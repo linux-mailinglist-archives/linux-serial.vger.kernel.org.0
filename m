@@ -2,49 +2,50 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDB57E82FD
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 20:44:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 453DE7E81C1
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 19:33:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235415AbjKJTjw (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 14:39:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53240 "EHLO
+        id S1345498AbjKJSdv (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 13:33:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236235AbjKJTjk (ORCPT
+        with ESMTP id S1345518AbjKJSc4 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 14:39:40 -0500
+        Fri, 10 Nov 2023 13:32:56 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4DE3A8B8
-        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:54 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3113AE15
+        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:59 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT6-0006Pf-5V; Fri, 10 Nov 2023 16:30:48 +0100
+        id 1r1TT6-0006Q5-DD; Fri, 10 Nov 2023 16:30:48 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT5-0083Kx-5R; Fri, 10 Nov 2023 16:30:47 +0100
+        id 1r1TT5-0083L0-E7; Fri, 10 Nov 2023 16:30:47 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TT4-00GnxC-SS; Fri, 10 Nov 2023 16:30:46 +0100
+        id 1r1TT5-00GnxH-4w; Fri, 10 Nov 2023 16:30:47 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>
-Cc:     Laxman Dewangan <ldewangan@nvidia.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>, kernel@pengutronix.de,
-        linux-serial@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 36/52] serial: tegra: Convert to platform remove callback returning void
-Date:   Fri, 10 Nov 2023 16:30:04 +0100
-Message-ID: <20231110152927.70601-37-u.kleine-koenig@pengutronix.de>
+Cc:     Thierry Reding <treding@nvidia.com>,
+        Tobias Klauser <tklauser@distanz.ch>,
+        Richard GENOUD <richard.genoud@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>, kernel@pengutronix.de,
+        linux-serial@vger.kernel.org
+Subject: [PATCH 37/52] serial: txx9: Convert to platform remove callback returning void
+Date:   Fri, 10 Nov 2023 16:30:05 +0100
+Message-ID: <20231110152927.70601-38-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1825; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=G2ztO6ZS0L1mppkoBSatHWYdrZ3lJhBHyoZqK/ZNRzY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyGLb33QkkT/HgQ0F6Yevq7L3StcfbfsEz9s /Xpqyt2m3aJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MhgAKCRCPgPtYfRL+ Tlo2B/9tenq0eFH5I1CfvTlJAFSpeRaUXBJbga528JieDnIuiWIXvuf4pzDH5SEs6/IWm3atRnX XlxnNp01iHQDdQSKhBBGdHvGVZSkB/+hYPTR0uJ/mbS7mwPB4gzhT2ehCEJw85N8wReiZKLFQRJ Hsf4rLCwRrcU3JmZo5euHCevWpV32VhjQf8AKrjh8Q6UF1Ah4tPQXyBfcwQX8fG21Y09ydk/ZgW DHlb3IN4oqtOLiMcXZo3YfWuhvxSIsgRg4fHJYAhVtCUvcsBu+aZmfm9j3g3gqOpbXD2PRJKgG8 f5Ub9hDZ7nlk/bnD51yCLVkmHL9VIIagOuw+KOBuzt0p/261
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1888; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=79i3JRQQkLyJUMUcsqiIaRJXAT6ziqOMjwh1zWRC1Bw=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkyH/z9AUSsLRwGXvLcQdyKx3SkQoo8Q9sDmS ARHmJcyb9KJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MhwAKCRCPgPtYfRL+ TjJiB/9a9S8q/hNJCkKE3MxOJ9xnu6SXuRaie4H312fqlnVTOiVU7VYq1o/5SpEAb8CwBYX0CcJ EeDIb1zHlYz7QDDHpIb6GehtI4FzpgraiGlt+TjxKMP/OJ+79W8+GLEWmQjZCfNwZt83aLahpgi KSQKZzEjGUVaMOlbYPAuZ9HyH0OK1uKzmL28oWVLrzQ3G5ZXYNZMJNvOv9Y6LkdxajhG+gmtNM8 ZpV6dgDX0DDJftPbFCGnuyTyQLbfrRN1pkP1+WcDD84+SlxuQLH+1v6EU85kZl+8lNJ4siLUDHE wmsTk56miai5shB4d5cYIK/EWm+9nvYhgJ4WNS8Ywc8BbEib
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -75,37 +76,39 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/serial-tegra.c | 5 ++---
+ drivers/tty/serial/serial_txx9.c | 5 ++---
  1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/tty/serial/serial-tegra.c b/drivers/tty/serial/serial-tegra.c
-index 6d4006b41975..525f3a2f7bd4 100644
---- a/drivers/tty/serial/serial-tegra.c
-+++ b/drivers/tty/serial/serial-tegra.c
-@@ -1611,13 +1611,12 @@ static int tegra_uart_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
--static int tegra_uart_remove(struct platform_device *pdev)
-+static void tegra_uart_remove(struct platform_device *pdev)
+diff --git a/drivers/tty/serial/serial_txx9.c b/drivers/tty/serial/serial_txx9.c
+index eaa980722455..e1897894a4ef 100644
+--- a/drivers/tty/serial/serial_txx9.c
++++ b/drivers/tty/serial/serial_txx9.c
+@@ -1052,7 +1052,7 @@ static int serial_txx9_probe(struct platform_device *dev)
+ /*
+  * Remove serial ports registered against a platform device.
+  */
+-static int serial_txx9_remove(struct platform_device *dev)
++static void serial_txx9_remove(struct platform_device *dev)
  {
- 	struct tegra_uart_port *tup = platform_get_drvdata(pdev);
- 	struct uart_port *u = &tup->uport;
+ 	int i;
  
- 	uart_remove_one_port(&tegra_uart_driver, u);
+@@ -1062,7 +1062,6 @@ static int serial_txx9_remove(struct platform_device *dev)
+ 		if (up->dev == &dev->dev)
+ 			serial_txx9_unregister_port(i);
+ 	}
 -	return 0;
  }
  
- #ifdef CONFIG_PM_SLEEP
-@@ -1644,7 +1643,7 @@ static const struct dev_pm_ops tegra_uart_pm_ops = {
+ #ifdef CONFIG_PM
+@@ -1097,7 +1096,7 @@ static int serial_txx9_resume(struct platform_device *dev)
  
- static struct platform_driver tegra_uart_platform_driver = {
- 	.probe		= tegra_uart_probe,
--	.remove		= tegra_uart_remove,
-+	.remove_new	= tegra_uart_remove,
- 	.driver		= {
- 		.name	= "serial-tegra",
- 		.of_match_table = tegra_uart_of_match,
+ static struct platform_driver serial_txx9_plat_driver = {
+ 	.probe		= serial_txx9_probe,
+-	.remove		= serial_txx9_remove,
++	.remove_new	= serial_txx9_remove,
+ #ifdef CONFIG_PM
+ 	.suspend	= serial_txx9_suspend,
+ 	.resume		= serial_txx9_resume,
 -- 
 2.42.0
 
