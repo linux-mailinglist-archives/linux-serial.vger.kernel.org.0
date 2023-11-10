@@ -2,52 +2,50 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B57267E7E6C
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 18:44:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E8A7E8022
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Nov 2023 19:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234746AbjKJRom (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Fri, 10 Nov 2023 12:44:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S230163AbjKJSHM (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Fri, 10 Nov 2023 13:07:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235160AbjKJRn6 (ORCPT
+        with ESMTP id S234983AbjKJSFY (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Fri, 10 Nov 2023 12:43:58 -0500
+        Fri, 10 Nov 2023 13:05:24 -0500
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A7103A8AD
-        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:52 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57D833A8AA
+        for <linux-serial@vger.kernel.org>; Fri, 10 Nov 2023 07:30:50 -0800 (PST)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TSz-00065S-Bj; Fri, 10 Nov 2023 16:30:41 +0100
+        id 1r1TT0-00065v-Ai; Fri, 10 Nov 2023 16:30:42 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
         (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TSy-0083Ih-2G; Fri, 10 Nov 2023 16:30:40 +0100
+        id 1r1TSy-0083Im-7w; Fri, 10 Nov 2023 16:30:40 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1r1TSx-00Gnun-P1; Fri, 10 Nov 2023 16:30:39 +0100
+        id 1r1TSx-00Gnuq-Uv; Fri, 10 Nov 2023 16:30:39 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         Jiri Slaby <jirislaby@kernel.org>,
-        Tony Lindgren <tony@atomide.com>
-Cc:     John Ogness <john.ogness@linutronix.de>,
-        =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Thomas Richard <thomas.richard@bootlin.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Thomas Gleixner <tglx@linutronix.de>, kernel@pengutronix.de,
+        Alexander Shiyan <shc_work@mail.ru>
+Cc:     Richard GENOUD <richard.genoud@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Yangtao Li <frank.li@vivo.com>, kernel@pengutronix.de,
         linux-serial@vger.kernel.org
-Subject: [PATCH 01/52] serial: 8250: omap: Don't skip resource freeing if pm_runtime_resume_and_get() failed
-Date:   Fri, 10 Nov 2023 16:29:29 +0100
-Message-ID: <20231110152927.70601-2-u.kleine-koenig@pengutronix.de>
+Subject: [PATCH 02/52] serial: sccnxp: Improve error message if regulator_disable() fails
+Date:   Fri, 10 Nov 2023 16:29:30 +0100
+Message-ID: <20231110152927.70601-3-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.42.0.586.gbc5204569f7d.dirty
 In-Reply-To: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 References: <20231110152927.70601-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1318; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jhxKH06aKU7oNg7h3QPQ9KuF9O89H8Ag15BPAaTV/K4=; b=owGbwMvMwMXY3/A7olbonx/jabUkhlQ/n0iTd1dLRA8dVb/RzW+1/C/bK4/8CeK1iw1cu2yDO p/qTkvoZDRmYWDkYpAVU2Sxb1yTaVUlF9m59t9lmEGsTCBTGLg4BWAiGms4GGYaqbRLvZ0z6YtL vVlu3fP1u/a8+jZZOfTGDovpQne/vHRNmiSsv8/RfMK7SOeaV7ujBXgL8iW3zVRNqU1hlZR9kVe 5afFaqT+FO/frv7ktHr3iZ0vh6/d5Dpo9/gUu3d+uaTYIsPb6cm5wvsulI2Hm3vC5JW+W69GX4Z 38Ezb3+xkXXq52WeUz8ZzSji3dD+8IGD53Z7FPNXxxrcLC/aOPw/uC+RmL2uonTNG8/EsipWeuV xEPb3nIvYmRSxl22a6uMGmYxL9iVfH/iUqX0wov9h8UqFyQKr2KTaXqp87pmfwWZgv2fMvstlzg bNHDO/cyZ9C7Sce5lVMEz+aln3G32XPpna2fhLH1p6bdAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1140; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=kBg/MDlr2mx1OX55pin6DcW9PLUaM0+0RakV/R8miMU=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBlTkxaEBLfHNY+5POSOi7cywgDOncYCsmUv7Rft kqdNAtYYTiJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZU5MWgAKCRCPgPtYfRL+ TqIqB/0dhjU2coVu1IhF1huBtkAuwO5F9zMrySYwuoTPj0M3p8rv49TMmDeitt/nTK2wyqbMVN2 xA3Of+iWDZtTq7L6OKDeCJ+SszjK/CFrreCvtZQdTv7brLtxQ/0VOSWpbCWgQysZAwNx0VxarbK mIXv7w0ctDi8xHyH+HSf/RlCSq08JwmrzCUQaRv2GQgZC1vdnh0xvGwUnFjxRpnm0BU97iiOGcx JHJmnUimTLIWiGuJyb9LLAYzteJr+9uCXIYHGZTdRX1G19Sv9ioUycsnQR41GXQFKKwFhVr2cm2 CD/9K/yJn2beUp+tJkVYRHTISwFf4p2/OXmyDQKQq+3Tvbny
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -68,32 +66,35 @@ little helpful error message:
 
 	remove callback returned a non-zero value. This will be ignored.
 
-and then remove the device anyhow. So all resources that were not freed
-are leaked in this case. Skipping serial8250_unregister_port() has the
-potential to keep enough of the UART around to trigger a use-after-free.
+and then remove the device anyhow.
 
 So replace the error return (and with it the little helpful error
-message) by a more useful error message and continue to cleanup.
+message) by a more useful error message.
 
-Fixes: e3f0c638f428 ("serial: 8250: omap: Fix unpaired pm_runtime_put_sync() in omap8250_remove()")
+Fixes: 31815c08fc90 ("serial: sccnxp: Replace pdata.init/exit with regulator API")
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/tty/serial/8250/8250_omap.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/sccnxp.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 2d42f485c987..661a83dbc11b 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -1592,7 +1592,7 @@ static int omap8250_remove(struct platform_device *pdev)
+diff --git a/drivers/tty/serial/sccnxp.c b/drivers/tty/serial/sccnxp.c
+index 2be2c1098025..8269b0fb3083 100644
+--- a/drivers/tty/serial/sccnxp.c
++++ b/drivers/tty/serial/sccnxp.c
+@@ -1036,8 +1036,11 @@ static int sccnxp_remove(struct platform_device *pdev)
  
- 	err = pm_runtime_resume_and_get(&pdev->dev);
- 	if (err)
--		return err;
-+		dev_err(&pdev->dev, "Failed to resume hardware\n");
+ 	uart_unregister_driver(&s->uart);
  
- 	up = serial8250_get_port(priv->line);
- 	omap_8250_shutdown(&up->port);
+-	if (!IS_ERR(s->regulator))
+-		return regulator_disable(s->regulator);
++	if (!IS_ERR(s->regulator)) {
++		int ret = regulator_disable(s->regulator);
++		if (ret)
++			dev_err(&pdev->dev, "Failed to disable regulator\n");
++	}
+ 
+ 	return 0;
+ }
 -- 
 2.42.0
 
