@@ -2,138 +2,110 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0F127EDE81
-	for <lists+linux-serial@lfdr.de>; Thu, 16 Nov 2023 11:31:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E20587EDE8F
+	for <lists+linux-serial@lfdr.de>; Thu, 16 Nov 2023 11:33:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1344966AbjKPKbd (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Thu, 16 Nov 2023 05:31:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36152 "EHLO
+        id S1344981AbjKPKdb (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Thu, 16 Nov 2023 05:33:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233066AbjKPKbb (ORCPT
+        with ESMTP id S1345003AbjKPKda (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Thu, 16 Nov 2023 05:31:31 -0500
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B846D1AE;
-        Thu, 16 Nov 2023 02:31:26 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id DEF996001C;
-        Thu, 16 Nov 2023 10:31:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1700130685;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=8Gilx4H3RKP8/lZDTxCW04nyKKjKNCSF+csRLPdNS2A=;
-        b=JGs2E4Pm4ttEACnrdJLtXtseCSq4ZCZOGkeVwb0XK7HwE5wEyzJYbuUSED/lJJXzwU5+Jz
-        aydtnjt7I4CmF/JEs83zg0J0OL7YFkQCtUOpViTQP640eIQmc80KockT651UVFfChIaBEx
-        bWqZRjnMXbL4C6siWB88VN3om1jpFOnm16vCvWIuHcIWrLYzIydBY3eG5P1/4fgwTZ0rsU
-        YguJIdOi87LeLchXoAYe556YcEtxiu1cSItiTjOakmvbo2gOT1G6VEZ19sjGs6PDSDIOOy
-        S0F7f6gzyez5k2vVXdB8rMs+LPBa2XcIrsa40K0bdNc6PF8IaPR/kQvNFQyL8w==
-From:   =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date:   Thu, 16 Nov 2023 11:31:08 +0100
-Subject: [PATCH v2 5/5] tty: serial: amba-pl011: unindent
- pl011_console_get_options function body
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231116-mbly-uart-v2-5-863f665ce520@bootlin.com>
-References: <20231116-mbly-uart-v2-0-863f665ce520@bootlin.com>
-In-Reply-To: <20231116-mbly-uart-v2-0-863f665ce520@bootlin.com>
-To:     Russell King <linux@armlinux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-        Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-        =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.3
-X-GND-Sasl: theo.lebrun@bootlin.com
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 16 Nov 2023 05:33:30 -0500
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7801AE;
+        Thu, 16 Nov 2023 02:33:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+        :Date:subject:date:message-id:reply-to;
+        bh=KOCiWUhMH4hnxHlWOWnGeGYkeEeB5aUu205Zvuz11KU=; b=cEoL1JoVdqwT9mHr0UlV0Sx71j
+        IztOapDuFS5+FCzgG760gnCgwl/yKCtjGmGsL4vtPwPMHpSsSlojB7A/lDpIFo7yCE8A1Se0EwV1P
+        ZmVLZLGD3iDi3VMnyik5h3bRV2NTqYx8jz2YjhEpx7h6jmAseNVILhkTaUCLVy8boq0g=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:34750 helo=asus64.hugovil.com)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1r3ZgQ-0000qg-UU; Thu, 16 Nov 2023 05:33:15 -0500
+Date:   Thu, 16 Nov 2023 05:33:14 -0500
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+Cc:     <git@amd.com>, <michal.simek@amd.com>, <jacmet@sunsite.dk>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <corbet@lwn.net>, <christophe.leroy@csgroup.eu>,
+        <rdunlap@infradead.org>, <airlied@redhat.com>,
+        <ogabbay@kernel.org>, <linux-doc@vger.kernel.org>,
+        <radhey.shyam.pandey@amd.com>, <srinivas.goud@amd.com>,
+        <shubhrajyoti.datta@amd.com>, <manion05gk@gmail.com>
+Message-Id: <20231116053314.e976a87476cc5bc20eacde48@hugovil.com>
+In-Reply-To: <20231116072915.3338387-2-manikanta.guntupalli@amd.com>
+References: <20231116072915.3338387-1-manikanta.guntupalli@amd.com>
+        <20231116072915.3338387-2-manikanta.guntupalli@amd.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED,URIBL_CSS autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH V3 1/2] Documentation: devices.txt: Update ttyUL major
+ number allocation details
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-The whole function body is encapsulated inside an if-condition. Reverse
-the if logic and early return to remove one indentation level.
+On Thu, 16 Nov 2023 12:59:14 +0530
+Manikanta Guntupalli <manikanta.guntupalli@amd.com> wrote:
 
-Also turn two nested ifs into a single one at the end of the function.
+Hi,
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/tty/serial/amba-pl011.c | 42 ++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+> Describe when uartlite driver uses static/dynamic allocation for major
+> number based on maximum number of uartlite serial ports.
+> 
+> Signed-off-by: Manikanta Guntupalli <manikanta.guntupalli@amd.com>
+> ---
+> Changes for V2:
+> This patch introduced in V2.
+> Changes for V3:
+> Fix typo.
+> Move description to above of ttyUL.
+> ---
+>  Documentation/admin-guide/devices.txt | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/Documentation/admin-guide/devices.txt b/Documentation/admin-guide/devices.txt
+> index 839054923530..ae7431e317ad 100644
+> --- a/Documentation/admin-guide/devices.txt
+> +++ b/Documentation/admin-guide/devices.txt
+> @@ -2704,6 +2704,9 @@
+>  		    ...
+>  		 185 = /dev/ttyNX15		Hilscher netX serial port 15
+>  		 186 = /dev/ttyJ0		JTAG1 DCC protocol based serial port emulation
+> +
+> +		 If maximum number of uartlite serial ports are more than 4, then driver uses
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index bb3082c4d35c..5774d48c7f16 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2369,34 +2369,34 @@ pl011_console_write(struct console *co, const char *s, unsigned int count)
- static void pl011_console_get_options(struct uart_amba_port *uap, int *baud,
- 				      int *parity, int *bits)
- {
--	if (pl011_read(uap, REG_CR) & UART01x_CR_UARTEN) {
--		unsigned int lcr_h, ibrd, fbrd;
-+	unsigned int lcr_h, ibrd, fbrd;
- 
--		lcr_h = pl011_read(uap, REG_LCRH_TX);
-+	if (!(pl011_read(uap, REG_CR) & UART01x_CR_UARTEN))
-+		return;
- 
--		*parity = 'n';
--		if (lcr_h & UART01x_LCRH_PEN) {
--			if (lcr_h & UART01x_LCRH_EPS)
--				*parity = 'e';
--			else
--				*parity = 'o';
--		}
-+	lcr_h = pl011_read(uap, REG_LCRH_TX);
- 
--		if ((lcr_h & 0x60) == UART01x_LCRH_WLEN_7)
--			*bits = 7;
-+	*parity = 'n';
-+	if (lcr_h & UART01x_LCRH_PEN) {
-+		if (lcr_h & UART01x_LCRH_EPS)
-+			*parity = 'e';
- 		else
--			*bits = 8;
-+			*parity = 'o';
-+	}
-+
-+	if ((lcr_h & 0x60) == UART01x_LCRH_WLEN_7)
-+		*bits = 7;
-+	else
-+		*bits = 8;
- 
--		ibrd = pl011_read(uap, REG_IBRD);
--		fbrd = pl011_read(uap, REG_FBRD);
-+	ibrd = pl011_read(uap, REG_IBRD);
-+	fbrd = pl011_read(uap, REG_FBRD);
- 
--		*baud = uap->port.uartclk * 4 / (64 * ibrd + fbrd);
-+	*baud = uap->port.uartclk * 4 / (64 * ibrd + fbrd);
- 
--		if (uap->vendor->oversampling) {
--			if (pl011_read(uap, REG_CR)
--				  & ST_UART011_CR_OVSFACT)
--				*baud *= 2;
--		}
-+	if (uap->vendor->oversampling &&
-+	    (pl011_read(uap, REG_CR) & ST_UART011_CR_OVSFACT)) {
-+		*baud *= 2;
- 	}
- }
- 
+"are more" -> "is more"
+
+"then driver" -> "the driver" (or "then the driver")
+
+Hugo.
+
+
+> +		 dynamic allocation instead of static allocation for major number.
+>  		 187 = /dev/ttyUL0		Xilinx uartlite - port 0
+>  		    ...
+>  		 190 = /dev/ttyUL3		Xilinx uartlite - port 3
+> -- 
+> 2.25.1
+> 
+
 
 -- 
-2.41.0
-
+Hugo Villeneuve <hugo@hugovil.com>
