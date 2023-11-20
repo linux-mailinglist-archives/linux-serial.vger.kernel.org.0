@@ -2,118 +2,107 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 081E07F1F17
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 22:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF9AE7F1F63
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 22:45:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232496AbjKTVWG (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Nov 2023 16:22:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40052 "EHLO
+        id S229529AbjKTVpz (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Nov 2023 16:45:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232138AbjKTVV6 (ORCPT
+        with ESMTP id S232003AbjKTVpy (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Nov 2023 16:21:58 -0500
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFC1B13D
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:37 -0800 (PST)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-40b27b498c3so1245975e9.0
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700515296; x=1701120096; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8SZvpwVvhHSYn6AVsfP8mg+sxtJjbt/EepCXw4mUJk4=;
-        b=ri7ccVumztQ15WbdcOoix30xdhJ1cXwpBNRxl6gOxsDptHbVDWQ03b6gGo9ZMhj7Vd
-         eSdynerOs/gvpYE9/0Hi4cDaBhTa3Xxr805huWcsUNqWjewF2+xVjFGpvlLyROL6upWO
-         t3YidFYImjuIWvhYpVr0jMuainVQOlFjtcEUWgb1JZOlmmpEpyt01PA7dEpJAjk9NJg4
-         HuI3rchuDtaaulhdJ/vznVXGvU37J4kGvvVDfIQXvT+MWRTdaztfQF5XOxtOq8JjRDRs
-         qUt00u7hrxtJqI/OM33fiJoHRwTwj48wKb7bO/q80xEzmIMJZzqFg2ZktoGd6vEc3jyo
-         5NXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700515296; x=1701120096;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8SZvpwVvhHSYn6AVsfP8mg+sxtJjbt/EepCXw4mUJk4=;
-        b=WSUrBrtXNxith86LnIVYsDEBjAj+9GoCaymOr/wDXTNiUlDBEXFpHOkPr/AQnkQnh+
-         wRvLM7XjscEb6bGD1DwhioXHxdY4342jU8zDVOWRkTgFQNlMLWCRHvtm2+7YpT69GsJG
-         Csk5WyhyLgYLfhfvKjLBrFo68aDzyng64oXSRpbHIWpMcsevwZ1OE+jfKLS2Tdjz2ghN
-         ImguVJFFsJpCowUshDDHTeHzOh2bwjIGEhIvKqPMuv2rwTGKDGL97kCV2T+KUdrUL7Zz
-         dSxmy4pguhwZdVCKrynWbGZFUMeVIjbL/HNePI3Mn+izJ3nSJDJHvHg2TDRIZnbzFhAe
-         tQbA==
-X-Gm-Message-State: AOJu0YwfT1ASdoVfZI/81a0ZpxXkrYYdcnNp8r20tjzT039sUMxprcgi
-        o+CfrZy6BMEu/tSo0bOkRTg5Qw==
-X-Google-Smtp-Source: AGHT+IHWybnx0ZdcwvMDBNOdpFDZ42C4c7PfCA39mS3Y8UEKdxKa8P+vhEV2G8kWfZN270RqzE6obg==
-X-Received: by 2002:a05:600c:190c:b0:408:4160:150a with SMTP id j12-20020a05600c190c00b004084160150amr6535303wmq.33.1700515296392;
-        Mon, 20 Nov 2023 13:21:36 -0800 (PST)
-Received: from gpeter-l.lan (host-92-29-24-243.as13285.net. [92.29.24.243])
-        by smtp.gmail.com with ESMTPSA id je14-20020a05600c1f8e00b0040596352951sm19518451wmb.5.2023.11.20.13.21.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 13:21:35 -0800 (PST)
-From:   Peter Griffin <peter.griffin@linaro.org>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
-        tomasz.figa@gmail.com, s.nawrocki@samsung.com,
-        linus.walleij@linaro.org, wim@linux-watchdog.org,
-        linux@roeck-us.net, catalin.marinas@arm.com, will@kernel.org,
-        arnd@arndb.de, olof@lixom.net, gregkh@linuxfoundation.org,
-        jirislaby@kernel.org, cw00.choi@samsung.com,
-        alim.akhtar@samsung.com
-Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
-        andre.draszik@linaro.org, semen.protsenko@linaro.org,
-        saravanak@google.com, willmcvicker@google.com, soc@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: [PATCH v4 19/19] MAINTAINERS: add entry for Google Tensor SoC
-Date:   Mon, 20 Nov 2023 21:20:37 +0000
-Message-ID: <20231120212037.911774-20-peter.griffin@linaro.org>
-X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
-In-Reply-To: <20231120212037.911774-1-peter.griffin@linaro.org>
-References: <20231120212037.911774-1-peter.griffin@linaro.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Mon, 20 Nov 2023 16:45:54 -0500
+Received: from mxe-2-adb.seznam.cz (mxe-2-adb.seznam.cz [IPv6:2a02:598:64:8a00::1000:adb])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC12A4
+        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:45:48 -0800 (PST)
+Received: from email.seznam.cz
+        by smtpc-mxe-b7dc65f8c-m6chn
+        (smtpc-mxe-b7dc65f8c-m6chn [2a02:598:64:8a00::1000:adb])
+        id 212f4ebbdfdbfc1121a1c0a3;
+        Mon, 20 Nov 2023 22:45:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz;
+        s=szn20221014; t=1700516722;
+        bh=KOJZarIYC0hLYr1MwPUV/ajt9MnhOl+KmxMTugbvoGU=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:References:
+         In-Reply-To:Mime-Version:X-Mailer:Content-Type:
+         Content-Transfer-Encoding;
+        b=Kvix8Pp/zUz0y0ZYzgjEEs7VC9aUeRm/B/5Pc46Sxl4XBK/JhDXCJDDF4RU68/Ms9
+         YxmjNPJznY8P3+eheHYm0E5gu8LTOJ1gA8U0CrNpNY0vrjcnavo9S2G1AFrT1J6//L
+         2maxtaCmsa0ShUhfAFHt0qWNW8fekU7kjxf6qXydiv4wFmfxIkLKjpwvlrQUgNdS8h
+         SCui9fOSg29t7UDYERiWS8XHj1jIJ2pwiESD8Gi4NztMMaPVU33NtaaVJoBjVzDNNk
+         0Q8LSQTM1nye7SbJtqhqzhjRynCu4OqHc4mgu/PVXgDJziL3z8BFBylDagRQVWbKS9
+         8xN8CbYvd3hcw==
+Received: from 184-143.gtt-net.cz (184-143.gtt-net.cz [82.144.143.184])
+        by email.seznam.cz (szn-UNKNOWN-unknown) with HTTP;
+        Mon, 20 Nov 2023 22:45:20 +0100 (CET)
+From:   "Tomas Paukrt" <tomaspaukrt@email.cz>
+To:     "Krzysztof Kozlowski" <krzk@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Conor Dooley" <conor+dt@kernel.org>,
+        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Jiri Slaby" <jirislaby@kernel.org>
+Cc:     <linux-serial@vger.kernel.org>,
+        "Lino Sanfilippo" <LinoSanfilippo@gmx.de>,
+        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>
+Subject: =?utf-8?q?Re=3A_=5BPATCH_v3_1/2=5D_serial=3A_core=3A_Add_option_t?=
+        =?utf-8?q?o_enable_RS485_mode_via_GPIO_?=
+Date:   Mon, 20 Nov 2023 22:45:20 +0100 (CET)
+Message-Id: <3Nj.ZZr}.5RaPRe7D8AB.1bMzDm@seznam.cz>
+References: <VY.ZZnz.2Km1cHBSh2}.1bLIJa@seznam.cz>
+        <476876ca-806f-a5ad-1eeb-435c8a3111a2@gmx.de>
+        <2cZ.ZZqF.1YADr1CLFoQ.1bMn3d@seznam.cz>
+        <5a0321ac-e1e6-45e9-9faf-153db8d34980@kernel.org>
+In-Reply-To: <5a0321ac-e1e6-45e9-9faf-153db8d34980@kernel.org>
+Mime-Version: 1.0 (szn-mime-2.1.33)
+X-Mailer: szn-UNKNOWN-unknown
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add maintainers entry for the Google tensor SoC based
-platforms.
+Add an option to enable the RS485 mode at boot time based on
+the state of a GPIO pin (DIP switch or configuration jumper).
+The GPIO is defined by the device tree property "rs485-mode-gpio".
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
+Signed-off-by: Tomas Paukrt <tomaspaukrt@email.cz>
 ---
- MAINTAINERS | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+ drivers/tty/serial/serial_core.c | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index e55173ae5e39..f5c84da7008e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9013,6 +9013,16 @@ S:	Maintained
- T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
- F:	drivers/firmware/google/
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_=
+core.c
+index f1348a5..f1bf0b9 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -3603,6 +3603,18 @@ int uart_get_rs485_mode(struct uart_port *port)
+ 	}
  
-+GOOGLE TENSOR SoC SUPPORT
-+M:	Peter Griffin <peter.griffin@linaro.org>
-+L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-samsung-soc@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
-+F:	arch/arm64/boot/dts/exynos/google/
-+F:	drivers/clk/samsung/clk-gs101.c
-+F:	include/dt-bindings/clock/google,clk-gs101.h
+ 	/*
++	 * Enable the RS485 mode based on the state of a GPIO pin.
++	 */
++	desc =3D devm_gpiod_get_optional(dev, "rs485-mode", GPIOD_IN);
++	if (IS_ERR(desc))
++		return dev_err_probe(dev, PTR_ERR(desc), "Cannot get rs485-mode-gpio\n"=
+);
++	if (desc) {
++		if (gpiod_get_value(desc))
++			rs485conf->flags |=3D SER_RS485_ENABLED;
++		devm_gpiod_put(dev, desc);
++	}
 +
- GPD POCKET FAN DRIVER
- M:	Hans de Goede <hdegoede@redhat.com>
- L:	platform-driver-x86@vger.kernel.org
--- 
-2.43.0.rc1.413.gea7ed67945-goog
++	/*
+ 	 * Disabling termination by default is the safe choice:  Else if many
+ 	 * bus participants enable it, no communication is possible at all.
+ 	 * Works fine for short cables and users may enable for longer cables.=
 
+-- 
+2.7.4
+ 
