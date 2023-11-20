@@ -2,53 +2,57 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C24317F0D02
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 08:51:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E4A67F0D2D
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 09:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231948AbjKTHvR (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Nov 2023 02:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S232048AbjKTIGk (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Nov 2023 03:06:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjKTHvQ (ORCPT
+        with ESMTP id S231961AbjKTIGk (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Nov 2023 02:51:16 -0500
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [IPv6:2a0a:edc0:2:b01:1d::104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A2EB9
-        for <linux-serial@vger.kernel.org>; Sun, 19 Nov 2023 23:51:13 -0800 (PST)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1r4z3l-0000XT-FS; Mon, 20 Nov 2023 08:51:09 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1r4z3k-00AIfC-Pq; Mon, 20 Nov 2023 08:51:08 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1r4z3k-004A3n-GZ; Mon, 20 Nov 2023 08:51:08 +0100
-Date:   Mon, 20 Nov 2023 08:51:08 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Michal Simek <michal.simek@amd.com>,
-        linux-serial@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] serial: xilinx_uartps: Fix kernel doc about .remove()'s
- return code
-Message-ID: <20231120075108.jvrabyv7a6izgbgd@pengutronix.de>
-References: <20231117101236.878008-1-u.kleine-koenig@pengutronix.de>
- <dfc69d21-1c09-4cff-ac11-21857278f6e0@kernel.org>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="agr2mntupn2nnz73"
-Content-Disposition: inline
-In-Reply-To: <dfc69d21-1c09-4cff-ac11-21857278f6e0@kernel.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-serial@vger.kernel.org
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,
+        Mon, 20 Nov 2023 03:06:40 -0500
+X-Greylist: delayed 659 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 20 Nov 2023 00:06:34 PST
+Received: from mxe-1-522.seznam.cz (mxe-1-522.seznam.cz [IPv6:2a02:598:128:8a00::1000:522])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B3D1B4
+        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 00:06:33 -0800 (PST)
+Received: from email.seznam.cz
+        by smtpc-mxe-78cbc4b585-zzm5x
+        (smtpc-mxe-78cbc4b585-zzm5x [2a02:598:128:8a00::1000:522])
+        id 26254a2dd8d1f88726abc435;
+        Mon, 20 Nov 2023 09:06:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz;
+        s=szn20221014; t=1700467582;
+        bh=bXaPvd+CaRF/Ui64SAKpYYmS8L9oBJ6a2i7Wkgr8t0I=;
+        h=Received:From:To:Cc:Subject:Date:Message-Id:References:
+         In-Reply-To:Mime-Version:X-Mailer:Content-Type:
+         Content-Transfer-Encoding;
+        b=Wmpih0OGHwS7MpYWGU4Bkbp539jgQra/XzlqEyI891Svc6sER4yOgNrAvpLTI5d0m
+         6kiXeKYi6j+GBFwgymmiqVzWGBxjNLgBXfIONcZeMZwQtYuKH3+ePQ34phGA2g7v4l
+         U0LgX4v4pDh/k61L7fw4WPFz6MroJn2fwRM42PwxVax0ZdNr+ocEOGRMNrLbX0le1K
+         30H7+FvMBGqsWUVc8wmmtF9BUrd0358x9Ri9DflmRNlwAzpHRAsvujXjjCwSZ86+Lf
+         tKyXJkU/a36HdgIRWKd2vMdZBJz1SsIolbFkYLsLP7Hj5cithzkXTAfWZhu6BW1zfT
+         zootCTEd95czQ==
+Received: from 184-143.gtt-net.cz (184-143.gtt-net.cz [82.144.143.184])
+        by email.seznam.cz (szn-UNKNOWN-unknown) with HTTP;
+        Mon, 20 Nov 2023 08:55:19 +0100 (CET)
+From:   "Tomas Paukrt" <tomaspaukrt@email.cz>
+To:     "Lino Sanfilippo" <LinoSanfilippo@gmx.de>
+Cc:     <linux-serial@vger.kernel.org>
+Subject: =?utf-8?q?Re=3A_=5BPATCH_v2=5D_serial=3A_core=3A_Add_option_to_en?=
+        =?utf-8?q?able_RS485_mode_via_GPIO?=
+Date:   Mon, 20 Nov 2023 08:55:19 +0100 (CET)
+Message-Id: <2cZ.ZZqF.1YADr1CLFoQ.1bMn3d@seznam.cz>
+References: <VY.ZZnz.2Km1cHBSh2}.1bLIJa@seznam.cz>
+        <476876ca-806f-a5ad-1eeb-435c8a3111a2@gmx.de>
+In-Reply-To: <476876ca-806f-a5ad-1eeb-435c8a3111a2@gmx.de>
+Mime-Version: 1.0 (szn-mime-2.1.33)
+X-Mailer: szn-UNKNOWN-unknown
+Content-Type: text/plain;
+        charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_BLOCKED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,60 +61,59 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
+This patch provides an option to enable the RS485 mode at boot time
+based on the state of a GPIO pin (DIP switch or configuration jumper).
+The GPIO is defined by the device tree property "rs485-mode-gpio".
 
---agr2mntupn2nnz73
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Tomas Paukrt <tomaspaukrt@email.cz>
+---
+ Documentation/devicetree/bindings/serial/rs485.yaml |  4 ++++
+ drivers/tty/serial/serial_core.c                    | 12 ++++++++++++
+ 2 files changed, 16 insertions(+)
 
-Hey Jiri,
+diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documen=
+tation/devicetree/bindings/serial/rs485.yaml
+index 9418fd6..7a72f37 100644
+--- a/Documentation/devicetree/bindings/serial/rs485.yaml
++++ b/Documentation/devicetree/bindings/serial/rs485.yaml
+@@ -47,6 +47,10 @@ properties:
+       later with proper ioctl.
+     $ref: /schemas/types.yaml#/definitions/flag
+ 
++  rs485-mode-gpio:
++    description: GPIO pin to enable the RS485 mode at boot time.
++    maxItems: 1
++
+   rs485-rx-during-tx:
+     description: enables the receiving of data even while sending data.=
 
-On Mon, Nov 20, 2023 at 08:27:12AM +0100, Jiri Slaby wrote:
-> On 17. 11. 23, 11:12, Uwe Kleine-K=F6nig wrote:
-> > Since the driver was converted to use .remove_new() the return function
-> > doesn't return a value any more. So remove the obsolete documentation
-> > about the return value.
-> >=20
-> > Reported-by: Michal Simek <michal.simek@amd.com>
-> > Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> > ---
-> > Hello,
-> >=20
-> > the patch converting to .remove_new is not yet applied, so I didn't
-> > reference its commit id. It's available at
-> >=20
-> > 	https://lore.kernel.org/linux-serial/20231110152927.70601-53-u.kleine-=
-koenig@pengutronix.de
-> >=20
-> > and obviously this patch dropping the comment should get applied after
-> > the conversion to void.
->=20
-> So perhaps you squash and resend :)?
+     $ref: /schemas/types.yaml#/definitions/flag
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_=
+core.c
+index f1348a5..f1bf0b9 100644
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -3603,6 +3603,18 @@ int uart_get_rs485_mode(struct uart_port *port)
+ 	}
+ 
+ 	/*
++	 * Enable the RS485 mode based on the state of a GPIO pin.
++	 */
++	desc =3D devm_gpiod_get_optional(dev, "rs485-mode", GPIOD_IN);
++	if (IS_ERR(desc))
++		return dev_err_probe(dev, PTR_ERR(desc), "Cannot get rs485-mode-gpio\n"=
+);
++	if (desc) {
++		if (gpiod_get_value(desc))
++			rs485conf->flags |=3D SER_RS485_ENABLED;
++		devm_gpiod_put(dev, desc);
++	}
++
++	/*
+ 	 * Disabling termination by default is the safe choice:  Else if many
+ 	 * bus participants enable it, no communication is possible at all.
+ 	 * Works fine for short cables and users may enable for longer cables.=
 
-Sending an follow-up patch was what Greg requested in
-https://lore.kernel.org/linux-serial/2023111330-tigress-suffering-e329@greg=
-kh/
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---agr2mntupn2nnz73
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmVbD+sACgkQj4D7WH0S
-/k4M/Qf/dfAUC9yPH7gGW18tXzxngnAj2z3nfmiXCogkUj6hv4iAQA3Z5vZ1HnuP
-Bz2Vk7uBC1BXA6hQgxqvkkk2XYpWB3j5hY83HvmGBSUDqe7AgPxHsg4mCK2OMikb
-fLNHm5khlE+xi+8bFanR3Jzu3gvTYPG2MMOY3yeU7A22+ZQAnvfKBTd4Sepo51oL
-VN0g/2ZLeXfUUDjQckaoNsOqi9Dnm2RNAQUtki+MNjwWpU0YHykcLLEndpqE6pLs
-+XRAncn0I1PBEP9EQ3dONyHd2dcP8enqoDNQEYHa/vIgioNRUCkOE4Jj/9KuLICp
-AlUpJYPNyUdu8LC2iQF3yMOecgWI/w==
-=fJuk
------END PGP SIGNATURE-----
-
---agr2mntupn2nnz73--
+-- 
+2.7.4
+ 
