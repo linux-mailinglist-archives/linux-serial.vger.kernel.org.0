@@ -2,54 +2,54 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E10E47F1ED6
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 22:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DAB07F1EDB
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 22:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232406AbjKTVVf (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Nov 2023 16:21:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S232430AbjKTVVg (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Nov 2023 16:21:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232453AbjKTVVY (ORCPT
+        with ESMTP id S232459AbjKTVVZ (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Nov 2023 16:21:24 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E44012E
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:19 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-4081ccf69dcso13161075e9.0
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:19 -0800 (PST)
+        Mon, 20 Nov 2023 16:21:25 -0500
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A01810E
+        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:21 -0800 (PST)
+Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40a48775c58so21342005e9.3
+        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 13:21:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1700515278; x=1701120078; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1700515279; x=1701120079; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OkMSBNYAvYCAc3X4q8qxASdZhZ6ecouGkRCIVe4XyTs=;
-        b=W6CPFW2Fes5ogCaFKqBnyhIyeufYNOxLlE/r/Sdo5gMeWKLEFKz7kM6Fk4zum/xTn8
-         ayfk/BvFNWAuXl+WJhX8EZmQUVIDJambUVSAWl968hUK38RKFxoyXfgwDhw4x3HyP0ZS
-         MNdwO8q2MarggSY8ZoL1tW/smyZ1yjMKAQnslLqxOJ3eeuM4fz4c/wytQuRFaGtKiEtm
-         oGey/silqi7Q/6KgrQhoBenpYVs+DavYy+JYK/3ubCI1evbcAYgCLsN3CgHQCCDpnSvt
-         dBx955cuXza97FFxIIFskvbljn190qmskbNFXp9YLS7bRYKt+qlYBPWD+U/gKqRA94WY
-         svmg==
+        bh=HGbaQ0HPCBmwnLgBXIo+1TiPclTwFAe7Vfce3B7czes=;
+        b=NvVOVKMwdqnuggrWZyqrxgYoKOm65YfA4b6qfGaAnMRw1FBIo9aUBnVoKc/veiWivv
+         rhCBLZN1EBZcNV8JrNj2SrUkQu8Fv0y2zfhy8G/hgTfZ3/dOegYKy6GIvJbVExkOcRi0
+         ihCButLFWzy6p8Ykh0itPPDMs/p7zfCGOXdq+3B1Rqy4QnCOLQVJq/gueUr0CtYFmTL8
+         1S1LAv0Dbm+pOR2jQwMcRkgN6Vmr1uAHTAxHF1SAbYpQkFGl6a8WPcUANiW9qfF4h8cL
+         /4BcmP2AtFqSCmIqTsCkFXHoSOlQ+ITxxjyVSiooqdsfZqBdEqei0C859nSSSshVE6uf
+         QTEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700515278; x=1701120078;
+        d=1e100.net; s=20230601; t=1700515279; x=1701120079;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OkMSBNYAvYCAc3X4q8qxASdZhZ6ecouGkRCIVe4XyTs=;
-        b=ODPzjiYaGJOiv07P1DXUGdIqbyqvsPWVLOM1z1rXX5vXJVqjTuDcfkaZFpObHGf8Ih
-         n+FI++oj4zd7QounPDAZOwW5Vs/DMXcMIrE53DRGCVPPsOxV3hdrLD631H3ocXYcrbzv
-         bH/fO9rEake+WU40BmmK5JCQ3BE7ov0dyHEoxyNJwakkuFbCBzuZNnxtOtXbeCRmZ+o5
-         3meEpXRCwlzY88IjDAOSbF4QMaD+tF3l61pUt+0isWn2iIgm66XFzVES5JbPXolyakoo
-         rqpssfDjsfwrCb5c/ZSEMLeC9zssBm6aro2fxJMGyh/odXE7caWJZ5J7rg7Cc5GqNM3S
-         wxFQ==
-X-Gm-Message-State: AOJu0YxCsI4aDsKTHeeipznaQueqrhDwM8euOb73OuMmFZT2swHHtoBa
-        /rnHJjw2gNiK6oTJTFF0ydKcUg==
-X-Google-Smtp-Source: AGHT+IEJbzDcW7S5/GI1PbDI0zdEaDb2gaggZv2mN99zjWhskgR9PmElBCBPkOp59Dez6eQSpkYf2g==
-X-Received: by 2002:a05:600c:1d1a:b0:402:ea8c:ea57 with SMTP id l26-20020a05600c1d1a00b00402ea8cea57mr602593wms.7.1700515278079;
-        Mon, 20 Nov 2023 13:21:18 -0800 (PST)
+        bh=HGbaQ0HPCBmwnLgBXIo+1TiPclTwFAe7Vfce3B7czes=;
+        b=Q8i9X9Fzjh778VEMVU9RzottMp5ZAnZ+br8az2vEjTgHlhFU1GfxUVzbnCfguxZE2g
+         zCwDUIxTNaWD3S7A5+vsE2OsZycvKfgJV04RmWO10YmtpjcxXEsy7vRdeUYlkOIJguGK
+         uHW0l8H+BCFhzW87du8DaQXVQG/l8dKlatSh97NGeN4Gl9WnXy9I6XWX8ZeYZ3YbMi5w
+         z3gWevxiXrMDW2ysf5iMTKMexkMuFEZ4BnYy225SJlFNp5eyBk3vEXTxdVqjB/ijus/1
+         pINBV/or+1NR5ao2CYDg6I68ErKqPR+V/hn5i2Gth8NpH7T2rQCPzxNYhpt6kgR/lDuk
+         UPEQ==
+X-Gm-Message-State: AOJu0YyBjs0UoQy1C80JDKLclvbt8liU+csRjBm4jsDSHwW0BimS6/ne
+        W3PVGqLdVuE/4b/Fp9m2eEG8aA==
+X-Google-Smtp-Source: AGHT+IH602lqzhrrd5ihv9nkycuna2+sAG626bnATZiwyxXwpH3DfNnEo9fr+SzZKcNrL/DjF/2qUw==
+X-Received: by 2002:a05:600c:4f04:b0:409:101e:235a with SMTP id l4-20020a05600c4f0400b00409101e235amr6149430wmq.28.1700515279671;
+        Mon, 20 Nov 2023 13:21:19 -0800 (PST)
 Received: from gpeter-l.lan (host-92-29-24-243.as13285.net. [92.29.24.243])
-        by smtp.gmail.com with ESMTPSA id je14-20020a05600c1f8e00b0040596352951sm19518451wmb.5.2023.11.20.13.21.16
+        by smtp.gmail.com with ESMTPSA id je14-20020a05600c1f8e00b0040596352951sm19518451wmb.5.2023.11.20.13.21.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 13:21:17 -0800 (PST)
+        Mon, 20 Nov 2023 13:21:19 -0800 (PST)
 From:   Peter Griffin <peter.griffin@linaro.org>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         mturquette@baylibre.com, conor+dt@kernel.org, sboyd@kernel.org,
@@ -66,9 +66,9 @@ Cc:     peter.griffin@linaro.org, tudor.ambarus@linaro.org,
         linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
         linux-gpio@vger.kernel.org, linux-watchdog@vger.kernel.org,
         kernel-team@android.com, linux-serial@vger.kernel.org
-Subject: [PATCH v4 08/19] dt-bindings: serial: samsung: Add google-gs101-uart compatible
-Date:   Mon, 20 Nov 2023 21:20:26 +0000
-Message-ID: <20231120212037.911774-9-peter.griffin@linaro.org>
+Subject: [PATCH v4 09/19] dt-bindings: serial: samsung: Make samsung,uart-fifosize required property
+Date:   Mon, 20 Nov 2023 21:20:27 +0000
+Message-ID: <20231120212037.911774-10-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.43.0.rc1.413.gea7ed67945-goog
 In-Reply-To: <20231120212037.911774-1-peter.griffin@linaro.org>
 References: <20231120212037.911774-1-peter.griffin@linaro.org>
@@ -84,27 +84,50 @@ Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-Add dedicated google-gs101-uart compatible to the dt-schema for
-representing uart of the Google Tensor gs101 SoC.
+Specifying samsung,uart-fifosize in both DT and driver static data is error
+prone and relies on driver probe order and dt aliases to be correct.
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+Additionally on many Exynos platforms these are (USI) universal serial
+interfaces which can be uart, spi or i2c, so it can change per board.
+
+For google,gs101-uart and exynosautov9-uart make samsung,uart-fifosize a
+required property. For these platforms fifosize now *only* comes from DT.
+
+It is hoped other Exynos platforms will also switch over time.
+
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- Documentation/devicetree/bindings/serial/samsung_uart.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ .../bindings/serial/samsung_uart.yaml           | 17 +++++++++++++++++
+ 1 file changed, 17 insertions(+)
 
 diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-index e32c1b462836..ccc3626779d9 100644
+index ccc3626779d9..22a1edadc4fe 100644
 --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
 +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
-@@ -21,6 +21,7 @@ properties:
-       - enum:
-           - apple,s5l-uart
-           - axis,artpec8-uart
-+          - google,gs101-uart
-           - samsung,s3c6400-uart
-           - samsung,s5pv210-uart
-           - samsung,exynos4210-uart
+@@ -133,6 +133,23 @@ allOf:
+             - const: uart
+             - const: clk_uart_baud0
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - google,gs101-uart
++              - samsung,exynosautov9-uart
++    then:
++      properties:
++        samsung,uart-fifosize:
++          description: The fifo size supported by the UART channel.
++          $ref: /schemas/types.yaml#/definitions/uint32
++          enum: [16, 64, 256]
++
++      required:
++       - samsung,uart-fifosize
++
+ unevaluatedProperties: false
+ 
+ examples:
 -- 
 2.43.0.rc1.413.gea7ed67945-goog
 
