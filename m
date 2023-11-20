@@ -2,190 +2,144 @@ Return-Path: <linux-serial-owner@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 021C87F0D20
-	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 09:05:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C81107F0E95
+	for <lists+linux-serial@lfdr.de>; Mon, 20 Nov 2023 10:09:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232073AbjKTIF2 (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
-        Mon, 20 Nov 2023 03:05:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41542 "EHLO
+        id S232413AbjKTJKA (ORCPT <rfc822;lists+linux-serial@lfdr.de>);
+        Mon, 20 Nov 2023 04:10:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231961AbjKTIF1 (ORCPT
+        with ESMTP id S232419AbjKTJJ7 (ORCPT
         <rfc822;linux-serial@vger.kernel.org>);
-        Mon, 20 Nov 2023 03:05:27 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E13B9
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 00:05:20 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-4081ccf69dcso7698225e9.0
-        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 00:05:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1700467519; x=1701072319; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=k/r7/AHUvU5h9gmXC8cWkhPHDiuLCW3OhU5H88ffb6E=;
-        b=c5Urs6HK+5R4uRglqHsTWMmz7EK2bzhvxoO7ZXc+L52FHnIC+MwZUzSvMhxllQNneG
-         5tJjWdX4AworNkTtJwRXdJC/Ex4VVoKeuOUpfugx+7i0kcddwkv0wym4YHO8VRNrPDQk
-         3DGtpB9hO0UJ+cq5P8ArLMqIaU4PTrbVfiRMNwPJ2EjqI/V28o7DxyvoAFTZCZj339rC
-         NfiVcqFl8oyFNrGsRBjEjkdv7/jIakwr/+KRHqiRDtrG/DZgdSgCSzdJAPRuZP+67//i
-         xcKwZ4KArv1JPpj84GuaNCJ6MSQK7FWpn9X6u0bK5MAFhWBmAvgS21J+5+sjaiAP9iVl
-         5nHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1700467519; x=1701072319;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=k/r7/AHUvU5h9gmXC8cWkhPHDiuLCW3OhU5H88ffb6E=;
-        b=G3QSOjefkNAUn7XgBQ0eCNsWEa6kqVYM1EDXxd41wqiw7Ub49oENCgV5J04dAPHogc
-         2rdxCJefGYBmlP0K0akQq5zjO9T95iCtf/yXM2i1vx8Lg5gSSqB0dpkL3NHSaYXkNuBU
-         urlKsgCk0Qws7ekgI/X5nhomPiCWoNE3QdjDmbUfgFa7UTPDb9Bgih8Qb4uayEG+bSwv
-         vmQVPsQDvvnR6R9vq2x7MIuDSpXueeiHbP4ywISDHSeWSWui+FQgRKoS/2HWHV/elCgb
-         rwNsob4EPma5rJVTO2fZ1Px7VL67xr3mzocdhy5SBGJaqw2AovJHIdDzSS5lTh5fnyPA
-         o+TQ==
-X-Gm-Message-State: AOJu0YxqR4gLWFXkxzg2+XuEsH/4bjjhBKd6O3XlOkwgjlFOE4o9lD+g
-        2mpOI7ijLWt2fLawKJN4PMwq3Q==
-X-Google-Smtp-Source: AGHT+IFN4nwCSr0/wD+U66vM10GQFv+Nri9nZ939m/NOfkfbpyvhNkhO8KxhTxplHCfzLfcHQj8ulg==
-X-Received: by 2002:a05:600c:6001:b0:408:33ba:569a with SMTP id az1-20020a05600c600100b0040833ba569amr10872487wmb.8.1700467518744;
-        Mon, 20 Nov 2023 00:05:18 -0800 (PST)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id j7-20020a05600c190700b004064cd71aa8sm12586581wmq.34.2023.11.20.00.05.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Nov 2023 00:05:18 -0800 (PST)
-Date:   Mon, 20 Nov 2023 09:05:17 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Conor Dooley <conor@kernel.org>,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/5] RISC-V: Add SBI debug console helper routines
-Message-ID: <20231120-639982716fbfd33a6fc144d6@orel>
-References: <20231118033859.726692-1-apatel@ventanamicro.com>
- <20231118033859.726692-3-apatel@ventanamicro.com>
+        Mon, 20 Nov 2023 04:09:59 -0500
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2040.outbound.protection.outlook.com [40.107.102.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54ACFF2
+        for <linux-serial@vger.kernel.org>; Mon, 20 Nov 2023 01:09:54 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cjA5D3sGAWl6+k1YT1OujzjMn49ZkrO6xjpncUYjlmea7YX8nKBTDJC7QGkjt3orAq3glm2MC49KN4Nw+Ul1lO/n7lAuEuc9JhcUV5dxSnkPPIu90B153Z7oGMy6wxVXrcF1aneMhxDXT6iXCHgO+81TGjIlnHVu3Cqf5cGGqcRefVPE5l0C4F7up+GHSYeGTSHvUFe+QI7nZmdQS2sItc4YUTq1Vm7x5J4WuQ1B0Zsd5PTGRaHOJo1Cr3EZO1LTgkOnwRCddL+YQKw22fx8S1LyCKPrk3ouAZYSIRvtEE8uDx1LRYM344bpHQXeBlWhApXA988jpqIPQm7CPrtElQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=w1GKnTLS8y292runHi1Bk3PExI35nx12mx7rMh7CAI8=;
+ b=jQ6SWWGjwguOEPCrfVqqYCYJoHL/ObNEEAjd6QcN6L1SPmUddtYgmoWaVORNCL8gS8w5j3zCjfemMTHGYC7eJY0c0mELgy43AqIfeeNay2akIUZEA2VdUQWhFTWdX1C/Jasy0QVtgxA8gG6nuxz2IRNsukBm9eLlSvliTCHtJ12pr8D+EbJyW9IXd8Q6gZo5cB2MilCRmEbTMULiolMqdiMgzDGRkLY1NVDCPIcv/a+jhxDUiqATRRPCIhidu6VxpJ670mC1UcoDqduqOfjOoFxmF57cl05+Q7LFhX9nSGh0eJ27pqHnH/pFr5/eJgCznyKTZII1ntix7Qy10+pCJQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=w1GKnTLS8y292runHi1Bk3PExI35nx12mx7rMh7CAI8=;
+ b=N9d/6yYKH8PJDZr0fxKDdvUpMkobrE0verk+25GrJY7QWW7RRAFJNb589Q7gQebOaYwcibl/AIl6Je1ni4ukDk1/skz9oXllyOVbsbI87cwMyoEBPu5uPxQRtvATDfiL6y2hzGJtr8st5T0/dwzVDbT5yPSSKjeyZas9YchE0mI=
+Received: from CH0PR04CA0012.namprd04.prod.outlook.com (2603:10b6:610:76::17)
+ by CH2PR12MB4955.namprd12.prod.outlook.com (2603:10b6:610:68::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.26; Mon, 20 Nov
+ 2023 09:09:51 +0000
+Received: from CY4PEPF0000FCC0.namprd03.prod.outlook.com
+ (2603:10b6:610:76:cafe::21) by CH0PR04CA0012.outlook.office365.com
+ (2603:10b6:610:76::17) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7002.26 via Frontend
+ Transport; Mon, 20 Nov 2023 09:09:51 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000FCC0.mail.protection.outlook.com (10.167.242.102) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7025.12 via Frontend Transport; Mon, 20 Nov 2023 09:09:50 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 20 Nov
+ 2023 03:09:46 -0600
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.34; Mon, 20 Nov
+ 2023 03:09:07 -0600
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.34 via Frontend
+ Transport; Mon, 20 Nov 2023 03:09:06 -0600
+From:   Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To:     <linux-serial@vger.kernel.org>
+CC:     <jacmet@sunsite.dk>, <gregkh@linuxfoundation.org>,
+        <jirislaby@kernel.org>, <sean.anderson@seco.com>
+Subject: [PATCH v2] tty: serial: uartlite: Fix kernel doc warning
+Date:   Mon, 20 Nov 2023 14:39:05 +0530
+Message-ID: <20231120090905.24222-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231118033859.726692-3-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_BLOCKED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000FCC0:EE_|CH2PR12MB4955:EE_
+X-MS-Office365-Filtering-Correlation-Id: 20171a58-dff9-4829-c3f3-08dbe9a87424
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: l6TD39EpdVzsMOiEclX+6sf+AVQyeWZoGx6JV22mXUtrseloM6qOrFK39zt52je0XeihmXtbU6RSklRyL06umhaCJTBWjtTKLhcFs/y7QgBxDBAdXJeGazwIYdchegICB3xZBC+gKgwXX36GG9T5RolWNV/+zsk0ILHj3L3ZipMCyMxajGAy3BlqY/A2tHNhTQZlb3YG53WngymJGANJ6a4tCgbvBXSrsCCi1xgH8WovaZ+KCpQxRij2ul3DNAziNXSCIf2qwV31EIQtPyRpHXFSWiTOOUzLJS9muCsVCSfbtp1u4NH8Iplh1/5fp87gkg76TB3ATmjLgRuKZJ4ZFgrIHip0nT1lK3PHiKKRBYK/Yf/IUZf1+30SZe/acxquzME+9V2wP+hTlMrom4BH0VXvWtly5LPY3/imXhbiZ0Q6QKH/qQ5WL4aQbwrF38lEfIdOyWIysOlA0AKzGpEp9t4j33MoHDa5TrqABxVvDfVR09aNh39ei9PxKWm0sQsvr4pH9r2jpst6s52UO3WGjq5CWdqJcxO4n73no9RAd907DDGJwFe9paugy0qjYeYPOIVS6kw5oGnNIqdjIkYS1yuh3L1VI6Ujlcy82MydYey50TJEmvUys+jnanxPwBbIR20iUBp6ne8O5N61aN5GwTdmqVy23+O3zNTRYFJLuzDF8492qEWj/hDArhcw/ItfiA/S0cq4WEyPpTDFf4TV2G6X2O8iEZ81Mf9nTlr6AI8Pk3/KI6fhC9fX5OkiOpMOrBrWvAAF4qtYpxWmrS96YL3xfHQO1pZUV+wZ6fwflP+erk2vCWzSAF0ihdCLhT7W
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230031)(4636009)(396003)(346002)(39860400002)(136003)(376002)(230922051799003)(230273577357003)(230173577357003)(82310400011)(186009)(451199024)(64100799003)(1800799012)(46966006)(36840700001)(40470700004)(47076005)(1076003)(81166007)(2616005)(356005)(40460700003)(36860700001)(336012)(41300700001)(426003)(83380400001)(36756003)(26005)(82740400003)(44832011)(8936002)(4326008)(8676002)(40480700001)(478600001)(5660300002)(86362001)(966005)(70206006)(2906002)(70586007)(6916009)(316002)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Nov 2023 09:09:50.9619
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 20171a58-dff9-4829-c3f3-08dbe9a87424
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000FCC0.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4955
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_BLOCKED,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-serial.vger.kernel.org>
 X-Mailing-List: linux-serial@vger.kernel.org
 
-On Sat, Nov 18, 2023 at 09:08:56AM +0530, Anup Patel wrote:
-> Let us provide SBI debug console helper routines which can be
-> shared by serial/earlycon-riscv-sbi.c and hvc/hvc_riscv_sbi.c.
-> 
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/sbi.h |  5 +++++
->  arch/riscv/kernel/sbi.c      | 43 ++++++++++++++++++++++++++++++++++++
->  2 files changed, 48 insertions(+)
-> 
-> diff --git a/arch/riscv/include/asm/sbi.h b/arch/riscv/include/asm/sbi.h
-> index 66f3933c14f6..ee7aef5f6233 100644
-> --- a/arch/riscv/include/asm/sbi.h
-> +++ b/arch/riscv/include/asm/sbi.h
-> @@ -334,6 +334,11 @@ static inline unsigned long sbi_mk_version(unsigned long major,
->  }
->  
->  int sbi_err_map_linux_errno(int err);
-> +
-> +extern bool sbi_debug_console_available;
-> +int sbi_debug_console_write(unsigned int num_bytes, phys_addr_t base_addr);
-> +int sbi_debug_console_read(unsigned int num_bytes, phys_addr_t base_addr);
-> +
->  #else /* CONFIG_RISCV_SBI */
->  static inline int sbi_remote_fence_i(const struct cpumask *cpu_mask) { return -1; }
->  static inline void sbi_init(void) {}
-> diff --git a/arch/riscv/kernel/sbi.c b/arch/riscv/kernel/sbi.c
-> index 5a62ed1da453..73a9c22c3945 100644
-> --- a/arch/riscv/kernel/sbi.c
-> +++ b/arch/riscv/kernel/sbi.c
-> @@ -571,6 +571,44 @@ long sbi_get_mimpid(void)
->  }
->  EXPORT_SYMBOL_GPL(sbi_get_mimpid);
->  
-> +bool sbi_debug_console_available;
-> +
-> +int sbi_debug_console_write(unsigned int num_bytes, phys_addr_t base_addr)
-> +{
-> +	struct sbiret ret;
-> +
-> +	if (!sbi_debug_console_available)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (IS_ENABLED(CONFIG_32BIT))
-> +		ret = sbi_ecall(SBI_EXT_DBCN, SBI_EXT_DBCN_CONSOLE_WRITE,
-> +				num_bytes, lower_32_bits(base_addr),
-> +				upper_32_bits(base_addr), 0, 0, 0);
-> +	else
-> +		ret = sbi_ecall(SBI_EXT_DBCN, SBI_EXT_DBCN_CONSOLE_WRITE,
-> +				num_bytes, base_addr, 0, 0, 0, 0);
-> +
-> +	return ret.error ? sbi_err_map_linux_errno(ret.error) : ret.value;
+Fix the below warning
+drivers/tty/serial/uartlite.c:79: warning: Function parameter or member 'reg_ops' not described in 'uartlite_data'
+drivers/tty/serial/uartlite.c:79: warning: Function parameter or member 'clk' not described in 'uartlite_data'
+drivers/tty/serial/uartlite.c:79: warning: Function parameter or member 'baud' not described in 'uartlite_data'
+drivers/tty/serial/uartlite.c:79: warning: Function parameter or member 'cflags' not described in 'uartlite_data'
 
-We can't get perfect mappings, but I wonder if we can do better than
-returning ENOTSUPP for "Failed to write the byte due to I/O errors."
+Reported-by: kernel test robot <yujie.liu@intel.com>
+Closes: https://lore.kernel.org/r/202311061059.NUeUar9b-lkp@intel.com/
+Fixes: ea017f5853e9 ("tty: serial: uartlite: Prevent changing fixed parameters")
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
 
-How about
+---
 
- if (ret.error == SBI_ERR_FAILURE)
-     return -EIO;
+Changes in v2:
+Update doc for uartlite_data
 
- return ret.error ? sbi_err_map_linux_errno(ret.error) : ret.value;
+ drivers/tty/serial/uartlite.c | 10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
+diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
+index 404c14acafa5..e586d7aeac98 100644
+--- a/drivers/tty/serial/uartlite.c
++++ b/drivers/tty/serial/uartlite.c
+@@ -62,11 +62,11 @@ static struct uart_port *console_port;
+ #endif
+ 
+ /**
+- * struct uartlite_data: Driver private data
+- * reg_ops: Functions to read/write registers
+- * clk: Our parent clock, if present
+- * baud: The baud rate configured when this device was synthesized
+- * cflags: The cflags for parity and data bits
++ * struct uartlite_data - Driver private data
++ * @reg_ops: Functions to read/write registers
++ * @clk: Our parent clock, if present
++ * @baud: The baud rate configured when this device was synthesized
++ * @cflags: The cflags for parity and data bits
+  */
+ struct uartlite_data {
+ 	const struct uartlite_reg_ops *reg_ops;
+-- 
+2.17.1
 
-> +}
-> +
-> +int sbi_debug_console_read(unsigned int num_bytes, phys_addr_t base_addr)
-> +{
-> +	struct sbiret ret;
-> +
-> +	if (!sbi_debug_console_available)
-> +		return -EOPNOTSUPP;
-> +
-> +	if (IS_ENABLED(CONFIG_32BIT))
-> +		ret = sbi_ecall(SBI_EXT_DBCN, SBI_EXT_DBCN_CONSOLE_READ,
-> +				num_bytes, lower_32_bits(base_addr),
-> +				upper_32_bits(base_addr), 0, 0, 0);
-> +	else
-> +		ret = sbi_ecall(SBI_EXT_DBCN, SBI_EXT_DBCN_CONSOLE_READ,
-> +				num_bytes, base_addr, 0, 0, 0, 0);
-> +
-> +	return ret.error ? sbi_err_map_linux_errno(ret.error) : ret.value;
-
-Same comment as above.
-
-> +}
-> +
->  void __init sbi_init(void)
->  {
->  	int ret;
-> @@ -612,6 +650,11 @@ void __init sbi_init(void)
->  			sbi_srst_reboot_nb.priority = 192;
->  			register_restart_handler(&sbi_srst_reboot_nb);
->  		}
-> +		if ((sbi_spec_version >= sbi_mk_version(2, 0)) &&
-> +		    (sbi_probe_extension(SBI_EXT_DBCN) > 0)) {
-> +			pr_info("SBI DBCN extension detected\n");
-> +			sbi_debug_console_available = true;
-> +		}
->  	} else {
->  		__sbi_set_timer = __sbi_set_timer_v01;
->  		__sbi_send_ipi	= __sbi_send_ipi_v01;
-> -- 
-> 2.34.1
->
-
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
