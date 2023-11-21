@@ -1,42 +1,42 @@
-Return-Path: <linux-serial+bounces-17-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-18-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B737F2770
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D631F7F2771
 	for <lists+linux-serial@lfdr.de>; Tue, 21 Nov 2023 09:28:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C300E282015
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Nov 2023 08:28:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91EE8282867
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Nov 2023 08:28:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 074CC38DC6;
-	Tue, 21 Nov 2023 08:28:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 146B43B2A3;
+	Tue, 21 Nov 2023 08:28:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=email.cz header.i=@email.cz header.b="eaE4JBTn"
+	dkim=pass (2048-bit key) header.d=email.cz header.i=@email.cz header.b="D7AXvMTX"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mxe-1-51d.seznam.cz (mxe-1-51d.seznam.cz [IPv6:2a02:598:128:8a00::1000:51d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 839D7125;
+Received: from mxe-2-adb.seznam.cz (mxe-2-adb.seznam.cz [IPv6:2a02:598:64:8a00::1000:adb])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72DB2F9;
 	Tue, 21 Nov 2023 00:28:31 -0800 (PST)
 Received: from email.seznam.cz
-	by smtpc-mxe-b7dc65f8c-7rcq6
-	(smtpc-mxe-b7dc65f8c-7rcq6 [2a02:598:128:8a00::1000:51d])
-	id 7226a1698cd213c372a82f71;
-	Tue, 21 Nov 2023 09:28:12 +0100 (CET)
+	by smtpc-mxe-b7dc65f8c-m6chn
+	(smtpc-mxe-b7dc65f8c-m6chn [2a02:598:64:8a00::1000:adb])
+	id 7e5e3ab780aa881d7ed0b4af;
+	Tue, 21 Nov 2023 09:28:13 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=email.cz;
-	s=szn20221014; t=1700555292;
-	bh=J2I1LgR+R5ZrT9fKUyz3O47ieYqVVfjxD2dhJj8QCJU=;
+	s=szn20221014; t=1700555293;
+	bh=ji2dMfHgLE3waElO8QAkAB5krWMcZPVPZP+nJi3UQt4=;
 	h=Received:From:To:Cc:Subject:Date:Message-Id:Mime-Version:X-Mailer:
 	 Content-Type:Content-Transfer-Encoding;
-	b=eaE4JBTnoBKS2rFUhOZKGHIK+dlToqaFK4eYJ7HJpjDkBxTHk0997zS+U+QjJ/PSB
-	 Y/gzB7xjGbuIuKlLe+bZJKq/4BFNp7dPeejDFleXZlXEHeSyvQJAIfgmk34kYDAd4U
-	 50JWNQ83yKbqmft+4Nprd0kA3khadoW0xir73MrochxH7wmgaPdlmJKOMnykuY5ukE
-	 kz8kNqESEOGcLszKdzM5nl9dqKAeRHKeFJHNiGMnmXKncMooTSy6fkQ/0m9hau08Sv
-	 L0tbcR+kzFqVTMDy839Ufw2WMon1L5DFIGWSHeCUo3C5hOvAqZQEId9tGTbgatPRIJ
-	 2d4hBjJtoCZgg==
+	b=D7AXvMTXM2WuFMz3JfMg9Usx782zt6mvPljekAsbggigslcnFBw4NIrR/5zc+101Q
+	 wuVp8Xq596y73jXC0cth2MwJDtUyW8p2qqBOdO4QFcap/mjroqnRvEaZA2gBdCeUgw
+	 pERgCHCdlhw7CYyso97OxXagSXHkpwnpJRYUiEYBUDty+2ThipHCTAbr9Pc5JY83wJ
+	 PgJ2FYUhh4ejI/nZlJAaEIyrZk4dCeUSFhDMG1wJ8HcHSHzn+fYPFJcpc4kjYgsRnj
+	 7N4sOXDuFSMnBWhPFvmsmSXk8pz2ppgYwM7a7qGwJJNkKrFLUQnQk/oL8qJJ20VswA
+	 R+AJF13uk8gJA==
 Received: from 184-143.gtt-net.cz (184-143.gtt-net.cz [82.144.143.184])
 	by email.seznam.cz (szn-UNKNOWN-unknown) with HTTP;
-	Tue, 21 Nov 2023 09:28:10 +0100 (CET)
+	Tue, 21 Nov 2023 09:28:12 +0100 (CET)
 From: "Tomas Paukrt" <tomaspaukrt@email.cz>
 To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
 	"Jiri Slaby" <jirislaby@kernel.org>,
@@ -46,10 +46,10 @@ To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
 Cc: <linux-kernel@vger.kernel.org>,
 	<linux-serial@vger.kernel.org>,
 	<devicetree@vger.kernel.org>
-Subject: =?utf-8?q?=5BPATCH_v4_1/2=5D_serial=3A_core=3A_Add_support_for_en?=
-	=?utf-8?q?abling_RS485_mode_via_GPIO_at_boot_time?=
-Date: Tue, 21 Nov 2023 09:28:10 +0100 (CET)
-Message-Id: <3Za.ZZs}.ndXI8CMee4.1bN6eQ@seznam.cz>
+Subject: =?utf-8?q?=5BPATCH_v4_2/2=5D_dt-bindings=3A_serial=3A_Add_support?=
+	=?utf-8?q?_for_enabling_RS485_mode_via_GPIO_at_boot_time?=
+Date: Tue, 21 Nov 2023 09:28:12 +0100 (CET)
+Message-Id: <3Zb.ZZsn.wkax8K4so6.1bN6eS@seznam.cz>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -68,35 +68,26 @@ The GPIO is defined by the device tree property "linux,rs485-mode-gpio".=
 
 Signed-off-by: Tomas Paukrt <tomaspaukrt@email.cz>
 ---
- drivers/tty/serial/serial_core.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ Documentation/devicetree/bindings/serial/rs485.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_=
-core.c
-index f1348a5..f1bf0b9 100644
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -3603,6 +3603,18 @@ int uart_get_rs485_mode(struct uart_port *port)
- 	}
+diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documen=
+tation/devicetree/bindings/serial/rs485.yaml
+index 9418fd6..7a72f37 100644
+--- a/Documentation/devicetree/bindings/serial/rs485.yaml
++++ b/Documentation/devicetree/bindings/serial/rs485.yaml
+@@ -47,6 +47,10 @@ properties:
+       later with proper ioctl.
+     $ref: /schemas/types.yaml#/definitions/flag
  
- 	/*
-+	 * Enable the RS485 mode based on the state of a GPIO pin.
-+	 */
-+	desc =3D devm_gpiod_get_optional(dev, "linux,rs485-mode", GPIOD_IN);
-+	if (IS_ERR(desc))
-+		return dev_err_probe(dev, PTR_ERR(desc), "Cannot get linux,rs485-mode-g=
-pio\n");
-+	if (desc) {
-+		if (gpiod_get_value(desc))
-+			rs485conf->flags |=3D SER_RS485_ENABLED;
-+		devm_gpiod_put(dev, desc);
-+	}
++  linux,rs485-mode-gpio:
++    description: GPIO pin to enable RS485 mode at boot time.
++    maxItems: 1
 +
-+	/*
- 	 * Disabling termination by default is the safe choice:  Else if many
- 	 * bus participants enable it, no communication is possible at all.
- 	 * Works fine for short cables and users may enable for longer cables.=
+   rs485-rx-during-tx:
+     description: enables the receiving of data even while sending data.=
 
+     $ref: /schemas/types.yaml#/definitions/flag
 -- 
 2.7.4
  
