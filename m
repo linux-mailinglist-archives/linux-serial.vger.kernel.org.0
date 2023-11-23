@@ -1,126 +1,142 @@
-Return-Path: <linux-serial+bounces-170-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-173-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 490797F6095
-	for <lists+linux-serial@lfdr.de>; Thu, 23 Nov 2023 14:42:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BF7DA7F60C0
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Nov 2023 14:49:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C4849B2151E
-	for <lists+linux-serial@lfdr.de>; Thu, 23 Nov 2023 13:42:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FB13B213A0
+	for <lists+linux-serial@lfdr.de>; Thu, 23 Nov 2023 13:49:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15A2425579;
-	Thu, 23 Nov 2023 13:42:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EF8325757;
+	Thu, 23 Nov 2023 13:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NRAK1wIg"
+	dkim=pass (1024-bit key) header.d=rasmusvillemoes.dk header.i=@rasmusvillemoes.dk header.b="cuNGAaXJ"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E78CD49;
-	Thu, 23 Nov 2023 05:42:49 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 58A5D20007;
-	Thu, 23 Nov 2023 13:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1700746967;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CVBDCS1NTDb3ab3cFjXMUr783QzZPSiK8Mrwk5FgGVk=;
-	b=NRAK1wIgVmhdjMNjKWvEyu+zXOcx+/cQ7TRdPSsMRujvRiMpre+IHWlYH70bj1OWEgfWuf
-	LX7cwaRXkncLiZLjfknzSmBQMlgBjoS7RlPWuqtR24GKk2rxnCTa2YPtyjNjnQLgVKBsDy
-	UP4p14COSaKs8f98niq3z+XvevTn1a7/PPguFX7hoBsoTKVjn5F6tN0DHuDd96J6ax1HX9
-	mkIS25+RS6I973GJVb2bDd+tyrIwqoASaTc3HB6mOr2r+qOHBWqug+w5gLJs6rA4VcGRMY
-	G43ylCTHCeq/R9IAtcnY8fdbtzouQE09xgUB89woDmAd+/iqUlEjZwTOhjizOA==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 23 Nov 2023 14:42:44 +0100
-Subject: [PATCH v4 6/6] tty: serial: amba-pl011: factor QDF2400 SoC erratum
- 44 out of probe
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3D391B3
+	for <linux-serial@vger.kernel.org>; Thu, 23 Nov 2023 05:48:55 -0800 (PST)
+Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-507a5f2193bso940285e87.1
+        for <linux-serial@vger.kernel.org>; Thu, 23 Nov 2023 05:48:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=rasmusvillemoes.dk; s=google; t=1700747334; x=1701352134; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYJ9RINpWO/etmrdmn1FP6FlQ9EPAx5C4AtYkJeamEI=;
+        b=cuNGAaXJmWlRWqjJena6EFfVjKGaTvWz50yhLoPjEGVBOVDyrKuDtQAO2HT57j7tHQ
+         KnbtiC8F+y86KMXPGZ5Vz6Eoiee/j0izmlHp/DrfhkIZt/C+oCqtBUnsyWaiazNB7vaB
+         GDhgUMMzUIG+wmW+QS0seAE97+h3JBUuvBJP0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1700747334; x=1701352134;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wYJ9RINpWO/etmrdmn1FP6FlQ9EPAx5C4AtYkJeamEI=;
+        b=q6TrvaftXmHLtqzjPwUgJszz8GHELpf+hbp/50DkgE/w4f9BOBgkFMp+rWvxjo/CWg
+         7gZzPpLty8P0ThkC29jUrRb7pOhhYR0Dvai+YIVIishl+J/Bk6uBWWHYXcZI5FSJ2lbo
+         UE81P6GdaLiWAKxtYGjC8eAzjf4l5QTUZBDTVL50vi1BSRabsAWhPE7m4fYymPIzGWLE
+         Ltl9eUu+id0oJJf/oHeem6RbUZkBPDxAhAPbxYQhCh0IaGqryYPA9dAQxsdQDLu1Jf1K
+         /bQTcucfItjvWx6evAEo/hmwyjbWHtTwm+CW8gYUaAfiopz8bqvVTvBgIGk1QxVqMaKv
+         cZuA==
+X-Gm-Message-State: AOJu0YypGGq87q5e0rKRk3fxXPHmr+7gXeWMToy7e49+hqdre3szN+Km
+	yhkR9maTV02rfw+H9hyzBJosuA==
+X-Google-Smtp-Source: AGHT+IG4CVoPRUAn77ky2ffnCHCPrIVvxiwyxMrF5VOgYS9HaFefUSItqzrdzQkf09aJ01Bo2N1g3g==
+X-Received: by 2002:a19:7512:0:b0:50a:a31c:39b1 with SMTP id y18-20020a197512000000b0050aa31c39b1mr865785lfe.9.1700747333878;
+        Thu, 23 Nov 2023 05:48:53 -0800 (PST)
+Received: from [172.16.11.116] ([81.216.59.226])
+        by smtp.gmail.com with ESMTPSA id t6-20020a056512068600b005094486b705sm199933lfe.16.2023.11.23.05.48.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Nov 2023 05:48:53 -0800 (PST)
+Message-ID: <b8df5f0c-a3cd-4cad-b1c6-db89686464fc@rasmusvillemoes.dk>
+Date: Thu, 23 Nov 2023 14:48:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231123-mbly-uart-v4-6-7f913a74ff89@bootlin.com>
-References: <20231123-mbly-uart-v4-0-7f913a74ff89@bootlin.com>
-In-Reply-To: <20231123-mbly-uart-v4-0-7f913a74ff89@bootlin.com>
-To: Russell King <linux@armlinux.org.uk>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.3
-X-GND-Sasl: theo.lebrun@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: serial: rs485: add rs485-mux-gpios
+ binding
+Content-Language: en-US, da
+To: Lukas Wunner <lukas@wunner.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+ Crescent CY Hsieh <crescentcy.hsieh@moxa.com>,
+ Lino Sanfilippo <LinoSanfilippo@gmx.de>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Peter Rosin <peda@axentia.se>
+References: <20231120151056.148450-1-linux@rasmusvillemoes.dk>
+ <20231120151056.148450-2-linux@rasmusvillemoes.dk>
+ <20231122145344.GA18949@wunner.de>
+ <e731c0a9-7a5c-41c3-87aa-d6937b99d01a@rasmusvillemoes.dk>
+ <20231123103802.GA30056@wunner.de>
+From: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+In-Reply-To: <20231123103802.GA30056@wunner.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On this platform, different vendor data is used. That requires a
-compile-time check as we access (1) a global boolean & (2) our local
-vendor data. Both symbols are accessible only when
-CONFIG_ACPI_SPCR_TABLE is enabled.
+On 23/11/2023 11.38, Lukas Wunner wrote:
+> On Thu, Nov 23, 2023 at 11:07:16AM +0100, Rasmus Villemoes wrote:
+>> On 22/11/2023 15.53, Lukas Wunner wrote:
+>>> But if that patch gets accepted, we'd have *three* different modes:
+>>> RS-232, RS-485, RS-422.  A single GPIO seems insufficient to handle that.
+>>> You'd need at least two GPIOs.
+>>
+>> I don't see Crescent introducing any new gpio that needs to be handled.
+>> In fact, I can't even see why from the perspective of the software that
+>> rs422 isn't just rs232; there's no transmit enable pin that needs to be
+>> handled. But maybe the uart driver does something different in rs422
+>> mode; I assume he must have some update of some driver, since otherwise
+>> the new rs422 bit should be rejected by the core. So I can't really see
+>> the whole picture of that rs422 story.
+> 
+> The question is, could we conceivably have the need to support
+> switching between the three modes RS-232, RS-485, RS-422.
+> If yes, then the GPIO mux interface should probably allow for that.
+> 
+> As a case in point, the Siemens IOT 2040 has two serial ports
+> which can be set to either of those three modes.  The signals
+> are routed to the same D-sub socket, but the pins used are
+> different.  See page 46 and 47 of this document:
+> 
+> https://cache.industry.siemens.com/dl/files/658/109741658/att_899623/v1/iot2000_operating_instructions_enUS_en-US.pdf
+> 
+> The driver for this product is 8250_exar.c.  It's an Intel-based
+> product, so no devicetree, but it shows that such use cases exist.
 
-Factor the vendor data overriding to a separate function that is empty
-when CONFIG_ACPI_SPCR_TABLE is not defined.
+OK. I did look at the mux-controller/mux-consumer bindings, but couldn't
+really make heads or tails of it, and there aren't a whole lot of
+examples in-tree. Also, the C API seems ... not quite what is needed
+here. I realize that's not really anything to do with the best way to
+describe the hardware, but that, plus the fact that the serial core
+already handles a number of gpios controlling circuitry related to
+rs485, was what made me go for one extra gpio.
 
-Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/tty/serial/amba-pl011.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+How would a mux-consumer description look?
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 4185d6fd243b..f42f4a94c239 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2874,6 +2874,22 @@ static int pl011_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(pl011_dev_pm_ops, pl011_suspend, pl011_resume);
- 
-+#ifdef CONFIG_ACPI_SPCR_TABLE
-+static void qpdf2400_erratum44_workaround(struct device *dev,
-+					  struct uart_amba_port *uap)
-+{
-+	if (!qdf2400_e44_present)
-+		return;
-+
-+	dev_info(dev, "working around QDF2400 SoC erratum 44\n");
-+	uap->vendor = &vendor_qdt_qdf2400_e44;
-+}
-+#else
-+static void qpdf2400_erratum44_workaround(struct device *dev,
-+					  struct uart_amba_port *uap)
-+{ /* empty */ }
-+#endif
-+
- static int sbsa_uart_probe(struct platform_device *pdev)
- {
- 	struct uart_amba_port *uap;
-@@ -2909,13 +2925,8 @@ static int sbsa_uart_probe(struct platform_device *pdev)
- 		return ret;
- 	uap->port.irq	= ret;
- 
--#ifdef CONFIG_ACPI_SPCR_TABLE
--	if (qdf2400_e44_present) {
--		dev_info(&pdev->dev, "working around QDF2400 SoC erratum 44\n");
--		uap->vendor = &vendor_qdt_qdf2400_e44;
--	} else
--#endif
--		uap->vendor = &vendor_sbsa;
-+	uap->vendor = &vendor_sbsa;
-+	qpdf2400_erratum44_workaround(&pdev->dev, uap);
- 
- 	uap->reg_offset	= uap->vendor->reg_offset;
- 	uap->fifosize	= 32;
+  mux-states = <&mux 0>, <&mux 1>;
+  mux-state-names = "rs485", "rs232";
 
--- 
-2.42.0
+or should that be mux-controls? Would that be enough so that we're sure
+that if and when a rs422 state is needed that could easily be
+represented here?
+
+Now implementation-wise, there's the complication that switching the mux
+to/from rs485 mode must be done after/before the driver's ->rs485_config
+is called, to avoid the transceiver temporarily being activated (thus
+blocking/disturbing other traffic). That plus the need to mux_*_deselect
+the old mode means the consumer (serial core in this case) ends up with
+quite a lot of bookkeeping, and even more so taking error path into
+consideration.
+
+Rasmus
 
 
