@@ -1,41 +1,41 @@
-Return-Path: <linux-serial+bounces-307-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-309-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C41167FF137
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:07:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9CAEF7FF138
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:07:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 017C61C20CBD
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 58427281B32
 	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 14:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DFEE48CD1;
-	Thu, 30 Nov 2023 14:07:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B3348CE2;
+	Thu, 30 Nov 2023 14:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kxrmXO2p"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NtrxVUXx"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6585196;
-	Thu, 30 Nov 2023 06:07:36 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3482C40003;
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905FC1B4;
+	Thu, 30 Nov 2023 06:07:37 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C32934000D;
 	Thu, 30 Nov 2023 14:07:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701353255;
+	t=1701353256;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Q7vbdl0phWxmXqUNa5odOWDQ5PiPNBLg4EXYyhdyx1Q=;
-	b=kxrmXO2pD/RvqeUbb1b13xx7xVNZXcsWd5lr4hZYIc3cFLhByFdzZeGk0W3c9kRZic0WxJ
-	u3Lck3xl6q8x/O6QtGCnvKisWgZowEWNo5WjPvtUDuXv7hC5luoyjB1TYDC8xOgBQSWgnE
-	fbkpHwZpVjWDibSRCA+L6Z+X6an5Rg9DgO9eGA1tGQEhIpxKOVu+z8nWrhcyEbf4He/QeF
-	doiPogFV51DF3qbIDil3+aO5p1qZqCevLZpTtZBSo4NdYdTtbmUsZJPQFGCvpshavrmgOd
-	q15d6k93uuPTJnnwo0+Dbwm7xkMiNzgbKDTPwtvQQXgO9SHzfsS3diEzhQkUtg==
+	bh=d9nOprxz6fcIYCBwr+hMskwGdUdDHFkRMGiyHUidsjs=;
+	b=NtrxVUXxRHUkgyhUybuEJ67yF7/hooBVKQL1dMnaBsNQOeW0dgE1JuOf9hTahfbTmr5Bxy
+	mI7wZaIDPb1qDd8pj+S06xXM1I13nCCKDHP9fVtPhgS7AMsG2qxOKhwuDthRAtXkdJgWoD
+	ix+3ktB54h+eO43C7XPCr1GBWeTPIXKi6JMTSRECLrP43UCu204AgJ6XoyKBTIbEDINbbO
+	TdHnyaLEUudR5VpKLLQ3HcJVwTfOlVTWYLkaiSaKFf6RLcahLNCUI7EAjKxZV7LFoE70O7
+	ipAE6OlLZxeQmxo8kRPKeUOK/zNcv8uAsqXRX4FWP1rr4an6oVdQSHAk0VGt0g==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 30 Nov 2023 15:07:16 +0100
-Subject: [PATCH v5 4/9] tty: serial: amba-pl011: replace TIOCMBIT macros by
- static functions
+Date: Thu, 30 Nov 2023 15:07:17 +0100
+Subject: [PATCH v5 5/9] tty: serial: amba-pl011: avoid quoted string split
+ across lines
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -44,7 +44,7 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20231130-mbly-uart-v5-4-6566703a04b5@bootlin.com>
+Message-Id: <20231130-mbly-uart-v5-5-6566703a04b5@bootlin.com>
 References: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com>
 In-Reply-To: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com>
 To: Russell King <linux@armlinux.org.uk>, 
@@ -62,118 +62,67 @@ Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
 X-Mailer: b4 0.12.3
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-The driver uses two TIOCMBIT macros inside pl011_{get,set}_mctrl to
-simplify the logic. Those look scary to checkpatch because they contain
-ifs without do-while loops.
-
-Avoid the macros by creating small equivalent static functions; that
-lets the compiler do its type checking & avoids checkpatch errors.
-
-For the second instance __assign_bit is not usable because it deals with
-unsigned long pointers whereas we have an unsigned int in
-pl011_set_mctrl.
-
-This addresses the following checkpatch warnings:
+Remove all instances of quoted strings split across lines. Fix four
+checkpatch warnings:
 
     $ ./scripts/checkpatch.pl --strict --file \
         drivers/tty/serial/amba-pl011.c
+    WARNING: quoted string split across lines
+    [...]
 
-    ERROR: Macros starting with if should be enclosed by a do -
-           while loop to avoid possible if/else logic defects
-
-    CHECK: Macro argument 'uartbit' may be better as '(uartbit)' to
-           avoid precedence issues
-
-    ERROR: Macros starting with if should be enclosed by a do - while
-           loop to avoid possible if/else logic defects
-
-    CHECK: Macro argument 'tiocmbit' may be better as '(tiocmbit)' to
-           avoid precedence issues
-
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/tty/serial/amba-pl011.c | 45 ++++++++++++++++++++++-------------------
- 1 file changed, 24 insertions(+), 21 deletions(-)
+ drivers/tty/serial/amba-pl011.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 7bd0b68ef92f..743dee75c68b 100644
+index 743dee75c68b..be8888db1a37 100644
 --- a/drivers/tty/serial/amba-pl011.c
 +++ b/drivers/tty/serial/amba-pl011.c
-@@ -1589,6 +1589,12 @@ static unsigned int pl011_tx_empty(struct uart_port *port)
- 							0 : TIOCSER_TEMT;
- }
- 
-+static void pl011_maybe_set_bit(bool cond, unsigned int *ptr, unsigned int mask)
-+{
-+	if (cond)
-+		*ptr |= mask;
-+}
-+
- static unsigned int pl011_get_mctrl(struct uart_port *port)
- {
- 	struct uart_amba_port *uap =
-@@ -1596,18 +1602,22 @@ static unsigned int pl011_get_mctrl(struct uart_port *port)
- 	unsigned int result = 0;
- 	unsigned int status = pl011_read(uap, REG_FR);
- 
--#define TIOCMBIT(uartbit, tiocmbit)	\
--	if (status & uartbit)		\
--		result |= tiocmbit
-+	pl011_maybe_set_bit(status & UART01x_FR_DCD, &result, TIOCM_CAR);
-+	pl011_maybe_set_bit(status & uap->vendor->fr_dsr, &result, TIOCM_DSR);
-+	pl011_maybe_set_bit(status & uap->vendor->fr_cts, &result, TIOCM_CTS);
-+	pl011_maybe_set_bit(status & uap->vendor->fr_ri, &result, TIOCM_RNG);
- 
--	TIOCMBIT(UART01x_FR_DCD, TIOCM_CAR);
--	TIOCMBIT(uap->vendor->fr_dsr, TIOCM_DSR);
--	TIOCMBIT(uap->vendor->fr_cts, TIOCM_CTS);
--	TIOCMBIT(uap->vendor->fr_ri, TIOCM_RNG);
--#undef TIOCMBIT
- 	return result;
- }
- 
-+static void pl011_assign_bit(bool cond, unsigned int *ptr, unsigned int mask)
-+{
-+	if (cond)
-+		*ptr |= mask;
-+	else
-+		*ptr &= ~mask;
-+}
-+
- static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
- {
- 	struct uart_amba_port *uap =
-@@ -1616,23 +1626,16 @@ static void pl011_set_mctrl(struct uart_port *port, unsigned int mctrl)
- 
- 	cr = pl011_read(uap, REG_CR);
- 
--#define	TIOCMBIT(tiocmbit, uartbit)		\
--	if (mctrl & tiocmbit)		\
--		cr |= uartbit;		\
--	else				\
--		cr &= ~uartbit
--
--	TIOCMBIT(TIOCM_RTS, UART011_CR_RTS);
--	TIOCMBIT(TIOCM_DTR, UART011_CR_DTR);
--	TIOCMBIT(TIOCM_OUT1, UART011_CR_OUT1);
--	TIOCMBIT(TIOCM_OUT2, UART011_CR_OUT2);
--	TIOCMBIT(TIOCM_LOOP, UART011_CR_LBE);
-+	pl011_assign_bit(mctrl & TIOCM_RTS, &cr, UART011_CR_RTS);
-+	pl011_assign_bit(mctrl & TIOCM_DTR, &cr, UART011_CR_DTR);
-+	pl011_assign_bit(mctrl & TIOCM_OUT1, &cr, UART011_CR_OUT1);
-+	pl011_assign_bit(mctrl & TIOCM_OUT2, &cr, UART011_CR_OUT2);
-+	pl011_assign_bit(mctrl & TIOCM_LOOP, &cr, UART011_CR_LBE);
- 
- 	if (port->status & UPSTAT_AUTORTS) {
- 		/* We need to disable auto-RTS if we want to turn RTS off */
--		TIOCMBIT(TIOCM_RTS, UART011_CR_RTSEN);
-+		pl011_assign_bit(mctrl & TIOCM_RTS, &cr, UART011_CR_RTSEN);
+@@ -973,8 +973,8 @@ static void pl011_dma_rx_irq(struct uart_amba_port *uap)
+ 	/* Switch buffer & re-trigger DMA job */
+ 	dmarx->use_buf_b = !dmarx->use_buf_b;
+ 	if (pl011_dma_rx_trigger_dma(uap)) {
+-		dev_dbg(uap->port.dev, "could not retrigger RX DMA job "
+-			"fall back to interrupt mode\n");
++		dev_dbg(uap->port.dev,
++			"could not retrigger RX DMA job fall back to interrupt mode\n");
+ 		uap->im |= UART011_RXIM;
+ 		pl011_write(uap->im, uap, REG_IMSC);
  	}
--#undef TIOCMBIT
+@@ -1021,8 +1021,8 @@ static void pl011_dma_rx_callback(void *data)
+ 	 * get some IRQ immediately from RX.
+ 	 */
+ 	if (ret) {
+-		dev_dbg(uap->port.dev, "could not retrigger RX DMA job "
+-			"fall back to interrupt mode\n");
++		dev_dbg(uap->port.dev,
++			"could not retrigger RX DMA job fall back to interrupt mode\n");
+ 		uap->im |= UART011_RXIM;
+ 		pl011_write(uap->im, uap, REG_IMSC);
+ 	}
+@@ -1158,8 +1158,8 @@ static void pl011_dma_startup(struct uart_amba_port *uap)
  
- 	pl011_write(cr, uap, REG_CR);
- }
+ 	if (uap->using_rx_dma) {
+ 		if (pl011_dma_rx_trigger_dma(uap))
+-			dev_dbg(uap->port.dev, "could not trigger initial "
+-				"RX DMA job, fall back to interrupt mode\n");
++			dev_dbg(uap->port.dev,
++				"could not trigger initial RX DMA job, fall back to interrupt mode\n");
+ 		if (uap->dmarx.poll_rate) {
+ 			timer_setup(&uap->dmarx.timer, pl011_dma_rx_poll, 0);
+ 			mod_timer(&uap->dmarx.timer,
+@@ -1391,8 +1391,8 @@ __acquires(&uap->port.lock)
+ 	 */
+ 	if (pl011_dma_rx_available(uap)) {
+ 		if (pl011_dma_rx_trigger_dma(uap)) {
+-			dev_dbg(uap->port.dev, "could not trigger RX DMA job "
+-				"fall back to interrupt mode again\n");
++			dev_dbg(uap->port.dev,
++				"could not trigger RX DMA job fall back to interrupt mode again\n");
+ 			uap->im |= UART011_RXIM;
+ 			pl011_write(uap->im, uap, REG_IMSC);
+ 		} else {
 
 -- 
 2.43.0
