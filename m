@@ -1,126 +1,96 @@
-Return-Path: <linux-serial+bounces-313-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-315-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8D807FF13F
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:07:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 380567FF19D
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:19:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 70201B210FA
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 14:07:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 71A8C1C20B93
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 14:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99D1D48CF0;
-	Thu, 30 Nov 2023 14:07:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 318D84A984;
+	Thu, 30 Nov 2023 14:19:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dmPnnFHn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IVVBQBcf"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D69D710F2;
-	Thu, 30 Nov 2023 06:07:39 -0800 (PST)
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 084854000C;
-	Thu, 30 Nov 2023 14:07:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1701353258;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+sPV5HLoRY51KAmBzr1P1nmrX5oNWMM/Fl0J4fOzMcw=;
-	b=dmPnnFHnMQC+V9BPhSHgfl5r2gTpn3MzFkurvB/l9sipbC71rbO8QbXABTv5omqPMsZn/N
-	EJSGM4gpHL2MrNuLwykHRcEbXZ+vSiCj+XY/+wYHDbjlB10Nj2+cGDRN/MfRzbAmF91vVe
-	yM8cXo1QdSfwfybH3eAl2r7+cqWubdG9C5F69dutwmVnjqD8FYQ2w4bsWtbvmgTLVrlkD3
-	ElsUmKCHY7lrxDz97XLBOVmB2fhBcEE7xWfkLxXXOj2f7x3Pgv+gJJU7CcAStbQTjBVgIB
-	30sgYFK7aj/qbYvTFkVMV8LqMuwuOBLFrG0w22w+g6FxbQkOKTnO9frOnjn35Q==
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Thu, 30 Nov 2023 15:07:21 +0100
-Subject: [PATCH v5 9/9] tty: serial: amba-pl011: factor QDF2400 SoC erratum
- 44 out of probe
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2BB783;
+	Thu, 30 Nov 2023 06:19:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1701353982; x=1732889982;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=yCwGWZ6omGh26nOrTHmakqG/E9HURyUlbCEKibso0J8=;
+  b=IVVBQBcfWVf+4CAcFifLasnnajhg04Mwa76SQCtVHnx2GPOhA47AXS2J
+   6v1IUbXGH+wDvRm6MPUiLUD8HKZOx2Fg+G9LpOS0s8Nr2Myhr+31DZGdJ
+   OD+AC1vn0BWVjAXk3qGbiYr1MaLuEwseUtpJiLh2TIGAADsYgUfBFZPyk
+   IQ+CPw0S7ABCskwXSM4fYz10ui0lBCTXYe/42YpLjkVEj6WufoWrGi0dI
+   TgMFC0Qnr9x087VBkf6ngLXNApJcXBAq1WFlCMyoRROvzsxSNuZPu18WF
+   H1M7G+xohB6nTHsIHhGDBOVtiy5Xoz6YwWjDuo+63mQBmz+G0/ukQtqqn
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="188373"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="188373"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 06:19:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10910"; a="1100951359"
+X-IronPort-AV: E=Sophos;i="6.04,239,1695711600"; 
+   d="scan'208";a="1100951359"
+Received: from bergler-mobl.ger.corp.intel.com ([10.249.33.30])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Nov 2023 06:19:38 -0800
+Date: Thu, 30 Nov 2023 16:19:36 +0200 (EET)
+From: =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: =?ISO-8859-15?Q?Th=E9o_Lebrun?= <theo.lebrun@bootlin.com>
+cc: Russell King <linux@armlinux.org.uk>, 
+    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+    Jiri Slaby <jirislaby@kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+    linux-serial <linux-serial@vger.kernel.org>, 
+    Linus Walleij <linus.walleij@linaro.org>, 
+    =?ISO-8859-15?Q?Gr=E9gory_Clement?= <gregory.clement@bootlin.com>, 
+    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+    Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+    Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+    Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH v5 5/9] tty: serial: amba-pl011: avoid quoted string
+ split across lines
+In-Reply-To: <20231130-mbly-uart-v5-5-6566703a04b5@bootlin.com>
+Message-ID: <439c1650-e88-4442-4025-38e9fbf465@linux.intel.com>
+References: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com> <20231130-mbly-uart-v5-5-6566703a04b5@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20231130-mbly-uart-v5-9-6566703a04b5@bootlin.com>
-References: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com>
-In-Reply-To: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com>
-To: Russell King <linux@armlinux.org.uk>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- Linus Walleij <linus.walleij@linaro.org>, 
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-X-Mailer: b4 0.12.3
-X-GND-Sasl: theo.lebrun@bootlin.com
+Content-Type: multipart/mixed; boundary="8323329-210180421-1701353981=:1808"
 
-On this platform, different vendor data is used. That requires a
-compile-time check as we access (1) a global boolean & (2) our local
-vendor data. Both symbols are accessible only when
-CONFIG_ACPI_SPCR_TABLE is enabled.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-Factor the vendor data overriding to a separate function that is empty
-when CONFIG_ACPI_SPCR_TABLE is not defined.
+--8323329-210180421-1701353981=:1808
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: 8BIT
 
-Suggested-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/tty/serial/amba-pl011.c | 25 ++++++++++++++++++-------
- 1 file changed, 18 insertions(+), 7 deletions(-)
+On Thu, 30 Nov 2023, Théo Lebrun wrote:
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index fe910c5f3489..d50e3c14b0e4 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -2869,6 +2869,22 @@ static int pl011_resume(struct device *dev)
- 
- static SIMPLE_DEV_PM_OPS(pl011_dev_pm_ops, pl011_suspend, pl011_resume);
- 
-+#ifdef CONFIG_ACPI_SPCR_TABLE
-+static void qpdf2400_erratum44_workaround(struct device *dev,
-+					  struct uart_amba_port *uap)
-+{
-+	if (!qdf2400_e44_present)
-+		return;
-+
-+	dev_info(dev, "working around QDF2400 SoC erratum 44\n");
-+	uap->vendor = &vendor_qdt_qdf2400_e44;
-+}
-+#else
-+static void qpdf2400_erratum44_workaround(struct device *dev,
-+					  struct uart_amba_port *uap)
-+{ /* empty */ }
-+#endif
-+
- static int sbsa_uart_probe(struct platform_device *pdev)
- {
- 	struct uart_amba_port *uap;
-@@ -2904,13 +2920,8 @@ static int sbsa_uart_probe(struct platform_device *pdev)
- 		return ret;
- 	uap->port.irq	= ret;
- 
--#ifdef CONFIG_ACPI_SPCR_TABLE
--	if (qdf2400_e44_present) {
--		dev_info(&pdev->dev, "working around QDF2400 SoC erratum 44\n");
--		uap->vendor = &vendor_qdt_qdf2400_e44;
--	} else
--#endif
--		uap->vendor = &vendor_sbsa;
-+	uap->vendor = &vendor_sbsa;
-+	qpdf2400_erratum44_workaround(&pdev->dev, uap);
- 
- 	uap->reg_offset	= uap->vendor->reg_offset;
- 	uap->fifosize	= 32;
+> Remove all instances of quoted strings split across lines. Fix four
+> checkpatch warnings:
+> 
+>     $ ./scripts/checkpatch.pl --strict --file \
+>         drivers/tty/serial/amba-pl011.c
+>     WARNING: quoted string split across lines
+>     [...]
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 
 -- 
-2.43.0
+ i.
 
+--8323329-210180421-1701353981=:1808--
 
