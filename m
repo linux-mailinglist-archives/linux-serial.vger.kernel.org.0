@@ -1,83 +1,133 @@
-Return-Path: <linux-serial+bounces-304-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-306-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64DD87FF11A
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:03:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116127FF13D
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 15:07:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 954971C20C4E
-	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 14:03:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 701B9B20E91
+	for <lists+linux-serial@lfdr.de>; Thu, 30 Nov 2023 14:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE2748790;
-	Thu, 30 Nov 2023 14:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dkim=none
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6CB1E48CC8;
+	Thu, 30 Nov 2023 14:07:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="jiiBmXTx"
 X-Original-To: linux-serial@vger.kernel.org
-X-Greylist: delayed 440 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 30 Nov 2023 06:03:12 PST
-Received: from mail.someserver.de (mail.someserver.de [116.202.193.223])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2DE4CB9
-	for <linux-serial@vger.kernel.org>; Thu, 30 Nov 2023 06:03:12 -0800 (PST)
-Received: from [IPV6:2a02:8109:a893:3b00:7bad:dd01:344c:715f] (unknown [IPv6:2a02:8109:a893:3b00:7bad:dd01:344c:715f])
-	by mail.someserver.de (Postfix) with ESMTPSA id 1634AA0BF2;
-	Thu, 30 Nov 2023 14:55:48 +0100 (CET)
-Message-ID: <37a7a59b-70a8-41fb-b919-9fff8c44f349@christina-quast.de>
-Date: Thu, 30 Nov 2023 14:55:47 +0100
+Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE578D46;
+	Thu, 30 Nov 2023 06:07:34 -0800 (PST)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 623B540007;
+	Thu, 30 Nov 2023 14:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1701353253;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6n5y5Y4ag6lEhCM60JkkPOe9LhwwAQaW6l5XEjQba18=;
+	b=jiiBmXTxD+R0K1mUExooYO3IQW+9FJFg+tOT9rjRayt8ZhNqrwP6xB6YpdpAi69Mw1Sb/G
+	NQr2h8nGRHljYmWDhj6fwlNLYLaHYqpM1b3ZZY1I3tcvW26dCxky5M35rzn4xxLE1TMlvx
+	sBzwOWLihAlJQqkg6teyknxp2+ZdMYQeIvU2Fa8CxXPXvB+dCNJ2GLqpAkoIo7dST+3INU
+	QJsFaEXkOZ9H0yESKKBPCT2wBz+EuwC4BWqlTZt5VIXz7wAdJN/de5upg8CszjttvVtZyy
+	shicLGyppULTXyItSqKl/uzzbVEdr/qJfh83WmfCp4eCus/NwbKoN+IIU3G7IQ==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v5 0/9] Cleanup AMBA PL011 driver
+Date: Thu, 30 Nov 2023 15:07:12 +0100
+Message-Id: <20231130-mbly-uart-v5-0-6566703a04b5@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 RESEND] hid-ft260: Add serial driver
-Content-Language: en-US
-To: Greg KH <gregkh@linuxfoundation.org>,
- Christina Quast <contact@christina-quast.de>
-Cc: linux-serial@vger.kernel.org, Daniel Beer
- <daniel.beer@igorinstitute.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-References: <20231122094004.95399-1-contact@christina-quast.de>
- <2023112205-explore-frequency-40a6@gregkh>
- <0fb134f7-f72e-4742-9c2d-c68f83b67975@christina-quast.de>
- <2023112831-pacifist-lure-428a@gregkh>
-From: Christina Quast <chrysh@christina-quast.de>
-In-Reply-To: <2023112831-pacifist-lure-428a@gregkh>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABCXaGUC/2XPzQoCIRSG4VsJ1xn+jKO26j6ihdo5JdQYziRFz
+ L1nQWS0cPGJzws+yAg5wkjWiwfJUOIY01CHWi5IOLrhADTu6yaCCcnroWd/utOryxN1GFzw3ho
+ 0ntT3lwwYb+/Wdlf3MY5Tyvd3uvDX7afSN5XCKaNWKAPghNV7ufEpTac4rEI6k1eniK/l/MeKa
+ k0vse9VACXYv5WNFay1slqmHUhltUWO/7Zrbfvz0lWr0XLpdIdo7K+d5/kJXPbCQFgBAAA=
+To: Russell King <linux@armlinux.org.uk>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: b4 0.12.3
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Hi Greg!
+Hi,
 
-I searched around and many devices seem to configure their own device 
-names (ttyPZ, ttyGF, ttySDIO, ttyMX, ttyMI, ttyIPWp, ...), so I think 
-ttyFT for all the FTDI devices fits well as a name. I explained it 
-better in the commit message in the next patchset I will be sending.
+While adding upstream support to a new platform (Mobileye EyeQ5[1]) that
+uses the AMBA PL011 driver, I took some time to look at the PL011
+driver and ended up with a few patches that cleanup parts of it. The
+line-diff is big mostly because of the checkpatch-fixing commits.
 
-On 11/28/23 11:29, Greg KH wrote:
-> On Sun, Nov 26, 2023 at 10:53:18AM +0100, Christina Quast wrote:
->> Hi Greg!
->>
->> Thanks for the comments!
->>
->> On 11/22/23 11:15, Greg KH wrote:
->>> On Wed, Nov 22, 2023 at 10:40:03AM +0100, Christina Quast wrote:
->>>> This commit adds a serial interface /dev/FTx which implements the tty
->>>> serial driver ops, so that it is possible to set the baudrate, send
->>>> and receive data, etc.
->>> Why is this a serial device?  What type of device is it?
->>>
->>> And why "FTx"?  Where did that name come from?  That's not a "normal"
->>> tty name.
->> I meant /dev/ttyFTx. Since it's a hid device providing a serial interface,
->> in theory you could also call it /dev/ttySx or /dev/ttyUSBx, but both feel
->> wrong. It's an FTDI device, that functions as a USB to UART / I2C Master. Do
->> you have a better name in mind?
-> I thought we had a HID tty device name already, perhaps dig around for
-> that and tie into that interface?  If not, sure, youcan use ttyFTx, but
-> it needs to be documented somewhere (and the correct wording here in the
-> changelog as well.)
->
-> thanks,
->
-> greg k-h
+The driver hadn't received any love for quite some time. See commit
+messages for more information.
+
+v5 has been rebased upon v6.7-rc1, with [PATCH v4 3/6] split into many
+small commits and a header include in [PATCH v4 2/6] to fix a kernel
+test robot report.
+
+[1]: https://lore.kernel.org/all/202310050726.GDpZbMDO-lkp@intel.com/T/
+
+Have a nice day,
+Théo Lebrun
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v5:
+- Rebase upon v6.7-rc1.
+- Add #include <linux/bitfield.h> in include/linux/amba/serial.h.
+- Split [PATCH v4 3/6] into 5 manageable commits.
+- Link to v4: https://lore.kernel.org/r/20231123-mbly-uart-v4-0-7f913a74ff89@bootlin.com
+
+Changes in v4:
+- Fix reverse if logic bug in [PATCH V3 6/6].
+- Link to v3: https://lore.kernel.org/r/20231120-mbly-uart-v3-0-07ae35979f1f@bootlin.com
+
+Changes in v3:
+- Replace magic constants in linux/amba/serial.h by FIELD_PREP_CONST calls
+- Refactor QDF2400 SoC erratum 44 handling out of probe in a new patch
+- A nit in "unindent pl011_console_get_options function body"
+- Link to v2: https://lore.kernel.org/r/20231116-mbly-uart-v2-0-863f665ce520@bootlin.com
+
+Changes in v2:
+- [PATCH 2]: add #include <linux/bits.h> in include/linux/amba/serial.h
+  as we use the BIT() macro.
+- Move one whitespace cleanup from [PATCH 4/6] to [PATCH v2 3/5] where
+  it belongs.
+- Drop [PATCH 6/6]: console will never have a word length of 5 or 6.
+- Link to v1: https://lore.kernel.org/r/20231026-mbly-uart-v1-0-9258eea297d3@bootlin.com
+
+---
+Théo Lebrun (9):
+      tty: serial: amba: cleanup whitespace
+      tty: serial: amba: Use linux/{bits,bitfield}.h macros
+      tty: serial: amba-pl011: fix whitespace formatting
+      tty: serial: amba-pl011: replace TIOCMBIT macros by static functions
+      tty: serial: amba-pl011: avoid quoted string split across lines
+      tty: serial: amba-pl011: fix formatting of conditions
+      tty: serial: amba-pl011: fix miscellaneous checkpatch warnings
+      tty: serial: amba-pl011: unindent pl011_console_get_options function body
+      tty: serial: amba-pl011: factor QDF2400 SoC erratum 44 out of probe
+
+ drivers/tty/serial/amba-pl011.c | 261 +++++++++++++++++++++-------------------
+ include/linux/amba/serial.h     | 258 ++++++++++++++++++++-------------------
+ 2 files changed, 266 insertions(+), 253 deletions(-)
+---
+base-commit: 9e47ce5c186d8364f4de3e879a148121b37e5216
+change-id: 20231023-mbly-uart-afcacbb98f8b
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
