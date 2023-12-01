@@ -1,212 +1,192 @@
-Return-Path: <linux-serial+bounces-350-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-354-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2803B800D4B
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Dec 2023 15:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 669B2800EF7
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Dec 2023 17:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 593AA1C20C70
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Dec 2023 14:36:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 983D51C20A01
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Dec 2023 16:05:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD95B18C03;
-	Fri,  1 Dec 2023 14:36:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B394BA8B;
+	Fri,  1 Dec 2023 16:05:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.com header.i=@suse.com header.b="b9K6IHou"
+	dkim=pass (2048-bit key) header.d=cesnet.cz header.i=@cesnet.cz header.b="JjnSq3c7"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3C65F3;
-	Fri,  1 Dec 2023 06:36:39 -0800 (PST)
-Received: from relay2.suse.de (unknown [149.44.160.134])
-	by smtp-out1.suse.de (Postfix) with ESMTP id 59BAF21C98;
-	Fri,  1 Dec 2023 14:36:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-	t=1701441398; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pReC4R8b5GqDVY3afS0evrMQ1O4RS3OjnRhpunQOyuo=;
-	b=b9K6IHouq7sqO3BPBSWsaMyBuzrAnMVFKHmtN2I5WlywedInMvXxtoezaTsCqYpvDYMTY1
-	Kb00E2kyC+f5H1IesoFNm4g+10HMhGk/GT5tHhqjY/mGBCclCJAeFNwuBxcbeZkVludk1m
-	X0pAgPvG/X+bNZe3JQXT2KdzdkbAG0s=
-Received: from suse.cz (pmladek.tcp.ovpn2.prg.suse.de [10.100.208.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from office2.cesnet.cz (office2.cesnet.cz [78.128.248.237])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B880C10DE;
+	Fri,  1 Dec 2023 08:05:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cesnet.cz;
+	s=office2-2020; t=1701446167;
+	bh=blRPznuOYE6dlUwmDgzSjq7L6S7lteGDmHiIree5W48=;
+	h=Resent-Date:Resent-From:Resent-To:Resent-Cc:From:Date:Subject:To:
+	 Cc;
+	b=JjnSq3c7EFDb23S/ooLBoxbz1GriUiNYNUKyInR+sjqTwN8lkfScKTfE/jmc92yCD
+	 MNPd8cwrwaEsxjdkzn2MJeYsDGC9iJs8srQ9CwZ2Pv1YHXaJnxE0ebuYRre2tcIQ7g
+	 GpXmhxNHmam96JNpFEF2ZpMNlkShE/SXNZeyxHDebyB8uH05uwAAdGCi0/tYerFNQ5
+	 0oEF/U8fz/H/zbdZeCi+Y2N+pbgrwQ6ZzplWBmzKtQKuczIY1t4Sa3fzyBpW7dvZoF
+	 Fki0AmrINOxvYymW45fCPmf1TAxDw3SvgfG4MOXlv2VrggcurscfmAS5/E8wQG9h7b
+	 +a/ybtA/Bvu8w==
+Received: from localhost (tlha232.cesnet.cz [IPv6:2001:718:1:6::134:232])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by relay2.suse.de (Postfix) with ESMTPS id B4F2E2C143;
-	Fri,  1 Dec 2023 14:36:35 +0000 (UTC)
-Date: Fri, 1 Dec 2023 15:36:35 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: Tony Lindgren <tony@atomide.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Andy Shevchenko <andriy.shevchenko@intel.com>,
-	Dhruva Gole <d-gole@ti.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	John Ogness <john.ogness@linutronix.de>,
-	Johan Hovold <johan@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 0/3] Add support for DEVNAME:0.0 style hardware based
- addressing
-Message-ID: <ZWnvc6-LnXdjOQLY@alley>
-References: <20231121113203.61341-1-tony@atomide.com>
+	by office2.cesnet.cz (Postfix) with ESMTPSA id 06C501180072;
+	Fri,  1 Dec 2023 16:56:04 +0100 (CET)
+Resent-Date: Fri, 01 Dec 2023 16:56:04 +0100
+Resent-Message-ID: <dec29196-65e4-46a0-994e-d05bf10caa87@cesnet.cz>
+Resent-From: =?iso-8859-1?Q?Jan_Kundr=E1t?= <jan.kundrat@cesnet.cz>
+Resent-To: Mark Brown <broonie@kernel.org>,
+ Cosmin Tanislav <cosmin.tanislav@analog.com>,
+ <linux-serial@vger.kernel.org>
+Resent-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+ <linux-kernel@vger.kernel.org>
+Message-ID: <bd91db46c50615bc1d1d62beb659fa7f62386446.1701446070.git.jan.kundrat@cesnet.cz>
+From: =?UTF-8?q?Jan=20Kundr=C3=A1t?= <jan.kundrat@cesnet.cz>
+Date: Fri, 1 Dec 2023 15:51:51 +0100
+Subject: [PATCH] tty: max310x: work around regmap->regcache data corruption
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20231121113203.61341-1-tony@atomide.com>
-X-Spamd-Bar: +++++++++++++++++++++++++++
-Authentication-Results: smtp-out1.suse.de;
-	dkim=none;
-	dmarc=fail reason="No valid SPF, No valid DKIM" header.from=suse.com (policy=quarantine);
-	spf=fail (smtp-out1.suse.de: domain of pmladek@suse.com does not designate 149.44.160.134 as permitted sender) smtp.mailfrom=pmladek@suse.com
-X-Rspamd-Server: rspamd2
-X-Spamd-Result: default: False [27.10 / 50.00];
-	 RDNS_NONE(1.00)[];
-	 BAYES_SPAM(5.10)[100.00%];
-	 SPAMHAUS_XBL(0.00)[149.44.160.134:from];
-	 TO_DN_SOME(0.00)[];
-	 RWL_MAILSPIKE_GOOD(-1.00)[149.44.160.134:from];
-	 HFILTER_HELO_IP_A(1.00)[relay2.suse.de];
-	 HFILTER_HELO_NORES_A_OR_MX(0.30)[relay2.suse.de];
-	 MX_GOOD(-0.01)[];
-	 RCVD_NO_TLS_LAST(0.10)[];
-	 FROM_EQ_ENVFROM(0.00)[];
-	 R_DKIM_NA(2.20)[];
-	 MIME_TRACE(0.00)[0:+];
-	 RDNS_DNSFAIL(0.00)[];
-	 ARC_NA(0.00)[];
-	 R_SPF_FAIL(1.00)[-all];
-	 FROM_HAS_DN(0.00)[];
-	 DMARC_POLICY_QUARANTINE(1.50)[suse.com : No valid SPF, No valid DKIM,quarantine];
-	 TO_MATCH_ENVRCPT_ALL(0.00)[];
-	 MIME_GOOD(-0.10)[text/plain];
-	 DKIM_SIGNED(0.00)[suse.com:s=susede1];
-	 VIOLATED_DIRECT_SPF(3.50)[];
-	 NEURAL_SPAM_LONG(3.50)[1.000];
-	 RCPT_COUNT_TWELVE(0.00)[15];
-	 FUZZY_BLOCKED(0.00)[rspamd.com];
-	 MID_RHS_NOT_FQDN(0.50)[];
-	 RCVD_COUNT_TWO(0.00)[2];
-	 HFILTER_HOSTNAME_UNKNOWN(2.50)[]
-X-Spam-Score: 27.10
-X-Rspamd-Queue-Id: 59BAF21C98
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+To: Mark Brown <broonie@kernel.org>,
+    Cosmin Tanislav <cosmin.tanislav@analog.com>,
+    linux-serial@vger.kernel.org
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
+    linux-kernel@vger.kernel.org
 
-On Tue 2023-11-21 13:31:54, Tony Lindgren wrote:
-> Hi all,
-> 
-> With the recent serial core changes, we can now add DEVNAME:0.0 style
-> addressing for the serial ports. When using DEVNAME:0.0 naming, we don't
-> need to care which ttyS instance number is allocated depending on HSUART
-> settings or if the devicetree has added aliases for all the ports.
-> 
-> This also allows us to also drop the old console_setup() parsing for
-> character device names.
-> 
-> Tony Lindgren (3):
->   printk: Save console options for add_preferred_console_match()
->   serial: core: Add support for DEVNAME:0.0 style naming for kernel
->     console
->   serial: core: Move console character device handling from printk
+The TL;DR summary is that the regmap_noinc_write spills over the data
+that are correctly written to the HW also to the following registers in
+the regcache. As a result, regcache then contains user-controlled
+garbage which will be used later for bit updates on unrelated registers.
 
-First, I appreciate the effort to match aliases to the same console.
+This patch is a "wrong" fix; a real fix would involve fixing regmap
+and/or regcache, but that code has too many indirections for my little
+mind.
 
-Well, my understanding is that it solves the problem only for the newly
-added console=DEVICENAME:0.0 format. But it does not handle the
-existing problems with matching console names passed via earlycon=
-and console= parameters. Am I right?
+I was investigating a regression that happened somewhere between 5.12.4
+(plus 14 of our patches) and v6.5.9 (plus 7 of our patches). Our
+MAX14830 UART would work fine the first time, but when our application
+opens the UART the second time it just wouldn't send anything over the
+physical TX pin. With the help of a logical analyzer, I found out that
+the kernel was sending value 0xcd to the MODE1 register, which on this
+chip is a request to set the UART's TX pin to the Hi-Z mode and to
+switch off RX completely. That's certainly not the intention of the
+code, but that's what I was seeing on the physical SPI bus, and also in
+the log when I instrumented the regmap layer.
 
-Now, the bad news. This patchset causes regressions which are
-not acceptable. I have found two so far but there might be more.
+It turned out that one of the *data* bytes which were sent over the UART
+was 0xdd, and that this *data byte* somehow ended up in the regcache's
+idea about the value within the MODE1 register. When the UART is opened
+up the next time and max310x_startup updates a single unrelated bit in
+MODE1, that code consults the regcache, notices the 0xdd data byte in
+there, and ends up sending 0xcd over SPI.
 
-I used the following kernel command line:
+Here's what dump_stack() shows:
 
-   earlycon=uart8250,io,0x3f8,115200 console=ttyS0,115200 console=tty0 ignore_loglevel log_buf_len=1M
+ max310x spi1.2: regcache_write: reg 0x9 value 0xdd
+ max310x spi1.2: PWNED
+ CPU: 1 PID: 26 Comm: kworker/1:1 Not tainted 6.5.9-7-g9e090fe75fd8 #7
+ Hardware name: Marvell Armada 380/385 (Device Tree)
+ Workqueue: events max310x_tx_proc
+  unwind_backtrace from show_stack+0x10/0x14
+  show_stack from dump_stack_lvl+0x40/0x4c
+  dump_stack_lvl from regcache_write+0xc0/0xc4
+  regcache_write from _regmap_raw_write_impl+0x178/0x828
+  _regmap_raw_write_impl from _regmap_raw_write+0xb8/0x134
+  _regmap_raw_write from regmap_noinc_write+0x130/0x178
+  regmap_noinc_write from max310x_tx_proc+0xd4/0x1a4
+  max310x_tx_proc from process_one_work+0x21c/0x4e4
+  process_one_work from worker_thread+0x50/0x54c
+  worker_thread from kthread+0xe0/0xfc
+  kthread from ret_from_fork+0x14/0x28
 
+Clearly, regmap_noinc_write of a register 0x00 (that's the TX FIFO on
+this chip) has no business updating register 0x09, but that's what was
+happening here. The regmap_config is already set up in a way that
+register 0x00 is marked precious and volatile, so it has no business
+going through the cache at all. Also, the documentation for
+regmap_noinc_write suggests that this driver was using the regmap
+infrastructure correctly, and that the real bug is somewhere in
+regmap/regcache where a call to regmap_noinc_write end up updating an
+unrelated register in regcache.
 
-1. The patchset caused that /dev/console became associated with
-   ttyS0 instead of tty0, see the "C" flag:
+Until regmap/regcache is fixed, let's just use an adapted version of the
+old code that bypasses regmap altogether, and just sends out an SPI
+transaction.
 
-	original # cat /proc/consoles
-	tty0                 -WU (EC    )    4:1
-	ttyS0                -W- (E  p a)    4:64
+This is related to my commit 3f42b142ea1171967e40e10e4b0241c0d6d28d41
+("serial: max310x: fix IO data corruption in batched operations") which
+introduced usage of regmap_noinc_write() to this driver. That commit is
+a fixup of commit 285e76fc049c4d32c772eea9460a7ef28a193802 ("serial:
+max310x: use regmap methods for SPI batch operations") which started
+using regmap_raw_write(), which was however also a wrong function.
 
-   vs.
+Fixes: 3f42b142ea11 ("serial: max310x: fix IO data corruption in batched operations")
+Fixes: 285e76fc049c ("serial: max310x: use regmap methods for SPI batch operations")
+Signed-off-by: Jan Kundrát <jan.kundrat@cesnet.cz>
+To: Mark Brown <broonie@kernel.org>
+To: Cosmin Tanislav <cosmin.tanislav@analog.com>
+To: linux-serial@vger.kernel.org
+Cc: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: linux-kernel@vger.kernel.org
+---
+ drivers/tty/serial/max310x.c | 30 ++++++++++++++++++++++++------
+ 1 file changed, 24 insertions(+), 6 deletions(-)
 
-	patched # cat /proc/consoles
-	ttyS0                -W- (EC p a)    4:64
-	tty0                 -WU (E     )    4:1
-
-   This is most likely caused by the different ordering of
-   __add_preferred_console() calls.
-
-   The ordering is important because it defines which console
-   will get associated with /dev/console. It is a so called
-   preferred console defined by the last console= parameter.
-
-   Unfortunately also the ordering of the other parameters
-   is important when a console defined by the last console=
-   parameter is not registered at all. In this case,
-   /dev/console gets associated with the first console
-   with tty binding according to the order on the command line.
-
-   If you think that it is weird behavior then I agree.
-   But it is a historical mess. It is how people used it
-   when the various features were added. Many changes
-   in this code caused regressions and had to be reverted.
-
-   See the following to get the picture:
-
-       + commit c6c7d83b9c9e6a8 ("Revert "console: don't
-	 prefer first registered if DT specifies stdout-path")
-
-       + commit dac8bbbae1d0ccb ("Revert "printk: fix double
-	 printing with earlycon"").
-
-
-2. The serial console gets registered much later with this
-   patchset:
-
-	original # dmesg | grep printk:
-	[    0.000000] printk: legacy bootconsole [uart8250] enabled
-	[    0.000000] printk: debug: ignoring loglevel setting.
-	[    0.016859] printk: log_buf_len: 1048576 bytes
-	[    0.017324] printk: early log buf free: 259624(99%)
-	[    0.141859] printk: legacy console [tty0] enabled
-	[    0.142399] printk: legacy bootconsole [uart8250] disabled
-	[    0.143032] printk: legacy console [ttyS0] enabled
-
-   vs.
-
-	patched # dmesg | grep printk:
-	[    0.000000] printk: legacy bootconsole [uart8250] enabled
-	[    0.000000] printk: debug: ignoring loglevel setting.
-	[    0.018142] printk: log_buf_len: 1048576 bytes
-	[    0.018757] printk: early log buf free: 259624(99%)
-	[    0.160706] printk: legacy console [tty0] enabled
-	[    0.161213] printk: legacy bootconsole [uart8250] disabled
-	[    1.592929] printk: legacy console [ttyS0] enabled
-
-   This is pretty bad because it would complicate or even prevent
-   debugging of the boot stage via serial console.
-
-   The graphical console is not usable when the system dies. Also
-   finding the right arguments for the earlycon= parameter is
-   tricky so that people enable it only when they have to debug
-   very early messages.
+diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+index c44237470bee..79797b573723 100644
+--- a/drivers/tty/serial/max310x.c
++++ b/drivers/tty/serial/max310x.c
+@@ -663,16 +663,34 @@ static u32 max310x_set_ref_clk(struct device *dev, struct max310x_port *s,
+ 
+ static void max310x_batch_write(struct uart_port *port, u8 *txbuf, unsigned int len)
+ {
+-	struct max310x_one *one = to_max310x_port(port);
+-
+-	regmap_noinc_write(one->regmap, MAX310X_THR_REG, txbuf, len);
++	const u8 header = (port->iobase * 0x20 + MAX310X_THR_REG) | MAX310X_WRITE_BIT;
++	struct spi_transfer xfer[] = {
++		{
++			.tx_buf = &header,
++			.len = 1,
++		},
++		{
++			.tx_buf = txbuf,
++			.len = len,
++		},
++	};
++	spi_sync_transfer(to_spi_device(port->dev), xfer, ARRAY_SIZE(xfer));
+ }
+ 
+ static void max310x_batch_read(struct uart_port *port, u8 *rxbuf, unsigned int len)
+ {
+-	struct max310x_one *one = to_max310x_port(port);
+-
+-	regmap_noinc_read(one->regmap, MAX310X_RHR_REG, rxbuf, len);
++	const u8 header = port->iobase * 0x20 + MAX310X_RHR_REG;
++	struct spi_transfer xfer[] = {
++		{
++			.tx_buf = &header,
++			.len = 1,
++		},
++		{
++			.rx_buf = rxbuf,
++			.len = len,
++		},
++	};
++	spi_sync_transfer(to_spi_device(port->dev), xfer, ARRAY_SIZE(xfer));
+ }
+ 
+ static void max310x_handle_rx(struct uart_port *port, unsigned int rxlen)
+-- 
+2.42.0
 
 
-I am going to look at the patches more closely to see if I could
-provide some hints.
-
-Best Regards,
-Petr
 
