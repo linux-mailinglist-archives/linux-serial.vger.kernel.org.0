@@ -1,33 +1,33 @@
-Return-Path: <linux-serial+bounces-447-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-452-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 206DA803E17
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 20:08:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B0029803F1C
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 21:15:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF13D1F21071
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 19:08:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3827EB20A9A
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 20:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B667830F8D;
-	Mon,  4 Dec 2023 19:07:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0654233095;
+	Mon,  4 Dec 2023 20:14:59 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-X-Greylist: delayed 6600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Dec 2023 11:07:55 PST
-Received: from 20.mo582.mail-out.ovh.net (20.mo582.mail-out.ovh.net [178.32.124.17])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBF82188
-	for <linux-serial@vger.kernel.org>; Mon,  4 Dec 2023 11:07:55 -0800 (PST)
-Received: from director4.ghost.mail-out.ovh.net (unknown [10.108.20.107])
-	by mo582.mail-out.ovh.net (Postfix) with ESMTP id D23AD25051
-	for <linux-serial@vger.kernel.org>; Mon,  4 Dec 2023 16:38:19 +0000 (UTC)
-Received: from ghost-submission-6684bf9d7b-9k8qw (unknown [10.109.138.60])
-	by director4.ghost.mail-out.ovh.net (Postfix) with ESMTPS id C50471FDDB;
-	Mon,  4 Dec 2023 16:38:16 +0000 (UTC)
-Received: from etezian.org ([37.59.142.102])
-	by ghost-submission-6684bf9d7b-9k8qw with ESMTPSA
-	id oPzWM3gAbmUIfgAA3fLkWg
-	(envelope-from <andi@etezian.org>); Mon, 04 Dec 2023 16:38:16 +0000
-Authentication-Results:garm.ovh; auth=pass (GARM-102R00487f7c05c-cd1b-45e6-a84e-d0be2fe0901c,
+X-Greylist: delayed 12536 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 04 Dec 2023 12:14:53 PST
+Received: from 13.mo581.mail-out.ovh.net (13.mo581.mail-out.ovh.net [87.98.150.175])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F564CE
+	for <linux-serial@vger.kernel.org>; Mon,  4 Dec 2023 12:14:53 -0800 (PST)
+Received: from director7.ghost.mail-out.ovh.net (unknown [10.108.16.164])
+	by mo581.mail-out.ovh.net (Postfix) with ESMTP id AFD892911F
+	for <linux-serial@vger.kernel.org>; Mon,  4 Dec 2023 16:38:32 +0000 (UTC)
+Received: from ghost-submission-6684bf9d7b-xs2pd (unknown [10.110.115.64])
+	by director7.ghost.mail-out.ovh.net (Postfix) with ESMTPS id 684E11FEB1;
+	Mon,  4 Dec 2023 16:38:30 +0000 (UTC)
+Received: from etezian.org ([37.59.142.108])
+	by ghost-submission-6684bf9d7b-xs2pd with ESMTPSA
+	id +XHROoYAbmXEPgEAARI0UQ
+	(envelope-from <andi@etezian.org>); Mon, 04 Dec 2023 16:38:30 +0000
+Authentication-Results:garm.ovh; auth=pass (GARM-108S002df2c8a09-4776-4603-a36c-0a28285054ac,
                     728393C84468B0D913C64D460E7D07E4521566EB) smtp.auth=andi@etezian.org
 X-OVh-ClientIp:178.238.172.4
 From: Andi Shyti <andi.shyti@kernel.org>
@@ -37,10 +37,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	linux-serial@vger.kernel.org,
 	Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH 0/2] serial ma35d1 imrpovements
-Date: Mon,  4 Dec 2023 17:38:02 +0100
-Message-ID: <20231204163804.1331415-1-andi.shyti@kernel.org>
+Subject: [PATCH 2/2] serial: ma35d1: Improve logging for out-of-bound console setup
+Date: Mon,  4 Dec 2023 17:38:04 +0100
+Message-ID: <20231204163804.1331415-3-andi.shyti@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20231204163804.1331415-1-andi.shyti@kernel.org>
+References: <20231204163804.1331415-1-andi.shyti@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -48,26 +50,38 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Ovh-Tracer-Id: 34621422958217799
+X-Ovh-Tracer-Id: 38280596975913543
 X-VR-SPAMSTATE: OK
 X-VR-SPAMSCORE: -100
-X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnheptdevueeiheeftedujefhheelieejvdevteelfefhheeutdelkedtveejudejgfdvnecukfhppeduvdejrddtrddtrddupddujeekrddvfeekrddujedvrdegpdefjedrheelrddugedvrddutddvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhsvghrihgrlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekvddpmhhouggvpehsmhhtphhouhht
+X-VR-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvkedrudejiedgledvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuqfggjfdpvefjgfevmfevgfenuceurghilhhouhhtmecuhedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomheptehnughiucfuhhihthhiuceorghnughirdhshhihthhisehkvghrnhgvlhdrohhrgheqnecuggftrfgrthhtvghrnhepgfduveejteegteelhfetueetheegfeehhfektddvleehtefhheevkeduleeuueevnecukfhppeduvdejrddtrddtrddupddujeekrddvfeekrddujedvrdegpdefjedrheelrddugedvrddutdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepuddvjedrtddrtddruddpmhgrihhlfhhrohhmpeeorghnughisegvthgviihirghnrdhorhhgqedpnhgspghrtghpthhtohepuddprhgtphhtthhopehlihhnuhigqdhsvghrihgrlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdpoffvtefjohhsthepmhhoheekuddpmhhouggvpehsmhhtphhouhht
 
-Hi,
+An out-of-bound index results in an error and should not be
+logged merely as a debug message; it requires at least a warning
+level. Therefore, use pr_warn() instead of pr_debug.
 
-Just a couple of improvements after running through a failure
-for the serial ma35d1 driver.
+Additionally, the log message itself has been improved for
+clarity.
 
-Thanks,
-Andi
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Cc: Jacky Huang <ychuang3@nuvoton.com>
+---
+ drivers/tty/serial/ma35d1_serial.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-Andi Shyti (2):
-  serial: ma35d1: Validate console index before assignment
-  serial: ma35d1: Improve logging for out-of-bound console setup
-
- drivers/tty/serial/ma35d1_serial.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
+diff --git a/drivers/tty/serial/ma35d1_serial.c b/drivers/tty/serial/ma35d1_serial.c
+index 21b574f78b861..bcc402b4c0b2f 100644
+--- a/drivers/tty/serial/ma35d1_serial.c
++++ b/drivers/tty/serial/ma35d1_serial.c
+@@ -599,7 +599,8 @@ static int __init ma35d1serial_console_setup(struct console *co, char *options)
+ 	int flow = 'n';
+ 
+ 	if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
+-		pr_debug("Console Port%x out of range\n", co->index);
++		pr_warn("Failed to write on cononsole port %x, out of range\n",
++			co->index);
+ 		return -EINVAL;
+ 	}
+ 
 -- 
 2.43.0
 
