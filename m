@@ -1,52 +1,43 @@
-Return-Path: <linux-serial+bounces-451-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-453-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 279E5803EEC
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 21:02:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBD9780405E
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 21:47:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57CE01C20A7C
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 20:02:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EFF11F212D6
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Dec 2023 20:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3623A33085;
-	Mon,  4 Dec 2023 20:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1823D2F849;
+	Mon,  4 Dec 2023 20:47:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="iIggT4z2"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="FabWgz0B"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CB28C4;
-	Mon,  4 Dec 2023 12:02:31 -0800 (PST)
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF47AA
+	for <linux-serial@vger.kernel.org>; Mon,  4 Dec 2023 12:47:49 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
 	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
 	:Date:subject:date:message-id:reply-to;
-	bh=Iudy9bNgGP1tF6Dq9Kz4Szt32tEwdS+2umgrF9xjPTQ=; b=iIggT4z2KmYa6t/offRhSz1vc6
-	IA3B/3moj35Y3iLfFSdAkkhntwaMvto5vgSfAyr9U74su9LF9jlrKRCHPqdbrHjWEy+z+ci2eat+1
-	pYRMjLfUg+Zt2OwBR+DsB6eIVBcm1cVZPU3kMdxOChF3Pe1jDf+W3FY0LiACl9zgkkLY=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:34148 helo=pettiford)
+	bh=nUnKFbU+1IP5RwQf3eLQvf0DW03XbLlHMuIBUTFTbDc=; b=FabWgz0BSUdPD1kPPIAcxI9Ewx
+	EeNXPHyXNBtT2DMKxMZHXjowyepj6e3x5D4tyIFrrh3gt17ghUfflKZWUWI2ePO6fWsoh1KBoxRRG
+	1ummBejDlaVm+E9ZDddQ1miv3rOG7zKwvyr9TXp36tetFqPn6cXYMCI5FFcWQ/mjNP5o=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:45352 helo=pettiford)
 	by mail.hugovil.com with esmtpa (Exim 4.92)
 	(envelope-from <hugo@hugovil.com>)
-	id 1rAF96-0001DF-RY; Mon, 04 Dec 2023 15:02:25 -0500
-Date: Mon, 4 Dec 2023 15:02:24 -0500
+	id 1rAFqw-0001TG-P9; Mon, 04 Dec 2023 15:47:43 -0500
+Date: Mon, 4 Dec 2023 15:47:42 -0500
 From: Hugo Villeneuve <hugo@hugovil.com>
-To: Mark Brown <broonie@kernel.org>
-Cc: Jan =?ISO-8859-1?Q?Kundr=E1t?= <jan.kundrat@cesnet.cz>, Cosmin Tanislav
- <cosmin.tanislav@analog.com>, linux-serial@vger.kernel.org, Andy Shevchenko
- <andy.shevchenko@gmail.com>, linux-kernel@vger.kernel.org
-Message-Id: <20231204150224.add8b07a59bf737edb0b5c1c@hugovil.com>
-In-Reply-To: <f6e93e9c-1c7a-424e-afe0-425b24b99e5c@sirena.org.uk>
-References: <20231201163846.a7c1d79daca7c6a2e1416a70@hugovil.com>
-	<f5277458-635a-4eca-a37d-c3b2e83eb4b9@sirena.org.uk>
-	<20231201171644.6f7ade89d4c2f744fa3556b7@hugovil.com>
-	<20231204112905.e58cf1b7bf94440f49188390@hugovil.com>
-	<06fa462c-5b48-410e-8656-4d0dbdbfa142@sirena.org.uk>
-	<20231204120151.f0afbee2ebc69e93e7977547@hugovil.com>
-	<50b24985-cb30-4a75-a15d-9c165a276f1d@sirena.org.uk>
-	<20231204135922.0355f030945920086d21b8b6@hugovil.com>
-	<66946666-eb33-431d-9870-7046c39ffb4e@sirena.org.uk>
-	<20231204144136.89fec6da9be49e3db96994e0@hugovil.com>
-	<f6e93e9c-1c7a-424e-afe0-425b24b99e5c@sirena.org.uk>
+To: Andi Shyti <andi.shyti@kernel.org>
+Cc: Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+ <jirislaby@kernel.org>, linux-serial@vger.kernel.org
+Message-Id: <20231204154742.3aec6ab62378df433677102b@hugovil.com>
+In-Reply-To: <20231204163804.1331415-3-andi.shyti@kernel.org>
+References: <20231204163804.1331415-1-andi.shyti@kernel.org>
+	<20231204163804.1331415-3-andi.shyti@kernel.org>
 X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -59,54 +50,56 @@ Content-Transfer-Encoding: 7bit
 X-SA-Exim-Connect-IP: 70.80.174.168
 X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Level: 
-Subject: Re: [PATCH] tty: max310x: work around regmap->regcache data
- corruption
+Subject: Re: [PATCH 2/2] serial: ma35d1: Improve logging for out-of-bound
+ console setup
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On Mon, 4 Dec 2023 19:48:05 +0000
-Mark Brown <broonie@kernel.org> wrote:
+On Mon,  4 Dec 2023 17:38:04 +0100
+Andi Shyti <andi.shyti@kernel.org> wrote:
 
-> On Mon, Dec 04, 2023 at 02:41:36PM -0500, Hugo Villeneuve wrote:
+> An out-of-bound index results in an error and should not be
+> logged merely as a debug message; it requires at least a warning
+> level. Therefore, use pr_warn() instead of pr_debug.
 > 
-> > But that is not was my question was about. Here a pseudo code
-> > example to select "page" 1:
+> Additionally, the log message itself has been improved for
+> clarity.
 > 
-> > 1. save original value of LCR register.
-> > 2. write 0xBF to LCR register
-> > 3. access desired register in page 1
-> > 4. restore original LCR value saved in step 1
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Cc: Jacky Huang <ychuang3@nuvoton.com>
+> ---
+>  drivers/tty/serial/ma35d1_serial.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> > How do you do that with regmap range?
+> diff --git a/drivers/tty/serial/ma35d1_serial.c b/drivers/tty/serial/ma35d1_serial.c
+> index 21b574f78b861..bcc402b4c0b2f 100644
+> --- a/drivers/tty/serial/ma35d1_serial.c
+> +++ b/drivers/tty/serial/ma35d1_serial.c
+> @@ -599,7 +599,8 @@ static int __init ma35d1serial_console_setup(struct console *co, char *options)
+>  	int flow = 'n';
+>  
+>  	if ((co->index < 0) || (co->index >= MA35_UART_NR)) {
+> -		pr_debug("Console Port%x out of range\n", co->index);
+> +		pr_warn("Failed to write on cononsole port %x, out of range\n",
+> +			co->index);
+
+Hi,
+I do not see why this improves clarity...
+
+You also introduced a syntax error "cononsole".
+
+Hugo.
+
+
+>  		return -EINVAL;
+>  	}
+>  
+> -- 
+> 2.43.0
 > 
-> Are you saying that the selector has other, non-selector functions?
+> 
 
-Yes! There is no bit or bit range in that register that is used to
-select a praticular set of registers or "page". It is only when
-writing the special magic value of $BF that the IC switches to "page"
-1. And if the value is NOT $BF, then it switches back to "page" 0.
 
-When I told you if you could point to other IC/drivers that had the
-same configuration, I tough you were aware of this. That explains some
-of the confusion.
-
-> This is truly innovative hardware,...
-
-Well, I would not say innovative, but more "crappy" hardware design :)
-
-> ...generally the selector is just a 
-> bitfield that you write paging values to.
-
-This is also what I am accustomed to normally.
-
->  You'd need to extend the core
-> so that it knows about this quirk, right now that's not possible and
-> we'll just leave the window pointing at whatever was last accessed.
-
-Ok. I am not sure that adding support for it would make sense, since I
-do not know of other ICs that could reuse this very specific and
-particular method for switching "paged" registers.
-
-Thank you,
+-- 
 Hugo Villeneuve
 
