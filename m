@@ -1,136 +1,419 @@
-Return-Path: <linux-serial+bounces-532-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-534-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EF938058B6
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Dec 2023 16:29:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 695B9805917
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Dec 2023 16:51:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9C730B2103F
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Dec 2023 15:29:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D15911F21725
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Dec 2023 15:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 816095F1CF;
-	Tue,  5 Dec 2023 15:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3404168E97;
+	Tue,  5 Dec 2023 15:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="siv2SY+k"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16F77122;
-	Tue,  5 Dec 2023 07:29:32 -0800 (PST)
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-5d6b9143782so41120787b3.0;
-        Tue, 05 Dec 2023 07:29:32 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1701790171; x=1702394971;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=nKR4eGh9Q8YilRGEEfPHT07Wa+ghJ3PZE9UUZkDUQSU=;
-        b=keJkStga+jZ8Uo/hghHETxFv1rnAbPnVJYh/f97si3DN+oSv/dV5LVrp6cW17uTp7P
-         XPSy9sDSuIVslUS+xMwXHGcaiBaGmXoLz9UflI74kZXyJOlMsXaiedV6N+IWsl/IOXIm
-         leoO8YygGc9bEKFa6VUmyQ6Br9k2EJE0TsXeR6QpbdUjziDl5rqYZJghRWHnFJXrabaO
-         QcIJ9rEeNAHwS1q/JKGGjLGpfDJFly9tT4g2ReLdG4L/K+l/g2t2Plb128lIXEnZGy/3
-         mnGePHA7VIZm7epis3AyVuXTpcGz0h8b8soSE27LjzJk/CGn8cqRFPxEALijTQ2cb3TL
-         sPOQ==
-X-Gm-Message-State: AOJu0Yxy2TE4HDGwaUgRPYOE5T+cEDH7t3qIyOAiAN8iNeJ8BfpTn4RL
-	bLAeG07zUYFwFYUvd+nesfAxAjcw01KY4g==
-X-Google-Smtp-Source: AGHT+IGniOkt2In+ND9FjMFdQCNAS6I92uhwMneiOiO5M4fByOWCFxG9E/IRcrI00OxBWY6PTr24Kg==
-X-Received: by 2002:a81:4c0c:0:b0:5d3:5887:edb9 with SMTP id z12-20020a814c0c000000b005d35887edb9mr4411016ywa.44.1701790171070;
-        Tue, 05 Dec 2023 07:29:31 -0800 (PST)
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
-        by smtp.gmail.com with ESMTPSA id u64-20020a814743000000b00582b239674esm4218954ywa.129.2023.12.05.07.29.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Dec 2023 07:29:30 -0800 (PST)
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-d9beb865a40so4101478276.1;
-        Tue, 05 Dec 2023 07:29:30 -0800 (PST)
-X-Received: by 2002:a25:870f:0:b0:db7:d3e0:46d1 with SMTP id
- a15-20020a25870f000000b00db7d3e046d1mr4072755ybl.32.1701790170465; Tue, 05
- Dec 2023 07:29:30 -0800 (PST)
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2081.outbound.protection.outlook.com [40.107.21.81])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFE05BA;
+	Tue,  5 Dec 2023 07:50:59 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dy40NzvjrcX4+vtDR+vO+v3eLuLeCBGCiMTaFwoB2HJ58CD7oWs9ENi35mZSfvwRDTB0K+Zu0fhJVLjbsDS3mvSQLG3ueuDPAHF6Rmfv6wBiuIWyZn5pWCbB6iNhmUcfT+wK1lwi0hlX7/wNBHE/+y0SwR+aH2jE0IUeC8PdQY45lV3GxlQCLMr3sX5qzF7v5LRSw4tQGvjpQJ+avPOhs5kgDoFerdbjcYHPrQFMKLqNd4A9u02ykUMIO4PmW+QgYMUGiibgs6joa8+wEX1/OqzHolioRsVLanhMIuQhYvfAkvUVSHrxoMfcNiaw6yTLrAp1bcqoffWnDzbRbC+wcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h22YibGG9SQL9IqkVgyOROIE9QYCIwTjO7vog9j7Xl0=;
+ b=m15kcc6JUwjITthIWuf+LwmAUrkRr/2uoGZdpo+NbSSMG99Xua6V2LTgJyY33m+i7/lCB/Lhow7bEKwOx/iW+DzCCHrN2nXRG9fYZ+iS6iVZHsqNfAgLghQffgwbtIXQ9RiWgovZhq+3a+hGUZg//sVtkrxVsk4njSbiAH+8qRroOyOvfJ1AoVFXqUz+EvBHv/tmYBu51Bpf/qQkXKQQgH0hp3v6r1InHtjvxPyhWMUTy79RKYzuStKroceGzv/Ftok+L70To4Xjwzfi1EA/yKevSPU1rOmDfFxU/m95FFDOSCWlIMiyx6AKJQZjTtX+cCyfn0AVuitN86KanO7ZGQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h22YibGG9SQL9IqkVgyOROIE9QYCIwTjO7vog9j7Xl0=;
+ b=siv2SY+kSB37NHSJXdvBzhmj6BItLXqIo+WDZxVM+A0sBb1JU1R9Px4GZeljVXTrdj56PN6ebrW8GXPRqmkmJX61N0I/qQgvdzJ7D7OKoapwQ36tT66cfG1UfRYLt7S43g2CaODRMvPYQQ9qTuoElRgoLwvdWasc5l5+r8gF+hs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by AS8PR04MB8786.eurprd04.prod.outlook.com (2603:10a6:20b:42d::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7068.23; Tue, 5 Dec
+ 2023 15:50:56 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::95f5:5118:258f:ee40]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::95f5:5118:258f:ee40%6]) with mapi id 15.20.7068.022; Tue, 5 Dec 2023
+ 15:50:56 +0000
+Date: Tue, 5 Dec 2023 10:50:46 -0500
+From: Frank Li <Frank.li@nxp.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: miquel.raynal@bootlin.com, alexandre.belloni@bootlin.com,
+	conor.culhane@silvaco.com, imx@lists.linux.dev, joe@perches.com,
+	linux-i3c@lists.infradead.org, linux-kernel@vger.kernel.org,
+	zbigniew.lukwinski@linux.intel.com, gregkh@linuxfoundation.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v5 7/7] tty: i3c: add TTY over I3C master support
+Message-ID: <ZW9G1qVlYOS2TQ+l@lizhi-Precision-Tower-5810>
+References: <20231130224408.3591288-1-Frank.Li@nxp.com>
+ <20231130224408.3591288-8-Frank.Li@nxp.com>
+ <2c3824d7-0960-4de7-8fae-01478fdef8fe@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2c3824d7-0960-4de7-8fae-01478fdef8fe@kernel.org>
+X-ClientProxiedBy: BYAPR21CA0021.namprd21.prod.outlook.com
+ (2603:10b6:a03:114::31) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1701768028.git.ysato@users.sourceforge.jp> <91a4cac133cb7244903e872b9e63fbbd57fbd68c.1701768028.git.ysato@users.sourceforge.jp>
-In-Reply-To: <91a4cac133cb7244903e872b9e63fbbd57fbd68c.1701768028.git.ysato@users.sourceforge.jp>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Dec 2023 16:29:19 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUNQ_u0O1ANv6zdao5SOp9H=WLuULnYuvAt2tgAfsp_GQ@mail.gmail.com>
-Message-ID: <CAMuHMdUNQ_u0O1ANv6zdao5SOp9H=WLuULnYuvAt2tgAfsp_GQ@mail.gmail.com>
-Subject: Re: [DO NOT MERGE v5 09/37] dt-bindings: timer: renesas,tmu: add renesas,tmu-sh7750
-To: Yoshinori Sato <ysato@users.sourceforge.jp>
-Cc: linux-sh@vger.kernel.org, Damien Le Moal <dlemoal@kernel.org>, 
-	Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Magnus Damm <magnus.damm@gmail.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Lee Jones <lee@kernel.org>, 
-	Helge Deller <deller@gmx.de>, Heiko Stuebner <heiko@sntech.de>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Chris Morgan <macromorgan@hotmail.com>, 
-	Linus Walleij <linus.walleij@linaro.org>, Randy Dunlap <rdunlap@infradead.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Hyeonggon Yoo <42.hyeyoo@gmail.com>, 
-	David Rientjes <rientjes@google.com>, Vlastimil Babka <vbabka@suse.cz>, Baoquan He <bhe@redhat.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Guenter Roeck <linux@roeck-us.net>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>, Guo Ren <guoren@kernel.org>, 
-	Javier Martinez Canillas <javierm@redhat.com>, Azeem Shaikh <azeemshaikh38@gmail.com>, 
-	Palmer Dabbelt <palmer@rivosinc.com>, Bin Meng <bmeng@tinylab.org>, 
-	Max Filippov <jcmvbkbc@gmail.com>, Tom Rix <trix@redhat.com>, 
-	Herve Codina <herve.codina@bootlin.com>, Jacky Huang <ychuang3@nuvoton.com>, 
-	Lukas Bulwahn <lukas.bulwahn@gmail.com>, Jonathan Corbet <corbet@lwn.net>, 
-	Biju Das <biju.das.jz@bp.renesas.com>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@pengutronix.de>, 
-	Sam Ravnborg <sam@ravnborg.org>, Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>, 
-	Sergey Shtylyov <s.shtylyov@omp.ru>, 
-	Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>, linux-ide@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org, 
-	dri-devel@lists.freedesktop.org, linux-pci@vger.kernel.org, 
-	linux-serial@vger.kernel.org, linux-fbdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AS8PR04MB8786:EE_
+X-MS-Office365-Filtering-Correlation-Id: 836ceedf-0a24-4f8f-589d-08dbf5a9f7da
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	olNSxbpTRVD3I68MQHzA0XCtVTpgEZKt2QGJjAH4EEUOUibpP9X694pf8QzOLOzfKNs62moh77dIN3tZrqDyKSpYMrkvBkR4VXLpmxzzAoBtq0xAGvRwbK6hHsgYgYv1aYIHyPSwGZ9M5lgfp/UEbqxywPDCQbIONPRA+basvi337bNyhnj+k6rsTORtOmh+LvDzuc2WOxIsfNUL4npzINC6ZC+LOmTxLfNwfiKYLXvqAZHEIyLZEraM4Uxa2FbcN5Jgaj3VlaDJAjqbUujoxEBJZ2h5Z7HVkbET8yneePW4E1sgpgVNSP+muaXY7PcmhvHLT1HlVYjP3/YP4Tf4LkYjSeFlyfS7K7TP6iW6wtPBSF3EFbQWV8l03HTH1nRxR8o8tJhnR62BPKg4yQRsAvAJhZ6X2lXmtMkxhVLFmyki8sdcgcL4dos/qPbDidCNfF35+XgW2DgfVJRcRHnDruqtx6kvp4gBRX0iQFSrfYL7LEiBWhwrIA2Ukr7Y1vTyICfj1XBRgI1b1A7haOyWUk0EpIvgnGrC/NPp5dFj4+fWCyMK7lUz4TnfvF+cyHtaiLc941/zwqDgJ1+GZMqM5+2Om5w18ZzbcVnLrIKYYMRKhnjKIvpZp/3C+mdaJyoSxqGCg7tOqpC3b8KmRQ0hIQ==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(7916004)(39860400002)(136003)(396003)(376002)(366004)(346002)(230922051799003)(1800799012)(186009)(64100799003)(451199024)(6486002)(26005)(6506007)(52116002)(6512007)(9686003)(6666004)(38100700002)(478600001)(316002)(66946007)(83380400001)(66556008)(66476007)(6916009)(4326008)(7416002)(8936002)(8676002)(2906002)(86362001)(33716001)(38350700005)(41300700001)(5660300002)(67856001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?hrYb1r9Um8UYMunMk1BXFXRzRwdCjG/KvATvBASyBqZAP9mnqWcl63AjMz8y?=
+ =?us-ascii?Q?9pQm/spUFmXnfKZpQijoYWp8GaqlEBsi1wCSDdr6pHe35cjmkQkTDI1IuxeE?=
+ =?us-ascii?Q?PjPRvel48AORHmf9fE01o8IH/FwAkVoZosCYI6H/Yvmkgn9LtDlTt7BJAkMn?=
+ =?us-ascii?Q?2eKIv0j/+bTKi7ulAOWa0TxSOSwuY7pzNpVg3Yn8cjPIFQdC4JoXq/4+V4vA?=
+ =?us-ascii?Q?Oz0YtXifIQNhQTZ1WkuAx3MywxxUF6f9NNqATjDmUzwcw8D+Fos/7DV9QhYH?=
+ =?us-ascii?Q?TymH7KC9Rh2d7CjhHcvL8+q5nw5ER2aXXYdzZ0qrV18mHSASnwAm6VEKGgwJ?=
+ =?us-ascii?Q?x8+5PF7zUXUOxtYZRhNjYxtv8if1cW/pCI1mUHiSK3ghZiOciPTApDNUbYSP?=
+ =?us-ascii?Q?eYjgFULfh7LV8+91fwPOa2acvP87nZAF5uA6aHy/bcdbilamJIEEufVKxnck?=
+ =?us-ascii?Q?q8XcNDULV0MXuV/aGDnpf0WuYrVgZ5i1itwj86Fw2Y+DUZcbTvFOqpmfh3yd?=
+ =?us-ascii?Q?vWrh57FF/X2e+TS9Q6kFboz1ZVq7ByC0xA92TctSIxdWm/vYZyXsfUWrhyvv?=
+ =?us-ascii?Q?9LiXiUq4nZOieXm7HnZ92UI8RAriuthffGr9CEkwyvEgus/YuQ53EXDjg1vG?=
+ =?us-ascii?Q?ws14AsmncM8ShEJ24jPiQi2I0cGUQkHqe1qeU4KZqqqmjXsfnTzZBC/SDsGA?=
+ =?us-ascii?Q?A6ZhwYg5dd/S+A3T2312Avau6j4OgWHRcpU9qzc9KUrIPJvIOoAj5fmc9s0s?=
+ =?us-ascii?Q?bwqwJtYpv3ddxj9F9trO/HiyO1VVcQVNYYlnSMZGAoMVeTfMiWfLOyCkO/z2?=
+ =?us-ascii?Q?+HFkSXcOqj7U42KkL4uSalFVbtnIQIqIsZh5WqRkKYgmp5+HkVnR0RXZI48G?=
+ =?us-ascii?Q?6x7PHZhZ8fljhg6IstZaQNqLJaERQ+AETsB5drU4oqBcQQV9sAgdOUWmIlmO?=
+ =?us-ascii?Q?gfMA+SJRIYmLAIPzBcE8BoONOXbUPoGrtrSNQxj3turBz5LDToPHk7F8Ki/6?=
+ =?us-ascii?Q?YD0glBOv/xcor/AQ2F3AIoPS1xOC3XCcglMp8BhAZ/+H/SfAWR2yJ53+vd++?=
+ =?us-ascii?Q?Sgu/xg/QTFMfpfNlT6kp+UbdxNKSqR7Lvr7N4e2PlrJ8Y9zvaHXDEfwHWgZC?=
+ =?us-ascii?Q?I3yOFY6hfpx7jOI4PxIEM7u9l58U0zxe0FHMJJwoECyZMD8/0F+OIjhIoidO?=
+ =?us-ascii?Q?xq1r5pdr2PovEkEx1iklUYX2UQuXIdUzSNq/CxeZczlbZgRZa58+Leh0XznD?=
+ =?us-ascii?Q?kj5UzY02TtrXiVYASq9F9XGOkzbfmahIdsy7qHBTSJtU8ZZd9nn/SbQWLmNy?=
+ =?us-ascii?Q?0aNsDxoGABtCT78BcAZ/RQit1p2WXGnbsyI6Luz2xteRFbMTN7yjkRsKsAZd?=
+ =?us-ascii?Q?6rn+Nh9A1uUxI33Auo7Ucv9RAi3ZJK9SSVMbs+4zVXUGP8T75tGwLOL3ZyDD?=
+ =?us-ascii?Q?plqLzlW9VsoddDRXIyBG+Pa9ipQYN9yCM5/9verSgDB2NT8eju61WuSBhNqN?=
+ =?us-ascii?Q?ivMG7Oi4EbMLbqz/RijlxHEp6BhgcgflEb3U/dxMTVev/RvaUSQHOqfDJdnY?=
+ =?us-ascii?Q?IxBt4H/MQOV6jKOoQO6WW8O2Kkiqku2FFXdOZ/rC?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 836ceedf-0a24-4f8f-589d-08dbf5a9f7da
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2023 15:50:56.5657
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: LDckpcsiC8XmWICm/FK5uiGcN4ZEAeTglQhfqTLtvHUvtFc8dBIufym18uWQUO2cNMNh8TEcZpWuYFLb6fucsA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8786
 
-Hi Sato-san,
+On Tue, Dec 05, 2023 at 10:56:09AM +0100, Jiri Slaby wrote:
+> On 30. 11. 23, 23:44, Frank Li wrote:
+> > In typical embedded Linux systems, UART consoles require at least two pins,
+> > TX and RX. In scenarios where I2C/I3C devices like sensors or PMICs are
+> > present, we can save these two pins by using this driver. Pins is crucial
+> > resources, especially in small chip packages.
+> > 
+> > This introduces support for using the I3C bus to transfer console tty data,
+> > effectively replacing the need for dedicated UART pins. This not only
+> > conserves valuable pin resources but also facilitates testing of I3C's
+> > advanced features, including early termination, in-band interrupt (IBI)
+> > support, and the creation of more complex data patterns. Additionally,
+> > it aids in identifying and addressing issues within the I3C controller
+> > driver.
+> > 
+> > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ...
+> > --- a/drivers/tty/Kconfig
+> > +++ b/drivers/tty/Kconfig
+> > @@ -412,6 +412,19 @@ config RPMSG_TTY
+> >   	  To compile this driver as a module, choose M here: the module will be
+> >   	  called rpmsg_tty.
+> > +config I3C_TTY
+> > +	tristate "TTY over I3C"
+> > +	depends on I3C
+> > +	help
+> > +	  Select this options if you'd like use TTY over I3C master controller
+> 
+> this option
+> to use
+> add a period to the end.
+> 
+> > +
+> > +	  This makes it possible for user-space programs to send and receive
+> > +	  data as a standard tty protocol. I3C provide relatively higher data
+> > +	  transfer rate and less pin numbers, SDA/SCL are shared with other
+> > +	  devices.
+> > +
+> > +	  If unsure, say N
+> > +
+> >   endif # TTY
+> >   source "drivers/tty/serdev/Kconfig"
+> ...
+> > --- /dev/null
+> > +++ b/drivers/tty/i3c_tty.c
+> > @@ -0,0 +1,443 @@
+> ...
+> > +struct ttyi3c_port {
+> > +	struct tty_port port;
+> > +	int minor;
+> > +	spinlock_t xlock; /* protect xmit */
+> > +	char tx_buff[I3C_TTY_TRANS_SIZE];
+> > +	char rx_buff[I3C_TTY_TRANS_SIZE];
+> 
+> These should be u8 as per the other changes throughout the tty layer.
+> 
+> > +	struct i3c_device *i3cdev;
+> > +	struct work_struct txwork;
+> > +	struct work_struct rxwork;
+> > +	struct completion txcomplete;
+> > +	unsigned long status;
+> > +	int buf_overrun;
+> 
+> Can this be ever negative?
+> 
+> > +};
+> > +
+> > +struct workqueue_struct *workqueue;
+> 
+> Is this related:
+>     Still below items not be fixed (according to Jiri Slaby's comments)
+>     - rxwork thread: need trigger from two position.
+>     - common thread queue: need some suggestion
+> ?
+> 
+> As I don't remember, could you elaborate again why you need your own
+> workqueue? You need to do it in the commit log anyway.
 
-On Tue, Dec 5, 2023 at 10:46=E2=80=AFAM Yoshinori Sato
-<ysato@users.sourceforge.jp> wrote:
-> Add SH7750 TMU entry.
->
-> Signed-off-by: Yoshinori Sato <ysato@users.sourceforge.jp>
+I just learn from other drivers, such as USB ACM, usb gadget ACM driver.
+If use common workqueue, which one prefered.
 
-Thanks for your patch!
+I will send fixed version after i3c part accepted.
 
-> --- a/Documentation/devicetree/bindings/timer/renesas,tmu.yaml
-> +++ b/Documentation/devicetree/bindings/timer/renesas,tmu.yaml
-> @@ -21,6 +21,7 @@ properties:
->    compatible:
->      items:
->        - enum:
-> +          - renesas,tmu-sh7750   # SH7750
-
-Please preserve alphabetical sort order.
-
->            - renesas,tmu-r8a7740  # R-Mobile A1
->            - renesas,tmu-r8a774a1 # RZ/G2M
->            - renesas,tmu-r8a774b1 # RZ/G2N
-
-The rest LGTM.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Frank
+> 
+> ...
+> > +static ssize_t i3c_write(struct tty_struct *tty, const unsigned char *buf, size_t count)
+> > +{
+> > +	struct ttyi3c_port *sport = tty->driver_data;
+> > +	unsigned long flags;
+> > +	bool is_empty;
+> > +	int ret;
+> > +
+> > +	spin_lock_irqsave(&sport->xlock, flags);
+> > +	ret = kfifo_in(&sport->port.xmit_fifo, buf, count);
+> > +	is_empty = kfifo_is_empty(&sport->port.xmit_fifo);
+> > +	spin_unlock_irqrestore(&sport->xlock, flags);
+> > +
+> > +	if (!is_empty)
+> > +		queue_work(workqueue, &sport->txwork);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static int i3c_put_char(struct tty_struct *tty, unsigned char ch)
+> > +{
+> > +	struct ttyi3c_port *sport = tty->driver_data;
+> > +	unsigned long flags;
+> > +	int ret = 0;
+> 
+> Unneeded initialization.
+> 
+> > +
+> > +	spin_lock_irqsave(&sport->xlock, flags);
+> > +	ret = kfifo_put(&sport->port.xmit_fifo, ch);
+> > +	spin_unlock_irqrestore(&sport->xlock, flags);
+> > +
+> > +	return ret;
+> > +}
+> ...
+> > +static void tty_i3c_rxwork(struct work_struct *work)
+> > +{
+> > +	struct ttyi3c_port *sport = container_of(work, struct ttyi3c_port, rxwork);
+> > +	struct i3c_priv_xfer xfers;
+> > +	int retry = I3C_TTY_RETRY;
+> 
+> Likely, should be unsigned.
+> 
+> > +	u16 status = BIT(0);
+> > +	int ret;
+> > +
+> > +	memset(&xfers, 0, sizeof(xfers));
+> > +	xfers.data.in = sport->rx_buff;
+> > +	xfers.len = I3C_TTY_TRANS_SIZE;
+> > +	xfers.rnw = 1;
+> > +
+> > +	do {
+> > +		if (test_bit(I3C_TTY_RX_STOP, &sport->status))
+> > +			break;
+> > +
+> > +		i3c_device_do_priv_xfers(sport->i3cdev, &xfers, 1);
+> > +
+> > +		if (xfers.actual_len) {
+> > +			ret = tty_insert_flip_string(&sport->port, sport->rx_buff,
+> > +						     xfers.actual_len);
+> > +			if (ret < xfers.actual_len)
+> > +				sport->buf_overrun++;
+> > +
+> > +			retry = I3C_TTY_RETRY;
+> > +			continue;
+> > +		}
+> > +
+> > +		status = BIT(0);
+> > +		i3c_device_getstatus_format1(sport->i3cdev, &status);
+> > +		/*
+> > +		 * Target side needs some time to fill data into fifo. Target side may not
+> > +		 * have hardware update status in real time. Software update status always
+> > +		 * needs some delays.
+> > +		 *
+> > +		 * Generally, target side have circular buffer in memory, it will be moved
+> > +		 * into FIFO by CPU or DMA. 'status' just show if circular buffer empty. But
+> > +		 * there are gap, especially CPU have not response irq to fill FIFO in time.
+> > +		 * So xfers.actual will be zero, wait for little time to avoid flood
+> > +		 * transfer in i3c bus.
+> > +		 */
+> > +		usleep_range(I3C_TTY_YIELD_US, 10 * I3C_TTY_YIELD_US);
+> > +		retry--;
+> > +
+> > +	} while (retry && (status & BIT(0)));
+> > +
+> > +	tty_flip_buffer_push(&sport->port);
+> > +}
+> > +
+> > +static void tty_i3c_txwork(struct work_struct *work)
+> > +{
+> > +	struct ttyi3c_port *sport = container_of(work, struct ttyi3c_port, txwork);
+> > +	struct i3c_priv_xfer xfers;
+> > +	int retry = I3C_TTY_RETRY;
+> 
+> Detto.
+> 
+> > +	unsigned long flags;
+> > +	int ret;
+> > +
+> > +	xfers.rnw = 0;
+> > +	xfers.data.out = sport->tx_buff;
+> > +
+> > +	while (!kfifo_is_empty(&sport->port.xmit_fifo) && retry) {
+> > +		xfers.len = kfifo_len(&sport->port.xmit_fifo);
+> > +		xfers.len = min_t(u16, I3C_TTY_TRANS_SIZE, xfers.len);
+> > +
+> > +		xfers.len = kfifo_out_peek(&sport->port.xmit_fifo, sport->tx_buff, xfers.len);
+> 
+> Can this simply be:
+> xfers.len = kfifo_out_peek(&sport->port.xmit_fifo, sport->tx_buff,
+> I3C_TTY_TRANS_SIZE);
+> ?
+> 
+> > +
+> > +		ret = i3c_device_do_priv_xfers(sport->i3cdev, &xfers, 1);
+> > +		if (ret) {
+> > +			/*
+> > +			 * Target side may not move data out of FIFO. delay can't resolve problem,
+> > +			 * just reduce some possiblity. Target can't end I3C SDR mode write
+> > +			 * transfer, discard data is reasonable when FIFO overrun.
+> > +			 */
+> > +			usleep_range(I3C_TTY_YIELD_US, 10 * I3C_TTY_YIELD_US);
+> > +			retry--;
+> > +		} else {
+> > +			retry = I3C_TTY_RETRY;
+> > +			ret = kfifo_out(&sport->port.xmit_fifo, sport->tx_buff, xfers.len);
+> 
+> Just to make sure: xfers.len is nor overwritten by
+> i3c_device_do_priv_xfers(), right?
+> 
+> > +		}
+> > +	}
+> > +
+> > +	spin_lock_irqsave(&sport->xlock, flags);
+> 
+> Why do you take the lock here, but not during the kfifo operations above?
+> 
+> > +	if (kfifo_is_empty(&sport->port.xmit_fifo))
+> > +		complete(&sport->txcomplete);
+> > +	spin_unlock_irqrestore(&sport->xlock, flags);
+> > +}
+> 
+> > +static int __init i3c_tty_init(void)
+> > +{
+> > +	int ret;
+> > +
+> > +	i3c_tty_driver = tty_alloc_driver(I3C_TTY_MINORS,
+> > +					  TTY_DRIVER_REAL_RAW | TTY_DRIVER_DYNAMIC_DEV);
+> > +
+> > +	if (IS_ERR(i3c_tty_driver))
+> > +		return PTR_ERR(i3c_tty_driver);
+> > +
+> > +	i3c_tty_driver->driver_name = "ttyI3C";
+> > +	i3c_tty_driver->name = "ttyI3C";
+> > +	i3c_tty_driver->minor_start = 0,
+> > +	i3c_tty_driver->type = TTY_DRIVER_TYPE_SERIAL,
+> > +	i3c_tty_driver->subtype = SERIAL_TYPE_NORMAL,
+> > +	i3c_tty_driver->init_termios = tty_std_termios;
+> > +	i3c_tty_driver->init_termios.c_cflag = B9600 | CS8 | CREAD | HUPCL |
+> > +					       CLOCAL;
+> > +	i3c_tty_driver->init_termios.c_lflag = 0;
+> > +
+> > +	tty_set_operations(i3c_tty_driver, &i3c_tty_ops);
+> > +
+> > +	ret = tty_register_driver(i3c_tty_driver);
+> > +	if (ret)
+> > +		goto err_tty_register_driver;
+> > +
+> > +	ret = i3c_driver_register(&i3c_driver);
+> > +	if (ret)
+> > +		goto err_i3c_driver_register;
+> > +
+> > +	workqueue = alloc_workqueue("ttyI3C", 0, 0);
+> 
+> Can it happen that you already queue something on this wq, while not
+> allocated yet? I mean: should this be done first in i3c_tty_init()?
+> 
+> > +	if (!workqueue) {
+> > +		ret = PTR_ERR(workqueue);
+> > +		goto err_alloc_workqueue;
+> > +	}
+> > +
+> > +	return 0;
+> > +
+> > +err_alloc_workqueue:
+> > +	i3c_driver_unregister(&i3c_driver);
+> > +
+> > +err_i3c_driver_register:
+> > +	tty_unregister_driver(i3c_tty_driver);
+> > +
+> > +err_tty_register_driver:
+> > +	tty_driver_kref_put(i3c_tty_driver);
+> > +
+> > +	return ret;
+> > +}
+> > +
+> > +static void __exit i3c_tty_exit(void)
+> > +{
+> > +	i3c_driver_unregister(&i3c_driver);
+> > +	tty_unregister_driver(i3c_tty_driver);
+> > +	tty_driver_kref_put(i3c_tty_driver);
+> > +	idr_destroy(&i3c_tty_minors);
+> 
+> What about the wq?
+> 
+> > +}
+> 
+> regards,
+> -- 
+> js
+> suse labs
+> 
 
