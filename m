@@ -1,47 +1,45 @@
-Return-Path: <linux-serial+bounces-575-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-576-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EA9780689A
-	for <lists+linux-serial@lfdr.de>; Wed,  6 Dec 2023 08:37:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 181F980689B
+	for <lists+linux-serial@lfdr.de>; Wed,  6 Dec 2023 08:37:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A062D1C20CF6
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6F5B281E31
 	for <lists+linux-serial@lfdr.de>; Wed,  6 Dec 2023 07:37:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24141798D;
-	Wed,  6 Dec 2023 07:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49C6016429;
+	Wed,  6 Dec 2023 07:37:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6IQRDqk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YYqDjxsN"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A624E16429
-	for <linux-serial@vger.kernel.org>; Wed,  6 Dec 2023 07:37:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16B3CC433C9;
-	Wed,  6 Dec 2023 07:37:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 276C610A25
+	for <linux-serial@vger.kernel.org>; Wed,  6 Dec 2023 07:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B0CC433CC;
+	Wed,  6 Dec 2023 07:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1701848261;
-	bh=18JyKq4qj/ln/rCT3pVsLeqjsPFlBw+nKU0XPRGVwY0=;
+	s=k20201202; t=1701848263;
+	bh=vx/MuvUsQSvv1EouHrNkdKzoIAgHm5f/1Px1Jg2vH4A=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=p6IQRDqkaYUoPif/d7W9DRIcT9jGBoIc5ICU9urWmi2ZRus2ETMngmAZsTHKOW0To
-	 rLG45RiEQcK1kwmt6j8cYToPebcY32H8QRWMylgVKvixxlqgv/RjnmOpPPRMpM9Pam
-	 clpS7FkXgElpDEbUkhIQnwF1oJ9lr5zwiPDIrWzPzGNOOsES30u4YDSCJVdsLnYy1f
-	 NvbtSPIITiYZisvRQV7jG+tbbo9cpITSVwJI0bKLQJZX/G8VH1xB+Am3COfhw0Uc+E
-	 PhzQSdXnEErWlY1yMEY5+Scs3I8k6cOkD5p1NIkmv4DN7y44EoylEGfPKc/kUCvl3c
-	 QwIsT15zKSayA==
+	b=YYqDjxsNCfuFf9Y/UF2sFfxDk2DzRyPakA/MJEECRB1D6FVXT83Pvb3N9b++LtVsy
+	 +KoNyI3YVuhhSb7Q/4ONmBSQjtUussVES/pdP0SQQJBUEXVFoW2+q4ptjzFq5BmhHt
+	 WBFZ2UH3ipcY6garWdOS7jHha5OPAeA1lt4ak2sB/S8AXs88AZ0n6LvwjubHVdzQ6X
+	 6vvMzVTxlEcN91YLby54IGcx6NeKxsFgdQ59lXoogNoBPOPu3ChS56IKI2OfSV1oqD
+	 BpjFxLIgL6BQZVtSS4lq9Bv+8nBvauJg+BuJHdT69aRroeED3h1oMWeIup01LnZfnh
+	 NfqkBwq9ifBKQ==
 From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To: gregkh@linuxfoundation.org
 Cc: linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-	linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 10/27] tty: ehv_bytechan: convert to u8 and size_t
-Date: Wed,  6 Dec 2023 08:36:55 +0100
-Message-ID: <20231206073712.17776-11-jirislaby@kernel.org>
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH 11/27] tty: goldfish: convert to u8 and size_t
+Date: Wed,  6 Dec 2023 08:36:56 +0100
+Message-ID: <20231206073712.17776-12-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20231206073712.17776-1-jirislaby@kernel.org>
 References: <20231206073712.17776-1-jirislaby@kernel.org>
@@ -57,56 +55,58 @@ Switch character types to u8 and sizes to size_t. To conform to
 characters/sizes in the rest of the tty layer.
 
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
-Cc: Laurentiu Tudor <laurentiu.tudor@nxp.com>
-Cc: linuxppc-dev@lists.ozlabs.org
 ---
- drivers/tty/ehv_bytechan.c | 11 +++++------
- 1 file changed, 5 insertions(+), 6 deletions(-)
+ drivers/tty/goldfish.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/tty/ehv_bytechan.c b/drivers/tty/ehv_bytechan.c
-index cc9f4338da60..69508d7a4135 100644
---- a/drivers/tty/ehv_bytechan.c
-+++ b/drivers/tty/ehv_bytechan.c
-@@ -49,7 +49,7 @@ struct ehv_bc_data {
- 	unsigned int tx_irq;
+diff --git a/drivers/tty/goldfish.c b/drivers/tty/goldfish.c
+index 7ad7fa66cb27..d27979eabfdf 100644
+--- a/drivers/tty/goldfish.c
++++ b/drivers/tty/goldfish.c
+@@ -50,10 +50,8 @@ static u32 goldfish_tty_line_count = 8;
+ static u32 goldfish_tty_current_line_count;
+ static struct goldfish_tty *goldfish_ttys;
  
- 	spinlock_t lock;	/* lock for transmit buffer */
--	unsigned char buf[BUF_SIZE];	/* transmit circular buffer */
-+	u8 buf[BUF_SIZE];	/* transmit circular buffer */
- 	unsigned int head;	/* circular buffer head */
- 	unsigned int tail;	/* circular buffer tail */
- 
-@@ -138,9 +138,9 @@ static int find_console_handle(void)
- 
- static unsigned int local_ev_byte_channel_send(unsigned int handle,
- 					       unsigned int *count,
--					       const char *p)
-+					       const u8 *p)
+-static void do_rw_io(struct goldfish_tty *qtty,
+-		     unsigned long address,
+-		     unsigned int count,
+-		     bool is_write)
++static void do_rw_io(struct goldfish_tty *qtty, unsigned long address,
++		     size_t count, bool is_write)
  {
--	char buffer[EV_BYTE_CHANNEL_MAX_BYTES];
-+	u8 buffer[EV_BYTE_CHANNEL_MAX_BYTES];
- 	unsigned int c = *count;
+ 	unsigned long irq_flags;
+ 	void __iomem *base = qtty->base;
+@@ -73,10 +71,8 @@ static void do_rw_io(struct goldfish_tty *qtty,
+ 	spin_unlock_irqrestore(&qtty->lock, irq_flags);
+ }
  
- 	/*
-@@ -166,7 +166,7 @@ static unsigned int local_ev_byte_channel_send(unsigned int handle,
-  * has been sent, or if some error has occurred.
-  *
-  */
--static void byte_channel_spin_send(const char data)
-+static void byte_channel_spin_send(const u8 data)
+-static void goldfish_tty_rw(struct goldfish_tty *qtty,
+-			    unsigned long addr,
+-			    unsigned int count,
+-			    bool is_write)
++static void goldfish_tty_rw(struct goldfish_tty *qtty, unsigned long addr,
++			    size_t count, bool is_write)
  {
- 	int ret, count;
+ 	dma_addr_t dma_handle;
+ 	enum dma_data_direction dma_dir;
+@@ -125,7 +121,7 @@ static void goldfish_tty_rw(struct goldfish_tty *qtty,
+ 	}
+ }
  
-@@ -474,8 +474,7 @@ static ssize_t ehv_bc_tty_write(struct tty_struct *ttys, const u8 *s,
+-static void goldfish_tty_do_write(int line, const u8 *buf, unsigned int count)
++static void goldfish_tty_do_write(int line, const u8 *buf, size_t count)
  {
- 	struct ehv_bc_data *bc = ttys->driver_data;
- 	unsigned long flags;
--	unsigned int len;
--	unsigned int written = 0;
-+	size_t len, written = 0;
+ 	struct goldfish_tty *qtty = &goldfish_ttys[line];
  
- 	while (1) {
- 		spin_lock_irqsave(&bc->lock, flags);
+@@ -136,7 +132,7 @@ static irqreturn_t goldfish_tty_interrupt(int irq, void *dev_id)
+ {
+ 	struct goldfish_tty *qtty = dev_id;
+ 	void __iomem *base = qtty->base;
+-	unsigned char *buf;
++	u8 *buf;
+ 	u32 count;
+ 
+ 	count = gf_ioread32(base + GOLDFISH_TTY_REG_BYTES_READY);
 -- 
 2.43.0
 
