@@ -1,393 +1,292 @@
-Return-Path: <linux-serial+bounces-656-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-659-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1784C809D84
-	for <lists+linux-serial@lfdr.de>; Fri,  8 Dec 2023 08:50:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D817809DE7
+	for <lists+linux-serial@lfdr.de>; Fri,  8 Dec 2023 09:07:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA15228179F
-	for <lists+linux-serial@lfdr.de>; Fri,  8 Dec 2023 07:50:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E7D83B20ACD
+	for <lists+linux-serial@lfdr.de>; Fri,  8 Dec 2023 08:07:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36F0A1094F;
-	Fri,  8 Dec 2023 07:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A48E10969;
+	Fri,  8 Dec 2023 08:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="qx41GLFp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OY2EMj/g"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD3A21737
-	for <linux-serial@vger.kernel.org>; Thu,  7 Dec 2023 23:50:30 -0800 (PST)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20231208075022epoutp012104f782c0f5b1c916198a505ddeacb9~ey9RfDLpw0062500625epoutp01w
-	for <linux-serial@vger.kernel.org>; Fri,  8 Dec 2023 07:50:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20231208075022epoutp012104f782c0f5b1c916198a505ddeacb9~ey9RfDLpw0062500625epoutp01w
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1702021822;
-	bh=tDx7+j5DykI148IvsokWJUA3ERR2qHhvO15Vvo+brS4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qx41GLFpCix6yG6WToUPIbRxheV62itvLf4+9xgoGCv27APHgcNzsvimgFxz6FC6L
-	 N12c/wW72xotEdqSK84t14P8VU71UxREi/qXqS8iV8oSk9FaVD+q8sGWRHoY/BpxaI
-	 I7bauuH0eRkDmxiWis0hxezZm5MbzqpWvW/EXID8=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-	epcas2p3.samsung.com (KnoxPortal) with ESMTP id
-	20231208075021epcas2p3a079d1a5512c90ba6e2d2a98a9002f2b~ey9Q5Ug5P0598705987epcas2p3n;
-	Fri,  8 Dec 2023 07:50:21 +0000 (GMT)
-Received: from epsmges2p1.samsung.com (unknown [182.195.36.70]) by
-	epsnrtp4.localdomain (Postfix) with ESMTP id 4Smjwr6vH2z4x9Q1; Fri,  8 Dec
-	2023 07:50:20 +0000 (GMT)
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-	epsmges2p1.samsung.com (Symantec Messaging Gateway) with SMTP id
-	C6.D3.10006.CBAC2756; Fri,  8 Dec 2023 16:50:20 +0900 (KST)
-Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
-	epcas2p4.samsung.com (KnoxPortal) with ESMTPA id
-	20231208075020epcas2p414c85e03d18327665eeff54082314b56~ey9P6bxPo0754707547epcas2p48;
-	Fri,  8 Dec 2023 07:50:20 +0000 (GMT)
-Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
-	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20231208075020epsmtrp1a874498b4d1f8fb3e2635c9b45b4a7c1~ey9P36vit0202202022epsmtrp11;
-	Fri,  8 Dec 2023 07:50:20 +0000 (GMT)
-X-AuditID: b6c32a45-3ebfd70000002716-7c-6572cabca78e
-Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
-	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
-	DB.C4.08755.CBAC2756; Fri,  8 Dec 2023 16:50:20 +0900 (KST)
-Received: from localhost.localdomain (unknown [10.229.9.55]) by
-	epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20231208075020epsmtip24c69b3412c34bfffa92e5bd6c348fd89~ey9PmcHxA1333813338epsmtip2Z;
-	Fri,  8 Dec 2023 07:50:20 +0000 (GMT)
-From: Jaewon Kim <jaewon02.kim@samsung.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, Alim Akhtar
-	<alim.akhtar@samsung.com>, Rob Herring <robh+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Tomasz Figa <tomasz.figa@gmail.com>, Sylwester
-	Nawrocki <s.nawrocki@samsung.com>, Linus Walleij <linus.walleij@linaro.org>,
-	Thierry Reding <thierry.reding@gmail.com>, Uwe Kleine-K?nig
-	<u.kleine-koenig@pengutronix.de>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-serial@vger.kernel.org, Jaewon Kim <jaewon02.kim@samsung.com>
-Subject: [PATCH v3 4/4] pinctrl: samsung: add exynosautov920 pinctrl
-Date: Fri,  8 Dec 2023 16:45:27 +0900
-Message-ID: <20231208074527.50840-5-jaewon02.kim@samsung.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20231208074527.50840-1-jaewon02.kim@samsung.com>
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D831725
+	for <linux-serial@vger.kernel.org>; Fri,  8 Dec 2023 00:07:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1702022861; x=1733558861;
+  h=date:from:to:cc:subject:message-id;
+  bh=wS5XSrLKISjIlJZOfrXrGYUSBE7D5jjr0WKAUKUWV5Q=;
+  b=OY2EMj/gow6R6s1syH20Z/e0Gm6ueOcWC3ETFeATVBebSz74vwxq1IB7
+   lPt11ysQVK0ksYqqwkg8OiOBiEoEfpXiueHhJVYWpxGZIBt/4MlXUBR4j
+   sxAveaMtJSmndlJBy3nFjjMuZuq/TkTJ3tIFqPiN1JtlecGnm0RwPLkZL
+   Ac9GBilP5iKxEVl+HCX8zG+gtmK13yS4Z8bWUNEhZKIqosocg1YLtmAzI
+   yolvafrRxCzw6DdU2J82XhaSA5WqtaRrLKYz6pkfBLZdBdpp3ALUuQH8f
+   uxDvRDWXfBstmn1IfhTCxyPsaP0HP+elMXUtl3sKSOSl/CuviLI3pCHrh
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="1253719"
+X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
+   d="scan'208";a="1253719"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Dec 2023 00:07:41 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10917"; a="775720538"
+X-IronPort-AV: E=Sophos;i="6.04,260,1695711600"; 
+   d="scan'208";a="775720538"
+Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
+  by fmsmga007.fm.intel.com with ESMTP; 08 Dec 2023 00:07:40 -0800
+Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1rBVta-000DTD-1A;
+	Fri, 08 Dec 2023 08:07:38 +0000
+Date: Fri, 08 Dec 2023 16:07:35 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org
+Subject: [tty:tty-testing] BUILD SUCCESS
+ ff16c54aa85101955638d09434169897474e073c
+Message-ID: <202312081632.jYJudfZp-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0xbdRTH8+ttby8QyKUw91u7sdrFGSBASyi9kLEtguYmg4UpMWZO8Ao3
-	hVHaprc1G2oECTBAnh1sLa+yYiYNG1mhS4dUkVZFgqCDDWXjYcQpLyMsbsrGYuntdP99f+d8
-	vr9zzu+BIYIpVIgVqPW0Tk2pJGgg97o7kogZGtPR0ukmObHYcR0lel0THKLTM8Ejyqx9KOEs
-	8fCIP9r3Eq5VB584//gyh7D/cptH9Hc+BsTUYBtKzM3ZAHFx8nMOMW6t5RPlLg+fcK9V8oh/
-	Bju4hG3Qy91pNIKjYeQN8xyftNuqUPLu7SGU/KK9l0/2d39I1m9LyboBGyDv2yMysZOFh/Jp
-	Ko/WiWl1riavQK1MkRx7LSc1R54olcXIkgiFRKymiugUSVp6ZswrBSrvOBLxu5TK4A1lUgwj
-	iTt8SKcx6GlxvobRp0hobZ5Kq9DGMlQRY1ArY9W0PlkmlcbLveDbhfnDGys87cdvnrHcaOaW
-	gKmMahCAQTwBrj4y8qtBICbAnQC6v5pB2cUmgLWTHyHs4gGALabfeE8tTdeaeGzCBaBj4aqf
-	2gDwZtV5zg6F4tHwYZ/V5wjHFxC4WvHeDoTglRzY8WCZu5MIw9PgZFsZsqO5+Avwlu2uLx6M
-	p8DtlicoW24/tDov+5gA/DC01DoRlgmF35qWfDziZcocrQjLj2PQ6jjC6jTYuHaVw+owuPLN
-	AJ/VQrhcX+HXGlgxPe7X78NrlpuA1Ueg+dGAdwDMu38k7BuM25EQPwA9s/6qIfCce5vPhoPh
-	uQoBazwIF5on/M3vhU2eHn8DJBy7M+RrUoA3Alh+T9UAxOZnZjE/M4v5/7oWgNjAc7SWKVLS
-	TLxW9t8F52qK7MD3uqNedgLj+p+xI4CDgREAMUQSHqya1NCC4DzqbDGt0+ToDCqaGQFy70k3
-	IsJduRrv91Drc2QJSdKExESZIl4uVUh2B8+Xt+cJcCWlpwtpWkvrnvo4WICwhBO1tZiV7Om8
-	gmd1IwFryz2iU9np+w4e6+0ZNZSj87rwU/V7AnPiQu2iH9ZfPT3pUIXZRgPt/Z9EL5yMWO4L
-	kUdWCvGf58XjennWcND9lT2/ZxebGraMjaWbH6SNbJS6m5SLhoWO5Ldc2SI9N1VZfUDYbA5J
-	r1vkt176einoR8tEze6HxghHRtdo/fAbx6+8pPhefvZvIAx/3iXiBoTWbF4ofXFWsX4C636i
-	vvX6X2hmRujMdybC5DaUhH0a/xkTlTS//ydp++nQrtmxC9G/HqVrjtcFdc0023chdV+SVdSJ
-	aaeoLvFMQ+uQE23bmukSJW7uK8q41PJOavG9pWHpImmUcJl8ShaF6BjqX/8r/IxmBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSvO6eU0WpBqvOCFs8mLeNzWLN3nNM
-	FvOPnGO1aF68ns1iR8MRVot3c2Us9r7eym4x5c9yJotNj6+xWmye/4fR4vKuOWwWd++uYrSY
-	cX4fk8WZxb3sFq17j7BbHH7Tzmrxc9c8FotVu4Dqbk+czOgg7LFz1l12j02rOtk87lzbw+ax
-	f+4ado/NS+o9+v8aePRtWcXo8XmTXABHFJdNSmpOZllqkb5dAlfGgY+vWAt6oisW7JzK0sB4
-	2beLkZNDQsBEYtLGSaxdjFwcQgK7GSX6Zs5mhUjISCx/1scGYQtL3G85AlX0nlHi96GPzCAJ
-	NgFtie/rF4MlRASeM0uc/fMILMEs0M8kcX1TAogtLOAicX5OM1icRUBV4uqqOywgNq+ArcTf
-	af+gNshLLN6xHKyGU8BOYkHvDjBbCKhmzdYOdoh6QYmTM5+wQMyXl2jeOpt5AqPALCSpWUhS
-	CxiZVjFKphYU56bnFhsWGOallusVJ+YWl+al6yXn525iBEealuYOxu2rPugdYmTiYDzEKMHB
-	rCTCm3M+P1WINyWxsiq1KD++qDQntfgQozQHi5I4r/iL3hQhgfTEktTs1NSC1CKYLBMHp1QD
-	k9HVZJnOeVrzfWIL0oVeNR/jnX73z2WWuEyuC8yZ7J/SdwVE3I6QuqE9WbVk+mPmW7ZeCdOa
-	j6aEMWn/CGNynGy/p4OheinH/U5RTu2KN3eXs02RE7Fwa1hrqCBYtj4pt0xW3qfnZDm3r4hJ
-	rmVA482QhIl3yl9xXFDdMKftgsGxl+Vnk5SDKnJyzsW7ptQW/byZ+fXWqXmV7/k4Tv1RWPnk
-	7JFtvjfbNV78WBPzs0FOsf1QttuljZxvcjXzz306mVgSzLLKsv6z36Mdv9c7SV1RyJS+uenF
-	wtzpv+LLDN2eM/8wZcvJP51n+5hjjyjX7y9LleI6vzE3lzI32jNEbEgI5nIK9YtRf7mJa7IS
-	S3FGoqEWc1FxIgCYdcqgIwMAAA==
-X-CMS-MailID: 20231208075020epcas2p414c85e03d18327665eeff54082314b56
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20231208075020epcas2p414c85e03d18327665eeff54082314b56
-References: <20231208074527.50840-1-jaewon02.kim@samsung.com>
-	<CGME20231208075020epcas2p414c85e03d18327665eeff54082314b56@epcas2p4.samsung.com>
 
-Add pinctrl data for ExynosAutov920 SoC.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
+branch HEAD: ff16c54aa85101955638d09434169897474e073c  serial: msm: Use OPP table for DVFS support
 
-Pinctrl data for ExynosAutoV920 SoC.
- - GPA0,GPA1 (10): External wake up interrupt
- - GPQ0 (2): SPMI (PMIC I/F)
- - GPB0,GPB1,GPB2,GPB3,GPB4,GPB5,GPB6 (47): I2S Audio
- - GPH0,GPH1,GPH2,GPH3,GPH4,GPH5,GPH6,GPH8 (49): PCIE, UFS, Ethernet
- - GPG0,GPG1,GPG2,GPG3,GPG4,GPG5 (29): General purpose
- - GPP0,GPP1,GPP2,GPP3,GPP4,GPP5,GPP6,GPP7,GPP8,GPP9,GPP10 (77): USI
+elapsed time: 1475m
 
-Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
----
- .../pinctrl/samsung/pinctrl-exynos-arm64.c    | 140 ++++++++++++++++++
- drivers/pinctrl/samsung/pinctrl-exynos.c      |  18 +++
- drivers/pinctrl/samsung/pinctrl-exynos.h      |  24 +++
- drivers/pinctrl/samsung/pinctrl-samsung.c     |   2 +
- drivers/pinctrl/samsung/pinctrl-samsung.h     |   1 +
- 5 files changed, 185 insertions(+)
+configs tested: 214
+configs skipped: 1
 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-index cb965cf93705..a998c296dd05 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos-arm64.c
-@@ -796,3 +796,143 @@ const struct samsung_pinctrl_of_match_data fsd_of_data __initconst = {
- 	.ctrl		= fsd_pin_ctrl,
- 	.num_ctrl	= ARRAY_SIZE(fsd_pin_ctrl),
- };
-+
-+/* pin banks of exynosautov920 pin-controller 0 (ALIVE) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks0[] = {
-+	EXYNOSV920_PIN_BANK_EINTW(8, 0x0000, "gpa0", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTW(2, 0x1000, "gpa1", 0x18, 0x20, 0x24),
-+	EXYNOS850_PIN_BANK_EINTN(2, 0x2000, "gpq0"),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 1 (AUD) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks1[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(7, 0x0000, "gpb0", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(6, 0x1000, "gpb1", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x2000, "gpb2", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x3000, "gpb3", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x4000, "gpb4", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(5, 0x5000, "gpb5", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(5, 0x6000, "gpb6", 0x18, 0x24, 0x28),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 2 (HSI0) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks2[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(6, 0x0000, "gph0", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(2, 0x1000, "gph1", 0x18, 0x20, 0x24),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 3 (HSI1) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks3[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(7, 0x000, "gph8", 0x18, 0x24, 0x28),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 4 (HSI2) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks4[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x0000, "gph3", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(7, 0x1000, "gph4", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x2000, "gph5", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(7, 0x3000, "gph6", 0x18, 0x24, 0x28),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 5 (HSI2UFS) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks5[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x000, "gph2", 0x18, 0x20, 0x24),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 6 (PERIC0) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks6[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x0000, "gpp0", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x1000, "gpp1", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x2000, "gpp2", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(5, 0x3000, "gpg0", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x4000, "gpp3", 0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x5000, "gpp4", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x6000, "gpg2", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x7000, "gpg5", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(3, 0x8000, "gpg3", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(5, 0x9000, "gpg4", 0x18, 0x24, 0x28),
-+};
-+
-+/* pin banks of exynosautov920 pin-controller 7 (PERIC1) */
-+static const struct samsung_pin_bank_data exynosautov920_pin_banks7[] = {
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x0000, "gpp5",  0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(5, 0x1000, "gpp6",  0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x2000, "gpp10", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x3000, "gpp7",  0x18, 0x24, 0x28),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x4000, "gpp8",  0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x5000, "gpp11", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x6000, "gpp9",  0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(4, 0x7000, "gpp12", 0x18, 0x20, 0x24),
-+	EXYNOSV920_PIN_BANK_EINTG(8, 0x8000, "gpg1",  0x18, 0x24, 0x28),
-+};
-+
-+static const struct samsung_retention_data exynosautov920_retention_data __initconst = {
-+	.regs	 = NULL,
-+	.nr_regs = 0,
-+	.value	 = 0,
-+	.refcnt	 = &exynos_shared_retention_refcnt,
-+	.init	 = exynos_retention_init,
-+};
-+
-+static const struct samsung_pin_ctrl exynosautov920_pin_ctrl[] = {
-+	{
-+		/* pin-controller instance 0 ALIVE data */
-+		.pin_banks	= exynosautov920_pin_banks0,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks0),
-+		.eint_wkup_init	= exynos_eint_wkup_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+		.retention_data	= &exynosautov920_retention_data,
-+	}, {
-+		/* pin-controller instance 1 AUD data */
-+		.pin_banks	= exynosautov920_pin_banks1,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks1),
-+	}, {
-+		/* pin-controller instance 2 HSI0 data */
-+		.pin_banks	= exynosautov920_pin_banks2,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks2),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin-controller instance 3 HSI1 data */
-+		.pin_banks	= exynosautov920_pin_banks3,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks3),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin-controller instance 4 HSI2 data */
-+		.pin_banks	= exynosautov920_pin_banks4,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks4),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin-controller instance 5 HSI2UFS data */
-+		.pin_banks	= exynosautov920_pin_banks5,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks5),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin-controller instance 6 PERIC0 data */
-+		.pin_banks	= exynosautov920_pin_banks6,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks6),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	}, {
-+		/* pin-controller instance 7 PERIC1 data */
-+		.pin_banks	= exynosautov920_pin_banks7,
-+		.nr_banks	= ARRAY_SIZE(exynosautov920_pin_banks7),
-+		.eint_gpio_init	= exynos_eint_gpio_init,
-+		.suspend	= exynos_pinctrl_suspend,
-+		.resume		= exynos_pinctrl_resume,
-+	},
-+};
-+
-+const struct samsung_pinctrl_of_match_data exynosautov920_of_data __initconst = {
-+	.ctrl		= exynosautov920_pin_ctrl,
-+	.num_ctrl	= ARRAY_SIZE(exynosautov920_pin_ctrl),
-+};
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.c b/drivers/pinctrl/samsung/pinctrl-exynos.c
-index f798f64b1122..593633d09aa2 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.c
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.c
-@@ -487,6 +487,22 @@ static const struct exynos_irq_chip exynos7_wkup_irq_chip __initconst = {
- 	.set_eint_wakeup_mask = exynos_pinctrl_set_eint_wakeup_mask,
- };
- 
-+static const struct exynos_irq_chip exynosautov920_wkup_irq_chip __initconst = {
-+	.chip = {
-+		.name = "exynosautov920_wkup_irq_chip",
-+		.irq_unmask = exynos_irq_unmask,
-+		.irq_mask = exynos_irq_mask,
-+		.irq_ack = exynos_irq_ack,
-+		.irq_set_type = exynos_irq_set_type,
-+		.irq_set_wake = exynos_wkup_irq_set_wake,
-+		.irq_request_resources = exynos_irq_request_resources,
-+		.irq_release_resources = exynos_irq_release_resources,
-+	},
-+	.eint_wake_mask_value = &eint_wake_mask_value,
-+	.eint_wake_mask_reg = EXYNOS5433_EINT_WAKEUP_MASK,
-+	.set_eint_wakeup_mask = exynos_pinctrl_set_eint_wakeup_mask,
-+};
-+
- /* list of external wakeup controllers supported */
- static const struct of_device_id exynos_wkup_irq_ids[] = {
- 	{ .compatible = "samsung,s5pv210-wakeup-eint",
-@@ -499,6 +515,8 @@ static const struct of_device_id exynos_wkup_irq_ids[] = {
- 			.data = &exynos7_wkup_irq_chip },
- 	{ .compatible = "samsung,exynosautov9-wakeup-eint",
- 			.data = &exynos7_wkup_irq_chip },
-+	{ .compatible = "samsung,exynosautov920-wakeup-eint",
-+			.data = &exynosautov920_wkup_irq_chip },
- 	{ }
- };
- 
-diff --git a/drivers/pinctrl/samsung/pinctrl-exynos.h b/drivers/pinctrl/samsung/pinctrl-exynos.h
-index 5049c170e958..305cb1d31de4 100644
---- a/drivers/pinctrl/samsung/pinctrl-exynos.h
-+++ b/drivers/pinctrl/samsung/pinctrl-exynos.h
-@@ -141,6 +141,30 @@
- 		.name		= id				\
- 	}
- 
-+#define EXYNOSV920_PIN_BANK_EINTG(pins, reg, id, con_offs, mask_offs, pend_offs)	\
-+	{							\
-+		.type			= &exynos850_bank_type_off,	\
-+		.pctl_offset		= reg,				\
-+		.nr_pins		= pins,				\
-+		.eint_type		= EINT_TYPE_GPIO,		\
-+		.eint_con_offset	= con_offs,			\
-+		.eint_mask_offset	= mask_offs,			\
-+		.eint_pend_offset	= pend_offs,			\
-+		.name			= id				\
-+	}
-+
-+#define EXYNOSV920_PIN_BANK_EINTW(pins, reg, id, con_offs, mask_offs, pend_offs)	\
-+	{							\
-+		.type			= &exynos850_bank_type_alive,	\
-+		.pctl_offset		= reg,				\
-+		.nr_pins		= pins,				\
-+		.eint_type		= EINT_TYPE_WKUP,		\
-+		.eint_con_offset	= con_offs,			\
-+		.eint_mask_offset	= mask_offs,			\
-+		.eint_pend_offset	= pend_offs,			\
-+		.name			= id				\
-+	}
-+
- /**
-  * struct exynos_weint_data: irq specific data for all the wakeup interrupts
-  * generated by the external wakeup interrupt controller.
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index 362e99566919..800a2f0a026a 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -1324,6 +1324,8 @@ static const struct of_device_id samsung_pinctrl_dt_match[] = {
- 		.data = &exynosautov9_of_data },
- 	{ .compatible = "tesla,fsd-pinctrl",
- 		.data = &fsd_of_data },
-+	{ .compatible = "samsung,exynosautov920-pinctrl",
-+		.data = &exynosautov920_of_data },
- #endif
- #ifdef CONFIG_PINCTRL_S3C64XX
- 	{ .compatible = "samsung,s3c64xx-pinctrl",
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.h b/drivers/pinctrl/samsung/pinctrl-samsung.h
-index 789358bcd9c5..987086fa0d1d 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.h
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.h
-@@ -362,6 +362,7 @@ extern const struct samsung_pinctrl_of_match_data exynos7_of_data;
- extern const struct samsung_pinctrl_of_match_data exynos7885_of_data;
- extern const struct samsung_pinctrl_of_match_data exynos850_of_data;
- extern const struct samsung_pinctrl_of_match_data exynosautov9_of_data;
-+extern const struct samsung_pinctrl_of_match_data exynosautov920_of_data;
- extern const struct samsung_pinctrl_of_match_data fsd_of_data;
- extern const struct samsung_pinctrl_of_match_data s3c64xx_of_data;
- extern const struct samsung_pinctrl_of_match_data s3c2412_of_data;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig   gcc  
+alpha                               defconfig   gcc  
+arc                               allnoconfig   gcc  
+arc                                 defconfig   gcc  
+arc                   randconfig-001-20231207   gcc  
+arc                   randconfig-001-20231208   gcc  
+arc                   randconfig-002-20231207   gcc  
+arc                   randconfig-002-20231208   gcc  
+arc                    vdk_hs38_smp_defconfig   gcc  
+arm                               allnoconfig   gcc  
+arm                         assabet_defconfig   gcc  
+arm                           h3600_defconfig   gcc  
+arm                      integrator_defconfig   gcc  
+arm                      jornada720_defconfig   gcc  
+arm                       multi_v4t_defconfig   gcc  
+arm                        multi_v7_defconfig   gcc  
+arm                   randconfig-001-20231207   gcc  
+arm                   randconfig-002-20231207   gcc  
+arm                   randconfig-003-20231207   gcc  
+arm                   randconfig-004-20231207   gcc  
+arm                         s3c6400_defconfig   gcc  
+arm                           sunxi_defconfig   gcc  
+arm                           tegra_defconfig   gcc  
+arm                         wpcm450_defconfig   gcc  
+arm64                            allmodconfig   clang
+arm64                             allnoconfig   gcc  
+arm64                               defconfig   gcc  
+arm64                 randconfig-001-20231207   gcc  
+arm64                 randconfig-002-20231207   gcc  
+arm64                 randconfig-003-20231207   gcc  
+arm64                 randconfig-004-20231207   gcc  
+csky                              allnoconfig   gcc  
+csky                                defconfig   gcc  
+csky                  randconfig-001-20231207   gcc  
+csky                  randconfig-001-20231208   gcc  
+csky                  randconfig-002-20231207   gcc  
+csky                  randconfig-002-20231208   gcc  
+hexagon                          allmodconfig   clang
+hexagon                          allyesconfig   clang
+i386                             allmodconfig   clang
+i386                              allnoconfig   clang
+i386                             allyesconfig   clang
+i386                                defconfig   gcc  
+i386                  randconfig-011-20231207   clang
+i386                  randconfig-011-20231208   gcc  
+i386                  randconfig-012-20231207   clang
+i386                  randconfig-012-20231208   gcc  
+i386                  randconfig-013-20231207   clang
+i386                  randconfig-013-20231208   gcc  
+i386                  randconfig-014-20231207   clang
+i386                  randconfig-014-20231208   gcc  
+i386                  randconfig-015-20231207   clang
+i386                  randconfig-015-20231208   gcc  
+i386                  randconfig-016-20231207   clang
+i386                  randconfig-016-20231208   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                        allyesconfig   gcc  
+loongarch                           defconfig   gcc  
+loongarch                 loongson3_defconfig   gcc  
+loongarch             randconfig-001-20231207   gcc  
+loongarch             randconfig-001-20231208   gcc  
+loongarch             randconfig-002-20231207   gcc  
+loongarch             randconfig-002-20231208   gcc  
+m68k                             allmodconfig   gcc  
+m68k                              allnoconfig   gcc  
+m68k                             allyesconfig   gcc  
+m68k                                defconfig   gcc  
+m68k                          hp300_defconfig   gcc  
+m68k                            mac_defconfig   gcc  
+m68k                        mvme147_defconfig   gcc  
+m68k                        stmark2_defconfig   gcc  
+microblaze                       allmodconfig   gcc  
+microblaze                        allnoconfig   gcc  
+microblaze                       allyesconfig   gcc  
+microblaze                          defconfig   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                           ci20_defconfig   gcc  
+mips                      loongson3_defconfig   gcc  
+mips                         rt305x_defconfig   gcc  
+nios2                            allmodconfig   gcc  
+nios2                             allnoconfig   gcc  
+nios2                            allyesconfig   gcc  
+nios2                               defconfig   gcc  
+nios2                 randconfig-001-20231207   gcc  
+nios2                 randconfig-001-20231208   gcc  
+nios2                 randconfig-002-20231207   gcc  
+nios2                 randconfig-002-20231208   gcc  
+openrisc                         allmodconfig   gcc  
+openrisc                          allnoconfig   gcc  
+openrisc                         allyesconfig   gcc  
+openrisc                            defconfig   gcc  
+parisc                           allmodconfig   gcc  
+parisc                            allnoconfig   gcc  
+parisc                           allyesconfig   gcc  
+parisc                              defconfig   gcc  
+parisc                randconfig-001-20231207   gcc  
+parisc                randconfig-001-20231208   gcc  
+parisc                randconfig-002-20231207   gcc  
+parisc                randconfig-002-20231208   gcc  
+parisc64                         alldefconfig   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   clang
+powerpc                           allnoconfig   gcc  
+powerpc                          allyesconfig   clang
+powerpc                      ep88xc_defconfig   gcc  
+powerpc                  iss476-smp_defconfig   gcc  
+powerpc                      makalu_defconfig   gcc  
+powerpc                       ppc64_defconfig   gcc  
+powerpc               randconfig-001-20231207   gcc  
+powerpc               randconfig-002-20231207   gcc  
+powerpc               randconfig-003-20231207   gcc  
+powerpc                     stx_gp3_defconfig   gcc  
+powerpc64             randconfig-001-20231207   gcc  
+powerpc64             randconfig-002-20231207   gcc  
+powerpc64             randconfig-003-20231207   gcc  
+riscv                            allmodconfig   gcc  
+riscv                            allyesconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                    nommu_k210_defconfig   gcc  
+riscv                 randconfig-001-20231207   gcc  
+riscv                 randconfig-002-20231207   gcc  
+riscv                          rv32_defconfig   clang
+s390                             allmodconfig   gcc  
+s390                              allnoconfig   gcc  
+s390                             allyesconfig   gcc  
+s390                                defconfig   gcc  
+s390                  randconfig-001-20231208   gcc  
+s390                  randconfig-002-20231208   gcc  
+sh                               allmodconfig   gcc  
+sh                                allnoconfig   gcc  
+sh                               allyesconfig   gcc  
+sh                         ap325rxa_defconfig   gcc  
+sh                                  defconfig   gcc  
+sh                         ecovec24_defconfig   gcc  
+sh                        edosk7705_defconfig   gcc  
+sh                          lboxre2_defconfig   gcc  
+sh                    randconfig-001-20231207   gcc  
+sh                    randconfig-001-20231208   gcc  
+sh                    randconfig-002-20231207   gcc  
+sh                    randconfig-002-20231208   gcc  
+sh                          sdk7780_defconfig   gcc  
+sh                           se7206_defconfig   gcc  
+sh                           se7722_defconfig   gcc  
+sh                              ul2_defconfig   gcc  
+sparc                            allmodconfig   gcc  
+sparc                            allyesconfig   gcc  
+sparc64                          allmodconfig   gcc  
+sparc64                          allyesconfig   gcc  
+sparc64                             defconfig   gcc  
+sparc64               randconfig-001-20231207   gcc  
+sparc64               randconfig-001-20231208   gcc  
+sparc64               randconfig-002-20231207   gcc  
+sparc64               randconfig-002-20231208   gcc  
+um                               allmodconfig   clang
+um                               allyesconfig   clang
+um                                  defconfig   gcc  
+um                             i386_defconfig   gcc  
+um                    randconfig-001-20231207   gcc  
+um                    randconfig-002-20231207   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   clang
+x86_64       buildonly-randconfig-001-20231207   gcc  
+x86_64       buildonly-randconfig-001-20231208   clang
+x86_64       buildonly-randconfig-002-20231207   gcc  
+x86_64       buildonly-randconfig-002-20231208   clang
+x86_64       buildonly-randconfig-003-20231207   gcc  
+x86_64       buildonly-randconfig-003-20231208   clang
+x86_64       buildonly-randconfig-004-20231207   gcc  
+x86_64       buildonly-randconfig-004-20231208   clang
+x86_64       buildonly-randconfig-005-20231207   gcc  
+x86_64       buildonly-randconfig-005-20231208   clang
+x86_64       buildonly-randconfig-006-20231207   gcc  
+x86_64       buildonly-randconfig-006-20231208   clang
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                randconfig-011-20231207   gcc  
+x86_64                randconfig-011-20231208   clang
+x86_64                randconfig-012-20231207   gcc  
+x86_64                randconfig-012-20231208   clang
+x86_64                randconfig-013-20231207   gcc  
+x86_64                randconfig-013-20231208   clang
+x86_64                randconfig-014-20231207   gcc  
+x86_64                randconfig-014-20231208   clang
+x86_64                randconfig-015-20231207   gcc  
+x86_64                randconfig-015-20231208   clang
+x86_64                randconfig-016-20231207   gcc  
+x86_64                randconfig-016-20231208   clang
+x86_64                randconfig-071-20231207   gcc  
+x86_64                randconfig-071-20231208   clang
+x86_64                randconfig-072-20231207   gcc  
+x86_64                randconfig-072-20231208   clang
+x86_64                randconfig-073-20231207   gcc  
+x86_64                randconfig-073-20231208   clang
+x86_64                randconfig-074-20231207   gcc  
+x86_64                randconfig-074-20231208   clang
+x86_64                randconfig-075-20231207   gcc  
+x86_64                randconfig-075-20231208   clang
+x86_64                randconfig-076-20231207   gcc  
+x86_64                randconfig-076-20231208   clang
+x86_64                           rhel-8.3-bpf   gcc  
+x86_64                          rhel-8.3-rust   clang
+x86_64                               rhel-8.3   gcc  
+xtensa                            allnoconfig   gcc  
+xtensa                           allyesconfig   gcc  
+xtensa                generic_kc705_defconfig   gcc  
+xtensa                randconfig-001-20231207   gcc  
+xtensa                randconfig-001-20231208   gcc  
+xtensa                randconfig-002-20231207   gcc  
+xtensa                randconfig-002-20231208   gcc  
+xtensa                         virt_defconfig   gcc  
+xtensa                    xip_kc705_defconfig   gcc  
+
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
