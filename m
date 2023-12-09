@@ -1,58 +1,58 @@
-Return-Path: <linux-serial+bounces-699-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-701-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3B2180B7B6
-	for <lists+linux-serial@lfdr.de>; Sun, 10 Dec 2023 00:31:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90DE580B7BB
+	for <lists+linux-serial@lfdr.de>; Sun, 10 Dec 2023 00:31:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F0F81F2108A
-	for <lists+linux-serial@lfdr.de>; Sat,  9 Dec 2023 23:31:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47E161F210FE
+	for <lists+linux-serial@lfdr.de>; Sat,  9 Dec 2023 23:31:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3923C20B1F;
-	Sat,  9 Dec 2023 23:31:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 353641E52E;
+	Sat,  9 Dec 2023 23:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CZADniBo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="og4STcHf"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A858D5B
-	for <linux-serial@vger.kernel.org>; Sat,  9 Dec 2023 15:31:21 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c29f7b068so31437475e9.0
-        for <linux-serial@vger.kernel.org>; Sat, 09 Dec 2023 15:31:21 -0800 (PST)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FA8D60
+	for <linux-serial@vger.kernel.org>; Sat,  9 Dec 2023 15:31:22 -0800 (PST)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-40c3f68b649so8226215e9.0
+        for <linux-serial@vger.kernel.org>; Sat, 09 Dec 2023 15:31:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702164680; x=1702769480; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702164681; x=1702769481; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LNKNc9ba2oW+5GVALaJt9jJ8CT91VxfoYNg+x7EUoR4=;
-        b=CZADniBog19Zf40pGDDctUroIVaP4xin3/sm7MpHJZ/OvHPWG75SYTyr22tiUmJ4N5
-         d6+P/l4TGuaaI9qSJD6CI3UiH4hb5bnocHwp+fEuATOlqoo/vjf5sBCcEsN50J2K5jf4
-         HMDngV0mNOCZ2kLUWnEqwnEM2wnVi7dCEVJNbWHIDyaQxXkVKGIqfGCg+ba9OrIH7l/w
-         9RWwKkbQ12h9a0GhbCqPXcJh+lqAQyW5KCJ5sVzt3ccwq6T5nn3BVgzfzEE1/RqetBpe
-         49MU9khHr0omDwUeW7OZUxAhx5QrH9up3QnE9v8qSwKzavKMCRK1TrMKXbXe/pFCQnmt
-         HsWw==
+        bh=ufy0nGRtp/1JIZ9psxq6/E5zOi0BD5o7YxdicbrUE94=;
+        b=og4STcHfpcsjRVK8s4n0RirNEr81gpeabeqyyx0kbuBUuUolAkqMGsZej92CY7cEHH
+         Fdm90Tc8W4/cqWGM7wOH2DOzwySVXVTnXYkbuXnE8ZeoS3dyQdrwB65jyQNU3rAi5QPS
+         x5jUaCnVjpikHgdRg9ukxA6yaMSu8V0rZCGDHEbHlZDzi/tWyLvQoL29yAaID5+vqK9m
+         rRnsnYBaAeLvUjsUrkc2b0Q6In263MVY2AWM2NTqd1Ve94sJsiJP169KvLLIFLiWnZ33
+         PphYKDZMoyPMk3jgWQ74PFSf5rRVUD+5FeOJSx/y4TNkpycOcJgpItDmiqa5A4Uo2hhp
+         gIfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702164680; x=1702769480;
+        d=1e100.net; s=20230601; t=1702164681; x=1702769481;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LNKNc9ba2oW+5GVALaJt9jJ8CT91VxfoYNg+x7EUoR4=;
-        b=dUitOs8sGtUhpsBF2/P/XslIV2BV0YbdFpPhRG239oh4UFfOng8cu8+nyBViQ0axi+
-         zFISyqTkorZ1D2Ay/PWKfeeLRwcEyin6QFsJr+7cg8vxiwl9NAdjvXWIwiobAqqHHkDB
-         4PFgszkZm2VP/WfXdCzj1o0lRFuXcRyX94dc+mCLuqGqXeI/zsidIqcQj82Glvbrd0fR
-         jzewClsWTFqa950Di0Bt/Vymg6RzHe+yzL6BooQciNRhuxEImG1D8gFngzlRKhLznnpu
-         UVWnBUAFV/2KG7XmGjn9CyxrWIwZI45Gd+gxuwvlulNlBIfrmVSsBml5Ef2PGWf6ur6j
-         OKTg==
-X-Gm-Message-State: AOJu0YymevACHUFtBHVjvfC35/Q57l1rvNU4sKGHyXrFAp4agLlO3enJ
-	R4LehefuhMmzwnNkYKtQk9vHuA==
-X-Google-Smtp-Source: AGHT+IHxsGCDs1nqyGnKq+XEy7/JjY+5fCac/dj81p+I/NjwJHH6T+elv8cUb+jRy4JwuXiqskzBbw==
-X-Received: by 2002:a05:600c:3411:b0:40b:4aed:ef31 with SMTP id y17-20020a05600c341100b0040b4aedef31mr1133307wmp.21.1702164679695;
-        Sat, 09 Dec 2023 15:31:19 -0800 (PST)
+        bh=ufy0nGRtp/1JIZ9psxq6/E5zOi0BD5o7YxdicbrUE94=;
+        b=C9fbdJiU9fosmCmUT23SMxkTn72X/kPHN3jcwgizNAYgQBDq6CTX/MeO+na/AbL+Z2
+         MOJFaNeueR8/1pIaie4ozfdoGFLcZKW/2LUssOPWz8gbhePPH3ksrJB8PSQGrnPbPI5H
+         c42d4pAvy8KAbpOMJ9a2DypEN2E08WOQYQwJQvi4qhu//nWVAqR4GTuovfpLopz1amrZ
+         aG8RWvNxHRg3uYYsdo8E8+UIuBwpmzELE178IP67RC5m8ORBLCmdkq7PWKDQS4gjvYdP
+         1V909WF0ATgUuJF1kXU1ut++zxMrxMYOObkDlrEgQxRcYNvkpvANCgBvZ+uvdtnP7Kp/
+         SHEQ==
+X-Gm-Message-State: AOJu0Yy4OLbbpiWz+astmr5we+0gIuMV5T5Q0VxzG+AvfmeB/cD6Ld2o
+	E6qBLcE9gjhIFia/u2HRbUgeUw==
+X-Google-Smtp-Source: AGHT+IGjfXfdEi+FC95F5SnCn1zV/uuKcGFsWqZfxOQ5CQVz10lrVJ/v+al0iR+cDIdCSxfU0CP1Rg==
+X-Received: by 2002:a7b:cd89:0:b0:40b:5e1e:fb94 with SMTP id y9-20020a7bcd89000000b0040b5e1efb94mr741927wmj.73.1702164681233;
+        Sat, 09 Dec 2023 15:31:21 -0800 (PST)
 Received: from gpeter-l.lan (host-92-23-61-173.as13285.net. [92.23.61.173])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.18
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Dec 2023 15:31:19 -0800 (PST)
+        Sat, 09 Dec 2023 15:31:20 -0800 (PST)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -86,10 +86,11 @@ Cc: peter.griffin@linaro.org,
 	linux-gpio@vger.kernel.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v6 04/20] dt-bindings: watchdog: Document Google gs101 watchdog bindings
-Date: Sat,  9 Dec 2023 23:30:50 +0000
-Message-ID: <20231209233106.147416-5-peter.griffin@linaro.org>
+	linux-serial@vger.kernel.org,
+	Rob Herring <robh@kernel.org>
+Subject: [PATCH v6 05/20] dt-bindings: arm: google: Add bindings for Google ARM platforms
+Date: Sat,  9 Dec 2023 23:30:51 +0000
+Message-ID: <20231209233106.147416-6-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231209233106.147416-1-peter.griffin@linaro.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
@@ -101,65 +102,76 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add the "google,gs101-wdt" compatible to the dt-schema documentation.
+This introduces bindings and dt-schema for the Google tensor SoCs.
+Currently just gs101 and pixel 6 are supported.
 
-gs101 SoC has two CPU clusters and each cluster has its own dedicated
-watchdog timer (similar to exynos850 and exynosautov9 SoCs).
-
-These WDT instances are controlled using different bits in PMU
-registers.
-
+Reviewed-by: Rob Herring <robh@kernel.org>
 Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- .../devicetree/bindings/watchdog/samsung-wdt.yaml         | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ .../devicetree/bindings/arm/google.yaml       | 53 +++++++++++++++++++
+ 1 file changed, 53 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/arm/google.yaml
 
-diff --git a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-index 8fb6656ba0c2..57468c2c5ece 100644
---- a/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-+++ b/Documentation/devicetree/bindings/watchdog/samsung-wdt.yaml
-@@ -17,6 +17,7 @@ description: |+
- properties:
-   compatible:
-     enum:
-+      - google,gs101-wdt                      # for Google gs101
-       - samsung,s3c2410-wdt                   # for S3C2410
-       - samsung,s3c6410-wdt                   # for S3C6410, S5PV210 and Exynos4
-       - samsung,exynos5250-wdt                # for Exynos5250
-@@ -42,13 +43,14 @@ properties:
-   samsung,cluster-index:
-     $ref: /schemas/types.yaml#/definitions/uint32
-     description:
--      Index of CPU cluster on which watchdog is running (in case of Exynos850)
-+      Index of CPU cluster on which watchdog is running (in case of Exynos850
-+      or Google gs101).
- 
-   samsung,syscon-phandle:
-     $ref: /schemas/types.yaml#/definitions/phandle
-     description:
-       Phandle to the PMU system controller node (in case of Exynos5250,
--      Exynos5420, Exynos7 and Exynos850).
-+      Exynos5420, Exynos7, Exynos850 and gs101).
- 
- required:
-   - compatible
-@@ -64,6 +66,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - google,gs101-wdt
-               - samsung,exynos5250-wdt
-               - samsung,exynos5420-wdt
-               - samsung,exynos7-wdt
-@@ -77,6 +80,7 @@ allOf:
-         compatible:
-           contains:
-             enum:
-+              - google,gs101-wdt
-               - samsung,exynos850-wdt
-               - samsung,exynosautov9-wdt
-     then:
+diff --git a/Documentation/devicetree/bindings/arm/google.yaml b/Documentation/devicetree/bindings/arm/google.yaml
+new file mode 100644
+index 000000000000..e20b5c9b16bc
+--- /dev/null
++++ b/Documentation/devicetree/bindings/arm/google.yaml
+@@ -0,0 +1,53 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/arm/google.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Google Tensor platforms
++
++maintainers:
++  - Peter Griffin <peter.griffin@linaro.org>
++
++description: |
++  ARM platforms using SoCs designed by Google branded "Tensor" used in Pixel
++  devices.
++
++  Currently upstream this is devices using "gs101" SoC which is found in Pixel
++  6, Pixel 6 Pro and Pixel 6a.
++
++  Google have a few different names for the SoC:
++  - Marketing name ("Tensor")
++  - Codename ("Whitechapel")
++  - SoC ID ("gs101")
++  - Die ID ("S5P9845")
++
++  Likewise there are a couple of names for the actual device
++  - Marketing name ("Pixel 6")
++  - Codename ("Oriole")
++
++  Devicetrees should use the lowercased SoC ID and lowercased board codename,
++  e.g. gs101 and gs101-oriole.
++
++properties:
++  $nodename:
++    const: '/'
++  compatible:
++    oneOf:
++      - description: Google Pixel 6 / Oriole
++        items:
++          - enum:
++              - google,gs101-oriole
++          - const: google,gs101
++
++  # Bootloader requires empty ect node to be present
++  ect:
++    type: object
++    additionalProperties: false
++
++required:
++  - ect
++
++additionalProperties: true
++
++...
 -- 
 2.43.0.472.g3155946c3a-goog
 
