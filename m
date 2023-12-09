@@ -1,58 +1,58 @@
-Return-Path: <linux-serial+bounces-712-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-714-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1273880B804
-	for <lists+linux-serial@lfdr.de>; Sun, 10 Dec 2023 00:32:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BB7D80B80D
+	for <lists+linux-serial@lfdr.de>; Sun, 10 Dec 2023 00:32:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDD09280FA4
-	for <lists+linux-serial@lfdr.de>; Sat,  9 Dec 2023 23:32:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6C4211C2083E
+	for <lists+linux-serial@lfdr.de>; Sat,  9 Dec 2023 23:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76BF3067C;
-	Sat,  9 Dec 2023 23:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6582208A;
+	Sat,  9 Dec 2023 23:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tgW+AdJF"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s5juPEp9"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C53010CF
-	for <linux-serial@vger.kernel.org>; Sat,  9 Dec 2023 15:31:45 -0800 (PST)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-40c3f68b79aso8030435e9.0
-        for <linux-serial@vger.kernel.org>; Sat, 09 Dec 2023 15:31:45 -0800 (PST)
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F242A1986
+	for <linux-serial@vger.kernel.org>; Sat,  9 Dec 2023 15:31:46 -0800 (PST)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-40c38de1ee4so14485475e9.0
+        for <linux-serial@vger.kernel.org>; Sat, 09 Dec 2023 15:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1702164704; x=1702769504; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1702164705; x=1702769505; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EAFdW67HYd3Bb2Hwf4KYbLMCw5f3bVCl5OXFClJ7A/Y=;
-        b=tgW+AdJF4K/vl40eDcFF9QOruWB23uOYtchJUgQECTzklcH9FK1nW6Gx5L3j1eR/e/
-         yIylAQW9zz/t1ViVCz37A07Uy0YX4gulSj1zJ1J7Lr9qQMxVuKdN1fgj88Pwe3KhniGW
-         IIyK61UKtpVIm2i0gQrZpQQnG05nXBf9h/jH69yQ/zNPhjpvjl4aPppOuvl3rfai3fFS
-         S1XNnMX2ASHigg9K5cCzXtJrRz+svX++NGhHWKULsSVPzRZqHn14JwCTNSQfZ8nI4KBj
-         CXh29FuALJIknOim/2l1Yz2TT7pJPmCAKwqs9b1UbgtQM13lhPMXA4u40niEXLQrnexv
-         kiNw==
+        bh=JvDVwBTixWipZmxB22MbupuPU8/bAZmmQsaKZWMqwMg=;
+        b=s5juPEp93J3a43MCuBqwwklxa7LHFFwZ1UfibeZ9o7iE55ojUG3qY788TYy7XWYRbM
+         5tuR/DgndTvBCc43V1X9cTSyxAMnBcjF4mXxpazm9Mrx64lo9OKH/dKsm27sfS06LLCp
+         Lu9Ne/eFsrIIiYokVtZC0v7RpzwAsG56RsjX5Rd6Se/ocmE3Y16q+IM/vNxIiOVY26Di
+         mg9jdP7hI1tC8BVcpIW8SY1yoey+cMudl0nu6SWScikwGCpAt3h0rhRSNEjJlhOuxtJZ
+         IyQCiC0Our2ywE2MYahIEtiIxrQcoN0ko8rR/AyJaHjoF6qN7QRyjO9Sa1h6jHlBTYmR
+         2/RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1702164704; x=1702769504;
+        d=1e100.net; s=20230601; t=1702164705; x=1702769505;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=EAFdW67HYd3Bb2Hwf4KYbLMCw5f3bVCl5OXFClJ7A/Y=;
-        b=iaDNOIB00gT92BubA7Hyuus6Ez7tz3fxntKd0Y9zKtxV7obfK5S8idU9vvvEaxH3Jp
-         mqDC9/BovizQ6LSdEm4bNAXpMCp/KRVMuwnZ8Bk06QZf++ynZxN/XcrBekvmUN47JLau
-         FRAeYql2duP977ek5NubBxCEl/mz7HsZcF8hxi+3LBH+mQXyjOjC5SzpPB1fsNeKwhOO
-         NNuqe1LIV25z2U7zhfR0hKTKxMI4osqmRmSq4d+uuGuZiViuBLjgYkBZYN2XRxAdD4IE
-         /ZuEvMaLoZv8ujdQJy2y1MQ0UMvhgi4rE/AnLSD2jPFYNuGwTHk2bLXQBCODdP/q2avX
-         INFg==
-X-Gm-Message-State: AOJu0YyuNsyhh8r4QvBUdO1mf02VpfPGJuLTBlFajLWDI007e0GrV+4G
-	sUTjAfG40HEkJDr9JDy1O+HS/g==
-X-Google-Smtp-Source: AGHT+IGsMNfWWZYt//plT1q2eosUu1d2fNrrD6nxOtqlsx/fDB3WWNn9uayy8DtAVH92M7WKy9TjFg==
-X-Received: by 2002:a05:600c:4507:b0:40c:2ace:5f01 with SMTP id t7-20020a05600c450700b0040c2ace5f01mr1156000wmo.163.1702164703912;
-        Sat, 09 Dec 2023 15:31:43 -0800 (PST)
+        bh=JvDVwBTixWipZmxB22MbupuPU8/bAZmmQsaKZWMqwMg=;
+        b=H2DiVePY8cHH5TmtJEd4c6qU602FLdVxDSWLSUTFDX/zw+G4yZHmoHb84T56UuzZ9W
+         LIOPZlSimTK4CqnvLAZn1YZpJ/bRsZCm3bGT8ZQcGU6m9jJj/uRqNhqXSVO8pii+NGE3
+         HB3zGV8txHnlX4MFjNIWKWYrqBL/K+m9szC6bmsA7TE0intXHkJf8lGcql6EoMt/84vO
+         syIRkAefq6/+QsXTJpvnWuPQAARqrk/zzhJIyLNRj+H+mKiff0IIH+/G7arqCnN4kEtR
+         QzvjEoJe/118Lz5iMkLIyA3vrjDbSt1DnPHY6ojzAFJZEHpXVqE+vUDt+qRfBS+ROxKs
+         rnsQ==
+X-Gm-Message-State: AOJu0YytMVDSJuiAHearWPXTgNE/XrX2fK9j5ofE0Zyf/OI5zJJRBtOX
+	IW7HAkqxLX2T8patCy8AVDSzEw==
+X-Google-Smtp-Source: AGHT+IHM7LcYLG9aTshmuTPPsWSbLkc5xOgZRK+Kqu3DOn6BTP3f96X3RQ4aTdS3JSlcWsHq4lukDg==
+X-Received: by 2002:a7b:c390:0:b0:40b:5e59:e9fa with SMTP id s16-20020a7bc390000000b0040b5e59e9famr1058010wmj.153.1702164705459;
+        Sat, 09 Dec 2023 15:31:45 -0800 (PST)
 Received: from gpeter-l.lan (host-92-23-61-173.as13285.net. [92.23.61.173])
-        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.42
+        by smtp.gmail.com with ESMTPSA id n9-20020a05600c4f8900b0040c41846923sm1875277wmq.26.2023.12.09.15.31.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 09 Dec 2023 15:31:43 -0800 (PST)
+        Sat, 09 Dec 2023 15:31:44 -0800 (PST)
 From: Peter Griffin <peter.griffin@linaro.org>
 To: robh+dt@kernel.org,
 	krzysztof.kozlowski+dt@linaro.org,
@@ -87,9 +87,9 @@ Cc: peter.griffin@linaro.org,
 	linux-watchdog@vger.kernel.org,
 	kernel-team@android.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH v6 19/20] arm64: dts: exynos: google: Add initial Oriole/pixel 6 board support
-Date: Sat,  9 Dec 2023 23:31:05 +0000
-Message-ID: <20231209233106.147416-20-peter.griffin@linaro.org>
+Subject: [PATCH v6 20/20] MAINTAINERS: add entry for Google Tensor SoC
+Date: Sat,  9 Dec 2023 23:31:06 +0000
+Message-ID: <20231209233106.147416-21-peter.griffin@linaro.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231209233106.147416-1-peter.griffin@linaro.org>
 References: <20231209233106.147416-1-peter.griffin@linaro.org>
@@ -101,152 +101,36 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add initial board support for the Pixel 6 phone code named Oriole. This
-has been tested with a minimal busybox initramfs and boots to a shell.
+Add maintainers entry for the Google tensor SoC based
+platforms.
 
-Tested-by: Will McVicker <willmcvicker@google.com>
 Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
- arch/arm64/boot/dts/exynos/Makefile           |   2 +
- arch/arm64/boot/dts/exynos/google/Makefile    |   4 +
- .../boot/dts/exynos/google/gs101-oriole.dts   | 105 ++++++++++++++++++
- 3 files changed, 111 insertions(+)
- create mode 100644 arch/arm64/boot/dts/exynos/google/Makefile
- create mode 100644 arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
+ MAINTAINERS | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/exynos/Makefile b/arch/arm64/boot/dts/exynos/Makefile
-index 6e4ba69268e5..44c24a8ad9e1 100644
---- a/arch/arm64/boot/dts/exynos/Makefile
-+++ b/arch/arm64/boot/dts/exynos/Makefile
-@@ -1,4 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
-+subdir-y += google
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 36f6e76170e6..a3bd682c9e32 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9032,6 +9032,16 @@ S:	Maintained
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/chrome-platform/linux.git
+ F:	drivers/firmware/google/
+ 
++GOOGLE TENSOR SoC SUPPORT
++M:	Peter Griffin <peter.griffin@linaro.org>
++L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
++L:	linux-samsung-soc@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/clock/google,gs101-clock.yaml
++F:	arch/arm64/boot/dts/exynos/google/
++F:	drivers/clk/samsung/clk-gs101.c
++F:	include/dt-bindings/clock/google,clk-gs101.h
 +
- dtb-$(CONFIG_ARCH_EXYNOS) += \
- 	exynos5433-tm2.dtb		\
- 	exynos5433-tm2e.dtb		\
-diff --git a/arch/arm64/boot/dts/exynos/google/Makefile b/arch/arm64/boot/dts/exynos/google/Makefile
-new file mode 100644
-index 000000000000..0a6d5e1fe4ee
---- /dev/null
-+++ b/arch/arm64/boot/dts/exynos/google/Makefile
-@@ -0,0 +1,4 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+dtb-$(CONFIG_ARCH_EXYNOS) += \
-+	gs101-oriole.dtb \
-diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-new file mode 100644
-index 000000000000..ce087ee1fd4d
---- /dev/null
-+++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-@@ -0,0 +1,105 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Oriole Device Tree
-+ *
-+ * Copyright 2021-2023 Google LLC
-+ * Copyright 2023 Linaro Ltd - <peter.griffin@linaro.org>
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/gpio/gpio.h>
-+#include <dt-bindings/input/input.h>
-+#include "gs101-pinctrl.h"
-+#include "gs101.dtsi"
-+
-+/ {
-+	model = "Oriole";
-+	compatible = "google,gs101-oriole", "google,gs101";
-+
-+	aliases {
-+		serial0 = &serial_0;
-+	};
-+
-+	chosen {
-+		/* Bootloader expects bootargs specified otherwise it crashes */
-+		bootargs = "";
-+		stdout-path = &serial_0;
-+	};
-+
-+	gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&key_voldown>, <&key_volup>, <&key_power>;
-+
-+		button-vol-down {
-+			label = "KEY_VOLUMEDOWN";
-+			linux,code = <KEY_VOLUMEDOWN>;
-+			gpios = <&gpa7 3 GPIO_ACTIVE_LOW>;
-+			wakeup-source;
-+		};
-+
-+		button-vol-up {
-+			label = "KEY_VOLUMEUP";
-+			linux,code = <KEY_VOLUMEUP>;
-+			gpios = <&gpa8 1 GPIO_ACTIVE_LOW>;
-+			wakeup-source;
-+		};
-+
-+		button-power {
-+			label = "KEY_POWER";
-+			linux,code = <KEY_POWER>;
-+			gpios = <&gpa10 1 GPIO_ACTIVE_LOW>;
-+			wakeup-source;
-+		};
-+	};
-+};
-+
-+&ext_24_5m {
-+	clock-frequency = <24576000>;
-+};
-+
-+&ext_200m {
-+	clock-frequency = <200000000>;
-+};
-+
-+&pinctrl_far_alive {
-+	key_voldown: key-voldown-pins {
-+		samsung,pins = "gpa7-3";
-+		samsung,pin-function = <GS101_PIN_FUNC_EINT>;
-+		samsung,pin-pud = <GS101_PIN_PULL_NONE>;
-+		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
-+	};
-+
-+	key_volup: key-volup-pins {
-+		samsung,pins = "gpa8-1";
-+		samsung,pin-function = <GS101_PIN_FUNC_EINT>;
-+		samsung,pin-pud = <GS101_PIN_PULL_NONE>;
-+		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
-+	};
-+};
-+
-+&pinctrl_gpio_alive {
-+	key_power: key-power-pins {
-+		samsung,pins = "gpa10-1";
-+		samsung,pin-function = <GS101_PIN_FUNC_EINT>;
-+		samsung,pin-pud = <GS101_PIN_PULL_NONE>;
-+		samsung,pin-drv = <GS101_PIN_DRV_2_5_MA>;
-+	};
-+};
-+
-+&serial_0 {
-+	status = "okay";
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_bus>;
-+};
-+
-+&usi_uart {
-+	status = "okay";
-+	samsung,clkreq-on; /* needed for UART mode */
-+};
-+
-+&watchdog_cl0 {
-+	timeout-sec = <30>;
-+	status = "okay";
-+};
+ GPD POCKET FAN DRIVER
+ M:	Hans de Goede <hdegoede@redhat.com>
+ L:	platform-driver-x86@vger.kernel.org
 -- 
 2.43.0.472.g3155946c3a-goog
 
