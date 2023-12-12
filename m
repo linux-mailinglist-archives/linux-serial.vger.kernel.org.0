@@ -1,360 +1,195 @@
-Return-Path: <linux-serial+bounces-845-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-847-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE89F80F0F2
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Dec 2023 16:30:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3978B80F12F
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Dec 2023 16:36:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 94DC82804E2
-	for <lists+linux-serial@lfdr.de>; Tue, 12 Dec 2023 15:30:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E76B828163F
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Dec 2023 15:36:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B734F76DDF;
-	Tue, 12 Dec 2023 15:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ACF876DBB;
+	Tue, 12 Dec 2023 15:36:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="t/MkDzcs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Ueq2+8VX"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED721B6;
-	Tue, 12 Dec 2023 07:28:30 -0800 (PST)
-Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
-	by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 3BCDTj5q030770;
-	Tue, 12 Dec 2023 16:27:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
-	from:to:cc:subject:date:message-id:in-reply-to:references
-	:mime-version:content-transfer-encoding:content-type; s=
-	selector1; bh=A5E3Yu4fIV5aU7qtI3/a6w1HvBafHrdmVAlZVmDmZf8=; b=t/
-	MkDzcs97RJTybMv0GdhkYCl2CsJvbP8D59E+Gc4Qn9DeoaEmlcDrsoXYd6kO9Yct
-	5eLkh+QwurAaviZ4O3szR7dhoVz4mBCbkCIdXFxsN5/tWK8gEs7q8Ba3hwqcf7+I
-	R065+ObzoCVoRLMImemhjuhLNnAoquPiUHC5fQxHnLXpOaofrOwxjNDJssfUTc7M
-	qfz09yiho6vN22qYBThkA5rCMt+Jml1ZHd6y9lKpqOoQfdR5yJUAD3cB8zKNSWtU
-	37DRUMA0xseOaMfsg+aAhUmc1KUFp8XggfR7w3fX9nc8t+olhrIeGM2/LVxCjQuN
-	ZOwBDIjat23I5zfhehWA==
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3uve88uyxn-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 12 Dec 2023 16:27:45 +0100 (CET)
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2622C100060;
-	Tue, 12 Dec 2023 16:27:45 +0100 (CET)
-Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
-	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 1695522F7C8;
-	Tue, 12 Dec 2023 16:27:45 +0100 (CET)
-Received: from localhost (10.252.7.20) by SHFDAG1NODE1.st.com (10.75.129.69)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Tue, 12 Dec
- 2023 16:27:44 +0100
-From: Gatien Chevallier <gatien.chevallier@foss.st.com>
-To: <Oleksii_Moisieiev@epam.com>, <gregkh@linuxfoundation.org>,
-        <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <conor+dt@kernel.org>, <alexandre.torgue@foss.st.com>,
-        <vkoul@kernel.org>, <jic23@kernel.org>, <olivier.moysan@foss.st.com>,
-        <arnaud.pouliquen@foss.st.com>, <mchehab@kernel.org>,
-        <fabrice.gasnier@foss.st.com>, <andi.shyti@kernel.org>,
-        <ulf.hansson@linaro.org>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <hugues.fruchet@foss.st.com>, <lee@kernel.org>,
-        <will@kernel.org>, <catalin.marinas@arm.com>, <arnd@kernel.org>,
-        <richardcochran@gmail.com>, Frank Rowand <frowand.list@gmail.com>,
-        <peng.fan@oss.nxp.com>, <lars@metafoo.de>, <rcsekar@samsung.com>,
-        <wg@grandegger.com>, <mkl@pengutronix.de>
-CC: <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <dmaengine@vger.kernel.org>, <linux-i2c@vger.kernel.org>,
-        <linux-iio@vger.kernel.org>, <alsa-devel@alsa-project.org>,
-        <linux-media@vger.kernel.org>, <linux-mmc@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-serial@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>,
-        Gatien Chevallier
-	<gatien.chevallier@foss.st.com>
-Subject: [PATCH v8 13/13] ARM: dts: stm32: put ETZPC as an access controller for STM32MP13x boards
-Date: Tue, 12 Dec 2023 16:23:56 +0100
-Message-ID: <20231212152356.345703-14-gatien.chevallier@foss.st.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
-References: <20231212152356.345703-1-gatien.chevallier@foss.st.com>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6250F3399E
+	for <linux-serial@vger.kernel.org>; Tue, 12 Dec 2023 15:36:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B6FAC433C8;
+	Tue, 12 Dec 2023 15:36:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1702395401;
+	bh=NppgUai8ObnH0XLPs3DqgNdMjuEFldpM4HollsD15VQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Ueq2+8VXTj7fCclJkPDr2zQh+Pn6gCOWnZxhoFW7FjFw2hGGkAeauNqDcuP7LImNQ
+	 D3UZmiTZDlqwujCQWELHaNx99vAARBxKbz46/VXGxDpblrSGLQfNXPjOXN/RT8s2/5
+	 wxIjRTQik3cB5IwFQsMlxcKc8BjJfXiv2z0RCMng=
+Date: Tue, 12 Dec 2023 16:36:38 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Roman =?utf-8?B?xb1pbGth?= <roman.zilka@gmail.com>
+Cc: jirislaby@kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] tty/vt: UTF-8 parsing update according to RFC 3629,
+ modern Unicode
+Message-ID: <2023121201-ecosphere-polyester-8d37@gregkh>
+References: <14027090-ca91-45ca-90d4-75456c0f2c76@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
- (10.75.129.69)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-12_09,2023-12-12_01,2023-05-22_02
+In-Reply-To: <14027090-ca91-45ca-90d4-75456c0f2c76@gmail.com>
 
-Reference ETZPC as an access-control-provider.
+On Tue, Dec 12, 2023 at 04:13:20PM +0100, Roman Žilka wrote:
+> vc_translate_unicode() and vc_sanitize_unicode() parse input to the
+> UTF-8-enabled console, marking invalid byte sequences and producing Unicode
+> codepoints. The current algorithm follows ancient Unicode and may accept invalid
+> byte sequences, pass on non-existent codepoints and reject valid sequences.
+> 
+> The patch restores the functions' compliance with modern Unicode (v15.1 + many
+> previous versions) as well as RFC 3629.
+> 1. Codepoint space is limited to 0x10FFFF.
+> 2. "Noncharacters", such as U+FFFE, U+FFFF, are no longer invalid in Unicode and
+>    will be accepted. Another option was to complete the set of noncharacters
+>    (used to be just those two, now there's more) and preserve the rejection
+>    step. This is indeed what Unicode suggests (v15.1, chap. 23.7) (not
+>    requires), but most codepoints are !iswprint(), so selecting just the
+>    noncharacters seemed arbitrary and futile (and unnecessary).
+> 
+> On the side:
+> 3. What remained of vc_sanitize_unicode() is in vc_translate_unicode().
+> 4. Corrected vc_translate_unicode() doc (@rescan).
+> 
+> This is not a security patch. I'm not aware of any present security implications
+> of the old code.
+> 
+> Signed-off-by: Roman Žilka <roman.zilka@gmail.com>
+> ---
+>  drivers/tty/vt/vt.c | 36 +++++++-----------------------------
+>  1 file changed, 7 insertions(+), 29 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index 156efda7c80d..215e162ec8af 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -2587,23 +2587,11 @@ static inline int vc_translate_ascii(const struct vc_data *vc, int c)
+>  }
+>  
+>  
+> -/**
+> - * vc_sanitize_unicode - Replace invalid Unicode code points with U+FFFD
+> - * @c: the received character, or U+FFFD for invalid sequences.
+> - */
+> -static inline int vc_sanitize_unicode(const int c)
+> -{
+> -	if ((c >= 0xd800 && c <= 0xdfff) || c == 0xfffe || c == 0xffff)
+> -		return 0xfffd;
+> -
+> -	return c;
+> -}
+> -
+>  /**
+>   * vc_translate_unicode - Combine UTF-8 into Unicode in @vc_utf_char
+>   * @vc: virtual console
+> - * @c: character to translate
+> - * @rescan: we return true if we need more (continuation) data
+> + * @c: UTF-8 byte to translate
+> + * @rescan: true => @c wasn't translated here and needs to be re-processed
+>   *
+>   * @vc_utf_char is the being-constructed unicode character.
+>   * @vc_utf_count is the number of continuation bytes still expected to arrive.
+> @@ -2611,10 +2599,7 @@ static inline int vc_sanitize_unicode(const int c)
+>   */
+>  static int vc_translate_unicode(struct vc_data *vc, int c, bool *rescan)
+>  {
+> -	static const u32 utf8_length_changes[] = {
+> -		0x0000007f, 0x000007ff, 0x0000ffff,
+> -		0x001fffff, 0x03ffffff, 0x7fffffff
+> -	};
+> +	static const u32 utf8_length_changes[] = {0x7f, 0x7ff, 0xffff, 0x10ffff};
+>  
+>  	/* Continuation byte received */
+>  	if ((c & 0xc0) == 0x80) {
+> @@ -2629,12 +2614,12 @@ static int vc_translate_unicode(struct vc_data *vc, int c, bool *rescan)
+>  
+>  		/* Got a whole character */
+>  		c = vc->vc_utf_char;
+> -		/* Reject overlong sequences */
+> +		/* Reject overlong sequences and surrogates */
+>  		if (c <= utf8_length_changes[vc->vc_npar - 1] ||
+> -				c > utf8_length_changes[vc->vc_npar])
+> +				c > utf8_length_changes[vc->vc_npar] ||
+> +				(c & 0xfff800) == 0x00d800)
+>  			return 0xfffd;
+> -
+> -		return vc_sanitize_unicode(c);
+> +		return c;
+>  	}
+>  
+>  	/* Single ASCII byte or first byte of a sequence received */
+> @@ -2660,14 +2645,7 @@ static int vc_translate_unicode(struct vc_data *vc, int c, bool *rescan)
+>  	} else if ((c & 0xf8) == 0xf0) {
+>  		vc->vc_utf_count = 3;
+>  		vc->vc_utf_char = (c & 0x07);
+> -	} else if ((c & 0xfc) == 0xf8) {
+> -		vc->vc_utf_count = 4;
+> -		vc->vc_utf_char = (c & 0x03);
+> -	} else if ((c & 0xfe) == 0xfc) {
+> -		vc->vc_utf_count = 5;
+> -		vc->vc_utf_char = (c & 0x01);
+>  	} else {
+> -		/* 254 and 255 are invalid */
+>  		return 0xfffd;
+>  	}
+>  
+> 
+> base-commit: a39b6ac3781d46ba18193c9dbb2110f31e9bffe9
+> -- 
+> 2.41.0
+> 
+> 
 
-For more information on which peripheral is securable or supports MCU
-isolation, please read the STM32MP13 reference manual
+Hi,
 
-Signed-off-by: Gatien Chevallier <gatien.chevallier@foss.st.com>
----
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Patch not present in V6
+You are receiving this message because of the following common error(s)
+as indicated below:
 
- arch/arm/boot/dts/st/stm32mp131.dtsi  | 26 ++++++++++++++++++++++++++
- arch/arm/boot/dts/st/stm32mp133.dtsi  |  1 +
- arch/arm/boot/dts/st/stm32mp13xc.dtsi |  1 +
- arch/arm/boot/dts/st/stm32mp13xf.dtsi |  1 +
- 4 files changed, 29 insertions(+)
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
 
-diff --git a/arch/arm/boot/dts/st/stm32mp131.dtsi b/arch/arm/boot/dts/st/stm32mp131.dtsi
-index 6ba8e3fd43b0..74ceece168ce 100644
---- a/arch/arm/boot/dts/st/stm32mp131.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp131.dtsi
-@@ -883,6 +883,7 @@ etzpc: bus@5c007000 {
- 			reg = <0x5c007000 0x400>;
- 			#address-cells = <1>;
- 			#size-cells = <1>;
-+			#access-controller-cells = <1>;
- 			ranges;
- 
- 			adc_2: adc@48004000 {
-@@ -895,6 +896,7 @@ adc_2: adc@48004000 {
- 				#interrupt-cells = <1>;
- 				#address-cells = <1>;
- 				#size-cells = <0>;
-+				access-controllers = <&etzpc 33>;
- 				status = "disabled";
- 
- 				adc2: adc@0 {
-@@ -942,6 +944,7 @@ usbotg_hs: usb@49000000 {
- 				dr_mode = "otg";
- 				otg-rev = <0x200>;
- 				usb33d-supply = <&scmi_usb33>;
-+				access-controllers = <&etzpc 34>;
- 				status = "disabled";
- 			};
- 
-@@ -955,6 +958,7 @@ usart1: serial@4c000000 {
- 				dmas = <&dmamux1 41 0x400 0x5>,
- 				<&dmamux1 42 0x400 0x1>;
- 				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 16>;
- 				status = "disabled";
- 			};
- 
-@@ -968,6 +972,7 @@ usart2: serial@4c001000 {
- 				dmas = <&dmamux1 43 0x400 0x5>,
- 				<&dmamux1 44 0x400 0x1>;
- 				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 17>;
- 				status = "disabled";
- 			};
- 
-@@ -979,6 +984,7 @@ i2s4: audio-controller@4c002000 {
- 				dmas = <&dmamux1 83 0x400 0x01>,
- 				<&dmamux1 84 0x400 0x01>;
- 				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 13>;
- 				status = "disabled";
- 			};
- 
-@@ -993,6 +999,7 @@ spi4: spi@4c002000 {
- 				dmas = <&dmamux1 83 0x400 0x01>,
- 				       <&dmamux1 84 0x400 0x01>;
- 				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 18>;
- 				status = "disabled";
- 			};
- 
-@@ -1007,6 +1014,7 @@ spi5: spi@4c003000 {
- 				dmas = <&dmamux1 85 0x400 0x01>,
- 				       <&dmamux1 86 0x400 0x01>;
- 				dma-names = "rx", "tx";
-+				access-controllers = <&etzpc 19>;
- 				status = "disabled";
- 			};
- 
-@@ -1025,6 +1033,7 @@ i2c3: i2c@4c004000 {
- 				dma-names = "rx", "tx";
- 				st,syscfg-fmp = <&syscfg 0x4 0x4>;
- 				i2c-analog-filter;
-+				access-controllers = <&etzpc 20>;
- 				status = "disabled";
- 			};
- 
-@@ -1043,6 +1052,7 @@ i2c4: i2c@4c005000 {
- 				dma-names = "rx", "tx";
- 				st,syscfg-fmp = <&syscfg 0x4 0x8>;
- 				i2c-analog-filter;
-+				access-controllers = <&etzpc 21>;
- 				status = "disabled";
- 			};
- 
-@@ -1061,6 +1071,7 @@ i2c5: i2c@4c006000 {
- 				dma-names = "rx", "tx";
- 				st,syscfg-fmp = <&syscfg 0x4 0x10>;
- 				i2c-analog-filter;
-+				access-controllers = <&etzpc 22>;
- 				status = "disabled";
- 			};
- 
-@@ -1073,6 +1084,7 @@ timers12: timer@4c007000 {
- 				interrupt-names = "global";
- 				clocks = <&rcc TIM12_K>;
- 				clock-names = "int";
-+				access-controllers = <&etzpc 23>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1097,6 +1109,7 @@ timers13: timer@4c008000 {
- 				interrupt-names = "global";
- 				clocks = <&rcc TIM13_K>;
- 				clock-names = "int";
-+				access-controllers = <&etzpc 24>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1121,6 +1134,7 @@ timers14: timer@4c009000 {
- 				interrupt-names = "global";
- 				clocks = <&rcc TIM14_K>;
- 				clock-names = "int";
-+				access-controllers = <&etzpc 25>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1150,6 +1164,7 @@ timers15: timer@4c00a000 {
- 				<&dmamux1 107 0x400 0x1>,
- 				<&dmamux1 108 0x400 0x1>;
- 				dma-names = "ch1", "up", "trig", "com";
-+				access-controllers = <&etzpc 26>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1177,6 +1192,7 @@ timers16: timer@4c00b000 {
- 				dmas = <&dmamux1 109 0x400 0x1>,
- 				<&dmamux1 110 0x400 0x1>;
- 				dma-names = "ch1", "up";
-+				access-controllers = <&etzpc 27>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1204,6 +1220,7 @@ timers17: timer@4c00c000 {
- 				dmas = <&dmamux1 111 0x400 0x1>,
- 				       <&dmamux1 112 0x400 0x1>;
- 				dma-names = "ch1", "up";
-+				access-controllers = <&etzpc 28>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1228,6 +1245,7 @@ lptimer2: timer@50021000 {
- 				clocks = <&rcc LPTIM2_K>;
- 				clock-names = "mux";
- 				wakeup-source;
-+				access-controllers = <&etzpc 1>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1262,6 +1280,7 @@ lptimer3: timer@50022000 {
- 				clocks = <&rcc LPTIM3_K>;
- 				clock-names = "mux";
- 				wakeup-source;
-+				access-controllers = <&etzpc 2>;
- 				status = "disabled";
- 
- 				pwm {
-@@ -1290,6 +1309,7 @@ hash: hash@54003000 {
- 				resets = <&rcc HASH1_R>;
- 				dmas = <&mdma 30 0x2 0x1000a02 0x0 0x0>;
- 				dma-names = "in";
-+				access-controllers = <&etzpc 41>;
- 			};
- 
- 			rng: rng@54004000 {
-@@ -1297,6 +1317,7 @@ rng: rng@54004000 {
- 				reg = <0x54004000 0x400>;
- 				clocks = <&rcc RNG1_K>;
- 				resets = <&rcc RNG1_R>;
-+				access-controllers = <&etzpc 40>;
- 			};
- 
- 			fmc: memory-controller@58002000 {
-@@ -1311,6 +1332,7 @@ fmc: memory-controller@58002000 {
- 				#size-cells = <1>;
- 				clocks = <&rcc FMC_K>;
- 				resets = <&rcc FMC_R>;
-+				access-controllers = <&etzpc 54>;
- 				status = "disabled";
- 
- 				nand-controller@4,0 {
-@@ -1344,6 +1366,7 @@ qspi: spi@58003000 {
- 				dma-names = "tx", "rx";
- 				clocks = <&rcc QSPI_K>;
- 				resets = <&rcc QSPI_R>;
-+				access-controllers = <&etzpc 55>;
- 				status = "disabled";
- 			};
- 
-@@ -1358,6 +1381,7 @@ sdmmc1: mmc@58005000 {
- 				cap-sd-highspeed;
- 				cap-mmc-highspeed;
- 				max-frequency = <130000000>;
-+				access-controllers = <&etzpc 50>;
- 				status = "disabled";
- 			};
- 
-@@ -1372,6 +1396,7 @@ sdmmc2: mmc@58007000 {
- 				cap-sd-highspeed;
- 				cap-mmc-highspeed;
- 				max-frequency = <130000000>;
-+				access-controllers = <&etzpc 51>;
- 				status = "disabled";
- 			};
- 
-@@ -1385,6 +1410,7 @@ usbphyc: usbphyc@5a006000 {
- 				resets = <&rcc USBPHY_R>;
- 				vdda1v1-supply = <&scmi_reg11>;
- 				vdda1v8-supply = <&scmi_reg18>;
-+				access-controllers = <&etzpc 5>;
- 				status = "disabled";
- 
- 				usbphyc_port0: usb-phy@0 {
-diff --git a/arch/arm/boot/dts/st/stm32mp133.dtsi b/arch/arm/boot/dts/st/stm32mp133.dtsi
-index c4d3a520c14b..3e394c8e58b9 100644
---- a/arch/arm/boot/dts/st/stm32mp133.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp133.dtsi
-@@ -47,6 +47,7 @@ adc_1: adc@48003000 {
- 		#interrupt-cells = <1>;
- 		#address-cells = <1>;
- 		#size-cells = <0>;
-+		access-controllers = <&etzpc 32>;
- 		status = "disabled";
- 
- 		adc1: adc@0 {
-diff --git a/arch/arm/boot/dts/st/stm32mp13xc.dtsi b/arch/arm/boot/dts/st/stm32mp13xc.dtsi
-index b9fb071a1471..a8bd5fe6536c 100644
---- a/arch/arm/boot/dts/st/stm32mp13xc.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp13xc.dtsi
-@@ -11,6 +11,7 @@ cryp: crypto@54002000 {
- 		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&rcc CRYP1>;
- 		resets = <&rcc CRYP1_R>;
-+		access-controllers = <&etzpc 42>;
- 		status = "disabled";
- 	};
- };
-diff --git a/arch/arm/boot/dts/st/stm32mp13xf.dtsi b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
-index b9fb071a1471..a8bd5fe6536c 100644
---- a/arch/arm/boot/dts/st/stm32mp13xf.dtsi
-+++ b/arch/arm/boot/dts/st/stm32mp13xf.dtsi
-@@ -11,6 +11,7 @@ cryp: crypto@54002000 {
- 		interrupts = <GIC_SPI 80 IRQ_TYPE_LEVEL_HIGH>;
- 		clocks = <&rcc CRYP1>;
- 		resets = <&rcc CRYP1_R>;
-+		access-controllers = <&etzpc 42>;
- 		status = "disabled";
- 	};
- };
--- 
-2.25.1
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/process/submitting-patches.rst for what
+  needs to be done here to properly describe this.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
 
