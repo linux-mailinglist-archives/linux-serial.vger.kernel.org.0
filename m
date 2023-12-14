@@ -1,125 +1,116 @@
-Return-Path: <linux-serial+bounces-924-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-921-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57124813165
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 14:26:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C52A28130EB
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 14:07:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 888E11C21A22
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 13:26:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6FA81C21702
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 13:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CEC1556470;
-	Thu, 14 Dec 2023 13:26:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26D03524C2;
+	Thu, 14 Dec 2023 13:06:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gehealthcare.com header.i=@gehealthcare.com header.b="g6dOpR5l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oiul8Eew"
 X-Original-To: linux-serial@vger.kernel.org
-X-Greylist: delayed 2169 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 14 Dec 2023 05:26:02 PST
-Received: from mx0a-00176a03.pphosted.com (mx0b-00176a03.pphosted.com [67.231.157.48])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8949D124;
-	Thu, 14 Dec 2023 05:26:02 -0800 (PST)
-Received: from pps.filterd (m0048299.ppops.net [127.0.0.1])
-	by m0048299.ppops.net-00176a03. (8.17.1.19/8.17.1.19) with ESMTP id 3BEAqCgB032366;
-	Thu, 14 Dec 2023 07:49:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gehealthcare.com; h=date : from :
- to : cc : subject : message-id : references : mime-version : content-type
- : in-reply-to; s=outbound;
- bh=6VCWaveWtQ4TTCEg/huDwclSFR1aouzs3cX1Z5zsynw=;
- b=g6dOpR5liYoky07H88PlbqHiF8ybzHCpIDPlyyjmdW1TKB4RF2Hwewa+TBFMweUESq3Z
- KlzULGxzDGygUeiRZiYqkj7mt+HHtdXLQH4oDPj2Tg4GpzIkC/8NIYTUuxCODCJErZUV
- up8XlzPDrytoQYIKkyD/r7haigTZlEBEYr6WReGFAu3VctI/oVixyY4OZ2bttK0Nf7LV
- 3810PYZaUf07TvdKQVw0qNyHJi1yPH1Qug0dyKgNkvXzZMy3Bse4x7SEwLR9opnLi/qA
- 0xTXnhjsZJxlmNYU5y8qu+nJBkNbeu7RhN91x7Y0TAgfGjTPThzQorEnlltKYEvS03EP wQ== 
-Date: Thu, 14 Dec 2023 14:49:41 +0200
-From: Ian Ray <ian.ray@gehealthcare.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Uwe Kleine-K??nig <u.kleine-koenig@pengutronix.de>,
-        Sebastian Reichel <sebastian.reichel@collabora.com>,
-        Rob Herring <robh@kernel.org>, linux-serial@vger.kernel.org,
-        Jiri Slaby <jirislaby@kernel.org>, Fabio Estevam <festevam@gmail.com>,
-        Sascha Hauer <s.hauer@pengutronix.de>, linux-kernel@vger.kernel.org,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>, kernel@collabora.com,
-        Shawn Guo <shawnguo@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        nandor.han@gehealthcare.com
-Subject: Re: EXT: Re: [PATCHv5 0/2] Fix imx53-ppd UART configuration
-Message-ID: <ZXr55QV4tnCz8GtI@4600ffe2ac4f>
-References: <20210430175038.103226-1-sebastian.reichel@collabora.com>
- <20231208090754.fn3bddlum3t7kakn@pengutronix.de>
- <2023120821-sandstone-lavender-7487@gregkh>
- <919dd7b3-aa86-4a2f-bcbe-7efa26831975@linaro.org>
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEA6041224;
+	Thu, 14 Dec 2023 13:06:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829CFC433C9;
+	Thu, 14 Dec 2023 13:06:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702559218;
+	bh=4DmhfcKP5a7QiKawraF+mw/pvVqMPyK0S58+roaapOU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=oiul8EewigOeqOx6Mi9PQ6UZF0YQOATTHlzqVv7wkqi4OqclyCpebjS1KjirRDmEJ
+	 SvN6nIAF5QFu3Rcpr05GHKOL9eWgDgCzQnhmYlLvXsoBM5YepIaVkkk87flH4foOMk
+	 HaEEHOk0t2MkerO7erR4Tg+mK9QVlxsBk7Li9xJ41U0gwmHV/F1W6wdcrgGytQYVC6
+	 l+8sai6EDx5PdMp0sZGLrrvruoCIlp5nUBPWXV5vXuL6jbYuhR4pxOxmDPiJk4Tuig
+	 EUYn8D2ZMCCIcBnTMtuI4S6P9Gk70pgl1fWKnsQog7jGOaMaIc+kHPMXoL5wrB9y7/
+	 vLwEC5YUsRGug==
+Date: Thu, 14 Dec 2023 14:06:54 +0100
+From: Wolfram Sang <wsa@kernel.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: peter.griffin@linaro.org, robh+dt@kernel.org,
+	krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
+	sboyd@kernel.org, conor+dt@kernel.org, andi.shyti@kernel.org,
+	alim.akhtar@samsung.com, gregkh@linuxfoundation.org,
+	jirislaby@kernel.org, catalin.marinas@arm.com, will@kernel.org,
+	s.nawrocki@samsung.com, tomasz.figa@gmail.com,
+	cw00.choi@samsung.com, arnd@arndb.de, semen.protsenko@linaro.org,
+	andre.draszik@linaro.org, saravanak@google.com,
+	willmcvicker@google.com, linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH 03/13] dt-bindings: i2c: exynos5: add google,gs101-hsi2c
+ compatible
+Message-ID: <ZXr97owdnLq3viNc@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, peter.griffin@linaro.org,
+	robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+	mturquette@baylibre.com, sboyd@kernel.org, conor+dt@kernel.org,
+	andi.shyti@kernel.org, alim.akhtar@samsung.com,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	catalin.marinas@arm.com, will@kernel.org, s.nawrocki@samsung.com,
+	tomasz.figa@gmail.com, cw00.choi@samsung.com, arnd@arndb.de,
+	semen.protsenko@linaro.org, andre.draszik@linaro.org,
+	saravanak@google.com, willmcvicker@google.com,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-serial@vger.kernel.org
+References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
+ <20231214105243.3707730-4-tudor.ambarus@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="HQnYG9fD4BDlpmSL"
+Content-Disposition: inline
+In-Reply-To: <20231214105243.3707730-4-tudor.ambarus@linaro.org>
+
+
+--HQnYG9fD4BDlpmSL
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <919dd7b3-aa86-4a2f-bcbe-7efa26831975@linaro.org>
-X-Proofpoint-ORIG-GUID: cTTSlR9xjeMfDmKT2eWxAJJuMa2zr8om
-X-Proofpoint-GUID: cTTSlR9xjeMfDmKT2eWxAJJuMa2zr8om
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
- definitions=2023-12-14_07,2023-12-13_01,2023-05-22_02
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 suspectscore=0
- spamscore=0 clxscore=1011 lowpriorityscore=0 mlxscore=0 bulkscore=0
- mlxlogscore=711 adultscore=0 priorityscore=1501 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2311290000 definitions=main-2312140088
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Dec 08, 2023 at 01:14:50PM +0100, Krzysztof Kozlowski wrote:
-> 
-> On 08/12/2023 11:32, Greg Kroah-Hartman wrote:
-> > On Fri, Dec 08, 2023 at 10:07:54AM +0100, Uwe Kleine-K??nig wrote:
-> >> [Cc += dt maintainers]
-> >>
-> >> On Fri, Apr 30, 2021 at 07:50:36PM +0200, Sebastian Reichel wrote:
-> > 
-> > You are responding to a message from 2021???
-> > 
-> > I can't remember what I wrote in an email last week, let alone years
-> > ago, are you sure any of this is relevant still?
-> > 
-> 
-> Also, adding DT maintainers as Cc, does not magically allow us to
-> understand the discussion. Please shortly summarize what do you
-> need/expect from us.
+On Thu, Dec 14, 2023 at 10:52:33AM +0000, Tudor Ambarus wrote:
+> Add google,gs101-hsi2c dedicated compatible for representing
+> I2C of Google GS101 SoC.
+>=20
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 
-This thread is indeed old, but we are remain interested in getting
-this resolved.
+Acked-by: Wolfram Sang <wsa@kernel.org>
 
 
-The topic itself is about the tuning of DMA buffers for the i.MX53
-platform.
+--HQnYG9fD4BDlpmSL
+Content-Type: application/pgp-signature; name="signature.asc"
 
-DMA is required (for the 4M baud UART case), and a specific buffer
-configuration is required, too.
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmV6/ekACgkQFA3kzBSg
+Kbac1hAAtEeMMhA9NKxHiemKCgdvzxVb71vVFzKZTa0rM9HstusgWrnxcXTU4XWd
+tQMUwAVVs6G5Lxho0WuFLuJXRVmc/XOFSyDLeo75vHop/khJpREg5/4x5S953V7j
+SDY4ThYVJuYdXFhZKFsiH04nV3O4zrxm3leDvT0q9C9P09Xh7DYeMu2PnHPV/Gu1
+JFGknNxP4nAb86hKMMsZIkhWZ9Wk+XZAluArjyu17rKeSQHcbE6QJoR95AEydEUy
+PolkM4ZOh/SHRffnMO+FG1+IX2lIEMM9dOX2eLpjZzMRI4iW0I39iQaoPz7WSqQs
+fWa8LdXndWGIZvQmYN4lRjQFhzDKDEOheg/SglzLuGa+48tkqrrcRKGRM+Kx/cGo
+yHbtA6qimdxi/o8+YmUWl+X57X8JIbgmSHsucm/+lNCG6JFtfMyOskeS1hsIgWws
+PV3BPNAY32hJLbEnTf2royzKnJbWMt75RZJTsu/8j54DPydhhLO9IqdHDqngnHpp
+d5WPhOebKuYdqH5YHqVG6C7hOYTR903tWy0annEcAKm64bboWZ9EWYs5Z0IP2/af
+i/i9y1Nou+YYvlSmkp0asWHhpHySkIR3rkThW9eIHVBEWkSS2si6WJSfWQBvDGro
+hEYeczzfDuUcb3v6vuIinWdDcVoHWyrlRbJS5GLIT8LoVAc8ohs=
+=msdb
+-----END PGP SIGNATURE-----
 
-Two approaches have been attempted:
-
-"V4" sysfs
-https://lore.kernel.org/lkml/20210305115058.92284-1-sebastian.reichel@collabora.com/
-
-"V5" DT
-https://lore.kernel.org/lkml/20210430175038.103226-1-sebastian.reichel@collabora.com/
-(this thread)
-
-
-Uwe recently commented to [1], and (hoping to avoid any further
-confusion) let's continue in that thread.
-
-[1] https://lore.kernel.org/lkml/20231208090205.ioc76sych3snjiwb@pengutronix.de/
-
-
-> 
-> Best regards,
-> Krzysztof
-> 
-> 
+--HQnYG9fD4BDlpmSL--
 
