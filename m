@@ -1,58 +1,58 @@
-Return-Path: <linux-serial+bounces-911-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-913-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75A5E812D8F
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 11:53:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B23CA812DA1
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 11:53:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7E971C20EAC
-	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 10:53:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 538F4B212B6
+	for <lists+linux-serial@lfdr.de>; Thu, 14 Dec 2023 10:53:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAD923E47D;
-	Thu, 14 Dec 2023 10:53:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7081B3DB98;
+	Thu, 14 Dec 2023 10:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eWmrLSaN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LxDwOFzf"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE5DE1A4
-	for <linux-serial@vger.kernel.org>; Thu, 14 Dec 2023 02:53:00 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-40c2a444311so76940335e9.2
-        for <linux-serial@vger.kernel.org>; Thu, 14 Dec 2023 02:53:00 -0800 (PST)
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+	by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCCF124
+	for <linux-serial@vger.kernel.org>; Thu, 14 Dec 2023 02:53:01 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-40c3fe6c1b5so49724685e9.2
+        for <linux-serial@vger.kernel.org>; Thu, 14 Dec 2023 02:53:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1702551179; x=1703155979; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Megaf9f9M4nt2nVACiBPuppJXE2rpfqhEX+FbrDDmrA=;
-        b=eWmrLSaNshz1uXxFUxh65YDl61DlGJpl4+UghogrCooJdDIg2hY4E865PujS3/dJcq
-         O04v16i+jDsPMwMztSompMN+MtZGqDtCu9GpYhFCY7Bt5T8VqSirffi1WL7PaDFPJ8sd
-         5cPubnPiKyj6rWcAs5UGww7gGhlOxdcEk81xnMWs6H7HekFK64K5PCBQVDhiNr5K3HfR
-         EXyaAVFWk7dPgC8YsAeUCNYUh89EVswqyh1X05JVeQQ5KDLhgu0QAcnm4AD9JGAw6xvx
-         BRghvpBMOSz4esE5UO+CGxK/wbiiJfN7p7Oj20E2frPrnj7X42HN5haFFUHVoXyLOaeN
-         XenQ==
+        bh=zzA2dIkRl3zi6KLIovteqBU+Yufsa0nL24/l8CSy6vo=;
+        b=LxDwOFzfk1mk+5E1bTajsbZZurk8ncwEgE3e/mLgw99ELriUqpFuRUcAdz20xR37W4
+         u9FEqecRe5aE/3G1MLIwXLQilHOFJy0ZiQ6eIGn6TTRziz8wVJicN7gVFWEDsmZUzgWP
+         MwLLqxgOb7HjlrAaPYcl7jrZN5gW0y1hpUfYNfx/ZTuolzJCQVMSDsebP5ryM/DgQ4D/
+         b2g4TtRESD2YoGyxuq7c4KIkYtnSL+TgrYnwrZt2HqgRxQpYWMCJWpzRfEXZ2DHjHthM
+         lehXU5TNuVpiFIc2jI2vlg7s3LYocs//mVEd24nRjEim57OYetvIvqiWdXvOkdaVBNUQ
+         5TVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1702551179; x=1703155979;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Megaf9f9M4nt2nVACiBPuppJXE2rpfqhEX+FbrDDmrA=;
-        b=mRAriV9aKidVVSjYX04VzQnBBHa8lfnlF6y/sQFEhx5F+t+qUaTPBzwEj3vY1bzagA
-         J/eDHVcdonGpEbgOMmY5TOtQgxGJCaAlNcd2n/99vX6uBxVuUZhHvs6N5JyPJDCJLFqO
-         JPqojC2vIJ3n7Tp8gaw+ZM/U26F8cP5CD7Z99qaqNDSs7XcfB37927YWtUVsrb8dWsZ9
-         lcMXQkeGz0e4TK1BWwROk4BVN2WTMWRsuTJmmigqd9ATVqKhCwBhaS4wBHNC1WO1p3Sr
-         4ZUaSFRKgz2BWstyGNP74nNvnh0iIyBpPhDT5DMTAto0ZiVm1n1pfd78gO7+72JhNt2b
-         tALQ==
-X-Gm-Message-State: AOJu0YyYsyM9iuRjpwLHELqi2EDVEt7pCkjQTeiOKiBy/3RvWiO05KD0
-	e/AgZDCVwZA7Br1UpKx0ByATUg==
-X-Google-Smtp-Source: AGHT+IFs51FthL1Nr91swtXQkkGdZ40yp7FNgHHvmg/tGaEZe1O3ayiAy2cT5rDzRcynaO2ozABYHg==
-X-Received: by 2002:a05:600c:18a3:b0:40c:2548:2e29 with SMTP id x35-20020a05600c18a300b0040c25482e29mr2796189wmp.334.1702551178958;
-        Thu, 14 Dec 2023 02:52:58 -0800 (PST)
+        bh=zzA2dIkRl3zi6KLIovteqBU+Yufsa0nL24/l8CSy6vo=;
+        b=cclfogbbMPYhet6MwDlGsGc2+6QGhz7N+uLGPrx7BL+FTrKh73hhaRf89PZAQv0XV+
+         GQaU45vDcDLtD9nzWNoUK71xj9Cdn1c/vFyvIYzR8qT2ZlFpjq4y7QyBMmw9pTy10B+Q
+         ZPmmoSmLlvL27eEVWKDnwpM6r0WA95SvI1K2MhUOpWebEUQfYJXTwjyom7E7W488+G+w
+         rZu08rxIC7INkV9RcMYJwTRRMnWhinWQYHKUnm6BNcQp1suk2B5irsT0THXKHd/np3fw
+         j2saBK5uY9915SbLddGAZ+M8FwM6VOo70LMdTIZXFgpL0PC1T1BNCK5aU8FNM6FMZpL9
+         1V/A==
+X-Gm-Message-State: AOJu0YyR3B05iT8m7AtlZPxqfK3Fd1O9sLEzP55OSG0E8hTN/0KK9BAf
+	T8cPzUVDtpqvJAXS1U5fmHFRhA==
+X-Google-Smtp-Source: AGHT+IEqV0ObtUONCdvEPCDbFLJPuQr+9mAoHMbahLrEG03jRPqlYIZ5dCXvjXgOAcoNCpFns3NOPA==
+X-Received: by 2002:a05:600c:2111:b0:40c:2910:50c0 with SMTP id u17-20020a05600c211100b0040c291050c0mr4828141wml.89.1702551179737;
+        Thu, 14 Dec 2023 02:52:59 -0800 (PST)
 Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id p7-20020a05600c468700b0040c420eda48sm17614854wmo.22.2023.12.14.02.52.58
+        by smtp.gmail.com with ESMTPSA id p7-20020a05600c468700b0040c420eda48sm17614854wmo.22.2023.12.14.02.52.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 14 Dec 2023 02:52:58 -0800 (PST)
+        Thu, 14 Dec 2023 02:52:59 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: peter.griffin@linaro.org,
 	robh+dt@kernel.org,
@@ -82,9 +82,9 @@ Cc: andre.draszik@linaro.org,
 	linux-i2c@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH 08/13] arm64: dts: exynos: gs101: enable cmu-peric0 clock controller
-Date: Thu, 14 Dec 2023 10:52:38 +0000
-Message-ID: <20231214105243.3707730-9-tudor.ambarus@linaro.org>
+Subject: [PATCH 09/13] arm64: dts: exynos: gs101: update USI UART to use peric0 clocks
+Date: Thu, 14 Dec 2023 10:52:39 +0000
+Message-ID: <20231214105243.3707730-10-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
 References: <20231214105243.3707730-1-tudor.ambarus@linaro.org>
@@ -96,36 +96,56 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Enable the cmu-peric0 clock controller. It feeds USI and I3c.
+Get rid of the dummy clock and start using the cmu_peric0 clocks
+for the usi_uart and serial_0 nodes.
+
+Tested the serial at 115200, 1000000 and 3000000 baudrates,
+everthing went fine.
 
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- arch/arm64/boot/dts/exynos/google/gs101.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-index 9747cb3fa03a..d0b0ad70c6ba 100644
+index d0b0ad70c6ba..ffb7b4d89a8c 100644
 --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
 +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-@@ -339,6 +339,18 @@ ppi_cluster2: interrupt-partition-2 {
- 			};
+@@ -180,14 +180,6 @@ HERA_CPU_SLEEP: cpu-hera-sleep {
  		};
+ 	};
  
-+		cmu_peric0: clock-controller@10800000 {
-+			compatible = "google,gs101-cmu-peric0";
-+			reg = <0x10800000 0x4000>;
-+			#clock-cells = <1>;
-+			clocks = <&ext_24_5m>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_BUS>,
-+				 <&cmu_top CLK_DOUT_CMU_PERIC0_IP>;
-+			clock-names = "oscclk",
-+				      "dout_cmu_peric0_bus",
-+				      "dout_cmu_peric0_ip";
-+		};
-+
- 		sysreg_peric0: syscon@10820000 {
- 			compatible = "google,gs101-peric0-sysreg", "syscon";
- 			reg = <0x10820000 0x10000>;
+-	/* TODO replace with CCF clock */
+-	dummy_clk: clock-3 {
+-		compatible = "fixed-clock";
+-		#clock-cells = <0>;
+-		clock-frequency = <12345>;
+-		clock-output-names = "pclk";
+-	};
+-
+ 	/* ect node is required to be present by bootloader */
+ 	ect {
+ 	};
+@@ -369,7 +361,8 @@ usi_uart: usi@10a000c0 {
+ 			ranges;
+ 			#address-cells = <1>;
+ 			#size-cells = <1>;
+-			clocks = <&dummy_clk>, <&dummy_clk>;
++			clocks = <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI0_UART_CLK>,
++				 <&cmu_peric0 CLK_DOUT_PERIC0_USI0_UART>;
+ 			clock-names = "pclk", "ipclk";
+ 			samsung,sysreg = <&sysreg_peric0 0x1020>;
+ 			samsung,mode = <USI_V2_UART>;
+@@ -381,7 +374,8 @@ serial_0: serial@10a00000 {
+ 				reg-io-width = <4>;
+ 				interrupts = <GIC_SPI 634
+ 					      IRQ_TYPE_LEVEL_HIGH 0>;
+-				clocks = <&dummy_clk 0>, <&dummy_clk 0>;
++				clocks = <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI0_UART_CLK>,
++					 <&cmu_peric0 CLK_DOUT_PERIC0_USI0_UART>;
+ 				clock-names = "uart", "clk_uart_baud0";
+ 				samsung,uart-fifosize = <256>;
+ 				status = "disabled";
 -- 
 2.43.0.472.g3155946c3a-goog
 
