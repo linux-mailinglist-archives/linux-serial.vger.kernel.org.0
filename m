@@ -1,238 +1,141 @@
-Return-Path: <linux-serial+bounces-990-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-993-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D94F814B7F
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 16:16:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9FA814CCF
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 17:19:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02709287965
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 15:16:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76B392813AD
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 16:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5083C3C49A;
-	Fri, 15 Dec 2023 15:13:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C583A8F9;
+	Fri, 15 Dec 2023 16:18:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="xiQ7qHKo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K7dm0Ddl"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DC823FB15;
-	Fri, 15 Dec 2023 15:13:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1702653233; x=1734189233;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=s5idXhmEOPHM3MCEEcLriHfCWCN1qs4CTulDZLbtAuI=;
-  b=xiQ7qHKoQLn3d9uzyyV6dI/1Zuty05tnR9TL4YB9TycAhHf4Cp/PMex4
-   BTwOnTkfr+E0vXxM3VEMtdsRpCKMyGkZqndRCVH12FmH19BmsuX7ZXOAY
-   Y/FHsOeEKL88M637WjgUFKLZZNz9UXnMzRn66kKnbYxOoUIqtulxYbMju
-   Y3Yzd7EIQVbdhuk19uNG1ZMQ5YTwmNPUNuftys1oW58BNyyZhFex3K7+l
-   cGQt5GkYd0U7SmSIrM8c4Kv8CBYBz41qi7Wqtw/PRlYaQTbTEYo8qajyi
-   PHLBcD+jbR4cgRr24pBB7s4jXxsKBGzWMFvrWXTsMY665HPLcmKWR+dhd
-   w==;
-X-CSE-ConnectionGUID: qwhyNkqhRvWQqhblyCRvoA==
-X-CSE-MsgGUID: hSitPxS4SUyiyih87HIsxQ==
-X-ThreatScanner-Verdict: Negative
-X-IronPort-AV: E=Sophos;i="6.04,279,1695711600"; 
-   d="scan'208";a="14326541"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 15 Dec 2023 08:13:51 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 15 Dec 2023 08:13:32 -0700
-Received: from che-dk-ungapp03lx.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 15 Dec 2023 08:13:28 -0700
-From: Rengarajan S <rengarajan.s@microchip.com>
-To: <kumaravel.thiagarajan@microchip.com>,
-	<tharunkumar.pasumarthi@microchip.com>, <gregkh@linuxfoundation.org>,
-	<jirislaby@kernel.org>, <keescook@chromium.org>, <gustavoars@kernel.org>,
-	<linux-serial@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-hardening@vger.kernel.org>
-CC: <unglinuxdriver@microchip.com>
-Subject: [PATCH v1 tty-next 4/4] 8250: microchip: pci1xxxx: Add Burst mode transmission support in uart driver for reading from FIFO
-Date: Fri, 15 Dec 2023 20:41:23 +0530
-Message-ID: <20231215151123.41812-5-rengarajan.s@microchip.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20231215151123.41812-1-rengarajan.s@microchip.com>
-References: <20231215151123.41812-1-rengarajan.s@microchip.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3E853BB25;
+	Fri, 15 Dec 2023 16:18:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 46FC0C433C7;
+	Fri, 15 Dec 2023 16:18:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1702657137;
+	bh=YlcNrdt+0bdBjEoeknJhdd+iUZGMaHxrfBZN/74+PSM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=K7dm0Ddli65bXnpIe+H/ttDbslFE9q2kMgBadq97OkKtouXQIbEiyY2q9JXScuDsv
+	 C1TjFxiht6mfl4VICqLkzK7PUWl+CGRGnU6fYOYPcX8M4yYc9TnjF9ZXpkWsSySLmw
+	 CyyhNm54GFYsWjy2rItDi4vwFE9/ZhlLtsFlUG5+pOmeb3j63lrLaKJ7ABlRzd4YHf
+	 FIPEL5mBy+6x1p0RKnf9kDaMW13b61pXy/Df0JjpQnoeYrO6LSmIPopfjK9+e6we66
+	 XhmZW3p8qy6Nb89ngBM4O2Sk//rED3kWw0q23oLG3uetyunnmSGJbQZLPq0L+Kbm4x
+	 OaRnvmY/t7uxg==
+Received: from johan by xi.lan with local (Exim 4.96.2)
+	(envelope-from <johan@kernel.org>)
+	id 1rEAto-0000VW-1C;
+	Fri, 15 Dec 2023 17:18:52 +0100
+Date: Fri, 15 Dec 2023 17:18:52 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Francesco Dolcini <francesco@dolcini.it>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-bluetooth@vger.kernel.org,
+	linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, greybus-dev@lists.linaro.org,
+	linux-iio@vger.kernel.org, netdev@vger.kernel.org,
+	chrome-platform@lists.linux.dev,
+	platform-driver-x86@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-sound@vger.kernel.org,
+	Francesco Dolcini <francesco.dolcini@toradex.com>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Alex Elder <elder@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
+	Lee Jones <lee@kernel.org>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Hans de Goede <hdegoede@redhat.com>,
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Benson Leung <bleung@chromium.org>,
+	Tzung-Bi Shih <tzungbi@kernel.org>, Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v1] treewide, serdev: change receive_buf() return type to
+ size_t
+Message-ID: <ZXx8bCVyxJ9Ddvqm@hovoldconsulting.com>
+References: <20231214170146.641783-1-francesco@dolcini.it>
+ <ZXxWX-Fw1InID2ax@hovoldconsulting.com>
+ <ZXxa7yzKzG6048vw@francesco-nb.int.toradex.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZXxa7yzKzG6048vw@francesco-nb.int.toradex.com>
 
-pci1xxxx_handle_irq reads the burst status and checks if the FIFO
-is empty and is ready to accept the incoming data. The handling is
-done in pci1xxxx_tx_burst where each transaction processes data in
-block of DWORDs, while any remaining bytes are processed individually,
-one byte at a time.
+On Fri, Dec 15, 2023 at 02:55:59PM +0100, Francesco Dolcini wrote:
+> On Fri, Dec 15, 2023 at 02:36:31PM +0100, Johan Hovold wrote:
+> > On Thu, Dec 14, 2023 at 06:01:46PM +0100, Francesco Dolcini wrote:
+> > > From: Francesco Dolcini <francesco.dolcini@toradex.com>
+> > > 
+> > > receive_buf() is called from ttyport_receive_buf() that expects values
+> > > ">= 0" from serdev_controller_receive_buf(), change its return type from
+> > > ssize_t to size_t.
 
-Signed-off-by: Rengarajan S <rengarajan.s@microchip.com>
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 103 ++++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+> > > -int gnss_insert_raw(struct gnss_device *gdev, const unsigned char *buf,
+> > > -				size_t count)
+> > > +size_t gnss_insert_raw(struct gnss_device *gdev, const unsigned char *buf,
+> > > +		       size_t count)
+> > >  {
+> > > -	int ret;
+> > > +	size_t ret;
+> > >  
+> > >  	ret = kfifo_in(&gdev->read_fifo, buf, count);
+> > >  
+> > 
+> > Why are you changing this function? This is part of the GNSS interface
+> > and has nothing to do with the rest of this patch.
+> 
+> good point, thanks for looking into that.
+> 
+> from my understanding kfifo_in() already return an unsigned, both
+> __kfifo_in and __kfifo_in_r return unsigned.
 
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 558c4c7f3104..ebe793bf6431 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -67,6 +67,7 @@
- #define SYSLOCK_RETRY_CNT			1000
- 
- #define UART_RX_BYTE_FIFO			0x00
-+#define UART_TX_BYTE_FIFO			0x00
- #define UART_FIFO_CTL				0x02
- 
- #define UART_ACTV_REG				0x11
-@@ -100,6 +101,7 @@
- #define UART_RESET_D3_RESET_DISABLE		BIT(16)
- 
- #define UART_BURST_STATUS_REG			0x9C
-+#define UART_TX_BURST_FIFO			0xA0
- #define UART_RX_BURST_FIFO			0xA4
- 
- #define MAX_PORTS				4
-@@ -109,6 +111,7 @@
- #define UART_BURST_SIZE				4
- 
- #define UART_BST_STAT_RX_COUNT_MASK		0x00FF
-+#define UART_BST_STAT_TX_COUNT_MASK		0xFF00
- #define UART_BST_STAT_IIR_INT_PEND		0x100000
- #define UART_LSR_OVERRUN_ERR_CLR		0x43
- #define UART_BST_STAT_LSR_RX_MASK		0x9F000000
-@@ -116,6 +119,7 @@
- #define UART_BST_STAT_LSR_OVERRUN_ERR		0x2000000
- #define UART_BST_STAT_LSR_PARITY_ERR		0x4000000
- #define UART_BST_STAT_LSR_FRAME_ERR		0x8000000
-+#define UART_BST_STAT_LSR_THRE			0x20000000
- 
- struct pci1xxxx_8250 {
- 	unsigned int nr;
-@@ -344,6 +348,102 @@ static void pci1xxxx_rx_burst(struct uart_port *port, u32 uart_status)
- 	}
- }
- 
-+static void pci1xxxx_process_write_data(struct uart_port *port,
-+					struct circ_buf *xmit,
-+					int *data_empty_count,
-+					u32 *valid_byte_count)
-+{
-+	u32 valid_burst_count = *valid_byte_count / UART_BURST_SIZE;
-+
-+	/*
-+	 * Each transaction transfers data in DWORDs. If there are less than
-+	 * four remaining valid_byte_count to transfer or if the circular
-+	 * buffer has insufficient space for a DWORD, the data is transferred
-+	 * one byte at a time.
-+	 */
-+	while (valid_burst_count--) {
-+		if (*data_empty_count - UART_BURST_SIZE < 0)
-+			break;
-+		if (xmit->tail > (UART_XMIT_SIZE - UART_BURST_SIZE))
-+			break;
-+		writel(*(unsigned int *)&xmit->buf[xmit->tail],
-+		       port->membase + UART_TX_BURST_FIFO);
-+		*valid_byte_count -= UART_BURST_SIZE;
-+		*data_empty_count -= UART_BURST_SIZE;
-+		xmit->tail = (xmit->tail + UART_BURST_SIZE) &
-+			     (UART_XMIT_SIZE - 1);
-+	}
-+
-+	while (*valid_byte_count--) {
-+		if (*data_empty_count - UART_BYTE_SIZE < 0)
-+			break;
-+		writeb(xmit->buf[xmit->tail], port->membase +
-+		       UART_TX_BYTE_FIFO);
-+		*data_empty_count -= UART_BYTE_SIZE;
-+
-+		/*
-+		 * When the tail of the circular buffer is reached, the next
-+		 * byte is transferred to the beginning of the buffer.
-+		 */
-+		xmit->tail = (xmit->tail + UART_BYTE_SIZE) &
-+			     (UART_XMIT_SIZE - 1);
-+
-+		/*
-+		 * If there are any pending burst count, data is handled by
-+		 * transmitting DWORDs at a time.
-+		 */
-+		if (valid_burst_count && (xmit->tail <
-+		   (UART_XMIT_SIZE - UART_BURST_SIZE)))
-+			break;
-+	}
-+}
-+
-+static void pci1xxxx_tx_burst(struct uart_port *port, u32 uart_status)
-+{
-+	struct uart_8250_port *up = up_to_u8250p(port);
-+	u32 valid_byte_count;
-+	int data_empty_count;
-+	struct circ_buf *xmit;
-+
-+	xmit = &port->state->xmit;
-+
-+	if (port->x_char) {
-+		writeb(port->x_char, port->membase + UART_TX);
-+		port->icount.tx++;
-+		port->x_char = 0;
-+		return;
-+	}
-+
-+	if ((uart_tx_stopped(port)) || (uart_circ_empty(xmit))) {
-+		port->ops->stop_tx(port);
-+	} else {
-+		data_empty_count = (pci1xxxx_read_burst_status(port) &
-+				    UART_BST_STAT_TX_COUNT_MASK) >> 8;
-+		do {
-+			valid_byte_count = uart_circ_chars_pending(xmit);
-+
-+			pci1xxxx_process_write_data(port, xmit,
-+						    &data_empty_count,
-+						    &valid_byte_count);
-+
-+			port->icount.tx++;
-+			if (uart_circ_empty(xmit))
-+				break;
-+		} while (data_empty_count && valid_byte_count);
-+	}
-+
-+	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
-+		uart_write_wakeup(port);
-+
-+	 /*
-+	  * With RPM enabled, we have to wait until the FIFO is empty before
-+	  * the HW can go idle. So we get here once again with empty FIFO and
-+	  * disable the interrupt and RPM in __stop_tx()
-+	  */
-+	if (uart_circ_empty(xmit) && !(up->capabilities & UART_CAP_RPM))
-+		port->ops->stop_tx(port);
-+}
-+
- static int pci1xxxx_handle_irq(struct uart_port *port)
- {
- 	unsigned long flags;
-@@ -359,6 +459,9 @@ static int pci1xxxx_handle_irq(struct uart_port *port)
- 	if (status & UART_BST_STAT_LSR_RX_MASK)
- 		pci1xxxx_rx_burst(port, status);
- 
-+	if (status & UART_BST_STAT_LSR_THRE)
-+		pci1xxxx_tx_burst(port, status);
-+
- 	spin_unlock_irqrestore(&port->lock, flags);
- 
- 	return 1;
--- 
-2.25.1
+Correct.
 
+> With that said this is used by 3 drivers:
+> 
+> = drivers/gnss/sirf.c:
+> = drivers/gnss/serial.c:
+> 
+> The driver just use it into the actual receive_buf callback.
+> 
+> = drivers/gnss/usb.c
+> 
+> This driver does nothing with a negative return value (that is never the
+> less not possible), it just check that the whole buffer was inserted.
+
+That driver also knows it will never be negative.
+
+And you forgot about
+
+	drivers/net/ethernet/intel/ice/ice_gnss.c
+
+> To me the change is correct, with that said probably this should have
+> been explicitly mentioned in the commit message or a separate
+> preparation patch.
+
+It's a separate change and should not be hidden away in a tree-wide
+change that goes through a different maintainer.
+
+Please drop this change from this patch and resubmit it separately to me
+if you want and I'll review when I have the time.
+
+And when doing tree-wide changes, please try to follow the style of the
+driver you are changing (e.g. do not introduce inconsistencies by
+changing to open parenthesis alignment of continuation lines in code
+that do not use it).
+
+Johan
 
