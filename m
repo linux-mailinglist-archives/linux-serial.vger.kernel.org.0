@@ -1,35 +1,35 @@
-Return-Path: <linux-serial+bounces-959-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-961-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C98481440A
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 09:58:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 562EE81440F
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 09:58:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 39A9E1F233CD
-	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 08:58:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAD54B22765
+	for <lists+linux-serial@lfdr.de>; Fri, 15 Dec 2023 08:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE50F168D4;
-	Fri, 15 Dec 2023 08:57:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A1241772E;
+	Fri, 15 Dec 2023 08:57:36 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
 Received: from SHSQR01.spreadtrum.com (mx1.unisoc.com [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511BE1798E;
-	Fri, 15 Dec 2023 08:57:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 642BF1774C;
+	Fri, 15 Dec 2023 08:57:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
 Received: from dlp.unisoc.com ([10.29.3.86])
-	by SHSQR01.spreadtrum.com with ESMTP id 3BF8uqDs028071;
-	Fri, 15 Dec 2023 16:56:52 +0800 (+08)
+	by SHSQR01.spreadtrum.com with ESMTP id 3BF8usLB028221;
+	Fri, 15 Dec 2023 16:56:54 +0800 (+08)
 	(envelope-from Chunyan.Zhang@unisoc.com)
 Received: from SHDLP.spreadtrum.com (bjmbx02.spreadtrum.com [10.0.64.8])
-	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Ss2xM29ggz2PDtHV;
-	Fri, 15 Dec 2023 16:50:47 +0800 (CST)
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4Ss2xN3qR1z2PfHZn;
+	Fri, 15 Dec 2023 16:50:48 +0800 (CST)
 Received: from ubt.spreadtrum.com (10.0.73.88) by BJMBX02.spreadtrum.com
  (10.0.64.8) with Microsoft SMTP Server (TLS) id 15.0.1497.23; Fri, 15 Dec
- 2023 16:56:50 +0800
+ 2023 16:56:51 +0800
 From: Chunyan Zhang <chunyan.zhang@unisoc.com>
 To: Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski
@@ -45,9 +45,9 @@ CC: <devicetree@vger.kernel.org>, <linux-serial@vger.kernel.org>,
         Chunyan Zhang <chunyan.zhang@unisoc.com>,
         LKML
 	<linux-kernel@vger.kernel.org>
-Subject: [PATCH 2/4] dt-bindings: arm: Add compatible strings for Unisoc's UMS9620
-Date: Fri, 15 Dec 2023 16:56:28 +0800
-Message-ID: <20231215085630.984892-3-chunyan.zhang@unisoc.com>
+Subject: [PATCH 3/4] dt-bindings: serial: Add a new compatible string for UMS9620
+Date: Fri, 15 Dec 2023 16:56:29 +0800
+Message-ID: <20231215085630.984892-4-chunyan.zhang@unisoc.com>
 X-Mailer: git-send-email 2.41.0
 In-Reply-To: <20231215085630.984892-1-chunyan.zhang@unisoc.com>
 References: <20231215085630.984892-1-chunyan.zhang@unisoc.com>
@@ -61,31 +61,27 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
  BJMBX02.spreadtrum.com (10.0.64.8)
-X-MAIL:SHSQR01.spreadtrum.com 3BF8uqDs028071
+X-MAIL:SHSQR01.spreadtrum.com 3BF8usLB028221
 
-Added bindings for Unisoc's UMS9620-2H10 board and UMS9620 SoC.
+The UMS9620 also uses the same serial device with SC9836.
 
 Signed-off-by: Chunyan Zhang <chunyan.zhang@unisoc.com>
 ---
- Documentation/devicetree/bindings/arm/sprd/sprd.yaml | 5 +++++
- 1 file changed, 5 insertions(+)
+ Documentation/devicetree/bindings/serial/sprd-uart.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/arm/sprd/sprd.yaml b/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
-index eaa67b8e0d6c..40fc3c8b9dce 100644
---- a/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
-+++ b/Documentation/devicetree/bindings/arm/sprd/sprd.yaml
-@@ -35,6 +35,11 @@ properties:
-               - sprd,ums512-1h10
-           - const: sprd,ums512
+diff --git a/Documentation/devicetree/bindings/serial/sprd-uart.yaml b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+index 28ff77aa86c8..f4dbb6dc2b6e 100644
+--- a/Documentation/devicetree/bindings/serial/sprd-uart.yaml
++++ b/Documentation/devicetree/bindings/serial/sprd-uart.yaml
+@@ -20,6 +20,7 @@ properties:
+               - sprd,sc9860-uart
+               - sprd,sc9863a-uart
+               - sprd,ums512-uart
++              - sprd,ums9620-uart
+           - const: sprd,sc9836-uart
+       - const: sprd,sc9836-uart
  
-+      - items:
-+          - enum:
-+              - sprd,ums9620-2h10
-+          - const: sprd,ums9620
-+
- additionalProperties: true
- 
- ...
 -- 
 2.41.0
 
