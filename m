@@ -1,37 +1,37 @@
-Return-Path: <linux-serial+bounces-1071-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1069-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76DB7818DED
-	for <lists+linux-serial@lfdr.de>; Tue, 19 Dec 2023 18:20:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7426818DF0
+	for <lists+linux-serial@lfdr.de>; Tue, 19 Dec 2023 18:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8FBC1C20EEF
-	for <lists+linux-serial@lfdr.de>; Tue, 19 Dec 2023 17:20:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 069B51C24EDE
+	for <lists+linux-serial@lfdr.de>; Tue, 19 Dec 2023 17:21:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A24E737D25;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FA8237D14;
 	Tue, 19 Dec 2023 17:19:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="ci4Gmm1s"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="Es1tOgue"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495363715D;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02D3B3717E;
 	Tue, 19 Dec 2023 17:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
 	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
 	:From:subject:date:message-id:reply-to;
-	bh=teRiT/PcWy7VJ9V99NNQOeeSZvzVxy17hbE3C1wRPvE=; b=ci4Gmm1sWAzaQsm3++CMVL9fPO
-	qVSxhUubXDTMj40TZTnvWxCo1AQ+a8BENEENLsZwFioUVOjjpnFCbM2ARQ2XxRuBzw4d+wYzsHbVY
-	KQylOUUYeM5GO/sBX33tzfHkNFwoypobk+AEUvTtq2gtU4wMpuSnJybSLWjMQPPQjU0w=;
+	bh=s/yWW4Vy76vXSiHl0gv7O0Csm0Ex/rL0yRa8UtQ/IPg=; b=Es1tOgueRS7EWff0ucpzQMT/2F
+	ynxAniJZI5jETkempKC8oIKdGZVd/qzbspc6QMaPmxCkvgFG8AZX2Dw/IIwHtzAuVxeij9tTtZPtZ
+	fZVDY8dgmNcTWMRIt4XoNNJ0Zugu7rudi5acE9ot7GdWzJaoT2nMqoOmfYX3ZHq7OAt0=;
 Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:40128 helo=pettiford.lan)
 	by mail.hugovil.com with esmtpa (Exim 4.92)
 	(envelope-from <hugo@hugovil.com>)
-	id 1rFdkS-0007Ao-Pm; Tue, 19 Dec 2023 12:19:17 -0500
+	id 1rFdkT-0007Ao-PK; Tue, 19 Dec 2023 12:19:18 -0500
 From: Hugo Villeneuve <hugo@hugovil.com>
 To: gregkh@linuxfoundation.org,
 	jirislaby@kernel.org,
@@ -44,8 +44,8 @@ Cc: linux-kernel@vger.kernel.org,
 	hugo@hugovil.com,
 	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
 	Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 19 Dec 2023 12:18:54 -0500
-Message-Id: <20231219171903.3530985-11-hugo@hugovil.com>
+Date: Tue, 19 Dec 2023 12:18:55 -0500
+Message-Id: <20231219171903.3530985-12-hugo@hugovil.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20231219171903.3530985-1-hugo@hugovil.com>
 References: <20231219171903.3530985-1-hugo@hugovil.com>
@@ -62,41 +62,49 @@ X-Spam-Level:
 X-Spam-Report: 
 	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
 	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
-Subject: [PATCH 10/18] serial: sc16is7xx: use HZ_PER_MHZ macro to improve readability
+Subject: [PATCH 11/18] serial: sc16is7xx: add explicit return for some switch default cases
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
 From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Improves code readability by making it more obvious that it is a MHz value.
+Allows to simplify code by removing the break statement in the default
+switch/case in some functions.
 
 Suggested-by: Andy Shevchenko <andy.shevchenko@gmail.com>
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- drivers/tty/serial/sc16is7xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ drivers/tty/serial/sc16is7xx.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 29844e2eefc5..7d5eec2d0e94 100644
+index 7d5eec2d0e94..feb50d9271ac 100644
 --- a/drivers/tty/serial/sc16is7xx.c
 +++ b/drivers/tty/serial/sc16is7xx.c
-@@ -24,6 +24,7 @@
- #include <linux/tty_flip.h>
- #include <linux/spi/spi.h>
- #include <linux/uaccess.h>
-+#include <linux/units.h>
- #include <uapi/linux/sched/types.h>
+@@ -460,10 +460,8 @@ static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
+ 	case SC16IS7XX_IOCONTROL_REG:
+ 		return true;
+ 	default:
+-		break;
++		return false;
+ 	}
+-
+-	return false;
+ }
  
- #define SC16IS7XX_NAME			"sc16is7xx"
-@@ -1741,7 +1742,7 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- 	spi->bits_per_word	= 8;
- 	/* only supports mode 0 on SC16IS762 */
- 	spi->mode		= spi->mode ? : SPI_MODE_0;
--	spi->max_speed_hz	= spi->max_speed_hz ? : 15000000;
-+	spi->max_speed_hz	= spi->max_speed_hz ? : 15 * HZ_PER_MHZ;
- 	ret = spi_setup(spi);
- 	if (ret)
- 		return ret;
+ static bool sc16is7xx_regmap_precious(struct device *dev, unsigned int reg)
+@@ -472,10 +470,8 @@ static bool sc16is7xx_regmap_precious(struct device *dev, unsigned int reg)
+ 	case SC16IS7XX_RHR_REG:
+ 		return true;
+ 	default:
+-		break;
++		return false;
+ 	}
+-
+-	return false;
+ }
+ 
+ static bool sc16is7xx_regmap_noinc(struct device *dev, unsigned int reg)
 -- 
 2.39.2
 
