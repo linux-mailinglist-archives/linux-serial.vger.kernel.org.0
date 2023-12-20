@@ -1,52 +1,52 @@
-Return-Path: <linux-serial+bounces-1091-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1093-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9D6B781A32E
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 16:53:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07AD381A337
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 16:55:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CE9A1F25967
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 15:53:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B93CF284009
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 15:55:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3BFB40BEC;
-	Wed, 20 Dec 2023 15:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5AEF41235;
+	Wed, 20 Dec 2023 15:54:15 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8351C4184F;
-	Wed, 20 Dec 2023 15:52:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 835C046520;
+	Wed, 20 Dec 2023 15:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="462283009"
+X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="394718101"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="462283009"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:52:55 -0800
+   d="scan'208";a="394718101"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:54:13 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="805306455"
+X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="867014290"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="805306455"
+   d="scan'208";a="867014290"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:52:52 -0800
+  by FMSMGA003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:54:11 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andy.shevchenko@gmail.com>)
-	id 1rFysL-00000007apN-0A7P;
-	Wed, 20 Dec 2023 17:52:49 +0200
-Date: Wed, 20 Dec 2023 17:52:48 +0200
+	id 1rFytb-00000007aqH-45CW;
+	Wed, 20 Dec 2023 17:54:07 +0200
+Date: Wed, 20 Dec 2023 17:54:07 +0200
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
 To: Hugo Villeneuve <hugo@hugovil.com>
 Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, jringle@gridpoint.com,
 	kubakici@wp.pl, phil@raspberrypi.org, bo.svangard@embeddedart.se,
 	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
 	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH 12/18] serial: sc16is7xx: replace hardcoded divisor value
- with BIT() macro
-Message-ID: <ZYMN0NFVVZvnlu-4@smile.fi.intel.com>
+Subject: Re: [PATCH 13/18] serial: sc16is7xx: use in_range() for DT
+ properties bound checks
+Message-ID: <ZYMOH2VFRJ1npR7L@smile.fi.intel.com>
 References: <20231219171903.3530985-1-hugo@hugovil.com>
- <20231219171903.3530985-13-hugo@hugovil.com>
+ <20231219171903.3530985-14-hugo@hugovil.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -55,16 +55,24 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231219171903.3530985-13-hugo@hugovil.com>
+In-Reply-To: <20231219171903.3530985-14-hugo@hugovil.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Dec 19, 2023 at 12:18:56PM -0500, Hugo Villeneuve wrote:
+On Tue, Dec 19, 2023 at 12:18:57PM -0500, Hugo Villeneuve wrote:
 > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> To better show why the limit is what it is, since we have only 16 bits for
-> the divisor.
+> Improve code readability and efficiency by using in_range() when checking
+> device tree properties bound.
 
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+...
+
+>  	count = device_property_count_u32(dev, "irda-mode-ports");
+> -	if (count < 0 || count > SC16IS7XX_MAX_PORTS)
+> +	if (!in_range(count, 0, SC16IS7XX_MAX_PORTS + 1))
+>  		return;
+
+Okay, looking at this, it becomes uglier than initial code,
+means my suggestion was not good. Please, drop this patch.
 
 -- 
 With Best Regards,
