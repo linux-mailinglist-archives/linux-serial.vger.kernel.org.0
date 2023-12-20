@@ -1,67 +1,67 @@
-Return-Path: <linux-serial+bounces-1085-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1089-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 886A381A301
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 16:48:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B98A81A313
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 16:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAD251C23725
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 15:48:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2AFBB213ED
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Dec 2023 15:50:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42E76405F0;
-	Wed, 20 Dec 2023 15:48:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07D8841236;
+	Wed, 20 Dec 2023 15:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lTr8t25I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MaXTpkpz"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.55.52.43])
+Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19E6405D3;
-	Wed, 20 Dec 2023 15:48:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD4A440C00;
+	Wed, 20 Dec 2023 15:50:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1703087290; x=1734623290;
+  t=1703087443; x=1734623443;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=3XR7enFHKoVe08GWHpYKNroBhFsbx5ma1bagxJv3MNc=;
-  b=lTr8t25Iex5KUpWKnue67q3Ap95K/6T5JyocFfVMn76wWq7cQ44aMOk2
-   3L7dUGufI7x5w+gRDgtp66pOgFHsNfOfMDr4W+6DR2/RRlr8q4hm4HUIC
-   jFIjkACB6Snzf7iJ+5C+lju0sT4Wi6aCn+AIwLfF8wNFx3hgsJ1+x4JnY
-   6SyZMfV/cBRV6ZYjO4wI29KTz3tn1g9Vz2jSfwL4BOvzKxV4IKx/wxvNQ
-   MDvq/CbWj0LxLQt63C8N5myZsrH2gWsTIxkuJLGsJ4SUmA41xei/M89i7
-   ojOw6FrB4o22f6p9905eeIHsr8atekfg0qaiwlYWqr7E1OI8TFFd1ALpT
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="482018894"
+  bh=UhdmluMNpK/TcTrqtcRnsnNoNAHzR/TaqZv3iZKi1oc=;
+  b=MaXTpkpz0mzFMfP5I4n4/B7zkbrxy7E+CJh73I44uFbO5wwJX4/iyjHU
+   s17q6bwa/ZK4rFjLmkJzZdbofCZId3uo1KW+IaCJH9PfVhr+OR01rmdXB
+   ztAfoWxdbb0W9Yk96zqlmwePTChYTVahqi4UPOOxh8k1dwMUF+hcutwOk
+   DgX40traih8C8677JYPFa2Fyx03CghlG6kwy1TedjS+D6Rophm1jFM516
+   G0gMTNWKlQgJ2tsE5DhyZyZvz1HTTai70TnNYl2uyl1WVFZu0z5LCIOUn
+   B/4WE1VWi8zzfH8KuYHl42mqqAA1sI+n8kBk3Li6s9qX+H+tJiHNcFuJ9
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="462282775"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="482018894"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:48:10 -0800
+   d="scan'208";a="462282775"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:50:41 -0800
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="776380711"
+X-IronPort-AV: E=McAfee;i="6600,9927,10930"; a="1107765632"
 X-IronPort-AV: E=Sophos;i="6.04,291,1695711600"; 
-   d="scan'208";a="776380711"
+   d="scan'208";a="1107765632"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:48:07 -0800
+  by fmsmga005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2023 07:50:38 -0800
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1rFynj-00000007aki-2iLW;
-	Wed, 20 Dec 2023 17:48:03 +0200
-Date: Wed, 20 Dec 2023 17:48:03 +0200
+	id 1rFyqB-00000007amZ-0P8C;
+	Wed, 20 Dec 2023 17:50:35 +0200
+Date: Wed, 20 Dec 2023 17:50:34 +0200
 From: Andy Shevchenko <andriy.shevchenko@intel.com>
 To: Hugo Villeneuve <hugo@hugovil.com>
 Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, jringle@gridpoint.com,
 	kubakici@wp.pl, phil@raspberrypi.org, bo.svangard@embeddedart.se,
 	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
 	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Subject: Re: [PATCH 08/18] serial: sc16is7xx: add driver name to struct
- uart_driver
-Message-ID: <ZYMMs5A758h12AEM@smile.fi.intel.com>
+Subject: Re: [PATCH 09/18] serial: sc16is7xx: add macro for max number of
+ UART ports
+Message-ID: <ZYMNSqFgAhId-lQ2@smile.fi.intel.com>
 References: <20231219171903.3530985-1-hugo@hugovil.com>
- <20231219171903.3530985-9-hugo@hugovil.com>
+ <20231219171903.3530985-10-hugo@hugovil.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -70,30 +70,39 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20231219171903.3530985-9-hugo@hugovil.com>
+In-Reply-To: <20231219171903.3530985-10-hugo@hugovil.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Dec 19, 2023 at 12:18:52PM -0500, Hugo Villeneuve wrote:
+On Tue, Dec 19, 2023 at 12:18:53PM -0500, Hugo Villeneuve wrote:
 > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 > 
-> Make sure that the driver name is displayed instead of "unknown" when
-> displaying the driver infos:
-> 
-> Before:
->     cat /proc/tty/drivers | grep ttySC
->     unknown              /dev/ttySC    243 0-7 serial
-> 
-> After:
->     cat /proc/tty/drivers | grep ttySC
->     sc16is7xx            /dev/ttySC    243 0-7 serial
+> Add macro to hold the maximum number of UART ports per IC/device.
 
-"Useless use of cat" (you can google for this phrase, it's famous).
+...
 
-	grep ... /proc/...
+> -	if (count < 0 || count > ARRAY_SIZE(irda_port))
+> +	if (count < 0 || count > SC16IS7XX_MAX_PORTS)
 
-will work :-)
+ARRAY_SIZE() is more robust than this. What if you change to support different
+devices where this won't be as defined?
 
-Otherwise LGTM!
+>  		return;
+
+...
+
+> -	if (count < 0 || count > ARRAY_SIZE(mctrl_port))
+> +	if (count < 0 || count > SC16IS7XX_MAX_PORTS)
+>  		return 0;
+
+Ditto.
+
+...
+
+> +	WARN_ON(devtype->nr_uart > SC16IS7XX_MAX_PORTS);
+
+Not sure about this, perhaps it's fine.
+
+Otherwise looks reasonable.
 
 -- 
 With Best Regards,
