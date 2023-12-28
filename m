@@ -1,153 +1,141 @@
-Return-Path: <linux-serial+bounces-1206-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1208-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DB4081F890
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 14:02:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5706381F8F8
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 15:04:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3F77C1C21DD7
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 13:02:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EA7081F227F6
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 14:04:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE6811188;
-	Thu, 28 Dec 2023 12:58:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFD80C8EA;
+	Thu, 28 Dec 2023 14:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tsm6+4s/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bYVPu0Jw"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7966911197
-	for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 12:58:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1180C8832
+	for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 14:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-40d5bc68bb7so18882935e9.3
-        for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 04:58:24 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-336979a566aso4483618f8f.1
+        for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 06:04:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703768303; x=1704373103; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=T/YL/2OiXBxCX/gD6IApJPmq9GlVQJZGnRfROzab14c=;
-        b=tsm6+4s/hz3xpEd26lt/8M4X3EVCQ0CHQE77inkpa1ZvGyHUzzxMhzn8GEOsCLVQaZ
-         xClfMrKKs9Tobv4xSDbVXSoESRqv33+54OZK7cmlp1L/s4UyFO/zW7iWYlWc9kJpZblG
-         Sk/9n1jsDFkDHeP725dBrh5bQmQ7yxm607qS2efQmAVLXP/Z74PuhkN2Ua+35zyCZSMT
-         I0YvFM4QY90xKQPkFbYS4q3+HgczMl99IjQyHSWWfpL3gMHDw33JueHNZy8rIHoxrqj4
-         O+1lp5PB08sEuaSSmAoGQzNqEJ6nnLC4Kto0iVJ2UyQ5G1Njphr/ToJk0915JQe5ThVr
-         hMMA==
+        d=linaro.org; s=google; t=1703772244; x=1704377044; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=mPkijzavdvdOdoaGEBSsLLFk6woqLrK/9VsOdIqUCa0=;
+        b=bYVPu0JwyCEQ+me/1C7wRVmxl2Ma6aE6AlWCUAOg3kh8/FWxXmuPV66h7p0po2LyZK
+         VnMX2PIpPGA/DdrpV695/VA8VlbtVxl9eapzkjIXXKy16LyT/FevK+Yj3gvipaDWRnwK
+         ZY1U61V/xGdk8e29PMq6kTnqWatdp2P3ACZCwF9TEjW8pCXooIYglS7vPKHu4wplgYqr
+         igkmpvf/RvVi/Hx9ipQbn8yMz5uANOjIdB0U5+OIhDP7DruacoRYlTAyfdtbhdLtRcF2
+         8ySppcwDh7jYkTTThqd6EiffaNRJUJHqvvHnHjqXzrMZHmrKAtZysinWQ9QQdKl1p82T
+         ZxvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703768303; x=1704373103;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=T/YL/2OiXBxCX/gD6IApJPmq9GlVQJZGnRfROzab14c=;
-        b=QifRSPZ/M5Ux8CKDV17FUymaLQXEeaMOnzO3WIHF1NtnVIoEo7bX5kBInx621rREqO
-         id7pO0KB3M3FXjR90g8y+52ATByZNlnVQcCtzG5+BmaVd+/p6faYHyMXbbNQUqja9crR
-         hzA+l4IUxhmolwoP926P8gMvHOUbIwefctBYEEeVCHL3XpM+c09c0ZosTOCnund2FIr6
-         BvY1/utG8HpdiF5Ez5ollPdgs4FRe8ed8biKhEBwwlN7FSUj/KfrsHcBcim5+9FpFU90
-         nlx3HgKRb18F2+whsGn7wThALtsZiwPjZc23H+wmd5z8YEy+xoatJyQicC8w76t7FFgI
-         CRtg==
-X-Gm-Message-State: AOJu0Yx3AGyFjouiWGxtrFm+s/PLwaR0WwR1r/69f+I9LB6eQvC8KOIQ
-	EEiP0bsUaZ1OY23xS4vRL/eARyM+DotDVQ==
-X-Google-Smtp-Source: AGHT+IFFojsXoPb7K03oLgZ6jOvlLwBUwXu6zQoSVyiXDmyrmZ5YE9jkYffXSKkyFMwlzu2dsPNUsQ==
-X-Received: by 2002:a05:600c:4ca5:b0:40d:39cb:6af6 with SMTP id g37-20020a05600c4ca500b0040d39cb6af6mr5506215wmp.28.1703768302945;
-        Thu, 28 Dec 2023 04:58:22 -0800 (PST)
-Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b0040d5aca25f1sm8615807wmq.17.2023.12.28.04.58.21
+        d=1e100.net; s=20230601; t=1703772244; x=1704377044;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=mPkijzavdvdOdoaGEBSsLLFk6woqLrK/9VsOdIqUCa0=;
+        b=I33QYCpwazt6rSQre5qqv9HF8M9S8Nu0/aNWDQMOmMOMqAeY2vXb5jYc+yZ2cRAu2v
+         hfpoy3L7AGu6suSLmInupWRBiubEPeEsun52syZjGT5E0vPa5XqlMI8xBMUuP8nAVGc7
+         9/BDdYg2MKHf3xwQQqQaHReXLRe7uEB4fevxPgNr1Kdy4XAihe/ft5urAONNOLzU/JQk
+         174QhpivRzWkg43O4ZFxxMAZ9dJ67XBkIAZzIjUuk+rn93aR9pZmw+fNWkLQF4RpMUIw
+         eeGi8sPZiQBqzfHjxpA2MpvHezRArXp2lT6btkikgpCynm4gtIbbgR0n8rs07UzW7bMD
+         QLQA==
+X-Gm-Message-State: AOJu0YzfOlXJTUk6h9Qx3p7KTViTHjgVB7CtCFX0k4+gh9vVj8lfPLi/
+	w++4K4VvIXQ3tZJLizmDfMkkECen4SLz2A==
+X-Google-Smtp-Source: AGHT+IFx1n2uI1NoW+671gtu5x3u/GIM0bqgW0pdaDovQohcs0pKIX6FlwCJutRZLl+Zt/eK41hdWw==
+X-Received: by 2002:a5d:5984:0:b0:336:e161:8d with SMTP id n4-20020a5d5984000000b00336e161008dmr2745905wri.78.1703772244272;
+        Thu, 28 Dec 2023 06:04:04 -0800 (PST)
+Received: from salami.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id l4-20020a5d6744000000b00336710ddea0sm17155630wrw.59.2023.12.28.06.04.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 04:58:22 -0800 (PST)
-From: Tudor Ambarus <tudor.ambarus@linaro.org>
-To: peter.griffin@linaro.org,
-	robh+dt@kernel.org,
-	krzysztof.kozlowski+dt@linaro.org,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	conor+dt@kernel.org,
-	andi.shyti@kernel.org,
-	alim.akhtar@samsung.com,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	s.nawrocki@samsung.com,
-	tomasz.figa@gmail.com,
-	cw00.choi@samsung.com,
-	arnd@arndb.de,
-	semen.protsenko@linaro.org
-Cc: andre.draszik@linaro.org,
-	saravanak@google.com,
-	willmcvicker@google.com,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-i2c@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	kernel-team@android.com,
-	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 12/12] arm64: dts: exynos: gs101: enable eeprom on gs101-oriole
-Date: Thu, 28 Dec 2023 12:58:05 +0000
-Message-ID: <20231228125805.661725-13-tudor.ambarus@linaro.org>
-X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
-In-Reply-To: <20231228125805.661725-1-tudor.ambarus@linaro.org>
+        Thu, 28 Dec 2023 06:04:03 -0800 (PST)
+Message-ID: <a40b5d0dc3e151fede14aa00bcb853d1eeb8824b.camel@linaro.org>
+Subject: Re: [PATCH v2 11/12] arm64: dts: exynos: gs101: define USI8 with
+ I2C configuration
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: Tudor Ambarus <tudor.ambarus@linaro.org>, peter.griffin@linaro.org, 
+ robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+ mturquette@baylibre.com,  sboyd@kernel.org, conor+dt@kernel.org,
+ andi.shyti@kernel.org,  alim.akhtar@samsung.com,
+ gregkh@linuxfoundation.org, jirislaby@kernel.org,  s.nawrocki@samsung.com,
+ tomasz.figa@gmail.com, cw00.choi@samsung.com,  arnd@arndb.de,
+ semen.protsenko@linaro.org
+Cc: saravanak@google.com, willmcvicker@google.com, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org, 
+	linux-serial@vger.kernel.org, kernel-team@android.com
+Date: Thu, 28 Dec 2023 14:04:02 +0000
+In-Reply-To: <20231228125805.661725-12-tudor.ambarus@linaro.org>
 References: <20231228125805.661725-1-tudor.ambarus@linaro.org>
+	 <20231228125805.661725-12-tudor.ambarus@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.50.2-1 
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Enable the eeprom found on the battery connector.
+Hi Tudor,
 
-The selection of the USI protocol is done in the board dts file because
-the USI CONFIG register comes with a 0x0 reset value, meaning that USI8
-does not have a default protocol (I2C, SPI, UART) at reset.
+On Thu, 2023-12-28 at 12:58 +0000, Tudor Ambarus wrote:
+> [...]
+>=20
+> diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/bo=
+ot/dts/exynos/google/gs101.dtsi
+> index 0e5b1b490b0b..c6ae33016992 100644
+> --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
+> @@ -354,6 +354,35 @@ pinctrl_peric0: pinctrl@10840000 {
+> =C2=A0			interrupts =3D <GIC_SPI 625 IRQ_TYPE_LEVEL_HIGH 0>;
+> =C2=A0		};
+> =C2=A0
+> +		usi8: usi@109700c0 {
+> +			compatible =3D "google,gs101-usi",
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 "samsung,exynos850-usi";
+> +			reg =3D <0x109700c0 0x20>;
+> +			ranges;
+> +			#address-cells =3D <1>;
+> +			#size-cells =3D <1>;
+> +			clocks =3D <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>,
+> +				 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
+> +			clock-names =3D "pclk", "ipclk";
 
-Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
-Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
----
-v2:
-- move cells and pinctrls properties to dtsi
-- collect Sam's R-b
+Given the clock-names, shouldn't the clock indices be the other way around?=
+ Also see below.
 
- arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> +			samsung,sysreg =3D <&sysreg_peric0 0x101c>;
+> +			status =3D "disabled";
+> +
+> +			hsi2c_8: i2c@10970000 {
+> +				compatible =3D "google,gs101-hsi2c",
+> +					=C2=A0=C2=A0=C2=A0=C2=A0 "samsung,exynosautov9-hsi2c";
+> +				reg =3D <0x10970000 0xc0>;
+> +				interrupts =3D <GIC_SPI 642 IRQ_TYPE_LEVEL_HIGH 0>;
+> +				#address-cells =3D <1>;
+> +				#size-cells =3D <0>;
+> +				pinctrl-names =3D "default";
+> +				pinctrl-0 =3D <&hsi2c8_bus>;
+> +				clocks =3D <&cmu_peric0 CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7>,
+> +					 <&cmu_peric0 CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK>;
+> +				clock-names =3D "hsi2c", "hsi2c_pclk";
 
-diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-index 4a71f752200d..cb4d17339b6b 100644
---- a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-+++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-@@ -63,6 +63,15 @@ &ext_200m {
- 	clock-frequency = <200000000>;
- };
- 
-+&hsi2c_8 {
-+	status = "okay";
-+
-+	eeprom: eeprom@50 {
-+		compatible = "atmel,24c08";
-+		reg = <0x50>;
-+	};
-+};
-+
- &pinctrl_far_alive {
- 	key_voldown: key-voldown-pins {
- 		samsung,pins = "gpa7-3";
-@@ -99,6 +108,11 @@ &usi_uart {
- 	status = "okay";
- };
- 
-+&usi8 {
-+	samsung,mode = <USI_V2_I2C>;
-+	status = "okay";
-+};
-+
- &watchdog_cl0 {
- 	timeout-sec = <30>;
- 	status = "okay";
--- 
-2.43.0.472.g3155946c3a-goog
+Here, pclk =3D=3D CLK_GOUT_PERIC0_CLK_PERIC0_USI8_USI_CLK (which is correct=
+, I believe), whereas
+above pclk =3D=3D CLK_GOUT_PERIC0_PERIC0_TOP0_IPCLK_7
+
+Cheers,
+A.
 
 
