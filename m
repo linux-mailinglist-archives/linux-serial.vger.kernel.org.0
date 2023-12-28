@@ -1,62 +1,62 @@
-Return-Path: <linux-serial+bounces-1203-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1205-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A680181F879
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 14:00:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98B7281F886
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 14:01:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C3AFEB23DE3
-	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 13:00:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C99381C2336F
+	for <lists+linux-serial@lfdr.de>; Thu, 28 Dec 2023 13:01:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD1B10A2D;
-	Thu, 28 Dec 2023 12:58:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76FA81171D;
+	Thu, 28 Dec 2023 12:58:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wPYZRAo7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="VGRgjEtU"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680ED107A7
-	for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 12:58:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52ABA10948
+	for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 12:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-336788cb261so5399534f8f.3
-        for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 04:58:20 -0800 (PST)
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-40d5aef534eso19650545e9.0
+        for <linux-serial@vger.kernel.org>; Thu, 28 Dec 2023 04:58:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1703768298; x=1704373098; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1703768299; x=1704373099; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IfvY3WSeE4VIMFkeLJMaH8OzmsoSjNCK+Nz4eKgeCoc=;
-        b=wPYZRAo7QXUGA/kTIdTnIIR/+lhZF4k7xFRxU97cFJy0DbF59Ajk4knIPTZPZDW+SH
-         R8hVBzclA31K0t0nO6yWsUW5yBdn4g85JqkMwQWcfrEqu0GeCP0+xx98s12iEgJLNCgM
-         bRCa8MPRq8P5GtsGHqwbpPKxalvgBvMxLimtIzRQxMaXjFYo35PQ6hjpTwpVt97bpGgf
-         hIoaJWw1N6ZJW6ElXOfDHKfQpyxCnLcl4T9suyZxApsf59EFQk/BjRGVoSLt4NmXsKvM
-         4TMJCNbPDDjFiiFTlXo7gWy2BP9q8p2ia5moLVHqTZn5R+DCycl8l1erYcYHMmbRtD2o
-         cOPw==
+        bh=9P18XFXxLojrY56K1R6dgW5XgUJGd1RI2KgrEMEdbt0=;
+        b=VGRgjEtUWQXaj45h2Kim36YsftjD3/lzrOlNAnGvcLcCCR4P1BndKG1WkmcaKn4krL
+         KzgaB3pHKJP5hbc5SWan+JB+gmYLPxOyX0ZvE8MRoY9Davrl21fm21nEmCchRXULzMKW
+         o61bqKoj18suCoBSNZGu59AmoTlGu1+Vmi2w3u86vVVkdKWlFCtsxLh2zJCGeAOH4G8a
+         h6qLZNpQFjh3ZfM9bPKQTXuYX1tPdhGgj8brdvLsbotZoaViRboa3klaadVDZjkFwwS/
+         i/zvAYf5TjhGjqh6709tTOlvn31WrdAXNVPij7FKyfoZv5z6OQgTFCznS1qPdzmrMNx6
+         r74g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1703768298; x=1704373098;
+        d=1e100.net; s=20230601; t=1703768299; x=1704373099;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=IfvY3WSeE4VIMFkeLJMaH8OzmsoSjNCK+Nz4eKgeCoc=;
-        b=MYirJjXwVUx5lB2jAdmDEbvOTIF+YMnOcsZ9WQJOi0mltF5wAXRHUtkS2CGklh0FmU
-         5OOkSUUgapWTQHNoIR0/APX7JV+g4k9Xv1aznFLMQowqXs+rAxIXMPifnvvq9B0Gm181
-         vlfH78Kke1gSeG+rNZfBnEajiYuuhWV9WhwzMUjSdrM6QmeLm2JcFS6kihxhBqzP8te1
-         dz2/VPld7YbqItkZgRxnuJsv7WWAH7oiUuoIMrVwvTmdRruUnSBjRe5WkMbVYycPPPTP
-         X3Y7+Ev3KS5gDoLy98hDefePRqBPwDEGF//MXUJFQxlNanrGhi9uj/xl/ugHlhHnCW+F
-         wMnw==
-X-Gm-Message-State: AOJu0YwC+qVAT0pdRhWRy4M/UXZLuEehYhY4ZCx/Syg6RmofEr/hwqth
-	+rNRbhAa8Zu15vWzAezvlLawqpQBzXrZIA==
-X-Google-Smtp-Source: AGHT+IF55NKth7/eb18QsUtA1f9ddrzeSWtvCX/hHhNS9AwuDyV2qkCzAn6X1VS5tp90l5w01R7hBQ==
-X-Received: by 2002:a05:600c:748:b0:40c:53ba:1720 with SMTP id j8-20020a05600c074800b0040c53ba1720mr5454225wmn.76.1703768298710;
-        Thu, 28 Dec 2023 04:58:18 -0800 (PST)
+        bh=9P18XFXxLojrY56K1R6dgW5XgUJGd1RI2KgrEMEdbt0=;
+        b=qcvMD1XEqhWSptNz65Hv2kqD+jTqJo8J3ll4Zxa+66Zjeysf4YZ3AzwGFVkriSeCH0
+         O3zJzxZ1a9CY3lVjuFp5zWWLzHNkT+uImyUAQL5+FVy6Bx3rKKn6LCpoLyEyFvi4ZWTI
+         GrZTXbObfAaQ4HHN/yh8gSRukHNznO4ed0/TxwnU3jsurI4VcfDpL8Yu/GVISONpS7VI
+         Ss5WX+Cvb0HrmtSp0ZKTv/anOvlspwtNTOafpXdNNaNYzF0rta4UnYEYDcztjEhhnNOf
+         cx8H0BqlXkq+gN47CYnYJDgIlD2NgHRzRYcnsk0ZxndecxYROPzwtNCVLRBUHMBDBoJk
+         tc5Q==
+X-Gm-Message-State: AOJu0Yy96oXvKh2WFtW6k5Mdy49uWp6Q7TkME7eN7IVbl/UDJMuyv1gI
+	dsevpqu35bVtdZvChySfxfPeRctY2nbUVg==
+X-Google-Smtp-Source: AGHT+IEhfhBO50ykAwRsA55Z5OQSVWgKhNvX6SqkmYB+7qQHPv4Eq18tKnXzQa7B/fCe5uM8d1mYAg==
+X-Received: by 2002:a7b:ce98:0:b0:40d:5c58:fd7a with SMTP id q24-20020a7bce98000000b0040d5c58fd7amr1705829wmj.156.1703768299747;
+        Thu, 28 Dec 2023 04:58:19 -0800 (PST)
 Received: from ta2.c.googlers.com.com (216.131.76.34.bc.googleusercontent.com. [34.76.131.216])
-        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b0040d5aca25f1sm8615807wmq.17.2023.12.28.04.58.17
+        by smtp.gmail.com with ESMTPSA id h9-20020a05600c350900b0040d5aca25f1sm8615807wmq.17.2023.12.28.04.58.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 28 Dec 2023 04:58:17 -0800 (PST)
+        Thu, 28 Dec 2023 04:58:19 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: peter.griffin@linaro.org,
 	robh+dt@kernel.org,
@@ -85,9 +85,9 @@ Cc: andre.draszik@linaro.org,
 	linux-serial@vger.kernel.org,
 	kernel-team@android.com,
 	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 08/12] arm64: dts: exynos: gs101: remove reg-io-width from serial
-Date: Thu, 28 Dec 2023 12:58:01 +0000
-Message-ID: <20231228125805.661725-9-tudor.ambarus@linaro.org>
+Subject: [PATCH v2 09/12] arm64: dts: exynos: gs101: enable cmu-peric0 clock controller
+Date: Thu, 28 Dec 2023 12:58:02 +0000
+Message-ID: <20231228125805.661725-10-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.43.0.472.g3155946c3a-goog
 In-Reply-To: <20231228125805.661725-1-tudor.ambarus@linaro.org>
 References: <20231228125805.661725-1-tudor.ambarus@linaro.org>
@@ -99,32 +99,39 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Remove the reg-io-width property in order to comply with the bindings.
+Enable the cmu-peric0 clock controller. It feeds USI and I3c.
 
-The entire bus (PERIC) on which the GS101 serial resides only allows
-32-bit register accesses. The reg-io-width dt property is disallowed
-for the "google,gs101-uart" compatible and instead the iotype is
-inferred from the compatible.
-
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
-v2: new patch
+v2: collect R-b
 
- arch/arm64/boot/dts/exynos/google/gs101.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/exynos/google/gs101.dtsi | 12 ++++++++++++
+ 1 file changed, 12 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/exynos/google/gs101.dtsi b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-index 9747cb3fa03a..2c27c3cb9237 100644
+index 2c27c3cb9237..c693791ae584 100644
 --- a/arch/arm64/boot/dts/exynos/google/gs101.dtsi
 +++ b/arch/arm64/boot/dts/exynos/google/gs101.dtsi
-@@ -366,7 +366,6 @@ usi_uart: usi@10a000c0 {
- 			serial_0: serial@10a00000 {
- 				compatible = "google,gs101-uart";
- 				reg = <0x10a00000 0xc0>;
--				reg-io-width = <4>;
- 				interrupts = <GIC_SPI 634
- 					      IRQ_TYPE_LEVEL_HIGH 0>;
- 				clocks = <&dummy_clk 0>, <&dummy_clk 0>;
+@@ -339,6 +339,18 @@ ppi_cluster2: interrupt-partition-2 {
+ 			};
+ 		};
+ 
++		cmu_peric0: clock-controller@10800000 {
++			compatible = "google,gs101-cmu-peric0";
++			reg = <0x10800000 0x4000>;
++			#clock-cells = <1>;
++			clocks = <&ext_24_5m>,
++				 <&cmu_top CLK_DOUT_CMU_PERIC0_BUS>,
++				 <&cmu_top CLK_DOUT_CMU_PERIC0_IP>;
++			clock-names = "oscclk",
++				      "dout_cmu_peric0_bus",
++				      "dout_cmu_peric0_ip";
++		};
++
+ 		sysreg_peric0: syscon@10820000 {
+ 			compatible = "google,gs101-peric0-sysreg", "syscon";
+ 			reg = <0x10820000 0x10000>;
 -- 
 2.43.0.472.g3155946c3a-goog
 
