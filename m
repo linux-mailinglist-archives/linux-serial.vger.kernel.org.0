@@ -1,243 +1,200 @@
-Return-Path: <linux-serial+bounces-1284-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1286-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D23D38257B2
-	for <lists+linux-serial@lfdr.de>; Fri,  5 Jan 2024 17:07:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B2CC982604D
+	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 17:02:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2920828537A
-	for <lists+linux-serial@lfdr.de>; Fri,  5 Jan 2024 16:07:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2962C1F22114
+	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 16:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8EA2E637;
-	Fri,  5 Jan 2024 16:07:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F11BC848D;
+	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NyXOhfs6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PU8g1GHx"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [134.134.136.100])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2468F31A79
-	for <linux-serial@vger.kernel.org>; Fri,  5 Jan 2024 16:06:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1704470819; x=1736006819;
-  h=date:from:to:cc:subject:message-id;
-  bh=bdo0TuVLpIcW5CNGkFm+9FsrBtCtMYq2vidaHfdX90c=;
-  b=NyXOhfs6IOMA2Y8eQ44rSIZhnqUDwzbdyTpc3yB+wQ10jOv2TWqBssM1
-   WYD1or8H4HgrOfmvf2BPDg4RGjX5ZgDr+UHTAQ4rykwdRBFML95Lp6Is7
-   kRXZaZT6ry86YTUXk30bwID1AaAGJF+ga31zDqqqyVYlLk13CNLec5DF6
-   gKyOILW+Wq6bJPqYoDebaALDq0Ee8or8ZlhxksLWJsWJlL6+yTz6eQrPy
-   dnfj0jFYwM1rNEyQam3VH261U4tH07WL8KkuG9HRJAsOHcHo5cHw3k9+4
-   FOEhMREuNwLIlkTlO8tx8SkoeuqzX33dIXvL3hXMZHlOYcRrnNCPMHklh
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="463926798"
-X-IronPort-AV: E=Sophos;i="6.04,334,1695711600"; 
-   d="scan'208";a="463926798"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Jan 2024 08:06:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10944"; a="899676672"
-X-IronPort-AV: E=Sophos;i="6.04,334,1695711600"; 
-   d="scan'208";a="899676672"
-Received: from lkp-server02.sh.intel.com (HELO b07ab15da5fe) ([10.239.97.151])
-  by fmsmga002.fm.intel.com with ESMTP; 05 Jan 2024 08:06:57 -0800
-Received: from kbuild by b07ab15da5fe with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rLmil-0001PA-04;
-	Fri, 05 Jan 2024 16:06:55 +0000
-Date: Sat, 06 Jan 2024 00:06:26 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD REGRESSION
- 0c84bea0cabc4e2b98a3de88eeb4ff798931f056
-Message-ID: <202401060024.Yab5Cd1c-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17FB8475;
+	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 331B1C433C7;
+	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1704556947;
+	bh=CyU2HWnIK49IXRUVfIRsjtKjJMAK+3OujvoA9cvQ0X0=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=PU8g1GHxFTVl/Cns8oQEYxFY75s8den6NATRH6ym1Cp0giYTmjbhXelyV+5d+wr53
+	 8AIPBtjXC5K38rVYekTEJwwJAwbd4i5qojM6C5Zz4tskqa22Z27hO91FLrZ5O+jrL2
+	 QTGy0Pn0Y9TYBHFv47+pKKuy3ZUWdvFr1wgDRgrtHUMqfOtVsW0DFutGCblhUEdsj8
+	 BEazUoNoLFvky7v8Cmlv28WzKfyKfk6o965ZHLdWdTjvwxMT0ftU0EGyjwHJanDd3I
+	 HvwlFtNUp59TSCb0xezTN56jNdmpQBdNO5jkGGuK1dAhyREW8nHXgCdEGBDwv6+cPr
+	 6BdnR2Z0eSXKA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 11257C46CD2;
+	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
+From: Christoph Winklhofer via B4 Relay
+ <devnull+cj.winklhofer.gmail.com@kernel.org>
+Subject: [PATCH v4 0/3] w1: add UART w1 bus driver
+Date: Sat, 06 Jan 2024 17:02:23 +0100
+Message-Id: <20240106-w1-uart-v4-0-7fe1378a8b3e@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI95mWUC/02OQQ6CMBBFr0K6dsiUtoCuvIdhUXGgVaCmIGgId
+ 7eQYFzM4iXzX97MevKWenaKZuZptL11XQB5iFhpdFcT2FtglmAikaOEicNL+wGI8jRXmiutkIX
+ vp6fKvjfTpQhcedfCYDzpfS94Eg5RYh5LiSoFDuU9nmz3aIyryJ/rVtsmLl27Co3tB+c/W9koV
+ u0eoX4RowCE0JHhUVwTytI/RbEsyxcXaU7A3wAAAA==
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Christoph Winklhofer <cj.winklhofer@gmail.com>, 
+ Rob Herring <robh@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Jonathan Corbet <corbet@lwn.net>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-serial@vger.kernel.org, linux-doc@vger.kernel.org
+X-Mailer: b4 0.12.3
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1704556945; l=5244;
+ i=cj.winklhofer@gmail.com; s=20240104; h=from:subject:message-id;
+ bh=CyU2HWnIK49IXRUVfIRsjtKjJMAK+3OujvoA9cvQ0X0=;
+ b=No9PAQgILfnalERUJguZqJLrU+U8keYvsT4A5lqggEkxW0ywVnZ5uppBvbrzQt1rTqzQS8p/J
+ JESQngfn4lDAjlA/GueYT0o4V9V4zbyU4ojZ0COZrtlhX6DEgMqf1yi
+X-Developer-Key: i=cj.winklhofer@gmail.com; a=ed25519;
+ pk=lgjGjOt7hFKJT9UXhgUyrdthxvZ7DJ5F1U/7d9qdAsk=
+X-Endpoint-Received:
+ by B4 Relay for cj.winklhofer@gmail.com/20240104 with auth_id=111
+X-Original-From: Christoph Winklhofer <cj.winklhofer@gmail.com>
+Reply-To: <cj.winklhofer@gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 0c84bea0cabc4e2b98a3de88eeb4ff798931f056  serial: sc16is7xx: refactor EFR lock
+Hello!
 
-Error/Warning ids grouped by kconfigs:
+This patch contains a driver for a 1-Wire bus over UART. The driver
+utilizes the UART interface via the Serial Device Bus to create the
+1-Wire timing patterns.
 
-gcc_recent_errors
-|-- microblaze-allmodconfig
-|   `-- arch-microblaze-kernel-entry.S:Error:unknown-opcode-suspend
-`-- microblaze-allyesconfig
-    `-- arch-microblaze-kernel-entry.S:Error:unknown-opcode-suspend
+Changes in v4:
+- rework baud-rate configuration: also check max bit-time, support higher
+  baud-rates by adding a delay to complete 1-Wire cycle.
+- dt-binding w1-uart: specify baud-rates for 1-Wire operations
+- Link to v3: https://lore.kernel.org/r/20240105-w1-uart-v3-0-8687093b2e76@gmail.com
 
-elapsed time: 1449m
+Changes in v3:
+- improve baud-rate configuration: use specific limits for 1-Wire
+  reset, touch-0 and touch-1 operation, compute in nanoseconds.
+- remove unused header atomic.h
+- use function instead of macro to compute bit-time from baud-rate
+- switch to b4 util to publish patch: missing recipients
+- Link to v2: https://lore.kernel.org/lkml/20231223100408.44056-1-cj.winklhofer@gmail.com
 
-configs tested: 156
-configs skipped: 2
+Changes in v2:
+- add documentation for dt-binding
+- allow onewire as serial child node
+- support different baud-rates: The driver requests a baud-rate (9600
+  for reset and 115200 for write/read) and tries to adapt the
+  transmitted byte according to the actual baud-rate returned from
+  serdev.
+- fix locking problem for serdev-receive and w1-master reset/touch: The
+  received byte is now protected with a mutex - instead of the atomic,
+  which was used before due to the concurrent store and load.
+- explicit error in serdev-receive: Receiving more than one byte results
+  in an error, since the w1-uart driver is the only writer, it writes a
+  single-byte and should receive a single byte.
+- fix variable names, errno-returns, wrong define CONFIG_OF
+- fix log flooding
+- fix driver remove (error-path for rxtx-function)
+- Link to v1: https://lore.kernel.org/all/20231217122004.42795-1-cj.winklhofer@gmail.com
+Krzysztof, thank your very much for your feedback!
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240105   gcc  
-arc                   randconfig-002-20240105   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   gcc  
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240105   gcc  
-csky                  randconfig-002-20240105   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-i386                             allmodconfig   clang
-i386                              allnoconfig   clang
-i386                             allyesconfig   clang
-i386         buildonly-randconfig-001-20240105   clang
-i386         buildonly-randconfig-002-20240105   clang
-i386         buildonly-randconfig-003-20240105   clang
-i386         buildonly-randconfig-004-20240105   clang
-i386         buildonly-randconfig-005-20240105   clang
-i386         buildonly-randconfig-006-20240105   clang
-i386                                defconfig   gcc  
-i386                  randconfig-001-20240105   clang
-i386                  randconfig-002-20240105   clang
-i386                  randconfig-003-20240105   clang
-i386                  randconfig-004-20240105   clang
-i386                  randconfig-005-20240105   clang
-i386                  randconfig-006-20240105   clang
-i386                  randconfig-011-20240105   gcc  
-i386                  randconfig-012-20240105   gcc  
-i386                  randconfig-013-20240105   gcc  
-i386                  randconfig-014-20240105   gcc  
-i386                  randconfig-015-20240105   gcc  
-i386                  randconfig-016-20240105   gcc  
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                        allyesconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240105   gcc  
-loongarch             randconfig-002-20240105   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                          atari_defconfig   gcc  
-m68k                                defconfig   gcc  
-m68k                        m5407c3_defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                             allmodconfig   gcc  
-mips                              allnoconfig   clang
-mips                             allyesconfig   gcc  
-mips                         db1xxx_defconfig   gcc  
-mips                     decstation_defconfig   gcc  
-mips                           gcw0_defconfig   gcc  
-mips                      loongson3_defconfig   gcc  
-nios2                         3c120_defconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240105   gcc  
-nios2                 randconfig-002-20240105   gcc  
-openrisc                         allmodconfig   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-openrisc                 simple_smp_defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240105   gcc  
-parisc                randconfig-002-20240105   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   clang
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc                      cm5200_defconfig   gcc  
-powerpc                   motionpro_defconfig   gcc  
-powerpc                      pasemi_defconfig   gcc  
-riscv                            allmodconfig   gcc  
-riscv                             allnoconfig   clang
-riscv                            allyesconfig   gcc  
-riscv                               defconfig   gcc  
-riscv                          rv32_defconfig   clang
-s390                             allmodconfig   gcc  
-s390                              allnoconfig   gcc  
-s390                             allyesconfig   gcc  
-s390                                defconfig   gcc  
-s390                  randconfig-001-20240105   gcc  
-s390                  randconfig-002-20240105   gcc  
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240105   gcc  
-sh                    randconfig-002-20240105   gcc  
-sparc                            alldefconfig   gcc  
-sparc                            allmodconfig   gcc  
-sparc                            allyesconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240105   gcc  
-sparc64               randconfig-002-20240105   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   clang
-um                                  defconfig   gcc  
-um                             i386_defconfig   gcc  
-um                           x86_64_defconfig   gcc  
-x86_64                            allnoconfig   gcc  
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240105   clang
-x86_64       buildonly-randconfig-002-20240105   clang
-x86_64       buildonly-randconfig-003-20240105   clang
-x86_64       buildonly-randconfig-004-20240105   clang
-x86_64       buildonly-randconfig-005-20240105   clang
-x86_64       buildonly-randconfig-006-20240105   clang
-x86_64                              defconfig   gcc  
-x86_64                                  kexec   gcc  
-x86_64                randconfig-011-20240105   clang
-x86_64                randconfig-012-20240105   clang
-x86_64                randconfig-013-20240105   clang
-x86_64                randconfig-014-20240105   clang
-x86_64                randconfig-015-20240105   clang
-x86_64                randconfig-016-20240105   clang
-x86_64                randconfig-071-20240105   clang
-x86_64                randconfig-072-20240105   clang
-x86_64                randconfig-073-20240105   clang
-x86_64                randconfig-074-20240105   clang
-x86_64                randconfig-075-20240105   clang
-x86_64                randconfig-076-20240105   clang
-x86_64                          rhel-8.3-rust   clang
-x86_64                               rhel-8.3   gcc  
-xtensa                            allnoconfig   gcc  
-xtensa                           allyesconfig   gcc  
-xtensa                randconfig-001-20240105   gcc  
-xtensa                randconfig-002-20240105   gcc  
-xtensa                    smp_lx200_defconfig   gcc  
+It was tested on a "Raspberry Pi 3 Model B+" with a DS18B20 and on a
+"Variscite DART-6UL" with a DS18S20 temperature sensor.
 
+Content:
+- Patch 1: device tree binding 1-Wire
+- Patch 2: allow onewire as serial child node
+- Patch 3: driver and documentation
+
+The patch was created against the w1 subsytem tree (branch w1-next):
+  Link: https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-w1.git/
+
+The checkpatch.pl script reported the following error - which I am not
+sure how to fix:
+  WARNING: added, moved or deleted file(s), does MAINTAINERS need
+  updating?
+
+The technical details for 1-Wire over UART are in the document:
+  Link: https://www.analog.com/en/technical-articles/using-a-uart-to-implement-a-1wire-bus-master.html
+
+  In short, the UART peripheral must support full-duplex and operate in
+open-drain mode. The timing patterns are generated by a specific
+combination of baud-rate and transmitted byte, which corresponds to a
+1-Wire read bit, write bit or reset pulse.
+
+For instance the timing pattern for a 1-Wire reset and presence detect
+uses the baud-rate 9600, i.e. 104.2 us per bit. The transmitted byte
+0xf0 over UART (least significant bit first, start-bit low) sets the
+reset low time for 1-Wire to 521 us. A present 1-Wire device changes the
+received byte by pulling the line low, which is used by the driver to
+evaluate the result of the 1-Wire operation.
+
+Similar for a 1-Wire read bit or write bit, which uses the baud-rate
+115200, i.e. 8.7 us per bit. The transmitted byte 0x00 is used for a
+Write-0 operation and the byte 0xff for Read-0, Read-1 and Write-1.
+
+Hope the driver is helpful.
+
+Thanks,
+Christoph
+
+Christoph Winklhofer (3):
+  dt-bindings: w1: UART 1-Wire bus
+  dt-bindings: serial: allow onewire as child node
+  w1: add UART w1 bus driver
+
+ .../devicetree/bindings/serial/serial.yaml    |   2 +-
+ .../devicetree/bindings/w1/w1-uart.yaml       |  44 +++
+ Documentation/w1/masters/index.rst            |   1 +
+ Documentation/w1/masters/w1-uart.rst          |  53 +++
+ drivers/w1/masters/Kconfig                    |  10 +
+ drivers/w1/masters/Makefile                   |   1 +
+ drivers/w1/masters/w1-uart.c                  | 307 ++++++++++++++++++
+ 7 files changed, 417 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/w1/w1-uart.yaml
+ create mode 100644 Documentation/w1/masters/w1-uart.rst
+ create mode 100644 drivers/w1/masters/w1-uart.c
+
+--
+2.43.0
+
+base-commit: efc19c44aa442197ddcbb157c6ca54a56eba8c4e
+---
+Christoph Winklhofer (3):
+      dt-bindings: w1: UART 1-Wire bus
+      dt-bindings: serial: allow onewire as child node
+      w1: add UART w1 bus driver
+
+ .../devicetree/bindings/serial/serial.yaml         |   2 +-
+ Documentation/devicetree/bindings/w1/w1-uart.yaml  |  62 ++++
+ Documentation/w1/masters/index.rst                 |   1 +
+ Documentation/w1/masters/w1-uart.rst               |  54 +++
+ drivers/w1/masters/Kconfig                         |  10 +
+ drivers/w1/masters/Makefile                        |   1 +
+ drivers/w1/masters/w1-uart.c                       | 398 +++++++++++++++++++++
+ 7 files changed, 527 insertions(+), 1 deletion(-)
+---
+base-commit: efc19c44aa442197ddcbb157c6ca54a56eba8c4e
+change-id: 20240104-w1-uart-ee8685a15a50
+
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Christoph Winklhofer <cj.winklhofer@gmail.com>
+
 
