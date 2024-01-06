@@ -1,608 +1,160 @@
-Return-Path: <linux-serial+bounces-1287-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1289-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E54C382604E
-	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 17:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C75158260BF
+	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 17:56:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BD3B28390C
-	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 16:02:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 69551283649
+	for <lists+linux-serial@lfdr.de>; Sat,  6 Jan 2024 16:56:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 085148498;
-	Sat,  6 Jan 2024 16:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AA5B882A;
+	Sat,  6 Jan 2024 16:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NJbd8PgT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MyEtwTUw"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D38A3847A;
-	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5BFFBC433C8;
-	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1704556947;
-	bh=wLC2ox3dYqkH3wQaGG3RdVVosDp4HEObsxCLhjJqsgQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=NJbd8PgTCahdnPucAOcMnqHIXZMeF/HzQaWlec3kduukGtDBeNXcK4eXLPohpzaog
-	 /24+uDmljKB+S4gwk2Hn1Ugm5YZcX6pVjXc2Hm9oFr8LuC4yJCcZxKvWAQOd7Ps/o2
-	 H54ke8XOXDhWLg2qASiFaw9B0IBW1cLSqqyTvrXqKofEu2eZZHlEjhZBw7akC8CHYK
-	 FytLJ07yzrvYI0Sgz9oLLEIgVvxhIoRDs34fj1OdmtIn4zXv56xOpfU0uNJQChRNC6
-	 OLWQ6E3kUruofRFJgGgLM8efjdVHrCQie4+VoAYn9WgPWePmgBGfH5UOHKuMDYIeou
-	 AxSzYbUpzETUA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 3E559C47077;
-	Sat,  6 Jan 2024 16:02:27 +0000 (UTC)
-From: Christoph Winklhofer via B4 Relay
- <devnull+cj.winklhofer.gmail.com@kernel.org>
-Date: Sat, 06 Jan 2024 17:02:26 +0100
-Subject: [PATCH v4 3/3] w1: add UART w1 bus driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3AA5C12F
+	for <linux-serial@vger.kernel.org>; Sat,  6 Jan 2024 16:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-a277339dcf4so50813166b.2
+        for <linux-serial@vger.kernel.org>; Sat, 06 Jan 2024 08:56:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1704560197; x=1705164997; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m3RK8M7nZjmwg4vSv0KVTgjny+F4gwHfQQ0/FeMDQeg=;
+        b=MyEtwTUwH2dcipUNbcbijO46yviikphZBrzSQle+/s/xEXp5b0QFP4smrkEktpyny3
+         R+/IE8zaIJu1QtmxqYuZ3zwXOpol7+7hoAcBIS+sGuLilKvu0i34mRmGr+9cyBxnUJML
+         LjYIYgSHabDekVkN4Zoc5oVHx4BNjuezPD/2AdN+e2M8wDoU/34XEumNf5z0fADjZnWY
+         VyJ5PVlLzoSwhtWDDlnJJYtIKT5YSIbN8zNBeYgulY8Ad4PgtcElU+CfQTPbnELJ6bo5
+         vpDAB9Nf7oSIdoBSCabQAA2bxWqdz0gxVermQD0V04xvAB5y1x2rbgv70ZNHwcnLfoR8
+         E1Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1704560197; x=1705164997;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from:references:cc
+         :to:content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m3RK8M7nZjmwg4vSv0KVTgjny+F4gwHfQQ0/FeMDQeg=;
+        b=n13eW1O/Zs2UwIDxRWC0UtxX5dtzmn7LgG8rU5qRzkcCxbsVRO7o+Wm761F8wvss8F
+         hv1LY8mxl2b62nNl+RaH+PffUQIOcDcsB3cXpskvmg1pDSHAmk3gf3KaC28QbPLPkoek
+         1gVK4SdsWwCHm4+8SQ6FB5YDX27Ep0JWU5bwooh63dJrrATZa+fBqBQZr7WAmn4Zk8mb
+         cGKF0axTA8mMMKiiD+gyevZDyHX0FjGNDALUpSKOG9QVsq2R0xe+l5U/r7aPdQFGqzaD
+         eJk4C9/22hzy4XD6+moWsRg8bCjx2GZrErtWUgPwE5Q7pwuSHOIc5/HdHr6ZjQpEPpxX
+         vhwA==
+X-Gm-Message-State: AOJu0Yyjx8o2GqlXaSXRq29hpt6V76/Q7K0MQYqZUCL2bGKxPHGnEZCr
+	eDblu60mD+vn4iCbaQXkmmmJY3g6g/WxkQ==
+X-Google-Smtp-Source: AGHT+IECPwnKhvzCjYKxro2ZGhjfoCUP5QqyjBZ1p68pC+adiLkXI8Us/3oeeLjqqbaLrpWfvQXqeQ==
+X-Received: by 2002:a17:907:c902:b0:a23:8a00:cfbe with SMTP id ui2-20020a170907c90200b00a238a00cfbemr411822ejc.132.1704560197092;
+        Sat, 06 Jan 2024 08:56:37 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.112])
+        by smtp.gmail.com with ESMTPSA id v26-20020a1709064e9a00b00a26a061ae1esm2135066eju.97.2024.01.06.08.56.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 06 Jan 2024 08:56:36 -0800 (PST)
+Message-ID: <1aeff309-6867-4296-8983-a60e8fd31614@linaro.org>
+Date: Sat, 6 Jan 2024 17:56:34 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20240106-w1-uart-v4-3-7fe1378a8b3e@gmail.com>
-References: <20240106-w1-uart-v4-0-7fe1378a8b3e@gmail.com>
-In-Reply-To: <20240106-w1-uart-v4-0-7fe1378a8b3e@gmail.com>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
- Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
- Christoph Winklhofer <cj.winklhofer@gmail.com>, 
- Rob Herring <robh@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 0/3] w1: add UART w1 bus driver
+Content-Language: en-US
+To: cj.winklhofer@gmail.com, Rob Herring <robh+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
  Jonathan Corbet <corbet@lwn.net>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-serial@vger.kernel.org, linux-doc@vger.kernel.org
-X-Mailer: b4 0.12.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1704556945; l=15524;
- i=cj.winklhofer@gmail.com; s=20240104; h=from:subject:message-id;
- bh=UOoGkHAnezlxB6RgYDDo3ul/kN6oDAhar95IjRXXtQ0=;
- b=jN2YfBB0BMEMgEapPX+zV4C71KjYyfBqsThQv6iAIb0N/nCvXjH/I2GaIPWSUhQTAIuphlaH8
- ujuhUhPqKURCRHdsASA+pJvgTTvOkI+/98Avd1qra81vS1tKrzPQIsG
-X-Developer-Key: i=cj.winklhofer@gmail.com; a=ed25519;
- pk=lgjGjOt7hFKJT9UXhgUyrdthxvZ7DJ5F1U/7d9qdAsk=
-X-Endpoint-Received:
- by B4 Relay for cj.winklhofer@gmail.com/20240104 with auth_id=111
-X-Original-From: Christoph Winklhofer <cj.winklhofer@gmail.com>
-Reply-To: <cj.winklhofer@gmail.com>
+References: <20240106-w1-uart-v4-0-7fe1378a8b3e@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ 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
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20240106-w1-uart-v4-0-7fe1378a8b3e@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Christoph Winklhofer <cj.winklhofer@gmail.com>
+On 06/01/2024 17:02, Christoph Winklhofer via B4 Relay wrote:
+> Hello!
+> 
+> This patch contains a driver for a 1-Wire bus over UART. The driver
+> utilizes the UART interface via the Serial Device Bus to create the
+> 1-Wire timing patterns.
+> 
+> Changes in v4:
+> - rework baud-rate configuration: also check max bit-time, support higher
+>   baud-rates by adding a delay to complete 1-Wire cycle.
+> - dt-binding w1-uart: specify baud-rates for 1-Wire operations
+> - Link to v3: https://lore.kernel.org/r/20240105-w1-uart-v3-0-8687093b2e76@gmail.com
+> 
 
-Add a UART 1-Wire bus driver. The driver utilizes the UART interface via
-the Serial Device Bus to create the 1-Wire timing patterns. The driver
-was tested on a "Raspberry Pi 3B" with a DS18B20 and on a "Variscite
-DART-6UL" with a DS18S20 temperature sensor.
+You can slow down a bit. You sent v2 too late to be applied. Then you
+sent v3 and next day v4.
 
-The 1-Wire timing pattern and the corresponding UART baud-rate with the
-interpretation of the transferred bytes are described in the document:
+While I like approach to release early, release often, it does not
+necessarily apply to the bindings. Bindings should be complete, which
+means they should describe the hardware as fully as possible.
 
-Link: https://www.analog.com/en/technical-articles/using-a-uart-to-implement-a-1wire-bus-master.html
+About the driver, you can develop it incrementally, it is a good idea,
+however since ~rc6 my w1 tree is closed. It will remain closed till next
+rc1 is released (merge window finished). Nothing will get applied during
+that time, so if you intend to add new features, better to send v5 after
+the merge window (instead v4 now, v5 tomorrow, v6 next week and then v7
+after rc1).
 
-In short, the UART peripheral must support full-duplex and operate in
-open-drain mode. The timing patterns are generated by a specific
-combination of baud-rate and transmitted byte, which corresponds to a
-1-Wire read bit, write bit or reset.
-
-Signed-off-by: Christoph Winklhofer <cj.winklhofer@gmail.com>
----
- Documentation/w1/masters/index.rst   |   1 +
- Documentation/w1/masters/w1-uart.rst |  54 +++++
- drivers/w1/masters/Kconfig           |  10 +
- drivers/w1/masters/Makefile          |   1 +
- drivers/w1/masters/w1-uart.c         | 398 +++++++++++++++++++++++++++++++++++
- 5 files changed, 464 insertions(+)
-
-diff --git a/Documentation/w1/masters/index.rst b/Documentation/w1/masters/index.rst
-index 4442a98850ad..cc40189909fd 100644
---- a/Documentation/w1/masters/index.rst
-+++ b/Documentation/w1/masters/index.rst
-@@ -12,3 +12,4 @@
-    mxc-w1
-    omap-hdq
-    w1-gpio
-+   w1-uart
-diff --git a/Documentation/w1/masters/w1-uart.rst b/Documentation/w1/masters/w1-uart.rst
-new file mode 100644
-index 000000000000..8d0f122178d4
---- /dev/null
-+++ b/Documentation/w1/masters/w1-uart.rst
-@@ -0,0 +1,54 @@
-+.. SPDX-License-Identifier: GPL-2.0-or-later
-+
-+=====================
-+Kernel driver w1-uart
-+=====================
-+
-+Author: Christoph Winklhofer <cj.winklhofer@gmail.com>
-+
-+
-+Description
-+-----------
-+
-+UART 1-Wire bus driver. The driver utilizes the UART interface via the
-+Serial Device Bus to create the 1-Wire timing patterns as described in
-+the document `"Using a UART to Implement a 1-Wire Bus Master"`_.
-+
-+.. _"Using a UART to Implement a 1-Wire Bus Master": https://www.analog.com/en/technical-articles/using-a-uart-to-implement-a-1wire-bus-master.html
-+
-+In short, the UART peripheral must support full-duplex and operate in
-+open-drain mode. The timing patterns are generated by a specific
-+combination of baud-rate and transmitted byte, which corresponds to a
-+1-Wire read bit, write bit or reset pulse.
-+
-+For instance the timing pattern for a 1-Wire reset and presence detect uses
-+the baud-rate 9600, i.e. 104.2 us per bit. The transmitted byte 0xf0 over
-+UART (least significant bit first, start-bit low) sets the reset low time
-+for 1-Wire to 521 us. A present 1-Wire device changes the received byte by
-+pulling the line low, which is used by the driver to evaluate the result of
-+the 1-Wire operation.
-+
-+Similar for a 1-Wire read bit or write bit, which uses the baud-rate
-+115200, i.e. 8.7 us per bit. The transmitted byte 0x80 is used for a
-+Write-0 operation (low time 69.6us) and the byte 0xff for Read-0, Read-1
-+and Write-1 (low time 8.7us).
-+
-+The default baud-rate for reset and presence detection is 9600 and for
-+a 1-Wire read or write operation 115200. In case the actual baud-rate
-+is different from the requested one, the transmitted byte is adapted
-+to generate the 1-Wire timing patterns.
-+
-+
-+Usage
-+-----
-+
-+Specify the UART 1-wire bus in the device tree by adding the single child
-+onewire to the serial node (e.g. uart0). For example:
-+::
-+
-+  @uart0 {
-+    ...
-+    onewire {
-+      compatible = "w1-uart";
-+    };
-+  };
-diff --git a/drivers/w1/masters/Kconfig b/drivers/w1/masters/Kconfig
-index 513c0b114337..e6049a75b35b 100644
---- a/drivers/w1/masters/Kconfig
-+++ b/drivers/w1/masters/Kconfig
-@@ -78,5 +78,15 @@ config W1_MASTER_SGI
- 	  This support is also available as a module.  If so, the module
- 	  will be called sgi_w1.
- 
-+config W1_MASTER_UART
-+	tristate "UART 1-wire driver"
-+	depends on SERIAL_DEV_BUS
-+	help
-+	  Say Y here if you want to communicate with your 1-wire devices using
-+	  UART interface.
-+
-+	  This support is also available as a module.  If so, the module
-+	  will be called w1-uart.
-+
- endmenu
- 
-diff --git a/drivers/w1/masters/Makefile b/drivers/w1/masters/Makefile
-index 6c5a21f9b88c..227f80987e69 100644
---- a/drivers/w1/masters/Makefile
-+++ b/drivers/w1/masters/Makefile
-@@ -12,3 +12,4 @@ obj-$(CONFIG_W1_MASTER_MXC)		+= mxc_w1.o
- obj-$(CONFIG_W1_MASTER_GPIO)		+= w1-gpio.o
- obj-$(CONFIG_HDQ_MASTER_OMAP)		+= omap_hdq.o
- obj-$(CONFIG_W1_MASTER_SGI)		+= sgi_w1.o
-+obj-$(CONFIG_W1_MASTER_UART)		+= w1-uart.o
-diff --git a/drivers/w1/masters/w1-uart.c b/drivers/w1/masters/w1-uart.c
-new file mode 100644
-index 000000000000..e3a1f97e2a4c
---- /dev/null
-+++ b/drivers/w1/masters/w1-uart.c
-@@ -0,0 +1,398 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * w1-uart - UART 1-Wire bus driver
-+ *
-+ * Uses the UART interface (via Serial Device Bus) to create the 1-Wire
-+ * timing patterns. Implements the following 1-Wire master interface:
-+ *
-+ * - reset_bus: requests baud-rate 9600
-+ *
-+ * - touch_bit: requests baud-rate 115200
-+ *
-+ * Author: Christoph Winklhofer <cj.winklhofer@gmail.com>
-+ */
-+
-+#include <linux/completion.h>
-+#include <linux/delay.h>
-+#include <linux/jiffies.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/of.h>
-+#include <linux/serdev.h>
-+#include <linux/w1.h>
-+
-+#define W1_UART_TIMEOUT msecs_to_jiffies(500)
-+
-+/*
-+ * struct w1_uart_config - configuration for 1-Wire operation
-+ *
-+ * @baudrate: baud-rate returned from serdev
-+ * @delay_us: delay to complete a 1-Wire cycle (in us)
-+ * @tx_byte: byte to generate 1-Wire timing pattern
-+ */
-+struct w1_uart_config {
-+	unsigned int baudrate;
-+	unsigned int delay_us;
-+	unsigned char tx_byte;
-+};
-+
-+struct w1_uart_device {
-+	struct serdev_device *serdev;
-+	struct w1_bus_master bus;
-+
-+	struct w1_uart_config cfg_reset;
-+	struct w1_uart_config cfg_touch_0;
-+	struct w1_uart_config cfg_touch_1;
-+
-+	struct completion rx_byte_received;
-+	unsigned char rx_byte;
-+	int rx_err;
-+
-+	struct mutex mutex;
-+};
-+
-+/*
-+ * struct w1_uart_limits - limits for 1-Wire operations
-+ *
-+ * @baudrate: Requested baud-rate to create 1-Wire timing pattern
-+ * @bit_min_us: minimum time for a bit (in us)
-+ * @bit_max_us: maximum time for a bit (in us)
-+ * @sample_us: timespan to sample 1-Wire response
-+ * @cycle_us: duration of the 1-Wire cycle
-+ */
-+struct w1_uart_limits {
-+	unsigned int baudrate;
-+	unsigned int bit_min_us;
-+	unsigned int bit_max_us;
-+	unsigned int sample_us;
-+	unsigned int cycle_us;
-+};
-+
-+static inline unsigned int baud_to_bit_ns(unsigned int baud)
-+{
-+	return 1000000000 / baud;
-+}
-+
-+static inline unsigned int to_ns(unsigned int us)
-+{
-+	return us * 1000;
-+}
-+
-+/*
-+ * Set baud-rate, delay and tx-byte to create a 1-Wire pulse and adapt
-+ * the tx-byte according to the actual baud-rate.
-+ *
-+ * Reject when:
-+ * - time for a bit outside min/max range
-+ * - a 1-Wire response is not detectable for sent byte
-+ */
-+static int w1_uart_set_config(struct serdev_device *serdev,
-+			      const struct w1_uart_limits *limits,
-+			      struct w1_uart_config *w1cfg)
-+{
-+	unsigned int bits_low;
-+	unsigned int bit_ns;
-+	unsigned int low_ns;
-+
-+	w1cfg->baudrate = serdev_device_set_baudrate(serdev, limits->baudrate);
-+	if (w1cfg->baudrate == 0)
-+		return -EINVAL;
-+
-+	/* Compute in nanoseconds for accuracy */
-+	bit_ns = baud_to_bit_ns(w1cfg->baudrate);
-+	bits_low = to_ns(limits->bit_min_us) / bit_ns;
-+	/* start bit is always low */
-+	low_ns = bit_ns * (bits_low + 1);
-+
-+	if (low_ns < to_ns(limits->bit_min_us))
-+		return -EINVAL;
-+
-+	if (low_ns > to_ns(limits->bit_max_us))
-+		return -EINVAL;
-+
-+	/* 1-Wire response detectable for sent byte */
-+	if (limits->sample_us > 0 &&
-+	    bit_ns * 8 < low_ns + to_ns(limits->sample_us))
-+		return -EINVAL;
-+
-+	/* delay to complete 1-Wire cycle, include start and stop-bit */
-+	w1cfg->delay_us = 0;
-+	if (bit_ns * 10 < to_ns(limits->cycle_us))
-+		w1cfg->delay_us =
-+			(to_ns(limits->cycle_us) - bit_ns * 10) / 1000;
-+
-+	/* byte to create 1-Wire pulse */
-+	w1cfg->tx_byte = 0xff << bits_low;
-+
-+	return 0;
-+}
-+
-+/*
-+ * Configuration for reset and presence detect
-+ * - bit_min_us is 480us, add margin and use 485us
-+ * - limits for sample time 60us-75us, use 65us
-+ */
-+static int w1_uart_set_config_reset(struct w1_uart_device *w1dev)
-+{
-+	struct serdev_device *serdev = w1dev->serdev;
-+	struct device_node *np = serdev->dev.of_node;
-+
-+	struct w1_uart_limits limits = { .baudrate = 9600,
-+					 .bit_min_us = 485,
-+					 .bit_max_us = 640,
-+					 .sample_us = 65,
-+					 .cycle_us = 960 };
-+
-+	of_property_read_u32(np, "reset-speed", &limits.baudrate);
-+
-+	return w1_uart_set_config(serdev, &limits, &w1dev->cfg_reset);
-+}
-+
-+/*
-+ * Configuration for write-0 cycle (touch bit 0)
-+ * - bit_min_us is 60us, add margin and use 65us
-+ * - no sampling required, sample_us = 0
-+ */
-+static int w1_uart_set_config_touch_0(struct w1_uart_device *w1dev)
-+{
-+	struct serdev_device *serdev = w1dev->serdev;
-+	struct device_node *np = serdev->dev.of_node;
-+
-+	struct w1_uart_limits limits = { .baudrate = 115200,
-+					 .bit_min_us = 65,
-+					 .bit_max_us = 120,
-+					 .sample_us = 0,
-+					 .cycle_us = 70 };
-+
-+	of_property_read_u32(np, "touch_0-speed", &limits.baudrate);
-+
-+	return w1_uart_set_config(serdev, &limits, &w1dev->cfg_touch_0);
-+}
-+
-+/*
-+ * Configuration for write-1 and read cycle (touch bit 1)
-+ * - bit_min_us is 5us, add margin and use 6us
-+ * - limits for sample time 5us-15us, use 15us
-+ */
-+static int w1_uart_set_config_touch_1(struct w1_uart_device *w1dev)
-+{
-+	struct serdev_device *serdev = w1dev->serdev;
-+	struct device_node *np = serdev->dev.of_node;
-+
-+	struct w1_uart_limits limits = { .baudrate = 115200,
-+					 .bit_min_us = 6,
-+					 .bit_max_us = 15,
-+					 .sample_us = 15,
-+					 .cycle_us = 70 };
-+
-+	of_property_read_u32(np, "touch_1-speed", &limits.baudrate);
-+
-+	return w1_uart_set_config(serdev, &limits, &w1dev->cfg_touch_1);
-+}
-+
-+/*
-+ * Configure and open the serial device
-+ */
-+static int w1_uart_serdev_open(struct w1_uart_device *w1dev)
-+{
-+	struct serdev_device *serdev = w1dev->serdev;
-+	struct device *dev = &serdev->dev;
-+	int ret;
-+
-+	ret = devm_serdev_device_open(dev, serdev);
-+	if (ret < 0)
-+		return ret;
-+
-+	ret = serdev_device_set_parity(serdev, SERDEV_PARITY_NONE);
-+	if (ret < 0) {
-+		dev_err(dev, "set parity failed\n");
-+		return ret;
-+	}
-+
-+	ret = w1_uart_set_config_reset(w1dev);
-+	if (ret < 0) {
-+		dev_err(dev, "config for reset failed\n");
-+		return ret;
-+	}
-+
-+	ret = w1_uart_set_config_touch_0(w1dev);
-+	if (ret < 0) {
-+		dev_err(dev, "config for touch-0 failed\n");
-+		return ret;
-+	}
-+
-+	ret = w1_uart_set_config_touch_1(w1dev);
-+	if (ret < 0) {
-+		dev_err(dev, "config for touch-1 failed\n");
-+		return ret;
-+	}
-+
-+	serdev_device_set_flow_control(serdev, false);
-+
-+	return 0;
-+}
-+
-+/*
-+ * Send one byte (tx_byte) and read one byte (rx_byte) via serdev.
-+ */
-+static int w1_uart_serdev_tx_rx(struct w1_uart_device *w1dev,
-+				const struct w1_uart_config *w1cfg,
-+				unsigned char *rx_byte)
-+{
-+	struct serdev_device *serdev = w1dev->serdev;
-+	int ret;
-+
-+	serdev_device_write_flush(serdev);
-+	serdev_device_set_baudrate(serdev, w1cfg->baudrate);
-+
-+	/* write and immediately read one byte */
-+	reinit_completion(&w1dev->rx_byte_received);
-+	ret = serdev_device_write_buf(serdev, &w1cfg->tx_byte, 1);
-+	if (ret != 1)
-+		return -EIO;
-+	ret = wait_for_completion_interruptible_timeout(
-+		&w1dev->rx_byte_received, W1_UART_TIMEOUT);
-+	if (ret <= 0)
-+		return -EIO;
-+
-+	/* locking could fail during driver remove or when serdev is
-+	 * unexpectedly in the receive callback.
-+	 */
-+	if (!mutex_trylock(&w1dev->mutex))
-+		return -EIO;
-+
-+	ret = w1dev->rx_err;
-+	if (ret == 0)
-+		*rx_byte = w1dev->rx_byte;
-+
-+	if (w1cfg->delay_us > 0)
-+		fsleep(w1cfg->delay_us);
-+
-+	mutex_unlock(&w1dev->mutex);
-+
-+	return ret;
-+}
-+
-+static int w1_uart_serdev_receive_buf(struct serdev_device *serdev,
-+				      const unsigned char *buf, size_t count)
-+{
-+	struct w1_uart_device *w1dev = serdev_device_get_drvdata(serdev);
-+
-+	mutex_lock(&w1dev->mutex);
-+
-+	/* sent a single byte and receive one single byte */
-+	if (count == 1) {
-+		w1dev->rx_byte = buf[0];
-+		w1dev->rx_err = 0;
-+	} else {
-+		w1dev->rx_err = -EIO;
-+	}
-+
-+	mutex_unlock(&w1dev->mutex);
-+	complete(&w1dev->rx_byte_received);
-+
-+	return count;
-+}
-+
-+static const struct serdev_device_ops w1_uart_serdev_ops = {
-+	.receive_buf = w1_uart_serdev_receive_buf,
-+	.write_wakeup = serdev_device_write_wakeup,
-+};
-+
-+/*
-+ * 1-wire reset and presence detect: A present slave will manipulate
-+ * the received byte by pulling the 1-Wire low.
-+ */
-+static u8 w1_uart_reset_bus(void *data)
-+{
-+	struct w1_uart_device *w1dev = data;
-+	const struct w1_uart_config *w1cfg = &w1dev->cfg_reset;
-+	unsigned char val;
-+	int ret;
-+
-+	ret = w1_uart_serdev_tx_rx(w1dev, w1cfg, &val);
-+	if (ret < 0)
-+		return -1;
-+
-+	/* Device present (0) or no device (1) */
-+	return val != w1cfg->tx_byte ? 0 : 1;
-+}
-+
-+/*
-+ * 1-Wire read and write cycle: Only the read-0 manipulates the
-+ * received byte, all others left the line untouched.
-+ */
-+static u8 w1_uart_touch_bit(void *data, u8 bit)
-+{
-+	struct w1_uart_device *w1dev = data;
-+	const struct w1_uart_config *w1cfg = bit ? &w1dev->cfg_touch_1 :
-+						   &w1dev->cfg_touch_0;
-+	unsigned char val;
-+	int ret;
-+
-+	ret = w1_uart_serdev_tx_rx(w1dev, w1cfg, &val);
-+
-+	/* return inactive bus state on error */
-+	if (ret < 0)
-+		return 1;
-+
-+	return val == w1cfg->tx_byte ? 1 : 0;
-+}
-+
-+static int w1_uart_probe(struct serdev_device *serdev)
-+{
-+	struct device *dev = &serdev->dev;
-+	struct w1_uart_device *w1dev;
-+	int ret;
-+
-+	w1dev = devm_kzalloc(dev, sizeof(*w1dev), GFP_KERNEL);
-+	if (!w1dev)
-+		return -ENOMEM;
-+	w1dev->bus.data = w1dev;
-+	w1dev->bus.reset_bus = w1_uart_reset_bus;
-+	w1dev->bus.touch_bit = w1_uart_touch_bit;
-+	w1dev->serdev = serdev;
-+
-+	init_completion(&w1dev->rx_byte_received);
-+	mutex_init(&w1dev->mutex);
-+
-+	ret = w1_uart_serdev_open(w1dev);
-+	if (ret < 0)
-+		return ret;
-+	serdev_device_set_drvdata(serdev, w1dev);
-+	serdev_device_set_client_ops(serdev, &w1_uart_serdev_ops);
-+
-+	return w1_add_master_device(&w1dev->bus);
-+}
-+
-+static void w1_uart_remove(struct serdev_device *serdev)
-+{
-+	struct w1_uart_device *w1dev = serdev_device_get_drvdata(serdev);
-+
-+	mutex_lock(&w1dev->mutex);
-+
-+	w1_remove_master_device(&w1dev->bus);
-+
-+	mutex_unlock(&w1dev->mutex);
-+}
-+
-+static const struct of_device_id w1_uart_of_match[] = {
-+	{ .compatible = "w1-uart" },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(of, w1_uart_of_match);
-+
-+static struct serdev_device_driver w1_uart_driver = {
-+	.driver	= {
-+		.name		= "w1-uart",
-+		.of_match_table = w1_uart_of_match,
-+	},
-+	.probe	= w1_uart_probe,
-+	.remove	= w1_uart_remove,
-+};
-+
-+module_serdev_device_driver(w1_uart_driver);
-+
-+MODULE_DESCRIPTION("UART w1 bus driver");
-+MODULE_AUTHOR("Christoph Winklhofer <cj.winklhofer@gmail.com>");
-+MODULE_LICENSE("GPL");
-
--- 
-2.43.0
+Best regards,
+Krzysztof
 
 
