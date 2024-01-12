@@ -1,174 +1,101 @@
-Return-Path: <linux-serial+bounces-1478-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1483-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1C7082BD5E
-	for <lists+linux-serial@lfdr.de>; Fri, 12 Jan 2024 10:40:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B898382BDF7
+	for <lists+linux-serial@lfdr.de>; Fri, 12 Jan 2024 10:55:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CC9F91C25057
-	for <lists+linux-serial@lfdr.de>; Fri, 12 Jan 2024 09:40:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C639285C26
+	for <lists+linux-serial@lfdr.de>; Fri, 12 Jan 2024 09:55:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07CAF56B79;
-	Fri, 12 Jan 2024 09:40:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D02257861;
+	Fri, 12 Jan 2024 09:53:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WlVKOnSW"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="Fd9Bw38w"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27776168B5;
-	Fri, 12 Jan 2024 09:40:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1705052414; x=1736588414;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=mYZ8szFmxn+ynEuSW/tRuoGiph0TTNr3kjNUdauc12s=;
-  b=WlVKOnSWgY91qw3lIjkeAPJe9c9gnGP9HkRkM6bhU1FqVQ01fvLT0uOA
-   pfnXSEj7rvF/p4MNpfaqoidCyLsmcuOH4b8s0v9TjKtCuyxl3pK/lIHYx
-   cwwUkuBnTrseJgQokEeo+mtkXvJ73x5Ol6MU7ls7rCXLr+DeZT5G2SfRV
-   FsqylqPgXjnRx1cQknHk0AJ5sZDluC74KZMDIBp/2noc/BXFKiHJDQh/H
-   GZ4XGfo80EiOaigNDAVVg/fQ0bbxPtChLk7tKjtFU/BkxwU4hsrYZXZDD
-   5oHf1lBEk+WiWRbpCtR/f0zW+JC2chfUy537R6Anobcn9sNcb4jpV7RG1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="6493353"
-X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="6493353"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 01:40:13 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10950"; a="786283497"
-X-IronPort-AV: E=Sophos;i="6.04,189,1695711600"; 
-   d="scan'208";a="786283497"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.246.33.141])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2024 01:40:08 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 12 Jan 2024 11:40:04 +0200 (EET)
-To: John Ogness <john.ogness@linutronix.de>
-cc: Gui-Dong Han <2045gemini@gmail.com>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Jiri Slaby <jirislaby@kernel.org>, Tony Lindgren <tony@atomide.com>, 
-    l.sanfilippo@kunbus.com, tglx@linutronix.de, 
-    Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-    LKML <linux-kernel@vger.kernel.org>, 
-    linux-serial <linux-serial@vger.kernel.org>, baijiaju1990@outlook.com, 
-    stable@vger.kernel.org
-Subject: Re: [PATCH] serial: core: Fix atomicity violation in uart_tiocmget
-In-Reply-To: <87msta7vbe.fsf@jogness.linutronix.de>
-Message-ID: <4a52df23-71c3-59c7-fee4-e7cde526d249@linux.intel.com>
-References: <20240112075732.16730-1-2045gemini@gmail.com> <87msta7vbe.fsf@jogness.linutronix.de>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66B245FEE9;
+	Fri, 12 Jan 2024 09:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.17.1.24/8.17.1.24) with ESMTP id 40C8bHhU007737;
+	Fri, 12 Jan 2024 10:53:24 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	from:to:cc:subject:date:message-id:mime-version
+	:content-transfer-encoding:content-type; s=selector1; bh=o+HB9MM
+	1kq6YyqCwu/Y2zli6EEym4Kd+0JVjoN0IbRo=; b=Fd9Bw38w+ixsNKMfkhmHgB8
+	ucmEcU5fcjEiqTKOOOBNZvxQP3hsWM9nQOAV0uirntTUEA/b+wZFNMeRBg7Tk6a4
+	zV41nEjKwAEGAW0E9weI3LyHzb/hYVsCaPbg4yOYpSzA4MkKxSqVdvyM3BFYghin
+	4DQAc5xBHcPYYSfTSN7DbNPr59y/6txdVh6t09fX4kBDiolJxTNE1YAs4JQQhuf7
+	CpNFMYUzBxAYpwww8R+nX0MhFjnnueSvvVNjj3StJAG+IunIHtrVH7KGR4UTQwk1
+	s/Cw2UJ0WDP2wGROrfwKY5vP25Dudp3qeHo1HQJmR/Re2u4FZTFz5QB3sNJrUcA=
+	=
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3vk22v8bed-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 12 Jan 2024 10:53:24 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id C5BA410002A;
+	Fri, 12 Jan 2024 10:53:23 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 64641208D4E;
+	Fri, 12 Jan 2024 10:53:23 +0100 (CET)
+Received: from localhost (10.201.21.102) by SHFDAG1NODE1.st.com (10.75.129.69)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.27; Fri, 12 Jan
+ 2024 10:53:23 +0100
+From: Valentin Caron <valentin.caron@foss.st.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby
+	<jirislaby@kernel.org>
+CC: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Valentin Caron
+	<valentin.caron@foss.st.com>
+Subject: [PATCH v2 0/4] serial: stm32: improve driver for stm32mp25
+Date: Fri, 12 Jan 2024 10:52:56 +0100
+Message-ID: <20240112095300.2004878-1-valentin.caron@foss.st.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: EQNCAS1NODE4.st.com (10.75.129.82) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.997,Hydra:6.0.619,FMLib:17.11.176.26
+ definitions=2024-01-05_08,2024-01-05_01,2023-05-22_02
 
-On Fri, 12 Jan 2024, John Ogness wrote:
+STM32MP25 got the same serial hardware block as STM32MP1x but with two improvements:
+ - TX and RX FIFO have been extended to 64 bytes.
+ - one instance more than in STM32MP1x series.
+ 
+Since v1:
+ - Correct include issue reported by kernel test robot:
+   https://lore.kernel.org/oe-kbuild-all/202401121426.pnTJrQes-lkp@intel.com/
 
-> On 2024-01-12, Gui-Dong Han <2045gemini@gmail.com> wrote:
-> > In uart_tiocmget():
-> >     result = uport->mctrl;
-> >     uart_port_lock_irq(uport);
-> >     result |= uport->ops->get_mctrl(uport);
-> >     uart_port_unlock_irq(uport);
-> >     ...
-> >     return result;
-> >
-> > In uart_update_mctrl():
-> >     uart_port_lock_irqsave(port, &flags);
-> >     ...
-> >     port->mctrl = (old & ~clear) | set;
-> >     ...
-> >     uart_port_unlock_irqrestore(port, flags);
-> >
-> > An atomicity violation is identified due to the concurrent execution of
-> > uart_tiocmget() and uart_update_mctrl(). After assigning
-> > result = uport->mctrl, the mctrl value may change in uart_update_mctrl(),
-> > leading to a mismatch between the value returned by
-> > uport->ops->get_mctrl(uport) and the mctrl value previously read.
-> > This can result in uart_tiocmget() returning an incorrect value.
-> >
-> > This possible bug is found by an experimental static analysis tool
-> > developed by our team, BassCheck[1]. This tool analyzes the locking APIs
-> > to extract function pairs that can be concurrently executed, and then
-> > analyzes the instructions in the paired functions to identify possible
-> > concurrency bugs including data races and atomicity violations. The above
-> > possible bug is reported when our tool analyzes the source code of
-> > Linux 5.17.
-> >
-> > To address this issue, it is suggested to move the line
-> > result = uport->mctrl inside the uart_port_lock block to ensure atomicity
-> > and prevent the mctrl value from being altered during the execution of
-> > uart_tiocmget(). With this patch applied, our tool no longer reports the
-> > bug, with the kernel configuration allyesconfig for x86_64. Due to the
-> > absence of the requisite hardware, we are unable to conduct runtime
-> > testing of the patch. Therefore, our verification is solely based on code
-> > logic analysis.
-> >
-> > [1] https://sites.google.com/view/basscheck/
-> >
-> > Fixes: 559c7ff4e324 ("serial: core: Use port lock wrappers")
-> 
-> It fixes c5f4644e6c8b ("[PATCH] Serial: Adjust serial locking").
+Valentin Caron (4):
+  serial: stm32: implement prescaler tuning to compute low baudrate
+  serial: stm32: extend max number of U(S)ART to 9
+  serial: stm32: change register's offset type from u8 to u16
+  serial: stm32: get FIFO size from hwcfg register
 
-That commit only extracted the locks from ->get_mctrl() into the caller
-but this assignment was outside both pre and post that commit (the issue 
-goes all the way back into history.git domain into 33c0d1b0c3eb ("[PATCH] 
-Serial driver stuff") which introduced ->mctrl).
+ drivers/tty/serial/stm32-usart.c | 223 +++++++++++++++++++------------
+ drivers/tty/serial/stm32-usart.h |  38 ++++--
+ 2 files changed, 160 insertions(+), 101 deletions(-)
 
 -- 
- i.
+2.25.1
 
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Gui-Dong Han <2045gemini@gmail.com>
-> > ---
-> >  drivers/tty/serial/serial_core.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-> > index 80085b151b34..a9e39416d877 100644
-> > --- a/drivers/tty/serial/serial_core.c
-> > +++ b/drivers/tty/serial/serial_core.c
-> > @@ -1085,8 +1085,8 @@ static int uart_tiocmget(struct tty_struct *tty)
-> >  		goto out;
-> >  
-> >  	if (!tty_io_error(tty)) {
-> > -		result = uport->mctrl;
-> >  		uart_port_lock_irq(uport);
-> > +		result = uport->mctrl;
-> >  		result |= uport->ops->get_mctrl(uport);
-> >  		uart_port_unlock_irq(uport);
-> >  	}
-> 
-> Looking over the RMW accesses to @mctrl, I expect you will also need
-> this hunk:
-> 
-> @@ -2242,6 +2242,7 @@ uart_set_options(struct uart_port *port, struct console *co,
->  {
->  	struct ktermios termios;
->  	static struct ktermios dummy;
-> +	unsigned long flags;
->  
->  	/*
->  	 * Ensure that the serial-console lock is initialised early.
-> @@ -2279,7 +2280,9 @@ uart_set_options(struct uart_port *port, struct console *co,
->  	 * some uarts on other side don't support no flow control.
->  	 * So we set * DTR in host uart to make them happy
->  	 */
-> +	uart_port_lock_irqsave(port, &flags);
->  	port->mctrl |= TIOCM_DTR;
-> +	uart_port_unlock_irqrestore(port, flags);
->  
->  	port->ops->set_termios(port, &termios, &dummy);
->  	/*
-> 
-> FWIW,
-> Reviewed-by: John Ogness <john.ogness@linutronix.de>
-> 
 
