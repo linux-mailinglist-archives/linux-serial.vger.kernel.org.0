@@ -1,112 +1,105 @@
-Return-Path: <linux-serial+bounces-1639-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1641-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54462830F6A
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 23:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C234830F75
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 23:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 871D91C20D63
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 22:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBC3B28402E
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 22:45:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF2B42233E;
-	Wed, 17 Jan 2024 22:39:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BF11E880;
+	Wed, 17 Jan 2024 22:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="gR3G3VJ9"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="q5Nbd6aX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ZlD9+QEh"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 518D22E633;
-	Wed, 17 Jan 2024 22:39:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A96BF1E876;
+	Wed, 17 Jan 2024 22:44:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705531171; cv=none; b=QDD5uWIup1FkGbR7s5VISgGTk1OqyEhiS7vOkIHVJjUcqg4x6SUxU8U8sotccbm6xGxi5SLceBDKEtYkusTI3iWl1d2318u/OqtvPCrLMzRS+RoXbFrjFR7p0inwW6rpI1DTRDlDtlPMdXA/lHt2ziOlL8R+dfMxDYjzObwB14c=
+	t=1705531499; cv=none; b=JYEwBP6QeqUmIUjxoK144hYihFcHWt+7pnODgwWmGX+/KSzVsBckswgF294OpFaU2qp5hX1VhCbTy+ye/X94ZCqV4XThqe8SLxDM0+9f8F1Q1CsUHBeN4OuTsAhoN4UlHaiISFqsNYGSNQvRgpcC20W04UfQJVy5Ymqap1A6p5k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705531171; c=relaxed/simple;
-	bh=5aICcOZyaayWIUmbH/6Oxr/IUXVaWYS9/HKo5O+lCto=;
-	h=DKIM-Signature:Received:From:To:Cc:Date:Message-Id:X-Mailer:
-	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
-	 X-SA-Exim-Connect-IP:X-SA-Exim-Mail-From:X-Spam-Checker-Version:
-	 X-Spam-Level:X-Spam-Report:X-Spam-Status:Subject:X-SA-Exim-Version:
-	 X-SA-Exim-Scanned; b=U7c6zxfQVm+PMlEuhvtsQPjw/Zmmg7j3hOzZXKQrvfeWP+qzHO32O6kgM+dAHs4LW3cv27UO2smLKYnZvrXkZsySaQKLW/mOE3rBOAbu48ybKHLXuvVNA71AE5tUQ12zVVDU1UhNb6WOenfArhCffgdwtWvlE6bMU1JPXISt0Dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=gR3G3VJ9; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-	:From:subject:date:message-id:reply-to;
-	bh=Hx3kobHn4ye5X7TpjEYfMsc8kGxalIHKSpKr2v/vlaw=; b=gR3G3VJ9cDrbNI/ERH3kqSQ5rU
-	WCnuTyBGqWwRkhOeKGWytM2rU8EBgjXMPtAvZKy2GnTEGPY4Yn7cZLdCwiGnE59erm1me3RHxTiFM
-	h0l79A8jFaJ6dZPTXoSHn97YFSd5LgAhGRHG4JY+sApiK+HRttlNiRBPuG2DZMvCoF4A=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52924 helo=pettiford.lan)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1rQEZC-000155-ME; Wed, 17 Jan 2024 17:39:27 -0500
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	cosmin.tanislav@analog.com,
-	andy.shevchenko@gmail.com,
-	shc_work@mail.ru
-Cc: linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	hugo@hugovil.com,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Date: Wed, 17 Jan 2024 17:38:56 -0500
-Message-Id: <20240117223856.2303475-19-hugo@hugovil.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240117223856.2303475-1-hugo@hugovil.com>
-References: <20240117223856.2303475-1-hugo@hugovil.com>
+	s=arc-20240116; t=1705531499; c=relaxed/simple;
+	bh=uo9ksenHf0PRrhzd7uNRhqtbQ/m5PRRiiMD8IzDJaPY=;
+	h=From:DKIM-Signature:DKIM-Signature:To:Cc:Subject:In-Reply-To:
+	 References:Date:Message-ID:MIME-Version:Content-Type; b=tgyHj9nn10FZk7Py2E5QvtN7l8JU6SVTioJXhOazkjpQ+bjHEExWSJIwnDBzG64meKRsipI68d5EuhSwPTGdVCrXKbbfMbnvWXN7v27GOTEx5lm/amEJ3yWA2f2eekMk/H3P19JGfotNpCfeO36FEAyl/hGyxnDilun2G3acwis=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=q5Nbd6aX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ZlD9+QEh; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1705531495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qr3kH6h7RIJ2sdicFOor/RpNslyEnHGVdaaflfshLS8=;
+	b=q5Nbd6aXGzNzRvYJi6G7PYohHTJzIRgJt6fVzRGuL/rAN9XneZSTUHLlGnQoHO+3kY1ke/
+	V1zNuXWAGM1F84yMFkNT5s/I9PPtt4Mttgl+x9B/T6fF9aIFbDuejchtEsjrVNCm0PRXI3
+	ebmQkASPnedXVAQSF/UQa5PP8N6xy5mzum5wrqVoBGnGjGVZ9dDQ1I24MLNPqIar0yEmjg
+	BSTcORcrhXFtj8o/+f00oyXJ2r/+PSgnhvFbeXFQAoE+YKw9UD8rAchbUqLX6HyaZzqF4w
+	hKKh4RT17T2wW+uQ7PNv2AmKvIxeikysPfbelvVxnX1q3vKWYJRSiUsHL0Mdzg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1705531495;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qr3kH6h7RIJ2sdicFOor/RpNslyEnHGVdaaflfshLS8=;
+	b=ZlD9+QEhrSRD/um4Jdb5QhlmKaLo5cGlqQrsKtY+JOc2OZ2gIt6jQGqv7ylLRv0svjwOSo
+	AYF5s5H0mv2K4QDw==
+To: Leonardo Bras <leobras@redhat.com>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Ilpo
+ =?utf-8?Q?J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, Andy Shevchenko
+ <andriy.shevchenko@linux.intel.com>, Florian Fainelli
+ <f.fainelli@gmail.com>, John Ogness <john.ogness@linutronix.de>, Tony
+ Lindgren <tony@atomide.com>, Marcelo Tosatti <mtosatti@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, Sebastian
+ Andrzej Siewior <bigeasy@linutronix.de>
+Subject: Re: [RESEND RFC PATCH v1 2/2] serial/8250: Avoid getting lock in RT
+ atomic context
+In-Reply-To: <20240116073701.2356171-3-leobras@redhat.com>
+References: <20240116073701.2356171-1-leobras@redhat.com>
+ <20240116073701.2356171-3-leobras@redhat.com>
+Date: Wed, 17 Jan 2024 23:44:55 +0100
+Message-ID: <87r0ifful4.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
-Subject: [PATCH 18/18] serial: max310x: fix indentation
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+Content-Type: text/plain
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Tue, Jan 16 2024 at 04:37, Leonardo Bras wrote:
+> With PREEMPT_RT enabled, a spin_lock_irqsave() becomes a possibly sleeping
+> spin_lock(), without preempt_disable() or irq_disable().
+>
+> This allows a task T1 to get preempted or interrupted while holding the
+> port->lock. If the preempting task T2 need the lock, spin_lock() code
+> will schedule T1 back until it finishes using the lock, and then go back to
+> T2.
+>
+> There is an issue if a T1 holding port->lock is interrupted by an
+> IRQ, and this IRQ handler needs to get port->lock for writting (printk):
+> spin_lock() code will try to reschedule the interrupt handler, which is in
+> atomic context, causing a BUG() for trying to reschedule/sleep in atomic
+> context.
+>
+> So for the case (PREEMPT_RT && in_atomic()) try to get the lock, and if it
+> fails proceed anyway, just like it's done in oops_in_progress case.
 
-Fix indentation and add line after do/while() block.
+That's just blantantly wrong. The locks are really only to be ignored
+for the oops case, but not for regular printk.
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/tty/serial/max310x.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+I assume that this is not against the latest RT kernel as that should
+not have that problem at all.
 
-diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index c7849b92abb0..afe882146639 100644
---- a/drivers/tty/serial/max310x.c
-+++ b/drivers/tty/serial/max310x.c
-@@ -802,6 +802,7 @@ static irqreturn_t max310x_port_irq(struct max310x_port *s, int portno)
- 		if (ists & MAX310X_IRQ_TXEMPTY_BIT)
- 			max310x_start_tx(port);
- 	} while (1);
-+
- 	return res;
- }
- 
-@@ -1598,7 +1599,7 @@ static int max310x_i2c_probe(struct i2c_client *client)
- 		return dev_err_probe(&client->dev, -ENODEV, "Failed to match device\n");
- 
- 	if (client->addr < devtype->slave_addr.min ||
--		client->addr > devtype->slave_addr.max)
-+	    client->addr > devtype->slave_addr.max)
- 		return dev_err_probe(&client->dev, -EINVAL,
- 				     "Slave addr 0x%x outside of range [0x%x, 0x%x]\n",
- 				     client->addr, devtype->slave_addr.min,
--- 
-2.39.2
+Thanks,
 
+        tglx
 
