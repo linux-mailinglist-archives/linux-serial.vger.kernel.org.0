@@ -1,49 +1,49 @@
-Return-Path: <linux-serial+bounces-1622-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1628-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA6C8830F46
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 23:39:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D7501830F52
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 23:40:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 084F21C21BBC
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 22:39:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 75E1F1F265D2
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Jan 2024 22:40:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF9A1E881;
-	Wed, 17 Jan 2024 22:39:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B7FA28DD2;
+	Wed, 17 Jan 2024 22:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="0R/koWjz"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="tpeKgau/"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8451E87E;
-	Wed, 17 Jan 2024 22:39:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC56B22F16;
+	Wed, 17 Jan 2024 22:39:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705531158; cv=none; b=rJdo8l+1S1vfNIPI+dop1QWXUWDP0TdTl4gicDGwAIfcxdCNTPHpJ5ecXI/T8jbo3TPv/SFiEEj4DKPs06JOeF/2jx6acotWIxo66HM46fKJ+8x2pULQr8DNr/rWAw7Dsx8EkoWAjqVxFrvEGY2G3DqCPVURbrDAy8K40s7r0iU=
+	t=1705531160; cv=none; b=djnlvPyLRSwIpADD8bRsYdmBDL/i0ZRpfp6XJ78HFSq1DUgyU0d0gOqF/oDFHeS9w9tB9vYm/Pwwd+gyNvw1QMuIi6FElycPUEsrVA/7up6cAbTpA6r7M7cpdPWX6k4incT3yomKR2miiDbZW/FhOKCWYdmjpBXzQ9InXrYD/xY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705531158; c=relaxed/simple;
-	bh=vy0wdEBit3su56RQHlgDgVvvo7neIJRXuqdIwFymyJ4=;
+	s=arc-20240116; t=1705531160; c=relaxed/simple;
+	bh=6ssH8ZgFTWorVbF7gqdsEz0MZsz0ptGRL0zN8BmmVgw=;
 	h=DKIM-Signature:Received:From:To:Cc:Date:Message-Id:X-Mailer:
 	 In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:
 	 X-SA-Exim-Connect-IP:X-SA-Exim-Mail-From:X-Spam-Checker-Version:
 	 X-Spam-Level:X-Spam-Report:X-Spam-Status:Subject:X-SA-Exim-Version:
-	 X-SA-Exim-Scanned; b=TI/2NjlC/C+uNOyihI/Tssh5KUL+wTBFlWqkhRYEnLoMFB74RiWarIcVUuSGA5lFmqRAuiMPr1V6e/HQmw5X3bO0tKfLhAWZKa9ju1v+uT4+jHACy80WZkRLsO5Z4+Q9Yn0QN+XhmyiiFasPH9jPas/8dCoK3eEFYhTlXFM4EZo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=0R/koWjz; arc=none smtp.client-ip=162.243.120.170
+	 X-SA-Exim-Scanned; b=O6vTgMH6QF3iRw0pZ8STcruXleCyQZLd/mYsgdvaIOzaKeI0miWt4TyWbVZw+0eLCuvVV0GftaxDNjrNo1o/WYK+0YOvC1NZx5eoCynV6ng7sJZnWFpQwzbiMTN5QyEIbSqW6APe95yEPka6AkysnG3Zp3rp/XYpVe6XrSlAkxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=tpeKgau/; arc=none smtp.client-ip=162.243.120.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
 	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
 	:From:subject:date:message-id:reply-to;
-	bh=GFJehYhk/fDFBrjMMskC+wY+GYyn4Kg3SNttyfUxJbM=; b=0R/koWjzs2mNCLnvzoCc12asu7
-	U31h0qkVj2Ai0tPIJ4Ss0WD+H+hozbju9+8EUwdP/ZdTavxMOtN+rumw+XIz6IZUC7pKfsNVsXu5R
-	FcKI0mYDvElrbVTNaQzsTU5/B0vezxwJAKuXwq0sggjyBZQVcsm9M8RQBo+zO9j8Sanc=;
+	bh=ly5SLHQWwB0ldPLnZJ5A1OVYT4ftvTvkUmxN4PJGRSA=; b=tpeKgau/uUiLBUWRTx6gEEIdgo
+	j6WiLtsAowJVwPDptOeEajLpSfYcifH3+7q0sq8Y5LoKQTtP1HwtfzVq+96UHS8pq2DqL83NXb4xB
+	CRdDqEaZlOKAsaYameCFlcPbIxF2epXWPJPuOlIKLDMvwffLTQxAfBhwJSDh2/tDyWhg=;
 Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:52924 helo=pettiford.lan)
 	by mail.hugovil.com with esmtpa (Exim 4.92)
 	(envelope-from <hugo@hugovil.com>)
-	id 1rQEYr-000155-Dt; Wed, 17 Jan 2024 17:39:05 -0500
+	id 1rQEYs-000155-I6; Wed, 17 Jan 2024 17:39:07 -0500
 From: Hugo Villeneuve <hugo@hugovil.com>
 To: gregkh@linuxfoundation.org,
 	jirislaby@kernel.org,
@@ -54,8 +54,8 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	hugo@hugovil.com,
 	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Date: Wed, 17 Jan 2024 17:38:41 -0500
-Message-Id: <20240117223856.2303475-4-hugo@hugovil.com>
+Date: Wed, 17 Jan 2024 17:38:42 -0500
+Message-Id: <20240117223856.2303475-5-hugo@hugovil.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20240117223856.2303475-1-hugo@hugovil.com>
 References: <20240117223856.2303475-1-hugo@hugovil.com>
@@ -72,33 +72,37 @@ X-Spam-Level:
 X-Spam-Report: 
 	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
 	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
-Subject: [PATCH 03/18] serial: max310x: use i2c_get_match_data()
+Subject: [PATCH 04/18] serial: max310x: use spi_get_device_match_data()
 X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
 X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
 From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Use preferred i2c_get_match_data() instead of device_get_match_data()
-to get the driver match data.
+Use preferred spi_get_device_match_data() instead of
+device_get_match_data() and spi_get_device_id() to get the driver match
+data.
 
 Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 ---
- drivers/tty/serial/max310x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/max310x.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
-index 053cf2458264..a051bc773c4b 100644
+index a051bc773c4b..2314ec2afd3f 100644
 --- a/drivers/tty/serial/max310x.c
 +++ b/drivers/tty/serial/max310x.c
-@@ -1608,7 +1608,7 @@ static int max310x_i2c_probe(struct i2c_client *client)
- 	unsigned int i;
- 	u8 port_addr;
+@@ -1514,9 +1514,9 @@ static int max310x_spi_probe(struct spi_device *spi)
+ 	if (ret)
+ 		return ret;
  
--	devtype = device_get_match_data(&client->dev);
-+	devtype = i2c_get_match_data(client);
+-	devtype = device_get_match_data(&spi->dev);
++	devtype = spi_get_device_match_data(spi);
  	if (!devtype)
- 		return dev_err_probe(&client->dev, -ENODEV, "Failed to match device\n");
+-		devtype = (struct max310x_devtype *)spi_get_device_id(spi)->driver_data;
++		return dev_err_probe(&spi->dev, -ENODEV, "Failed to match device\n");
  
+ 	for (i = 0; i < devtype->nr; i++) {
+ 		u8 port_mask = i * 0x20;
 -- 
 2.39.2
 
