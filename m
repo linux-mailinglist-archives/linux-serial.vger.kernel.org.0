@@ -1,71 +1,71 @@
-Return-Path: <linux-serial+bounces-1769-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1768-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E61C8327E4
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:47:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 708AC8327E2
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:46:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F0091F25040
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 10:47:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10B931F25130
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 10:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 847824D59F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3910F4D590;
 	Fri, 19 Jan 2024 10:45:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oFC2hLrK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Wyoq+dIw"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7114CDED
-	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 10:45:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 707AA4D107
+	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 10:45:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705661139; cv=none; b=ghIqmWmXL24M+qEaDC0hGxmQwTeV/jeVunBMDF22aUhy7si6NaTczfbk4MNPRguxiag03scVyvgrpGUJfN9mFpJqf1jOc0jq84eEXGkPapNq8rmFcFzcFdASegmVhV2KYBI24kPzCS15QlQcswY0x1iI9R1iSHQFb0KX6TNekzg=
+	t=1705661139; cv=none; b=CfKEHxIVxNNBThp+bLD5x3TUc6rvdr5QKBK7LO9L/jF2z7eWMMH+zX0p76bCdJxK3xniiOBT+hgy+9icEdiObv1ETijTX7BeLCJQMVDuSRrOg1udL78P4aSDvr7rDKpT3gesVFeiAHg0CIXImxpuAPPbN7WVnI2m2kjEA7VYOvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1705661139; c=relaxed/simple;
-	bh=F0EgC+aY2d9D0s9EMXRvXW6DwtHatOTbMqQA3afuWrY=;
+	bh=ehREIwN8Zk3qCp4noF1X7poNbyaZwIdmBpSJicE3XRE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NCZzhYS6IFWFCtR/KpnWZgx/7sBlfRBe0Dko4NM2Ey8v4dTCT8sk4VS6t/dCIVKnL/R7rl+p/JN5OoV6mBDmBJ17T2SJkbYhCkkSt6flUt58f4BiljNiUEB1BaejFT/a5vaJGZWVUVuGoQqzGxzhQKlKCE3E3DpfxLCZ+hv0STc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oFC2hLrK; arc=none smtp.client-ip=209.85.128.43
+	 MIME-Version; b=ozHu+kKBWEs1BvkU1F/LJ9BqPl0VmYQ93cdwo/8xuBH2CHTDSJDP9CeF9H4dHsyTY8RbHuxVoR/kYVXNraDLGSeIrtvimrpB22ZbpnbD81Pvg+w3oKpPC9in0q4UQQo04X8dvuZxEsSotz1+2k5lBjrurS4nI6FoO1LhpD74t30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Wyoq+dIw; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-40e76626170so6697595e9.2
-        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 02:45:36 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-40e884ac5c8so6776305e9.2
+        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 02:45:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1705661135; x=1706265935; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PLdYk7lMN8S67k1ZA1qBwWGzOiN17GG5/kldayDzF2I=;
-        b=oFC2hLrK/NxbSrc4wCO2Ak0JzyrKW9plT1s9ND0tS45YUBraEYF3A56csBdyKlBsWG
-         dNUwGx8PyrwbuhlFQjiUU3A9ClqqhaLMwu+uv8Ltk1dgVnLcHT0bGpmqqnTO0lnTziWI
-         2yLQM7pn21V6lhx30efSPcIUwTktKo684h46WJmgrIvWpFXfRC2DZqFe53RSCJub2e3w
-         pBlvz5QpK78c7WebgtlT3kXhRZA5puwyu8xGYhalRRdqZw313/NMYbX+pY8lv5kbdTJM
-         xRBerLKZjWqi6W6J9X+7bK5uGkAV2ukaAAiLtgvminHSLEQai8R0Ydw/0z9pCIaaRET8
-         Jgug==
+        bh=pIbZuKCi3c1voBLaFczjMA5Q6as8L4OLAkz7Vvuwfes=;
+        b=Wyoq+dIwqDKdVxlvfhOTeKqDLBiRFe+8u+xTNy7anI1LXB9tt+T9h19EpOtJ/EOlcZ
+         otnHAsuMLUYi+ICpEwRkcu1qbJkRZHH8fH+y/e1LVbkuw6/y0MgqGOEImGIABD4j6BEq
+         3+zDskCh1yTouCXPUqghsr8mfYN/gbWHD9MT0Zo+AfsUfqJsOnUI479rIHPdxH2NAtDw
+         YXHVWwFNIYDKhqVB9vMABZPt5o/Xil6SNVrSS/PQY/gYVhaNm9cprWraWgXyMmv/zxHS
+         /ZbBEN5B86aGCqAAOu+zptUT4XCAC3hKSFXWCFQVr80YvnHizzREH6GHGj6z9+JTqYNS
+         ROHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1705661135; x=1706265935;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PLdYk7lMN8S67k1ZA1qBwWGzOiN17GG5/kldayDzF2I=;
-        b=iq9xv5SbkJXDOC8Q2B4c1zxsIqWZtSDHhlI1IcVzSLIMV2TOTSkJtwubSWHvhLkKMz
-         h/NOanDLga85ywsTBaL7aOgyEVh3LowexQ03eOL/1a+B84GgGos/9h33s4QyKDNNn8dp
-         zcILVmVUHIlS3jGyQCA2LR5INrodz2eSUwBNWhSEtXxktVnHZqjwiruiHp+9Lf6/ZwTq
-         dh7Fo2nSUNxzbG8OzTxfisHQNPHZGSdu8ME/b6vghrEBAsennz4tFcmiRTAhJSumOkPw
-         tyWaEyQSn2hA9dAByDnfX1Te+MIVzKgVpi/YTyEHiwAcUIH721FByRW5hxjlzZAIJ2yI
-         UdBA==
-X-Gm-Message-State: AOJu0YxfRU+MnEiB8bwOQGKaHa5GZBz/n4TqhMuAi2VrfmWlB0/FgJ9z
-	Viaahv2T1b/ouFsonlBxjde5PPNbQoyrZ7PMfZSsOnaNZuPdXAmpxYHIwMScaJc=
-X-Google-Smtp-Source: AGHT+IHStpeaJg7czVAXhy1YLg3/cMnP60jBDv2J1qFM0FiGJKfMOtGOvAXTPzU6UR+GGpcxYZaeFg==
-X-Received: by 2002:a05:600c:1d03:b0:40e:8a59:c3a9 with SMTP id l3-20020a05600c1d0300b0040e8a59c3a9mr1568710wms.2.1705661134824;
-        Fri, 19 Jan 2024 02:45:34 -0800 (PST)
+        bh=pIbZuKCi3c1voBLaFczjMA5Q6as8L4OLAkz7Vvuwfes=;
+        b=HaMdhytHtc3YyjW3DKnE2t7pAMaEvNR+UfgFgwh/XeYfbuXdib02iSUV0EdNgUpFtI
+         E7Rw6r44wuN8Dn/DKgYsdgQ3jejJ0SZiI8uM9mGngEaH7tEAnWmkho5WU5Ov/KWc+/yf
+         L+cU1Pk9HXH3J1Em6FqYdk6qCuvTXxtNnCf2k4tREuZzklBjxfixPgHvmCti5ooyw1ok
+         7Eji4CSNgN/zdyt3LQ0XBQN5lalOyXiVLlXSVa31enVHQNAlro+S6PYUGoKmUDWUVZzw
+         ug9UzhZxrfqQcSs6DZaTjDD9OwtjHLt4v0VPxmhxfDHa9FMa3quyWavMdo7qX+kKBSL5
+         xngQ==
+X-Gm-Message-State: AOJu0YzSQ3Th1lU+qX3WzcH1wMDtWpcp01eKzIMESdyuuF4uPud/O2Nz
+	r7KPYSf0T3hPklaiDq2f3r1Z1su3GFV2A9BnQegOz29xLill4vL+L2m5pBln74o=
+X-Google-Smtp-Source: AGHT+IFLmA7d8ltm4h9XYmmFH/I/kevgVOWIIn/k6BbTcCgt0ohwTpBHM8yPPxHqUedz/2sHd4eFSg==
+X-Received: by 2002:a05:600c:310f:b0:40e:76f4:8cf1 with SMTP id g15-20020a05600c310f00b0040e76f48cf1mr681769wmo.221.1705661135759;
+        Fri, 19 Jan 2024 02:45:35 -0800 (PST)
 Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id fm16-20020a05600c0c1000b0040ea10178f3sm77470wmb.21.2024.01.19.02.45.33
+        by smtp.gmail.com with ESMTPSA id fm16-20020a05600c0c1000b0040ea10178f3sm77470wmb.21.2024.01.19.02.45.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jan 2024 02:45:33 -0800 (PST)
+        Fri, 19 Jan 2024 02:45:35 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: gregkh@linuxfoundation.org,
 	jirislaby@kernel.org,
@@ -84,9 +84,9 @@ Cc: alim.akhtar@samsung.com,
 	semen.protsenko@linaro.org,
 	willmcvicker@google.com,
 	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 06/19] tty: serial: samsung: sort headers alphabetically
-Date: Fri, 19 Jan 2024 10:45:13 +0000
-Message-ID: <20240119104526.1221243-7-tudor.ambarus@linaro.org>
+Subject: [PATCH v2 07/19] tty: serial: samsung: explicitly include <linux/types.h>
+Date: Fri, 19 Jan 2024 10:45:14 +0000
+Message-ID: <20240119104526.1221243-8-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 In-Reply-To: <20240119104526.1221243-1-tudor.ambarus@linaro.org>
 References: <20240119104526.1221243-1-tudor.ambarus@linaro.org>
@@ -98,60 +98,28 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Sorting headers alphabetically helps locating duplicates,
-and makes it easier to figure out where to insert new headers.
+samsung_tty.c uses u32 and relies on <linux/console.h> to include
+<linux/types.h>. Explicitly include <linux/types.h>. We shall aim to
+have the driver self contained.
 
 Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- drivers/tty/serial/samsung_tty.c | 27 ++++++++++++++-------------
- 1 file changed, 14 insertions(+), 13 deletions(-)
+ drivers/tty/serial/samsung_tty.c | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 80b8fcf9e025..bd9064d4efe7 100644
+index bd9064d4efe7..b9b91ff6a1d7 100644
 --- a/drivers/tty/serial/samsung_tty.c
 +++ b/drivers/tty/serial/samsung_tty.c
-@@ -21,26 +21,27 @@
-  * BJD, 04-Nov-2004
-  */
- 
--#include <linux/dmaengine.h>
-+#include <linux/console.h>
-+#include <linux/clk.h>
-+#include <linux/cpufreq.h>
-+#include <linux/delay.h>
- #include <linux/dma-mapping.h>
--#include <linux/slab.h>
-+#include <linux/dmaengine.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/ioport.h>
- #include <linux/math.h>
- #include <linux/module.h>
--#include <linux/ioport.h>
--#include <linux/io.h>
-+#include <linux/of.h>
- #include <linux/platform_device.h>
--#include <linux/init.h>
-+#include <linux/serial.h>
-+#include <linux/serial_core.h>
-+#include <linux/serial_s3c.h>
-+#include <linux/slab.h>
+@@ -41,6 +41,7 @@
  #include <linux/sysrq.h>
--#include <linux/console.h>
  #include <linux/tty.h>
  #include <linux/tty_flip.h>
--#include <linux/serial_core.h>
--#include <linux/serial.h>
--#include <linux/serial_s3c.h>
--#include <linux/delay.h>
--#include <linux/clk.h>
--#include <linux/cpufreq.h>
--#include <linux/of.h>
-+
++#include <linux/types.h>
+ 
  #include <asm/irq.h>
  
- /* UART name and device definitions */
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
