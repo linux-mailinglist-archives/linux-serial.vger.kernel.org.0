@@ -1,119 +1,114 @@
-Return-Path: <linux-serial+bounces-1787-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1789-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DDAE8328E3
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 12:36:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DF55832900
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 12:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 071E1284223
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:36:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B3981B22FDC
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:41:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8F7B4EB23;
-	Fri, 19 Jan 2024 11:35:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 419BB4EB27;
+	Fri, 19 Jan 2024 11:41:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="mbi9StrE"
+	dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b="ALZNMtop"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-il1-f176.google.com (mail-il1-f176.google.com [209.85.166.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD584F88D
-	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 11:35:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.176
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 169933C460
+	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 11:41:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.254.6.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705664131; cv=none; b=mJJyAeo9E+XYonPdWNTxS3IeLeC3Tsjb31P4zyQjqVOQnD1oTI/7xS8UdbVYEZJSnD2vsOKc/cdYQeZZ+IK8G9WeSU+hYcz/efQk2Z4JTaWgOKpWrQdEXZgfOVQ/j2UPj6Ft8ZCJNLLO8DzEV6SzE4lLR43a1S8lwMCmHZjtT6Q=
+	t=1705664474; cv=none; b=Q1lSrApLwrXslq0JiLTv1WozXHyJu7Fvkodo72D/BkK0pEHGnq85PeIo01mEQXHNl0htLKJ2b4xZp7pOAfUax2xk4ANf+dmR+yvNdm5bMB69/eZCICQnV4njYqUciNiwLaC2S9wiuORmPr40IE4CZRobSMYdf/YLL7/LD3UdgAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705664131; c=relaxed/simple;
-	bh=fqqDjN66329pa4niMWl6MkhJrFW850wjJ+KnOw48Ihc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dQRTiT8H3f/cAk0Ml4OFt986C+UOnkl13R/v+IDJrPdvPd6RFGTtzPUOCEMqrkY9cqFfy6fscfsUIcj4hHP0V2Eedzrsksdr47oXAEfEcLKtWGwIskKPVQjZZ5gSS3RbyY5jPSsegT8yWXV4GB+CyHCkIPW/s/aJKwJpMrKEnmA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=mbi9StrE; arc=none smtp.client-ip=209.85.166.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
-Received: by mail-il1-f176.google.com with SMTP id e9e14a558f8ab-36091f4d8easo2130295ab.2
-        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 03:35:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1705664129; x=1706268929; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9bsP20n9g/LbbgzyTFqfc2H9X3ZVkLkHm6HS5kmWZpw=;
-        b=mbi9StrENwn6XzzWy1BiKRt2MrZXI0FQNYiBXiqntu4B3GBqLg2ACdEkuni/HKDOh7
-         xeHFb3EQ4WlP3gnlHxkvuLUeAnOPm7oBkcm2mR89JAIeBONVVYYMPaOT1s5m/dIVWmIO
-         pguQv9lZ8KL+hld87j1xwIhhVTu1H6fBpSwC5CqNVHNT4qPb4gbFbihbHt30CbSeU1/K
-         HAhwSrunwR1C6rvad4H0JDq93r6wWQpJ+Bl6Ms0U7xYYR5s2DDyV3FZ54ejnHy26fyuC
-         d+eaaLcjyrkCIMaGGyiuHge4Fc6Vx61+LiM2GzvOnasu+Bt2JbhG3G63Z4dP0jSHW/Gf
-         1Xkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705664129; x=1706268929;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9bsP20n9g/LbbgzyTFqfc2H9X3ZVkLkHm6HS5kmWZpw=;
-        b=VFWWKCbTk9fq5QIm2pSFXyTjuxouIz68AePvOELGub0udX3mPiEE1WnRo/BOezp5id
-         RahjO8VQ8NmdQXpfcTmcK2K7XjkSBBR6OTb5HVOxmfiWdcct8R4PW26WUnmju+n78PHc
-         IiR5HDmgpWTG1JAJsSP7go34Bgv/qab9/qj8pbv5zfHvOlorvO1cQuRPQmAzcW4g+S3U
-         n5gnKscJf4zn9Q9BpZd+Ca/S73Qz5UIWLl0H9fQPPpn6hxBI/x/y2rybjwWKU+ZLd3SY
-         dLAyMGpoUMFaNh1CMZqEjK+cdAZviuu5FetMsjGmMSAS4ePK6spMxmXMjfU7W8FkdIyn
-         Rj4w==
-X-Gm-Message-State: AOJu0YzPC46kY4HqFazHoGt+afNfxZhJmWzwj0sJYmy/awh4PTlQIdZI
-	VK6udL6aGSP2WnEU9cpAMvonDkffUo3WoYLJyqjs7nemYOJdxCLMrcqDQh9a/AE=
-X-Google-Smtp-Source: AGHT+IGm7KnfG4/vcA0JrRBkZfX6RoyXH3aaqdl/Wta7fnqjAcw1zMCsGIqUf/hTovepwm0OqOzh9A==
-X-Received: by 2002:a92:7310:0:b0:360:973b:844b with SMTP id o16-20020a927310000000b00360973b844bmr2368211ilc.11.1705664129602;
-        Fri, 19 Jan 2024 03:35:29 -0800 (PST)
-Received: from anup-ubuntu-vm.localdomain ([103.97.165.210])
-        by smtp.gmail.com with ESMTPSA id a5-20020a92a305000000b0036062f40c51sm5347302ili.71.2024.01.19.03.35.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jan 2024 03:35:29 -0800 (PST)
-From: Anup Patel <apatel@ventanamicro.com>
-To: Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Cc: Conor Dooley <conor@kernel.org>,
-	Andrew Jones <ajones@ventanamicro.com>,
-	linux-riscv@lists.infradead.org,
-	linux-serial@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-kernel@vger.kernel.org,
-	Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v6 5/5] RISC-V: Enable SBI based earlycon support
-Date: Fri, 19 Jan 2024 17:04:49 +0530
-Message-Id: <20240119113449.492152-6-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240119113449.492152-1-apatel@ventanamicro.com>
-References: <20240119113449.492152-1-apatel@ventanamicro.com>
+	s=arc-20240116; t=1705664474; c=relaxed/simple;
+	bh=Pjg+YILiLLoxV/S0pONXGEBLlg7JZww5FyMFng+r+20=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cH+bw5e6G8/cRw4m8LbOXTD7US4/qXkfw+kamWWiJ7LFefvPWGnt28OEhGPTXZnv2kzbrqFq4Ly8TAVWxctU6J4po/TA5aDxcjStQotDWLo8OTvtJqntayLHwLB8oqjsD6JvV4FwL3HGbDWKjqveY0eTsD1eoaeF3Iw7rB4CQro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com; spf=pass smtp.mailfrom=dh-electronics.com; dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b=ALZNMtop; arc=none smtp.client-ip=178.254.6.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dh-electronics.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+	s=dhelectronicscom; t=1705664436;
+	bh=7myNZ3RCwcag+XwWnSm1WHpr+kXN5+I3yuwLlfOLSws=;
+	h=From:To:CC:Subject:Date:From;
+	b=ALZNMtopR2X8qc3C7Ffonr54ZyT/Yqr3iZpEbbSQ/VYuUHLt/qx/waPqO6exC0lVr
+	 Ir7DJKmfateOHbSX9DOSNoXXugnJWNEcB6q/MMNCTwcHEch1eu9o/pWVgJiJmfnQJA
+	 u7eAT1KQw5dUzpRBn1bipm7GhIBYCrXHXKQWQMVIfj4iKZBl5daMy2SKzvdvpa3Ml+
+	 nxgMCdpqwHnu0vzE7ktMm0JnwExAaBNBbCpH33B+Fzz+8co0hLeYoOyeX4nZ/z9atA
+	 okgWW+ZB5YrWYzIZe5HIzhw13YZHvNJkZ1/GV26PmrUs8ejIvuoSQX3Id+huAk+mKK
+	 yqwVTCglMrf1Q==
+From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To: <linux-serial@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>
+CC: Christoph Niedermaier <cniedermaier@dh-electronics.com>, "Greg
+ Kroah-Hartman" <gregkh@linuxfoundation.org>, Crescent CY Hsieh
+	<crescentcy.hsieh@moxa.com>, Jiri Slaby <jirislaby@kernel.org>, Lukas Wunner
+	<lukas@wunner.de>, Lino Sanfilippo <l.sanfilippo@kunbus.com>, Hugo Villeneuve
+	<hugo@hugovil.com>
+Subject: [PATCH V3] tty: serial: Fix bit order in RS485 flag definitions
+Date: Fri, 19 Jan 2024 12:35:16 +0100
+Message-ID: <20240119113516.2944-1-cniedermaier@dh-electronics.com>
+X-klartext: yes
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Let us enable SBI based earlycon support in defconfig for both RV32
-and RV64 so that "earlycon=sbi" can be used again.
+Since the commit 93f3350c46fa ("RS485: fix inconsistencies in the
+meaning of some variables"), the definition for bit 3 has been removed.
+But with the switch to bit shift macros in commit 76ac8e29855b ("tty:
+serial: Cleanup the bit shift with macro"), this gap wasn't preserved.
+To avoid a break in user/kernel api of the system skip bit 3 again and
+add a placeholder comment.
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+Fixes: 76ac8e29855b ("tty: serial: Cleanup the bit shift with macro")
+Fixes: 6056f20f27e9 ("tty: serial: Add RS422 flag to struct serial_rs485")
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Crescent CY Hsieh <crescentcy.hsieh@moxa.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Lukas Wunner <lukas@wunner.de>
+Cc: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+Cc: Hugo Villeneuve <hugo@hugovil.com>
 ---
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+V2: - Fix typo
+    - Add Fixes tags
+V3: - Add Reviewed-by tag
+    - Remove triple dash after the last Fixes tag
+    - Remove all "To:"s after "Cc:"
+---
+ include/uapi/linux/serial.h | 13 +++++++------
+ 1 file changed, 7 insertions(+), 6 deletions(-)
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index 905881282a7c..eaf34e871e30 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -149,6 +149,7 @@ CONFIG_SERIAL_8250_CONSOLE=y
- CONFIG_SERIAL_8250_DW=y
- CONFIG_SERIAL_OF_PLATFORM=y
- CONFIG_SERIAL_SH_SCI=y
-+CONFIG_SERIAL_EARLYCON_RISCV_SBI=y
- CONFIG_VIRTIO_CONSOLE=y
- CONFIG_HW_RANDOM=y
- CONFIG_HW_RANDOM_VIRTIO=y
+diff --git a/include/uapi/linux/serial.h b/include/uapi/linux/serial.h
+index 9086367db043..de9b4733607e 100644
+--- a/include/uapi/linux/serial.h
++++ b/include/uapi/linux/serial.h
+@@ -145,12 +145,13 @@ struct serial_rs485 {
+ #define SER_RS485_ENABLED		_BITUL(0)
+ #define SER_RS485_RTS_ON_SEND		_BITUL(1)
+ #define SER_RS485_RTS_AFTER_SEND	_BITUL(2)
+-#define SER_RS485_RX_DURING_TX		_BITUL(3)
+-#define SER_RS485_TERMINATE_BUS		_BITUL(4)
+-#define SER_RS485_ADDRB			_BITUL(5)
+-#define SER_RS485_ADDR_RECV		_BITUL(6)
+-#define SER_RS485_ADDR_DEST		_BITUL(7)
+-#define SER_RS485_MODE_RS422		_BITUL(8)
++/* Placeholder for bit 3: SER_RS485_RTS_BEFORE_SEND, which isn't used anymore */
++#define SER_RS485_RX_DURING_TX		_BITUL(4)
++#define SER_RS485_TERMINATE_BUS		_BITUL(5)
++#define SER_RS485_ADDRB			_BITUL(6)
++#define SER_RS485_ADDR_RECV		_BITUL(7)
++#define SER_RS485_ADDR_DEST		_BITUL(8)
++#define SER_RS485_MODE_RS422		_BITUL(9)
+ 
+ 	__u32	delay_rts_before_send;
+ 	__u32	delay_rts_after_send;
 -- 
-2.34.1
+2.11.0
 
 
