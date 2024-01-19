@@ -1,71 +1,71 @@
-Return-Path: <linux-serial+bounces-1779-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1781-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04185832810
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:49:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56256832816
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:50:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 28CA91C22E45
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 10:49:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE42B1F25040
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 10:50:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E45A5103F;
-	Fri, 19 Jan 2024 10:45:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE405524B3;
+	Fri, 19 Jan 2024 10:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="si/6tQey"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="U1SbTumB"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E092D4C62C
-	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 10:45:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2915651026
+	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 10:45:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705661149; cv=none; b=cUsNfs8Bj+0TErMhBc4GdK6a3ibRkpJcp8s/xGGnkkwEaQzGhB34hdymmJ3P0hCffXCZYmg5EKDm4Z4mYLDmH1mb5TTst8sFG/wopBByxuxXSRikYhZc5BXSSez/hb+WvNWuFd30RCo89GCL8izWBa08x/FCNAG43a6a4OCwq14=
+	t=1705661150; cv=none; b=cXrkd7UjeXPv2iSBvVLjknSqzNK8wmMfgR/+K+Td3VzUdZXMNs2QiElRAw250p8P/VIQmAYPuvzdO8LjrOhOVaVqUS5sYqbfadagvoFXZatELKJ2HJqhP9k4pVFq35zd7zPVJX66Lp5ZiPhp66nLFaXPMVu2+3S+9o8lF8n2Phk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705661149; c=relaxed/simple;
-	bh=0rvm+ZfAvB34/Bb8MmtN/eXQ/wWDxr8HdRasaolA49E=;
+	s=arc-20240116; t=1705661150; c=relaxed/simple;
+	bh=YE3UMIIxQ6MMF0Ha1oOA8mHquJPAns0Jxr3xCN4fzZE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kwi9zcqcXGTRGRXw+lWZz0R83BdSWkmCCkcpRysCB0PZYqGORFXRX2oMwXAVwnl+Qjbewhkt95HsLHf+FTkQE8+1fHmJBp5ltQDttkmbmSmXAVfJS1H4jprlkQ9q4bBOr7bAdoQNOiSg/uhBweF5Bw9qYSpnTikNZbolKGd1I+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=si/6tQey; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version; b=CrxYZbpIQsnuWX/t5yhnn0SFms97md/DFIa1mLBEc3pAK16UNt5Nu7L9A0NTfcBhbPIthAY2Djqy/JoMNPKQo+ZF6zk7AaOinP8RIwI/7gqsvC8Os7WM5dvkA3txo0wczv7cJ/4mZ+FyqyUzjdHBh+xmS7341xHBxyMDZuflhgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=U1SbTumB; arc=none smtp.client-ip=209.85.167.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-40e9ef9853bso1969825e9.1
-        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 02:45:47 -0800 (PST)
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-50eaabc36bcso687718e87.2
+        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 02:45:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1705661146; x=1706265946; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1705661147; x=1706265947; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ecEUv9cB/C4rgpKZf48XubyCx93neS07LHrZaWe0W9s=;
-        b=si/6tQeyPq6LIimqvEt8VzUpZuHxFU85yfnK+W3rx6Rrk3rhvxg2NQ+BWjGZhdeBHO
-         foZfEoTHuad9Plp48UYuJryDZjyrAFOBLQuFL3GZrr3kv6AJyMUe9a/BWBffWOIXPWNY
-         nY6XXayP0SQLe5CP6wX1wx2BJy/qrz2v8Z2XRcIxz7CrcwNWhzfWU6jFZmys/v2pPCze
-         poeBzNeJjjHS5FAAoC3ekwjm2BC7EXOzyCogqj6GqqQ56R2Mq4Rzl0I1DPzZvN2Ft1Ol
-         q8wd2Lg+KF8MEfixrMag5ntOAqrtcmTesf6XMBtAb10dhk+GubO4x8XWVSGWKVUNdY4x
-         Pr/A==
+        bh=Dam+ysOKHmekRdWT+0A8uvWFAbklzxZhnxZqNV/mEds=;
+        b=U1SbTumBsQaZprp5gtw2jAVt25pZXzWQkZhBYeAiFS9Y/hVHuZ8ttXt+Z+meR+woTb
+         tOWgh1MuYenKQOXbNDD8uRId6Is7GAj58i+p213rVhqgsYUmnbtm9+fvAp4UsrKnFMPK
+         PJrHHdE4u04OInVtpu3T4Pb8T6z3lfiQXDPKLk9UkA+mv4agyWNIyci8LFHeBsHZAXvk
+         Pk5Rs9GTwIqyqAd2FmgokeGLUpqm48R6oRma1IBODWvdsEbczcxGTwxz6JjBJuWUyI/H
+         YTPMiJG3dP0cBGtP/OBtGTD62ghlpJtfnHkmdmNcwEZvJrNiIWADnPQBB9zIf6y/t/qZ
+         i3fw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1705661146; x=1706265946;
+        d=1e100.net; s=20230601; t=1705661147; x=1706265947;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ecEUv9cB/C4rgpKZf48XubyCx93neS07LHrZaWe0W9s=;
-        b=KEGDDl6buMnwdc2VbiNmxPTms4mXpP/YOVSVUN0bbn2IzDNnuncBjVDBYddwL+3VZK
-         f3v/IOmkSydeoTCRo49+7gdNDURPxGeYiGIDVD5n2hn9Vaz2U0ZoPP9vUsyJuslf6dKs
-         6/f2AZKaOFVr0T4g6tJ80DT5E0OT0UvrNWWKN7kPPu6jSbt8Fkake1PUF1vRQYa8LxJ2
-         kmvmyXxmFCD7gKszuUL9rEJY6xJOQo4YzyyXHH8fm9CPrECQtMTvG69dxbz8F6cxtOlh
-         xLhMi9ska1VL9NEOUlkjktUFkGWFb1TPmAHKRp2uziDMs6g66PAtgYPwlfCBYD4WgiRB
-         4CmQ==
-X-Gm-Message-State: AOJu0YzffVlv3Ae//UdXrbSE2UbZLbMmtphYCyV+SrWXhyrgfS0xFXG6
-	hvholYywE/zpGuTQy7uJ5W8C2ZUK6pEqOMp3WNnc3MB027UCjrBcExmFMVKUS1E=
-X-Google-Smtp-Source: AGHT+IFYdU7YgMMRHC+DrUKA5MwlIsxGfbocGuG9y6jEGdz2VaUXMw579pgtjEfWCwn+GLZjJgGcDw==
-X-Received: by 2002:a05:600c:6b0e:b0:40e:4ad9:90df with SMTP id jn14-20020a05600c6b0e00b0040e4ad990dfmr428957wmb.158.1705661146233;
-        Fri, 19 Jan 2024 02:45:46 -0800 (PST)
+        bh=Dam+ysOKHmekRdWT+0A8uvWFAbklzxZhnxZqNV/mEds=;
+        b=QQPbauLOkYoGaudsErUmjYm8pBSptvkTKAZOdt/YmSoJailFXb9RqtTgaaLS7653UK
+         0YJRiArAsOQ06dGLmpzVtbdEBpSGVvFsMc71k1cXY9nfb2SxWgc1+dBFi0KLnEcb3Ckq
+         ICCAx+peOb+bTRt+mvlyJXGtbhDMMbwwbVSRzH1K2xAdgH+O7v6MFCBgQBWyZPpFqR11
+         ZZ8pI3cLVhEJlFDJAYuzBgk9tTWLzugHSJ8mtuc9wkpp/CpRxTMjnSfPkm78F5H5cgZC
+         RPdbXrq+qcpy/P9HHI+coZ8oW/4GO1cNvIDAhibCfueFy4Wnt2RKCupEMg6F4Ytcdgws
+         mzag==
+X-Gm-Message-State: AOJu0YwaFd7KZ+DzCEJ7VNXETpqflGwN+5Ucqr2wYrW7B8zk7AACc9xo
+	dSXOvbnBa3MFR1lwzZquHevods14zXk+KH/FBpkB0WyRS4wMxPX3DNdC/xZWV10=
+X-Google-Smtp-Source: AGHT+IGXPpDJDvPliaArYGtaldjiGJwnoOPpIjme4o/zZGILHZV61MCszFmCgh4t0thzE2a5w6utjg==
+X-Received: by 2002:a05:6512:ac2:b0:50e:7b0d:5b66 with SMTP id n2-20020a0565120ac200b0050e7b0d5b66mr742328lfu.73.1705661147229;
+        Fri, 19 Jan 2024 02:45:47 -0800 (PST)
 Received: from ta2.c.googlers.com.com (88.140.78.34.bc.googleusercontent.com. [34.78.140.88])
-        by smtp.gmail.com with ESMTPSA id fm16-20020a05600c0c1000b0040ea10178f3sm77470wmb.21.2024.01.19.02.45.45
+        by smtp.gmail.com with ESMTPSA id fm16-20020a05600c0c1000b0040ea10178f3sm77470wmb.21.2024.01.19.02.45.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 19 Jan 2024 02:45:45 -0800 (PST)
+        Fri, 19 Jan 2024 02:45:46 -0800 (PST)
 From: Tudor Ambarus <tudor.ambarus@linaro.org>
 To: gregkh@linuxfoundation.org,
 	jirislaby@kernel.org,
@@ -84,9 +84,9 @@ Cc: alim.akhtar@samsung.com,
 	semen.protsenko@linaro.org,
 	willmcvicker@google.com,
 	Tudor Ambarus <tudor.ambarus@linaro.org>
-Subject: [PATCH v2 18/19] tty: serial: samsung: change has_divslot type to bool
-Date: Fri, 19 Jan 2024 10:45:25 +0000
-Message-ID: <20240119104526.1221243-19-tudor.ambarus@linaro.org>
+Subject: [PATCH v2 19/19] tty: serial: samsung: shrink memory footprint of ``struct s3c24xx_uart_info``
+Date: Fri, 19 Jan 2024 10:45:26 +0000
+Message-ID: <20240119104526.1221243-20-tudor.ambarus@linaro.org>
 X-Mailer: git-send-email 2.43.0.429.g432eaa2c6b-goog
 In-Reply-To: <20240119104526.1221243-1-tudor.ambarus@linaro.org>
 References: <20240119104526.1221243-1-tudor.ambarus@linaro.org>
@@ -98,76 +98,71 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since the driver was introduced the port features flags never extended.
-As we don't expect more flags soon that would bypass the first
-cacheline of ``struct s3c24xx_uart_info``, change the type of
-``has_divslot`` to bool. Bitfields operations incur performance penalty
-when set or read as compared to direct types.
+Use u32 for the members of ``struct s3c24xx_uart_info`` that are used
+for register interactions. The purpose of these members becomes clearer.
 
+The greater benefit of this change is that it also reduces the memory
+footprint of the struct, allowing 64-bit architectures to use a
+single cacheline for the entire struct.
+
+struct s3c24xx_uart_info {
+	const char  *              name;                 /*     0     8 */
+	enum s3c24xx_port_type     type;                 /*     8     4 */
+	unsigned int               port_type;            /*    12     4 */
+	unsigned int               fifosize;             /*    16     4 */
+	u32                        rx_fifomask;          /*    20     4 */
+	u32                        rx_fifoshift;         /*    24     4 */
+	u32                        rx_fifofull;          /*    28     4 */
+	u32                        tx_fifomask;          /*    32     4 */
+	u32                        tx_fifoshift;         /*    36     4 */
+	u32                        tx_fifofull;          /*    40     4 */
+	u32                        clksel_mask;          /*    44     4 */
+	u32                        clksel_shift;         /*    48     4 */
+	u32                        ucon_mask;            /*    52     4 */
+	u8                         def_clk_sel;          /*    56     1 */
+	u8                         num_clks;             /*    57     1 */
+	u8                         iotype;               /*    58     1 */
+	bool                       has_divslot;          /*    59     1 */
+
+	/* size: 64, cachelines: 1, members: 17 */
+	/* padding: 4 */
+};
+
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
 Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
 ---
- drivers/tty/serial/samsung_tty.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/tty/serial/samsung_tty.c | 18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
 diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index c429029c0207..0a03df44211d 100644
+index 0a03df44211d..fcc675603b14 100644
 --- a/drivers/tty/serial/samsung_tty.c
 +++ b/drivers/tty/serial/samsung_tty.c
-@@ -89,8 +89,7 @@ struct s3c24xx_uart_info {
+@@ -75,15 +75,15 @@ struct s3c24xx_uart_info {
+ 	enum s3c24xx_port_type	type;
+ 	unsigned int		port_type;
+ 	unsigned int		fifosize;
+-	unsigned long		rx_fifomask;
+-	unsigned long		rx_fifoshift;
+-	unsigned long		rx_fifofull;
+-	unsigned long		tx_fifomask;
+-	unsigned long		tx_fifoshift;
+-	unsigned long		tx_fifofull;
+-	unsigned long		clksel_mask;
+-	unsigned long		clksel_shift;
+-	unsigned long		ucon_mask;
++	u32			rx_fifomask;
++	u32			rx_fifoshift;
++	u32			rx_fifofull;
++	u32			tx_fifomask;
++	u32			tx_fifoshift;
++	u32			tx_fifofull;
++	u32			clksel_mask;
++	u32			clksel_shift;
++	u32			ucon_mask;
+ 	u8			def_clk_sel;
+ 	u8			num_clks;
  	u8			iotype;
- 
- 	/* uart port features */
--
--	unsigned int		has_divslot:1;
-+	bool			has_divslot;
- };
- 
- struct s3c24xx_serial_drv_data {
-@@ -2400,7 +2399,7 @@ static const struct s3c24xx_serial_drv_data s3c6400_serial_drv_data = {
- 		.port_type	= PORT_S3C6400,
- 		.iotype		= UPIO_MEM,
- 		.fifosize	= 64,
--		.has_divslot	= 1,
-+		.has_divslot	= true,
- 		.rx_fifomask	= S3C2440_UFSTAT_RXMASK,
- 		.rx_fifoshift	= S3C2440_UFSTAT_RXSHIFT,
- 		.rx_fifofull	= S3C2440_UFSTAT_RXFULL,
-@@ -2429,7 +2428,7 @@ static const struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
- 		.type		= TYPE_S3C6400,
- 		.port_type	= PORT_S3C6400,
- 		.iotype		= UPIO_MEM,
--		.has_divslot	= 1,
-+		.has_divslot	= true,
- 		.rx_fifomask	= S5PV210_UFSTAT_RXMASK,
- 		.rx_fifoshift	= S5PV210_UFSTAT_RXSHIFT,
- 		.rx_fifofull	= S5PV210_UFSTAT_RXFULL,
-@@ -2459,7 +2458,7 @@ static const struct s3c24xx_serial_drv_data s5pv210_serial_drv_data = {
- 		.type		= TYPE_S3C6400,			\
- 		.port_type	= PORT_S3C6400,			\
- 		.iotype		= UPIO_MEM,			\
--		.has_divslot	= 1,				\
-+		.has_divslot	= true,				\
- 		.rx_fifomask	= S5PV210_UFSTAT_RXMASK,	\
- 		.rx_fifoshift	= S5PV210_UFSTAT_RXSHIFT,	\
- 		.rx_fifofull	= S5PV210_UFSTAT_RXFULL,	\
-@@ -2498,7 +2497,7 @@ static const struct s3c24xx_serial_drv_data gs101_serial_drv_data = {
- 		.type		= TYPE_S3C6400,
- 		.port_type	= PORT_S3C6400,
- 		.iotype		= UPIO_MEM32,
--		.has_divslot	= 1,
-+		.has_divslot	= true,
- 		.rx_fifomask	= S5PV210_UFSTAT_RXMASK,
- 		.rx_fifoshift	= S5PV210_UFSTAT_RXSHIFT,
- 		.rx_fifofull	= S5PV210_UFSTAT_RXFULL,
-@@ -2569,7 +2568,7 @@ static const struct s3c24xx_serial_drv_data artpec8_serial_drv_data = {
- 		.port_type	= PORT_S3C6400,
- 		.iotype		= UPIO_MEM,
- 		.fifosize	= 64,
--		.has_divslot	= 1,
-+		.has_divslot	= true,
- 		.rx_fifomask	= S5PV210_UFSTAT_RXMASK,
- 		.rx_fifoshift	= S5PV210_UFSTAT_RXSHIFT,
- 		.rx_fifofull	= S5PV210_UFSTAT_RXFULL,
 -- 
 2.43.0.429.g432eaa2c6b-goog
 
