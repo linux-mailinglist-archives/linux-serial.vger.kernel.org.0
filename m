@@ -1,99 +1,126 @@
-Return-Path: <linux-serial+bounces-1788-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1790-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F4168328FA
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 12:40:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 601F7832CE4
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 17:10:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F7E6B2201B
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 11:40:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1560D282B2A
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jan 2024 16:10:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C61274C617;
-	Fri, 19 Jan 2024 11:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D67B54FB8;
+	Fri, 19 Jan 2024 16:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b="sO/NtG6o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="O0oOBPl1"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 261F63C460
-	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 11:39:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.254.6.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A404654FA8
+	for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 16:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1705664397; cv=none; b=POV0AO4t69vpJbwoaBb4pBxKXMxgvvqIm1etW/odI6/BRLX4AMojk3Q3812FJytctUVlviWQGV4/F++ZR+eYRGqNcTUZpxovN7jQEEm5p8ktDduv+cf+HWjx69NydXwHHg5ljyA7pTyhYXr2R/uYBawGhV4RWB+fCz+R1ekJhHQ=
+	t=1705680616; cv=none; b=TF+0r0PX2Zyuq5y0qWmb+qHv/RWsAaXS05Lx6RDu6V1zzXvFfBeC04ylUB2F1cClNuJ4gIp8tQYZ1+A6bVUUKNhBD0U3MdWlhmYCFCdLHn78NCIbVHEfPgBF91sJoM+kbaK2G/EpRsxJ0DFvncyvdcQJZnrmHjKN5fUN/3aiaNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1705664397; c=relaxed/simple;
-	bh=Lo87nM6WmmJQdASBYl2V6Qa8dqL9TZETmjOGooZcW8Q=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=aRQQrZZ/sG35OAgCB+LOXTD98A8kHU9LoXeKyuLsQmJfxEPtJ2+MmgR40T0safM9belIt6/1kHiRbo97iUfwKGAlxzeJ50zX1Bm79FU5anmwmfaeytUNqDDlg9RZFLjhjmkDsThy/yW9ucGsdQMGlRVt4Y1T2NgtD4vdbJxU4yk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com; spf=pass smtp.mailfrom=dh-electronics.com; dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b=sO/NtG6o; arc=none smtp.client-ip=178.254.6.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dh-electronics.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-	s=dhelectronicscom; t=1705664347;
-	bh=Lo87nM6WmmJQdASBYl2V6Qa8dqL9TZETmjOGooZcW8Q=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=sO/NtG6ounR/LqoqQ1/PML4szw1quwGJGwrlUtRjPGSvoJP+5jKkz6XCzXzCEaAGA
-	 V1DopzgQXueimm54t5LTGYmcj04GWX/cEYQK3pE0MfwzBv4DgJIWRVdi/FyekbHOvY
-	 QhWAbKvXtEIifibFiva4orr0wxc8ji7o/88Q1fbETjZ8nargbVmwQcZvsAHzLpxHsi
-	 1BO4uUZdtj3ecHesglc1ZyglzQgRlKjsgk4/3ARwpfnFKVdcqUszamYrid5CFEG/wI
-	 HVViNF02o4hJueAxjCfA9rMN9mN3k+SU2w8f/dZasO5PQvd1BOMpHDYbHrjUVQSHlx
-	 lQt1t5NW1oo7Q==
-X-secureTransport-forwarded: yes
-From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To: Jiri Slaby <jirislaby@kernel.org>, "linux-serial@vger.kernel.org"
-	<linux-serial@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Crescent CY Hsieh
-	<crescentcy.hsieh@moxa.com>, Lukas Wunner <lukas@wunner.de>, Lino Sanfilippo
-	<l.sanfilippo@kunbus.com>, Hugo Villeneuve <hugo@hugovil.com>
-Subject: RE: [PATCH V2] tty: serial: Fix bit order in RS485 flag definitions
-Thread-Topic: [PATCH V2] tty: serial: Fix bit order in RS485 flag definitions
-Thread-Index: AQHaSiWLX8eQRenJ8EiISLk4GeD6GLDgnn2AgABkuRA=
-Date: Fri, 19 Jan 2024 11:39:05 +0000
-Message-ID: <7d071d183a4d4b67bf9733152a79b69f@dh-electronics.com>
-References: <20240118154624.5340-1-cniedermaier@dh-electronics.com>
- <9cce131b-6f1e-4cb7-9149-5ac8bd3c01da@kernel.org>
-In-Reply-To: <9cce131b-6f1e-4cb7-9149-5ac8bd3c01da@kernel.org>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1705680616; c=relaxed/simple;
+	bh=UIfSZZLrOU6yAjs83tQxP628/v7NNSkU0fQmLwQ5Rgc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TMpw1ocJrXdoMlnsKMhcbYzG3otIxPKnfuJbDkj1lRIFSUpESdVZ8WEwivszfBSeYVitr56Eredew1RQ9OLTaO9n/WuhAUBA4aiOC3/l9JFiT4AM/N5VAGCwI6UB1liZj5DAR7Mm1g79pWeRahyD5Kej8UsWqfIIRGVruQoPFfc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=O0oOBPl1; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-5ce0efd60ddso684724a12.0
+        for <linux-serial@vger.kernel.org>; Fri, 19 Jan 2024 08:10:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1705680614; x=1706285414; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pQCgIpzx27vwofqc1JrDE3mPbm28nF45xDQ2x4EHqYg=;
+        b=O0oOBPl1HnzDOBptxY3mHrILPDDqYYsBbHHthZ4fLPO25Hq+aIGGU3QD289YggeXRU
+         Qh76VBPuqeEnuq6GMQel73FQcOwcaedTz7PMpd7CU9da+CBF+TU9rXGfOanodGmCidOX
+         xjx/FoiJLFWVjn/FeCNyiG5H7i8/8up5L+AA3uRExaCEAmIdF8h+URKlFhMfJ2vB6Dhw
+         k00ObGAJaX+D0ph/ljST6hZ9LgP+07+lWGHmi9iveLxlypIzm07uaWbVncvquipFsLMQ
+         yvvSDn+IbHjHGIOa4CluxTUolyf8GWaMRmINFBeYE54K2ic5tmq+gvrsW+CUKD7XBqGw
+         5QQw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1705680614; x=1706285414;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pQCgIpzx27vwofqc1JrDE3mPbm28nF45xDQ2x4EHqYg=;
+        b=DS1HC3Qbpj0e5D3669p95ZYU+JQv9/IfMDAapMppZHI+ulGmw56AgnHUTZRZIrPsj5
+         YxvaLQNDvJJq61JFLq97uxlaGi/0Zg91jBG7ruvvlc4WTeO95G5SyIiphi20IfSsycpn
+         q76GtoNF214+zmi2QG+agK0ahgbWgdNUpqsgPsZYI53bdJPsD/RpIsijZr9A2df5g9sy
+         k4vhmSTY2Nt2ONmtZhb24u1t1EJezirfCylFK7/FD/Dk5sQB8wknKGcVWyIqoHOyEHJD
+         zOHXmwbJ5gSNajA9TNSiEc6+Ce/p0+fsk8+1DjldckVgvS0iztKFGyNBoJFPzuPG/8D1
+         US5Q==
+X-Gm-Message-State: AOJu0Yz6QvrdLVonAqE/IWO1k3GPVJAGB0WBdol0cPtF6OC3y5X6mjxp
+	ncuX3uPmKzrGIms9PJdjLbsAdEOMcQ6EDMAZwZ5qKxvcvNv3wjajlbGhCVv/kie768gackp43BX
+	ZHbE0nYjcMu6BSj2cYtQWOBjmTctHcLj4xxFtlhJA6fmBVeZ8
+X-Google-Smtp-Source: AGHT+IEiy4VyavSARFTn3SaPOtL6MlCYRRMqM1J8DTeMjjwa3YfuzfgYhlEBz8SnyqE7ELSpye3aSowtoQGWAJ59kBM=
+X-Received: by 2002:a17:90b:124f:b0:290:467b:b7d6 with SMTP id
+ gx15-20020a17090b124f00b00290467bb7d6mr1054946pjb.84.1705680613997; Fri, 19
+ Jan 2024 08:10:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240119104526.1221243-1-tudor.ambarus@linaro.org> <20240119104526.1221243-3-tudor.ambarus@linaro.org>
+In-Reply-To: <20240119104526.1221243-3-tudor.ambarus@linaro.org>
+From: Sam Protsenko <semen.protsenko@linaro.org>
+Date: Fri, 19 Jan 2024 10:10:02 -0600
+Message-ID: <CAPLW+4=GvEZXXzzRj789JmCzLLnQ6cNDLhbF7i6nwiW9x6EGHg@mail.gmail.com>
+Subject: Re: [PATCH v2 02/19] dt-bindings: serial: samsung: do not allow
+ reg-io-width for gs101
+To: Tudor Ambarus <tudor.ambarus@linaro.org>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, robh+dt@kernel.org, 
+	krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, 
+	alim.akhtar@samsung.com, linux-kernel@vger.kernel.org, 
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
+	andre.draszik@linaro.org, kernel-team@android.com, peter.griffin@linaro.org, 
+	willmcvicker@google.com, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-RnJvbTogSmlyaSBTbGFieSBbbWFpbHRvOmppcmlzbGFieUBrZXJuZWwub3JnXQ0KU2VudDogRnJp
-ZGF5LCBKYW51YXJ5IDE5LCAyMDI0IDc6MzYgQU0NCj4gT24gMTguIDAxLiAyNCwgMTY6NDYsIENo
-cmlzdG9waCBOaWVkZXJtYWllciB3cm90ZToNCj4+IFNpbmNlIHRoZSBjb21taXQgOTNmMzM1MGM0
-NmZhICgiUlM0ODU6IGZpeCBpbmNvbnNpc3RlbmNpZXMgaW4gdGhlDQo+PiBtZWFuaW5nIG9mIHNv
-bWUgdmFyaWFibGVzIiksIHRoZSBkZWZpbml0aW9uIGZvciBiaXQgMyBoYXMgYmVlbiByZW1vdmVk
-Lg0KPj4gQnV0IHdpdGggdGhlIHN3aXRjaCB0byBiaXQgc2hpZnQgbWFjcm9zIGluIGNvbW1pdCA3
-NmFjOGUyOTg1NWIgKCJ0dHk6DQo+PiBzZXJpYWw6IENsZWFudXAgdGhlIGJpdCBzaGlmdCB3aXRo
-IG1hY3JvIiksIHRoaXMgZ2FwIHdhc24ndCBwcmVzZXJ2ZWQuDQo+PiBUbyBhdm9pZCBhIGJyZWFr
-IGluIHVzZXIva2VybmVsIGFwaSBvZiB0aGUgc3lzdGVtIHNraXAgYml0IDMgYWdhaW4gYW5kDQo+
-PiBhZGQgYSBwbGFjZWhvbGRlciBjb21tZW50Lg0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IENocmlz
-dG9waCBOaWVkZXJtYWllciA8Y25pZWRlcm1haWVyQGRoLWVsZWN0cm9uaWNzLmNvbT4NCj4+IEZp
-eGVzOiA3NmFjOGUyOTg1NWIgKCJ0dHk6IHNlcmlhbDogQ2xlYW51cCB0aGUgYml0IHNoaWZ0IHdp
-dGggbWFjcm8iKQ0KPj4gRml4ZXM6IDYwNTZmMjBmMjdlOSAoInR0eTogc2VyaWFsOiBBZGQgUlM0
-MjIgZmxhZyB0byBzdHJ1Y3Qgc2VyaWFsX3JzNDg1IikNCj4+IC0tLQ0KPiANCj4gVGhpcyB0cmlw
-bGUgZGFzaCBpcyBzdXBlcmZsdW91cyBhbmQgd2lsbCBsaWtlbHkgYnJlYWsgZ2l0IGFtLg0KDQpP
-Sy4NCiANCj4+IENjOiBHcmVnIEtyb2FoLUhhcnRtYW4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24u
-b3JnPg0KPj4gQ2M6IENyZXNjZW50IENZIEhzaWVoIDxjcmVzY2VudGN5LmhzaWVoQG1veGEuY29t
-Pg0KPj4gQ2M6IEppcmkgU2xhYnkgPGppcmlzbGFieUBrZXJuZWwub3JnPg0KPj4gQ2M6IEx1a2Fz
-IFd1bm5lciA8bHVrYXNAd3VubmVyLmRlPg0KPj4gQ2M6IExpbm8gU2FuZmlsaXBwbyA8bC5zYW5m
-aWxpcHBvQGt1bmJ1cy5jb20+DQo+PiBDYzogSHVnbyBWaWxsZW5ldXZlIDxodWdvQGh1Z292aWwu
-Y29tPg0KPj4gVG86IGxpbnV4LXNlcmlhbEB2Z2VyLmtlcm5lbC5vcmcNCj4+IFRvOiBsaW51eC1h
-cm0ta2VybmVsQGxpc3RzLmluZnJhZGVhZC5vcmcNCj4gDQo+ICJUbyIgaXMgbm90IHN1cHBvcnRl
-ZCBoZXJlLCBJTU8uDQoNCk9LLg0KDQo+IFdoZW4geW91IGZpeCB0aGF0Og0KPiBSZXZpZXdlZC1i
-eTogSmlyaSBTbGFieSA8amlyaXNsYWJ5QGtlcm5lbC5vcmc+DQoNCkkgd2lsbCBjcmVhdGUgYSB2
-ZXJzaW9uIDMuDQoNClsuLi5dDQoNClJlZ2FyZHMNCkNocmlzdG9waA0K
+On Fri, Jan 19, 2024 at 4:45=E2=80=AFAM Tudor Ambarus <tudor.ambarus@linaro=
+.org> wrote:
+>
+> All gs101 serial ports are restricted to 32-bit register accesses.
+> This requirement will be inferred from the compatible. Do not allow
+> the reg-io-width property for the google,gs101-uart compatible.
+>
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: Peter Griffin <peter.griffin@linaro.org>
+> Signed-off-by: Tudor Ambarus <tudor.ambarus@linaro.org>
+> ---
+
+Reviewed-by: Sam Protsenko <semen.protsenko@linaro.org>
+
+>  Documentation/devicetree/bindings/serial/samsung_uart.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/Documentation/devicetree/bindings/serial/samsung_uart.yaml b=
+/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> index 133259ed3a34..0f0131026911 100644
+> --- a/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> +++ b/Documentation/devicetree/bindings/serial/samsung_uart.yaml
+> @@ -143,6 +143,8 @@ allOf:
+>      then:
+>        required:
+>          - samsung,uart-fifosize
+> +      properties:
+> +        reg-io-width: false
+>
+>  unevaluatedProperties: false
+>
+> --
+> 2.43.0.429.g432eaa2c6b-goog
+>
 
