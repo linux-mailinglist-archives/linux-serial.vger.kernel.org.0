@@ -1,272 +1,212 @@
-Return-Path: <linux-serial+bounces-1923-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1925-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB14783DEC0
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jan 2024 17:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A0FD83E009
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jan 2024 18:29:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54B5E1F26CF9
-	for <lists+linux-serial@lfdr.de>; Fri, 26 Jan 2024 16:31:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FC221F258D2
+	for <lists+linux-serial@lfdr.de>; Fri, 26 Jan 2024 17:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F25C513FEE;
-	Fri, 26 Jan 2024 16:30:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9574208B0;
+	Fri, 26 Jan 2024 17:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com header.i=@smile-fr.20230601.gappssmtp.com header.b="KFoEJSn2"
+	dkim=pass (2048-bit key) header.d=theobroma-systems.com header.i=@theobroma-systems.com header.b="DqOCkTAT"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2054.outbound.protection.outlook.com [40.107.7.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57A921DDFC
-	for <linux-serial@vger.kernel.org>; Fri, 26 Jan 2024 16:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706286648; cv=none; b=K3GQVltlvNT7lIvnX6coqS2UAnd/gWLIbHxEkxaueZriaIz4B4ULmfBxhOBJL0UMb40Xi1O5tBu0xNUsafKeKFRAzsCvAyuHZI3ez10PHk2TNzKLw1rseWSKX6WkuQgsV2rqk4G6zt6AnPItPaVbb/HW49rrIcsozYUofGaPx5g=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706286648; c=relaxed/simple;
-	bh=e4P27LVIoLu447WxGDoBfB8TV0IwjkIO9iwplgiRTRA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=sTLokGLJULepUVgxAAwpe8znfIjCfPYAiRMDDsEy/aQbTTcEYkpTAagrerg96/ZTg23/B8kTOKFw9UTLXrqb1G31oGgGqnNkTUFbdrC2UCTjnry/wMSyuBrcT/tk/tBpYPksTXBYw0dOZc35xt1FLxOFDcm8fupAlI2dtjEoMxA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=smile.fr; spf=pass smtp.mailfrom=smile.fr; dkim=pass (2048-bit key) header.d=smile-fr.20230601.gappssmtp.com header.i=@smile-fr.20230601.gappssmtp.com header.b=KFoEJSn2; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=smile.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=smile.fr
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-40e7e2e04f0so9321145e9.1
-        for <linux-serial@vger.kernel.org>; Fri, 26 Jan 2024 08:30:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=smile-fr.20230601.gappssmtp.com; s=20230601; t=1706286643; x=1706891443; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YUy3Rwm9maFk8GP2x854tHf75dVLpNSbOLWxYX7ax5o=;
-        b=KFoEJSn2+NEXu+7uSAEIRaq3hq+MzWy0GZH54qlj+8NgLP03R9c7dJhtpHRx1VPWie
-         0qLcu+iaYrYc0ShiTf98eWcwiwuENAw8HBSKWaGpSJH3Qi1r1r91dUHl5obJJ/H0wk+I
-         UgMI31BifIvGcX0qS2HzcuaHK+m4J2GvT1TOQ3WYcOACA+UKD2dDNVMJHZvHweHgCuZW
-         yi2HuVF74dg3eJ6AenNcBklLYWa26y0XVI0GJFPaQLBerJA4H7R5WcAuVt7+yf9KW0oT
-         5zO9P3DtDByr2OsknZK426cpNz/OilgWiLHw7MNYzO50f1ritlJ7WWWbBTUL1KxC4eQB
-         orjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1706286643; x=1706891443;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YUy3Rwm9maFk8GP2x854tHf75dVLpNSbOLWxYX7ax5o=;
-        b=Oq3myTLVL+12I1Z+OWgubEcl1XciEqOFOOQ9XQnh/33CCBi5hjc0uM8JEktgjmNd5P
-         IYTVA0hebqXVNP4Ipy1rqjb06yDKwj3fak+75oOKzmL4occ8LYCZ+s6qa3nmK7hM3dZ9
-         xidKQO/f1CHoIcB6Iy0V5OnwUJ2A8aPsvmPoZ0eqroEKVrsLyHDeI1Tx/i91b5cqZjLC
-         eX/cnITTlzvC9rb3/RzqQkXc/iYkYSSrosBl5TS4OmBP56xODeS8JWI+guj87ZSXYJ7p
-         BYIspvMtW5c/COF4bEVMuokdIDjMyglye8Ro7ngnr4Sk9SAj8nDUhxeEv+CTKM1OW+rh
-         EGpg==
-X-Gm-Message-State: AOJu0Yy9OQsO5WX5Cpt6TVDMcFtT6dxvsfDk7mDLIei4AJn9TZhfteuz
-	0gArATbtqy4zKUUABSvlX3crUe5DMT00IaDSbW2LJqX3NPlljS/usp7luuiGNQA=
-X-Google-Smtp-Source: AGHT+IHKrnM6QdGCuLACvBQlPCI1fRERqYVbqvlykdiDAUVmDp7BbX1i59uxODRv8YnFlIpKfqkT3g==
-X-Received: by 2002:a05:600c:a385:b0:40e:e793:8f9 with SMTP id hn5-20020a05600ca38500b0040ee79308f9mr30020wmb.134.1706286643360;
-        Fri, 26 Jan 2024 08:30:43 -0800 (PST)
-Received: from P-ASN-ECS-830T8C3.numericable.fr ([89.159.1.53])
-        by smtp.gmail.com with ESMTPSA id p14-20020a05600c358e00b0040ea875a527sm2337557wmq.26.2024.01.26.08.30.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 26 Jan 2024 08:30:43 -0800 (PST)
-From: Yoann Congal <yoann.congal@smile.fr>
-To: x86@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org
-Cc: linux-kbuild@vger.kernel.org,
-	Yoann Congal <yoann.congal@smile.fr>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
-	Matthew Wilcox <willy@infradead.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Darren Hart <dvhart@infradead.org>,
-	Davidlohr Bueso <dave@stgolabs.net>,
-	=?UTF-8?q?Andr=C3=A9=20Almeida?= <andrealmeid@igalia.com>,
-	Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH] treewide: Change CONFIG_BASE_SMALL to bool type
-Date: Fri, 26 Jan 2024 17:30:32 +0100
-Message-Id: <20240126163032.1613731-1-yoann.congal@smile.fr>
-X-Mailer: git-send-email 2.39.2
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3D6D20310;
+	Fri, 26 Jan 2024 17:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.7.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1706290123; cv=fail; b=YXMgIcGBYFnj+eATIHFoSn9UxNqr2Q/RiAKUhkYuuDL5kNYDSpAawY2zPf5jOVk82PRMF6Yk/IpSjwergp4qSHZx+EPXOsff1vLC0Z5/Vfusq74EcdunkX1/jSUVDWjtIk0Tjm1lBE2lIwVA9ktdVfGUbXuepTP8SeDZMTIb7uQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1706290123; c=relaxed/simple;
+	bh=NRrgh+Y9FIMseBhbOBZyhEbQUd5QdnX7T6VYG5vpoOo=;
+	h=From:Subject:Date:Message-Id:Content-Type:To:Cc:MIME-Version; b=BQUpGXe4s0di7VLO1dvKwXG2qPxVNX5G8OXEROVWvjNAdxLyGU/GVvfwAYDqyXfjHxBax5uc6KonFiZWxo83KRiG34KqL1ILZwix0QfZUNu1s+wUZT6mnXNu67jJ7GG/3OJalS17+Wi9Y4V63JbFC4Rack+vzMiZ31+dH16icdU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=theobroma-systems.com; spf=pass smtp.mailfrom=theobroma-systems.com; dkim=pass (2048-bit key) header.d=theobroma-systems.com header.i=@theobroma-systems.com header.b=DqOCkTAT; arc=fail smtp.client-ip=40.107.7.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=theobroma-systems.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=theobroma-systems.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HN6fy3Rp9fOOkOrqNREq14ptydzsnXtAj8xD3NNg16gnfrlcYz0phBf3SzhHDlQY5+f1Gf5oCf0lNGRb2H6j6LJm4eb9+nFvIi5j40nBFCB9+dLk6u7CB+n7ltV6nhyNnNmd0DXrx/8QxiEYmi+D6QFXnusYVCDRGdZn9xlGxBO0oGRPTH7ScGnB0oNlY0h3ibp05dJqEWUV19C8A4OisavraPVjczCNHBjQ3/c2AWoLormf58uvMYhkyXPdHUqKPTVCsUySAcZXOY8lXSnr7d2sj+pANTir1cOcFhf85odly4CIn+8f2gftwTXiGItD2wO97k8QggtbDk7F3q/9kg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=parlSHQK5YZjdQ16b5JzjP0e9/POUszZXm2OhL0Vmzc=;
+ b=GsOcDvQjFWdKm6cQjaisK9FBuT5cX4PIeOVVRY10UFIrhSKntvG7N0ARQXm3tcUfqA2CkPsSOEmKLHzpOCWT8cm8+vnOsGDmECSZVIRYEVOUOQ37cZsdPGh0jMHwVOewWsWWf/XkDObdQm90w0mBitAiR2XGPB1pKNgq/vgtxpB+4jfLXOLlHnruaQh33shDUtV2NyiRb/PvIKglr5/mWO8kCJHKfFIoKN566LlYx1jK0f2luttMX2RebduoeP8TGoRRKOrkg0PdLqbqd7N58WfhSQzMPQyG+MjskCfxsVp2wAPPppGH4BmsQk+7U+sBFzcTUJKkPOD/Z7NQnXhfTw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=theobroma-systems.com; dmarc=pass action=none
+ header.from=theobroma-systems.com; dkim=pass header.d=theobroma-systems.com;
+ arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=theobroma-systems.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=parlSHQK5YZjdQ16b5JzjP0e9/POUszZXm2OhL0Vmzc=;
+ b=DqOCkTAT1CZl/ekaB4Rs2sNQf9Xg/bJViyBAbO3bpvj8VZM1JTcgtAG+fADyU1GVJq/huaWUqjymaHw2xI0HT3+SzOKOU8OJtoj7esZdvexdC9Kj1gPzET4wq41WIINS4vLPgl4NkBKN5fSvCDWPCBk91vAO82b2WwWVrjqLM27Wl7bpOhFRY2p4UZI41Ji4shrXzyixsxnW3sXWIjWyLMCxbMuHcrYU7GtNmPVSdY/h99Sm2FsKARRtINvdB2lpWmZ67YQlt7SKZPr93eBGtPad24oZW0XqHyXD1b0jNknVWj0WKq4+BfPlH8D3K7pJCi9ScldDyox3no+zzzpHuA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=theobroma-systems.com;
+Received: from VE1PR04MB6382.eurprd04.prod.outlook.com (2603:10a6:803:122::31)
+ by DB9PR04MB9820.eurprd04.prod.outlook.com (2603:10a6:10:4c3::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7228.26; Fri, 26 Jan
+ 2024 17:28:35 +0000
+Received: from VE1PR04MB6382.eurprd04.prod.outlook.com
+ ([fe80::d4b1:cea8:7085:ec50]) by VE1PR04MB6382.eurprd04.prod.outlook.com
+ ([fe80::d4b1:cea8:7085:ec50%4]) with mapi id 15.20.7228.027; Fri, 26 Jan 2024
+ 17:28:34 +0000
+From: Farouk Bouabid <farouk.bouabid@theobroma-systems.com>
+Subject: [PATCH v5 0/6] serial: 8250: Add support for rs485 half/full
+ duplex on puma/ringneck-haikou
+Date: Fri, 26 Jan 2024 18:27:41 +0100
+Message-Id: <20240126-dev-rx-enable-v5-0-5d934eda05ca@theobroma-systems.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAI3rs2UC/53PwYrDIBDG8VcpnmvRiSZmT/seSw/GGRuhiYsGa
+ Sl599oeloVuetjjNzA/+N9YphQos4/djSUqIYc416H3O+ZGO5+IB6ybgQAlJGiOVHi6cJrtcCa
+ OxkiDg+8cGFZ/vhP5cHl6X8e6x5CXmK5PvsjHdUsqkguuW4POWuvAwecyUhxSnCzP17zQlA8uT
+ uyhFvVWUlXyTQ/eSaW8NBvS/qeq/UtoFCC2NCiU/f8Epa31Cvu2AfOuRv+ueZF0lUQnhKROIjS
+ b0rqud4hupgXOAQAA
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh+dt@kernel.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Cc: Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-serial@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ quentin.schulz@theobroma-systems.com, 
+ Heiko Stuebner <heiko.stuebner@cherry.de>, 
+ Farouk Bouabid <farouk.bouabid@theobroma-systems.com>
+X-Mailer: b4 0.12.3
+X-ClientProxiedBy: VE1PR03CA0003.eurprd03.prod.outlook.com
+ (2603:10a6:802:a0::15) To VE1PR04MB6382.eurprd04.prod.outlook.com
+ (2603:10a6:803:122::31)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VE1PR04MB6382:EE_|DB9PR04MB9820:EE_
+X-MS-Office365-Filtering-Correlation-Id: acdd3803-7402-4637-e53f-08dc1e943910
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	SM/N5GSqYRTKTHjb+Gc5QmzGhw9R+T8EduscFf9ITmS4febcckg1iEqcRuzHz9XWIIZVVpl5HzXf7BxwkpAi0yiml71zqQmvi5tMvWS1ZGbQOe341ot5OVjLJwdDL+/O+SHG2p70/83cUrzmXVmQF2h+48dT/yHevvOQNtXKmF0AEWNehC5VhqyxFy6/XUVXp31PP6COtxtOa4+nPLuoHFo3PcYoCnXbyuHdQ5R/LxUwtpvxLB9gp0w4lf4A2WZdG0GR+2mFcqIiBesFJxDI7hukiMhGp5ly+EmUxV2ocvTo7vcr6Xl59dc38Kz1mVYQqC31Qsos0bLjKx608rZhG8Yr9AvWtHldQWgv9XZNUQGIsCH43SuedzAfcU26msgxPlsQ2QSW+TKWRA2Es3ydXRH00HtyadbQPNBeQZAY4/8/CwWA5Gqt2eI/vX179hQDfowFYHAms8nqPi1EUCFOYP0/a6hW6vce5pxBOUeLPR7h1v+T0aIkeGzeEUOd6qUfAYViuoVYSlxLhYkfHwEF+kV3p2NuAgD1nJFNVzY33fAscpBfJpZDZ68Bc06vcYDJiIIef5GF7azTcZArJSaWF2nt7xdIpzCNpnJEgazOkNm3sGofQCZOZt1fxfL5hU2tyel/03mZQsXNENkbMp7zvw==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR04MB6382.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(346002)(39850400004)(136003)(376002)(366004)(396003)(230273577357003)(230922051799003)(230173577357003)(64100799003)(186009)(1800799012)(451199024)(36756003)(478600001)(8676002)(4326008)(7416002)(8936002)(66556008)(54906003)(5660300002)(6486002)(44832011)(966005)(66476007)(316002)(2906002)(110136005)(66946007)(86362001)(6666004)(38350700005)(52116002)(6512007)(38100700002)(83380400001)(6506007)(2616005)(41300700001)(26005)(107886003);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?U1lHNlEyMTk5MUdhK2VTdzFzOVpMdGQ1a2hDazM2RFl3WkJ4YjZqQzEzM2x1?=
+ =?utf-8?B?aWo0N2RCVkFUMGxuVTZqbUJEd2pXU2JFVDI5NXBRaWZXVkVFNi9Dc2c5NUxX?=
+ =?utf-8?B?cFlCSWpXNkRBUStzUytkc2t4cnJrUWlZekJHVUZoME1CK2hMeXBSUU1pV3dq?=
+ =?utf-8?B?bnNhbFlHRmw5QUJQUlhTejNmUHRXZUl3MmNJUnNsNHFKOGh5U0hRMStkcHJ2?=
+ =?utf-8?B?N3VlK3JCemM2R0RXbHFRTVFWbkVIUGNna3pmRkErRU1qNisvUEJqbVZLd2Vm?=
+ =?utf-8?B?cHJZZ3NiU0JudjN5KzB0MUlCMU9qVW9JS1hBdGxnN0hQSjFKeWpseEJGNVIy?=
+ =?utf-8?B?c054c25KZGRncENpUVJPWHAwYWFWVlYvNGRMY1h1endqYWNiTXg3Q1U5dkZq?=
+ =?utf-8?B?Tjhxam5SalNKalFBSnJTSjZYZExpczNyRUo2aWMvd0x1ZGdJWHlFQWdwTEpV?=
+ =?utf-8?B?UW5ZdFRPQUltc1JuTXFSNENKcmxQUDlDRkFjeEsrSnR4azNlcHF4Sk1KbnB4?=
+ =?utf-8?B?SVJ0WCtMSHFFQmV5UXU0cGswRytFTmZFdjJic244RGg1ZzAxcDN6ZXNmZExD?=
+ =?utf-8?B?VGJsb3hvM3YvOHAyLzhQM0MwcHpkZzF5dk10SmNncXpqSU5yZzNadkc5amFG?=
+ =?utf-8?B?YWh5U05yM0lzL1VpSkZ1QUNrQ2JWZzNSNFJOZEozdEppWnJzUHNiK3ByYnNt?=
+ =?utf-8?B?eEQvV2R3MTVnMHBVem9xdWtFb0FKek1MWFVPcmRPUHN4b1Z1Z0x6UGllbWJz?=
+ =?utf-8?B?Vk42a0FrSzhkT21SUE9QTTFKZGQ1NzBuQm1NWmFSbzhucDBtd01lRDVYVHZx?=
+ =?utf-8?B?OW1YVUl5cXMyRy8xaTFWbDFHTjVkYlVOL1FPbysway9KUHBZWmpUaW4zeDA2?=
+ =?utf-8?B?UTZjbFhQcTB0bXBRczFyWnhuTEFtbjBBSHpPc1VLN0RXeTdtZ2YyNHdvRW50?=
+ =?utf-8?B?ZHI4Q0M0T2dWd0o3U2xFQndtSTZ0eWgzQ3FhTjlRWUtXZHNiT3hUUGx3OWpm?=
+ =?utf-8?B?Wm1pRFhoYlJqZWp5SzJEd1lZRk93T2VPTTBMMHpuQ3NWc0JKZklsYlZtTlpu?=
+ =?utf-8?B?Nlh3R2JDMFNJWTNCR2hmL0xuVXVreE5QL0pnbTN2bVlieFpRRE1COTVIbGpU?=
+ =?utf-8?B?YUdFT0w0U0RxdzdyaGN4YWdLeHd4b1JhMFByVnlTK0tyTFpEbEtWWHUxblo1?=
+ =?utf-8?B?cVkzV3BaaFZENlBoMFFqZFdlU09zRml1aHo4QUt2VUNhWmRTc1FnTTRnTG83?=
+ =?utf-8?B?YWdGTFVnMXo0cy9LdGtQSGVJQjM3eERiMER2dW9NdWw2cHVHaDZUbVdHdmZI?=
+ =?utf-8?B?SXV5UDNoM29MYmV2cHhoTmRHOENzYUQwWWIrY2tZbUJ5bFZqM2MzZWNQTTht?=
+ =?utf-8?B?NzZIZWNRRi8wb0JoU1ZwOGQ2N0NyRVNWdXA0YXV6eUxac2ptUkxHWUp2Slp5?=
+ =?utf-8?B?ZDZnVUc1bjRYT0tOdS9vd08yYm5wZ3ZSZXl5NU1wVjJIMmdWd3pKSWRiN0hk?=
+ =?utf-8?B?T0xQWnpRRDQwUGFPYjNnOHdodk9sS1lxenpubGxQaWcwRWVCUnVya2RVbVlZ?=
+ =?utf-8?B?YWVUZHRrekZmc3hYc3F6MVY5NUJXR0N0TjFLczdWR2dIQ1hzK0FoU1o4R3g0?=
+ =?utf-8?B?R3JmN2tLcGp2aDZIV0JsaXRIbkZ3Z2RONVFVQjBTZlkySTk5MUdibjh5YTJF?=
+ =?utf-8?B?ODZmK3dvT3d0TUx3MVZGdVVLcDdHWUcrWkZubUtkRyttK21CdU03N1JVanhk?=
+ =?utf-8?B?UkcxQlQzbVhORVU4TFdXRlBVcUlnSGdDUDdCOVpzVld3OTB6MzJsQzZrMWM1?=
+ =?utf-8?B?RHo0Z2NaQ0tKbXlTR1lUMHUrMVNNbGZqQ1Bva0dxMDQxSStxN2lKUUpaN2RN?=
+ =?utf-8?B?WDh2cVRNcVpLelJUc2xFUGtNcU03eGVGRzZCMFNPL09TdHlKb2oyODBGUDJP?=
+ =?utf-8?B?bWJ6MHpBY3dkRHNRY2JTcWtqUEtpWS93L09sWjVWeEl0cWVpTGVmaWdRM2xm?=
+ =?utf-8?B?empOMnFCZ29LY080UnBPQ2ZFa01xVDI1N2xxaElFNnpMNFJ6cUZUQXFmL3hY?=
+ =?utf-8?B?QWE5TnRVeUh4azVkcWNRd3czeU4ycnhjakJja0pTVVF6cGNFMGlkNmFBYzhu?=
+ =?utf-8?B?bFoyQmFZQkVYUlExd3pBdDJyWmgzQWtPMVR4QzBZUm85ZDVKNDNNZC9aNHQw?=
+ =?utf-8?Q?GpXgn5MSPh37VL9X2xDZH8k=3D?=
+X-OriginatorOrg: theobroma-systems.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: acdd3803-7402-4637-e53f-08dc1e943910
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR04MB6382.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jan 2024 17:28:34.2700
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 5e0e1b52-21b5-4e7b-83bb-514ec460677e
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: WSe4Lkdte9WQccOXkUjtutcWYxVu0ilDiyWffXLVNnCaV3c/vug6YeLY0ZWb4VKLM3AW3v6UCnJbQD+cnHWTWJl2zAvcf4/Q9UPn9xe7Nkxf2tixY6J55WkxZc3fbZYQ
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB9820
 
-CONFIG_BASE_SMALL is currently a type int but is only used as a boolean:
-CONFIG_BASE_SMALL == 0 vs CONFIG_BASE_SMALL != 0.
+This series tries to revive the work of Heiko Stuebner from 2020
 
-So change it to the more logical bool type.
+On the boards that we are using (ringneck/puma-haikou) a hardware switch
+can set the rs485 transceiver into half or full duplex mode.
 
-Furthermore, recent kconfig changes (see Fixes: tags) revealed that using
-  config SOMETHING
-     default "some value" if X
-does not work as expected if X is not of type bool.
+In half-duplex mode the DE/RE signal of the rs485 transceiver is not
+connected to an RTS signal whose control is already handled in the rs485
+emulation (start/stop callbacks), but rather to a gpio. And since enabling
+the receiver requires setting this gpio active we need to do that in em485
+while receiving and disable it while sending to enable the driver mode.
 
-CONFIG_BASE_SMALL is used that way in init/Kconfig:
-  config LOG_CPU_MAX_BUF_SHIFT
-  	default 12 if !BASE_SMALL
-  	default 0 if BASE_SMALL
+In full-duplex mode RE is grounded and separated  from DE. Meanwhile the
+rx-enable gpio remains connected to the DE pin. In this case the
+receiver-enable gpio should be disabled to enable driver mode in parallel
+to the enabled receiver.
 
-Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
-Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Closes: https://lore.kernel.org/all/CAMuHMdWm6u1wX7efZQf=2XUAHascps76YQac6rdnQGhc8nop_Q@mail.gmail.com/
-Fixes: 6262afa10ef7 ("kconfig: default to zero if int/hex symbol lacks default property")
-Fixes: 4e244c10eab3 ("kconfig: remove unneeded symbol_empty variable")
+This patch-series adds support for controlling the receiver mode using a
+gpio in em485 for half-duplex mode while allowing users to keep using the
+full-duplex feature if em485 is disabled.
+
+Changes in v5:
+- set port->rs485_re_gpio in "serial: 8250: Support separate rs485 rx-enable GPIO"
+- Link to v4: https://lore.kernel.org/r/20240126-dev-rx-enable-v4-0-45aaf4d96328@theobroma-systems.com
+
+Changes in v4:
+- define the state of rx-enable gpio when em485 is disabled
+- add rs485 half/full duplex support to ringneck/puma-haikou
+- use dev_err_probe instead of dev_err if error is -EPROBE_DEFER
+
+Changes from the 2020 submission include:
+- external gpio for optional receiver-enable handling
+- Link to v3: https://lore.kernel.org/all/20200517215610.2131618-1-heiko@sntech.de/
 
 ---
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: "H. Peter Anvin" <hpa@zytor.com>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Jiri Slaby <jirislaby@kernel.org>
-CC: Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-CC: Matthew Wilcox <willy@infradead.org>
-CC: Peter Zijlstra <peterz@infradead.org>
-CC: Darren Hart <dvhart@infradead.org>
-CC: Davidlohr Bueso <dave@stgolabs.net>
-CC: "André Almeida" <andrealmeid@igalia.com>
-CC: Masahiro Yamada <masahiroy@kernel.org>
-CC: x86@kernel.org
-CC: linux-kernel@vger.kernel.org
-CC: linux-serial@vger.kernel.org
-CC: linux-fsdevel@vger.kernel.org
-CC: linux-kbuild@vger.kernel.org
----
- arch/x86/include/asm/mpspec.h | 2 +-
- drivers/tty/vt/vc_screen.c    | 2 +-
- include/linux/threads.h       | 4 ++--
- include/linux/udp.h           | 2 +-
- include/linux/xarray.h        | 2 +-
- init/Kconfig                  | 6 +++---
- kernel/futex/core.c           | 2 +-
- kernel/user.c                 | 2 +-
- 8 files changed, 11 insertions(+), 11 deletions(-)
+Farouk Bouabid (4):
+      dt-bindings: serial: add binding for rs485 rx-enable state when rs485 is disabled
+      serial: 8250: set rx-enable gpio state when rs485 is disabled
+      arm64: dts: rockchip: rk3399-puma-haikou: add rs485 support on uart2
+      arm64: dts: rockchip: px30-ringneck-haikou: add rs485 support on uart5
 
-diff --git a/arch/x86/include/asm/mpspec.h b/arch/x86/include/asm/mpspec.h
-index 4b0f98a8d338d..ebe4b6121b698 100644
---- a/arch/x86/include/asm/mpspec.h
-+++ b/arch/x86/include/asm/mpspec.h
-@@ -15,7 +15,7 @@ extern int pic_mode;
-  * Summit or generic (i.e. installer) kernels need lots of bus entries.
-  * Maximum 256 PCI busses, plus 1 ISA bus in each of 4 cabinets.
-  */
--#if CONFIG_BASE_SMALL == 0
-+#ifndef CONFIG_BASE_SMALL
- # define MAX_MP_BUSSES		260
- #else
- # define MAX_MP_BUSSES		32
-diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-index 67e2cb7c96eec..da33c6c4691c0 100644
---- a/drivers/tty/vt/vc_screen.c
-+++ b/drivers/tty/vt/vc_screen.c
-@@ -51,7 +51,7 @@
- #include <asm/unaligned.h>
- 
- #define HEADER_SIZE	4u
--#define CON_BUF_SIZE (CONFIG_BASE_SMALL ? 256 : PAGE_SIZE)
-+#define CON_BUF_SIZE (IS_ENABLED(CONFIG_BASE_SMALL) ? 256 : PAGE_SIZE)
- 
- /*
-  * Our minor space:
-diff --git a/include/linux/threads.h b/include/linux/threads.h
-index c34173e6c5f18..1674a471b0b4c 100644
---- a/include/linux/threads.h
-+++ b/include/linux/threads.h
-@@ -25,13 +25,13 @@
- /*
-  * This controls the default maximum pid allocated to a process
-  */
--#define PID_MAX_DEFAULT (CONFIG_BASE_SMALL ? 0x1000 : 0x8000)
-+#define PID_MAX_DEFAULT (IS_ENABLED(CONFIG_BASE_SMALL) ? 0x1000 : 0x8000)
- 
- /*
-  * A maximum of 4 million PIDs should be enough for a while.
-  * [NOTE: PID/TIDs are limited to 2^30 ~= 1 billion, see FUTEX_TID_MASK.]
-  */
--#define PID_MAX_LIMIT (CONFIG_BASE_SMALL ? PAGE_SIZE * 8 : \
-+#define PID_MAX_LIMIT (IS_ENABLED(CONFIG_BASE_SMALL) ? PAGE_SIZE * 8 : \
- 	(sizeof(long) > 4 ? 4 * 1024 * 1024 : PID_MAX_DEFAULT))
- 
- /*
-diff --git a/include/linux/udp.h b/include/linux/udp.h
-index d04188714dca1..b456417fb4515 100644
---- a/include/linux/udp.h
-+++ b/include/linux/udp.h
-@@ -24,7 +24,7 @@ static inline struct udphdr *udp_hdr(const struct sk_buff *skb)
- }
- 
- #define UDP_HTABLE_SIZE_MIN_PERNET	128
--#define UDP_HTABLE_SIZE_MIN		(CONFIG_BASE_SMALL ? 128 : 256)
-+#define UDP_HTABLE_SIZE_MIN		(IS_ENABLED(CONFIG_BASE_SMALL) ? 128 : 256)
- #define UDP_HTABLE_SIZE_MAX		65536
- 
- static inline u32 udp_hashfn(const struct net *net, u32 num, u32 mask)
-diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-index cb571dfcf4b16..3f81ee5f9fb9c 100644
---- a/include/linux/xarray.h
-+++ b/include/linux/xarray.h
-@@ -1141,7 +1141,7 @@ static inline void xa_release(struct xarray *xa, unsigned long index)
-  * doubled the number of slots per node, we'd get only 3 nodes per 4kB page.
-  */
- #ifndef XA_CHUNK_SHIFT
--#define XA_CHUNK_SHIFT		(CONFIG_BASE_SMALL ? 4 : 6)
-+#define XA_CHUNK_SHIFT		(IS_ENABLED(CONFIG_BASE_SMALL) ? 4 : 6)
- #endif
- #define XA_CHUNK_SIZE		(1UL << XA_CHUNK_SHIFT)
- #define XA_CHUNK_MASK		(XA_CHUNK_SIZE - 1)
-diff --git a/init/Kconfig b/init/Kconfig
-index 8d4e836e1b6b1..766a7ac8c5ea4 100644
---- a/init/Kconfig
-+++ b/init/Kconfig
-@@ -1941,9 +1941,9 @@ config RT_MUTEXES
- 	default y if PREEMPT_RT
- 
- config BASE_SMALL
--	int
--	default 0 if BASE_FULL
--	default 1 if !BASE_FULL
-+	bool
-+	default n if BASE_FULL
-+	default y if !BASE_FULL
- 
- config MODULE_SIG_FORMAT
- 	def_bool n
-diff --git a/kernel/futex/core.c b/kernel/futex/core.c
-index e0e853412c158..5f7aa4fc2f9ee 100644
---- a/kernel/futex/core.c
-+++ b/kernel/futex/core.c
-@@ -1141,7 +1141,7 @@ static int __init futex_init(void)
- 	unsigned int futex_shift;
- 	unsigned long i;
- 
--#if CONFIG_BASE_SMALL
-+#ifdef CONFIG_BASE_SMALL
- 	futex_hashsize = 16;
- #else
- 	futex_hashsize = roundup_pow_of_two(256 * num_possible_cpus());
-diff --git a/kernel/user.c b/kernel/user.c
-index 03cedc366dc9e..aa1162deafe49 100644
---- a/kernel/user.c
-+++ b/kernel/user.c
-@@ -88,7 +88,7 @@ EXPORT_SYMBOL_GPL(init_user_ns);
-  * when changing user ID's (ie setuid() and friends).
-  */
- 
--#define UIDHASH_BITS	(CONFIG_BASE_SMALL ? 3 : 7)
-+#define UIDHASH_BITS	(IS_ENABLED(CONFIG_BASE_SMALL) ? 3 : 7)
- #define UIDHASH_SZ	(1 << UIDHASH_BITS)
- #define UIDHASH_MASK		(UIDHASH_SZ - 1)
- #define __uidhashfn(uid)	(((uid >> UIDHASH_BITS) + uid) & UIDHASH_MASK)
+Heiko Stuebner (2):
+      dt-bindings: serial: Add binding for rs485 receiver enable GPIO
+      serial: 8250: Support separate rs485 rx-enable GPIO
+
+ Documentation/devicetree/bindings/serial/rs485.yaml   |  9 +++++++++
+ arch/arm64/boot/dts/rockchip/px30-ringneck-haikou.dts |  2 ++
+ arch/arm64/boot/dts/rockchip/rk3399-puma-haikou.dts   |  4 +++-
+ drivers/tty/serial/8250/8250_port.c                   | 11 ++++++++++-
+ drivers/tty/serial/serial_core.c                      | 11 +++++++++++
+ include/linux/serial_core.h                           |  2 ++
+ 6 files changed, 37 insertions(+), 2 deletions(-)
+---
+base-commit: 5ebe731c2a586b379103f736cd498bcca3cf1ea9
+change-id: 20240125-dev-rx-enable-d8818dbf7c28
+
+Best regards,
 -- 
-2.39.2
+Farouk Bouabid <farouk.bouabid@theobroma-systems.com>
 
 
