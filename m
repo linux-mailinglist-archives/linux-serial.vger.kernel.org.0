@@ -1,43 +1,43 @@
-Return-Path: <linux-serial+bounces-1958-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-1959-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F3E3840F3C
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jan 2024 18:22:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC4F184109E
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jan 2024 18:29:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D0C5EB252F8
-	for <lists+linux-serial@lfdr.de>; Mon, 29 Jan 2024 17:22:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B5E91C2397D
+	for <lists+linux-serial@lfdr.de>; Mon, 29 Jan 2024 17:29:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C39015D5CB;
-	Mon, 29 Jan 2024 17:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8721976C8E;
+	Mon, 29 Jan 2024 17:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="IoM9DKAd"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="GjsjKwuS"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4957015AAD4;
-	Mon, 29 Jan 2024 17:13:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DA9E76C81;
+	Mon, 29 Jan 2024 17:17:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1706548406; cv=none; b=Dt6cWKGWGv0Bz5/LbONj92BwwFz6x4wtdZeJNzz6VCl8nXPGsrqwJe1DJHrcqcsesMuj1yxpsrWA0mHRDO/ABHgrR6JkaYCivlzmsppvdMJMqNCBMu6HxULD2AV5lCDv6lJfiv8fnSkdU2mJp8K94CW0MEDSkFPS7d8074OxIkc=
+	t=1706548656; cv=none; b=MrbvaoNh2bY6QtD27O/HMkweOU6VFPfDOY0IenvUEnIxqlRNYOyEDMAV6oNlEoDGlG2hWp/Cy3W0Gk+NWmC8SJwGSlD3ewIe8FgxRjbZCyAvI3RzCkAVE1n8OeC/XlGJei5M+WdX26RnbbLKU+kSb2NM2l5hCgr901MGyUP7Gm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1706548406; c=relaxed/simple;
-	bh=7e3N5DPfHPvV6+tt33hTzbMGYZp9qo21S3nzaUHlU6c=;
+	s=arc-20240116; t=1706548656; c=relaxed/simple;
+	bh=Us/p2Kb8UWMp7cf7OHmF17HempDkaA0GdhoElvOp8PY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=haMWS3Q1ui9H12Pxi/3b7o0kyxNQUHgwqKyLVG+Vy+9b9o9rfQB6MVi8MkufYiL/XznWgdw11cLcQ2qPE0DutAwNgTKWaMA/A8k5YxwceCzU1E9ge/8tpJ8CFlFvX/BHTAAU2plcxuh3x8W28HsiuqS3jQEvSZuNFrewjD6hK/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=IoM9DKAd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E6F2C433F1;
-	Mon, 29 Jan 2024 17:13:26 +0000 (UTC)
+	 MIME-Version; b=HR+7Tvn6NTfnJE6Tp1j1bw0lPUQ55uRmOqzksFcOiovo4g1uR4DhDxw5RZfeeIn6gCVV0YdF9acS3PrFPhfeZ++IVdR1claDD7CsMCjTGSqqbqqTmw2/bSdl9APq0t6FtYUYWZ3pWPk/KUXfqweiYizp0Bf3xYXqmmPpdqxcWgQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=GjsjKwuS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 24376C433F1;
+	Mon, 29 Jan 2024 17:17:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1706548406;
-	bh=7e3N5DPfHPvV6+tt33hTzbMGYZp9qo21S3nzaUHlU6c=;
+	s=korg; t=1706548656;
+	bh=Us/p2Kb8UWMp7cf7OHmF17HempDkaA0GdhoElvOp8PY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=IoM9DKAdoJMwBde+ybxlgIz7NhTFVAkHO9lJp14vISLrW7+Y0hBci1CHcpdeQzr1H
-	 cJzh9uvfYjo3IpmYaXIsrcswF7LHYvfOQ2XOFTQMv8rBImhConUcpcCHX2FqGlx/3e
-	 qYt6CQz/DgZU484zAmDJgVUrk4ZU+qIizPvffkdQ=
+	b=GjsjKwuS6zY5CQtTJ9rCsfw3tMjVwr7yfx89hszvHFmYH2XOCqhSKDvoL3bw46BmY
+	 jymjp/RziQuSWssbMLRfv2Cuw9qsHhIA/+xdAnPq7bb0lVuzAftYp76aZv72TWbgSa
+	 F8sE9Dtjq3KUX3cKstlhLEp1EPNFu3QzuStBMm5I=
 From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To: stable@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -47,12 +47,12 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	John Ogness <john.ogness@linutronix.de>,
 	linux-serial@vger.kernel.org,
 	Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH 6.1 185/185] serial: core: fix kernel-doc for uart_port_unlock_irqrestore()
-Date: Mon, 29 Jan 2024 09:06:25 -0800
-Message-ID: <20240129170004.526571865@linuxfoundation.org>
+Subject: [PATCH 6.6 330/331] serial: core: fix kernel-doc for uart_port_unlock_irqrestore()
+Date: Mon, 29 Jan 2024 09:06:34 -0800
+Message-ID: <20240129170024.539674891@linuxfoundation.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240129165958.589924174@linuxfoundation.org>
-References: <20240129165958.589924174@linuxfoundation.org>
+In-Reply-To: <20240129170014.969142961@linuxfoundation.org>
+References: <20240129170014.969142961@linuxfoundation.org>
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-6.1-stable review patch.  If anyone has any objections, please let me know.
+6.6-stable review patch.  If anyone has any objections, please let me know.
 
 ------------------
 
@@ -92,7 +92,7 @@ Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
 --- a/include/linux/serial_core.h
 +++ b/include/linux/serial_core.h
-@@ -653,7 +653,7 @@ static inline void uart_port_unlock_irq(
+@@ -658,7 +658,7 @@ static inline void uart_port_unlock_irq(
  }
  
  /**
