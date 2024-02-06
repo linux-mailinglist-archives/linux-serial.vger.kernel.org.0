@@ -1,249 +1,230 @@
-Return-Path: <linux-serial+bounces-2132-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2134-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D29184C09F
-	for <lists+linux-serial@lfdr.de>; Wed,  7 Feb 2024 00:06:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C977B84C284
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Feb 2024 03:31:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E79B7284005
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Feb 2024 23:05:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED47C1C24BEF
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Feb 2024 02:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43DB81C69C;
-	Tue,  6 Feb 2024 23:05:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6D102CA9;
+	Wed,  7 Feb 2024 02:31:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvdPV+2C"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="LiAiaq4j"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116651CD17;
-	Tue,  6 Feb 2024 23:05:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81767F9D6
+	for <linux-serial@vger.kernel.org>; Wed,  7 Feb 2024 02:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707260746; cv=none; b=C9YOGDie0z0fGTyTItR/963g1X/yi+Npx57RYc3AYLjcGpBYa7+BmU999fwNDFIAqO1Z5bxMD2vN/BApOlNsKsgH+4lgFFNgSsa3jVcAd/e5IL2WDIB3YIiKOi7oFC1ieVV7R2O+z5qOyAd/ltvDe/9Kh7nN/m99T3iT0DA5IuU=
+	t=1707273093; cv=none; b=CPbpyP62YDT1Fgf2l2RvOalVNtsmrEEexFEUuAvRI7z1ZQaZNPPxS664uKUnVuxOpt2RA3wjgvgQbNduiseU7CgDnHLTNKGIJ7AbYQcHyq7QP9NPfPdJa+4/R4tR7W0577T5jpvnZ20Qpynwv6iJIXcvaI+Dy6kLaJfCYCfCYDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707260746; c=relaxed/simple;
-	bh=nXdR+a6VM2WRCvGRjAN8VSBuD/Uz2750SQd0svzgACE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U/RX5sZG5jsC1KL9VQKOhFOXKqHODe5qb4MkyDhKh4nn1alRW1SoyWiPd7oGfrAZo6OO/fgD36485eJOfideI4EaMfvldZm11p7s845pWvhl8hmxK+pMpJR7ILX9ibY8wSEuB0Jz9LpznevBTXxWYd+uSTjFqd8rGjegQfmmwLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvdPV+2C; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79C8CC43390;
-	Tue,  6 Feb 2024 23:05:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1707260745;
-	bh=nXdR+a6VM2WRCvGRjAN8VSBuD/Uz2750SQd0svzgACE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=lvdPV+2CPODujZO0/HwvdGmj+dOSacaeKhUlP6vw58sJ0Ma4KA4zQykKw+t9xrg5m
-	 w68WaeMmWfvypFp5tWxvktWHVRcfq/xHLo118H2GWtP1h/UA5Z3MXG/YgH+U4Y01rc
-	 1O/PZPRBOsO2b1AHg/hb0Jad3P5vBT6EgiqMz6TV2Hus3Gf4cXST1P0yHCQ+hBoWvS
-	 o6XbCxb6/EVZo5PcgPYDf40uXMcxDy5f1fjKZvn2xWvo4rHBq8vh7xMP2/GFaUi0AL
-	 dfvT4a1zZrVren6mbnuoxq2n4ZXvzWOU8iHQVs9zQYHOa48KGhr2R7mMZEou0b8zLF
-	 OeI7JLD9NCZ4w==
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-511490772f6so856e87.2;
-        Tue, 06 Feb 2024 15:05:45 -0800 (PST)
-X-Gm-Message-State: AOJu0YzgAWMBoyYqw7PkvH1DniGTfHESsEZvHqHy/wXd+nuJ4RniQ9Sd
-	2BOxsB0UtUbBbCI0OcfWfbfG4534ks8Z4O/b2hT3UrFDS05ye8ZtysVtrbAN+QmLCEN9MKKEQY5
-	gX9ifcFNW6anQbU3GaEX2Ei/vzss=
-X-Google-Smtp-Source: AGHT+IEMbrPIpSm6OEH2wjHQ/bmWih8c7TetX4tr5aYc278nyCtvtcRboPNHPHMJOQ4NGrPQiVcY9Z4OoBcazk1ridA=
-X-Received: by 2002:a2e:b6c6:0:b0:2d0:aa83:c5a4 with SMTP id
- m6-20020a2eb6c6000000b002d0aa83c5a4mr2463469ljo.51.1707260744020; Tue, 06 Feb
- 2024 15:05:44 -0800 (PST)
+	s=arc-20240116; t=1707273093; c=relaxed/simple;
+	bh=0Ua2anGm+Zkes34NxIgO6E5Ea+znSU2PSDX5jTb8nuM=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:Message-ID:MIME-Version:
+	 Content-Type:References; b=etO4ei7U2dMp5ZnVj/VvQQCHqL8nGxSYHqHRxGpj5od8W1FWN2aJmU2AAabVASp1Rt1kfILBSCPahpFqPxUrB1gqNm2ZEpH+hrP4VzncX7Sj9fqKhYddHVMti3hbuKtdagHipOmXp6QdnBnxtdIoMf2PJQ4igdNxAtXxgVzZCO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=LiAiaq4j; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p4.samsung.com (unknown [182.195.41.42])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240207023128epoutp01168461920d843cb14db5b6dcae915033~xc9QPuP0h3140331403epoutp01c
+	for <linux-serial@vger.kernel.org>; Wed,  7 Feb 2024 02:31:28 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240207023128epoutp01168461920d843cb14db5b6dcae915033~xc9QPuP0h3140331403epoutp01c
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1707273088;
+	bh=ANHZv412Dg+fCGbgGPRPJxGYQWRFR9Bp1dtID0lKAec=;
+	h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+	b=LiAiaq4jv3N73TmFQqiDgE7gK4Gfxu1TC+SUxTYV6610yppEq+AiaejZPlsFJdeVn
+	 UYa8U/o10Fo43y7SkwAp7Cdo93Xx+AFvkLH7hIcg4WMjwp2A1aLeYc7uk6xt0/obnB
+	 1eujtuWswIPkRwewBss3Par10LVpRnE3rkD3Vfq8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240207023127epcas5p2b7db665d4a089b6a041129cf1f3502fe~xc9Pt1IDW2585225852epcas5p2c;
+	Wed,  7 Feb 2024 02:31:27 +0000 (GMT)
+Received: from epsmgec5p1-new.samsung.com (unknown [182.195.38.182]) by
+	epsnrtp1.localdomain (Postfix) with ESMTP id 4TV3yj6kBVz4x9Q3; Wed,  7 Feb
+	2024 02:31:25 +0000 (GMT)
+Received: from epcas5p3.samsung.com ( [182.195.41.41]) by
+	epsmgec5p1-new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	94.3F.19369.D7BE2C56; Wed,  7 Feb 2024 11:31:25 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+	epcas5p4.samsung.com (KnoxPortal) with ESMTPA id
+	20240206113359epcas5p44b31963a9b932530ff9e2c349a2fe466~xQtpLLOgD2813628136epcas5p49;
+	Tue,  6 Feb 2024 11:33:59 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+	epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20240206113359epsmtrp245a884d3b2c5a66a072c68f46f4b15c2~xQtpKUHc90849508495epsmtrp2p;
+	Tue,  6 Feb 2024 11:33:59 +0000 (GMT)
+X-AuditID: b6c32a50-c99ff70000004ba9-f5-65c2eb7da326
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	5F.3B.08755.62912C56; Tue,  6 Feb 2024 20:33:58 +0900 (KST)
+Received: from FDSFTE048 (unknown [107.116.189.46]) by epsmtip2.samsung.com
+	(KnoxPortal) with ESMTPA id
+	20240206113357epsmtip2e0b997287d5fd76a11945d1b8b8a204c~xQtnzojQK1860618606epsmtip2v;
+	Tue,  6 Feb 2024 11:33:57 +0000 (GMT)
+From: "Tamseel Shams" <m.shams@samsung.com>
+To: "'Krzysztof Kozlowski'" <krzysztof.kozlowski@linaro.org>,
+	<alim.akhtar@samsung.com>, <krzysztof.kozlowski+dt@linaro.org>,
+	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>
+Cc: <linux-arm-kernel@lists.infradead.org>,
+	<linux-samsung-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>
+In-Reply-To: <0a2604e7-8b30-4cf9-9099-ba3681bc5538@linaro.org>
+Subject: RE: [PATCH v2] serial: samsung: honor fifosize from dts at first
+Date: Tue, 6 Feb 2024 17:03:56 +0530
+Message-ID: <006b01da58f0$601316b0$20394410$@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240206001333.1710070-1-yoann.congal@smile.fr> <20240206001333.1710070-3-yoann.congal@smile.fr>
-In-Reply-To: <20240206001333.1710070-3-yoann.congal@smile.fr>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Wed, 7 Feb 2024 08:05:07 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATzkZSK=hYbShOER=PnR7KVUBrDN=RL2Yyw413uMueiXw@mail.gmail.com>
-Message-ID: <CAK7LNATzkZSK=hYbShOER=PnR7KVUBrDN=RL2Yyw413uMueiXw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] printk: Change type of CONFIG_BASE_SMALL to bool
-To: Yoann Congal <yoann.congal@smile.fr>
-Cc: linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, x86@kernel.org, 
-	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
-	Borislav Petkov <bp@alien8.de>, Darren Hart <dvhart@infradead.org>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, Davidlohr Bueso <dave@stgolabs.net>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Jiri Slaby <jirislaby@kernel.org>, 
-	John Ogness <john.ogness@linutronix.de>, Josh Triplett <josh@joshtriplett.org>, 
-	Matthew Wilcox <willy@infradead.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Petr Mladek <pmladek@suse.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
-	Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>, 
-	Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: en-in
+Thread-Index: AQGLvBEqWUIU8btMzlwH+Ehg5kjUAwE8LAIjAhrCDkaxf69ZIA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrFJsWRmVeSWpSXmKPExsWy7bCmpm7t60OpBk+PKFo8mLeNzaJ58Xo2
+	i3dzZSz6Xjxkttj7eiu7xabH11gtLu+aw2Yx4/w+Joszi3vZHTg9Nq3qZPO4c20Pm8f+uWvY
+	PTYvqffo27KK0ePzJrkAtqhsm4zUxJTUIoXUvOT8lMy8dFsl7+B453hTMwNDXUNLC3MlhbzE
+	3FRbJRefAF23zBygm5QUyhJzSoFCAYnFxUr6djZF+aUlqQoZ+cUltkqpBSk5BSYFesWJucWl
+	eel6eaklVoYGBkamQIUJ2RmP+pMKZktW/Fz0n7mBcb9IFyMnh4SAicSna+eYuhi5OIQE9jBK
+	nF9ykxXC+cQo8eDsUhYI5xujxNoZ3awwLa1b+9khEnsZJU7f7mWDcF4wSqw+vJwFpIpNQFvi
+	3a6zYINFBLYxSnx9eQnMYRaYzCjROHk1E0gVp4CdRPOJ18wgtrCAp8TpaX/AdrAIqEj0b54L
+	VsMrYCnxf989NghbUOLkzCdgG5gF5CW2v53DDHGTgsTPp8tYIeLiEkd/9oDFRQScJBaefABV
+	s5JD4sQCNQjbRWLBkt+MELawxKvjW9ghbCmJz+/2skHY6RJzH/YyQdgFEst2fYeqsZc4cGUO
+	0A0cQLs0Jdbv0ocIy0pMPbWOCeIEPone30+gWnkldsyDsRUl/u/uhxojLvFuxRTWCYxKs5B8
+	NgvJZ7OQfDMLYdsCRpZVjFKpBcW56anJpgWGunmp5fAoT87P3cQITrRaATsYV2/4q3eIkYmD
+	8RCjBAezkgiv2Y4DqUK8KYmVValF+fFFpTmpxYcYTYHhPZFZSjQ5H5jq80riDU0sDUzMzMxM
+	LI3NDJXEeV+3zk0REkhPLEnNTk0tSC2C6WPi4JRqYNI72/N/c7iSJ8Myxgf+ATG9SUFFTaV9
+	oZbf9rXdKn7kf1elUi7rTyi3vpMHx76kG18sJk6Ktv3l6RH3ib1is//VTYuWJWxd+tNlzZ/V
+	v2R4Vxa87inRa5yUqPDRVbRG7IKkXNXDpjVPXy7ervC7Uzahd8PN4zf/POsr/Ms1Wbl+7ZuD
+	3z4waS74tiHvzh6ZiqPuNza/X26+xX7J8bn/lqlqH5bqLLTtcbhp+uP6nRXn/34+edfP2nbL
+	Y5H480e5pJV6F9240N/QsYdXTSX3xHOO7P89M2sL7kmWK3iu/naqdmbdo9TW9vLimR/mFp9S
+	a140/XithMCVNv/XHd5zdD7HPbm1d4Ecp3rxrYber9OUWIozEg21mIuKEwEjnVzCPQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsWy7bCSvK6a5KFUg7VLbCwezNvGZtG8eD2b
+	xbu5MhZ9Lx4yW+x9vZXdYtPja6wWl3fNYbOYcX4fk8WZxb3sDpwem1Z1snncubaHzWP/3DXs
+	HpuX1Hv0bVnF6PF5k1wAWxSXTUpqTmZZapG+XQJXxqP+pILZkhU/F/1nbmDcL9LFyMkhIWAi
+	0bq1n72LkYtDSGA3o8S+G2eZIBLiEtN+7WeEsIUlVv57DlX0jFHi/aRmFpAEm4C2xLtdIA1c
+	HCICuxglZpx+wgriMAtMZZT41fOIGaJlD6NE79mjYLM4Bewkmk+8ZgaxhQU8JU5P+8MKYrMI
+	qEj0b54LtptXwFLi/757bBC2oMTJmU/A1jEDret92MoIYctLbH87hxniPgWJn0+XsULExSWO
+	/uwBi4sIOEksPPmAeQKj8Cwko2YhGTULyahZSNoXMLKsYpRMLSjOTc8tNiwwzEst1ytOzC0u
+	zUvXS87P3cQIjjYtzR2M21d90DvEyMTBeIhRgoNZSYTXbMeBVCHelMTKqtSi/Pii0pzU4kOM
+	0hwsSuK84i96U4QE0hNLUrNTUwtSi2CyTBycUg1MlQtEJjIvn6G5PFji3XOPqZvnu94zZbv7
+	4PqVOXEz6xxmtqxjWFr37emVDQ+Unp77HsqyYcM2g/mfN+6KmuJ04Eqw9NSVrWk8gY22c4Lu
+	8fzpu/T3ZXV56QG7k9e0PSXuHE+4uexx3v2dQdxZlWWvFt9/vCZOM+XikbsyPstbnn+LFmuO
+	iZo/oeTeJl6npVEZQhczTDh8nJRFmbmYbmo7FrdfL/q8N6F1Vv6tq9tMjtXomM/661ourrDz
+	RMvHTJuDM5aEZf5MffHr5ZVva3eXPVNVDvL4wsc0/4n6lDzBOUlbn8naeBpWZ0wS2XQ3al+I
+	4vmHJxlU07QdrATXRjZluus1aFlpFX4RimfddW9JpRJLcUaioRZzUXEiADG1IgolAwAA
+X-CMS-MailID: 20240206113359epcas5p44b31963a9b932530ff9e2c349a2fe466
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240205082441epcas5p1e904f4f95852de3fd8663742ed5131df
+References: <CGME20240205082441epcas5p1e904f4f95852de3fd8663742ed5131df@epcas5p1.samsung.com>
+	<20240205082434.36531-1-m.shams@samsung.com>
+	<0a2604e7-8b30-4cf9-9099-ba3681bc5538@linaro.org>
 
-On Tue, Feb 6, 2024 at 9:13=E2=80=AFAM Yoann Congal <yoann.congal@smile.fr>=
- wrote:
->
-> CONFIG_BASE_SMALL is currently a type int but is only used as a boolean.
->
-> So, change its type to bool and adapt all usages:
-> CONFIG_BASE_SMALL =3D=3D 0 becomes !IS_ENABLED(CONFIG_BASE_SMALL) and
-> CONFIG_BASE_SMALL !=3D 0 becomes  IS_ENABLED(CONFIG_BASE_SMALL).
->
-> Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
-> ---
-> NB: This is preliminary work for the following patch removing
-> CONFIG_BASE_FULL (now equivalent to !CONFIG_BASE_SMALL)
->
-> v3->v4:
-> * Split "switch CONFIG_BASE_SMALL to bool" (this patch) and "Remove the r=
-edundant
->   config" into two patches
-> * keep CONFIG_BASE_SMALL instead of CONFIG_BASE_FULL
-> ---
->  arch/x86/include/asm/mpspec.h | 6 +++---
->  drivers/tty/vt/vc_screen.c    | 2 +-
->  include/linux/threads.h       | 4 ++--
->  include/linux/udp.h           | 2 +-
->  include/linux/xarray.h        | 2 +-
->  init/Kconfig                  | 8 ++++----
->  kernel/futex/core.c           | 2 +-
->  kernel/user.c                 | 2 +-
->  8 files changed, 14 insertions(+), 14 deletions(-)
->
-> diff --git a/arch/x86/include/asm/mpspec.h b/arch/x86/include/asm/mpspec.=
-h
-> index 4b0f98a8d338d..c01d3105840cf 100644
-> --- a/arch/x86/include/asm/mpspec.h
-> +++ b/arch/x86/include/asm/mpspec.h
-> @@ -15,10 +15,10 @@ extern int pic_mode;
->   * Summit or generic (i.e. installer) kernels need lots of bus entries.
->   * Maximum 256 PCI busses, plus 1 ISA bus in each of 4 cabinets.
->   */
-> -#if CONFIG_BASE_SMALL =3D=3D 0
-> -# define MAX_MP_BUSSES         260
-> -#else
-> +#ifdef CONFIG_BASE_SMALL
->  # define MAX_MP_BUSSES         32
-> +#else
-> +# define MAX_MP_BUSSES         260
->  #endif
->
->  #define MAX_IRQ_SOURCES                256
-> diff --git a/drivers/tty/vt/vc_screen.c b/drivers/tty/vt/vc_screen.c
-> index 67e2cb7c96eec..da33c6c4691c0 100644
-> --- a/drivers/tty/vt/vc_screen.c
-> +++ b/drivers/tty/vt/vc_screen.c
-> @@ -51,7 +51,7 @@
->  #include <asm/unaligned.h>
->
->  #define HEADER_SIZE    4u
-> -#define CON_BUF_SIZE (CONFIG_BASE_SMALL ? 256 : PAGE_SIZE)
-> +#define CON_BUF_SIZE (IS_ENABLED(CONFIG_BASE_SMALL) ? 256 : PAGE_SIZE)
->
->  /*
->   * Our minor space:
-> diff --git a/include/linux/threads.h b/include/linux/threads.h
-> index c34173e6c5f18..1674a471b0b4c 100644
-> --- a/include/linux/threads.h
-> +++ b/include/linux/threads.h
-> @@ -25,13 +25,13 @@
->  /*
->   * This controls the default maximum pid allocated to a process
->   */
-> -#define PID_MAX_DEFAULT (CONFIG_BASE_SMALL ? 0x1000 : 0x8000)
-> +#define PID_MAX_DEFAULT (IS_ENABLED(CONFIG_BASE_SMALL) ? 0x1000 : 0x8000=
-)
->
->  /*
->   * A maximum of 4 million PIDs should be enough for a while.
->   * [NOTE: PID/TIDs are limited to 2^30 ~=3D 1 billion, see FUTEX_TID_MAS=
-K.]
->   */
-> -#define PID_MAX_LIMIT (CONFIG_BASE_SMALL ? PAGE_SIZE * 8 : \
-> +#define PID_MAX_LIMIT (IS_ENABLED(CONFIG_BASE_SMALL) ? PAGE_SIZE * 8 : \
->         (sizeof(long) > 4 ? 4 * 1024 * 1024 : PID_MAX_DEFAULT))
->
->  /*
-> diff --git a/include/linux/udp.h b/include/linux/udp.h
-> index d04188714dca1..b456417fb4515 100644
-> --- a/include/linux/udp.h
-> +++ b/include/linux/udp.h
-> @@ -24,7 +24,7 @@ static inline struct udphdr *udp_hdr(const struct sk_bu=
-ff *skb)
->  }
->
->  #define UDP_HTABLE_SIZE_MIN_PERNET     128
-> -#define UDP_HTABLE_SIZE_MIN            (CONFIG_BASE_SMALL ? 128 : 256)
-> +#define UDP_HTABLE_SIZE_MIN            (IS_ENABLED(CONFIG_BASE_SMALL) ? =
-128 : 256)
->  #define UDP_HTABLE_SIZE_MAX            65536
->
->  static inline u32 udp_hashfn(const struct net *net, u32 num, u32 mask)
-> diff --git a/include/linux/xarray.h b/include/linux/xarray.h
-> index cb571dfcf4b16..3f81ee5f9fb9c 100644
-> --- a/include/linux/xarray.h
-> +++ b/include/linux/xarray.h
-> @@ -1141,7 +1141,7 @@ static inline void xa_release(struct xarray *xa, un=
-signed long index)
->   * doubled the number of slots per node, we'd get only 3 nodes per 4kB p=
-age.
->   */
->  #ifndef XA_CHUNK_SHIFT
-> -#define XA_CHUNK_SHIFT         (CONFIG_BASE_SMALL ? 4 : 6)
-> +#define XA_CHUNK_SHIFT         (IS_ENABLED(CONFIG_BASE_SMALL) ? 4 : 6)
->  #endif
->  #define XA_CHUNK_SIZE          (1UL << XA_CHUNK_SHIFT)
->  #define XA_CHUNK_MASK          (XA_CHUNK_SIZE - 1)
-> diff --git a/init/Kconfig b/init/Kconfig
-> index d50ebd2a2ce42..d4b16cad98502 100644
-> --- a/init/Kconfig
-> +++ b/init/Kconfig
-> @@ -734,7 +734,7 @@ config LOG_CPU_MAX_BUF_SHIFT
->         int "CPU kernel log buffer size contribution (13 =3D> 8 KB, 17 =
-=3D> 128KB)"
->         depends on SMP
->         range 0 21
-> -       default 0 if BASE_SMALL !=3D 0
-> +       default 0 if BASE_SMALL
->         default 12
->         depends on PRINTK
->         help
-> @@ -1941,9 +1941,9 @@ config RT_MUTEXES
->         default y if PREEMPT_RT
->
->  config BASE_SMALL
-> -       int
-> -       default 0 if BASE_FULL
-> -       default 1 if !BASE_FULL
-> +       bool
-> +       default y if !BASE_FULL
-> +       default n
+Hi Krzysztof,
+
+> -----Original Message-----
+> From: Krzysztof Kozlowski [mailto:krzysztof.kozlowski@linaro.org]
+> Sent: 06 February 2024 15:42
+> To: Tamseel Shams <m.shams@samsung.com>; alim.akhtar@samsung.com;
+> krzysztof.kozlowski+dt@linaro.org; gregkh@linuxfoundation.org;
+> jirislaby@kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org; linux-samsung-
+> soc@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
+> serial@vger.kernel.org
+> Subject: Re: [PATCH v2] serial: samsung: honor fifosize from dts at first
+> 
+> On 05/02/2024 09:24, Tamseel Shams wrote:
+> > Currently for platforms which passes UART fifosize from DT gets
+> > override by local driver structure "s3c24xx_serial_drv_data", which is
+> > not intended. Change the code to honor fifosize from device tree at
+> > first.
+> >
+> > Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+> > ---
+> > Change Log:
+> > v1 -> v2:
+> > Acknowledged Krzysztof's comments
+> > Initialized "ret" variable
+> >
+> >  drivers/tty/serial/samsung_tty.c | 16 +++++++++-------
+> >  1 file changed, 9 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/tty/serial/samsung_tty.c
+> > b/drivers/tty/serial/samsung_tty.c
+> > index 71d17d804fda..e5dc2c32b1bd 100644
+> > --- a/drivers/tty/serial/samsung_tty.c
+> > +++ b/drivers/tty/serial/samsung_tty.c
+> > @@ -1952,7 +1952,7 @@ static int s3c24xx_serial_probe(struct
+> platform_device *pdev)
+> >  	struct device_node *np = pdev->dev.of_node;
+> >  	struct s3c24xx_uart_port *ourport;
+> >  	int index = probe_index;
+> > -	int ret, prop = 0;
+> > +	int ret = 1, prop = 0;
+> 
+> I am sorry, but return of probe function cannot be positive.
+> 
+
+Thanks for the review.
+
+I am reusing the "ret" variable to check whether fifosize property
+is present in DT or not. It will be overwritten at later stage in probe
+function before returning. Also, "ret" variable is used to return from
+probe function only in case of failure i.e. "ret" is negative.
+Currently, probe function always returns 0 in case of success.
+
+For better readability, I am thinking of introducing a new variable for
+checking the return value from function "of_property_read_u32" while
+getting "samsung,uart-fifosize" property.
+
+What are your thoughts on that?
+
+> >
+> >  	if (np) {
+> >  		ret = of_alias_get_id(np, "serial"); @@ -1990,8 +1990,7 @@
+> static
+> > int s3c24xx_serial_probe(struct platform_device *pdev)
+> >  	}
+> >
+> >  	if (np) {
+> > -		of_property_read_u32(np,
+> > -			"samsung,uart-fifosize", &ourport->port.fifosize);
+> > +		ret = of_property_read_u32(np, "samsung,uart-fifosize",
+> > +&ourport->port.fifosize);
+> >
+> >  		if (of_property_read_u32(np, "reg-io-width", &prop) == 0) {
+> >  			switch (prop) {
+> > @@ -2009,10 +2008,13 @@ static int s3c24xx_serial_probe(struct
+> platform_device *pdev)
+> >  		}
+> >  	}
+> >
+> > -	if (ourport->drv_data->fifosize[index])
+> > -		ourport->port.fifosize = ourport->drv_data->fifosize[index];
+> > -	else if (ourport->info->fifosize)
+> > -		ourport->port.fifosize = ourport->info->fifosize;
+> > +	if (ret) {
+> 
+> Are you sure that you are checking correct ret?
+
+Explanation same as above. 
 
 
-
-The shortest form would be:
-
-
-config BASE_SMALL
-        def_bool !BASE_FULL
+Thanks & Regards,
+Tamseel Shams
 
 
-
-But, that is not a big deal, as this hunk will
-be removed by 3/3.
-
-
-
-
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
-
-
-
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
 
