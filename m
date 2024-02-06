@@ -1,181 +1,137 @@
-Return-Path: <linux-serial+bounces-2127-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2131-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE54884BF60
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Feb 2024 22:42:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7884E84C095
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Feb 2024 00:03:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E702890E5
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Feb 2024 21:42:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 13D9D1F24F34
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Feb 2024 23:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B8FF1B957;
-	Tue,  6 Feb 2024 21:42:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8E131C692;
+	Tue,  6 Feb 2024 23:03:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="VdUKMERz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="llIjhFqs"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F9B91B963;
-	Tue,  6 Feb 2024 21:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 929941C2BC;
+	Tue,  6 Feb 2024 23:03:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707255744; cv=none; b=GhmQAYO5fy0Sgb1WulJX7GTqJsA/U6E7lhn36m39/YcFRuwjxTdkhDVSCepo+hUVpxJUJTSuCsTAcTYJ+6LNNDC4hG2Jw9gxbqG8i82M52SPZyHPr39Nl9oE1gRmf5PyejvrTiMlK76pQ+BVoPwMDTLp+WddEue5hqpuhcZN3qM=
+	t=1707260631; cv=none; b=FMhs5cKzl4fk1ICjPO2SzkqF5sO3GDJm5OtZtNfSlVn6wUslUL6vPjwYAEVTG7XXB3JRye1nK+Wtd3rWdVzloP//0pBeLWb04+pQNZ3KMaIRCsaTHHP0+DCFyXxrfbiqhsqUsPXpFSAthYINOc3ppmV1M4oElnEzfrCuyNM0J6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707255744; c=relaxed/simple;
-	bh=sV3k/j9J5B++drgSu+cGIrn3j32CbFIY0tqZsiotMlU=;
-	h=From:To:Cc:Date:Message-Id:In-Reply-To:References:MIME-Version:
-	 Subject; b=NM3PY+QLNBgl5rIDDWUMuo0VTCJ3oZNVOnmmyliP7XutipW79VVFz/Ta6RvoxvXVhNxIHgQTX74rVW1i40Qn5KRC8/lsCRaxFvluN0S8LwQepOfUnVP69FAHailvsaa1/rpvBBedYzpYdpCh2IavaU5lLYM+pBlg48SD/BsXyVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=VdUKMERz; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-	:From:subject:date:message-id:reply-to;
-	bh=S8GKrBx7k32D5TQmOeQBgeGGSVzTirjzknxQ6smCCHw=; b=VdUKMERzJuOYo8CYPfpAAw1yyg
-	HMOFPakOOiSF9GphkQb9HQPguSMGozhvzln1MryMY/MwYaff6+ZOdijyV2FAXYXfuUfXLIH6H6p8y
-	VwJWFGZC7MAn4U+L0pPf7AtIDw/SyUCsxHZZZ8i1g7GxxwbkYDUH5QpVC1qdAMUBlA3A=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:41434 helo=pettiford.lan)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1rXTCu-0006XX-3M; Tue, 06 Feb 2024 16:42:21 -0500
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	hugo@hugovil.com,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Date: Tue,  6 Feb 2024 16:42:08 -0500
-Message-Id: <20240206214208.2141067-5-hugo@hugovil.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240206214208.2141067-1-hugo@hugovil.com>
-References: <20240206214208.2141067-1-hugo@hugovil.com>
+	s=arc-20240116; t=1707260631; c=relaxed/simple;
+	bh=4dxokc2QPwkquTf9uWdCyBwcesXL5u1vQk+9x9lj0w8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=noHMu5Vd2sCzxqhdo4etUhC8Ga9QdZkvF2qcHAJMyQf9NkIv5mSLvlFO7gshR3AqAm+4dFetUzjYMuFvBnOqlh91QOPMNrm9Yxvvnj+2Cat6MH22YmBl4iGtMw7Ip32WNKGasyVkn11jYC3mM/sCOcpu3xzNrG7VyOEVl4BS+VM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=llIjhFqs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1BDBFC4166D;
+	Tue,  6 Feb 2024 23:03:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707260631;
+	bh=4dxokc2QPwkquTf9uWdCyBwcesXL5u1vQk+9x9lj0w8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=llIjhFqsMot38UiBSgpMbrU3q1EyAar3dbkYydDusLNp4etlKKxgYYA8CSCeeJgMR
+	 UHtcQccrBub4GX8gC81MohKFqixZ/LPqBUqQeqjwgIsDVkb+lLLrjkuvyiIUscVXlS
+	 OZ1xXJcD/bBDPoJHZL2lZyY7GMfq/MMnxGSEOKq1kfuy4wKIXLj7l/5coA+anl82ix
+	 e/QN5QfVMxTuW9iMTOKVDNts3oDTcQjExG/33DV8FaDOwpCDPvsmZR3tJGMCCBoDMA
+	 dtHox/jdzVMmhApZ0Gl2cEi4q+/8X5Ljl6cKOsOdXAwtmkuaARNvjVrTzTGX9WMGj4
+	 76dgvpN+M1BpQ==
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-2d0a0e40672so589871fa.0;
+        Tue, 06 Feb 2024 15:03:51 -0800 (PST)
+X-Gm-Message-State: AOJu0Yze7ZGktVyPat4K3p5Z3AB6GtagCPm/vgD7gSQbkmqgQ1pIiqsX
+	hJY+NJ++HLazxM6Q9dslRAS6HBLh1VaXtE9SOIBzYqXGchC8czp8y3jenBKGKmLwR9jKMRvqrWv
+	sEJA9CC0O/LpYmdlYYS3DezS9Vrs=
+X-Google-Smtp-Source: AGHT+IHPsbwOOGRL3EAJfktD49MBO4GuGXVhAKtmtpsW8IP5vCf4bzzoS6Arg8OttOMnwkUGeLZmSyzohQ9br6sVeOs=
+X-Received: by 2002:a2e:95d3:0:b0:2d0:af6e:5cb4 with SMTP id
+ y19-20020a2e95d3000000b002d0af6e5cb4mr1383013ljh.16.1707260629362; Tue, 06
+ Feb 2024 15:03:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
-Subject: [PATCH 4/4] serial: sc16is7xx: split into core and I2C/SPI parts (sc16is7xx_regcfg)
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+References: <20240206001333.1710070-1-yoann.congal@smile.fr> <20240206001333.1710070-2-yoann.congal@smile.fr>
+In-Reply-To: <20240206001333.1710070-2-yoann.congal@smile.fr>
+From: Masahiro Yamada <masahiroy@kernel.org>
+Date: Wed, 7 Feb 2024 08:03:12 +0900
+X-Gmail-Original-Message-ID: <CAK7LNAQ22qMJi3jQD8R_+7bi5DTz-pgMAEs91m-cDcnfOmES+A@mail.gmail.com>
+Message-ID: <CAK7LNAQ22qMJi3jQD8R_+7bi5DTz-pgMAEs91m-cDcnfOmES+A@mail.gmail.com>
+Subject: Re: [PATCH v4 1/3] printk: Fix LOG_CPU_MAX_BUF_SHIFT when BASE_SMALL
+ is enabled
+To: Yoann Congal <yoann.congal@smile.fr>
+Cc: linux-fsdevel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, x86@kernel.org, 
+	=?UTF-8?Q?Andr=C3=A9_Almeida?= <andrealmeid@igalia.com>, 
+	Borislav Petkov <bp@alien8.de>, Darren Hart <dvhart@infradead.org>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Davidlohr Bueso <dave@stgolabs.net>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Ingo Molnar <mingo@redhat.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	John Ogness <john.ogness@linutronix.de>, Josh Triplett <josh@joshtriplett.org>, 
+	Matthew Wilcox <willy@infradead.org>, Peter Zijlstra <peterz@infradead.org>, 
+	Petr Mladek <pmladek@suse.com>, Sergey Senozhatsky <senozhatsky@chromium.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Willem de Bruijn <willemdebruijn.kernel@gmail.com>, Vegard Nossum <vegard.nossum@oracle.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+On Tue, Feb 6, 2024 at 9:13=E2=80=AFAM Yoann Congal <yoann.congal@smile.fr>=
+ wrote:
+>
+> LOG_CPU_MAX_BUF_SHIFT default value depends on BASE_SMALL:
+>   config LOG_CPU_MAX_BUF_SHIFT
+>         default 12 if !BASE_SMALL
+>         default 0 if BASE_SMALL
+> But, BASE_SMALL is a config of type int and "!BASE_SMALL" is always
+> evaluated to true whatever is the value of BASE_SMALL.
+>
+> This patch fixes this by using the correct conditional operator for int
+> type : BASE_SMALL !=3D 0.
+>
+> Note: This changes CONFIG_LOG_CPU_MAX_BUF_SHIFT=3D12 to
+> CONFIG_LOG_CPU_MAX_BUF_SHIFT=3D0 for BASE_SMALL defconfigs, but that will
+> not be a big impact due to this code in kernel/printk/printk.c:
+>   /* by default this will only continue through for large > 64 CPUs */
+>   if (cpu_extra <=3D __LOG_BUF_LEN / 2)
+>           return;
+> Systems using CONFIG_BASE_SMALL and having 64+ CPUs should be quite
+> rare.
+>
+> John Ogness <john.ogness@linutronix.de> (printk reviewer) wrote:
+> > For printk this will mean that BASE_SMALL systems were probably
+> > previously allocating/using the dynamic ringbuffer and now they will
+> > just continue to use the static ringbuffer. Which is fine and saves
+> > memory (as it should).
+>
+> Petr Mladek <pmladek@suse.com> (printk maintainer) wrote:
+> > More precisely, it allocated the buffer dynamically when the sum
+> > of per-CPU-extra space exceeded half of the default static ring
+> > buffer. This happened for systems with more than 64 CPUs with
+> > the default config values.
+>
+> Signed-off-by: Yoann Congal <yoann.congal@smile.fr>
+> Reported-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> Closes: https://lore.kernel.org/all/CAMuHMdWm6u1wX7efZQf=3D2XUAHascps76YQ=
+ac6rdnQGhc8nop_Q@mail.gmail.com/
+> Reported-by: Vegard Nossum <vegard.nossum@oracle.com>
+> Closes: https://lore.kernel.org/all/f6856be8-54b7-0fa0-1d17-39632bf29ada@=
+oracle.com/
+> Fixes: 4e244c10eab3 ("kconfig: remove unneeded symbol_empty variable")
 
-Since each I2C/SPI probe function can modify sc16is7xx_regcfg at the same
-time, change structure to be constant and do the required modifications on
-a local copy.
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
----
- drivers/tty/serial/sc16is7xx.c     |  2 +-
- drivers/tty/serial/sc16is7xx.h     |  2 +-
- drivers/tty/serial/sc16is7xx_i2c.c | 11 +++++++----
- drivers/tty/serial/sc16is7xx_spi.c | 11 +++++++----
- 4 files changed, 16 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 5073ebfc45bf..706c8b18250b 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1696,7 +1696,7 @@ const struct of_device_id __maybe_unused sc16is7xx_dt_ids[] = {
- EXPORT_SYMBOL_GPL(sc16is7xx_dt_ids);
- MODULE_DEVICE_TABLE(of, sc16is7xx_dt_ids);
- 
--struct regmap_config sc16is7xx_regcfg = {
-+const struct regmap_config sc16is7xx_regcfg = {
- 	.reg_bits = 5,
- 	.pad_bits = 3,
- 	.val_bits = 8,
-diff --git a/drivers/tty/serial/sc16is7xx.h b/drivers/tty/serial/sc16is7xx.h
-index 410f34b1005c..8d03357e35c7 100644
---- a/drivers/tty/serial/sc16is7xx.h
-+++ b/drivers/tty/serial/sc16is7xx.h
-@@ -19,7 +19,7 @@ struct sc16is7xx_devtype {
- 	int	nr_uart;
- };
- 
--extern struct regmap_config sc16is7xx_regcfg;
-+extern const struct regmap_config sc16is7xx_regcfg;
- 
- extern const struct of_device_id __maybe_unused sc16is7xx_dt_ids[];
- 
-diff --git a/drivers/tty/serial/sc16is7xx_i2c.c b/drivers/tty/serial/sc16is7xx_i2c.c
-index 70f0c329cc13..5667c56cf2aa 100644
---- a/drivers/tty/serial/sc16is7xx_i2c.c
-+++ b/drivers/tty/serial/sc16is7xx_i2c.c
-@@ -12,17 +12,20 @@ static int sc16is7xx_i2c_probe(struct i2c_client *i2c)
- {
- 	const struct sc16is7xx_devtype *devtype;
- 	struct regmap *regmaps[SC16IS7XX_MAX_PORTS];
-+	struct regmap_config regcfg;
- 	unsigned int i;
- 
- 	devtype = i2c_get_match_data(i2c);
- 	if (!devtype)
- 		return dev_err_probe(&i2c->dev, -ENODEV, "Failed to match device\n");
- 
-+	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
-+
- 	for (i = 0; i < devtype->nr_uart; i++) {
--		sc16is7xx_regcfg.name = sc16is7xx_regmap_name(i);
--		sc16is7xx_regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i);
--		sc16is7xx_regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
--		regmaps[i] = devm_regmap_init_i2c(i2c, &sc16is7xx_regcfg);
-+		regcfg.name = sc16is7xx_regmap_name(i);
-+		regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regmaps[i] = devm_regmap_init_i2c(i2c, &regcfg);
- 	}
- 
- 	return sc16is7xx_probe(&i2c->dev, devtype, regmaps, i2c->irq);
-diff --git a/drivers/tty/serial/sc16is7xx_spi.c b/drivers/tty/serial/sc16is7xx_spi.c
-index 3942fc1b7455..55c1d4ad83f5 100644
---- a/drivers/tty/serial/sc16is7xx_spi.c
-+++ b/drivers/tty/serial/sc16is7xx_spi.c
-@@ -16,6 +16,7 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- {
- 	const struct sc16is7xx_devtype *devtype;
- 	struct regmap *regmaps[SC16IS7XX_MAX_PORTS];
-+	struct regmap_config regcfg;
- 	unsigned int i;
- 	int ret;
- 
-@@ -35,17 +36,19 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- 	if (!devtype)
- 		return dev_err_probe(&spi->dev, -ENODEV, "Failed to match device\n");
- 
-+	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
-+
- 	for (i = 0; i < devtype->nr_uart; i++) {
--		sc16is7xx_regcfg.name = sc16is7xx_regmap_name(i);
-+		regcfg.name = sc16is7xx_regmap_name(i);
- 		/*
- 		 * If read_flag_mask is 0, the regmap code sets it to a default
- 		 * of 0x80. Since we specify our own mask, we must add the READ
- 		 * bit ourselves:
- 		 */
--		sc16is7xx_regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i) |
-+		regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i) |
- 			SC16IS7XX_SPI_READ_BIT;
--		sc16is7xx_regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
--		regmaps[i] = devm_regmap_init_spi(spi, &sc16is7xx_regcfg);
-+		regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regmaps[i] = devm_regmap_init_spi(spi, &regcfg);
- 	}
- 
- 	return sc16is7xx_probe(&spi->dev, devtype, regmaps, spi->irq);
--- 
-2.39.2
+Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
 
+
+
+
+
+--=20
+Best Regards
+Masahiro Yamada
 
