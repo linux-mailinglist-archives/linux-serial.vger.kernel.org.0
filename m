@@ -1,133 +1,123 @@
-Return-Path: <linux-serial+bounces-2221-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2223-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 016D3853B48
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Feb 2024 20:39:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB55985408B
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 01:00:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86685B20AC7
-	for <lists+linux-serial@lfdr.de>; Tue, 13 Feb 2024 19:39:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A2B21C2682E
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 00:00:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C4CC60DDA;
-	Tue, 13 Feb 2024 19:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8DEA63CAC;
+	Tue, 13 Feb 2024 23:58:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c64hZ0Z6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="R/5GHkPC"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B54EF60BBA;
-	Tue, 13 Feb 2024 19:38:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A10B369D2D;
+	Tue, 13 Feb 2024 23:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707853115; cv=none; b=fyq32k/41N3b0shE9tBrIInV7n3jYs8HK5wAq3gMwSy28qR0gy1snnQ5FlcBq04RLWWmuW+kk0JNUkJ7D16dNTKJmTGo7MKkxLPFgcbogUeCglekUc3B6iybAk1DYX+H8dta3xZb6nQdE96DJ6UtvNN95vE88LCvT4BLbCQdafY=
+	t=1707868692; cv=none; b=SwJ/FLW+nndpmdHPmuXXeOULZ7g6xdtcG+fyOUqhydAR1mQq9RDQEVb8zuDipBt1DKzYgViL3x1NfOtUcV0B/trOhO0o7/3LCTNb0LSRHVG6qxRH/+T/PmUk+18DoanTcHSXDrfMhXwoXq9f2dEK0WYFKn2wTrUL2EU26T0XSrY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707853115; c=relaxed/simple;
-	bh=o7LkJqrD2vVgnZLqnrQyG9cxpNtR87PcZfpLb0iubAs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HB5dvi3Lir0FLgfyzgqKky7BnUD266BGdim0/N80lFx368ar5q3PQ/DEfB/I+f1YDt72WJFUhS60t54R32Er7f+ZHPbGLuWqEySn0cAz8XqYLUZp32Bgh6x5owbQhmQbuqi9mJ8YiTNJw1MnDYby0SVR/yXxHAEha6K9iqR7pug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c64hZ0Z6; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1707853114; x=1739389114;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=o7LkJqrD2vVgnZLqnrQyG9cxpNtR87PcZfpLb0iubAs=;
-  b=c64hZ0Z6KDWtbLqDK1EWddXRn9CYFp2NsAwfGuvCe2wMmKJgkJIpwWo4
-   0bfFhnAc95ZYD62J1VXi0X7uTKBeHX5E68W3+JJ2cFYprr2JlVM+5oxqx
-   VTkqbpBs6Latf7Wy/hKcAflouzzzaxZYr0e0kylZv9Au8HFk/k5jb2ztH
-   HNS9yhhtohNGFaxgvsPnYbHWzE0fUSzxwl2y7KCa2eqSM/n0MrfjmTwP6
-   xDlI923AZOWYndZ1SW0j0hXhEUZgxq/f4AgEHXPdsr3zAqPOPaHDp5i4G
-   ya8NmTpJq2YcKt6YYqEjDmdHuxBSv+iB8flV7JLIir1aEqke0WC4yrh/e
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="24351138"
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="24351138"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2024 11:38:33 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10982"; a="935435642"
-X-IronPort-AV: E=Sophos;i="6.06,158,1705392000"; 
-   d="scan'208";a="935435642"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Feb 2024 11:38:30 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 9006C184; Tue, 13 Feb 2024 21:38:29 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Rengarajan S <rengarajan.s@microchip.com>,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Kumaravel Thiagarajan <kumaravel.thiagarajan@microchip.com>,
-	Tharun Kumar P <tharunkumar.pasumarthi@microchip.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 1/1] serial: 8250_pci1xxxx: Don't use "proxy" headers
-Date: Tue, 13 Feb 2024 21:38:27 +0200
-Message-ID: <20240213193827.3207353-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
+	s=arc-20240116; t=1707868692; c=relaxed/simple;
+	bh=gNqNSc2uf6gFYuN9ZBm4KIxHP1qZmB6TQVFDZVxZC3Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZAhicaOyGWgUVxD+4gAQiq3iwLwcCOS860rUNFaIijPUnUXUii9INA/7Whz+3XUcrw/CMGv/7pSIvuUhvGgHFXPqRcdjhej/L9x1J4UVGTVdh4OCgKSfro0tBr6GUc4e0W6P16n56m/3GNp2jfuucVFMmEa1aGKGAa8q5DiQ64g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=R/5GHkPC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8C4C433C7;
+	Tue, 13 Feb 2024 23:58:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1707868692;
+	bh=gNqNSc2uf6gFYuN9ZBm4KIxHP1qZmB6TQVFDZVxZC3Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=R/5GHkPCttL6z0RfSJrW5H17w2Bo+fpdUaCfIdqb0Xb9UV3PHHBzIS0DGbiuehz0X
+	 qU5PRq7oQgJv0z6E5VDh5FvGXTh+azQCwx3AjSxOrKXixZ3qvnQvNRhH0Urv+0OsZz
+	 M7pFG1lWRbCO9iGA3hj4yk+Rzygz9cTHb2eSf8zcR2C6TcFUE8MY2tLO+VQmjwAjd0
+	 o2OYchSxIT6d0dYH63S8J6ncIYRzp1atQ6prUPAXz9n5BECMJLlyPuhOWzhR9mUjRx
+	 RDmk61rwMx/RZP5Gn3UgpuKnmeCkB0WVoYT3wzgmmb9DrMv+S4MF1gok0he/CQ4cr6
+	 5P8BwM+z+SpfA==
+Received: by mercury (Postfix, from userid 1000)
+	id 55B4D1061C38; Wed, 14 Feb 2024 00:58:09 +0100 (CET)
+Date: Wed, 14 Feb 2024 00:58:09 +0100
+From: Sebastian Reichel <sre@kernel.org>
+To: Tony Lindgren <tony@atomide.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Petr Mladek <pmladek@suse.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, 
+	Sergey Senozhatsky <senozhatsky@chromium.org>, "David S . Miller" <davem@davemloft.net>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Dhruva Gole <d-gole@ti.com>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Johan Hovold <johan@kernel.org>, 
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>, Vignesh Raghavendra <vigneshr@ti.com>, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v6 4/6] serial: core: Add support for DEVNAME:0.0 style
+ naming for kernel console
+Message-ID: <jnfrv7wj4wigtzsh7r7p4zgbtim64kniriwbtjc3pebznyvwtk@7l36wdfn6tja>
+References: <20240213084545.40617-1-tony@atomide.com>
+ <20240213084545.40617-5-tony@atomide.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240213084545.40617-5-tony@atomide.com>
 
-Update header inclusions to follow IWYU (Include What You Use)
-principle.
+Hi,
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_pci1xxxx.c | 20 ++++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+On Tue, Feb 13, 2024 at 10:45:11AM +0200, Tony Lindgren wrote:
+> We can now add hardware based addressing for serial ports. Starting with
+> commit 84a9582fd203 ("serial: core: Start managing serial controllers to
+> enable runtime PM"), and all the related fixes to this commit, the serial
+> core now knows to which serial port controller the ports are connected.
+> 
+> The serial ports can be addressed with DEVNAME:0.0 style naming. The names
+> are something like 00:04:0.0 for a serial port on qemu, and something like
+> 2800000.serial:0.0 on platform device using systems like ARM64 for example.
+> 
+> The DEVNAME is the unique serial port hardware controller device name, AKA
+> the name for port->dev. The 0.0 are the serial core controller id and port
+> id.
+> 
+> Typically 0.0 are used for each controller and port instance unless the
+> serial port hardware controller has multiple controllers or ports.
+> 
+> Using DEVNAME:0.0 style naming actually solves two long term issues for
+> addressing the serial ports:
+> 
+> 1. According to Andy Shevchenko, using DEVNAME:0.0 style naming fixes an
+>    issue where depending on the BIOS settings, the kernel serial port ttyS
+>    instance number may change if HSUART is enabled
+> 
+> 2. Device tree using architectures no longer necessarily need to specify
+>    aliases to find a specific serial port, and we can just allocate the
+>    ttyS instance numbers dynamically in whatever probe order
+> 
+> To do this, let's match the hardware addressing style console name to
+> the character device name used, and add a preferred console using the
+> character device name.
+> 
+> Note that when using console=DEVNAME:0.0 style kernel command line, the
+> 8250 serial console gets enabled later compared to using console=ttyS
+> naming for ISA ports. This is because the serial port DEVNAME to character
+> device mapping is not known until the serial driver probe time. If used
+> together with earlycon, this issue is avoided.
+> 
+> Signed-off-by: Tony Lindgren <tony@atomide.com>
+> ---
 
-diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial/8250/8250_pci1xxxx.c
-index 356972734b29..55eada1dba56 100644
---- a/drivers/tty/serial/8250/8250_pci1xxxx.c
-+++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
-@@ -7,23 +7,31 @@
-  *  Copyright (C) 2022 Microchip Technology Inc., All Rights Reserved.
-  */
- 
-+#include <linux/array_size.h>
- #include <linux/bitfield.h>
--#include <linux/bitops.h>
--#include <linux/delay.h>
-+#include <linux/bits.h>
-+#include <linux/circ_buf.h>
-+#include <linux/device.h>
-+#include <linux/errno.h>
-+#include <linux/gfp_types.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
--#include <linux/kernel.h>
-+#include <linux/minmax.h>
- #include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/overflow.h>
- #include <linux/pci.h>
-+#include <linux/pm.h>
- #include <linux/serial_core.h>
- #include <linux/serial_reg.h>
- #include <linux/serial_8250.h>
--#include <linux/slab.h>
-+#include <linux/spinlock.h>
- #include <linux/string.h>
--#include <linux/units.h>
-+#include <linux/time.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
--#include <linux/8250_pci.h>
-+#include <linux/types.h>
-+#include <linux/units.h>
- 
- #include <asm/byteorder.h>
- 
--- 
-2.43.0.rc1.1.gbec44491f096
+I would expect an update to the console= section in [0] somewhere in
+this series.
 
+[0] Documentation/admin-guide/kernel-parameters.txt
+
+Greetings,
+
+-- Sebastian
 
