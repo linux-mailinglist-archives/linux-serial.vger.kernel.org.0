@@ -1,43 +1,43 @@
-Return-Path: <linux-serial+bounces-2243-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2242-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02353854855
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 12:29:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5F9018547E0
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 12:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EECE8B23203
-	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 11:29:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C3D82882D9
+	for <lists+linux-serial@lfdr.de>; Wed, 14 Feb 2024 11:15:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76C4E199BC;
-	Wed, 14 Feb 2024 11:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE5C1AAD2;
+	Wed, 14 Feb 2024 11:14:46 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
 Received: from gepdcl09.sg.gdce.sony.com.sg (unknown [121.100.38.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D70171A3;
-	Wed, 14 Feb 2024 11:29:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE94618E2F;
+	Wed, 14 Feb 2024 11:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=121.100.38.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1707910182; cv=none; b=N9KURrlt9xo+kDgJditJbIeBtE8qKV3EtEVDDlfIpw4h5c3U5dTkOYxIVzan4lb63opmaOXCCwePCY04XErp63Q8067BuxlPwc0phEXptYfL6kGlsnawIntXLCb0+G8N3l182fWqTjxR2XTmbjCtKcH+8NIN9RQCaDuFhejOW0w=
+	t=1707909286; cv=none; b=VbFS34wa9CKuM1Gkn/dum9kSxzK3TtLPZAYpPFI49WwWDEQVr9/jqocbXlObkVWegpN77VTYbvbeqU6o/oRlYhhc7Vf6p056Umt5dRR169bU445zP+gAyC4MgEhPvt7aSbgViivrchYuewQ4bNFTiQNnnUNbYgDFEHuBg0ftOOM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1707910182; c=relaxed/simple;
-	bh=3t2GII+GFBiCVO0yfeqLOOLESh/DgusqChhhZZZl7tk=;
+	s=arc-20240116; t=1707909286; c=relaxed/simple;
+	bh=l+i0yIxLpwQsUo4QfGAzTGFABUordW6G5AbZmrrcfq4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R3lq81YZeNR2jWn28OxDcXUBoftpmrZzRYP9Iq483kclCtqp84c2/Qz4cKURMTdsSm/1KeXrKT5QZEqSIkMC+xPYxyoHgONmbRVAa7UDBZEgTjsNf+kTjcx0jl3UbXZ/GNaKbRVPQgiMBoPvh5/qtYh2TFBh2EiNnR9CbnKk3T8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hcgqxpawrug8kr1AdCwrUKFOZ2tVHoGLRopOwcOGHPNI/9D2wKD8+kPRKS0UAkYORTkBSWjxuu9q+o1UE/2CFbS39bnxPu0JLCxevwKhL5n4Nn52VdyDNuivIPHaL+bkHfPlqx4L+gstNcoRiEeOQV12YQb6AcyHQBjMVhbZ/ns=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sony.com; spf=fail smtp.mailfrom=sony.com; arc=none smtp.client-ip=121.100.38.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=sony.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=sony.com
-Received: from gepdcl04.s.gdce.sony.com.sg (SGGDCSE1NS08.sony.com.sg [146.215.123.198])
-	by gepdcl09.sg.gdce.sony.com.sg (8.14.7/8.14.4) with ESMTP id 41EAgcpk007668;
-	Wed, 14 Feb 2024 18:44:09 +0800
+Received: from gepdcl02.s.gdce.sony.com.sg (SGGDCSE1NS07.sony.com.sg [146.215.123.196])
+	by gepdcl09.sg.gdce.sony.com.sg (8.14.7/8.14.4) with ESMTP id 41EBE4g3027632;
+	Wed, 14 Feb 2024 19:14:16 +0800
 Received: from mail.sony.com ([43.88.80.246])
-	by gepdcl04.s.gdce.sony.com.sg (8.14.7/8.14.4) with ESMTP id 41EAg5SS002885;
-	Wed, 14 Feb 2024 18:42:05 +0800
+	by gepdcl02.s.gdce.sony.com.sg (8.14.7/8.14.4) with ESMTP id 41EBE2jV014297;
+	Wed, 14 Feb 2024 19:14:02 +0800
 Received: by mail.sony.com (Postfix, from userid 1000)
-	id 367FD20C089D; Wed, 14 Feb 2024 16:10:39 +0530 (IST)
-Date: Wed, 14 Feb 2024 16:10:39 +0530
+	id 6BA9420C089E; Wed, 14 Feb 2024 16:42:36 +0530 (IST)
+Date: Wed, 14 Feb 2024 16:42:36 +0530
 From: Sreenath Vijayan <sreenath.vijayan@sony.com>
 To: Petr Mladek <pmladek@suse.com>
 Cc: john.ogness@linutronix.de, corbet@lwn.net, gregkh@linuxfoundation.org,
@@ -45,10 +45,10 @@ Cc: john.ogness@linutronix.de, corbet@lwn.net, gregkh@linuxfoundation.org,
         senozhatsky@chromium.org, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
         taichi.shimoyashiki@sony.com, daniel.palmer@sony.com,
-        anandakumar.balasubramaniam@sony.com
+        anandakumar.balasubramaniam@sony.com, sreenath.vijayan@sony.com
 Subject: Re: [PATCH v4 2/2] tty/sysrq: Dump printk ring buffer messages via
  sysrq
-Message-ID: <ZcyYp4eZsrrrunFj@sony.com>
+Message-ID: <ZcygJOj9TaHZUKd-@sony.com>
 References: <cover.1706772349.git.sreenath.vijayan@sony.com>
  <ca8dd18e434f309612c907d90e9f77c09e045b37.1706772349.git.sreenath.vijayan@sony.com>
  <ZcOdLrOPiPJmCec5@alley>
@@ -84,7 +84,7 @@ command and might be easier to remember.
 > console_loglevel is set to show all messages. This is done
 > in __handle_sysrq(). But it is not done in the workqueue
 > context.
-> 
+>
 
 Yes, the initial implementation was using write() of consoles
 so the messages would be shown irrespective of the console log
@@ -96,7 +96,7 @@ loglevel before calling callback function for the key.
 If console_loglevel is set to show KERN_INFO messages, it would
 dump most of the important printk messages in our case. Also the
 loglevel can be modified using sysrq itself now.
-
+ 
 > Finally, the commit message should explain why workqueues are used
 > and what are the limitations. Something like:
 > 
