@@ -1,78 +1,78 @@
-Return-Path: <linux-serial+bounces-2288-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2291-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7CEF857738
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 09:11:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (unknown [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1DE185773F
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 09:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9C88B21BF3
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 08:11:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0F940B21004
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 08:13:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 637EC182AE;
-	Fri, 16 Feb 2024 08:00:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A02E71BDE6;
+	Fri, 16 Feb 2024 08:00:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S26B1SIS"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="RhP1J26n"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A9AF1B962
-	for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 08:00:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B28E91BC4B
+	for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 08:00:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070428; cv=none; b=W424d6/jU5+3iyAy/CMLJqKyrG168zobX1gmZlrHU1mlRKRMVjaItA1ad7pGt/khvfzUbSwvNlzu2PgHB5EITN8abxFyFTO/TM2feVVB5ZICFFzMKqOOvwF4JNfxGZTMGJL3GRgGiplwYy7psGl+LrNc6e1Mqlh69zHfkRjXSis=
+	t=1708070433; cv=none; b=U9HVneA37f4W+Eh5M6XH5fP3mSS8qkChbSs1hGDnFi5Tro8dvpwKMoUzBOOko9pS2ssVniokdVj1jCfDTiAf5y90CeBBnI14VLGqk0n20qwhz8BiYrRBQCw9aw1ECCAnThqV1oExuGD506iIuOdo8IDGHN0Q340fzKTr7hboRZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070428; c=relaxed/simple;
-	bh=aEHy6hiozJg0zLqSV3cEv145/oODe8VbFXoxgPA/6rM=;
+	s=arc-20240116; t=1708070433; c=relaxed/simple;
+	bh=Ap0hhSVhCcUi+ugheKg7fHGNULFldbyGXWaIBynCIwo=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B8pOa+i/diiJZnz7/AY/CG7DGw173SSvdGzTlIYTMybWPeO49hq+ZY/iovCiBgQ8ONxYSI0r4v03XojC8ppytoJYFP9dobxjJnlcUQxGseYHwZ5fEIi0mjPrphWfoq6l0iZ4d6oy50fbNBr6WHDqnlkwBnYZ/OGf/VhaVEfYJwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S26B1SIS; arc=none smtp.client-ip=170.10.133.124
+	 MIME-Version:Content-Type; b=IPjP1/AaAbhFwLoiZ4EpkaBe/ziHM9xCRB2ETjVFUcbwZmKCF20rbP7UPYjYMjGv+PX0Tr3lorKQAkD2H4DGZOLCQHspNu34Y73LBKjPNF5f2LX/GLMEToCvwmgQv7fSglP7CgwoPSerDZnogDpAiuZ3Fk8tiftTS1eua9S2gdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=RhP1J26n; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708070425;
+	s=mimecast20190719; t=1708070430;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=d3/GSmZNXXq4OmuXU9kp4Oh7aTznSf//j0PB7MhvXcY=;
-	b=S26B1SISfjWZK6nGOXmi1T80Q1zG2SGSfeqZJJ4nVeX7bxBwt8LyBK8vWtZSDz+86n1xNw
-	aPt9aDAD/fmtZjbMmEabcZ8Fs5/4P9Yz43JP3sFvKXIN9iA+4FzI+nrFf+OCC8kEPao8lu
-	QCtCD7QtHUCayThFPkvyBMevnmKps4I=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=lf9jFY+y8CayXQz2V+yS9ViGyyGoBfGEuY3heLM9Fu0=;
+	b=RhP1J26nxEFjoS2Mz8dT8b9Kaid3nnQkbv1r1R1S3wtBpIsEkhmWGJbfXMBZZFhI5UT1ZT
+	hZsdFNQm1A8fdZv3YBGpof6Qj/eGYaCX5TrzdHmFMNt1A57bXxLxLd4FDIXuPlu+O4wuOK
+	NfNpH1dz8BzVRYPSrxQk45l0OyCC42s=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-410-AT6p03SmPCiNo5jf5jfDNw-1; Fri, 16 Feb 2024 03:00:23 -0500
-X-MC-Unique: AT6p03SmPCiNo5jf5jfDNw-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-78732274d13so43725085a.1
-        for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 00:00:23 -0800 (PST)
+ us-mta-622-WeKXBOtZPLCGERQPQAbzdg-1; Fri, 16 Feb 2024 03:00:26 -0500
+X-MC-Unique: WeKXBOtZPLCGERQPQAbzdg-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7873fd60a11so97553085a.1
+        for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 00:00:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708070423; x=1708675223;
+        d=1e100.net; s=20230601; t=1708070426; x=1708675226;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=d3/GSmZNXXq4OmuXU9kp4Oh7aTznSf//j0PB7MhvXcY=;
-        b=ol42LZaUaVGWUe0gHai3CvG/g6NcaX3Euh7Px/lhSt9FkhKbwXeiK28m7Zhw2lGQCF
-         jUT4VA0PbhkLeKtfrUiQGeOgAYGlEPZba5bA6WnawgY3js5X+2dLLRsNLtPQ/y4JVQbL
-         h9FvwvHv/g3HIJB/MpifM8ouZGOieXWjbaXmD8ngPKgF2ZQgIzA1yJkGvoBYF9nzvjod
-         K77A8g1WWEdVaqvcffcaXQDn+bI6/nOWIOlM3mHvXA71VWBqcbmFEz/urKTVm3E5nHH/
-         B8ick6G24CQRjIXVO4dA3Cah6uUZd2F9ZmCFq/kaDFit18oS642AYpkSSCyd+qjMyU6T
-         2byQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLtZQHdVLlfzsGILpgDTwpRDb3yAcvyP0g7Bx/rPGQjhdKSsKmWXl+Izk/Kc0wOKVL/LssoHLiD1D3LQUAMgRIEcQJuIjlR+hsr5S2
-X-Gm-Message-State: AOJu0YwOLm0GZKztff/C2ERkzMkcPTsRy9fHG78guBxVMfoCSlOhvwAq
-	TE3GskVI9l3fMWWq1Kv9cGe5gq+cNeqgA2Z76+/7E9Ne2iV8mY764VC3QmO4MO+a7Tbo7YoSis8
-	j788RpniKhu0I/i+pTVlYhYUQm5vmkBfeEfIVQbKYgXeRga/yQ5CQrHbJpr2wKw==
-X-Received: by 2002:a05:620a:20dc:b0:785:bd25:e5f7 with SMTP id f28-20020a05620a20dc00b00785bd25e5f7mr4327147qka.40.1708070423379;
-        Fri, 16 Feb 2024 00:00:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHDRyKi0XcKVQ1C8Z+dCIrgkoC1k7NPLTiBJp4VU065CynceYB7WcSQnoLO8F0WxfTXSA0FUQ==
-X-Received: by 2002:a05:620a:20dc:b0:785:bd25:e5f7 with SMTP id f28-20020a05620a20dc00b00785bd25e5f7mr4327129qka.40.1708070423128;
-        Fri, 16 Feb 2024 00:00:23 -0800 (PST)
+        bh=lf9jFY+y8CayXQz2V+yS9ViGyyGoBfGEuY3heLM9Fu0=;
+        b=QRlsWn0MOZ/t4Vck4PXd3epNm5i2I/jaI4KFd0tYY9o8OcNKMeSDprZhYM3yXVRFtl
+         QDxAfKC8jHnkK0G2cuu5JQravBb43baO49rO/EHp/PEVznBZIxiAb6IimpD0gCHMQtzO
+         0iMbjJ9fDfTdVp/zzUaQ4sLwSvQdT8azhpHGncAAUnP8dlmxOi73bZdp60Nysb6jqbdg
+         NckDOVPn9lsh1Qba1g6eiS7bjK9wbxmJ9or4Bc5dM8SL0DfAb37iwFZQI93jfJKlAtkD
+         kew9Y2xq/73RF/gtVdCoojkixOW7CW5adtlDkF8VMe/HLlTDY1gREnoYBFZC35aSePcu
+         LWbg==
+X-Forwarded-Encrypted: i=1; AJvYcCXdGRzE/fo4fqaTHbmsBnPCOmi7mTQ9LIl6HXB9SsYcCwFSCurm6/GX2j7XTQBTI4p1nbymtyiTrUmHAhtWeBxIRt1Z6AJ69DMi9LCg
+X-Gm-Message-State: AOJu0YwwBRTsHdMyB8XsCxyVR72UnnHzioouXK/H0AsT5jPvbHyHhC9f
+	NUOqm2qizix6n7dnMju6Fc+KapZ8xdtLePzaFK+IhGyoywGuxoYHXxDeAxi4UcIGkYbkYiCRVHD
+	sUz6wMgO1d0VobEuqFg8kW3eTK6m7+//IXF0QJZw9j/yEeWPPcXk47vKm1F2wNw==
+X-Received: by 2002:a05:620a:372a:b0:787:2d4a:e91 with SMTP id de42-20020a05620a372a00b007872d4a0e91mr12380855qkb.12.1708070426060;
+        Fri, 16 Feb 2024 00:00:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHLG7XvZtlTywNrtd9AYcJ1Px0bo2LO9DGLhh4nIJjj5II6F+o5xx7gYe26QguBGg3mPZZ7zA==
+X-Received: by 2002:a05:620a:372a:b0:787:2d4a:e91 with SMTP id de42-20020a05620a372a00b007872d4a0e91mr12380824qkb.12.1708070425766;
+        Fri, 16 Feb 2024 00:00:25 -0800 (PST)
 Received: from LeoBras.redhat.com ([2804:1b3:a800:4770:9d0:4bac:1782:4637])
-        by smtp.gmail.com with ESMTPSA id br37-20020a05620a462500b00787346f1edasm1300756qkb.54.2024.02.16.00.00.20
+        by smtp.gmail.com with ESMTPSA id br37-20020a05620a462500b00787346f1edasm1300756qkb.54.2024.02.16.00.00.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 00:00:22 -0800 (PST)
+        Fri, 16 Feb 2024 00:00:25 -0800 (PST)
 From: Leonardo Bras <leobras@redhat.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
@@ -87,9 +87,9 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Shanker Donthineni <sdonthineni@nvidia.com>
 Cc: linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [RFC PATCH v2 2/4] irq/spurious: Account for multiple handles in note_interrupt
-Date: Fri, 16 Feb 2024 04:59:44 -0300
-Message-ID: <20240216075948.131372-4-leobras@redhat.com>
+Subject: [RFC PATCH v2 3/4] irq: Introduce IRQ_HANDLED_MANY
+Date: Fri, 16 Feb 2024 04:59:45 -0300
+Message-ID: <20240216075948.131372-5-leobras@redhat.com>
 X-Mailer: git-send-email 2.43.2
 In-Reply-To: <20240216075948.131372-2-leobras@redhat.com>
 References: <20240216075948.131372-2-leobras@redhat.com>
@@ -104,117 +104,123 @@ X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-Currently note_interrupt() will check threads_handled for changes and use
-it to mark an IRQ as handled, in order to avoid having a threaded
-interrupt to falsely trigger unhandled IRQ detection.
+In threaded IRQs, some irq handlers are able to handle many requests at a
+single run, but this is only accounted as a single IRQ_HANDLED when
+increasing threads_handled.
 
-This detection can still be falsely triggered if we have many IRQ handled
-accounted between each check of threads_handled, as those will be counted
-as a single one in the unhandled IRQ detection.
+In order to fix this, introduce IRQ_HANDLED_MANY, so the returned value of
+those IRQ handlers are able to signal that many IRQs got handled at that
+run.
 
-In order to fix this, subtract from irqs_unhandled the number of IRQs
-handled since the last check (threads_handled_last - threads_handled).
+Is scenarios where there is no need to keep track of IRQ handled, convert
+it back to IRQ_HANDLED.
 
 Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- include/linux/irqdesc.h |  2 +-
- kernel/irq/spurious.c   | 53 ++++++++++++++++++++++++++---------------
- 2 files changed, 35 insertions(+), 20 deletions(-)
+ include/linux/irqreturn.h | 23 ++++++++++++++++++++++-
+ kernel/irq/chip.c         | 10 ++++++++--
+ kernel/irq/handle.c       |  3 +++
+ kernel/irq/manage.c       |  4 ++++
+ 4 files changed, 37 insertions(+), 3 deletions(-)
 
-diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
-index 62aff209315fe..957ac02e9ec2b 100644
---- a/include/linux/irqdesc.h
-+++ b/include/linux/irqdesc.h
-@@ -67,7 +67,7 @@ struct irq_desc {
- 	unsigned long		last_unhandled;	/* Aging timer for unhandled count */
- 	unsigned int		irqs_unhandled;
- 	atomic_t		threads_handled;
--	int			threads_handled_last;
-+	unsigned int		threads_handled_last;
- 	raw_spinlock_t		lock;
- 	struct cpumask		*percpu_enabled;
- 	const struct cpumask	*percpu_affinity;
-diff --git a/kernel/irq/spurious.c b/kernel/irq/spurious.c
-index d92f33b2e31ee..4e8e2727b8beb 100644
---- a/kernel/irq/spurious.c
-+++ b/kernel/irq/spurious.c
-@@ -267,6 +267,28 @@ try_misrouted_irq(unsigned int irq, struct irq_desc *desc,
- 	return action && (action->flags & IRQF_IRQPOLL);
- }
+diff --git a/include/linux/irqreturn.h b/include/linux/irqreturn.h
+index d426c7ad92bfd..204030696676c 100644
+--- a/include/linux/irqreturn.h
++++ b/include/linux/irqreturn.h
+@@ -7,14 +7,35 @@
+  * @IRQ_NONE:		interrupt was not from this device or was not handled
+  * @IRQ_HANDLED:	interrupt was handled by this device
+  * @IRQ_WAKE_THREAD:	handler requests to wake the handler thread
++ * @IRQ_HANDLED_MANY:	interrupt was handled by this device multiple times
++ *			should be the only bit set in the first 3 bits, and
++ *			carry a count > 1 in the next bits.
+  */
+ enum irqreturn {
+ 	IRQ_NONE		= (0 << 0),
+ 	IRQ_HANDLED		= (1 << 0),
+ 	IRQ_WAKE_THREAD		= (1 << 1),
++	IRQ_HANDLED_MANY	= (1 << 2),
++	IRQ_RETMASK		= IRQ_HANDLED |	IRQ_WAKE_THREAD | IRQ_HANDLED_MANY,
+ };
  
-+static inline int get_handled_diff(struct irq_desc *desc)
-+{
-+	unsigned int handled;
-+	int diff;
+-typedef enum irqreturn irqreturn_t;
++#define IRQ_HANDLED_MANY_SHIFT (3)
 +
-+	handled = (unsigned int)atomic_read(&desc->threads_handled);
-+	handled |= SPURIOUS_DEFERRED;
++typedef int irqreturn_t;
+ #define IRQ_RETVAL(x)	((x) ? IRQ_HANDLED : IRQ_NONE)
++#define	IRQ_RETVAL_MANY(x)							\
++({										\
++	__typeof__(x) __x = (x);						\
++	irqreturn_t __ret;							\
++	if (__x == 0)								\
++		__ret = IRQ_NONE;						\
++	else if (__x == 1)							\
++		__ret = IRQ_HANDLED;						\
++	else									\
++		__ret = IRQ_HANDLED_MANY | (__x << IRQ_HANDLED_MANY_SHIFT);	\
++	__ret;									\
++})
 +
-+	diff = handled - desc->threads_handled_last;
-+	diff >>= SPURIOUS_DEFERRED_SHIFT;
++#define IRQ_HANDLED_MANY_GET(x)	((x) >> IRQ_HANDLED_MANY_SHIFT)
+ 
+ #endif
+diff --git a/kernel/irq/chip.c b/kernel/irq/chip.c
+index dc94e0bf2c940..233cf22a5b771 100644
+--- a/kernel/irq/chip.c
++++ b/kernel/irq/chip.c
+@@ -482,8 +482,14 @@ void handle_nested_irq(unsigned int irq)
+ 	raw_spin_unlock_irq(&desc->lock);
+ 
+ 	action_ret = IRQ_NONE;
+-	for_each_action_of_desc(desc, action)
+-		action_ret |= action->thread_fn(action->irq, action->dev_id);
++	for_each_action_of_desc(desc, action) {
++		irqreturn_t ret = action->thread_fn(action->irq, action->dev_id);
 +
-+	/*
-+	 * Note: We keep the SPURIOUS_DEFERRED bit set. We are handling the
-+	 * previous invocation right now. Keep it for the current one, so the
-+	 * next hardware interrupt will account for it.
-+	 */
-+	if (diff != 0)
-+		desc->threads_handled_last = handled;
++		if ((ret & IRQ_RETMASK) == IRQ_HANDLED_MANY)
++			ret = IRQ_HANDLED;
 +
-+	return diff;
-+}
++		action_ret |= ret;
++	}
+ 
+ 	if (!irq_settings_no_debug(desc))
+ 		note_interrupt(desc, action_ret);
+diff --git a/kernel/irq/handle.c b/kernel/irq/handle.c
+index 9489f93b3db34..bfc6e3e43045a 100644
+--- a/kernel/irq/handle.c
++++ b/kernel/irq/handle.c
+@@ -162,6 +162,9 @@ irqreturn_t __handle_irq_event_percpu(struct irq_desc *desc)
+ 			      irq, action->handler))
+ 			local_irq_disable();
+ 
++		if ((res & IRQ_RETMASK) == IRQ_HANDLED_MANY)
++			res = IRQ_HANDLED;
 +
- void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
- {
- 	unsigned int irq;
-@@ -308,7 +330,7 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
- 		 * interrupt.
- 		 */
- 		if (action_ret == IRQ_WAKE_THREAD) {
--			int handled;
-+			int diff;
+ 		switch (res) {
+ 		case IRQ_WAKE_THREAD:
  			/*
- 			 * We use bit 0 of thread_handled_last to
- 			 * denote the deferred spurious detection
-@@ -325,27 +347,20 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
- 			 * Check whether one of the threaded handlers
- 			 * returned IRQ_HANDLED since the last
- 			 * interrupt happened.
--			 *
--			 * For simplicity we just set bit 0, as it is
--			 * set in threads_handled_last as well. So we
--			 * avoid extra masking. And we really do not
--			 * care about the high bits of the handled
--			 * count. We just care about the count being
--			 * different than the one we saw before.
- 			 */
--			handled = atomic_read(&desc->threads_handled);
--			handled |= SPURIOUS_DEFERRED;
--			if (handled != desc->threads_handled_last) {
--				action_ret = IRQ_HANDLED;
-+			diff = get_handled_diff(desc);
-+			if (diff > 0) {
- 				/*
--				 * Note: We keep the SPURIOUS_DEFERRED
--				 * bit set. We are handling the
--				 * previous invocation right now.
--				 * Keep it for the current one, so the
--				 * next hardware interrupt will
--				 * account for it.
-+				 * Subtract from irqs_unhandled	the number of
-+				 * IRQs handled since the last change in
-+				 * threads_handled.
- 				 */
--				desc->threads_handled_last = handled;
-+				if (diff < desc->irqs_unhandled)
-+					desc->irqs_unhandled -= diff;
-+				else
-+					desc->irqs_unhandled = 0;
-+
-+				action_ret = IRQ_HANDLED;
- 			} else {
- 				/*
- 				 * None of the threaded handlers felt
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 5bc609c7b728c..e684c7107ff90 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1192,6 +1192,8 @@ irq_forced_thread_fn(struct irq_desc *desc, struct irqaction *action)
+ 	ret = action->thread_fn(action->irq, action->dev_id);
+ 	if (ret == IRQ_HANDLED)
+ 		irq_add_handled(desc, 1);
++	else if ((ret & IRQ_RETMASK) == IRQ_HANDLED_MANY)
++		irq_add_handled(desc, IRQ_HANDLED_MANY_GET(ret));
+ 
+ 	irq_finalize_oneshot(desc, action);
+ 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+@@ -1213,6 +1215,8 @@ static irqreturn_t irq_thread_fn(struct irq_desc *desc,
+ 	ret = action->thread_fn(action->irq, action->dev_id);
+ 	if (ret == IRQ_HANDLED)
+ 		irq_add_handled(desc, 1);
++	else if ((ret & IRQ_RETMASK) == IRQ_HANDLED_MANY)
++		irq_add_handled(desc, IRQ_HANDLED_MANY_GET(ret));
+ 
+ 	irq_finalize_oneshot(desc, action);
+ 	return ret;
 -- 
 2.43.2
 
