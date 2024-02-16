@@ -1,195 +1,168 @@
-Return-Path: <linux-serial+bounces-2303-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2305-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E77858696
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 21:18:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02B25858925
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 23:48:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2AD2A2844CE
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 20:18:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C6CCB22339
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 22:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E94A91384AC;
-	Fri, 16 Feb 2024 20:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5E5148313;
+	Fri, 16 Feb 2024 22:48:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ODJ+UIRH"
+	dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b="jaGS85hU"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2139.outbound.protection.outlook.com [40.107.13.139])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B64D12FF60
-	for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 20:18:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708114707; cv=none; b=in5gwlB4rQBJlJ/+N+SZnwO2lHsFev6Z8xlwMHqC8Hhi3mSThZDLdL8KJV3nyaMBccRe8WnGUebUNPgMoILnyekqJHnDHT1MAdTWBVJYP3V7PQJb0fmrBgw4g9h5aDBTG2NoquoaWYG4gjid+58L3iNovt695hzcZgVV3qGx2Go=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708114707; c=relaxed/simple;
-	bh=02fBze+VPiN2IlWJArLIcZJnV5U0/kJfFuoQ8de5peM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type:Content-Disposition; b=sZOrNJcx1FvwUQuF99JYi0yp88TKMBldEovCg4hm5kDUZEbeZ0WBFoFIdWZ54V7Yqxau6pL1RsoKnzu81gR+derySgT2ZvfkYPG/5jpNQ5ENNh+O7vVnrASBNacJz4B0lMqTfT6H54ATg2RzMSiY2il16EpD4pqpG1fZOHpHfzQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ODJ+UIRH; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708114705;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=eEAq0tKZP/23jzaMIN60ZwyZvpQxftOTebhwinddGfA=;
-	b=ODJ+UIRHnWqVoFOjIX2g9mgT685gkR3iqcOQJLabRoqTMfpjYVrq49vm241hnFsiBq8iIk
-	7hdr3R/5R20Jnr1vjEwP3Ww+xjYSlgu8bgU+g79f8QfLgEoYjZsEWSMjFHjb7nySb1gQWH
-	fHCylqGsBVTMOfeWIr7hWH3ksLBwS8s=
-Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
- [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-617-1L3EL2HjNByoGguqKHbJXg-1; Fri, 16 Feb 2024 15:18:23 -0500
-X-MC-Unique: 1L3EL2HjNByoGguqKHbJXg-1
-Received: by mail-oi1-f198.google.com with SMTP id 5614622812f47-3bd66680a39so2509344b6e.2
-        for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 12:18:23 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708114702; x=1708719502;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eEAq0tKZP/23jzaMIN60ZwyZvpQxftOTebhwinddGfA=;
-        b=bh5n4NtVo2pdIEUSxokhfpkiZhtvGuwVa4rA3/bOvygZlD3FwstWcu2eS5BSMHCt3P
-         xrtMa/3pOJkvTzmQkH/JQofMORUZvcwaFGHVC+M/d9ojxpqcDCCsXky5TNYDUD8L5qZ+
-         2J6N90Q2fzBkUutqptW782FryE8vXY/3RK3DhJwfBV8h4tOasYdSsTo4AKhgFwlr3Fno
-         NcNudaiFvr8upxnNAuBoZJr5L/763CnuhXzbAalug7WBoRvuPdFq4aV8g0K9vaEFKQ3c
-         OhczY9qYBY8UPEPvfXcnUiRA9Igwr4LGulMplZ29A2K2YXEgLVaBEYGW7VGtICpzLgJu
-         c+6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUKczw+i962vqiUgZdjW3RuO+Rmdcplbj+ZUuuUG0Sdhdc4Sxw35fDlICnM0UZNLLUSqRanW/tf0RROkekbz0Tmm4S1JUs2GoUKsvwx
-X-Gm-Message-State: AOJu0YzD3j9tlJ0Nh8U3UP45O49LQ28UB7H+y+DHBOE0i3ibe4MVm8Wm
-	pqbeEcvpy8G2nIwo5zCn4/qEv0IrCnuWuZ+lXbaQKquA4hnKo8DzIaODxhHanMqXm/uET1hwRbr
-	CIxbUMo7tp8QsNmh5XA3dkzVUOohlNHacZ2wgsMF14ic2hZYHgJTbmFtQLzkKYA==
-X-Received: by 2002:a05:6808:23c6:b0:3c0:4bf1:b5a6 with SMTP id bq6-20020a05680823c600b003c04bf1b5a6mr7162884oib.2.1708114702663;
-        Fri, 16 Feb 2024 12:18:22 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFIzTp9rWVLDjQHfPe/31aF2/OhORAsPOJi3O5mQOLuN1b8kQlFOth9/cWEAuTxyAiepvFRzg==
-X-Received: by 2002:a05:6808:23c6:b0:3c0:4bf1:b5a6 with SMTP id bq6-20020a05680823c600b003c04bf1b5a6mr7162868oib.2.1708114702447;
-        Fri, 16 Feb 2024 12:18:22 -0800 (PST)
-Received: from LeoBras.redhat.com ([2804:1b3:a800:4770:9d0:4bac:1782:4637])
-        by smtp.gmail.com with ESMTPSA id pf2-20020a056214498200b0068f2aba4842sm239481qvb.129.2024.02.16.12.18.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 12:18:21 -0800 (PST)
-From: Leonardo Bras <leobras@redhat.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Leonardo Bras <leobras@redhat.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Tony Lindgren <tony@atomide.com>,
-	John Ogness <john.ogness@linutronix.de>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Shanker Donthineni <sdonthineni@nvidia.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B420E146904;
+	Fri, 16 Feb 2024 22:48:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.13.139
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1708123683; cv=fail; b=PBc1Yig+tdd4yczypqNpnqkS5TYbhlhb05Wz+3pOXQXSCRnVk27B0wiIgIDaI8IM/BPbIRh8GM7ajktiKBhoqNsMw6Dm1ge8eTKCmIahvCKhtG8LMj+s3MkNK2wIhlH0OttVgJAUpmZZaQOGFnIpwKi3VajcVcGQckOQmKuNBCo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1708123683; c=relaxed/simple;
+	bh=sQNmmOqiQ+gSaPNcqFZpoXHPHkDDxxndySbu7ZpRVEo=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=tJBctfyl6X8LZIHXc+e0j655HttnqWdx7c3fvqe+C+Fee0r/fizq/fGhqPgqds3u7Hqrrhx6RQfgXDsou7qA5R+HVp20ZbH4x7192LFIdHCP4mJTBBr2uQRWC67pzjdpwd7FTUqJsvJD1x3nhge5bFDlvVY1iJVpoQIibqcLy3Q=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com; spf=pass smtp.mailfrom=kunbus.com; dkim=pass (1024-bit key) header.d=kunbus.com header.i=@kunbus.com header.b=jaGS85hU; arc=fail smtp.client-ip=40.107.13.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kunbus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kunbus.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=bsNMKYXMeq4u989EDx5QHaCRx1LC8NhiODUUP5xAEVTo0otblf+6UkkXiPj7cdWGA6PlKPzDVnYWiFPO4qfs65yDuFIZnEPSEmkUL2knCIjeVlCPBhfv23WCl5+AHlWEYpkeJz1ftxy7tagwsUm+UbYwRrWaJ3iFYb4gaPuqXZtJqyxOTopgva5Ha/sZnnfK50dW2JZi3/aIF6NH9WIb2nYHeivHSaMtT2J35WkaRc3FrREA8ARrR0m9fPuhTDT65WV0Bj6IXcC5QBtJxqerP3Ki5YuAleuBbRAPSzGJF2KhMjsKd8+aKLzmJPUdGaxWCpSpnRaM28bDih9MY+L5Tw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sQNmmOqiQ+gSaPNcqFZpoXHPHkDDxxndySbu7ZpRVEo=;
+ b=Lqhv6KbRm16mv4OkVgUEWEexmm8TwLagwDYQeJbmLEXe8t8t/bTu9UnOlzkGO+K7VY53ekXjTIZiWBhrdF2eiFG4y/OQ7+FV0EVaXkRKPOrhz4Aq049vpQkC2hYLptIbLrlhB7D7lwqU6NJH1crJvl/u2cw3zQSlbcNUkJYiY8FYscWU9Ckt3E54Jid72mN5Qv9nOClDh9oN6Lvv//ygqQsCtbE7c4akZMEzu81i0NfD250XGS+AeT5aGcoxbrMBzIIOLh7qTDJFEmD44v20C47qMr10x+eZd6q698mTyAleyz6228ZBJ30Ce1j/dkI4+64Q0o8m36G2SRnO3QC2SA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=kunbus.com; dmarc=pass action=none header.from=kunbus.com;
+ dkim=pass header.d=kunbus.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kunbus.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sQNmmOqiQ+gSaPNcqFZpoXHPHkDDxxndySbu7ZpRVEo=;
+ b=jaGS85hUaOu2FmvFVZ9GHlTuZ6Ok7aG3se73l8iCHrFfiPMrUIuvQJqkagZEMSvzWAlLPjTrMak4OBcoeURck3MSr09VHy5xwCZwJx+62x2JB1ApkWkVbz+HYcMdGXdV2bfeUx7zE2ctZJmHYPZvECJSQI61IEa0fnBpFJ7YWLs=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=kunbus.com;
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM (2603:10a6:803:4e::14)
+ by PAXP193MB1872.EURP193.PROD.OUTLOOK.COM (2603:10a6:102:1c6::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7292.31; Fri, 16 Feb
+ 2024 22:47:55 +0000
+Received: from VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::83c6:a213:7935:ae6f]) by VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ ([fe80::83c6:a213:7935:ae6f%4]) with mapi id 15.20.7292.026; Fri, 16 Feb 2024
+ 22:47:55 +0000
+From: Lino Sanfilippo <l.sanfilippo@kunbus.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
+Cc: LinoSanfilippo@gmx.de,
+	lukas@wunner.de,
+	p.rosenberger@kunbus.com,
+	ilpo.jarvinen@linux.intel.com,
+	mcoquelin.stm32@gmail.com,
+	alexandre.torgue@foss.st.com,
 	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: Re: [RFC PATCH v2 2/4] irq/spurious: Account for multiple handles in note_interrupt
-Date: Fri, 16 Feb 2024 17:18:15 -0300
-Message-ID: <Zc_DBym2GuwPmAne@LeoBras>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <Zc-BBQGauwIEJJXy@smile.fi.intel.com>
-References: <20240216075948.131372-2-leobras@redhat.com> <20240216075948.131372-4-leobras@redhat.com> <Zc-BBQGauwIEJJXy@smile.fi.intel.com>
+	linux-serial@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] serial: stm32: do not always set SER_RS485_RX_DURING_TX if RS485 is enabled
+Date: Fri, 16 Feb 2024 23:47:07 +0100
+Message-ID: <20240216224709.9928-1-l.sanfilippo@kunbus.com>
+X-Mailer: git-send-email 2.43.0
+Content-Transfer-Encoding: base64
+Content-Type: text/plain
+X-ClientProxiedBy: FR0P281CA0259.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:b5::18) To VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:803:4e::14)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: redhat.com
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1P193MB0413:EE_|PAXP193MB1872:EE_
+X-MS-Office365-Filtering-Correlation-Id: 693dd5d1-c3ea-41f3-550b-08dc2f41502e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	w6ZMlVOi7srl3om4cqW+LtQ5EsdbDzSUanfaWfuxyQyByEVw0zYhgezWTaM36DAe4NkHGmRyJaBGL1/PZVLAzKk2FptA02/fJex3xjIZ65GuEOnE4EbK579OHjFSUIkzuwF0KB9mgYGUYbLRA+Jlei9VIpm+M+EcKjO1XCB3re3QY5BaS6ZAEWWpDJJc4Q96Kk/M4iDBexrsHDd6r5qBZ4c2rt9SljGOnHj4KN6knTBhC1gM6w6CR0w8/wCOpkyYOgSiLtINpkz8RWAZ+BMcbxmwv1oYPZ4+KcrwyHXRwtv+2cRoA4TeODFMnl3CX4gxKIQv6uH+0Cs5n3xiz1q3m2S+8BZ63XnlDOCrC3Oq0Qb1i8PtMUewr9eiVyuIoULDrx9OuyAGnM5MbQxScazUl/EJiYEUL8dUHKLmSyU8d/1ohUytOIlT1MODb6/xwsQ0IHBIEjpNwzZppmtcZuVzi96C4RIzbyk37MhCruoB5J7XGPmhkYIsbV647mTZfBo35K233SCh3zbWaLiB52ZFnRowudhf8JWummI5UolLBbzQQLODKzK/9fs0D/Etlznc
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1P193MB0413.EURP193.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230031)(366004)(136003)(346002)(396003)(39840400004)(376002)(230922051799003)(186009)(451199024)(64100799003)(1800799012)(2906002)(66946007)(8936002)(66556008)(4326008)(66476007)(8676002)(7416002)(5660300002)(1076003)(2616005)(41300700001)(83380400001)(36756003)(316002)(6666004)(478600001)(6506007)(6486002)(52116002)(86362001)(38100700002)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?/QdQYcac3Cn9ncDCtyxZhPjVMsOQ0ipavKSRZlzLl53org6iGx9i/rDKOr3P?=
+ =?us-ascii?Q?X5AWQhZK8h0gF0jmyvO5I/VQO05iyvSrriKMpRe7r5hM9XBv2H7t1/UuS+qK?=
+ =?us-ascii?Q?ubmU0F9F6lAa6/mY2prJW6F8VhoiyjIkVHDgDry0LcbeDmMIz0Zjsi10N0yi?=
+ =?us-ascii?Q?cCBFd9QaxfcyAwO+gtC6nCjcUesPWjaz6d/kwMWIM7o21PmW4AWVyrOJMyg4?=
+ =?us-ascii?Q?EwKn7PpUUGOMz+YRxrztSu3aTuM5N6WKYdmkkAqEwAVZtkCOJlFsnSMxRAcr?=
+ =?us-ascii?Q?KmzQSL51fQQ/lwKIvuI3RWdni5ccVvjuvkjJMZtQDwrjCVWoxzdqPcEVf0NI?=
+ =?us-ascii?Q?XkaRtj8skj9SVWekmyJUanIkEHi06uO4ktIGhwzBR7w11woaXELKJ/0O8cr8?=
+ =?us-ascii?Q?nIflNiwDb93cBLXgOpWZPZ/O/6GRmXxtBDjVgQe6DW51aqgQjDGqm+Qg4t7S?=
+ =?us-ascii?Q?1piBWzkLnQKwlOf1YU81IV++NEB80sRw3cfw6H0tnbr+uleHjKpRMKNIHbt6?=
+ =?us-ascii?Q?6OkZDe77815ctn3fcsf0j4LPqpT237yx2fbfB7pQ/Gg7z+0C/+oTONKJd6sE?=
+ =?us-ascii?Q?245zH5qKbnWiTGNS8c6R+qdxmjCtJwb/vlwMQMD/phZIFkQrckblxzzu1nFZ?=
+ =?us-ascii?Q?YBcn7L4h5b67Ngv2mHAKg3rvZN2Lm3/CHowJdunE2ezJIfWo3qM8IornFgEd?=
+ =?us-ascii?Q?p8uSBQmkqBqKS+o/I3pJbwQNYv98QZsv2nnauYB6PP1ze8+PC8/xj0O3Pz1I?=
+ =?us-ascii?Q?H/x3g2ng3zMcVOcNZDZTVOTproJ0d/ze3v2jylVHzqMH6uqTgDM5l/dTHuBG?=
+ =?us-ascii?Q?SkZgrTY/7qoSF8L/NYFrfHZUVgzwdwHGcJXUVBHSXUXNAGBSaLnyYc633vMh?=
+ =?us-ascii?Q?AK3aaAc6rVASLoSHwyztWfAQ2xt8LWE5W80Ma/OYIpnvYQXSm+Ibf9q6T50q?=
+ =?us-ascii?Q?pAkiqcPongRrBb0k/VZp7Dp8BnXMvAV9g8FV7g2q0MsVbQNF8E7RSkT7gcRd?=
+ =?us-ascii?Q?eUhpvxjDcrb5t7Y9HVyaPLsAMsh4ex4vDKDTB7jbuBqLwX58efgzqzAfr94n?=
+ =?us-ascii?Q?gKCiWiS2UY5A9IOvwkeTyW82Ct60Bk7sgw9TEwuRXMvpXBmZV3IZxDuhKsmW?=
+ =?us-ascii?Q?xQ2VgAN4Ia7F9j7ro1fTUFmILuTA1CjummCn+RHdfovbtcFt+Sk0hvwdQpdr?=
+ =?us-ascii?Q?PytNkSUs/Uv8HkNw5fybFtCG9Heazl5x7MJuomSkZatz6obj4fNQHNRmPPMV?=
+ =?us-ascii?Q?BiJdQqIelm68adswagrO+Z2PAfceQctdMIZ+7614zmxfnmEIRbBcnDqMGHKz?=
+ =?us-ascii?Q?xfRo4M0fCt9e/vHRdzrfuLFMOVhVYIdXrOCEePkxPicY9M8IAnMRT2vMkZbB?=
+ =?us-ascii?Q?HD6M2Gq2Do7Ek2hnL3RDsPRhHIyQ0gJCfSFs56iIuD1Ah+TUvX50HXKN2BIN?=
+ =?us-ascii?Q?ru2ikOf6jnPTsJwPUMKhso+iZzAICL8Otyieqculeh/09HqV93fQ9r3eeA3n?=
+ =?us-ascii?Q?loy1HPQJ6Wyd8B5yYH3cUemSd9Z+2OVIxaSQOTXPYvkhu/BwXGPMQPEEqq/t?=
+ =?us-ascii?Q?FYmwCHVnvuYQz04+CHRGHBgfkDtv1CZyhwpvn4yGI6RxdhclPDNpDNuDWM88?=
+ =?us-ascii?Q?BAbiQeVSyso77R3ZFmg6CJkUBxtd7kCSlfKGypdtZdv7bX90TOdv6krWdvj7?=
+ =?us-ascii?Q?xymDHA=3D=3D?=
+X-OriginatorOrg: kunbus.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 693dd5d1-c3ea-41f3-550b-08dc2f41502e
+X-MS-Exchange-CrossTenant-AuthSource: VI1P193MB0413.EURP193.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Feb 2024 22:47:54.8566
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: aaa4d814-e659-4b0a-9698-1c671f11520b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: FP6qpxMKUZlu5+UYK56t8kJRDUoyGB1DwQfVlC8W6ewPuCspG+tHh5PvDmkxvOTSiFkeTmz7L8CBYF9TahzA7A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXP193MB1872
 
-On Fri, Feb 16, 2024 at 05:36:37PM +0200, Andy Shevchenko wrote:
-> On Fri, Feb 16, 2024 at 04:59:44AM -0300, Leonardo Bras wrote:
-> > Currently note_interrupt() will check threads_handled for changes and use
-> > it to mark an IRQ as handled, in order to avoid having a threaded
-> > interrupt to falsely trigger unhandled IRQ detection.
-> > 
-> > This detection can still be falsely triggered if we have many IRQ handled
-> > accounted between each check of threads_handled, as those will be counted
-> > as a single one in the unhandled IRQ detection.
-> > 
-> > In order to fix this, subtract from irqs_unhandled the number of IRQs
-> > handled since the last check (threads_handled_last - threads_handled).
-> 
-> ...
-> 
-> > +static inline int get_handled_diff(struct irq_desc *desc)
-> > +{
-> > +	unsigned int handled;
-> > +	int diff;
-> > +
-> > +	handled = (unsigned int)atomic_read(&desc->threads_handled);
-> > +	handled |= SPURIOUS_DEFERRED;
-> > +
-> > +	diff = handled - desc->threads_handled_last;
-> > +	diff >>= SPURIOUS_DEFERRED_SHIFT;
-> > +
-> > +	/*
-> > +	 * Note: We keep the SPURIOUS_DEFERRED bit set. We are handling the
-> > +	 * previous invocation right now. Keep it for the current one, so the
-> > +	 * next hardware interrupt will account for it.
-> > +	 */
-> 
-
-Hello Andy, thanks for reviewing!
-
-> > +	if (diff != 0)
-> 
-> 	if (diff)
-
-Sure
-
-> 
-> > +		desc->threads_handled_last = handled;
-> > +
-> > +	return diff;
-> > +}
-> 
-> ...
-> 
-> > +			diff = get_handled_diff(desc);
-> > +			if (diff > 0) {
-> 
-> diff may not be negative as you always right shift by 1 (or more) bit.
-
-Agree
-
-> Hence
-> 
-> 			if (diff)
-> 
-> will suffice (also be aligned with the similar check inside the helper) and
-> making the helper to return unsigned value will be clearer. Am I correct?
-
-Sure, you are correct.
-
-I just think having it be (diff > 0) makes it clear that we only do the 
-subtraction if diff is bigger than zero, while (diff) could mean diff being 
-valid, and would require the reader to go back in code to see that diff is 
-an int. 
-
-Does it make sense?
-
-Other than that, I agree the negative half of diff is never going to get 
-used, and it's better to go with unsigned int in both cases.
-
-That will be changed on the next version.
-
-Thanks!
-Leo
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
-
+QmVmb3JlIGNvbW1pdCAwN2MzMGVhNTg2MWYgKCJzZXJpYWw6IERvIG5vdCBob2xkIHRoZSBwb3J0
+IGxvY2sgd2hlbiBzZXR0aW5nCnJ4LWR1cmluZy10eCBHUElPIikgdGhlIFNFUl9SUzQ4NV9SWF9E
+VVJJTkdfVFggZmxhZyB3YXMgb25seSBzZXQgaWYgdGhlCnJ4LWR1cmluZy10eCBtb2RlIHdhcyBu
+b3QgY29udHJvbGxlZCBieSBhIEdQSU8uIE5vdyB0aGUgZmxhZyBpcyBzZXQKdW5jb25kaXRpb25h
+bGx5IHdoZW4gUlM0ODUgaXMgZW5hYmxlZC4gVGhpcyByZXN1bHRzIGluIGFuIGluY29ycmVjdCBz
+ZXR0aW5nCmlmIHRoZSByeC1kdXJpbmctdHggR1BJTyBpcyBub3QgYXNzZXJ0ZWQuCgpGaXggdGhp
+cyBieSBzZXR0aW5nIHRoZSBmbGFnIG9ubHkgaWYgdGhlIHJ4LWR1cmluZy10eCBtb2RlIGlzIG5v
+dApjb250cm9sbGVkIGJ5IGEgR1BJTyBhbmQgdGh1cyByZXN0b3JlIHRoZSBjb3JyZWN0IGJlaGF2
+aW91ci4KCkNjOiA8c3RhYmxlQHZnZXIua2VybmVsLm9yZz4gIyA2LjYrCkZpeGVzOiAwN2MzMGVh
+NTg2MWYgKCJzZXJpYWw6IERvIG5vdCBob2xkIHRoZSBwb3J0IGxvY2sgd2hlbiBzZXR0aW5nIHJ4
+LWR1cmluZy10eCBHUElPIikKU2lnbmVkLW9mZi1ieTogTGlubyBTYW5maWxpcHBvIDxsLnNhbmZp
+bGlwcG9Aa3VuYnVzLmNvbT4KLS0tCiBkcml2ZXJzL3R0eS9zZXJpYWwvc3RtMzItdXNhcnQuYyB8
+IDQgKysrLQogMSBmaWxlIGNoYW5nZWQsIDMgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigtKQoK
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvdHR5L3NlcmlhbC9zdG0zMi11c2FydC5jIGIvZHJpdmVycy90
+dHkvc2VyaWFsL3N0bTMyLXVzYXJ0LmMKaW5kZXggNzk0Yjc3NTEyNzQwLi42OTNlOTMyZDZmZWIg
+MTAwNjQ0Ci0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC9zdG0zMi11c2FydC5jCisrKyBiL2RyaXZl
+cnMvdHR5L3NlcmlhbC9zdG0zMi11c2FydC5jCkBAIC0yNTEsNyArMjUxLDkgQEAgc3RhdGljIGlu
+dCBzdG0zMl91c2FydF9jb25maWdfcnM0ODUoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwgc3RydWN0
+IGt0ZXJtaW9zICp0ZXIKIAkJd3JpdGVsX3JlbGF4ZWQoY3IzLCBwb3J0LT5tZW1iYXNlICsgb2Zz
+LT5jcjMpOwogCQl3cml0ZWxfcmVsYXhlZChjcjEsIHBvcnQtPm1lbWJhc2UgKyBvZnMtPmNyMSk7
+CiAKLQkJcnM0ODVjb25mLT5mbGFncyB8PSBTRVJfUlM0ODVfUlhfRFVSSU5HX1RYOworCQlpZiAo
+IXBvcnQtPnJzNDg1X3J4X2R1cmluZ190eF9ncGlvKQorCQkJcnM0ODVjb25mLT5mbGFncyB8PSBT
+RVJfUlM0ODVfUlhfRFVSSU5HX1RYOworCiAJfSBlbHNlIHsKIAkJc3RtMzJfdXNhcnRfY2xyX2Jp
+dHMocG9ydCwgb2ZzLT5jcjMsCiAJCQkJICAgICBVU0FSVF9DUjNfREVNIHwgVVNBUlRfQ1IzX0RF
+UCk7CgpiYXNlLWNvbW1pdDogODQxYzM1MTY5MzIzY2Q4MzMyOTQ3OThlNThiOWJmNjNmYTRmYTFk
+ZQotLSAKMi40My4wCgo=
 
