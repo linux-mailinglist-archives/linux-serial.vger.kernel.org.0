@@ -1,76 +1,78 @@
-Return-Path: <linux-serial+bounces-2287-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2289-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76B79857737
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 09:10:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A3CB0857739
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 09:11:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A7AE1C21E84
-	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 08:10:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BDC9B2142B
+	for <lists+linux-serial@lfdr.de>; Fri, 16 Feb 2024 08:11:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D03E1B94F;
-	Fri, 16 Feb 2024 08:00:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E58D01B974;
+	Fri, 16 Feb 2024 08:00:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DLs8DZNW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FVUja+9u"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 489491B80C
-	for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 08:00:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14FC41B96B
+	for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 08:00:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708070425; cv=none; b=Ep2fsCje4GTsqI7VW3eC2HlgfwQxYIDNFkuIbk4AaQ6msipFUwCgXYtx4ZKgQAZIvBsv1/aS/fsKNqYDVBuRS+OsniXm+ugz11eMbMMTWUrJI5mlNlJT6xKou7jhjxtA8A5J9nBn6QxQOrqCgkpvypQ9dZupZgwm8+qXLnmMwyI=
+	t=1708070428; cv=none; b=Mvb1bpsmu+KlvRH8C4gyBq+HL3SlG6rDKyHCyu5dSLbsuPQ6NVPTlGX6XWA9qRFzcyMunRL4a0foHvM58kGtDvL8iZ5achBNOxtk66D+lyZjEnSkYBE7EAnUyA0+sjWDKiIyxqBiA7JE3C4UTEzYiboRC8JhdHKkbfzXO62S+Dg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708070425; c=relaxed/simple;
-	bh=Cqm/EG5qUaoDNuzdzJISKoEg77NshXhbERW32TZKJ+Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=nOi4vwR/RCU5bu2E7IfcYFPZxaSiVHkH6237gIo/TR5KV7OaHAjzjnMBjMkKCNmZ7DkTzj2GjmTgKNB5hZSVdXfEVxwVX+XzsETHU6T8t1AlR9PMZv9+GjFx9NwnnH1Y/PxjR9HTQeFlqwkcul9R/8xrj/WIEs+2aThJ2LUvTtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DLs8DZNW; arc=none smtp.client-ip=170.10.133.124
+	s=arc-20240116; t=1708070428; c=relaxed/simple;
+	bh=I7YQyvteIahvp42EiZA+1wJMmZSJKR2ugc165xDp9JA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qDaIKxbQ0880eNFFncwsHm4USH+m4dvvPITTUnL6Wr6U012RrqBQT9G/rvrwkVHyDkWRRhtf3anX7hEWMu6wAy5PWufe48qD1Yw6P233UhSvd1tjkQQgIT1R47lzwGgHKEVBKLQZ8+LgdZXwe620E/Mz9HmLYwZsdFDwVASm8Mw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FVUja+9u; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1708070422;
+	s=mimecast20190719; t=1708070425;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=fl5VQYwK1CPmD5XbTx/mJNWpRykw1CcLoDo4tp9HhvY=;
-	b=DLs8DZNWG4KjDbi0qZqo+5EVYbaQz2BkLC253xVz0fNlDOdeC5tOKGtT6rFouhKSJjNoQw
-	zFzaX5ZDZhgDHLYhP0W3bX2X/t84KX65UDkjBIUeszTeRpCNBIQekHaSp2tQozoJmXKa17
-	gCgZXnbtc459u8qGbrbT6kUISw+kw38=
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LC1bKFmWstjcuRp0NCZgXGUr7lDByzyZO+jUi4bsRIg=;
+	b=FVUja+9uErJ0XSk/Z5sdDO+MRLoOF6qtyQrJ8vDI8EaF45CNFdERswUCuB65X5p7NY/Cz6
+	zP7QAbO5gV94egxcJC0Fzvq6CUNwZFrR4Gy6Q+PkPHZ0drI4eR0EAKRWFWPeoblA9TPG1j
+	Pa4k6xo04kl2euOFtP2MYNrfru6yQKc=
 Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
  [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-682-dHoX9QBsPieVG3zBKMi4-g-1; Fri, 16 Feb 2024 03:00:18 -0500
-X-MC-Unique: dHoX9QBsPieVG3zBKMi4-g-1
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-78732ea0f74so173610685a.0
-        for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 00:00:18 -0800 (PST)
+ us-mta-245-Z8plUM8kPOKw7nTDGXpGrA-1; Fri, 16 Feb 2024 03:00:21 -0500
+X-MC-Unique: Z8plUM8kPOKw7nTDGXpGrA-1
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-781d8e14fd8so229610685a.3
+        for <linux-serial@vger.kernel.org>; Fri, 16 Feb 2024 00:00:21 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708070418; x=1708675218;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fl5VQYwK1CPmD5XbTx/mJNWpRykw1CcLoDo4tp9HhvY=;
-        b=odDB9QFx/ogQX3pFvBB/tyBZT6wkM0drXeRRGGYMJe0mFC5hos5OsFWoaz4MjqM/gk
-         FPVI6xooqalfKcDova9xuVG7hU1KyiUlCbaZCLN5/ch5efsa5wA8yg8RcWFWxnkkhSgj
-         LXn9z1GJYMdP1oB6grO0fIAXV5zlJNLL41OdAK71ayplX0ZBQLWrld09gPpBIKuF7mC1
-         uHhqTGpOaZnfKTkPdUe4z5uZOOlo8MO+xc+zi8AAEoV5eYPyfDud10kTUK/Mr8xoNY1G
-         XgJzEHBmCpj0iZo55ivSE1W3zk/Dv+ntDLQMmjrxfIZ7n4uLDJ+qCM8+sZ77rFFZIxsf
-         GEkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXjBQdRbL/MAWLlcN0m0xqpzzgD7EgE+zFYVTX2ANUiLcBtRGh7y/pV5HJNB2Tm3w0OiwX/DZ/uCQhS71e5RM6eG94eGam3LzkzrUAJ
-X-Gm-Message-State: AOJu0YzJ1RIaicJjVbRi62FGRTCzBnaS9nCD5+LMkIaWYH7VSSDd0qO8
-	Jw3uE1XK6+HIqIw6Q/VOKypSSuGRQEKGuUDDiG4CZ8AFeoQtb0tRIJZiMVJ1zq7LNfiLZIYVRVT
-	/3VGOy1TlaxG7+GOB5uFAUt1qNm/S39gpm9MZHr6EumlLSugRinQcfjAqfpRESA==
-X-Received: by 2002:a05:620a:1a95:b0:787:27f1:b8b7 with SMTP id bl21-20020a05620a1a9500b0078727f1b8b7mr5106190qkb.60.1708070417903;
-        Fri, 16 Feb 2024 00:00:17 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IHoFFLTl1vSEz2qmS9/UufhOWkiwxQFz5Zp8e7I64XzmrAOC80+oyQmmO0O2zGb46017TZ2Ow==
-X-Received: by 2002:a05:620a:1a95:b0:787:27f1:b8b7 with SMTP id bl21-20020a05620a1a9500b0078727f1b8b7mr5106134qkb.60.1708070417447;
-        Fri, 16 Feb 2024 00:00:17 -0800 (PST)
+        d=1e100.net; s=20230601; t=1708070420; x=1708675220;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LC1bKFmWstjcuRp0NCZgXGUr7lDByzyZO+jUi4bsRIg=;
+        b=mblLyX+zn2LbCtWr1ECiS07MrU35ss8GP+PhqeZefZYtSxn4snMwAcaonULetU+eMV
+         BHVt6uPmf13WP6FqETd9Dggg/f3gqyWtCndNxAjGaFhlb+jgD8AX+mI9wfdphox3cuVF
+         5961TT9pC7Iharza/e0e2pWl2/WBNkL2r6Nm2WmzZDDEBprI5bJ/5b97+Tf36NorBbS2
+         Ns6RBv/Smyo0QrHul57Mt+mpVIW7w2neeC4LjRCchfQbkkBt5NZiXs2xx2DTL6HLHfuN
+         3q0sftofyQEq/u0v5y3FldL2wL7gV9PRwZvbJv+Db9J1XBXT6ZBNXQTi0qMlw469Fufl
+         mGow==
+X-Forwarded-Encrypted: i=1; AJvYcCX7DJTbg+rcvJ+Ej4wPsQaKDiD+f1KoDOoDBP7nBzZvUS3nmWcD0sxDwYTZ/QHX+QKjiKKbJ6uXPS84rheDnKFNXNALLSTSZbU+xNKB
+X-Gm-Message-State: AOJu0YygSOk/i9yP0ERHeUTfNaYI/42KXInawvqymVfYGG2FVrKVxJVH
+	o215muyZlxBvdsseNPYDbfp9jr/x/kK0sFuz571y4FZ/O1z/xnMGAO/id22/T3JvKA9j4tPgB9V
+	RHqFmQCL+q4Hn/mw6YaTP6Otk8SfAPJsqqZSTyCh/s1QWAcVeg5gekqy3hp2H3w==
+X-Received: by 2002:a05:620a:810:b0:787:28cb:5ab8 with SMTP id s16-20020a05620a081000b0078728cb5ab8mr4048027qks.41.1708070420528;
+        Fri, 16 Feb 2024 00:00:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEzZCXcZ+QKr/cGMalNAF5gKgIDpVXp4WPWqbLnkgifvRtX29FergWTakc9zo0gqPSZwxJx4Q==
+X-Received: by 2002:a05:620a:810:b0:787:28cb:5ab8 with SMTP id s16-20020a05620a081000b0078728cb5ab8mr4047996qks.41.1708070420262;
+        Fri, 16 Feb 2024 00:00:20 -0800 (PST)
 Received: from LeoBras.redhat.com ([2804:1b3:a800:4770:9d0:4bac:1782:4637])
-        by smtp.gmail.com with ESMTPSA id br37-20020a05620a462500b00787346f1edasm1300756qkb.54.2024.02.16.00.00.14
+        by smtp.gmail.com with ESMTPSA id br37-20020a05620a462500b00787346f1edasm1300756qkb.54.2024.02.16.00.00.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 16 Feb 2024 00:00:16 -0800 (PST)
+        Fri, 16 Feb 2024 00:00:19 -0800 (PST)
 From: Leonardo Bras <leobras@redhat.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
@@ -85,10 +87,12 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Shanker Donthineni <sdonthineni@nvidia.com>
 Cc: linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [RFC PATCH v2 0/4] Fix force_irqthread + fast triggered edge-type IRQs
-Date: Fri, 16 Feb 2024 04:59:42 -0300
-Message-ID: <20240216075948.131372-2-leobras@redhat.com>
+Subject: [RFC PATCH v2 1/4] irq: Move spurious_deferred bit from BIT(31) to BIT(0)
+Date: Fri, 16 Feb 2024 04:59:43 -0300
+Message-ID: <20240216075948.131372-3-leobras@redhat.com>
 X-Mailer: git-send-email 2.43.2
+In-Reply-To: <20240216075948.131372-2-leobras@redhat.com>
+References: <20240216075948.131372-2-leobras@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -100,74 +104,87 @@ X-Mimecast-Originator: redhat.com
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="US-ASCII"; x-default=true
 
-v1 patchset subject was "Fix serial console for PREEMPT_RT".
+Makes sure the threads_handled reserve a bit for that.
+This will be useful in the next patch in this series.
 
-While dealing with a bug that breaks the serial console from qemu (8250)
-after printing a lot of data, I found some issues on this driver on 
-PREEMPT_RT kernel due to it enabling force_irqthreads, ending up causing 
-the IRQ to be disabled and the serial console to go down.
+Signed-off-by: Leonardo Bras <leobras@redhat.com>
+---
+ include/linux/irqdesc.h | 9 +++++++++
+ kernel/irq/manage.c     | 4 ++--
+ kernel/irq/spurious.c   | 6 ++----
+ 3 files changed, 13 insertions(+), 6 deletions(-)
 
-I found out 8250 driver get an IRQ request for every tx byte, but the
-handler is able to deal with sending multiple bytes per "thread wake up".
-
-If the thread don't get to run that often, and end up handling many irqs at
-once, it will cause few changes in threads_handled to be noticed, meaning 
-only a few runs of note_interrupt will not increment irqs_unhandled, which 
-leads to disabling the IRQ. 
-
-For serial8250, to trigger IRQ disabling it's only needed a fast printing 
-of ~300kBytes.
-
-In order to fix this, I propose that we subtract the number of threads 
-handled since the last note_interrupt from irqs_unhandled:
-(irqs_unhandled -= threads_handled - threads_handled_last)
-
-So this way irqs_unhandled actually reflects how many of those irqs 
-actually haven't been handled.
-
-This work is divided in:
-Patch #1: Simple change in SPURIOUS_DEFERRED bit (31 -> 0), so we can 
-acuratelly measure how many IRQs have been handled even when the 
-threads_handled & threads_handled_last are close to overflow.
-
-Patch #2: Subtract the diff from irqs_unhandled on note_interrupt.
-
-Patch #3: Implement IRQ_HANDLED_MANY in order to let the handler return how 
-many interruptions have been handled in a single run, and increment 
-threads_handled accordingly.
-
-Patch #4: Change serial8250 driver to use IRQ_HANDLED_MANY interface, 
-so it can inform how many IRQs have been handled, and help set the correct 
-number of irqs_unhandled, thus avoiding IRQ disabled for normal usage.
-
-Changes since RFCv1:
-- Implemented a way of better counting threaded_irqs handled, instead of 
-  only zeroing irqs_unhandled.
-- Rebased on top of linux-rt/v6.8-rc4-rt4-rebase, so I don't need to fix 
-  the sleep while atomic issue in serial8250 mainline.
-- Better description of what we are actually fixing
-- Changed patchset title from "Fix serial console for PREEMPT_RT"
-- Link: https://lore.kernel.org/all/20240116073701.2356171-1-leobras@redhat.com/
-
-Leonardo Bras (4):
-  irq: Move spurious_deferred bit from BIT(31) to BIT(0)
-  irq/spurious: Account for multiple handles in note_interrupt
-  irq: Introduce IRQ_HANDLED_MANY
-  tty/serial8250: Make use of IRQ_HANDLED_MANY interface
-
- include/linux/irqdesc.h             | 11 +++++-
- include/linux/irqreturn.h           | 23 +++++++++++-
- include/linux/serial_8250.h         |  2 +-
- drivers/tty/serial/8250/8250_core.c | 13 ++++---
- drivers/tty/serial/8250/8250_port.c | 16 +++++----
- kernel/irq/chip.c                   | 10 ++++--
- kernel/irq/handle.c                 |  3 ++
- kernel/irq/manage.c                 |  8 +++--
- kernel/irq/spurious.c               | 55 ++++++++++++++++++-----------
- 9 files changed, 102 insertions(+), 39 deletions(-)
-
-
-base-commit: 63d966ad6fecb66769e56fe2285de1e3b448f2ff
+diff --git a/include/linux/irqdesc.h b/include/linux/irqdesc.h
+index d9451d456a733..62aff209315fe 100644
+--- a/include/linux/irqdesc.h
++++ b/include/linux/irqdesc.h
+@@ -251,4 +251,13 @@ irq_set_lockdep_class(unsigned int irq, struct lock_class_key *lock_class,
+ 		__irq_set_lockdep_class(irq, lock_class, request_class);
+ }
+ 
++#define SPURIOUS_DEFERRED (0x1)
++#define SPURIOUS_DEFERRED_SHIFT (1)
++
++static inline void irq_add_handled(struct irq_desc *desc, int i)
++{
++	i <<= SPURIOUS_DEFERRED_SHIFT;
++	atomic_add(i, &desc->threads_handled);
++}
++
+ #endif
+diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
+index 1782f90cd8c6c..5bc609c7b728c 100644
+--- a/kernel/irq/manage.c
++++ b/kernel/irq/manage.c
+@@ -1191,7 +1191,7 @@ irq_forced_thread_fn(struct irq_desc *desc, struct irqaction *action)
+ 		local_irq_disable();
+ 	ret = action->thread_fn(action->irq, action->dev_id);
+ 	if (ret == IRQ_HANDLED)
+-		atomic_inc(&desc->threads_handled);
++		irq_add_handled(desc, 1);
+ 
+ 	irq_finalize_oneshot(desc, action);
+ 	if (!IS_ENABLED(CONFIG_PREEMPT_RT))
+@@ -1212,7 +1212,7 @@ static irqreturn_t irq_thread_fn(struct irq_desc *desc,
+ 
+ 	ret = action->thread_fn(action->irq, action->dev_id);
+ 	if (ret == IRQ_HANDLED)
+-		atomic_inc(&desc->threads_handled);
++		irq_add_handled(desc, 1);
+ 
+ 	irq_finalize_oneshot(desc, action);
+ 	return ret;
+diff --git a/kernel/irq/spurious.c b/kernel/irq/spurious.c
+index 02b2daf074414..d92f33b2e31ee 100644
+--- a/kernel/irq/spurious.c
++++ b/kernel/irq/spurious.c
+@@ -267,8 +267,6 @@ try_misrouted_irq(unsigned int irq, struct irq_desc *desc,
+ 	return action && (action->flags & IRQF_IRQPOLL);
+ }
+ 
+-#define SPURIOUS_DEFERRED	0x80000000
+-
+ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ {
+ 	unsigned int irq;
+@@ -312,7 +310,7 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ 		if (action_ret == IRQ_WAKE_THREAD) {
+ 			int handled;
+ 			/*
+-			 * We use bit 31 of thread_handled_last to
++			 * We use bit 0 of thread_handled_last to
+ 			 * denote the deferred spurious detection
+ 			 * active. No locking necessary as
+ 			 * thread_handled_last is only accessed here
+@@ -328,7 +326,7 @@ void note_interrupt(struct irq_desc *desc, irqreturn_t action_ret)
+ 			 * returned IRQ_HANDLED since the last
+ 			 * interrupt happened.
+ 			 *
+-			 * For simplicity we just set bit 31, as it is
++			 * For simplicity we just set bit 0, as it is
+ 			 * set in threads_handled_last as well. So we
+ 			 * avoid extra masking. And we really do not
+ 			 * care about the high bits of the handled
 -- 
 2.43.2
 
