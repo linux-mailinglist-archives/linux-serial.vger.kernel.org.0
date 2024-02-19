@@ -1,125 +1,335 @@
-Return-Path: <linux-serial+bounces-2339-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2341-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF1F585A718
-	for <lists+linux-serial@lfdr.de>; Mon, 19 Feb 2024 16:12:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BAFA85A8E0
+	for <lists+linux-serial@lfdr.de>; Mon, 19 Feb 2024 17:25:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6414F282114
-	for <lists+linux-serial@lfdr.de>; Mon, 19 Feb 2024 15:12:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E534C283C5D
+	for <lists+linux-serial@lfdr.de>; Mon, 19 Feb 2024 16:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2363770C;
-	Mon, 19 Feb 2024 15:11:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 442CA3BB3B;
+	Mon, 19 Feb 2024 16:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Io3ipe+f"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="JQgx5dYl"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 159E13A264;
-	Mon, 19 Feb 2024 15:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 284EF37704
+	for <linux-serial@vger.kernel.org>; Mon, 19 Feb 2024 16:25:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708355493; cv=none; b=kf6dF+2Gsg/MQXIt3tHxgoBsO0Za5wkMUg6L8yr2H85zCDWtnQCTR1YEMEqTtulBBTahkycYpqWctfc+W+OHNWtZbbaS60DHmlpPQ2yIWe/c1U8PL53Ly2IKCjj6+7OBBtzqUYh1f1BXHtA7FzEMiaztphuXEqZ3rTr6v4nod1U=
+	t=1708359948; cv=none; b=avCj0WIsFCy8oHmPxmVfTjjdu3COaW5fRCLtNlrYBeXCFCME8UV434DkUbtWFADRzQeyAyj4tgSMP7i1dGN3DYrpI9Yk6qTH1cRGOXYuqzA0js8V6wcstXmX7HUIPnFJO4RsUnaHc7KKUhkNZyQ4/l6S4wKuA6BgietRTWYhHGA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708355493; c=relaxed/simple;
-	bh=ayLLTpEgKqvBUDQj5moMFIOBncxte1r8rIs7zb2L0nI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CZOi2PPqBIeVydNBg5MAhpA/GQdn68olzudgsZJJiYPClazSaWNhRibllHf8ZM5cD/SZxs9xYQEUnzvrZIXlB2KoVBnYlDOlQdZygQZVecfVsA4jT+NhhHTStrtKoC5bYf/xBLfMRp78cCMqpQYgiIrhFlufCrMUsrix49hESdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Io3ipe+f; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1708355492; x=1739891492;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ayLLTpEgKqvBUDQj5moMFIOBncxte1r8rIs7zb2L0nI=;
-  b=Io3ipe+fSuBs3WX/JSX180EOJd+mCC1pJdAUW7hTI0SHzuwXM585dJWv
-   +Kep0tqLlqM+9zHh+l4U0sNl5bc1JaO4v6JyjR1rcRQZJzVaPj5cjfzAY
-   OGZ6fmhVo8OjhNBaDAVYg0HigMe4nLkoS7bJMKjG6ogS9mI4HhYC2Jkf7
-   yqK3BnToKe5vSa4fiNVImSvFmMJ/MblO36i7T2GcEraY2t4iLJ5SN1GdI
-   AFucmw9p+nqK+Mwnnq9CS+y9nYAqJPFtJqUfKtPCo9/XCz8sAIhlljzbn
-   xr0s9AWyqu7JaA3cC+yJmoBTPsk5v6r0WOp+JYWnO2PG1vb0Ox3YLsh3z
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="2545654"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="2545654"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 07:09:02 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10989"; a="912890661"
-X-IronPort-AV: E=Sophos;i="6.06,170,1705392000"; 
-   d="scan'208";a="912890661"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2024 07:08:57 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1rc5GI-00000005qqV-1fic;
-	Mon, 19 Feb 2024 17:08:54 +0200
-Date: Mon, 19 Feb 2024 17:08:54 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Andy Shevchenko <andy@black.fi.intel.com>,
-	Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jslaby@suse.com>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-	Maxime Ripard <mripard@kernel.org>, Will Deacon <will@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	linux-arm-kernel@lists.infradead.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v9 1/4] serial: 8250: Add 8250 port clock update method
-Message-ID: <ZdNvBtOlxo4FlLUH@smile.fi.intel.com>
-References: <20200723003357.26897-1-Sergey.Semin@baikalelectronics.ru>
- <20200723003357.26897-2-Sergey.Semin@baikalelectronics.ru>
- <ZczD7KPbeRnY4CFc@black.fi.intel.com>
- <raryiklwhctwxcfj3ulbnjcl32owagiccmxpwzmszlh3vm343y@h2ehupm7uiga>
- <Zc5oYJY6W_MCpwhN@smile.fi.intel.com>
- <ow5mvkxa4g7mub3faiytsij4cyaaralcbzyn675jny5355han7@azw65mhkpwjz>
+	s=arc-20240116; t=1708359948; c=relaxed/simple;
+	bh=TtFFrywWrdSh3lvXdTDfdKtEV3KGhptpRqjPyv1EmkM=;
+	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
+	 Content-Type:Subject; b=RPxFjcoV5k+IKmeTEIP+fiVcvjkqDPNkZhUSIlnRVM7jB5XXS+Ig7ickGhN1yNI/cVMOibzjtu1zOh95sdFi/Lf0WcJo4RW+xUsXLlFTht8n/H0IyUKHgE9n9IN/HwXUeWHo6cWUqC+n6Af1B1MyrchLu4bL4Nkag1oPYm/iwkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=JQgx5dYl; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=HDpZpP5Fu4PlY59K1reUsM4SfvwvFnxsxlICWpHiHlw=; b=JQgx5dYlBWqCHyHNAd9jvw51gj
+	2UcErXq6jEgBIe1714gLjRW/4JbwJFEvyAKbR52cAALLvI0pFOMN91KiIf/+bzL/NrZoh18HKUbUg
+	7qYWm803vOFIJC5HRHjc9P6dfkNRRFBjG77EqpO+tiPx4iD5gW8xe9a7IuMZ8yNJy2FI=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:48914 helo=pettiford)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1rc6Ab-0003qU-N2; Mon, 19 Feb 2024 11:07:06 -0500
+Date: Mon, 19 Feb 2024 11:07:05 -0500
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: "Nagarajan, Gnaneshwar" <gnaneshwar.nagarajan@cornelisnetworks.com>
+Cc: "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+ "Srinivasan, Usha" <usha.srinivasan@cornelisnetworks.com>
+Message-Id: <20240219110705.15e25ca2e825546b16b73b7d@hugovil.com>
+In-Reply-To: <DM6PR01MB4907F118F7EEDC8DEBFD8FBBF64E2@DM6PR01MB4907.prod.exchangelabs.com>
+References: <DM6PR01MB4907F118F7EEDC8DEBFD8FBBF64E2@DM6PR01MB4907.prod.exchangelabs.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ow5mvkxa4g7mub3faiytsij4cyaaralcbzyn675jny5355han7@azw65mhkpwjz>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+	* -1.3 NICE_REPLY_A Looks like a legit reply (A)
+Subject: Re: max14830 nobody cared Disbling IRQ issue
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On Fri, Feb 16, 2024 at 08:19:37PM +0300, Serge Semin wrote:
-> On Thu, Feb 15, 2024 at 09:39:12PM +0200, Andy Shevchenko wrote:
+On Wed, 14 Feb 2024 23:59:15 +0000
+"Nagarajan, Gnaneshwar" <gnaneshwar.nagarajan@cornelisnetworks.com>
+wrote:
 
-...
+> Hello Hugo
+> 
+> Thanks for your continued support. As a follow up to the thread: https://lore.kernel.org/all/BY5PR01MB5635C11E9BE2B105FB7B87A09E6C2@BY5PR01MB5635.prod.exchangelabs.com/, I would appreciate some help.
 
-(thanks for the detailed explanation why you have done it that way)
+Hi,
+see my comments inline below (and please also respond in line)...
 
-> If what you suggest is to replace the serial8250_update_uartclk() body
-> with a direct uart_port::set_termios() invocation then I don't find it
-> being much clearer really. The serial8250_update_uartclk() is
-> currently specialized on doing one thing: adjusting the divider in
-> case of the UART-clock change. If instead the entire
-> serial8250_set_termios() method is called then for a reader it won't
-> be easy to understand what is really required for a 8250 serial port
-> to perceive the ref-clock change. But from the maintainability point
-> of view I guess that it might be safer to just call
-> serial8250_set_termios() indeed, since among the other things the
-> later method implies the divider update too. Thus the maintainer won't
-> need to support the two clock divider update implementations.
+> 
+> We still see the following error with the max14830 interrupt handling:
+> 
+> [   88.430219] irq 57: nobody cared (try booting with the "irqpoll" option)
+> [   88.437720] CPU: 0 PID: 65 Comm: irq/57-11-006c Not tainted 6.1.15-580639a #1
+> [   88.445687] Hardware name: Generic DT based system
+> [   88.451046]  unwind_backtrace from show_stack+0x18/0x1c
+> [   88.456906]  show_stack from dump_stack_lvl+0x40/0x4c
+> [   88.462556]  dump_stack_lvl from __report_bad_irq+0x44/0xc8
+> [   88.468784]  __report_bad_irq from note_interrupt+0x2c8/0x314
+> [   88.475208]  note_interrupt from handle_irq_event+0x90/0x94
+> [   88.481436]  handle_irq_event from handle_level_irq+0xbc/0x1b4
+> [   88.487952]  handle_level_irq from generic_handle_domain_irq+0x30/0x40
+> [   88.495253]  generic_handle_domain_irq from aspeed_gpio_irq_handler+0xac/0x158
+> [   88.503326]  aspeed_gpio_irq_handler from generic_handle_domain_irq+0x30/0x40
+> [   88.511305]  generic_handle_domain_irq from gic_handle_irq+0x6c/0x80
+> [   88.518411]  gic_handle_irq from generic_handle_arch_irq+0x34/0x44
+> [   88.525316]  generic_handle_arch_irq from call_with_stack+0x18/0x20
+> [   88.532328]  call_with_stack from __irq_svc+0x98/0xb0
+> [   88.537973] Exception stack(0xbf925eb0 to 0xbf925ef8)
+> [   88.543614] 5ea0:                                     45854088 00000003 00000001 00000000
+> [   88.552742] 5ec0: 00000000 4184ee80 45854088 00000000 45854000 41a64140 00000000 00000000
+> [   88.561870] 5ee0: 00000000 bf925f00 4016bb7c 4016bac0 600f0013 ffffffff
+> [   88.569252]  __irq_svc from __wake_up_common_lock+0x1c/0xb8
+> [   88.575483]  __wake_up_common_lock from __wake_up+0x20/0x28
+> [   88.581714]  __wake_up from irq_thread+0x118/0x1ec
+> [   88.587070]  irq_thread from kthread+0xd8/0xf4
+> [   88.592040]  kthread from ret_from_fork+0x14/0x2c
+> [   88.597288] Exception stack(0xbf925fb0 to 0xbf925ff8)
+> [   88.602923] 5fa0:                                     00000000 00000000 00000000 00000000
+> [   88.612053] 5fc0: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
+> [   88.621179] 5fe0: 00000000 00000000 00000000 00000000 00000013 00000000
+> [   88.628559] handlers:
+> [   88.631088] [<4f379e2c>] irq_default_primary_handler threaded [<26199d83>] max310x_ist
+> [   88.639952] Disabling IRQ #57
+> 
+> 
+> 
+> *        Based on your comment to add commits 984a4afdc87a and c94e5baa989f, I brought in the two patches and sourced the tree per your suggestion.
 
-> From that perspective I agree, directly calling serial8250_set_termios()
-> might be more suitable despite of it' doing more than required.
+It would be best if you test with this tree:
 
-Would it be possible for you to cook the patch (and test on your HW,
-since it seems the only user of that)?
+git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
 
--- 
-With Best Regards,
-Andy Shevchenko
+and use the branch named "tty-next".
+
+> We still see the interrupts not being handled during the power-on
+process and causes a system hang for approximately 2 minutes before
+disabling the interrupt line. I also verified that the physical
+interrupt line stays high with the use of a voltmeter.
+
+Ok, so I assume that the line stays high at all times, not just after 2
+minutes?
+
+> 
+> *        The Power-Up and IRQ# section in the Max 1830 makes mention of setting the IRQSel bit of MODE_1 register to enable normal IRQ# operation. I tried doing that but did not pay any dividends either.
+> 
+> o   During power-up or following a reset, IRQ# has a different function. It is held low until the MAX14830 is ready for programming following an initialization delay. Once IRQ# goes high, the MAX14830 is ready to be programmed. The MODE1[7]: IRQSel bit should then be set to enable normal IRQ# interrupt operation.
+
+This is supposed to be done automatically by the driver in
+max310x_probe(), so it should have no effect to redo it manually.
+
+> 
+> 
+> *        We see this issue during the power-up process and the GLOBAL_IRQ register (0x1F) reads a value of 0xf indicating all the 4 ports generate interrupts but the subsequent ISR registers do not indicate any interrupts.
+> 
+> *         We currently have the 5 UART Multiplexers to operate in synchronized mode as depicted below:
+> 
+> [cid:image001.png@01DA5F76.05C46E70]
+> 
+> 
+> 
+> *        Our associated dts configuration looks as follows:
+> 
+> 
+> 
+> clocks {
+> 
+>         i2c_uart_clk: max14830_clk {
+> 
+>                 compatible = "fixed-clock";
+> 
+>                 #clock-cells = <0>;
+> 
+>                clock-frequency = <3686400>;
+> 
+>         };
+> 
+> };
+> 
+> 
+> 
+> 
+> 
+> &i2c11 {
+> 
+>         status = "okay";
+> 
+> 
+> 
+>         max148306c: max14830@6c {
+> 
+>                 compatible = "maxim,max14830";
+> 
+>                 reg = <0x6c>;
+> 
+>                 clocks = <&i2c_uart_clk>;
+> 
+>                 clock-names = "xtal";
+
+Based on that (and clock-frequency property), I assume that your clock
+is a crystal of 3.686400 MHz?
+
+> 
+>                 interrupt-parent = <&gpio0>;
+> 
+>                 interrupts = <ASPEED_GPIO(T, 0) IRQ_TYPE_LEVEL_LOW>;
+> 
+>                 gpio-controller;
+> 
+>                 #gpio-cells = <2>;
+> 
+>         };
+> 
+> 
+> 
+>         max1483061: max14830@61 {
+> 
+>                 compatible = "maxim,max14830";
+> 
+>                 reg = <0x61>;
+> 
+>                 clocks = <&i2c_uart_clk>;
+> 
+>                 clock-names = "osc";
+> 
+>                 interrupt-parent = <&gpio0>;
+> 
+>                 interrupts = <ASPEED_GPIO(T, 1) IRQ_TYPE_LEVEL_LOW>;
+> 
+>                 gpio-controller;
+> 
+>                 #gpio-cells = <2>;
+> 
+>         };
+> 
+> 
+> 
+>         max1483062: max14830@62 {
+> 
+>                 compatible = "maxim,max14830";
+> 
+>                 reg = <0x62>;
+> 
+>                 clocks = <&i2c_uart_clk>;
+> 
+>                 clock-names = "osc";
+> 
+>                 interrupt-parent = <&gpio0>;
+> 
+>                 interrupts = <ASPEED_GPIO(T, 2) IRQ_TYPE_LEVEL_LOW>;
+> 
+>                 gpio-controller;
+> 
+>                 #gpio-cells = <2>;
+> 
+>         };
+> 
+> 
+> 
+>         max1483064: max14830@64 {
+> 
+>                 compatible = "maxim,max14830";
+> 
+>                 reg = <0x64>;
+> 
+>                 clocks = <&i2c_uart_clk>;
+> 
+>                 clock-names = "osc";
+> 
+>                 interrupt-parent = <&gpio0>;
+> 
+>                 interrupts = <ASPEED_GPIO(T, 3) IRQ_TYPE_LEVEL_LOW>;
+> 
+>                 gpio-controller;
+> 
+>                 #gpio-cells = <2>;
+> 
+>         };
+> 
+> 
+> 
+>         max1483065: max14830@65 {
+> 
+>                 compatible = "maxim,max14830";
+> 
+>                 reg = <0x65>;
+> 
+>                 clocks = <&i2c_uart_clk>;
+> 
+>                 clock-names = "osc";
+> 
+>                 interrupt-parent = <&gpio0>;
+> 
+>                 interrupts = <ASPEED_GPIO(T, 4) IRQ_TYPE_LEVEL_LOW>;
+> 
+>                 gpio-controller;
+> 
+>                 #gpio-cells = <2>;
+> 
+>         };
+> 
+> };
+
+Ok, now I see that you are using 5 MAX14830 ICs, and it seems that the
+crystal is only connected to the first IC, and the other 4 remaining
+ICs are supposed to be clocked from the first?
+
+If it is like this, the driver doesn't currently support this mode of
+operation. The driver do not access the register TxSynch at address $20
+at all, so the bit 7 CLKtoGPIO is always set to its default value of
+0...
 
 
+> Kindly let me know of any ideas that we could try further.
+
+I think it would be best to focus on making only the first MAX14830
+device to work, before trying to have all 5 running at the same time,
+since you are using a special mode of interconnecting the chips, and
+this mode is 
+
+So I would suggest to temporary remove in your
+DTS the entries for the 4 last ICs, and keep only the first one. Then
+try to make it work properly.
+
+> 
+> On a different note, I noticed something in the code where the comment might need a change.
+> 
+> 
+> 
+>         /* Use baudrate 115200 for calculate error */
+> 
+>         long err = f % (460800 * 16);
+> 
+> 
+> 
+> The comment says calculate baudrate 115200 while I believe the formula is implemented for a 460800 baudrate calculation.
+
+Ok, the comment certainly seems a little bit confusing, I will try to
+look into it. Thank you.
+
+Hugo Villeneuve.
 
