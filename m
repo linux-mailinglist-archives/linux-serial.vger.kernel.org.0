@@ -1,126 +1,190 @@
-Return-Path: <linux-serial+bounces-2360-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2362-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7534285B8F1
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 11:23:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D80D685BA56
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 12:22:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B78A1F26433
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 10:23:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 026081C21FB3
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 11:22:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C26E612C3;
-	Tue, 20 Feb 2024 10:23:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1780767E89;
+	Tue, 20 Feb 2024 11:21:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="s9nrO5Y/"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303CA60ED2;
-	Tue, 20 Feb 2024 10:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BB8867A1E
+	for <linux-serial@vger.kernel.org>; Tue, 20 Feb 2024 11:21:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.254.224.24
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708424613; cv=none; b=a62xCIvRqBPOPacboigiNac9Q3Auw76qHL/Y3pp2cwuJviZgtCkc155M0TjFbEgvI7tVn8ckMXOeKR8rwghlDzH1B4u/yK0FXZmHeM+0bMAVx4YS5KM4XzGLcP6utUQeMxn4OI/LOq8DW0obe2IPwVeJsSuXiO1BkTZEdx93j9Q=
+	t=1708428103; cv=none; b=JTUpwt5AuHelDv/jsHo2cpmHCMmsnanxB0XKjyajy7okP8Wfshjzy4vA65lxlGm64xezZ1bJMC0XemHA9qU/jW4WlW+uoeflI1ONf93ZFPNNiHxTqseMChwmkRmbCmDqzhv3T7NGuMDk5/P/3iVCUzwsEF8vnwYDugXH9CE1FWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708424613; c=relaxed/simple;
-	bh=mLt4xmejzlrsSSdRTa1yS9wn+ZVm8cOBAXhmP0gRgxs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nKcRq9dN+pwtx+i1/jDVn97FUNEggL/+ZMrv0tAqgxeghgdq+2QyOryo400NW0SNd5TJZwdQUbY18360ZnmwU+hTzyrOtBgZ4AlLGFwKLZy3R7MzAd4DvJGpKmmApkzesRuhKZVcvl2os4IL697seMZQS7N9SaZ9B6cuXgAhU/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.128.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-603fd31f5c2so52743127b3.0;
-        Tue, 20 Feb 2024 02:23:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1708424609; x=1709029409;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=12Kyp8aB3rpgIdqlByHzUCQrNKWenvMCDuD+CWYwf7E=;
-        b=ErrwAcfSwPedBNUHJVGu3hzP3G6tpDriLPnHaM+cfoUJPJG6u90d6vy/GJxNw00S2+
-         +v3UojF/1PBzdsLoT1z1FNufj9UOsB3/qKt5YPOM+z8fEEOMwPxEQ3KpvkIk7cPvGWFV
-         R+MsdpJ1vQwebP2VJEeWLBIfI0wvmnOMyIdFTZmlN0nImFDNVzDGmza35Pl/pvu6idf2
-         iroPLopv1i780m2GCSF52TIPzmR3uzdOnj/c4WOGMe3fxujjWP+Oyz6Os8Ao5TUjS090
-         v8wEQqjfOTQLiUegM+YdCteeUy1DPvaIFzphZ4fPKMZhRxEA9bieAW2vZcXSkqY8eELw
-         w7Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCWmg4cxqEYlrx0U15sJ7+9abb4BcJSQjxWW+IvkMGAUfjA46X1uE8L17TjoZGTon2toH+jliQzJixeR37ounzV3MvWhM72BUpBa8nP28YGui+dosG9tWeI4HrBkXZXaKhdOzrIyOSU19Yre
-X-Gm-Message-State: AOJu0YyzpJEbbBpexvdpW0mPnaUgKa968EmUHi0RFEfp9HYqPXwqbG8R
-	EXq6o+rtGnfkANF0aqeMIbP/4YIbi4IUQEhluEbQrdW242owlphPPUuYDUoGckQ=
-X-Google-Smtp-Source: AGHT+IG/bCk4kIW9NyrCSQ6KIPPrgxsc/22TJV8EHDe4dT1Ty8hdJebdL39GxuNsH4o+UyZWeccXhw==
-X-Received: by 2002:a05:690c:d1a:b0:607:7bce:fe28 with SMTP id cn26-20020a05690c0d1a00b006077bcefe28mr10471026ywb.13.1708424608744;
-        Tue, 20 Feb 2024 02:23:28 -0800 (PST)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id j126-20020a819284000000b005ff98d9a7b8sm2045385ywg.19.2024.02.20.02.23.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 20 Feb 2024 02:23:28 -0800 (PST)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-607eefeea90so38019587b3.1;
-        Tue, 20 Feb 2024 02:23:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXlmEqZNdZ9RzyaYKredLH0J3NmRXlJAgQF9l7zRUYxCf6+cnTTPvZAL29NsiW83HQhY5UsP3x3I4PXI5rsFSbDI6fSlQYReNN9TWaMHWQxkmTEgc4JwK46wNsC4i05U8yBgEjzU/BvqS2m
-X-Received: by 2002:a81:4f84:0:b0:607:df5f:5e0c with SMTP id
- d126-20020a814f84000000b00607df5f5e0cmr9142339ywb.3.1708424607929; Tue, 20
- Feb 2024 02:23:27 -0800 (PST)
+	s=arc-20240116; t=1708428103; c=relaxed/simple;
+	bh=INHQvRB/ojgLL1jJyHv4kt04JhA8r1SShwN3sZfPsZ8=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:References; b=iWIm7w3DfNtlXowYiCF8EFx+ZlCRcgyQP2XdA/RhOGtkrLbsgiW9AXZBGSG3gzjhOa/ROhDQ34uccNiQBZiENbuJGpG/8F7D3Nts83mZiSSTiv/YJK/PbM3YZgWAcq1JdDgMj61uoMe+O6MMSGCrArmECtBXQIa/0xarGPlGLVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=s9nrO5Y/; arc=none smtp.client-ip=203.254.224.24
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from epcas5p2.samsung.com (unknown [182.195.41.40])
+	by mailout1.samsung.com (KnoxPortal) with ESMTP id 20240220112138epoutp01d33207ff626c53510fb715b41acb2b95~1jk3TwpQb2790327903epoutp01B
+	for <linux-serial@vger.kernel.org>; Tue, 20 Feb 2024 11:21:38 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20240220112138epoutp01d33207ff626c53510fb715b41acb2b95~1jk3TwpQb2790327903epoutp01B
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1708428098;
+	bh=9fGAvkkWp12wfZXJbzbavv2ZwQH5uBgyjHpo2ixsD5g=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=s9nrO5Y/2+9rMxzcwO8lBRBvPHPBIM4ouJ72/qRImVKjFySSrIQpgghQQcKSogBEG
+	 fUweX6u8ppsM01TrPotpPf4ou8a8vJQStDRecYXQ7ai67mGZpf+/zp7fozxuusgIIa
+	 wsfkGdBEWurXdqw72A2V24O8iKSUDyKJOT1uquKw=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+	epcas5p2.samsung.com (KnoxPortal) with ESMTP id
+	20240220112138epcas5p2f6ce1ff37994ee8c17b9d478d645c430~1jk24n3rP2571225712epcas5p2a;
+	Tue, 20 Feb 2024 11:21:38 +0000 (GMT)
+Received: from epsmges5p3new.samsung.com (unknown [182.195.38.175]) by
+	epsnrtp2.localdomain (Postfix) with ESMTP id 4TfH6S2xGcz4x9Pv; Tue, 20 Feb
+	2024 11:21:36 +0000 (GMT)
+Received: from epcas5p2.samsung.com ( [182.195.41.40]) by
+	epsmges5p3new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	8E.F3.09672.04B84D56; Tue, 20 Feb 2024 20:21:36 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+	epcas5p1.samsung.com (KnoxPortal) with ESMTPA id
+	20240220101235epcas5p16db3f82c8db1efd32299c48c875cdc87~1iokWVZc32498224982epcas5p1u;
+	Tue, 20 Feb 2024 10:12:35 +0000 (GMT)
+Received: from epsmgmc1p1new.samsung.com (unknown [182.195.42.40]) by
+	epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20240220101235epsmtrp15a637026f007baa6d501581fbe3dc121~1iokVk8672766527665epsmtrp1D;
+	Tue, 20 Feb 2024 10:12:35 +0000 (GMT)
+X-AuditID: b6c32a4b-60bfd700000025c8-0e-65d48b404943
+Received: from epsmtip2.samsung.com ( [182.195.34.31]) by
+	epsmgmc1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+	92.43.07368.21B74D56; Tue, 20 Feb 2024 19:12:34 +0900 (KST)
+Received: from cheetah.sa.corp.samsungelectronics.net (unknown
+	[107.109.115.53]) by epsmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20240220101233epsmtip2b9ecc58a6460c97f07645740b25e1462~1iojAi0Ht1920319203epsmtip2I;
+	Tue, 20 Feb 2024 10:12:33 +0000 (GMT)
+From: Tamseel Shams <m.shams@samsung.com>
+To: alim.akhtar@samsung.com, krzysztof.kozlowski+dt@linaro.org,
+	gregkh@linuxfoundation.org, jirislaby@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, Tamseel Shams
+	<m.shams@samsung.com>
+Subject: [PATCH v3] serial: samsung: honor fifosize from dts at first
+Date: Tue, 20 Feb 2024 15:42:27 +0530
+Message-Id: <20240220101227.80741-1-m.shams@samsung.com>
+X-Mailer: git-send-email 2.17.1
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrHKsWRmVeSWpSXmKPExsWy7bCmhq5D95VUg+W/BSwezNvGZtG8eD2b
+	xbu5MhZ9Lx4yW2x6fI3V4vKuOWwWM87vY7I4s7iX3eJu62J2B06PTas62TzuXNvD5rF/7hp2
+	j81L6j36tqxi9Pi8SS6ALSrbJiM1MSW1SCE1Lzk/JTMv3VbJOzjeOd7UzMBQ19DSwlxJIS8x
+	N9VWycUnQNctMwfoJiWFssScUqBQQGJxsZK+nU1RfmlJqkJGfnGJrVJqQUpOgUmBXnFibnFp
+	XrpeXmqJlaGBgZEpUGFCdsbrX/wFxwUqTs+fwtLA+J63i5GTQ0LARGLNusfsXYxcHEICuxkl
+	pk9bBeV8YpRYdO40I4TzjVFi68XzLDAts49MgkrsZZS4eXojVEsrk8TqE9OYuhg5ONgENCWO
+	n+cGMUUEiiQaP/OClDALbGCUeNCzAaxEWMBVYvUCGZCZLAKqEn92dzKC2LwCFhKTW26yQ+yS
+	l1i94QAzSK+EwCF2iUXXrrJBJFwkFv94A1UkLPHq+BYoW0riZX8blJ0uMfdhLxOEXSCxbNd3
+	qLi9xIErc1hAbmAGOnP9Ln2IsKzE1FPrwMqZBfgken8/gWrlldgxD8ZWlPi/ux9qjLjEuxVT
+	WCFsD4kVcyaAnSYkECtxtOct6wRG2VkIGxYwMq5ilEwtKM5NTy02LTDOSy2HR1Nyfu4mRnBC
+	0/LewfjowQe9Q4xMHIyHGCU4mJVEeFnKr6QK8aYkVlalFuXHF5XmpBYfYjQFhtlEZinR5Hxg
+	Ss0riTc0sTQwMTMzM7E0NjNUEud93To3RUggPbEkNTs1tSC1CKaPiYNTqoFJK2TH3UT2k1V6
+	Gsm7fs38E7LI89QGm+9S4u+nPzwcvHuW38pzzO7vvULEe47zHw6f7lF6UCbW3W55Tmyi3AXF
+	9+ud74TUb9S8/c1Rf3tniZXH8U9Ffam13/5EXbK4duqgnq/fss0rymdnW9pVyLitfeAxm6u8
+	SJwzY9/jyyeqzvopiEdfcCsydbx3d7LSYdd/T+0DTjF91Xf5N4HncN7tzFVqWd+ty9yPBOnw
+	/bkY5/HiiVHRUttn8y9WCPVvNlrFaPhbR6H4bBDzOZMFOyK36IuzqQmqXuksbFxnxqH+8Wz4
+	pK+2u90TXS3lXuYeZjrae+vZ56RVL55u0rnSwv5E6eTjk6vUTnhPM/Y8dj5JiaU4I9FQi7mo
+	OBEAl1tpjfEDAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupiluLIzCtJLcpLzFFi42LZdlhJXleo+kqqwfW5lhYP5m1js2hevJ7N
+	4t1cGYu+Fw+ZLTY9vsZqcXnXHDaLGef3MVmcWdzLbnG3dTG7A6fHplWdbB53ru1h89g/dw27
+	x+Yl9R59W1YxenzeJBfAFsVlk5Kak1mWWqRvl8CV8foXf8FxgYrT86ewNDC+5+1i5OSQEDCR
+	mH1kEmMXIxeHkMBuRomeL4fZIBLiEtN+7WeEsIUlVv57zg5R1Mwk8WPrReYuRg4ONgFNiePn
+	uUFqRATKJHZ132cFqWEW2MIoce7/X3aQGmEBV4nVC2RAalgEVCX+7O4Em8krYCExueUmO8R8
+	eYnVGw4wT2DkWcDIsIpRMrWgODc9N9mwwDAvtVyvODG3uDQvXS85P3cTIzi4tDR2MN6b/0/v
+	ECMTB+MhRgkOZiURXpbyK6lCvCmJlVWpRfnxRaU5qcWHGKU5WJTEeQ1nzE4REkhPLEnNTk0t
+	SC2CyTJxcEo1MG2co3V12dY8A4/3bicYZxfdETAwEZ44zVEkWmgO34umyIAsUeFZx+M62Uw+
+	8FpVMSy8XLbHO9Ha7dm8tMytmfUvJ/BEpLc68s75YWf+yjJEPHvCtlNmls9u9Yf9/vNn/e5r
+	XnJM8ozR0pdMeZ8H2kov7ZrS9/65UEagxv61FW8/d+UYXjzLJRiue7PhjV4t8xmBCb1f2ZLV
+	ts5z/rXxy8QNS17JlN2XTeNakZ4bGjBtJfscNs2//7fWy2i4hxX3mSzR4ZvdflCBzSax313j
+	neHCqR7NrO2XAsq3htTHWXUrTdYQ+dDW+XLZ9bKkDSkfkhdFZco8DHk2+fd+i8kc3GWBS5+1
+	/coQePVt7qOvSizFGYmGWsxFxYkATQEMn50CAAA=
+X-CMS-MailID: 20240220101235epcas5p16db3f82c8db1efd32299c48c875cdc87
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: REQ_APPROVE
+CMS-TYPE: 105P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20240220101235epcas5p16db3f82c8db1efd32299c48c875cdc87
+References: <CGME20240220101235epcas5p16db3f82c8db1efd32299c48c875cdc87@epcas5p1.samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20240219164002.520342-1-thuth@redhat.com> <c44bfc7f-7b06-4985-953d-185f8b576a5b@kernel.org>
-In-Reply-To: <c44bfc7f-7b06-4985-953d-185f8b576a5b@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 20 Feb 2024 11:23:15 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXc=rR9udEmMsCJof+sCxdoJryF49-Gy9j=DJqiHyUsvQ@mail.gmail.com>
-Message-ID: <CAMuHMdXc=rR9udEmMsCJof+sCxdoJryF49-Gy9j=DJqiHyUsvQ@mail.gmail.com>
-Subject: Re: [PATCH] drivers/tty/serial: Remove unused function early_mcf_setup
-To: Jiri Slaby <jirislaby@kernel.org>, Greg Ungerer <gerg@linux-m68k.org>
-Cc: Thomas Huth <thuth@redhat.com>, linux-m68k@lists.linux-m68k.org, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Feb 20, 2024 at 6:11=E2=80=AFAM Jiri Slaby <jirislaby@kernel.org> w=
-rote:
-> On 19. 02. 24, 17:40, Thomas Huth wrote:
-> > Compiling a kernel for the ColdFire causes a compiler warning:
-> >
-> > drivers/tty/serial/mcf.c:473:12: warning: no previous prototype for
-> >   =E2=80=98early_mcf_setup=E2=80=99 [-Wmissing-prototypes]
-> >    473 | int __init early_mcf_setup(struct mcf_platform_uart *platp)
-> >        |            ^~~~~~~~~~~~~~~
-> >
-> > This function seems to be completely unused, so let's remove it
-> > to silence the warning.
->
-> And it seems so since the driver addition in 2007 by:
-> commit 49aa49bfd40d718095669c1c70c9d167b814e29b
-> Author: Greg Ungerer <gerg@snapgear.com>
-> Date:   Tue Oct 23 14:37:54 2007 +1000
->
->      m68knommu: new style ColdFire UART driver
+Currently for platforms which passes UART fifosize from DT gets
+override by local driver structure "s3c24xx_serial_drv_data",
+which is not intended. Change the code to honor fifosize from
+device tree at first.
 
-Indeed.
+Signed-off-by: Tamseel Shams <m.shams@samsung.com>
+---
+Change Log:
+v1 -> v2:
+Acknowledged Krzysztof's comments
+Initialized "ret" variable
 
-Looks like the "changes to the ColdFire based m68knommu systems
-to use a platform model at init, and this is used there" from [1]
-never materialized on any public mailing list?
+v2 -> v3:
+intoduced new variable "fifosize_prop" to handle
+return value from call of "of_property_read_u32"
 
-Greg: does it still make sense to add them? If not:
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+ drivers/tty/serial/samsung_tty.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-[1] https://lore.kernel.org/all/47254BEB.2040609@snapgear.com/
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index 71d17d804fda..745702ec8eda 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -1952,7 +1952,7 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
+ 	struct device_node *np = pdev->dev.of_node;
+ 	struct s3c24xx_uart_port *ourport;
+ 	int index = probe_index;
+-	int ret, prop = 0;
++	int ret, prop = 0, fifosize_prop = 1;
+ 
+ 	if (np) {
+ 		ret = of_alias_get_id(np, "serial");
+@@ -1990,8 +1990,8 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	if (np) {
+-		of_property_read_u32(np,
+-			"samsung,uart-fifosize", &ourport->port.fifosize);
++		fifosize_prop = of_property_read_u32(np, "samsung,uart-fifosize",
++				&ourport->port.fifosize);
+ 
+ 		if (of_property_read_u32(np, "reg-io-width", &prop) == 0) {
+ 			switch (prop) {
+@@ -2009,10 +2009,13 @@ static int s3c24xx_serial_probe(struct platform_device *pdev)
+ 		}
+ 	}
+ 
+-	if (ourport->drv_data->fifosize[index])
+-		ourport->port.fifosize = ourport->drv_data->fifosize[index];
+-	else if (ourport->info->fifosize)
+-		ourport->port.fifosize = ourport->info->fifosize;
++	if (fifosize_prop) {
++		if (ourport->drv_data->fifosize[index])
++			ourport->port.fifosize = ourport->drv_data->fifosize[index];
++		else if (ourport->info->fifosize)
++			ourport->port.fifosize = ourport->info->fifosize;
++	}
++
+ 	ourport->port.has_sysrq = IS_ENABLED(CONFIG_SERIAL_SAMSUNG_CONSOLE);
+ 
+ 	/*
+-- 
+2.17.1
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
 
