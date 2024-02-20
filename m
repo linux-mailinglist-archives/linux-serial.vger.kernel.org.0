@@ -1,178 +1,191 @@
-Return-Path: <linux-serial+bounces-2361-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2363-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F61A85B9E6
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 12:06:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4F6685BAA8
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 12:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6E7E1F24439
-	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 11:06:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D978A1C21577
+	for <lists+linux-serial@lfdr.de>; Tue, 20 Feb 2024 11:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5106665BCD;
-	Tue, 20 Feb 2024 11:06:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF31E67735;
+	Tue, 20 Feb 2024 11:34:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b="GXt+n7XM"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="JY3TL8T6"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0250065BCC
-	for <linux-serial@vger.kernel.org>; Tue, 20 Feb 2024 11:06:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.254.6.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F389657DF
+	for <linux-serial@vger.kernel.org>; Tue, 20 Feb 2024 11:34:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1708427174; cv=none; b=MLS7wIL103UzDBAVPx6JKXiWDgdyOJuNXLhEtVpQPY9a3w+b+XUbw67CxiwLl5js2Tu0roUWX+OHN8Ysd3wiZAu17DBbPNrus61gy1RXUzbIX4Fxssb6GfWOyienkuhsDNEiTkM3aag6AjpT61h4yI66QVA3XzoFUOCSos3pchw=
+	t=1708428856; cv=none; b=RyoPt9IRnFKMVvDL+BI5Y9Oro2IsVp8pjQLeU5zhTAQg1jkj5ehIqSdpgqZaC0tfRXQ4azDbTzJ1C7CbFa/c2fg/i2h7JP9AzxXurMY5smhiFbt4aIjtxWAzfU4nxxJFDVWIDfFHTRHE9p9L7tBrEqKgkhTJCN0CW01WjEJ4iF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1708427174; c=relaxed/simple;
-	bh=zyCn8axoZQlXntt5T11qThYMH5vJDF7jJ6JEkXM24+U=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Y+qOMvMwSonwWf1uUL/+K5i5uJ1KiTVjhNYvGUeXwTQ6aM7yKhqtcrKnHhWjfVRj+rBfaUuIxfXBk/mINpKHYkjK00aVyLDwkM6Vs0pOBvvRp9rmHHL/zqYO2y+S2BVaNselauU19A5woiqUmVZOGSELmPGSXfEm3BNMq+KLwD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com; spf=pass smtp.mailfrom=dh-electronics.com; dkim=pass (2048-bit key) header.d=dh-electronics.com header.i=@dh-electronics.com header.b=GXt+n7XM; arc=none smtp.client-ip=178.254.6.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=dh-electronics.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dh-electronics.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-	s=dhelectronicscom; t=1708426627;
-	bh=zyCn8axoZQlXntt5T11qThYMH5vJDF7jJ6JEkXM24+U=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=GXt+n7XMctZkQlQdb44Tk2cxKWzJVGhXPonF1raMhj/uwFca7pNWSpWovQyuOORd/
-	 t9XUxKGjwtrItrahyUWPhynBSaDcECKyID7RhVot5DWy96Drtk2NV/280gNtbj+IFA
-	 +ZoMs7Ijc55ON3nG7Jdep0xUofHULEqkc7QNZjut/uqLKwxxoj+3Voe/wAawkZO3Ee
-	 OZASj2150X3dF9/6uOmYKsfeLagj484OphEL9MXszENNdzuLn4RR4HtXTRMuY68Ft5
-	 yRWv/AIT07if9hghJJYpM+18GXI/bZWPbqQuVCiWs2z3tPjPCEEErtQNwSD4DsIgoS
-	 gsFMsbVtNSStw==
-X-secureTransport-forwarded: yes
-From: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To: "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Marek Vasut
-	<marex@denx.de>, Fabio Estevam <festevam@denx.de>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
-	NXP Linux Team <linux-imx@nxp.com>, Sergey Organov <sorganov@gmail.com>,
-	=?utf-8?B?VXdlIEtsZWluZS1Lw7ZuaWc=?= <u.kleine-koenig@pengutronix.de>, "Rob
- Herring" <robh@kernel.org>, =?utf-8?B?SWxwbyBKw6RydmluZW4=?=
-	<ilpo.jarvinen@linux.intel.com>, Tom Rix <trix@redhat.com>, Thomas Gleixner
-	<tglx@linutronix.de>, Lukas Wunner <lukas@wunner.de>, Rickard X Andersson
-	<Rickard.Andersson@axis.com>, "rickard314.andersson@gmail.com"
-	<rickard314.andersson@gmail.com>
-Subject: RE: [RFC][PATCH] serial: imx: Fix RS485 behaviour on disabled
- RX_DURING_TX
-Thread-Topic: [RFC][PATCH] serial: imx: Fix RS485 behaviour on disabled
- RX_DURING_TX
-Thread-Index: AQHaY+MB2vblg263n0WgWxIvwFWSn7ETDcBA
-Date: Tue, 20 Feb 2024 10:57:05 +0000
-Message-ID: <2e866164c89c495aac905753978e8747@dh-electronics.com>
-References: <20240220061243.4169045-1-rickaran@axis.com>
- <20240220095540.3352-1-cniedermaier@dh-electronics.com>
-In-Reply-To: <20240220095540.3352-1-cniedermaier@dh-electronics.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1708428856; c=relaxed/simple;
+	bh=wpwueLBxQ8g7CUCfsdr3qWaKkli08BlyZt5JJx5mm44=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z0zITqtcIm8L4cWWB5O2SuHyqwH75fbwYB+5G0w2LxKlmz+Z+E5YNZgwBmHhUfGzp5S9zHI3Kyjn9QQ2yapKnV4a5T1ufnvONQy7I0hvoLvqbwMVmvXEsVpUIQCV2zlc7OWnZ3BCnDMPj72WHHIaE3FS9oROjvwa7aHZHza+YGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=JY3TL8T6; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-33d36736d4eso1783460f8f.1
+        for <linux-serial@vger.kernel.org>; Tue, 20 Feb 2024 03:34:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1708428853; x=1709033653; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z3Pvq3RdfRBYI8uAK+HiNG4SvbmBg/H4jDL+WIUGvTg=;
+        b=JY3TL8T6o5kXF3AWKRtemKT3kWNyEr9MsBv20xU0ab+XgBFQfi/7jWFxu3lBe76vCD
+         Q0MM1IcSjNTmldkfCKIk+tnE9maiw/lYszVPAhZnW1SpHVMVVycGI8ZzOZ03g0uAhwXP
+         aLgMFHqGUvtzWkABiIxZ4G28Z83d54jnROk+Cr4ykALbAHPxwk6muM4DX2hzdnhi3bhG
+         1rvvJMFqkiRp1V23nl5VJSNp+JHGd2vPxL8By7VGGxg2bvNeNDuxlvt+qheOBY0KeJcw
+         EnOVpSeXQLDE1M33h4r8tATV52BpCzkW8mWjG2CyFFQcoQET5wj2j5z8Rb/28Ym1kkt/
+         rzlw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1708428853; x=1709033653;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z3Pvq3RdfRBYI8uAK+HiNG4SvbmBg/H4jDL+WIUGvTg=;
+        b=Dk4sVlILQtnf4yawGBViyJKkxzmQJf3Z09POBMB2SCzJ5fMolpA9v/GJYwGOZTUUqh
+         twf55KbtO9+HSrTL2XbDwCC8IzEenpEQNRxiQwvt53FrKXsRn848OsHojSa19U4VAX/z
+         +MOkDji42+Ni/5FOiO7YcfZ/R7EoRYI1upW0Rc052xrUuzJPN9C7rFzG9KngRa9xybOH
+         ctkovv9NRTVh+Bj+UCyRZ7HIavxoIVRAQKm3JRqgsy2IiSMCi7t/wmC/zDMDBHPmpd5C
+         REvTOJ7Y9extXPj/ItRYCKKfNXVpKVWTWrMl4HbrPZpGl2hR7mBiNnxhn3KPwgDa9PHu
+         q/1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXiBpEvlK/CsPVkk/fXfPM4GosJ/d50r5ThtUgX+bSB0qYCm9m+j6izbk8SnNjGr03Z5cChtnYafC4gwhZ+EyV9vmwPp8dL5gX5Tzhr
+X-Gm-Message-State: AOJu0YwfOe83xhVWHYRncQyIKVN7ZSik0hOyWi9SZGrXdtxYoSbLA8Gn
+	/j9vIQJ3U3p1ixrX5ecI3+xrCf1LJbutAP69j5c3bNfkZ1dhtBPSqFDyqOX4LIs=
+X-Google-Smtp-Source: AGHT+IGw3UcTIT75fBKm4X2nkb9oIu2VZFCfSYXoNynHzrGBcjbo7mcmn9zo6bBaGcO1zeNFNAaYPg==
+X-Received: by 2002:a05:6000:1843:b0:33d:4fca:a47f with SMTP id c3-20020a056000184300b0033d4fcaa47fmr3907939wri.18.1708428853091;
+        Tue, 20 Feb 2024 03:34:13 -0800 (PST)
+Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:c6ce:c6a0:43ac:8f8e])
+        by smtp.gmail.com with ESMTPSA id bn28-20020a056000061c00b0033d6fe3f6absm1063006wrb.62.2024.02.20.03.34.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 Feb 2024 03:34:12 -0800 (PST)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Patrice Chotard <patrice.chotard@foss.st.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH v3] serial: st-asc: don't get/put GPIOs in atomic context
+Date: Tue, 20 Feb 2024 12:34:10 +0100
+Message-Id: <20240220113410.16613-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.40.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-PiBGcm9tOiBDaHJpc3RvcGggTmllZGVybWFpZXIgPGNuaWVkZXJtYWllckBkaC1lbGVjdHJvbmlj
-cy5jb20+DQo+IFNlbnQ6IFR1ZXNkYXksIEZlYnJ1YXJ5IDIwLCAyMDI0IDEwOjU2IEFNDQo+IFRv
-OiBsaW51eC1zZXJpYWxAdmdlci5rZXJuZWwub3JnDQo+IENjOiBDaHJpc3RvcGggTmllZGVybWFp
-ZXIgPGNuaWVkZXJtYWllckBkaC1lbGVjdHJvbmljcy5jb20+OyBHcmVnIEtyb2FoLUhhcnRtYW4N
-Cj4gPGdyZWdraEBsaW51eGZvdW5kYXRpb24ub3JnPjsgSmlyaSBTbGFieSA8amlyaXNsYWJ5QGtl
-cm5lbC5vcmc+OyBTaGF3biBHdW8NCj4gPHNoYXduZ3VvQGtlcm5lbC5vcmc+OyBNYXJlayBWYXN1
-dCA8bWFyZXhAZGVueC5kZT47IEZhYmlvIEVzdGV2YW0gPGZlc3RldmFtQGRlbnguZGU+Ow0KPiBT
-YXNjaGEgSGF1ZXIgPHMuaGF1ZXJAcGVuZ3V0cm9uaXguZGU+OyBQZW5ndXRyb25peCBLZXJuZWwg
-VGVhbSA8a2VybmVsQHBlbmd1dHJvbml4LmRlPjsNCj4gTlhQIExpbnV4IFRlYW0gPGxpbnV4LWlt
-eEBueHAuY29tPjsgU2VyZ2V5IE9yZ2Fub3YgPHNvcmdhbm92QGdtYWlsLmNvbT47IFV3ZSBLbGVp
-bmUtS8O2bmlnDQo+IDx1LmtsZWluZS1rb2VuaWdAcGVuZ3V0cm9uaXguZGU+OyBSb2IgSGVycmlu
-ZyA8cm9iaEBrZXJuZWwub3JnPjsgSWxwbyBKw6RydmluZW4NCj4gPGlscG8uamFydmluZW5AbGlu
-dXguaW50ZWwuY29tPjsgVG9tIFJpeCA8dHJpeEByZWRoYXQuY29tPjsgVGhvbWFzIEdsZWl4bmVy
-DQo+IDx0Z2x4QGxpbnV0cm9uaXguZGU+OyBMdWthcyBXdW5uZXIgPGx1a2FzQHd1bm5lci5kZT4N
-Cj4gU3ViamVjdDogW1JGQ11bUEFUQ0hdIHNlcmlhbDogaW14OiBGaXggUlM0ODUgYmVoYXZpb3Vy
-IG9uIGRpc2FibGVkIFJYX0RVUklOR19UWA0KPiANCj4gSSBoYXZlIG1hZGUgYSBwYXRjaCB0aGF0
-IGRvZXMgbm90IGVuYWJsZSB0aGUgbG9vcGJhY2sgd2hlbg0KPiB0aGUgUlhfRFVSSU5HX1RYIGZs
-YWcgaXMgZGlzYWJsZWQuIFdvdWxkIHlvdSBiZSBzbyBraW5kIHRvDQo+IHRlc3QgbXkgcGF0Y2gg
-dG8gc2VlIGlmIGl0IGFsc28gc29sdmVzIHlvdXIgcHJvYmxlbS4NCj4gDQo+IFJlZ2FyZHMNCj4g
-Q2hyaXN0b3BoDQoNCitDQyBSaWNrYXJkIFggQW5kZXJzc29uLCBiZWNhdXNlIG1pc3NlZCB0byBh
-ZGQgaGltLg0KDQo+IA0KPiANCj4gQ29tbWl0IDc5ZDAyMjRmNmJmMiAoInR0eTogc2VyaWFsOiBp
-bXg6IEhhbmRsZSBSUzQ4NSBERSBzaWduYWwgYWN0aXZlIGhpZ2giKQ0KPiBhY3RpdmF0ZWQgdGhl
-IGxvb3BiYWNrIG1vZGUgZm9yIFJTNDg1IGNvbnRyb2xsZWQgYnkgVUFSVCBDVFNfQiB3aGVuIHRo
-ZQ0KPiBmdW5jdGlvbiBpbXhfdWFydF9zdG9wX3J4KCkgaXMgY2FsbGVkLiBCdXQgdGhyb3VnaCB0
-aGF0IGNoYW5nZXMgdGhlIFJTNDg1DQo+IGZsYWcgUlhfRFVSSU5HX1RYIGlzbuKAmXQgYWJsZSB0
-byB0dXJuIG9mZiB0aGUgcmVjZWl2ZXIgYW55bW9yZS4gSWYgdGhlIGZsYWcNCj4gUlhfRFVSSU5H
-X1RYIGlzIGRpc2FibGVkIGV2ZXJ5dGhpbmcgdGhhdCB3YXMgc2VudCB3aWxsIGJlIHJlY2VpdmVk
-IGR1ZSB0bw0KPiB0aGUgYWN0aXZlIGxvb3BiYWNrLiBUbyB0dXJuIG9mZiB0aGUgcmVjZWl2ZXIg
-aW4gdGhpcyBjYXNlIHRoZSBmdW5jdGlvbg0KPiBpbXhfdWFydF9zdG9wX3J4KCkgaXMgZXh0ZW5k
-ZWQgYnkgYSB3cmFwcGVyIGZ1bmN0aW9uDQo+IGlteF91YXJ0X3N0b3Bfcnhfd2l0aF9sb29wYmFj
-a19yczQ4NV9jdHJsKCkgZm9yIHRoZSB1c2Ugb2YgUlM0ODUgd2l0aA0KPiBkaXNhYmxlZCBmbGFn
-IFJYX0RVUklOR19UWCwgd2hlcmUgdGhlIHJlY2VpdmVyIGlzIHR1cm4gb2ZmLiBGb3IgYWxsIG90
-aGVyDQo+IGNhc2VzIHRoZXJlIGFyZW7igJl0IGEgZnVuY3Rpb25hbCBjaGFuZ2UuDQo+IA0KPiBX
-aGVuIHRoZSByZWNlaXZlciBpcyB0dXJuZWQgb2ZmIHRoZSBVQVJUIENUU19CIHNpZ25hbCBpcyBh
-bHdheXMgaGlnaC4gVG8NCj4gZW5zdXJlIHRoYXQgdGhlIFJTNDg1IGJ1cyB3b27igJl0IGJsb2Nr
-ZWQgYnkgYSBkaXNhYmxlZCByZWNlaXZlciBjYXVzZWQgYnkgYQ0KPiBoaWdoIFVBUlQgQ1RTX0Ig
-c2lnbmFsIHRoZSBmdW5jdGlvbiBpbXhfdWFydF9zaHV0ZG93bigpIGlzIGV4dGVuZGVkLiBTbyBp
-bg0KPiBSUzQ4NSBsb29wYmFjayBtb2RlIHRoZSByZWNlaXZlciBpcyBhbHdheXMgb24gYWZ0ZXIg
-c2h1dGRvd24gdGhlIGRldmljZS4NCj4gDQo+IEZpeGVzOiA3OWQwMjI0ZjZiZjIgKCJ0dHk6IHNl
-cmlhbDogaW14OiBIYW5kbGUgUlM0ODUgREUgc2lnbmFsIGFjdGl2ZSBoaWdoIikNCj4gU2lnbmVk
-LW9mZi1ieTogQ2hyaXN0b3BoIE5pZWRlcm1haWVyIDxjbmllZGVybWFpZXJAZGgtZWxlY3Ryb25p
-Y3MuY29tPg0KPiAtLS0NCj4gQ2M6IEdyZWcgS3JvYWgtSGFydG1hbiA8Z3JlZ2toQGxpbnV4Zm91
-bmRhdGlvbi5vcmc+DQo+IENjOiBKaXJpIFNsYWJ5IDxqaXJpc2xhYnlAa2VybmVsLm9yZz4NCj4g
-Q2M6IFNoYXduIEd1byA8c2hhd25ndW9Aa2VybmVsLm9yZz4NCj4gQ2M6IE1hcmVrIFZhc3V0IDxt
-YXJleEBkZW54LmRlPg0KPiBDYzogRmFiaW8gRXN0ZXZhbSA8ZmVzdGV2YW1AZGVueC5kZT4NCj4g
-Q2M6IFNhc2NoYSBIYXVlciA8cy5oYXVlckBwZW5ndXRyb25peC5kZT4NCj4gQ2M6IFBlbmd1dHJv
-bml4IEtlcm5lbCBUZWFtIDxrZXJuZWxAcGVuZ3V0cm9uaXguZGU+DQo+IENjOiBOWFAgTGludXgg
-VGVhbSA8bGludXgtaW14QG54cC5jb20+DQo+IENjOiBTZXJnZXkgT3JnYW5vdiA8c29yZ2Fub3ZA
-Z21haWwuY29tPg0KPiBDYzogIlV3ZSBLbGVpbmUtS8O2bmlnIiA8dS5rbGVpbmUta29lbmlnQHBl
-bmd1dHJvbml4LmRlPg0KPiBDYzogUm9iIEhlcnJpbmcgPHJvYmhAa2VybmVsLm9yZz4NCj4gQ2M6
-ICJJbHBvIErDpHJ2aW5lbiIgPGlscG8uamFydmluZW5AbGludXguaW50ZWwuY29tPg0KPiBDYzog
-VG9tIFJpeCA8dHJpeEByZWRoYXQuY29tPg0KPiBDYzogVGhvbWFzIEdsZWl4bmVyIDx0Z2x4QGxp
-bnV0cm9uaXguZGU+DQo+IENjOiBMdWthcyBXdW5uZXIgPGx1a2FzQHd1bm5lci5kZT4NCj4gVG86
-IGxpbnV4LXNlcmlhbEB2Z2VyLmtlcm5lbC5vcmcNCj4gLS0tDQo+ICBkcml2ZXJzL3R0eS9zZXJp
-YWwvaW14LmMgfCAxNiArKysrKysrKysrKysrLS0tDQo+ICAxIGZpbGUgY2hhbmdlZCwgMTMgaW5z
-ZXJ0aW9ucygrKSwgMyBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3R0
-eS9zZXJpYWwvaW14LmMgYi9kcml2ZXJzL3R0eS9zZXJpYWwvaW14LmMNCj4gaW5kZXggNGFhNzJk
-NWFlYWZiLi4yMjJlMmM5MjliZDcgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvdHR5L3NlcmlhbC9p
-bXguYw0KPiArKysgYi9kcml2ZXJzL3R0eS9zZXJpYWwvaW14LmMNCj4gQEAgLTQ2Myw3ICs0NjMs
-OCBAQCBzdGF0aWMgdm9pZCBpbXhfdWFydF9zdG9wX3R4KHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQp
-DQo+ICB9DQo+IA0KPiAgLyogY2FsbGVkIHdpdGggcG9ydC5sb2NrIHRha2VuIGFuZCBpcnFzIG9m
-ZiAqLw0KPiAtc3RhdGljIHZvaWQgaW14X3VhcnRfc3RvcF9yeChzdHJ1Y3QgdWFydF9wb3J0ICpw
-b3J0KQ0KPiArc3RhdGljIHZvaWQgaW14X3VhcnRfc3RvcF9yeF93aXRoX2xvb3BiYWNrX3JzNDg1
-X2N0cmwoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCwNCj4gKwkJCQkJCSAgYm9vbCBsb29wYmFja19y
-czQ4NV9lbmFibGUpDQo+ICB7DQo+ICAJc3RydWN0IGlteF9wb3J0ICpzcG9ydCA9IChzdHJ1Y3Qg
-aW14X3BvcnQgKilwb3J0Ow0KPiAgCXUzMiB1Y3IxLCB1Y3IyLCB1Y3I0LCB1dHM7DQo+IEBAIC00
-ODMsNyArNDg0LDcgQEAgc3RhdGljIHZvaWQgaW14X3VhcnRfc3RvcF9yeChzdHJ1Y3QgdWFydF9w
-b3J0ICpwb3J0KQ0KPiAgCWlteF91YXJ0X3dyaXRlbChzcG9ydCwgdWNyNCwgVUNSNCk7DQo+IA0K
-PiAgCS8qIFNlZSBTRVJfUlM0ODVfRU5BQkxFRC9VVFNfTE9PUCBjb21tZW50IGluIGlteF91YXJ0
-X3Byb2JlKCkgKi8NCj4gLQlpZiAocG9ydC0+cnM0ODUuZmxhZ3MgJiBTRVJfUlM0ODVfRU5BQkxF
-RCAmJg0KPiArCWlmIChwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9SUzQ4NV9FTkFCTEVEICYmIGxv
-b3BiYWNrX3JzNDg1X2VuYWJsZSAmJg0KPiAgCSAgICBwb3J0LT5yczQ4NS5mbGFncyAmIFNFUl9S
-UzQ4NV9SVFNfT05fU0VORCAmJg0KPiAgCSAgICBzcG9ydC0+aGF2ZV9ydHNjdHMgJiYgIXNwb3J0
-LT5oYXZlX3J0c2dwaW8pIHsNCj4gIAkJdXRzID0gaW14X3VhcnRfcmVhZGwoc3BvcnQsIGlteF91
-YXJ0X3V0c19yZWcoc3BvcnQpKTsNCj4gQEAgLTQ5OCw2ICs0OTksMTIgQEAgc3RhdGljIHZvaWQg
-aW14X3VhcnRfc3RvcF9yeChzdHJ1Y3QgdWFydF9wb3J0ICpwb3J0KQ0KPiAgfQ0KPiANCj4gIC8q
-IGNhbGxlZCB3aXRoIHBvcnQubG9jayB0YWtlbiBhbmQgaXJxcyBvZmYgKi8NCj4gK3N0YXRpYyB2
-b2lkIGlteF91YXJ0X3N0b3Bfcngoc3RydWN0IHVhcnRfcG9ydCAqcG9ydCkNCj4gK3sNCj4gKwlp
-bXhfdWFydF9zdG9wX3J4X3dpdGhfbG9vcGJhY2tfcnM0ODVfY3RybChwb3J0LCAxKTsNCj4gK30N
-Cj4gKw0KPiArLyogY2FsbGVkIHdpdGggcG9ydC5sb2NrIHRha2VuIGFuZCBpcnFzIG9mZiAqLw0K
-PiAgc3RhdGljIHZvaWQgaW14X3VhcnRfZW5hYmxlX21zKHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQp
-DQo+ICB7DQo+ICAJc3RydWN0IGlteF9wb3J0ICpzcG9ydCA9IChzdHJ1Y3QgaW14X3BvcnQgKilw
-b3J0Ow0KPiBAQCAtNjg0LDcgKzY5MSw3IEBAIHN0YXRpYyB2b2lkIGlteF91YXJ0X3N0YXJ0X3R4
-KHN0cnVjdCB1YXJ0X3BvcnQgKnBvcnQpDQo+IA0KPiAgCQkJaWYgKCEocG9ydC0+cnM0ODUuZmxh
-Z3MgJiBTRVJfUlM0ODVfUlhfRFVSSU5HX1RYKSAmJg0KPiAgCQkJICAgICFwb3J0LT5yczQ4NV9y
-eF9kdXJpbmdfdHhfZ3BpbykNCj4gLQkJCQlpbXhfdWFydF9zdG9wX3J4KHBvcnQpOw0KPiArCQkJ
-CWlteF91YXJ0X3N0b3Bfcnhfd2l0aF9sb29wYmFja19yczQ4NV9jdHJsKHBvcnQsIDApOw0KPiAN
-Cj4gIAkJCXNwb3J0LT50eF9zdGF0ZSA9IFdBSVRfQUZURVJfUlRTOw0KPiANCj4gQEAgLTE1OTYs
-NiArMTYwMyw5IEBAIHN0YXRpYyB2b2lkIGlteF91YXJ0X3NodXRkb3duKHN0cnVjdCB1YXJ0X3Bv
-cnQgKnBvcnQpDQo+ICAJCXV0cyA9IGlteF91YXJ0X3JlYWRsKHNwb3J0LCBpbXhfdWFydF91dHNf
-cmVnKHNwb3J0KSk7DQo+ICAJCXV0cyB8PSBVVFNfTE9PUDsNCj4gIAkJaW14X3VhcnRfd3JpdGVs
-KHNwb3J0LCB1dHMsIGlteF91YXJ0X3V0c19yZWcoc3BvcnQpKTsNCj4gKwkJdWNyMiA9IGlteF91
-YXJ0X3JlYWRsKHNwb3J0LCBVQ1IyKTsNCj4gKwkJdWNyMiB8PSBVQ1IyX1JYRU47DQo+ICsJCWlt
-eF91YXJ0X3dyaXRlbChzcG9ydCwgdWNyMiwgVUNSMik7DQo+ICAJCXVjcjEgfD0gVUNSMV9VQVJU
-RU47DQo+ICAJfSBlbHNlIHsNCj4gIAkJdWNyMSAmPSB+VUNSMV9VQVJURU47DQo+IC0tDQo+IDIu
-MTEuMA0KDQo=
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+
+Since commit 1f2bcb8c8ccd ("gpio: protect the descriptor label with
+SRCU") gpiod_set_consumer_name() calls synchronize_srcu() which led to
+a "sleeping in atomic context" smatch warning.
+
+This function (along with gpiod_get/put() and all other GPIO APIs apart
+from gpiod_get/set_value() and gpiod_direction_input/output()) should
+have never been called with a spinlock taken. We're only fixing this now
+as GPIOLIB has been rebuilt to use SRCU for access serialization which
+uncovered this problem.
+
+Move the calls to gpiod_get/put() outside the spinlock critical section.
+
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/linux-gpio/deee1438-efc1-47c4-8d80-0ab2cf01d60a@moroto.mountain/
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+v2 -> v3:
+- we only need to change the GPIO configuration for RTS in certain situations
+  so use a separate variable for storing that information; if we don't then we
+  may end up putting the descriptor when setting a different option
+- I dropped Linus tag as the code change significantly
+
+v1 -> v2:
+- initialize the 'manual_rts' variable to false as we don't always get to
+  the place where it's set
+
+ drivers/tty/serial/st-asc.c | 40 ++++++++++++++++++++++---------------
+ 1 file changed, 24 insertions(+), 16 deletions(-)
+
+diff --git a/drivers/tty/serial/st-asc.c b/drivers/tty/serial/st-asc.c
+index bbb5595d7e24..a23e59551848 100644
+--- a/drivers/tty/serial/st-asc.c
++++ b/drivers/tty/serial/st-asc.c
+@@ -465,6 +465,7 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 			    const struct ktermios *old)
+ {
+ 	struct asc_port *ascport = to_asc_port(port);
++	bool manual_rts, toggle_rts = false;
+ 	struct gpio_desc *gpiod;
+ 	unsigned int baud;
+ 	u32 ctrl_val;
+@@ -518,25 +519,13 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 
+ 		/* If flow-control selected, stop handling RTS manually */
+ 		if (ascport->rts) {
+-			devm_gpiod_put(port->dev, ascport->rts);
+-			ascport->rts = NULL;
+-
+-			pinctrl_select_state(ascport->pinctrl,
+-					     ascport->states[DEFAULT]);
++			toggle_rts = true;
++			manual_rts = false;
+ 		}
+ 	} else {
+ 		/* If flow-control disabled, it's safe to handle RTS manually */
+-		if (!ascport->rts && ascport->states[NO_HW_FLOWCTRL]) {
+-			pinctrl_select_state(ascport->pinctrl,
+-					     ascport->states[NO_HW_FLOWCTRL]);
+-
+-			gpiod = devm_gpiod_get(port->dev, "rts", GPIOD_OUT_LOW);
+-			if (!IS_ERR(gpiod)) {
+-				gpiod_set_consumer_name(gpiod,
+-						port->dev->of_node->name);
+-				ascport->rts = gpiod;
+-			}
+-		}
++		if (!ascport->rts && ascport->states[NO_HW_FLOWCTRL])
++			manual_rts = toggle_rts = true;
+ 	}
+ 
+ 	if ((baud < 19200) && !ascport->force_m1) {
+@@ -595,6 +584,25 @@ static void asc_set_termios(struct uart_port *port, struct ktermios *termios,
+ 	asc_out(port, ASC_CTL, (ctrl_val | ASC_CTL_RUN));
+ 
+ 	uart_port_unlock_irqrestore(port, flags);
++
++	if (toggle_rts) {
++		if (manual_rts) {
++			pinctrl_select_state(ascport->pinctrl,
++					     ascport->states[NO_HW_FLOWCTRL]);
++
++			gpiod = devm_gpiod_get(port->dev, "rts", GPIOD_OUT_LOW);
++			if (!IS_ERR(gpiod)) {
++				gpiod_set_consumer_name(gpiod,
++							port->dev->of_node->name);
++				ascport->rts = gpiod;
++			}
++		} else {
++				devm_gpiod_put(port->dev, ascport->rts);
++				ascport->rts = NULL;
++				pinctrl_select_state(ascport->pinctrl,
++						     ascport->states[DEFAULT]);
++		}
++	}
+ }
+ 
+ static const char *asc_type(struct uart_port *port)
+-- 
+2.40.1
+
 
