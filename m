@@ -1,35 +1,35 @@
-Return-Path: <linux-serial+bounces-2540-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2541-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51EAA86EB76
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:53:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CBF286EB78
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82A171C215EF
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:53:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 236A128738A
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:53:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D1AD5915E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E16759161;
 	Fri,  1 Mar 2024 21:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0/QBNf4I";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ebzA5Hmm"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="fpkk8WdB";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="oSX8W81+"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0575159144
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07FC459146
 	for <linux-serial@vger.kernel.org>; Fri,  1 Mar 2024 21:52:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709329977; cv=none; b=KtMsmrhmygmBq7WKKgLFim1oQUpo9xHBwWqLYGpHvTBaioUOI51kdqPK4OCUqV1miUgpvcV0hbngtoNen5pzfEpbGAKhTOBbWbUaMArJOBKZ/GEKgs4wBivg2EHOOiovAGamCPzjLntfL8x8C8+BPJ5/i3FMJFmApXd9Hjn/3G0=
+	t=1709329977; cv=none; b=OHTlUo69Z8+bYKmkuel55Yl0uQOezs8e57K3kbUTpIZEZSFeaFvb1SMJQ0jPYVejwT6DAZ37l28TSXwbZp1Lni6sQ9yRa6phXX43gjH+NoA1FHgBIq96Y9sstZsufAk5dHVv2/FWgwTeE3RISWyyA99KhhKThyrlVor8V5qaPmQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1709329977; c=relaxed/simple;
-	bh=P+hCeeWTiwQ956ZhzC5IWqeVkfRNJPOR3rmG6/WGOPs=;
+	bh=95CvMzwLEYvN0YPdFgnvtB83kTTr7qCy0v8blcJOJG4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IRv0Z5I6AWRPecwuZa0WvCZq7mWVHiyw7tq/UXRr1e0EnfmyeDCnGyd3DBrXdeb4G8WPuylRP5SBtC5hmzl4o6o8J4le0pK7ArxvSw2xFfAwKDjtVLwmcvtrnLKuba3l9JZmdUxpB4g8RR8qizEb5cywtYYzIuuqtlJ3B9uIZOQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0/QBNf4I; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ebzA5Hmm; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=UldQlj86LX8Izq6YUh3lEeq+UbJHviYMo6Ubt+Z807ltOW1HvHvCM0Trde8zKFg7Ty067r1EJxkKtIfX2Y9gRRVIGdjYWFmOpC9B0H2WEaofnvofXK3EbX/wBXFDG6Eiu31zz3+qolHB15DF9mqGGATgJP21VOnpSYg7y753eC0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=fpkk8WdB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=oSX8W81+; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
@@ -39,29 +39,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=h7R39kvA5nWx/SHLkwt/oBPRXP7RjZNc6ixojjlPi0s=;
-	b=0/QBNf4IgMRfw2pMIvLY/+ufqDgbJ+mJ0y7/Y1Fj1j9vPByFNLCcRss+KyMSASwuMvMVEV
-	gxNzsvj09422np2aQm9l8Flk2xyq0w2IfLb5VVMtFk1gxOVy94DPUEHST5Oe0NI5H+hYc0
-	238QlnwCHRy/x/BST3gCKMnKu74tYZ4NJiAAd02w6v5to1plt38nhtkECyt71U4VvMDqzk
-	1i95o816KeNqBQ8ZMd6Yxkf3HW8ji/Y1C46QaHkBDa1Kg0U40/owVsWjaBPq+hgBntJh2d
-	02SKurrcCnbvCyG7b2IBuu1HZfDcFOSwLNdgXcRWFpWskf+r5wn4pk4+mzzzzg==
+	bh=gr2ZxEwFtSX4/4G1RgLzPTzSQg478W3tlH7lcsXH0mc=;
+	b=fpkk8WdB0bre+7rLpCRoW15tSHtAa/O4wATJbIud9rMy0nRIbnXFi3dS1unLyTMbYBRXUF
+	HiVK4tXA4/FMISi949igIbIJM7AODSe/QgrqD8MJzd70YgJzfcf+AAPvJuMvRuQquy/2eC
+	NhU2t12++7gk4neMB+c/qd3LmGfe25SyN21X8+/oL/cNdYL3rlqtaSZwZQXiceuQbGqVZb
+	h1S6OXd5s/A12s5mbYH6exS6ejDmIpI3OTq9luwoUcljx2Bt/mub0vGKat6p4ldroN8FkJ
+	nFO5KchHg67GHcBKJ6M4BJnvpOP7H1qV9q6LAIjv5KUfDqgTo7lNk0aeJ+vUDg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1709329973;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=h7R39kvA5nWx/SHLkwt/oBPRXP7RjZNc6ixojjlPi0s=;
-	b=ebzA5Hmm7uP1CoOmJvVGUtbjuTQGElZMrsxO9J/5ipZpXhiW0gRj8/p1wyP2CheMBUqMF6
-	QnWiUexhhbnpMxBg==
+	bh=gr2ZxEwFtSX4/4G1RgLzPTzSQg478W3tlH7lcsXH0mc=;
+	b=oSX8W81+15FcseS/E4G2apZY2qxtBj1NzB//CfXTjM9toOs5x8V/lBQoRnqSTwhOfW17Yl
+	u7GtZvLyQt2gKzCg==
 To: linux-serial@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 13/18] serial: pch: Invoke handle_rx_to() directly.
-Date: Fri,  1 Mar 2024 22:45:26 +0100
-Message-ID: <20240301215246.891055-14-bigeasy@linutronix.de>
+Subject: [PATCH 14/18] serial: pch: Make push_rx() return void.
+Date: Fri,  1 Mar 2024 22:45:27 +0100
+Message-ID: <20240301215246.891055-15-bigeasy@linutronix.de>
 In-Reply-To: <20240301215246.891055-1-bigeasy@linutronix.de>
 References: <20240301215246.891055-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -72,42 +72,59 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
 
-handle_rx() is only a wrapper around handle_rx_to() without any
-additional functionality.
+push_rx() returns always 0.
 
-Invoke handle_rx_to() directly and remove handle_rx().
+Make push_rx() return void.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/tty/serial/pch_uart.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/tty/serial/pch_uart.c | 12 ++++--------
+ 1 file changed, 4 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/tty/serial/pch_uart.c b/drivers/tty/serial/pch_uart.c
-index 436cc6d52a11b..29ed6f8621d7d 100644
+index 29ed6f8621d7d..124eb816fca7e 100644
 --- a/drivers/tty/serial/pch_uart.c
 +++ b/drivers/tty/serial/pch_uart.c
-@@ -778,11 +778,6 @@ static int handle_rx_to(struct eg20t_port *priv)
- 	return PCH_UART_HANDLED_RX_INT;
+@@ -599,16 +599,14 @@ static void pch_uart_hal_set_break(struct eg20t_port =
+*priv, int on)
+ 	iowrite8(lcr, priv->membase + UART_LCR);
  }
 =20
--static int handle_rx(struct eg20t_port *priv)
--{
--	return handle_rx_to(priv);
--}
--
- static int dma_handle_rx(struct eg20t_port *priv)
+-static int push_rx(struct eg20t_port *priv, const unsigned char *buf,
+-		   int size)
++static void push_rx(struct eg20t_port *priv, const unsigned char *buf,
++		    int size)
  {
  	struct uart_port *port =3D &priv->port;
-@@ -1051,7 +1046,7 @@ static irqreturn_t pch_uart_interrupt(int irq, void *=
-dev_id)
- 						PCH_UART_HAL_RX_INT |
- 						PCH_UART_HAL_RX_ERR_INT);
- 			} else {
--				ret =3D handle_rx(priv);
-+				ret =3D handle_rx_to(priv);
- 			}
- 			break;
- 		case PCH_UART_IID_RDR_TO:	/* Received Data Ready
+ 	struct tty_port *tport =3D &port->state->port;
+=20
+ 	tty_insert_flip_string(tport, buf, size);
+ 	tty_flip_buffer_push(tport);
+-
+-	return 0;
+ }
+=20
+ static int dma_push_rx(struct eg20t_port *priv, int size)
+@@ -761,7 +759,7 @@ static int handle_rx_to(struct eg20t_port *priv)
+ {
+ 	struct pch_uart_buffer *buf;
+ 	int rx_size;
+-	int ret;
++
+ 	if (!priv->start_rx) {
+ 		pch_uart_hal_disable_interrupt(priv, PCH_UART_HAL_RX_INT |
+ 						     PCH_UART_HAL_RX_ERR_INT);
+@@ -770,9 +768,7 @@ static int handle_rx_to(struct eg20t_port *priv)
+ 	buf =3D &priv->rxbuf;
+ 	do {
+ 		rx_size =3D pch_uart_hal_read(priv, buf->buf, buf->size);
+-		ret =3D push_rx(priv, buf->buf, rx_size);
+-		if (ret)
+-			return 0;
++		push_rx(priv, buf->buf, rx_size);
+ 	} while (rx_size =3D=3D buf->size);
+=20
+ 	return PCH_UART_HANDLED_RX_INT;
 --=20
 2.43.0
 
