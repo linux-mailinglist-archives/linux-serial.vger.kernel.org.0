@@ -1,35 +1,35 @@
-Return-Path: <linux-serial+bounces-2537-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2534-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD96286EB73
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:53:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B141686EB70
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:53:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A0301C213CB
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:53:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53916285EB1
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2520E59151;
-	Fri,  1 Mar 2024 21:52:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A793659148;
+	Fri,  1 Mar 2024 21:52:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hPVorvr4";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/KYP3h6W"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="btylfPwW";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="5S1ziX4Z"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3AA57873;
-	Fri,  1 Mar 2024 21:52:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A3E758AD1
+	for <linux-serial@vger.kernel.org>; Fri,  1 Mar 2024 21:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709329977; cv=none; b=fkky0ttq57w3oJDRlganBj2UrtzlIzd1eS3dJWeh4aRD8kPfKjTP6ZvAM4hTL0m9LWIacZf0EVEEypwVBRBfJrAiOXLfcVimqwUBOINhHE5rdph+c5TJLIcDaOOvsKTVLWL8pDHZBCn7l2LJeMutDjI7qUXJzKNt8IfWhn4vSV4=
+	t=1709329976; cv=none; b=S0nVjkn7e+0SlYcuK0w+Q8wgtKzTL+s92nHZiLQx2f2T4sej8IGPlqBNUDiPffTV2wFnQl04I3orTql5UmUTlvbxLQ0DynY1XZcz7KiXYF3/Hd8VCZcXTunonffWCjyaI44ZVbfFTMRliiaP4ejHd0grEB8SoN2eXQMuacux8YU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709329977; c=relaxed/simple;
-	bh=ZSHo7yW56q/OlHOuR8ZSf19ghp6NekGXo4YcajF/HdA=;
+	s=arc-20240116; t=1709329976; c=relaxed/simple;
+	bh=d0+vsfDJBJUqS2Fkhl3INsvp+GpH/URMcC4GhMT1Fgc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=fqMsUW3/K5+3re97vCiS/ETufMD3bq2cMpqqKg2wAc1pbnwS+/pOrjQApdNLNxxpUj5Sp9KYVeFv7pdo7gnR3nmME15ZDs0zE4aYD6pDa3ZNYw8Ayh09tPT3lfhgxWooTbdTl6T8JUF0qqjU73OXsn3TfUNhd1sPfQSzR2U/vdY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hPVorvr4; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/KYP3h6W; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=KB+UrLuUbsKejkR/JeA/IXzvec3xLl4dTL2IYLnBH3zikqBNMlD3BUllkIxI44laVJe9Iag0ClnBRpDRtNdJeZbK0cQ6dpLwKLlWCBFZRZuU1+AQSy+tOvigyeNHdRWYz0r+HBDltfugA7TsfZrPxxxxTmy8sU15yEjndkOTP28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=btylfPwW; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=5S1ziX4Z; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
@@ -39,32 +39,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XmPH4B4axTpKo5FxjSK3NcariRNbGHfCM6HFELDE+lQ=;
-	b=hPVorvr4HEx95TVYMIAgH+mUMaPHgAkQKpg/1R+JW9QNsO6/wzm/AaCImUQAhvuv1GSowQ
-	x4qCesKySc7anz3pLghuyOr5uePiwGPQOS4HuMO0+XrVDsUHnWBWHIvBzMehjHTvVut95B
-	4JeGs5GZWq1BDTjx57BgEetqBGJIpJvmLpeyPUHC1uLa+JvmodKSVl5QyUgvm+bzgOsy/8
-	TaAryy8aCFxeiiG3jcRJ+DJXGuuFDn47XXW466vBH3zj7E/GTO9psU3VehjYE7f0hbZ6f/
-	E0266TCHeosRsZUPRsunaI0Nw6DXVpDKnXIQustsXLyZSZ8ZOArEfxiQ/IdlBg==
+	bh=neIqKSHS/D/i5nWAr8RrJwghx1+ApKIn7UCJC7a4zDI=;
+	b=btylfPwWS9W4OhA7XC7wc2BZuaBJ7KjLDHmIDK9/iQlLfh8DtSq8ZJnxWWSs50h/nmjqaG
+	VeYJoS+++sbC4Jxc0NNKxTRC0Hqg1WBJmxOni05IPfsO+2a8pv1qU3v4cFz3/yfLAvmLqH
+	NMdOrjHmMdhlQ+JdiFBCLhsQ0zCIwUpOCdBwoFfx/5SVIsWg2gK4b2mvmx6ekaxWNQ8pf1
+	L2lxxxt9JaLtLKK40PJUd/LbX0TuMIZoqfBuw5aVcc/IgxhtSY4L3J7phaqlUUAMojUcZZ
+	e/gXEaeS9s0o4W8TtVQg7K3lGew4qZimwvlSrdOxvLKgiZs5lrnEITB+W5jw7A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1709329971;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XmPH4B4axTpKo5FxjSK3NcariRNbGHfCM6HFELDE+lQ=;
-	b=/KYP3h6W869OPAT3O4R56gPNrKlXFktxAb3iKcn1GjGPj1waQH6kBcx/CIFWeKlTQWB06/
-	X9pH9Nj4rJbfmNBw==
+	bh=neIqKSHS/D/i5nWAr8RrJwghx1+ApKIn7UCJC7a4zDI=;
+	b=5S1ziX4ZKs4Y/mf1jyZJiT7B2ElYQ1p2EVaXdPDGya0A/BwtKZZhUsxdxjNgxkeJ3Siymg
+	uY/BeBEDnSZszoCQ==
 To: linux-serial@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konrad.dybcio@linaro.org>,
-	linux-arm-msm@vger.kernel.org
-Subject: [PATCH 05/18] serial: msm: Use uart_prepare_sysrq_char().
-Date: Fri,  1 Mar 2024 22:45:18 +0100
-Message-ID: <20240301215246.891055-6-bigeasy@linutronix.de>
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Subject: [PATCH 06/18] serial: omap: Use uart_prepare_sysrq_char().
+Date: Fri,  1 Mar 2024 22:45:19 +0100
+Message-ID: <20240301215246.891055-7-bigeasy@linutronix.de>
 In-Reply-To: <20240301215246.891055-1-bigeasy@linutronix.de>
 References: <20240301215246.891055-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -84,114 +81,65 @@ Delay handling sysrq until port lock is dropped.
 Remove the special case in the console write routine an always use the
 complete locking function.
 
-Cc: Bjorn Andersson <andersson@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/tty/serial/msm_serial.c | 33 ++++++++++-----------------------
- 1 file changed, 10 insertions(+), 23 deletions(-)
+ drivers/tty/serial/omap-serial.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/tty/serial/msm_serial.c b/drivers/tty/serial/msm_seria=
-l.c
-index e24204ad35def..d27c4c8c84e13 100644
---- a/drivers/tty/serial/msm_serial.c
-+++ b/drivers/tty/serial/msm_serial.c
-@@ -588,16 +588,14 @@ static void msm_complete_rx_dma(void *args)
- 		if (!(port->read_status_mask & MSM_UART_SR_RX_BREAK))
- 			flag =3D TTY_NORMAL;
+diff --git a/drivers/tty/serial/omap-serial.c b/drivers/tty/serial/omap-ser=
+ial.c
+index f5a0b401af63b..9be1c871cf116 100644
+--- a/drivers/tty/serial/omap-serial.c
++++ b/drivers/tty/serial/omap-serial.c
+@@ -508,7 +508,7 @@ static void serial_omap_rdi(struct uart_omap_port *up, =
+unsigned int lsr)
 =20
--		uart_port_unlock_irqrestore(port, flags);
--		sysrq =3D uart_handle_sysrq_char(port, dma->virt[i]);
--		uart_port_lock_irqsave(port, &flags);
-+		sysrq =3D uart_prepare_sysrq_char(port, dma->virt[i]);
- 		if (!sysrq)
- 			tty_insert_flip_char(tport, dma->virt[i], flag);
- 	}
+ 	up->port.icount.rx++;
 =20
- 	msm_start_rx_dma(msm_port);
- done:
--	uart_port_unlock_irqrestore(port, flags);
-+	uart_unlock_and_check_sysrq_irqrestore(port, flags);
+-	if (uart_handle_sysrq_char(&up->port, ch))
++	if (uart_prepare_sysrq_char(&up->port, ch))
+ 		return;
 =20
- 	if (count)
- 		tty_flip_buffer_push(tport);
-@@ -763,9 +761,7 @@ static void msm_handle_rx_dm(struct uart_port *port, un=
-signed int misr)
- 			if (!(port->read_status_mask & MSM_UART_SR_RX_BREAK))
- 				flag =3D TTY_NORMAL;
-=20
--			uart_port_unlock(port);
--			sysrq =3D uart_handle_sysrq_char(port, buf[i]);
--			uart_port_lock(port);
-+			sysrq =3D uart_prepare_sysrq_char(port, buf[i]);
- 			if (!sysrq)
- 				tty_insert_flip_char(tport, buf[i], flag);
+ 	uart_insert_char(&up->port, lsr, UART_LSR_OE, ch, TTY_NORMAL);
+@@ -563,7 +563,7 @@ static irqreturn_t serial_omap_irq(int irq, void *dev_i=
+d)
  		}
-@@ -825,9 +821,7 @@ static void msm_handle_rx(struct uart_port *port)
- 		else if (sr & MSM_UART_SR_PAR_FRAME_ERR)
- 			flag =3D TTY_FRAME;
+ 	} while (max_count--);
 =20
--		uart_port_unlock(port);
--		sysrq =3D uart_handle_sysrq_char(port, c);
--		uart_port_lock(port);
-+		sysrq =3D uart_prepare_sysrq_char(port, c);
- 		if (!sysrq)
- 			tty_insert_flip_char(tport, c, flag);
- 	}
-@@ -948,11 +942,10 @@ static irqreturn_t msm_uart_irq(int irq, void *dev_id)
- 	struct uart_port *port =3D dev_id;
- 	struct msm_port *msm_port =3D to_msm_port(port);
- 	struct msm_dma *dma =3D &msm_port->rx_dma;
--	unsigned long flags;
- 	unsigned int misr;
- 	u32 val;
+-	uart_port_unlock(&up->port);
++	uart_unlock_and_check_sysrq(&up->port);
 =20
--	uart_port_lock_irqsave(port, &flags);
-+	uart_port_lock(port);
- 	misr =3D msm_read(port, MSM_UART_MISR);
- 	msm_write(port, 0, MSM_UART_IMR); /* disable interrupt */
+ 	tty_flip_buffer_push(&up->port.state->port);
 =20
-@@ -984,7 +977,7 @@ static irqreturn_t msm_uart_irq(int irq, void *dev_id)
- 		msm_handle_delta_cts(port);
-=20
- 	msm_write(port, msm_port->imr, MSM_UART_IMR); /* restore interrupt */
--	uart_port_unlock_irqrestore(port, flags);
-+	uart_unlock_and_check_sysrq(port);
-=20
- 	return IRQ_HANDLED;
- }
-@@ -1621,14 +1614,10 @@ static void __msm_console_write(struct uart_port *p=
-ort, const char *s,
- 			num_newlines++;
- 	count +=3D num_newlines;
+@@ -1212,13 +1212,10 @@ serial_omap_console_write(struct console *co, const=
+ char *s,
+ 	unsigned int ier;
+ 	int locked =3D 1;
 =20
 -	local_irq_save(flags);
--
--	if (port->sysrq)
+-	if (up->port.sysrq)
 -		locked =3D 0;
 -	else if (oops_in_progress)
--		locked =3D uart_port_trylock(port);
+-		locked =3D uart_port_trylock(&up->port);
 +	if (oops_in_progress)
-+		locked =3D uart_port_trylock_irqsave(port, &flags);
++		locked =3D uart_port_trylock_irqsave(&up->port, &flags);
  	else
--		uart_port_lock(port);
-+		uart_port_lock_irqsave(port, &flags);
+-		uart_port_lock(&up->port);
++		uart_port_lock_irqsave(&up->port, &flags);
 =20
- 	if (is_uartdm)
- 		msm_reset_dm_count(port, count);
-@@ -1667,9 +1656,7 @@ static void __msm_console_write(struct uart_port *por=
-t, const char *s,
- 	}
+ 	/*
+ 	 * First save the IER then disable the interrupts
+@@ -1245,8 +1242,7 @@ serial_omap_console_write(struct console *co, const c=
+har *s,
+ 		check_modem_status(up);
 =20
  	if (locked)
--		uart_port_unlock(port);
--
+-		uart_port_unlock(&up->port);
 -	local_irq_restore(flags);
-+		uart_port_unlock_irqrestore(port, flags);
++		uart_port_unlock_irqrestore(&up->port, flags);
  }
 =20
- static void msm_console_write(struct console *co, const char *s,
+ static int __init
 --=20
 2.43.0
 
