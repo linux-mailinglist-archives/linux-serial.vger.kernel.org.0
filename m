@@ -1,35 +1,35 @@
-Return-Path: <linux-serial+bounces-2533-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2531-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB3CF86EB6F
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:53:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 340F586EB6D
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 22:52:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E773E1C20BF2
-	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:52:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 640E31C215C3
+	for <lists+linux-serial@lfdr.de>; Fri,  1 Mar 2024 21:52:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72DA758ABA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1723158AC6;
 	Fri,  1 Mar 2024 21:52:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gsXiTTmu";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GfLsnBuT"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="LJkVeVlz";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/IvfRVUa"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EBEF57873
-	for <linux-serial@vger.kernel.org>; Fri,  1 Mar 2024 21:52:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC9958ABA
+	for <linux-serial@vger.kernel.org>; Fri,  1 Mar 2024 21:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709329974; cv=none; b=njE4XDmXzoNifH+sjETCAonmObSkoTRMB0aamv1b3lj62ft225QF1ctLqLqvjv8k2fLSgwUW3QGFgMp93kjnWN4TuNA0El2mUSuu8bcENUH2CE9wSGXWprJdkfFtg0PlHhmHGrDmpJlxpe1hC60CygAcjg9vbpVJOrWz0rxKIKU=
+	t=1709329974; cv=none; b=oKkoKvZW8LtvkVxjRI5lIo8QuWAWaNoEvUE/YfX6gTyw0By5btWCDcGbrMNPzv8WY1Ur9q+10bcTlX7xbnsYB0B/MHJ8uoQCRIYdhgYMYBDLmvmUCQ3dqrJCup1vHrcmsJasr0xfLPXOBQozafFMIyW56LsF0LYjmVAN+auUuP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1709329974; c=relaxed/simple;
-	bh=vt9PBEtGbohZDGrGc4PLnmYjZUk1n9QtGVrTPVAxhyw=;
+	bh=A0Sl0tlJDQ4HRDzIJ/leO1z/5F4WjWEu3jha+E8ggsI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ai5+/eww/pkCYErGrpcleZx9RM1LqJZZRdudblMClLD04SFsKrcjpW0ZeL2U+bKrK2Iw2ZGaEtYHDYMhXEpfowMH1RTQtjLr/TKC8ZqnOIHHaGvA/MkJpO8GW2kGzttSXTCjmrctdrelDAH+C2bhw+50J2TzfxCbWLKCLsGHWNc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gsXiTTmu; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GfLsnBuT; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=NViKvsB8mZNK5/fRFD3dgGFihp7TkFvwpXbuWIqP+mGw+U4+fsbjmRQIK79SYbUnbAxqlXvyw3+01ThxUrtPjng0jdjckG9lZ44Lh3mIJTs6sbZha078bZ2Dm5w9zm/QNCQj3hCMSilTai5DdfQq1umVT4DrzdgLAXdlrJlPT1o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=LJkVeVlz; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/IvfRVUa; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
@@ -39,29 +39,29 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=r0wQNW0zEI8swe9n40nxYYuKvTQNfbOQZBPRnKtnIEk=;
-	b=gsXiTTmuxhZpmQOghewy9Y617Dl1pm1ASBlUnSBMW1bJ2hxAUG8LlcsBiT41dYGR0gwk+g
-	zR2+rxmmUAOJ64baRHrlo6BVpBcH0yPxBcHyIQT+xoXJCQaH8cnLRPT5WAFFaPR+wv7QU9
-	vn1WQ0zt8RlRkHoXLIgrdM1Tqz2VHfG9v6U/zZL6uLz0OmiX8csNVij9ydDn8KHkBQ6Nr7
-	sNplJ3mn6hXB2V6IQeeGOc1BIGwYVBj+g57xr2egoX+vNW60l2yepn2RIfVhQG7OLzYqJo
-	GJgRgEZNvhSYSzlBTRR8rQvMJfSeHZ/2Mh3ygzqgfC+YDXsz41ehDbsjdOCRkg==
+	bh=YIqFu/AADtWHsa2rj/FvPzDKlVU7ecbiMypUuA2TtPA=;
+	b=LJkVeVlz6WczQ2ZtyWamJTorAMNcNKrme/ofxnWL7OhIZCYQCGVnzELmHZKFOxF8la5mIn
+	3Zbw53AEx6atAj223AulIn6zF6H+qS+tAQ9dX/UXx6Mw+Mqe+ihoMKDA/WMOy9lXyonVWL
+	eLfbCD3bPW/Qmx1y2abAYvriF3QXHIDJQNhyG+kLvAOONxNmSZtodpa9SWv9rxUQ5DzZnw
+	1S45MU9pfXSr6/xFaiBMRsX2vxht7bLxQVOPCyVxtBtbVaOOvG2xMTHoyQU6kfY4OWmo+L
+	PLC6ZBKoI2LrIgMbspKM8CtVU5y5MmCnxYA8WrpUNRnu8xj9QWfd5K+QiSHhLw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1709329970;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=r0wQNW0zEI8swe9n40nxYYuKvTQNfbOQZBPRnKtnIEk=;
-	b=GfLsnBuT4TCymPLvf91/y2bIaxkF68ngJeoYhNqf67Blhgmp6GohAhSi7d+eA1AI6h2GWr
-	P+C1ylMMh2QKbhDg==
+	bh=YIqFu/AADtWHsa2rj/FvPzDKlVU7ecbiMypUuA2TtPA=;
+	b=/IvfRVUa7UMPx9bEPcu7lqfzoDyoFpIjZL+j/rfBa8vduINCAKBi7F60JxkqJ2md9X50UL
+	oe+1fU4c5yfLRODw==
 To: linux-serial@vger.kernel.org
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-Subject: [PATCH 02/18] serial: ar933x: Use uart_prepare_sysrq_char().
-Date: Fri,  1 Mar 2024 22:45:15 +0100
-Message-ID: <20240301215246.891055-3-bigeasy@linutronix.de>
+Subject: [PATCH 03/18] serial: bcm63xx: Use uart_prepare_sysrq_char().
+Date: Fri,  1 Mar 2024 22:45:16 +0100
+Message-ID: <20240301215246.891055-4-bigeasy@linutronix.de>
 In-Reply-To: <20240301215246.891055-1-bigeasy@linutronix.de>
 References: <20240301215246.891055-1-bigeasy@linutronix.de>
 Precedence: bulk
@@ -83,65 +83,74 @@ complete locking function.
 
 Signed-off-by: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
 ---
- drivers/tty/serial/ar933x_uart.c | 18 ++++++------------
- 1 file changed, 6 insertions(+), 12 deletions(-)
+ drivers/tty/serial/bcm63xx_uart.c | 24 ++++++++----------------
+ 1 file changed, 8 insertions(+), 16 deletions(-)
 
-diff --git a/drivers/tty/serial/ar933x_uart.c b/drivers/tty/serial/ar933x_u=
-art.c
-index 8d09ace062e59..7790cbc57391a 100644
---- a/drivers/tty/serial/ar933x_uart.c
-+++ b/drivers/tty/serial/ar933x_uart.c
-@@ -378,7 +378,7 @@ static void ar933x_uart_rx_chars(struct ar933x_uart_por=
-t *up)
- 		up->port.icount.rx++;
- 		ch =3D rdata & AR933X_UART_DATA_TX_RX_MASK;
+diff --git a/drivers/tty/serial/bcm63xx_uart.c b/drivers/tty/serial/bcm63xx=
+_uart.c
+index a3cefa153456d..34801a6f300b6 100644
+--- a/drivers/tty/serial/bcm63xx_uart.c
++++ b/drivers/tty/serial/bcm63xx_uart.c
+@@ -285,10 +285,9 @@ static void bcm_uart_do_rx(struct uart_port *port)
+ 				flag =3D TTY_PARITY;
+ 		}
 =20
--		if (uart_handle_sysrq_char(&up->port, ch))
-+		if (uart_prepare_sysrq_char(&up->port, ch))
+-		if (uart_handle_sysrq_char(port, c))
++		if (uart_prepare_sysrq_char(port, c))
  			continue;
 =20
- 		if ((up->port.ignore_status_mask & AR933X_DUMMY_STATUS_RD) =3D=3D 0)
-@@ -468,7 +468,7 @@ static irqreturn_t ar933x_uart_interrupt(int irq, void =
-*dev_id)
- 		ar933x_uart_tx_chars(up);
+-
+ 		if ((cstat & port->ignore_status_mask) =3D=3D 0)
+ 			tty_insert_flip_char(tty_port, c, flag);
+=20
+@@ -353,7 +352,7 @@ static irqreturn_t bcm_uart_interrupt(int irq, void *de=
+v_id)
+ 					       estat & UART_EXTINP_DCD_MASK);
  	}
 =20
--	uart_port_unlock(&up->port);
-+	uart_unlock_and_check_sysrq(&up->port);
-=20
+-	uart_port_unlock(port);
++	uart_unlock_and_check_sysrq(port);
  	return IRQ_HANDLED;
  }
-@@ -627,14 +627,10 @@ static void ar933x_uart_console_write(struct console =
-*co, const char *s,
- 	unsigned int int_en;
- 	int locked =3D 1;
+=20
+@@ -703,20 +702,14 @@ static void bcm_console_write(struct console *co, con=
+st char *s,
+ {
+ 	struct uart_port *port;
+ 	unsigned long flags;
+-	int locked;
++	int locked =3D 1;
+=20
+ 	port =3D &ports[co->index];
 =20
 -	local_irq_save(flags);
--
--	if (up->port.sysrq)
+-	if (port->sysrq) {
+-		/* bcm_uart_interrupt() already took the lock */
 -		locked =3D 0;
--	else if (oops_in_progress)
--		locked =3D uart_port_trylock(&up->port);
+-	} else if (oops_in_progress) {
+-		locked =3D uart_port_trylock(port);
+-	} else {
+-		uart_port_lock(port);
+-		locked =3D 1;
+-	}
 +	if (oops_in_progress)
-+		locked =3D uart_port_trylock_irqsave(&up->port, &flags);
- 	else
--		uart_port_lock(&up->port);
-+		uart_port_lock_irqsave(&up->port, &flags);
++		locked =3D uart_port_trylock_irqsave(port, &flags);
++	else
++		uart_port_lock_irqsave(port, &flags);
 =20
- 	/*
- 	 * First save the IER then disable the interrupts
-@@ -654,9 +650,7 @@ static void ar933x_uart_console_write(struct console *c=
-o, const char *s,
- 	ar933x_uart_write(up, AR933X_UART_INT_REG, AR933X_UART_INT_ALLINTS);
+ 	/* call helper to deal with \r\n */
+ 	uart_console_write(port, s, count, bcm_console_putchar);
+@@ -725,8 +718,7 @@ static void bcm_console_write(struct console *co, const=
+ char *s,
+ 	wait_for_xmitr(port);
 =20
  	if (locked)
--		uart_port_unlock(&up->port);
--
+-		uart_port_unlock(port);
 -	local_irq_restore(flags);
-+		uart_port_unlock_irqrestore(&up->port, flags);
++		uart_port_unlock_irqrestore(port, flags);
  }
 =20
- static int ar933x_uart_console_setup(struct console *co, char *options)
+ /*
 --=20
 2.43.0
 
