@@ -1,160 +1,118 @@
-Return-Path: <linux-serial+bounces-2583-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2587-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD3BC87017F
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Mar 2024 13:33:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C87ED8709EB
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Mar 2024 19:53:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFC481C225AB
-	for <lists+linux-serial@lfdr.de>; Mon,  4 Mar 2024 12:32:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7EFFC1F22A60
+	for <lists+linux-serial@lfdr.de>; Mon,  4 Mar 2024 18:53:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A638145942;
-	Mon,  4 Mar 2024 12:30:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BCF778B4D;
+	Mon,  4 Mar 2024 18:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KJEiuq6s"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="chh0mb+L"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81BFC3FB16;
-	Mon,  4 Mar 2024 12:30:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31D8E1E487;
+	Mon,  4 Mar 2024 18:53:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709555456; cv=none; b=Rng24k6PDiEIVaY8vRgcCR5r+qNIfv18vVcsFmsGv/EQZliPX2AVdqywgfJezQuPsVxFXGnAuQyokazpvY/97lnGefdmnMV6RKV7kBiEFgGrG9MoFStpNcyPaoYnn9IZ3CmGu15koMTU68Nw1DD8jGy6eN+QEa33XVv/c5Z4vuA=
+	t=1709578394; cv=none; b=FDg7vpE1R8wDT8YNt7kNcNbAdhi9xYXGRy5j8RBud3nVpb7JCgX8ufLDxE+FbAz/llcz0q7ZEqImiIa13n5fkH8439rhgbMuVdH30BgrSfpjvfam31/4Bwfb9o39zALe6BABO9GA9rhi4u/ea63uvXAUnBpezUgjkd419+dnUOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709555456; c=relaxed/simple;
-	bh=ra/vhkklVUsTKlnEDSH9uXk+a4uvGp0G/qCYEiSyYhY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=egO4ZOaZMUMuinUi3+o8I75hHFdycUCceKiJSb8RQc2e1mBvPcxbAC0KHobCcCbSQKlpfATsegSQDBLKTSuPq3XbYcxM+x6FkJVNXy37wqkOx+A1iNUMoKhvf98ig26TFMao0FUQdDA8DuhevVxxcuRXg0beWLibhwHwz6+jlzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KJEiuq6s; arc=none smtp.client-ip=192.198.163.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1709555454; x=1741091454;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ra/vhkklVUsTKlnEDSH9uXk+a4uvGp0G/qCYEiSyYhY=;
-  b=KJEiuq6s1JyZ4djgPipAwwSGY3T7cF48SDf33s/pvPeJC3zN6qrZtu1L
-   XmHrrgaVnDUcE1m4VpPn2vmGjHcgr/Bs6s85RWh8XMrVcLiLf/nKoLJKI
-   9Efa6Ps5NlV7C5QyZU71nMwHP+gyZZtRC4/9FZ7TBsZj0VmSmMHxDxz0S
-   /kK2r+Fa4OcGV7gWxSFwXenGAPN4tmclDLD23nNQrFxCa85SwAXxcODFd
-   +Gy3cHFoygH+kGOfopGde8pxMGZTvUI+z+R5lCmCL/gjZvOVoYsxKItPA
-   810yBacUm5cjWys+VTMSf7CavtUHabB22UVTanu81ewJa37ZFuWrCg9R0
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="7815216"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="7815216"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Mar 2024 04:30:52 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11002"; a="937040435"
-X-IronPort-AV: E=Sophos;i="6.06,203,1705392000"; 
-   d="scan'208";a="937040435"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 04 Mar 2024 04:30:45 -0800
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E4614BA9; Mon,  4 Mar 2024 14:30:37 +0200 (EET)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-aspeed@lists.ozlabs.org,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-tegra@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Joel Stanley <joel@jms.id.au>,
-	Andrew Jeffery <andrew@codeconstruct.com.au>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Al Cooper <alcooperx@gmail.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH v3 14/14] serial: 8250_uniphier: Switch to use uart_read_port_properties()
-Date: Mon,  4 Mar 2024 14:27:15 +0200
-Message-ID: <20240304123035.758700-15-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240304123035.758700-1-andriy.shevchenko@linux.intel.com>
-References: <20240304123035.758700-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1709578394; c=relaxed/simple;
+	bh=V37rd8PiGAomhKd4+inZBZxarQhrmyPY3/x1sHNH0Fg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwtD5qElsLcYD5yG3Yf0nv51Rao1UA9RdPLYFz89Q+7a9hEXj25dGzMJXHfk55vpgXEpHBo+9QTj7lRbbzJcIqi71pH80XIhaLTSCtQgp9voPV7MO8CFqm793ISO+yK/n3HvfBHr0easGFlAR2g+TPTi10NVct4MuTBHVNtov0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=chh0mb+L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 39F1FC433F1;
+	Mon,  4 Mar 2024 18:53:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1709578393;
+	bh=V37rd8PiGAomhKd4+inZBZxarQhrmyPY3/x1sHNH0Fg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=chh0mb+LqnBnkw4LaW7GXGcf4MUfQbxrI1GPiO3rGliHt+iEnuPpVrGL74YA+11eB
+	 YKqeYxSxlpofVGMQM0Ja6YGuaQetDJzVb60hbUJEDi1PlVG4cEb4nVdlDtqRQ9JXbq
+	 xBD4P6A8pk6pRh83Ib26Riarw33D4f+xUWUobiJzyUK37lSJ4MH4DTgL1ty+ROff6f
+	 yEAplu4CapIknsh9V56kknwXU5O2uknTdnA6forEuztZiC95OLeI4Uc2V1tdzE6bh5
+	 qZm+mAKS/4704cicL872uYrMIEY/X9AfbnztAqIguotzkk9tiEBGdZBMHcp4/LRSmc
+	 /PYattFbOnngQ==
+Date: Mon, 4 Mar 2024 18:53:09 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+Cc: linux-riscv@lists.infradead.org,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	devicetree@vger.kernel.org, linux-serial@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [RFC] Inconsistent sifive,fu540-c000-uart binding.
+Message-ID: <20240304-whomever-gladly-d43da7ad2fe6@spud>
+References: <20240304105947.SJcVAdr1@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="9HC0fzGtO/m/qkzE"
+Content-Disposition: inline
+In-Reply-To: <20240304105947.SJcVAdr1@linutronix.de>
 
-Since we have now a common helper to read port properties
-use it instead of sparse home grown solution.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Reviewed-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Tested-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
----
- drivers/tty/serial/8250/8250_uniphier.c | 17 ++++-------------
- 1 file changed, 4 insertions(+), 13 deletions(-)
+--9HC0fzGtO/m/qkzE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/drivers/tty/serial/8250/8250_uniphier.c b/drivers/tty/serial/8250/8250_uniphier.c
-index 6399a38ecce2..670d2ca0f757 100644
---- a/drivers/tty/serial/8250/8250_uniphier.c
-+++ b/drivers/tty/serial/8250/8250_uniphier.c
-@@ -162,7 +162,6 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	struct uniphier8250_priv *priv;
- 	struct resource *regs;
- 	void __iomem *membase;
--	int irq;
- 	int ret;
- 
- 	regs = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-@@ -175,23 +174,12 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	if (!membase)
- 		return -ENOMEM;
- 
--	irq = platform_get_irq(pdev, 0);
--	if (irq < 0)
--		return irq;
--
- 	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
- 
- 	memset(&up, 0, sizeof(up));
- 
--	ret = of_alias_get_id(dev->of_node, "serial");
--	if (ret < 0) {
--		dev_err(dev, "failed to get alias id\n");
--		return ret;
--	}
--	up.port.line = ret;
--
- 	priv->clk = devm_clk_get(dev, NULL);
- 	if (IS_ERR(priv->clk)) {
- 		dev_err(dev, "failed to get clock\n");
-@@ -211,7 +199,10 @@ static int uniphier_uart_probe(struct platform_device *pdev)
- 	up.port.mapbase = regs->start;
- 	up.port.mapsize = resource_size(regs);
- 	up.port.membase = membase;
--	up.port.irq = irq;
-+
-+	ret = uart_read_port_properties(&up.port);
-+	if (ret)
-+		return ret;
- 
- 	up.port.type = PORT_16550A;
- 	up.port.iotype = UPIO_MEM32;
--- 
-2.43.0.rc1.1.gbec44491f096
+On Mon, Mar 04, 2024 at 11:59:47AM +0100, Sebastian Andrzej Siewior wrote:
+> | $ git grep fu540-c000-uart
+> | Documentation/devicetree/bindings/serial/sifive-serial.yaml:          -=
+ sifive,fu540-c000-uart
+> | Documentation/devicetree/bindings/serial/sifive-serial.yaml:        com=
+patible =3D "sifive,fu540-c000-uart", "sifive,uart0";
+> | Documentation/devicetree/bindings/sifive/sifive-blocks-ip-versioning.tx=
+t:"sifive,fu540-c000-uart".  This way, if SoC-specific
+> | Documentation/devicetree/bindings/sifive/sifive-blocks-ip-versioning.tx=
+t:    compatible =3D "sifive,fu540-c000-uart", "sifive,uart0";
+> | arch/riscv/boot/dts/sifive/fu540-c000.dtsi:                     compati=
+ble =3D "sifive,fu540-c000-uart", "sifive,uart0";
+> | arch/riscv/boot/dts/sifive/fu540-c000.dtsi:                     compati=
+ble =3D "sifive,fu540-c000-uart", "sifive,uart0";
+> | drivers/tty/serial/sifive.c:OF_EARLYCON_DECLARE(sifive, "sifive,fu540-c=
+000-uart0",
+> | drivers/tty/serial/sifive.c:    { .compatible =3D "sifive,fu540-c000-ua=
+rt0" },
+>=20
+> note that the driver has a trailing 0 in the binding while the yaml
+> description and the DT part does not.
+> The 'sifive,uart' has a trailing 0 where the 0 denotes the version UART
+> IP.
+>=20
+> Was this also intended for the fu540-c000-uart binding? Should the 0 be
+> added everywhere or removed from the driver?
 
+I suspect that the driver is what's incorrect, given there's little
+value in putting the IP version in the SoC-specific compatible as it's
+a fixed implementation. I'd change the driver to match the bindings.
+
+Cheers,
+Conor.
+
+--9HC0fzGtO/m/qkzE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZeYYkgAKCRB4tDGHoIJi
+0hLtAQCeh/vjouGnruLo6WjBW4ItX+rl8PSOfBxPoyZ6qLT1pAD/VFIkqqRSQoJT
+5af4p39+MyG3lRoOA+H3k7VIM/w0xAE=
+=qY/D
+-----END PGP SIGNATURE-----
+
+--9HC0fzGtO/m/qkzE--
 
