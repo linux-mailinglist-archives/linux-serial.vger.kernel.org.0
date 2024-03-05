@@ -1,192 +1,265 @@
-Return-Path: <linux-serial+bounces-2590-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2592-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 354E8871275
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Mar 2024 02:49:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA70C871433
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Mar 2024 04:24:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59B661C21DAF
-	for <lists+linux-serial@lfdr.de>; Tue,  5 Mar 2024 01:49:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5F486284592
+	for <lists+linux-serial@lfdr.de>; Tue,  5 Mar 2024 03:24:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4E9417C6F;
-	Tue,  5 Mar 2024 01:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D2029CE3;
+	Tue,  5 Mar 2024 03:24:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b="esTPgzLJ"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="CBL41u5n"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2054.outbound.protection.outlook.com [40.107.104.54])
+Received: from SG2PR03CU006.outbound.protection.outlook.com (mail-southeastasiaazolkn19010000.outbound.protection.outlook.com [52.103.65.0])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEDCF18026;
-	Tue,  5 Mar 2024 01:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.104.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8313C2F44;
+	Tue,  5 Mar 2024 03:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.65.0
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709603357; cv=fail; b=hWl6Ee94y0cOxp948g4fIbFMzets1fS7DlgZQ/qq+b3+SFRB6UQiP9v7d7qjLvAlyrv+/WNx2inqQeOXsHbdyeINWASTWIcoTEPNIB3yFGH7Fo4m+xktkcEHvVt9jHoeUT/dzx6IOcc8kvSdXFSkTJZGppmJvJ6LS6t1PPm7wmM=
+	t=1709609059; cv=fail; b=FJ1Q3j/Vh9GaJAjbDG+U97DrFkcVszD95q2gddplyXmnMlepe/9M+aum9ShhY4KtcSJEg0ravcQkJPuDW/j+rhjfDfc+6/4Dkg3hdINZmokLobdA23z9rSrViopZUqh3mHqn0SuEWPFlL8REYOHPIBPjKJXw9RjvWHJxPcH0ng8=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709603357; c=relaxed/simple;
-	bh=w0B4jNOdGrj/R8zBykjKmmMQirfTlDwDSrmXPzyg4E4=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=igWv2wets3EiQNSjrrPbDUz2fYgdxlsPB/i20Rp4BDDYcoTZiWkqW8msT2lX2Ac+2VzBLYpP92erPEGbIzcdOE1LpjYxS6BmYxztP4BLH3N8RC+q6pM+Xb/oao1v+xl3Jb4qKRIGWiwg42SlOgN9RkUxuJXXaSP8qJYZMFrwpmU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (1024-bit key) header.d=nxp.com header.i=@nxp.com header.b=esTPgzLJ; arc=fail smtp.client-ip=40.107.104.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+	s=arc-20240116; t=1709609059; c=relaxed/simple;
+	bh=YhE6rT35+o3xWcn7mm4jwLpLO3IjZh5WATHhkYcOGus=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=g4DLPN7rlQpQgjaDy+Lt/wAv5svEHiwAKe79RcXqVw1kEYzV18WvOQZPNMlFarLnPe7ORfvGInPcG6486tpQwsZcle/mRfaw6y88oydgkaM2x02owwlda0C6eOOKdf0HWBeQ1AxB5AJgC1C3wSt3M03U4noud0KL7/NVf3E5dfQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=CBL41u5n; arc=fail smtp.client-ip=52.103.65.0
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CIDw+kIg/lXekYBYtXngKA5hR8u7PrXm2mD7jdef8gIx3UHrTy2AV/vJtNW4j/sDynHkQCkSEBFwcHaAcj/LuM+RGaepBFhsXvlqBnmjtFI3l6CefKVm+aUO6G8lb1mnJruCFcBb8OtGQFDRmmtRX0YDL5IA3+8jWSMChHzbS2f90R2z+rJG2BHQqSyLfJTeNJMXB4tWm88YG3hUFEXUYvHVt/PuIgx9XbBETkZXvxH6c0woaTVTkOsTe6FRWlmej+FBmMK2RunsC0unRfZ2X+lxEuLPdKTTYjinfTIel7hoE2U9xCD6AmTmPv9oQgl0TECP67t/64WuJFyam3ER6A==
+ b=P6pWMP2fJtkDBK9vrG8a5UMtS8KXooHu9xfSU4ebOzAU7+ss2NPuJ4oRdLQNRo8SGagpr+pkeDnLv9osIZx3fGlkD0CnKBBXVDNC28LnnESVQJ5HKp3DYSDn2f4NIgwNwV3ep/z5vCmeFK8mE+lSOIYtf+uDMsjzzbAuht+/geFh8LwxfOdXC9b1rV5Icz14s50DISZmQrGsu0nLOAds12Qy35LzShYe2h50uJFmWKKtwWRsgjfaCX4DOCDxkDaqBxP6VUqrNc1pQdTlfO45+GcDbnGzQ/CCAwqIVmFfkgxTHLk08Xlhl+hbrFj7r/CtREk88AgWgFjAUreQONILqA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=n+ZVVVw333Vd4QWWlnX7zC7MRQSjORjycBYC2Vxfm4U=;
- b=lONTLTjuS8hBJgGI8Wkr8IvnI2696g400kHLFJDg8up3RlOBHPdrUTLVbEhNU+PmfSU9H4ekTDAxIMUo0j5HOvuJPOo0gP5XkuAo+4NNs1PIII+jzO+toupMJrIzd8Gu0XKxWpGoLkLAIBxoKWm4be24osQqJ5ZePJJUNySFIidDRH0y/RKS2r+zeiDOOhAEndakK4f/fmS9gJIDr+29q9030yQWnFUTN3llUx0oDLCCatykHYt+QIbFBdQPahUtjg1/96S+L7lqKxzo9B/mu3LxHHZm1qEjjPd3QP465wC/CdodmiO607JWA232cROKVGv1qmO0AIPzrNUZnJ4I2w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=F980M108OAUj73wFqugEdGKclkZb/eg3EE1BBKLoFLE=;
+ b=NW4wbsVMq8DcZQsYjBqLg+YOml1B+hCn4iw0Uhe/GVAJXbYGyoNhnFI/s61PwVZFmuIdfJWoBmeS0rvsOSSe4DWjPVmHnw2LKtUzvc661I8A0DcV4mP6VzrRb1eqt8IY2J+oEBxOoawBMAvfT9qIW269mtlJh5J80gdMhvGPpegBgjwLu3RENlo97VBhnXNtHpZXl5O41zuhQ4P4bSEm7HsTuK0/VOydVSIEGKxN6IG2W2zOrXUiPBpBxKChwXwKDUOxbV4JrmMM7LJLyyMsMeiipLmNYk++trCBPf1lhe/P8xg7zDMG3HEoIvnVLZFC6VLSPBPUt2z/s5XxYA/TXA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=n+ZVVVw333Vd4QWWlnX7zC7MRQSjORjycBYC2Vxfm4U=;
- b=esTPgzLJy2KtWBPFAl5NNUJk4UqfX/vXLd6Hbr7v58v+ApikeMouX/gyXL194enujxUYXmrcEgzu0mpp7vyymmJlAwC1mu9iZpy2CXBNzlbjLqNFN56iLW8MlW1cg6Y2+h40weDhgcw1bQ+hrsRVr/GZT9R8JzWNyT2WnXFOfnI=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com (2603:10a6:20b:3f8::7)
- by DU2PR04MB8933.eurprd04.prod.outlook.com (2603:10a6:10:2e0::9) with
+ bh=F980M108OAUj73wFqugEdGKclkZb/eg3EE1BBKLoFLE=;
+ b=CBL41u5nz28z61LBRwk88iUvgOaXTpzEsLp6Jt6a+7HKLC4pt5iD4ncWOsZgaudgBADiiMeoYBX59NuW6PicaiONtGCPK9RFJSfzXfiNbjk1QLZLUEnC/s02guKl/LL2v2Z/mF4T9Pbp+R77SE6Dr78t4IgSpK7bn8CqPf5qZ8rBRJ50eUIAqQugrtSYTNWPDvuUuRcfi3yvyG5BhhFl+9wv2gH5YAwKYuie4WvWMlWyHxH9jvl3+BGfQBkIEpd27rvT3SR8Djo3MqSWnqRZBSoe+cmrsAchDD2APBiiPxra7uenGxB2Ibz2LPv4l9dbk8Ve2oTLYG7KyHAGVRMAMw==
+Received: from PSAPR06MB4952.apcprd06.prod.outlook.com (2603:1096:301:a3::11)
+ by SEZPR06MB6665.apcprd06.prod.outlook.com (2603:1096:101:17c::11) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7339.39; Tue, 5 Mar
- 2024 01:49:13 +0000
-Received: from AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::643f:faca:24da:e9aa]) by AS8PR04MB8404.eurprd04.prod.outlook.com
- ([fe80::643f:faca:24da:e9aa%5]) with mapi id 15.20.7339.035; Tue, 5 Mar 2024
- 01:49:13 +0000
-From: Sherry Sun <sherry.sun@nxp.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	u.kleine-koenig@pengutronix.de,
-	ilpo.jarvinen@linux.intel.com,
-	shenwei.wang@nxp.com,
-	alexander.sverdlin@siemens.com,
-	robert.hodaszi@digi.com,
-	robh@kernel.org,
-	tglx@linutronix.de
-Cc: linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	imx@lists.linux.dev,
-	frank.li@nxp.com
-Subject: [PATCH V2] tty: serial: fsl_lpuart: avoid idle preamble pending if CTS is enabled
-Date: Tue,  5 Mar 2024 09:57:06 +0800
-Message-Id: <20240305015706.1050769-1-sherry.sun@nxp.com>
-X-Mailer: git-send-email 2.37.1
-Content-Type: text/plain; charset=UTF-8
+ 2024 03:24:12 +0000
+Received: from PSAPR06MB4952.apcprd06.prod.outlook.com
+ ([fe80::1e13:cc11:3196:e0a6]) by PSAPR06MB4952.apcprd06.prod.outlook.com
+ ([fe80::1e13:cc11:3196:e0a6%6]) with mapi id 15.20.7339.035; Tue, 5 Mar 2024
+ 03:24:12 +0000
+Message-ID:
+ <PSAPR06MB49526EEA505F752A2A1E1A97C9222@PSAPR06MB4952.apcprd06.prod.outlook.com>
+Date: Tue, 5 Mar 2024 11:24:08 +0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] serial: 8250_pnp: Support configurable reg shift property
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org, albanhuang@tencent.com
+References: <PSAPR06MB49522EB50BDE08A5D9D0DACEC95F2@PSAPR06MB4952.apcprd06.prod.outlook.com>
+ <2024022916-captivate-state-0255@gregkh>
+From: GuanBing Huang <albanhuang@outlook.com>
+In-Reply-To: <2024022916-captivate-state-0255@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SG2PR06CA0238.apcprd06.prod.outlook.com
- (2603:1096:4:ac::22) To AS8PR04MB8404.eurprd04.prod.outlook.com
- (2603:10a6:20b:3f8::7)
+X-TMN: [n9n6glQbcjtYGk19Kw/cX/wAfvrjydUc]
+X-ClientProxiedBy: SI2PR04CA0012.apcprd04.prod.outlook.com
+ (2603:1096:4:197::14) To PSAPR06MB4952.apcprd06.prod.outlook.com
+ (2603:1096:301:a3::11)
+X-Microsoft-Original-Message-ID:
+ <f94940d5-0814-4f2d-9ed4-9ae2dd720de0@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AS8PR04MB8404:EE_|DU2PR04MB8933:EE_
-X-MS-Office365-Filtering-Correlation-Id: b1cec08e-60e8-4bbc-4af5-08dc3cb6752e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: PSAPR06MB4952:EE_|SEZPR06MB6665:EE_
+X-MS-Office365-Filtering-Correlation-Id: 685a4b12-0521-419e-6132-08dc3cc3ba2e
+X-MS-Exchange-SLBlob-MailProps:
+	9qw5+ftluCDe1aJ4BXPAzEJ1EUPoZ50Jkg/iayShqwR8Jz8gr/Y2J7y87qqVmVn2WL1LlyjcRZaVElMgzQNeis/O4en7VX6sVcnRxO0rZDQ6qQQXo7LWTrIaGkEAm1b67/GBMzNC+bT5jQWCg8Hkk8Fpzw6c11x5vvmMLfC47iwTyicgwVs+tlXgjePsbENPhV6E5jIWGggKS9K0SG89MQOxZVJLLwm0OeiXG09l9bvTj/RpaH04Bdwx5hMtrXuFV+2fOkXuehP+6tA3/3uGLuMGff3qUplH1O3FZHlI205G0jWE/+psAUNu1RctfdZ1Zf2o7A/Bm6r4XGq0V8+GnPuDRWbayObhz5u2uRoFaqrHhVWlZNqIl2tMFkzKNRwRK6/1tStGGUyEp7FdfU2MK43GzNjl84f2tBeE+IYacCj7GYEfnhA8S3rg3EtIJxN47RtRYdlsVIccZfNiDC49zGtpvja53XvZ7re1FgRgehAswpzEYHZ9tjvSWQUoWECkLyJboHZ4GOT+pHQtv8bFWXddC6RHgxPIWTIr3kNf4wptHuB6SkYjNNHzZKO0/cpJMpxkqX1mDBhQsx+7e+sbXuigs3MjsKjB8mcN2jlbrrQrZvbPG3rKmHFTvHLVGXsBEMigpwae+HxShj/hPfaIqVgfN9jihQRODXWpTT8kSMfJur8DplD8Qe33/R4gr1A9u/U3EZadEmk=
 X-Microsoft-Antispam: BCL:0;
 X-Microsoft-Antispam-Message-Info:
-	ZyCjSYtS2QE7PBC9IWTl4Ouw4gQylJr4ycV4sll4QQqsMA35KABQGEoLtpCcjnEDEmXPIQ5+Y0KfSV2+OUAw9/RgQlsyj3CmKV2kAJ+LGCIxSNIjc/jdk4tVPg6nIp8zJO3gesWpCyDsjv4D91whmpQha793g3tPBhhfRGh0TuoAhhtJ+F+5kimSPiwvqLENIhXiIqrezv+ia6tn65mz3qib3Y1+ZNYv47eouWlPHLYM1rp/OnRGri4D09HzEsiS5hNoDV+AQgPZHvuzau+jgVmZpo0c9H9dljfGfTzuso26kql9pTEMhzjpcQ6oeOHRLLJRbfHlRttBuhnVL08hjgyyhUJqVK+Wli1sptq3JZhcCdJbZEygC2vYq7W4P8tvhe+f1PlxkoDiMpUgP4GrVVO9WDuOrJWfN9HjjPZ/W01e9S6WHdtD1kkqwNlwqbmY215jm8/ZUnPGVQEIQiCUG13FogLvklXumMT/9UDxb5wfcoOg8T8j2V8Qv1pAbO1kyQ/rRE67+P2YIzC+GXuefNDi1N79BHAsf7NpAp3R0QxNYY9y3RhKVGDeQGtbtmiE8ZGq0wtmIjdDlVHEyklQJK3Z2hjjNtZkA/mxA5st2FcK9vI8v7pX7ldtgJYU59YA0nbbP9ASNKzSdrIBpR8lYBISsmHWwVYsIczwJfvpB5vIMv/Tv3q0YBdEAyQ7/MpWhPLUhaX+gSK43za7q9G+E743PTcDp9Qbd6H1Oh4SHNY=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8404.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230031)(376005)(38350700005);DIR:OUT;SFP:1101;
+	+a7/UaonFcTCg77ojlyohXjVzTbUO9ES+V9CXiBHGq5ptxpBTEuCwOWo+Fgaso20or+lMRViNLT843Yv0NigA27yZ19Ti0fnQ4mb1AfPOhiZiVoY5hRb0KYgY5RguywlMdl4xpAlyJk0fQD5NmNCb4hV5hWDprMhfVbArUwkbCeuvcwBV+cIm+A1EeWrIGrzW/Mh0N16RhkQ9MYGjgvLu+syKL5ldMruWr6dr+VrLZZcs1jUytguB5rsQpCagvsnRpvRIg94z84Z7L9GtnjLpOCR8vHJYQ1QwRrYOwqNJ86VI19DWgoIMPmlL/I6z42TnTgMsF/beap9VIoVhvky3VhFkKs+S/NWlqMsleAXUwIdCu1opivVJuel2RFBO5p7yIJj6mNdL5S+8vM4AhXJkJjvtVceDy38YyKPdj7iFmRmscvOSR5Q51vJ6XdYBnNKhymtxw6sR8BAYoM8tKgDAS64ngVfwPTbW/V+uGkAfzptWKn915iGsIyxFMAH60+DtCWVkBrhN2fOQbV9he+eD8Kiwc0mYSk5+sigYMpciICJQ1dw8w37rEPWYHnwkTwU
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?SUptR3VIdHdwdEtwaStnOHlmUXU3Q284YXhVMXNRMHlHQ1hiZW1rVVdrdzR4?=
- =?utf-8?B?bEMvck51dlNXalFGOWNqclllb0E2cVc1TGdraXM2VDhGY1NxeFV0SktoU1Nk?=
- =?utf-8?B?MGtnTU1sZFhQZStkcDc4WW8vTlowOXVpeUxqN3UxdkN0bDlYODVVN0lOSUR6?=
- =?utf-8?B?eGJOUTBPM0U4aURuVU5uSGRLVERSRG5NamwxeXRWYlNVMHZHKzQvZjU2WXk3?=
- =?utf-8?B?dDJqVmV6bWJud0VzK0w3SUg5NXkxTWpQRlFXdEV5WVdYUEQ0aGxxYUpuaEFr?=
- =?utf-8?B?ZHdMVHpiTVNvZ2IwOEVvNWNQNGxma1lDOFRNR2hFK0VVeXB3YTNqZDBFUXlN?=
- =?utf-8?B?V1BLaGk2K3EvdzFJeSt4ZU5qZ0dNYjFCbm90QUNnMzk2TmJ2VEw5RXNWTWZx?=
- =?utf-8?B?STFFcVp6c3JJN0toUzNMM2xTUEpqQTNmVHRwSW1xcVNHM0VXSnlsYzRESGs2?=
- =?utf-8?B?SU1aU21idWtZc3M3L3M0bjNSMXAyQ1RuY0lhNS9SY3pYZGZVSXkwODJQTWF0?=
- =?utf-8?B?K2pVemhESWpVT1YyQnJNaGF4UkdrODBaODM3cVNqdS93alFMbC9lcGl0MDB6?=
- =?utf-8?B?K3ZSL1lxUWNDMWpWVFpiRS9lMWY1THhWcytoTUhXZGlnNjRFMUdZMTNVdzJm?=
- =?utf-8?B?VXc4TkI0ODc4bXVVMDlVZEQzblRkZTZvZVhOMndqVDBLUENkVlV5RzEyaUpF?=
- =?utf-8?B?NkNVRDNSeEJYQTZqL0xvcWlMZURUcmhWSklaUWNuUXEvMGlhS0drejVLS0JZ?=
- =?utf-8?B?Mm4yakdiRm1PTlgvZW56ZTVzdjBmTmgwV0Y5SmZzdE9hK3lFSXQvdVpJKzd3?=
- =?utf-8?B?djZwM3VNS0xLamZmZmZ5VlpPcWF2V1lUMyt3ZkZ0Wkd2M2dlM1g3YU9FWkls?=
- =?utf-8?B?UnV1TnJyN2hYSGtRNlkwYlNHOVJTUGxhcTQ0RVNzcVBtWkJhUGxYUE1BaXly?=
- =?utf-8?B?WDNqYmpsSkwyMUNGeHQrRVpJeUJnSVF5dzY2WjRFZVFXdkwwc0VZMjIxN0g5?=
- =?utf-8?B?Q3doM2ExUlRmREVlazg4UVpIVnBieDVwNjkrKzdJbnRDdThmeUJlTXJlTXlC?=
- =?utf-8?B?V1dwOGRPNHd0eFQ0d1NzUkVyOEhUNmxPcjQwd21nd3pYYlRWMmRubE9rditO?=
- =?utf-8?B?S2xiZDEwYUZpT3o0YjlzZTc3cFEwaldCSUh2eDhqV1JNeDRCd25CNDRMcm5R?=
- =?utf-8?B?QTRSQ0JSNHROcjBvaUdnNFB3WldMK3V2bzJFNjBLOXFuVXJHTUVmZlk3aWpw?=
- =?utf-8?B?NzczY05ieGtROTE0eitrZDVHcytNdWI0OU9GTW9QeHJIcUZKbEJmdzJqWXNH?=
- =?utf-8?B?d0YvU0tVMkdHRDNqcnpZS2kxVFUzT1pLekVDb2ZxTWN4U0tmckhURC9BeldQ?=
- =?utf-8?B?QjdjOWdkZXZnMTRtaTA2SlZ3cktSYmc2aXNvTVRxUUUxaHJSVXZmMk9QbVA3?=
- =?utf-8?B?YndSRXFpRjlCOWRZTldrYnZSK1VlZUZ3d2FVSkNaQmJyd0FJdVo3M3VoaGdN?=
- =?utf-8?B?ZlpxdSs1NG5QNkpzM3E5QjNoeEt6dk5SL0l3RTczUGtGZkhuSm1TSFhwTVRx?=
- =?utf-8?B?UmZMNHB0blRqbGtsWmpLZkxIZEVybHAybzBpU3BCaG1UanVXVlluMmZ6OXNQ?=
- =?utf-8?B?Z0dRQzAvaG1aNzZ2Tlc4K0UrZWFNamdNSFRVTUdFdEdtWklUREkweDBjbXpN?=
- =?utf-8?B?NlFEdFVmYXZia1hSMGVFT3N6Q2xFOEFnNjNCZzQva05YZFF0U1RlN3l3SXVT?=
- =?utf-8?B?YnNiMnUxbFFCbjdneWEvOUFFUUZFdXoxd0RUM0N3eFdWUEU5dmloNEwzMXNl?=
- =?utf-8?B?Z0VOcjYvYXo4NHhsKzNzQ1BSMGlmc1BqS0NJVWxOamNINnVhT1lpRFNhZjRm?=
- =?utf-8?B?dEQwUEtsVWl0Tk5IMk1Gb3FySHZtNXZVZnFWbVYvQmJPSmV1MSttei8zdnpG?=
- =?utf-8?B?QTJPajF1bDhsUUN0dUVEVmtpU2IxR0VtYk9MamYvR1hzRnllQjFKblFTTStK?=
- =?utf-8?B?WDlzOGxvSW5PbDJLak4zakoybjZWV3Y5ZWhkNW53czJjVTZ5TXVDY1ZKaUtS?=
- =?utf-8?B?MWsxdVdhOXFHWXA1K25ieVRmNTVzL2l2NlRaUEJvbnVQbVdIbTN6TWprMjhM?=
- =?utf-8?Q?aQvMaxMYI2rVfc85woRXorotZ?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b1cec08e-60e8-4bbc-4af5-08dc3cb6752e
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8404.eurprd04.prod.outlook.com
+	=?utf-8?B?NlNyVnJzdEozY1hCQmFJYWJhemM0d0NUUXNTekwzdlYrYStTdmcrOUtNYlFl?=
+ =?utf-8?B?YWdKcm1rTll2bHNWeS9GeEVzVjZSaDE0WXA1ZWJHeEFwRm5EVTlwbXVpbDlK?=
+ =?utf-8?B?SDA4d1lXUlQ4SzJXNWFQRXlEejIyZDg0enN4R1h3b2JZL3g4U2w1dE9zMmhi?=
+ =?utf-8?B?T1pSOFpVUXpIRVFpWTZhOEhoR0lqSUp4WU1Kb0FxMVpaMXB1UEhZSGl5QTk1?=
+ =?utf-8?B?cnBSTitwdVdmb0VuWGdtcFZFNWR2THEyUnNqczNGQkRUVktlUHllZURQUnhS?=
+ =?utf-8?B?SjVqcDBYY1RKMnVVODZzbDN4WEtwSjhDL1JTU2FZOGw3Q1Q1UkJCMXFkZ0w5?=
+ =?utf-8?B?WUk0Q3FpRUdKTHZjaEN3MnE5cmdvUm9ucG54TlZqZUNOYW5xaWJ4UkJOREl1?=
+ =?utf-8?B?SlZEelN0bFhudHBhK1A4d3prYnYzOFdxSGo0c2pqWUluUUp2YWgrOGdvUHpr?=
+ =?utf-8?B?bmRxSmJza25wR0VKU3JPRThvSDR4aUg5Vko2ZlRxVzFVWDVSN2V6UjVURHRN?=
+ =?utf-8?B?NnM2VHVlV0M3ZzhTWGU2VCtUc1pkV0tkZ1dCRjhDdXFmbjZEZEhSblIycndC?=
+ =?utf-8?B?Yzc4V3loQVVVMEpEemFUdys2aGF0YXkwaGYwd2hMOWVyUmFEajBMalR5N0JS?=
+ =?utf-8?B?QlFHbFBuQ1pvb3c5SFJaMWlSTlZYRUF0TG1heTRnaU5kVmNjVlpmOWFtRUhQ?=
+ =?utf-8?B?d2xna2lGVEtXOTlCdlhUUzNXejBVeHQ1NUxqS2lXdXFHblRIczk1T2JxZFhn?=
+ =?utf-8?B?d1Q1ekpiVGJNQlY0OG1WL1RKczNieUt0bGkyL2JTL2tmMVd5dHN4d0NjRk9X?=
+ =?utf-8?B?QkJTZmgydm8wWnFOSzVOaVI4WDZiZit2ZmN1MFRuTHM5SHU1a1NrcHFVaFA4?=
+ =?utf-8?B?SVZac0RKNUltYmxvMzVMUFJMaGtTYml1MzNRL29UcFRTWXFCeVI5aWtVcDNB?=
+ =?utf-8?B?b0R3MXBISG1KSnhrcDBJMC9nM2VVb2Q1bHYza1dYejl1OE9WVk5oSWc3U08z?=
+ =?utf-8?B?L3VObnp4UW1DaGt0Q0pzRVRsbS9qSWxRcUxYTUtJamdmamRrMXgxMVhvZFlp?=
+ =?utf-8?B?OGtxUVMyQkJiaHA0YzVVbm9KM3FkUFJlMlMxZ0pnUjZBemF3alpqSThhamIx?=
+ =?utf-8?B?a1o1OEpVdklXTHR3NHBBc2c0anFyOU9FSjVnVUdCMnFEQmVXVDVzaGJ5YThJ?=
+ =?utf-8?B?bHhjN1RlQnRHQ2dBTFdxVUdoSUIxT1U5UHZuVnRISDMzYi9WSUpudWYwQndl?=
+ =?utf-8?B?bDJ5cm1aYkVZSWNXQzlHaGZ6VUR6cXg4cU45WWdGbE5USEt3QTg2dExWdEdR?=
+ =?utf-8?B?QStqY09OT1FNYmpNZnAzV2c0YXE0ay91UTdpTHc5N1IxWnd5OEc3eHkyNWVC?=
+ =?utf-8?B?MmhQcFpITTRTSmhGTEd5ZUlKcEVja05lS2tnckUxV1NPbDA0SXBkbWljcWda?=
+ =?utf-8?B?NnhTU3BVcWhUR21JMTFIVERweHdYelQyR2ZDWDNjRGNlQzJEK1N1RStNTFIx?=
+ =?utf-8?B?VGoveDYvMlF3ZDM4d3hubTh4WVhIbExLdmFHZzh2dW5xWXhzSlJHL2ljVjEz?=
+ =?utf-8?B?NGNuUEc1ZGsyVUQ5VHhSY05lSzZWcmlreExmSEp3cmhSV3Z0UGt1WEpSRzFv?=
+ =?utf-8?Q?kXXh0EkqjUl7aw+3qgwV36WnoY00HcmCMY89IItSowVo=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 685a4b12-0521-419e-6132-08dc3cc3ba2e
+X-MS-Exchange-CrossTenant-AuthSource: PSAPR06MB4952.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 01:49:13.0621
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Mar 2024 03:24:12.3295
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uN1SE0fTrhtJI3CDXgST9zlsPKFtircaCtaX77857copKCildsMjuGPdIHJZRA6ze0g0rL3BOqbJC4WCtgB0PA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8933
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SEZPR06MB6665
 
-If the remote uart device is not connected or not enabled after booting
-up, the CTS line is high by default. At this time, if we enable the flow
-control when opening the device(for example, using “stty -F /dev/ttyLP4
-crtscts” command), there will be a pending idle preamble(first writing 0
-and then writing 1 to UARTCTRL_TE will queue an idle preamble) that
-cannot be sent out, resulting in the uart port fail to close(waiting for
-TX empty), so the user space stty will have to wait for a long time or
-forever.
+在 2024/3/1 6:00, Greg KH 写道:
 
-This is an LPUART IP bug(idle preamble has higher priority than CTS),
-here add a workaround patch to enable TX CTS after enabling UARTCTRL_TE,
-so that the idle preamble does not get stuck due to CTS is deasserted.
+> On Thu, Feb 29, 2024 at 07:51:54PM +0800, GuanBing Huang wrote:
+>> From: albanhuang <albanhuang@tencent.com>
+>>
+>> The 16550a serial port based on the ACPI table requires obtaining the
+>> reg-shift attribute. In the ACPI scenario, If the reg-shift property
+>> is not configured like in DTS, the 16550a serial driver cannot read or
+>> write controller registers properly during initialization.
+>>
+>> Signed-off-by: albanhuang <albanhuang@tencent.com>
+>> Signed-off-by: tombinfan <tombinfan@tencent.com>
+>> Signed-off-by: dylanlhdu <dylanlhdu@tencent.com>
+> "interesting" names, can you not just use your native encoding to make
+> this easier?
 
-Fixes: 380c966c093e ("tty: serial: fsl_lpuart: add 32-bit register interface support")
-Signed-off-by: Sherry Sun <sherry.sun@nxp.com>
----
-Changes in V2:
-1. Move the "restore control register" comment message to the appropriate place.
-2. Add Fixes tag.
----
- drivers/tty/serial/fsl_lpuart.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+> ->I'm sorry,this is my first time sending a patch.The names should be changed to the following. Do I need to resend a new patch?
 
-diff --git a/drivers/tty/serial/fsl_lpuart.c b/drivers/tty/serial/fsl_lpuart.c
-index 5ddf110aedbe..bbcbc91482af 100644
---- a/drivers/tty/serial/fsl_lpuart.c
-+++ b/drivers/tty/serial/fsl_lpuart.c
-@@ -2345,9 +2345,12 @@ lpuart32_set_termios(struct uart_port *port, struct ktermios *termios,
- 
- 	lpuart32_write(&sport->port, bd, UARTBAUD);
- 	lpuart32_serial_setbrg(sport, baud);
--	lpuart32_write(&sport->port, modem, UARTMODIR);
--	lpuart32_write(&sport->port, ctrl, UARTCTRL);
-+	/* disable CTS before enabling UARTCTRL_TE to avoid pending idle preamble */
-+	lpuart32_write(&sport->port, modem & ~UARTMODIR_TXCTSE, UARTMODIR);
- 	/* restore control register */
-+	lpuart32_write(&sport->port, ctrl, UARTCTRL);
-+	/* re-enable the CTS if needed */
-+	lpuart32_write(&sport->port, modem, UARTMODIR);
- 
- 	if ((ctrl & (UARTCTRL_PE | UARTCTRL_M)) == UARTCTRL_PE)
- 		sport->is_cs7 = true;
--- 
-2.37.1
+Signed-off-by: Guanbing Huang <albanhuang@tencent.com>
+Signed-off-by: Bing Fan <tombinfan@tencent.com>
+Signed-off-by: Linheng Du <dylanlhdu@tencent.com>
 
+>> ---
+>>   drivers/tty/serial/8250/8250_pnp.c | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_pnp.c b/drivers/tty/serial/8250/8250_pnp.c
+>> index 1974bbadc975..25b4e41e9745 100644
+>> --- a/drivers/tty/serial/8250/8250_pnp.c
+>> +++ b/drivers/tty/serial/8250/8250_pnp.c
+>> @@ -473,6 +473,7 @@ serial_pnp_probe(struct pnp_dev *dev, const struct pnp_device_id *dev_id)
+>>   		uart.port.flags |= UPF_SHARE_IRQ;
+>>   	uart.port.uartclk = 1843200;
+>>   	device_property_read_u32(&dev->dev, "clock-frequency", &uart.port.uartclk);
+>> +	device_property_read_u8(&dev->dev, "reg-shift", &uart.port.regshift);
+> Is this property documented somewhere?  What happens if the property
+> isn't there?
+> ->
+> 1、In the DTS scenario, certain chips use the reg-shift property, such as:
+>
+> arch/riscv/boot/dts/microchip/mpfs.dtsi:
+>
+> 294                 mmuart0: serial@20000000 {
+> 295                         compatible = "ns16550a";
+> 296                         reg = <0x0 0x20000000 0x0 0x400>;
+> 297                         reg-io-width = <4>;
+> 298                         reg-shift = <2>;
+> 299                         interrupt-parent = <&plic>;
+> 300                         interrupts = <90>;
+> 301                         current-speed = <115200>;
+> 302                         clocks = <&clkcfg CLK_MMUART0>;
+> 303                         status = "disabled"; /* Reserved for the HSS */
+> 304                 };
+>
+> drivers/tty/serial/8250/8250_of.c:
+>
+> of_platform_serial_probe->of_platform_serial_setup:
+>
+> 150         /* Check for registers offset within the devices address range */
+> 151         if (of_property_read_u32(np, "reg-shift", &prop) == 0)
+> 152                 port->regshift = prop;
+> 2、In the ACPI scenario, 16550a serial port initialization code execution process:
+> ->serial_pnp_probe
+> ->serial8250_register_8250_port
+> ->uart_add_one_port
+> ->serial_ctrl_register_port
+> ->serial_core_register_port
+> ->serial_core_add_one_port
+> ->uart_configure_port
+> ->serial8250_config_port
+> ->autoconfig:
+>
+> 1194                 scratch = serial_in(up, UART_IER);
+> 1195                 serial_out(up, UART_IER, 0);
+> 1196 #ifdef __i386__
+> 1197                 outb(0xff, 0x080);
+> 1198 #endif
+> 1199                 /*
+> 1200                  * Mask out IER[7:4] bits for test as some UARTs (e.g. TL
+> 1201                  * 16C754B) allow only to modify them if an EFR bit is set.
+> 1202                  */
+> 1203                 scratch2 = serial_in(up, UART_IER) & UART_IER_ALL_INTR;
+> 1204                 serial_out(up, UART_IER, UART_IER_ALL_INTR);
+> 1205 #ifdef __i386__
+> 1206                 outb(0, 0x080);
+> 1207 #endif
+> 1208                 scratch3 = serial_in(up, UART_IER) & UART_IER_ALL_INTR;
+> 1209                 serial_out(up, UART_IER, scratch);
+> 1210                 if (scratch2 != 0 || scratch3 != UART_IER_ALL_INTR) {
+> 1211                         /*
+> 1212                          * We failed; there's nothing here
+> 1213                          */
+> 1214                         spin_unlock_irqrestore(&port->lock, flags);
+> 1215                         DEBUG_AUTOCONF("IER test failed (%02x, %02x) ",
+> 1216                                        scratch2, scratch3);
+> 1217                         goto out;
+> 1218                 }
+>
+> static unsigned int mem_serial_in(struct uart_port *p, int offset)
+> {
+>          offset = offset << p->regshift;
+>          return readb(p->membase + offset);
+> }
+>
+> static void mem_serial_out(struct uart_port *p, int offset, int value)
+> {
+>          offset = offset << p->regshift;
+>          writeb(value, p->membase + offset);
+> }
+> The kernel will execute the serial_pnp_probe function to initialize the 16550a serial port during startup.
+> When executing the autoconfig function, the serial_in/serial_out function failed to read and write to the UART_IER register,
+> causing an abnormal branch entry at line 1210 and an abnormal exit at line 1217, preventing the subsequent 16550a initialization
+> process from being executed properly.
+> mem_serial_in/mem_serial_out will perform a regshift offset when reading and writing registers,
+> because serial_pnp_probe does not have a configured regshift, which is 0 (regshift needs to be configured as 2),
+> resulting in invalid register reading and writing.
+> Without the reg-shift attribute, print the kernel boot log and identify the serial port as "unknown":
+>
+> [    1.458722] riscv-plic riscv-plic.0: mapped 64 interrupts with 1 handlers for 1 contexts.
+> [    5.342472] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+> [    6.038702] 00:02: ttyS0 at MMIO 0x310b0000 (irq = 12, base_baud = 3125000) is a unknown
+> Configure the value of the reg-shift attribute to 2, print the kernel boot log, and correctly recognize 16550a:
+>
+> [    1.459948] riscv-plic riscv-plic.0: mapped 64 interrupts with 1 handlers for 1 contexts.
+> [    5.317550] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+> [    5.864828] 00:02: ttyS0 at MMIO 0x310b0000 (irq = 12, base_baud = 3125000) is a 16550A
+> thanks,
+> Guanbing Huang
+> thanks,
+>
+> greg k-h
 
