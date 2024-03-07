@@ -1,124 +1,128 @@
-Return-Path: <linux-serial+bounces-2659-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2664-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9AA20875186
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Mar 2024 15:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E188754A3
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Mar 2024 17:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55309285CAB
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Mar 2024 14:11:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E1CA28668B
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Mar 2024 16:53:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805BA12DDAE;
-	Thu,  7 Mar 2024 14:10:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D766131E2F;
+	Thu,  7 Mar 2024 16:52:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A4/iHSBG"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="MT220pCZ"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f68.google.com (mail-wm1-f68.google.com [209.85.128.68])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFC3812DD9F
-	for <linux-serial@vger.kernel.org>; Thu,  7 Mar 2024 14:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C495131E21;
+	Thu,  7 Mar 2024 16:52:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1709820626; cv=none; b=KDn8EdtmfeHoh7eHfd/y2NAIUVoH9wxrkot2RT5BDKMLFfGacl0SqoTSYOBnoOjlSGiai73+yIFMAreaDnAQdOwHqe6pa8U8IMEMTr+hyJeJjSIWojiQgtQQO++QW66jRigNKOFK7PoTDGzmd6pIyQPHZmoCTG9iBkIl83ebNek=
+	t=1709830338; cv=none; b=OHe7scdsJDI0HzDGtAxWoaSAInxzPzAdUIYdvif+fM8vKP/8EPRrs6jJ/Tu3fS/J3dnNZDTMBB6rmyRv9+1+BXBWNwEIJA7HAYU8Jf2OGD2gvE8wprBEy/aLKeemEZSQKMxlAotvn9dS7HAcjBG1jqU/3oie790veMC9XcCr0OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1709820626; c=relaxed/simple;
-	bh=8Uw8xMBW4UQK0qIgbOHRF+CbwIUsehbE2zVuCzuImqw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d2y9LSxQVbgw0AyvYFoyNEUW6ygnotlG/tMhCbo3yVJ53mRl+mywN2EA2kB2pkBXrPNzWaG4epyyxoomrZNi/gKm9dKAIsxj8TZA8qWGS5IG62APfMuhRbgUDa/6C1i46bNDTpGemhekQpD68lJkQP15+AzVXCMXn/fhDdg146s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A4/iHSBG; arc=none smtp.client-ip=209.85.128.68
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f68.google.com with SMTP id 5b1f17b1804b1-412e68b8594so7148455e9.1
-        for <linux-serial@vger.kernel.org>; Thu, 07 Mar 2024 06:10:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1709820622; x=1710425422; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8Uw8xMBW4UQK0qIgbOHRF+CbwIUsehbE2zVuCzuImqw=;
-        b=A4/iHSBGlcw+/1eAELQ56IAuE8pjP+I3a7JXTiKPJ2C0iJHk6bA7+iLZFFUI8E2yv0
-         et5mKBSVD5qseF0l9cADTSk81K9MA6E8gIb3KXsDctmAWU+DM5nT4Vv3rophH1Foed8y
-         aYMktPmS9l5SkMtdhp12Z0yhEPdW6LoauLpeeBDsqNd5lFrPAg2sXBhcOdH68dWCRrkL
-         NdAolSM3EVh/Ib0hHEWdhVAMc6Vdra0Li9uXkY5D5Xs5HdvOTefbhJC2qMyHI6Ckla7+
-         Iz++dIByny85EUK3N3Z/4rcsXwAn6OWihKDGN5hA/ryp4H9l284mMHriWWaI/dygevdx
-         7M7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1709820622; x=1710425422;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8Uw8xMBW4UQK0qIgbOHRF+CbwIUsehbE2zVuCzuImqw=;
-        b=tobCFHXVGVunFKi0oVqt/Kb/XXsC1PN8+e5Bt/Hz+x5TfZXwDCoeXqFDjUekXa0lMU
-         DMZRLarOST3KtjeOJVNAlJHOc6mTK4NfZrSZPzEBiTUM8G/iGY3SYSGMoDuzS05ezi4d
-         +Fg5K/DBT5v2VgBpoUAajSYBjKAxJHvEmk+8YfJEL/pAE8MfllJlmwNJ8klwgC8Dc730
-         ePOqJVdRrQ14v6egTg/7LeJ9kF1DrY2UWovjB8Qsmr4f1m0T7ecccUO36n+ufUUbGZbo
-         3nVFc9qkOdFuhqvGVd6wrBPLRAxRS1VSvgMfWwhQFRAVfX+steYO7rmfbPbPEnOee85C
-         BrDw==
-X-Forwarded-Encrypted: i=1; AJvYcCUnWW8scHN1rX7UmxBEQAFOexcKKD9IEje7fq2sxDJkF7F3CrJRiKt96KE7VdxLuW+aP6yAl6LgI/2qYXfQQ7olFEBei6d5v9aTNkjj
-X-Gm-Message-State: AOJu0Yx8S9+lgdwwbl7R52De6ItTbxV1BQVXuBTSeY3VpAPyPl1lgTc6
-	7V/wB6kyXALuHiJ2uoTVKTB3+EpzTZPZZo0bVQLFKrCaOe73wDbc
-X-Google-Smtp-Source: AGHT+IGCX+TVYxmSkg/Nnak8CCjHl6k+VgF6ooUvLNKGPo4S7QMZbne+sScf4Gn6hI1AUfL+CBYKGQ==
-X-Received: by 2002:a05:600c:35d1:b0:412:e56e:b4f5 with SMTP id r17-20020a05600c35d100b00412e56eb4f5mr8139230wmq.8.1709820621878;
-        Thu, 07 Mar 2024 06:10:21 -0800 (PST)
-Received: from ?IPV6:2001:470:5139::fb2? ([2001:470:5139::fb2])
-        by smtp.gmail.com with ESMTPSA id gw18-20020a05600c851200b00412a31d2e2asm2839875wmb.32.2024.03.07.06.10.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 07 Mar 2024 06:10:21 -0800 (PST)
-Message-ID: <51b7c6c2-824a-4f6c-9667-a8f047bfc080@gmail.com>
-Date: Thu, 7 Mar 2024 15:10:19 +0100
+	s=arc-20240116; t=1709830338; c=relaxed/simple;
+	bh=fZ5DoPv6ZsNNd105bFo2nteLWD8VO0z5njwuVgjVDPc=;
+	h=From:To:Cc:Date:Message-Id:MIME-Version:Subject; b=k68FZbAv/sQO/ny/joM+UTKvJn4ZQQLARnywkJu7JGXtccLG8tcW/2ETQOHfDjIr6IG/MI8kOaU39mxd169DIvL3oBWr4lNf5iZNOxSFo1sYXDcGWRn9Gfew7zDywvQjMC+5TziEDtGDg8eiub5Do5E33nTlGpkxyHtsWNFmXyg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=MT220pCZ; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+	:From:subject:date:message-id:reply-to;
+	bh=MBrRtTOLIx2ABajnqtReIp0j0/jKR5mxRObP6W0lLHE=; b=MT220pCZw8qZouHzCDJihZn4+u
+	hXMW5AWNxtdmWOIAbqYYJtFFzpJ8hT9xTfLzE8SHUUhC1VqIrlDtK9pxZRxDo+MyLeyhQP0zHgC1K
+	T7EQnBcdwGo5RPe6bUYMRIc8G2BTirmIbcFZM4CtCPFG90tgA2x+VQyswwVLL5640bhg=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:57020 helo=pettiford.lan)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1riGS3-0005lI-Mi; Thu, 07 Mar 2024 11:18:36 -0500
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	hugo@hugovil.com,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Date: Thu,  7 Mar 2024 11:18:24 -0500
+Message-Id: <20240307161828.118495-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH] serial: imx: Fix RS485 behaviour on disabled
- RX_DURING_TX
-Content-Language: en-US
-To: Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Cc: "Rickard.Andersson@axis.com" <Rickard.Andersson@axis.com>,
- "festevam@denx.de" <festevam@denx.de>,
- "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
- "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
- "jirislaby@kernel.org" <jirislaby@kernel.org>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>,
- "linux-imx@nxp.com" <linux-imx@nxp.com>,
- "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
- "lukas@wunner.de" <lukas@wunner.de>, "marex@denx.de" <marex@denx.de>,
- "rickard314.andersson@gmail.com" <rickard314.andersson@gmail.com>,
- "robh@kernel.org" <robh@kernel.org>,
- "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
- "shawnguo@kernel.org" <shawnguo@kernel.org>,
- "sorganov@gmail.com" <sorganov@gmail.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>, "trix@redhat.com"
- <trix@redhat.com>,
- "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>
-References: <2e866164c89c495aac905753978e8747@dh-electronics.com>
- <3a2987d4-ca89-4f4b-9f01-ee19a01c1b6b@gmail.com>
- <2d92d69369054578baacccf23ae2eff1@dh-electronics.com>
-From: "Tobias Jakobi (Compleo)" <tobias.jakobi.compleo@gmail.com>
-In-Reply-To: <2d92d69369054578baacccf23ae2eff1@dh-electronics.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -0.0 T_SCC_BODY_TEXT_LINE No description available.
+Subject: [PATCH v2 0/4] serial: sc16is7xx: split into core and I2C/SPI parts
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+
+Hello,
+this patch series splits the SPI/I2C parts for the sc16is7xx driver into
+separate source files (and separate I2C/SPI drivers).
+
+These changes are based on suggestions made by Andy Shevchenko
+following this discussion:
+
+Link: https://lore.kernel.org/all/CAHp75VebCZckUrNraYQj9k=Mrn2kbYs1Lx26f5-8rKJ3RXeh-w@mail.gmail.com/
+
+The patches are multiple, simply to facilitate the review process. In the end,
+they could be merged into a single patch.
+
+I have tested the changes on a custom board with two SC16IS752 DUART over
+a SPI interface using a Variscite IMX8MN NANO SOM. The four UARTs are
+configured in RS-485 mode.
+
+I did not test the changes on a real SC16is7xx using the I2C interface. But
+I slighly modified the driver to be able to simulate an I2C device using
+i2c-stub. I was then able to instantiate a virtual I2C device without
+disturbing existing connection/communication between real SPI devices on
+/dev/ttySC0 and /dev/ttySC2 (using a loopback cable).
+
+Thank you.
+
+Link: [v1] https://lore.kernel.org/lkml/20240206214208.2141067-1-hugo@hugovil.com
+
+Changes for V2:
+- Move port_registered[] init before the for loop to prevent bug if
+  aborting probe when i = 0
+- Since patch f7b487648986 ("lib/find: add atomic find_bit() primitives") has
+  been dropped from linux-next/master, rework patch 2 (sc16is7xx_lines)
+  without find_and_set_bit.
+
+Hugo Villeneuve (4):
+  serial: sc16is7xx: simplify and improve Kconfig help text
+  serial: sc16is7xx: split into core and I2C/SPI parts (core)
+  serial: sc16is7xx: split into core and I2C/SPI parts (sc16is7xx_lines)
+  serial: sc16is7xx: split into core and I2C/SPI parts
+    (sc16is7xx_regcfg)
+
+ drivers/tty/serial/Kconfig         |  41 +++--
+ drivers/tty/serial/Makefile        |   4 +-
+ drivers/tty/serial/sc16is7xx.c     | 245 ++++++-----------------------
+ drivers/tty/serial/sc16is7xx.h     |  41 +++++
+ drivers/tty/serial/sc16is7xx_i2c.c |  74 +++++++++
+ drivers/tty/serial/sc16is7xx_spi.c |  97 ++++++++++++
+ 6 files changed, 284 insertions(+), 218 deletions(-)
+ create mode 100644 drivers/tty/serial/sc16is7xx.h
+ create mode 100644 drivers/tty/serial/sc16is7xx_i2c.c
+ create mode 100644 drivers/tty/serial/sc16is7xx_spi.c
 
 
-On 07.03.24 13:38, Christoph Niedermaier wrote:
-> Rickard's patch in version 3 solved the same problem, so it should also
-> fix the problem on your side. It has already been accepted and is already
-> available in the next Kernel. It has a Fixes tag on it, so it should normally
-> be backported to the 6.1.x Kernel soon.
+base-commit: 801410b26a0e8b8a16f7915b2b55c9528b69ca87
+-- 
+2.39.2
 
-Sounds good! Going to keep an eye open when it lands in the stable tree.
-
-With best wishes,
-Tobias
-
-
->
-> Regards
-> Christo1ph
 
