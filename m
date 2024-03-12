@@ -1,108 +1,97 @@
-Return-Path: <linux-serial+bounces-2688-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2690-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A328878ABA
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Mar 2024 23:27:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE9C1879174
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Mar 2024 10:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 69FB1B210B2
-	for <lists+linux-serial@lfdr.de>; Mon, 11 Mar 2024 22:27:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82A9F1F216E0
+	for <lists+linux-serial@lfdr.de>; Tue, 12 Mar 2024 09:53:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBCC657875;
-	Mon, 11 Mar 2024 22:27:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 269F478274;
+	Tue, 12 Mar 2024 09:53:17 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+Received: from h3cspam02-ex.h3c.com (smtp.h3c.com [60.191.123.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B2D35786B
-	for <linux-serial@vger.kernel.org>; Mon, 11 Mar 2024 22:27:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.83
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77EB38464;
+	Tue, 12 Mar 2024 09:53:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.191.123.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1710196052; cv=none; b=D/MK1JeCkVaDpJ2jsGXLitMKDQ9OcGUw0PE4fXOjkwF/MVP13jFM9B0C9igMc1iHBtZbybhD8an9939oDYDBPLgVWkkLxUb/gZjCmnhsNZhM802DEtr0WhxIloldfiH1Wts22Xx3hEPOsI+fN3oRnEniLnlsgAHzmRt2qleg2m4=
+	t=1710237197; cv=none; b=R9NmInKU0wpM42+iDkmbWwpGQSd7sEAZn/KLSln9m5Vt+gFSPVX2O7QNT+AoT0l4Alhc3sGov3IYJFSVPAPdaYepxdEZGjKFuU75hKQs8SWmnEV6gpnB03Wn4fAonlW8tKdYbxmLkMX8tNtMQ1CJWRigZ7r2+Ta+/B1pEsRU5Yw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1710196052; c=relaxed/simple;
-	bh=sLhrfnF8dSizg/c5wOEza7Fobu4qwgdo33vs55Xb8qY=;
-	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=edwdVPmhvE8/xsf9jJpE6R63w8DjVkF/XIsaIMtFOLbawEkEEnGU89FoVsEqNuWWCmvdDALg+HAwpnfdjnT5adZENm9drccg8xX0hZB/UXYOSj0W+q844Yd9bfqTZJgmwLI7yj7FB62Olff9w0He0hvlPUmy6TnGDaRwKuRYrIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
-Received: from localhost (88-113-26-217.elisa-laajakaista.fi [88.113.26.217])
-	by fgw22.mail.saunalahti.fi (Halon) with ESMTP
-	id 618be5b6-dff6-11ee-a9de-005056bdf889;
-	Tue, 12 Mar 2024 00:26:20 +0200 (EET)
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 12 Mar 2024 00:26:18 +0200
-To: Serge Semin <fancer.lancer@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-	Stephen Rothwell <sfr@rothwell.id.au>, linux-mips@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/4] mips: cm: Add __mips_cm_l2sync_phys_base prototype
- declaration
-Message-ID: <Ze-FCrkZuRiHIItp@surfacebook.localdomain>
-References: <20240215171740.14550-1-fancer.lancer@gmail.com>
- <20240215171740.14550-2-fancer.lancer@gmail.com>
+	s=arc-20240116; t=1710237197; c=relaxed/simple;
+	bh=484fGHYCkSxYD6mCMfudQ6WkbUe/ZMV3OusJdX8NaVg=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WFOxKsLCrZ0czGvQO+riSMukOzU3+fWBX7Tw25MxQ+3sqrNauv3KxMc/EXLMHMHdCccldNWfJeE7ji0t07hj/nIYo6DUEHc36wnx0GZGoZV/8mqrIHKfGscXdab3FOWf+qrS8q8lg9fHWRj+eJjsDYv/Mr0IlI5c0z5aKXuWb1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com; spf=pass smtp.mailfrom=h3c.com; arc=none smtp.client-ip=60.191.123.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=h3c.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=h3c.com
+Received: from h3cspam02-ex.h3c.com (localhost [127.0.0.2] (may be forged))
+	by h3cspam02-ex.h3c.com with ESMTP id 42C8cam6070755;
+	Tue, 12 Mar 2024 16:38:36 +0800 (GMT-8)
+	(envelope-from liu.yeC@h3c.com)
+Received: from mail.maildlp.com ([172.25.15.154])
+	by h3cspam02-ex.h3c.com with ESMTP id 42C8bAQO064331;
+	Tue, 12 Mar 2024 16:37:10 +0800 (GMT-8)
+	(envelope-from liu.yeC@h3c.com)
+Received: from DAG6EX12-BJD.srv.huawei-3com.com (unknown [10.153.34.14])
+	by mail.maildlp.com (Postfix) with ESMTP id 9B02C2005153;
+	Tue, 12 Mar 2024 16:38:39 +0800 (CST)
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com (10.62.14.11) by
+ DAG6EX12-BJD.srv.huawei-3com.com (10.153.34.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1258.27; Tue, 12 Mar 2024 16:37:11 +0800
+Received: from DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4])
+ by DAG6EX02-IMDC.srv.huawei-3com.com ([fe80::4c21:7c89:4f9d:e4c4%16]) with
+ mapi id 15.02.1258.027; Tue, 12 Mar 2024 16:37:11 +0800
+From: Liuye <liu.yeC@h3c.com>
+To: Daniel Thompson <daniel.thompson@linaro.org>
+CC: "jason.wessel@windriver.com" <jason.wessel@windriver.com>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "gregkh@linuxfoundation.org"
+	<gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "kgdb-bugreport@lists.sourceforge.net"
+	<kgdb-bugreport@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linux-serial@vger.kernel.org"
+	<linux-serial@vger.kernel.org>
+Subject: =?gb2312?B?tPC4tDogtPC4tDogW1BBVENIXSBrZGI6IEZpeCB0aGUgZGVhZGxvY2sgaXNz?=
+ =?gb2312?Q?ue_in_KDB_debugging.?=
+Thread-Topic: =?gb2312?B?tPC4tDogW1BBVENIXSBrZGI6IEZpeCB0aGUgZGVhZGxvY2sgaXNzdWUgaW4g?=
+ =?gb2312?Q?KDB_debugging.?=
+Thread-Index: AQHaafG3YC/Li+j42kau1FDQhHr2m7EfIsgAgAMadaD///fWgIAJrHcQ
+Date: Tue, 12 Mar 2024 08:37:11 +0000
+Message-ID: <2ea381e7407a49aaa0b08fa7d4ff62d3@h3c.com>
+References: <20240228025602.3087748-1-liu.yeC@h3c.com>
+ <20240228120516.GA22898@aspen.lan> <8b41d34adaef4ddcacde2dd00d4e3541@h3c.com>
+ <20240301105931.GB5795@aspen.lan>
+In-Reply-To: <20240301105931.GB5795@aspen.lan>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-sender-location: DAG2
+Content-Type: text/plain; charset="gb2312"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240215171740.14550-2-fancer.lancer@gmail.com>
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL:h3cspam02-ex.h3c.com 42C8cam6070755
 
-Thu, Feb 15, 2024 at 08:17:26PM +0300, Serge Semin kirjoitti:
-> The __mips_cm_l2sync_phys_base() and mips_cm_l2sync_phys_base() couple was
-> introduced in commit 9f98f3dd0c51 ("MIPS: Add generic CM probe & access
-> code") where the former method was a weak implementation of the later
-> function. Such design pattern permitted to re-define the original method
-> and use the weak implementation in the new function. A similar approach
-> was introduced in the framework of another arch-specific programmable
-> interface: mips_cm_phys_base() and __mips_cm_phys_base(). The only
-> difference is that the underscored method of the later couple was declared
-> in the "asm/mips-cm.h" header file, but it wasn't done for the CM L2-sync
-> methods in the subject. Due to the missing the global function declaration
-> the "missing prototype" warning was spotted in the framework of the commit
-> 9a2036724cd6 ("mips: mark local function static if possible") and fixed
-> just be re-qualifying the weak method as static. Doing that broke what was
-> originally implied by having the weak implementation globally defined. Fix
-> that by dropping the static qualifier and adding the
-> __mips_cm_l2sync_phys_base() prototype declared in the "asm/mips-cm.h"
-> header file.
-
-...
-
-> +/**
-> + * __mips_cm_l2sync_phys_base - retrieve the physical base address of the CM
-> + *                              L2-sync region
-> + *
-> + * This function returns the physical base address of the Coherence Manager
-> + * L2-cache only region. It provides a default implementation which reads the
-> + * CMGCRL2OnlySyncBase register where available or returns a 4K region just
-> + * behind the CM GCR base address. It may be overridden by platforms which
-> + * determine this address in a different way by defining a function with the
-> + * same prototype except for the name mips_cm_l2sync_phys_base (without
-> + * underscores).
-> + */
-> +extern phys_addr_t __mips_cm_l2sync_phys_base(void);
-
-I'm wondering if you run
-
-	scripts/kernel-doc -v -none -Wall ...
-
-against this file. I believe it will complain that you missed Return section.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+SSBrbm93IHRoYXQgeW91IHNhaWQgc2NoZWR1bGVfd29yayBpcyBub3QgTk1JIHNhdmUsIHdoaWNo
+IGlzIHRoZSBmaXJzdCBpc3N1ZS4gUGVyaGFwcyBpdCBjYW4gYmUgZml4ZWQgdXNpbmcgaXJxX3dv
+cmtfcXVldWUuIEJ1dCBldmVuIGlmIGlycV93b3JrX3F1ZXVlIGlzIHVzZWQgdG8gaW1wbGVtZW50
+IGl0LCB0aGVyZSB3aWxsIHN0aWxsIGJlIGEgZGVhZGxvY2sgcHJvYmxlbSBiZWNhdXNlIHNsYXZl
+IGNwdTEgc3RpbGwgaGFzIG5vdCByZWxlYXNlZCB0aGUgcnVubmluZyBxdWV1ZSBsb2NrIG9mIG1h
+c3RlciBDUFUwLg0KDQoNCg0K
 
