@@ -1,92 +1,84 @@
-Return-Path: <linux-serial+bounces-2907-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2908-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCBC5889F79
-	for <lists+linux-serial@lfdr.de>; Mon, 25 Mar 2024 13:30:30 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFC9F88A814
+	for <lists+linux-serial@lfdr.de>; Mon, 25 Mar 2024 17:02:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CF6F1F38A5C
-	for <lists+linux-serial@lfdr.de>; Mon, 25 Mar 2024 12:30:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6ED2EB47AC2
+	for <lists+linux-serial@lfdr.de>; Mon, 25 Mar 2024 13:32:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4A715AD92;
-	Mon, 25 Mar 2024 07:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A130212C812;
+	Mon, 25 Mar 2024 10:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b="F+MIFHTU"
+	dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b="g+X8BfP7"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mail5.25mail.st (mail5.25mail.st [74.50.62.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F06F186384
-	for <linux-serial@vger.kernel.org>; Mon, 25 Mar 2024 07:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C9B82D98;
+	Mon, 25 Mar 2024 07:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.50.62.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711351062; cv=none; b=WKx9OkUpiNdtrDyJKh8qQqnsm04+Jl6iuELyAMNoSB1EjdLbyHF2SMM4VwPrFHrAGOIl2I4KHmqJsm9YM6bwT3ZWo1b9M+LQm26Ib55QJi32CLnDNhD8Z9dAv9QcOmnc8c2xscSotqgVOQJBYVwVZed3N6aQuXDT06m17E0HbBM=
+	t=1711352405; cv=none; b=b1I3wgjEwM0jhN99XkmxmSYUutE/5MiAkz83EnANBDnxLHRRYnmWGSWNF7eqbW2+bnJ8VSur0clDi6ndboKRLeWnzL8HRq+cTGtckWRU9+YcvjPwO2YlFk+KZTy+voli1qJbR9SUStbDva//XkKMCKX1BCdYa/XMpn1lWJiruDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711351062; c=relaxed/simple;
-	bh=zMOcC1a59osUvpc/55HzXpX2Y+BiLY1d1zGVzvm3oPo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=qlFu0PuAkpV+qJlki0puIL94yPLNdWQelYox6Bz3UF5vG4z5gxAdosTvjXJkD780pCKnCBwMzJxNKFt4L9Unn6RHJ0j11ixcdrPoUZLTot0GeXqj9WVI0cYXZ5ryVuj3yB1Bcwqdu4UbjwJM4P3X+8k0dWKWDFF9NkNrIVYs0fg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com; spf=fail smtp.mailfrom=atomide.com; dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b=F+MIFHTU; arc=none smtp.client-ip=74.50.62.9
+	s=arc-20240116; t=1711352405; c=relaxed/simple;
+	bh=P57Y9I6HUeQDxtauGaO6GSib3ALlVXY8LaHqz73i1f8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n7vxoIHQJdSzV5SkkyvWTZWtpya/A8HRZlM/07OxhPvNCYpSk8eTZues/FUl/akCfM2yzL1yy1vXx0rM/wVHX6IiMse1nkBcfyrp8VkHLh6bUpQhNvlVGmopi6IOAone077P9G0DGjDc/dtimh+2ClfmPfsAaHgihq8B+w47WGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com; spf=fail smtp.mailfrom=atomide.com; dkim=pass (2048-bit key) header.d=atomide.com header.i=@atomide.com header.b=g+X8BfP7; arc=none smtp.client-ip=74.50.62.9
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=atomide.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=atomide.com
 Received: from localhost (91-158-86-216.elisa-laajakaista.fi [91.158.86.216])
-	by mail5.25mail.st (Postfix) with ESMTPSA id 56CD16035A;
-	Mon, 25 Mar 2024 07:17:22 +0000 (UTC)
+	by mail5.25mail.st (Postfix) with ESMTPSA id F06E1603C4;
+	Mon, 25 Mar 2024 07:39:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=atomide.com;
-	s=25mailst; t=1711351053;
-	bh=zMOcC1a59osUvpc/55HzXpX2Y+BiLY1d1zGVzvm3oPo=;
-	h=From:To:Cc:Subject:Date:From;
-	b=F+MIFHTUnXoB27fIGY8RwTvrEz6tdWBQp1hvcv5GEuQJLwSHOuAUR6l2WsZ1alpJf
-	 7ex9w2Ye0BAtpPLrB86EYodDYBTGyjDVkdnqVGUPtrUwTIABsxvIFZFV6hSFDnk29s
-	 gwt+ckfGVQh0pYI0Iyqfoi4aDdeJvqMQ7iSBrwehEQU+TVHtPq917J+/u0nkIDyvDk
-	 XzPDlvBnKs9rHiE7uBJgngA62UpzlKhtFoErtA6/SWqWluyJ2vd7Ev99mzmYuhO0LA
-	 /P35ebYIdPPIBy2gSgqVafgOEDVA+CfFHK81pFXkBpDb3jxTRn+TjiH9h7J4HdhvhH
-	 SaX3fe0jIqlJA==
+	s=25mailst; t=1711352402;
+	bh=P57Y9I6HUeQDxtauGaO6GSib3ALlVXY8LaHqz73i1f8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=g+X8BfP7UAqtNQ8ZFM7VgwQinktNdorUxeqytHyLkjTUiXzCek6R0jqRYD11os0S0
+	 boDprVrdjuxGB8ot5GDZXKDiR1R4IhFbYikVjPuGDX9+ayiTdlRiZZePp7USDaO24N
+	 T96vqRYLetIHrCZRZnvNZ3lNRLFkBuGvZcTDCpd21OqNUaRHXArL82HnXXGFLRhhsv
+	 w46xvAQcj9wJVi3V0dqyWVsTu2nXqp/+8OyCNgXCPfXn+GemV9rPaWXhDOv6U9RkPn
+	 +8+xBNcYLAwT6UQ4v1ghKL6YtPZbDzp1my35hOrLiCRsw8rBEhg0zZnlc8fYVzqslT
+	 akrkEtlF1mQdQ==
+Date: Mon, 25 Mar 2024 09:39:50 +0200
 From: Tony Lindgren <tony@atomide.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Nick Bowler <nbowler@draconx.ca>,
-	linux-serial@vger.kernel.org
-Subject: [PATCH] serial: core: Fix regression when runtime PM is not enabled
-Date: Mon, 25 Mar 2024 09:16:47 +0200
-Message-ID: <20240325071649.27040-1-tony@atomide.com>
-X-Mailer: git-send-email 2.44.0
+To: Nick Bowler <nbowler@draconx.ca>
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+	regressions@lists.linux.dev, linux-serial@vger.kernel.org
+Subject: Re: PROBLEM: Sun Ultra 60 hangs on boot since Linux 6.8
+Message-ID: <20240325073950.GF5132@atomide.com>
+References: <d84baa5d-a092-3647-8062-ed7081d329d4@draconx.ca>
+ <20240322051531.GA5132@atomide.com>
+ <d7337014-09ac-8a35-7159-e75ecd2707b6@draconx.ca>
+ <20240322064843.GC5132@atomide.com>
+ <20240322090657.GD5132@atomide.com>
+ <193a134c-f0da-4a45-b45a-a3605f91cfa4@draconx.ca>
+ <20240323064925.GE5132@atomide.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240323064925.GE5132@atomide.com>
 
-Commit 45a3a8ef8129 ("serial: core: Revert checks for tx runtime PM state")
-caused a regression for Sun Ultra 60 for the sunsab driver as reported by
-Nick Bowler <nbowler@draconx.ca>.
+* Tony Lindgren <tony@atomide.com> [240323 08:49]:
+> * Nick Bowler <nbowler@draconx.ca> [240322 14:12]:
+> > Yes, with the below patch applied on top of 6.8 things are working.
+> 
+> OK great thanks for testing, I'll send out a proper patch.
 
-We need to add back the check runtime PM enabled state for serial port
-controller device, I wrongly assumed earlier we could just remove it.
+For reference, patch posted now at [0] below.
 
-Fixes: 45a3a8ef8129 ("serial: core: Revert checks for tx runtime PM state")
-Reported-by: Nick Bowler <nbowler@draconx.ca>
-Signed-off-by: Tony Lindgren <tony@atomide.com>
----
- drivers/tty/serial/serial_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Regards,
 
-diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
---- a/drivers/tty/serial/serial_core.c
-+++ b/drivers/tty/serial/serial_core.c
-@@ -156,7 +156,7 @@ static void __uart_start(struct uart_state *state)
- 	 * enabled, serial_port_runtime_resume() calls start_tx() again
- 	 * after enabling the device.
- 	 */
--	if (pm_runtime_active(&port_dev->dev))
-+	if (!pm_runtime_enabled(port->dev) || pm_runtime_active(&port_dev->dev))
- 		port->ops->start_tx(port);
- 	pm_runtime_mark_last_busy(&port_dev->dev);
- 	pm_runtime_put_autosuspend(&port_dev->dev);
--- 
-2.44.0
+Tony
+
+[0] https://lore.kernel.org/linux-serial/20240325071649.27040-1-tony@atomide.com/T/#u
 
