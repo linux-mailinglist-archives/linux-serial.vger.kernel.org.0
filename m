@@ -1,45 +1,45 @@
-Return-Path: <linux-serial+bounces-2954-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-2955-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA1DC88E2B3
-	for <lists+linux-serial@lfdr.de>; Wed, 27 Mar 2024 14:32:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B063788E424
+	for <lists+linux-serial@lfdr.de>; Wed, 27 Mar 2024 14:54:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3271C1F2CAB8
-	for <lists+linux-serial@lfdr.de>; Wed, 27 Mar 2024 13:32:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D402D1C2B833
+	for <lists+linux-serial@lfdr.de>; Wed, 27 Mar 2024 13:53:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD2A13CC77;
-	Wed, 27 Mar 2024 12:22:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDAB718BC58;
+	Wed, 27 Mar 2024 12:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VTSvbQ0k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vNJchuxA"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22C2B12FF69;
-	Wed, 27 Mar 2024 12:22:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2CCB1411D0;
+	Wed, 27 Mar 2024 12:26:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1711542165; cv=none; b=FOzkLVOMQlfnRBz82LOT4Xg0OdZ8ba5+O0558rCWB9ABsRCTWDaJq0jAuIWGYveMHD5a5YHLFKEjFoR7uoeTekNiJHZF/wRyS0tLIhabb9h3UkR2SGdVhxq/SvYo6pmyRvlisiFD49X0+3o9A/dp59DbJCQArEbmDY0in8mi3AM=
+	t=1711542399; cv=none; b=RUoUKxu3k69MXfEEEfp6LsAzQcVu4wvm3enkeOBl/YzSaGmFM2L9H+1prLQ0QCx6dbWKw/Y/OVr6o56C37lMqrqq0+hms9N/q4deevBZUT5pGuN31MlZ1U6EZcZVjrrlA7oCQ2vLbUbBp4iNULUwluDtfgwLOmyX7B8ZgZpG1Vk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1711542165; c=relaxed/simple;
-	bh=mu1QpX12s8RhnKVIQrgvsQdB1NHlixa0oNaX2v8nA20=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=M4951OvcqwfuveOSTkhL1Up8MmUlIgvH460YTv86UiozqXCbDXB2RTNx/WHNaPLqMBP8rWgnx2nZql3dYsrhAIBFJ23MyRpMrtHUV/kqEGBD5NjP7XhEuXI7LpH04+F2X63odNenrLfkVsxCIAEzOUDHBrXujwQ2/5/8UMh514M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VTSvbQ0k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12809C433F1;
-	Wed, 27 Mar 2024 12:22:43 +0000 (UTC)
+	s=arc-20240116; t=1711542399; c=relaxed/simple;
+	bh=Bqu2hl0JtlSjthW01bczpNl7+e3+8YdJrSpVEmEBO3s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OdYgfUcCMtaJflR19DgCfSNLekqvnccVz5agiTL30mq7dIPvh0oGQZqdLmDXaV6SAPnQftjPfU8s8mvvSjr+03QhubEwhWPuMAPyqUBkeob+DvBPTUeJPbad6LyW6SPGGhdK5VeDjT3DDZUvAp4+hjlzg/go4u1qS+RXM+cDzm4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vNJchuxA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED98CC43390;
+	Wed, 27 Mar 2024 12:26:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1711542164;
-	bh=mu1QpX12s8RhnKVIQrgvsQdB1NHlixa0oNaX2v8nA20=;
+	s=k20201202; t=1711542399;
+	bh=Bqu2hl0JtlSjthW01bczpNl7+e3+8YdJrSpVEmEBO3s=;
 	h=From:To:Cc:Subject:Date:From;
-	b=VTSvbQ0kXWPiCslOXElbqkuxzuiFaa9k98wi2wL5MXuCyRexONxLDyngfWYJdfZfW
-	 +50mei+Ye9mKw3B0o551uuXNRnuwgxtUmiHwXlNb68RkwNIyfGFw2MBp2dkKA53PHm
-	 y4sKPZxo7pIGHAHu4izCW7o5RKJgzGbVOEjyBoqDXN2T+zSA36GskPWiWrZcFv52Ae
-	 WRiJlsgKZqdfos4zMEPT0XtJWGKCER1YmpscFjFCkGXDwA0ER7LAMzXY4LOAQH7imV
-	 FXEozY3s61PGrHHUrQeG8703OqJFQnSZOZoeIucF0yGd3koVc+7iMBX1DVdv4UfMgt
-	 KfWyJLkw0q3ag==
+	b=vNJchuxAw9LEhB2phjuhAi13YEGsSyRWsl10yeWaqze0JumTfUro+QV39LJOCr3fI
+	 CebpZI0Dudo9NCZ+zr0Gol2TlBVHdsawwu++/XCCQfO4Yg0NSxRkHc4JmdxzqdEot3
+	 8/qNi8koZFlW3cBThZ5CBgkr2vnGFTPpe8q3GnuZfAi2H8sdxChuWWMDN5FLl1WgyD
+	 PEmxPARQSQQlso00Yj0YW9EQ4+SeebWtVQSxav6bu90cYt3W570RyIZVaQ90aohMTE
+	 abE9F74XKyr2wM9/3MGp08yftNNkkxsEukwvb7jMX50eIOOM3jd6VJk1TBjlEabtbp
+	 yROvlvZsN1wQQ==
 From: Sasha Levin <sashal@kernel.org>
 To: stable@vger.kernel.org,
 	pcc@google.com
@@ -47,9 +47,9 @@ Cc: John Ogness <john.ogness@linutronix.de>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: FAILED: Patch "serial: Lock console when calling into driver before registration" failed to apply to 5.4-stable tree
-Date: Wed, 27 Mar 2024 08:22:39 -0400
-Message-ID: <20240327122243.2837897-1-sashal@kernel.org>
+Subject: FAILED: Patch "serial: Lock console when calling into driver before registration" failed to apply to 4.19-stable tree
+Date: Wed, 27 Mar 2024 08:26:35 -0400
+Message-ID: <20240327122638.2841224-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -61,7 +61,7 @@ X-Patchwork-Hint: ignore
 X-stable: review
 Content-Transfer-Encoding: 8bit
 
-The patch below does not apply to the 5.4-stable tree.
+The patch below does not apply to the 4.19-stable tree.
 If someone wants it applied there, or to any other stable or longterm
 tree, then please email the backport, including the original git commit
 id to <stable@vger.kernel.org>.
