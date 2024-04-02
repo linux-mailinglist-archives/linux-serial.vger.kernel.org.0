@@ -1,149 +1,116 @@
-Return-Path: <linux-serial+bounces-2998-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3000-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6161E89575E
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 16:49:09 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5341F89585E
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 17:42:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9233A1C221C1
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 14:49:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8AC0B24267
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 15:42:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0DEB131183;
-	Tue,  2 Apr 2024 14:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 090EA1332B6;
+	Tue,  2 Apr 2024 15:42:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b="I8eFhD78"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oKJUSJCx"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-177131.yeah.net (mail-177131.yeah.net [123.58.177.131])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757E712C544;
-	Tue,  2 Apr 2024 14:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=123.58.177.131
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 484D0131753;
+	Tue,  2 Apr 2024 15:42:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712069103; cv=none; b=Qo8olfDyVa+tmGWj/zst9hOYCbq6t5Bxuoj8EdrHM6+xDk6C2LEIcgAVszyQfU9rrQ2/S3oWtBU1uDpc700EMoZaASMlPqfSVbOkO2leeXDTj27ltqqynRC8DZPVJZVuzENn21RlMXkr/UyybCOOoqfzmiwBjcX8/5KOUFiPfTg=
+	t=1712072546; cv=none; b=mABQjxGYxXbxQgxd334CqlvTEN7DLKPhYk2oQR5b9+y33RS3qlQPI1PmsVyA3IcTRlvy9fKl6fg8Lprt0WoA0ttoxrDjDw9n7rDDAZeTzmf+1qw5qCBTQcFTb87HxzY7K//oM93js2PXC4HUFpPvqR73IFUPXSgjaUMzBrfbrLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712069103; c=relaxed/simple;
-	bh=UoAIQh6T2R5yd03vS3etflEo5KsJFR7Ir5HehSGj0qU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I0kOnoH9UXN6za2tjzjus/yr9ubGTrx+ZMTF6DCJrFNTmf90WEYKdNyl9FVD4R2KPHSzjVWn/ldGLWVULwiqltYEXPl1K79WFwBKKCXXFG7iHE7K1GCJKW0voZkRKOBxMz9sK9kVf9+rYzsL9n3YJXoIERnF9MVoUccWPHmXn3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net; spf=pass smtp.mailfrom=yeah.net; dkim=pass (1024-bit key) header.d=yeah.net header.i=@yeah.net header.b=I8eFhD78; arc=none smtp.client-ip=123.58.177.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yeah.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yeah.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yeah.net;
-	s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-	Content-Type; bh=sNp+AZXGX0bUEOLXo2ZGNsWH+ua3wPGWHS+AYi2Sy94=;
-	b=I8eFhD78wX/KsGbMXjYCDiOI/4+iFV21AYAWatCGUUr9GlU1h2acMWQGuPSVc+
-	dx/49bGRy+cZNIPU8xEzxUJyuHI1B54xWKQtEVBWlgFH9jKZKfWhBJcVDnNc6yHq
-	oHplaASZd4k0BeDzmHPOoPw7UtMFu9iVBlqw2a1m1zi4I=
-Received: from dragon (unknown [223.68.79.243])
-	by smtp1 (Coremail) with SMTP id ClUQrADnr0IuGQxm_E+mAQ--.45967S3;
-	Tue, 02 Apr 2024 22:41:51 +0800 (CST)
-Date: Tue, 2 Apr 2024 22:41:50 +0800
-From: Shawn Guo <shawnguo2@yeah.net>
-To: Wadim Mueller <wafgo01@gmail.com>
-Cc: Rob Herring <robh+dt@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	NXP Linux Team <linux-imx@nxp.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Chester Lin <chester62515@gmail.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Matthias Brugger <mbrugger@suse.com>,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Tim Harvey <tharvey@gateworks.com>,
-	Marco Felsch <m.felsch@pengutronix.de>, Marek Vasut <marex@denx.de>,
-	Gregor Herburger <gregor.herburger@ew.tq-group.com>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Joao Paulo Goncalves <joao.goncalves@toradex.com>,
-	Markus Niebel <Markus.Niebel@ew.tq-group.com>,
-	Matthias Schiffer <matthias.schiffer@tq-group.com>,
-	Stefan Wahren <stefan.wahren@chargebyte.com>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Philippe Schenker <philippe.schenker@toradex.com>,
-	Josua Mayer <josua@solid-run.com>, Li Yang <leoyang.li@nxp.com>,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	s=arc-20240116; t=1712072546; c=relaxed/simple;
+	bh=2/PWeuWesUzausxl//V13vqLBKaXiwUc4zo7E78hC44=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u1IHl1cAV4TBK1QGppLC21ymAQ1Y809UBJB6btFs+OsRupNngQcljBBFDQv/gEIEAUh0wJkbcr0bKwr6RLLyNk6dQOJDfG023kFDWSIeRAEYzDL+qk67atHk+kjAkEBbb5NSjsRUmNqg5uhBkxeIIYIwBCWbWSI3wdaBiFC5xYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oKJUSJCx; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712072545; x=1743608545;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=2/PWeuWesUzausxl//V13vqLBKaXiwUc4zo7E78hC44=;
+  b=oKJUSJCxFyjN5UaqWIOvCVxj15hnQgwIqlh14SoHmW6cXONLlSUh3ieD
+   s7y4kYvJqtI/ZXqYBGZ9p1DX7td2/uLTZWbV5cXn1LufLd5t2NlPl+aNT
+   9uhdkNr7O0lq4kSG7WsYGXmbJnZosWDEwJ2KumUjQFKql+jNWg5c4mBpQ
+   6Q48AN5gVWUuWRVf7a2WOufpNdRTvk/QSKIqgnTkRTesfCMttdSo1LzFj
+   FZgfRVPGsgR+Yg8CnPlP4HtmtODi/fXeCsT28lD7uWQhYtmvhNWgUTUct
+   dhSnRA2vai/Z476KqEYrUvpyzQZMg7+SIRH0gKo9iSQkLmrsQPIBSGLFh
+   w==;
+X-CSE-ConnectionGUID: dNz+PfqrQyuwugDVdefSOQ==
+X-CSE-MsgGUID: hraLqaSNTY6fd8BSPtO3Ng==
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="17870051"
+X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
+   d="scan'208";a="17870051"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 08:42:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937083637"
+X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
+   d="scan'208";a="937083637"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 02 Apr 2024 08:42:21 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 1B4841C5; Tue,  2 Apr 2024 18:42:20 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] arm64: dts: S32G3: Introduce device tree for
- S32G-VNP-RDB3
-Message-ID: <ZgwZLkpBf11rHNrG@dragon>
-References: <20240324214329.29988-1-wafgo01@gmail.com>
- <20240324214329.29988-5-wafgo01@gmail.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v1 00/16] serial: max3100: Put into shape
+Date: Tue,  2 Apr 2024 18:38:06 +0300
+Message-ID: <20240402154219.3583679-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240324214329.29988-5-wafgo01@gmail.com>
-X-CM-TRANSID:ClUQrADnr0IuGQxm_E+mAQ--.45967S3
-X-Coremail-Antispam: 1Uf129KBjvJXoW7Cw1xGry8Zw1DCFWfuryUWrg_yoW5Jr1fpa
-	yrCrZ3GrZ7Gr17Zayaga1kWFyqvws5JFWYkry5ury8tr45Zr9Yqr10krsIgr47Xrn5Aayr
-	CF1F9ryxu3WYy3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07j34SrUUUUU=
-X-CM-SenderInfo: pvkd40hjxrjqh1hdxhhqhw/1tbiFRC0ZV6NnBoE+QAAs8
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 24, 2024 at 10:43:26PM +0100, Wadim Mueller wrote:
-> This commit adds device tree support for the NXP S32G3-based
-> S32G-VNP-RDB3 Board [1].
-> 
-> The S32G3 features an 8-core ARM Cortex-A53 based SoC developed by NXP.
-> 
-> The device tree files are derived from the official NXP downstream
-> Linux tree [2].
-> 
-> This addition encompasses a limited selection of peripherals that
-> are upstream-supported. Apart from the ARM System Modules
-> (GIC, Generic Timer, etc.), the following IPs have been validated:
-> 
->     * UART: fsl-linflexuart
->     * SDHC: fsl-imx-esdhc
-> 
-> Clock settings for the chip rely on ATF Firmware [3].
-> Pin control integration into the device tree is pending and currently
-> relies on Firmware/U-Boot settings [4].
-> 
-> These changes were validated using BSP39 Firmware/U-Boot from NXP [5].
-> 
-> The modifications enable booting the official Ubuntu 22.04 from NXP on
-> the RDB3 with default settings from the SD card and eMMC.
-> 
-> [1] https://www.nxp.com/design/design-center/designs/s32g3-vehicle-networking-reference-design:S32G-VNP-RDB3
-> [2] https://github.com/nxp-auto-linux/linux
-> [3] https://github.com/nxp-auto-linux/arm-trusted-firmware
-> [4] https://github.com/nxp-auto-linux/u-boot
-> [5] https://github.com/nxp-auto-linux/auto_yocto_bsp
-> 
-> Signed-off-by: Wadim Mueller <wafgo01@gmail.com>
-> ---
->  arch/arm64/boot/dts/freescale/Makefile        |   1 +
->  arch/arm64/boot/dts/freescale/s32g3.dtsi      | 233 ++++++++++++++++++
->  .../boot/dts/freescale/s32g399a-rdb3.dts      |  45 ++++
->  3 files changed, 279 insertions(+)
->  create mode 100644 arch/arm64/boot/dts/freescale/s32g3.dtsi
->  create mode 100644 arch/arm64/boot/dts/freescale/s32g399a-rdb3.dts
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
-> index 2cb0212b63c6..e701008dbc7b 100644
-> --- a/arch/arm64/boot/dts/freescale/Makefile
-> +++ b/arch/arm64/boot/dts/freescale/Makefile
-> @@ -252,3 +252,4 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mp-venice-gw74xx-rpidsi.dtb
->  dtb-$(CONFIG_ARCH_S32) += s32g274a-evb.dtb
->  dtb-$(CONFIG_ARCH_S32) += s32g274a-rdb2.dtb
->  dtb-$(CONFIG_ARCH_S32) += s32v234-evb.dtb
-> +dtb-$(CONFIG_ARCH_S32) += s32g399a-rdb3.dtb
+Put the driver into the shape with all new bells and whistles
+from the kernel.
 
-The list is alphabetically sorted, so it should be added before
-s32v234-evb.dtb.  I fixed it up and applied the patch.
+The first three patches marked as fixes, but there is no hurry (as it
+was for ages like this in the kernel) to pipe them to stable. That's
+why I sent all in one series and it's good for tty-next.
 
-Shawn
+Tested on Intel Merrifield with MAX3111e connected.
+
+Andy Shevchenko (16):
+  serial: max3100: Lock port->lock when calling uart_handle_cts_change()
+  serial: max3100: Update uart_driver_registered on driver removal
+  serial: max3100: Fix bitwise types
+  serial: max3100: Make struct plat_max3100 local
+  serial: max3100: Remove custom HW shutdown support
+  serial: max3100: Replace custom polling timeout with standard one
+  serial: max3100: Enable TIOCM_LOOP
+  serial: max3100: Get crystal frequency via device property
+  serial: max3100: Remove duplicating irq field
+  serial: max3100: Switch to use dev_err_probe()
+  serial: max3100: Replace MODULE_ALIAS() with respective ID tables
+  serial: max3100: Switch to DEFINE_SIMPLE_DEV_PM_OPS()
+  serial: max3100: Extract to_max3100_port() helper macro
+  serial: max3100: Remove unneeded forward declaration
+  serial: max3100: Sort headers
+  serial: max3100: Update Kconfig entry
+
+ drivers/tty/serial/Kconfig     |   7 +-
+ drivers/tty/serial/max3100.c   | 320 +++++++++++++--------------------
+ include/linux/serial_max3100.h |  48 -----
+ 3 files changed, 131 insertions(+), 244 deletions(-)
+ delete mode 100644 include/linux/serial_max3100.h
+
+-- 
+2.43.0.rc1.1.gbec44491f096
 
 
