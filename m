@@ -1,114 +1,143 @@
-Return-Path: <linux-serial+bounces-3015-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3020-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49B9B895880
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 17:45:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF667895ACB
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 19:36:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B37B289A2E
-	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 15:45:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0BFC1C21126
+	for <lists+linux-serial@lfdr.de>; Tue,  2 Apr 2024 17:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 337D713D88E;
-	Tue,  2 Apr 2024 15:42:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A9A715A4A9;
+	Tue,  2 Apr 2024 17:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nBP7VhyT"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="siVaUY0v"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D86613A890;
-	Tue,  2 Apr 2024 15:42:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F4CC15A48F;
+	Tue,  2 Apr 2024 17:36:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712072557; cv=none; b=Jj7TRjb0xJEeHmwqC1B2+G8Ow+u8rA7LMzGRpqD2DCiSRCNmHw8DTcQsIpsnmSnQDtnHVVSI6vr2T/ZRb8oxHhR87kftO0R0th93qWj+2Bti/FSvIPdpSd0pYCGKr7EjLER22AAViQnLYGc+XxxdjCysuDnEdZe3vXZljmyYLC0=
+	t=1712079405; cv=none; b=h8JEEa5vYBFfFH5ioR1XBsHHVOMgS1t0ldE7z3Lymnzs9LmDIorYRIhns366NhKdu/t3kIF/WNf0dQHdztdARAQwE9y71AcH7/Q5BT5zTA9k9rlB5Bc41kgl9vR05Yc0g7/zLSZCrEh4BqC7wcR0chtwHIVRZXvfGsm4U5xrmBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712072557; c=relaxed/simple;
-	bh=Pzd4zF55D0Q5tN3ZT/f+vvK1+li7w9jn5Gn98hnh/Tk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ICHBmyuohMRZlodt1DOr5/7a7jmUTTbNAMiYImMDDRxGs6Jq46hFIx1Le2FmEjo2m5MQFUQyxXKvRcsTGlulFeeQyt8G9yeGPwhxPvd6rLCc4gff+pHe3hbs1fnp2bT/pm0W4gouq7XonrAfHcJeQ8yDqBhnLBRJ+E7Ib36YIMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nBP7VhyT; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712072555; x=1743608555;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=Pzd4zF55D0Q5tN3ZT/f+vvK1+li7w9jn5Gn98hnh/Tk=;
-  b=nBP7VhyTTRyoCcONpmr8jmQ6qOIWoW42Q4Lzz2huPYZKgAk/PiPgGsTs
-   kzAX5wB7bQrR3mz74qEB0BcbCmDiGA8G7M5l8C6SZKv4LUHvd+b8ycNUO
-   oI5VQWQj0W5M+BLcbZZskLqNXEbG+xssUMX9TwVuzuYqaJ7eKQkah1M5+
-   OjudtXhbHPDixLKasnbYJRwTjutPzoCHkZDoGQGNyXJlWQsIuwfNdCj/l
-   1tIIlU3U7IzwSlrldSgvj+hCPXc017x/TY8Ub78iMHS29bHXpGZvmnMjv
-   CPK1v4cpZxurdibIoxBlUVBgC8sa2r5AM0hE3Vu6TM0TBOe66xnZBzJq7
-   A==;
-X-CSE-ConnectionGUID: kSOzQfISRcWO2NZSh8cLCg==
-X-CSE-MsgGUID: CHzj9OOQRYiAGGoK6ahx1w==
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="17870099"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="17870099"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Apr 2024 08:42:27 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11032"; a="937083651"
-X-IronPort-AV: E=Sophos;i="6.07,175,1708416000"; 
-   d="scan'208";a="937083651"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmsmga001.fm.intel.com with ESMTP; 02 Apr 2024 08:42:25 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id E0BC016EF; Tue,  2 Apr 2024 18:42:20 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 16/16] serial: max3100: Update Kconfig entry
-Date: Tue,  2 Apr 2024 18:38:22 +0300
-Message-ID: <20240402154219.3583679-17-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
-In-Reply-To: <20240402154219.3583679-1-andriy.shevchenko@linux.intel.com>
+	s=arc-20240116; t=1712079405; c=relaxed/simple;
+	bh=HYvuqgTovbrmBfAhIVEBa1k32Ke1zvhTT1PBjkR5M+k=;
+	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
+	 Content-Type:Subject; b=gJIfKheAyfOUfrf6qnbjSMdHWf5/hrBybL5qi/wASpKHAhqyvwlKIyVKTaEj4v8R+bHoAu+YjPab7iPXJZjjOogR1zMbhajBxUFtLFrDlXwZGJ2zgLpjTaBEcf5JcaeDhpnw/8M1WQ4zESqIad4Vpv50I/eze4AJ1ilZSM3KFlU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=siVaUY0v; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=o6apNIGIsVP1Vlbht6EkklAQEKnHCx0bPOXMWn2QzA0=; b=siVaUY0vjW2RjUtmC9LCDwl3uo
+	u8jK2cOVhzDKNQV3BZYgGbQyGxHJ4KqOy8JAslC+PS5+npch4v9Cauce0QuDJJ3GPges/DJwxCjy8
+	wQRFpFO1iQpJ8CNw3xC3s1NV2QkFcTqJt0zSbVA7jHM8VEOyNSNIU33g8K92dRAuFUOw=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:59304 helo=pettiford)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1rrhbP-0007OL-Lo; Tue, 02 Apr 2024 13:07:18 -0400
+Date: Tue, 2 Apr 2024 13:07:15 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, Jiri Slaby
+ <jirislaby@kernel.org>
+Message-Id: <20240402130715.7f1292b774ee0b2f056a6e95@hugovil.com>
+In-Reply-To: <20240402154219.3583679-2-andriy.shevchenko@linux.intel.com>
 References: <20240402154219.3583679-1-andriy.shevchenko@linux.intel.com>
+	<20240402154219.3583679-2-andriy.shevchenko@linux.intel.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -0.4 NICE_REPLY_A Looks like a legit reply (A)
+Subject: Re: [PATCH v1 01/16] serial: max3100: Lock port->lock when calling
+ uart_handle_cts_change()
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-The driver actually supports more than one chip.
-Update Kconfig entry to list the supported chips.
+On Tue,  2 Apr 2024 18:38:07 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/Kconfig | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Hi Andy,
 
-diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
-index e636a51eb7b6..dcb67c40bf92 100644
---- a/drivers/tty/serial/Kconfig
-+++ b/drivers/tty/serial/Kconfig
-@@ -307,11 +307,14 @@ config SERIAL_TEGRA_TCU_CONSOLE
- 	  If unsure, say Y.
- 
- config SERIAL_MAX3100
--	tristate "MAX3100 support"
-+	tristate "MAX3100/3110/3111/3222 support"
- 	depends on SPI
- 	select SERIAL_CORE
- 	help
--	  MAX3100 chip support
-+	  This selects support for an advanced UART from Maxim.
-+	  Supported ICs are MAX3100, MAX3110, MAX3111, MAX3222.
-+
-+	  Say Y here if you want to support these ICs.
- 
- config SERIAL_MAX310X
- 	tristate "MAX310X support"
+> uart_handle_cts_change() has to be called with port lock taken,
+> Since we run it in a separate work, the lcok maybe not taken at
+
+lcok -> lock
+
+and possibly: "may not be taken" ?
+
+
+> the time of running. Make sure that it's taken by explicitly doing
+> that. Without it we got a splat:
+> 
+>   WARNING: CPU: 0 PID: 10 at drivers/tty/serial/serial_core.c:3491 uart_handle_cts_change+0xa6/0xb0
+>   ...
+>   Workqueue: max3100-0 max3100_work [max3100]
+>   RIP: 0010:uart_handle_cts_change+0xa6/0xb0
+>   ...
+>    max3100_handlerx+0xc5/0x110 [max3100]
+>    max3100_work+0x12a/0x340 [max3100]
+> 
+> Fixes: 7831d56b0a35 ("tty: MAX3100")
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> ---
+>  drivers/tty/serial/max3100.c | 13 ++++++++++++-
+>  1 file changed, 12 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/max3100.c b/drivers/tty/serial/max3100.c
+> index 5efb2b593be3..45022f2909f0 100644
+> --- a/drivers/tty/serial/max3100.c
+> +++ b/drivers/tty/serial/max3100.c
+> @@ -213,7 +213,7 @@ static int max3100_sr(struct max3100_port *s, u16 tx, u16 *rx)
+>  	return 0;
+>  }
+>  
+> -static int max3100_handlerx(struct max3100_port *s, u16 rx)
+> +static int max3100_handlerx_unlocked(struct max3100_port *s, u16 rx)
+>  {
+>  	unsigned int status = 0;
+>  	int ret = 0, cts;
+> @@ -254,6 +254,17 @@ static int max3100_handlerx(struct max3100_port *s, u16 rx)
+>  	return ret;
+>  }
+>  
+> +static int max3100_handlerx(struct max3100_port *s, u16 rx)
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +
+> +	uart_port_lock_irqsave(&s->port, &flags);
+> +	ret = max3100_handlerx_unlocked(s, rx);
+> +	uart_port_unlock_irqrestore(&s->port, flags);
+> +	return ret;
+> +}
+> +
+>  static void max3100_work(struct work_struct *w)
+>  {
+>  	struct max3100_port *s = container_of(w, struct max3100_port, work);
+> -- 
+> 2.43.0.rc1.1.gbec44491f096
+> 
+> 
+
+
 -- 
-2.43.0.rc1.1.gbec44491f096
-
+Hugo Villeneuve
 
