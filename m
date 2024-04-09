@@ -1,117 +1,111 @@
-Return-Path: <linux-serial+bounces-3310-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3316-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AAA689DB6E
-	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 15:58:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A97C89DD3D
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 16:48:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CC169285982
-	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 13:58:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5BA161C23A49
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 14:48:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8314A12F59D;
-	Tue,  9 Apr 2024 13:58:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD1F131BA0;
+	Tue,  9 Apr 2024 14:47:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="yT9+lSe/"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="T9Vd3lXR"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD2412F38A
-	for <linux-serial@vger.kernel.org>; Tue,  9 Apr 2024 13:58:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D02F130E40;
+	Tue,  9 Apr 2024 14:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712671091; cv=none; b=OUT/hXLKBkunEH6kVoQXVc1HSXy3WBRfkNmFmDcg5xcWlSZbN7coqOTTIpIh7eeI2mBHv720rkps3eslWZ915DwiZOFwPVkWtomoYuyggMlFNqTM3udbJEYWG5VhDe/tvXSVOR0KvJx2er7ACm1gSnCG/+gplnbUoovPmLAiwVc=
+	t=1712674056; cv=none; b=O2bKrn5PEViDpk9kg0jHP+LQBwbqBhnRcCaN8o/E0eRyKIaqrSHaykbeiO7fEAda20pvZHqcGukIjHknyT88JdlXreIwyisa/nGdkNlFn810Xp389TjKT8vvkE5Wq3NMgGZTDz0EstLwHGPBCoZVQhNxIcatOxBrBlq3HDk4GzQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712671091; c=relaxed/simple;
-	bh=DKYSigMpkoU8bet8GKBg0SRhNvZ5v4fCCMF1OiXo7TY=;
-	h=Subject:To:From:Date:Message-ID:MIME-Version:Content-Type; b=k16yAoN6bC7p8doWpSSNixeaQsQfk0jsxXcbaYEW3xTxgKE8xWx5JPB8XOKdJCC9q9tdse7pqyzyTrpm3TtZJpn2S2iw/Okk83SLrtPHhRtG/BKEK/cN3wrSfNCDAHmSVSZAphyPQaE2Yqe44AECWDDOWBJxrwlpy98Inv46nDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=yT9+lSe/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82703C433C7;
-	Tue,  9 Apr 2024 13:58:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712671090;
-	bh=DKYSigMpkoU8bet8GKBg0SRhNvZ5v4fCCMF1OiXo7TY=;
-	h=Subject:To:From:Date:From;
-	b=yT9+lSe/VLoKf2dlk9mw7UEaOe+kmRqjTNB53iFqELvPajeXkUh/bEFzViKw+LBKn
-	 u9Qv4rSmbJvjtscLavYRxVxDYIQUBHQeO0iAZSvajkGGOuwzsi517VGfMdSCwdA9TE
-	 OtZAHKkH1TDHef5eXEYXpgUipF6c/zSPpdG83b3Y=
-Subject: patch "serial: 8250_pci: Remove redundant PCI IDs" added to tty-linus
-To: andy.shevchenko@gmail.com,gregkh@linuxfoundation.org,jimand04@hotmail.com,linux-serial@vger.kernel.org
-From: <gregkh@linuxfoundation.org>
-Date: Tue, 09 Apr 2024 15:58:01 +0200
-Message-ID: <2024040900-postnasal-basics-79dd@gregkh>
+	s=arc-20240116; t=1712674056; c=relaxed/simple;
+	bh=tu2SnYTw7xf2lMZm5p0+FQbEOrP8kSvSQ5bQJwoOWbw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UT4C/C9bF91iFNDoJg5BykZ6AiY3SHiCJ2cM/auS4KAH/+kXpk9IKrbWfcWCTdy29fAa6Y17piO2Lj3LO5cpoeEV8VBA1OZJUB207xCryiXwmWxh2uDrAx1eEnmB2jvuXNQ4W4fikLTrDXLix86UgM+HUk3+VwlSRi0yQAzc+J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=T9Vd3lXR; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1712674055; x=1744210055;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=tu2SnYTw7xf2lMZm5p0+FQbEOrP8kSvSQ5bQJwoOWbw=;
+  b=T9Vd3lXRKUHq5sMc+a7IYEsJ3+gcWP3DbUcUJlJ2ENpnIq11HgWDEFj5
+   3OXiKbPeR8LLcQX7QY+327XO+aZpdXDNjE8JOswk9HH3IIK75cfb4YRW4
+   lg7FAiXaqbF/TBpChMlDLX1gMBSeut0IaDWHT7OrFLAzex9X2tJSqb2nf
+   ztCe/P6RZfXFEv+Js/Ea6fKHv4dhvkqQvCkfTf/9iFwnISvnRSXku3LWr
+   jKcBQ+lMfc2AMUbjJ7i8QNrHBY/faJ+yeEMgFkeZHaTB/aQehhAV4oPQQ
+   gJz/ViuiTJ4wJI7u5SFKpza/0TzNLPDkvkoFwRylocbOW+Grtk00oQaY6
+   g==;
+X-CSE-ConnectionGUID: RXonn10VRO+QZ79UTrtNCg==
+X-CSE-MsgGUID: zDgj+hAET0yUhwJvQJ2zRA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="7905531"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="7905531"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Apr 2024 07:47:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,11039"; a="937093486"
+X-IronPort-AV: E=Sophos;i="6.07,189,1708416000"; 
+   d="scan'208";a="937093486"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmsmga001.fm.intel.com with ESMTP; 09 Apr 2024 07:47:28 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 1AFF7279; Tue,  9 Apr 2024 17:47:26 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v3 0/8] serial: max3100: Put into shape
+Date: Tue,  9 Apr 2024 17:45:47 +0300
+Message-ID: <20240409144721.638326-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1.gbec44491f096
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ANSI_X3.4-1968
 Content-Transfer-Encoding: 8bit
 
+Put the driver into the shape with all new bells and whistles
+from the kernel.
 
-This is a note to let you know that I've just added the patch titled
+Tested on Intel Merrifield with MAX3111e connected.
 
-    serial: 8250_pci: Remove redundant PCI IDs
+In v3:
+- dropped applied patches
+- rebased on top of tty-testing
+- v2 (20240402195306.269276-1-andriy.shevchenko@linux.intel.com)
 
-to my tty git tree which can be found at
-    git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git
-in the tty-linus branch.
+In v2:
+- fixed a few typos in the commit messages (Hugo)
+- added an additional fix to patch 2 (Hugo)
+- appended tag to patch 13 (Hugo)
+- v1 (20240402154219.3583679-1-andriy.shevchenko@linux.intel.com)
 
-The patch will show up in the next release of the linux-next tree
-(usually sometime within the next 24 hours during the week.)
+Andy Shevchenko (8):
+  serial: max3100: Enable TIOCM_LOOP
+  serial: max3100: Get crystal frequency via device property
+  serial: max3100: Remove duplicating irq field
+  serial: max3100: Switch to use dev_err_probe()
+  serial: max3100: Replace MODULE_ALIAS() with respective ID tables
+  serial: max3100: Switch to DEFINE_SIMPLE_DEV_PM_OPS()
+  serial: max3100: Extract to_max3100_port() helper macro
+  serial: max3100: Sort headers
 
-The patch will hopefully also be merged in Linus's tree for the
-next -rc kernel release.
+ drivers/tty/serial/max3100.c | 208 +++++++++++++++--------------------
+ 1 file changed, 86 insertions(+), 122 deletions(-)
 
-If you have any questions about this process, please let me know.
-
-
-From 90452456eb69297fe7ae34e56e40d8e47dc9e019 Mon Sep 17 00:00:00 2001
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 4 Apr 2024 01:41:52 +0300
-Subject: serial: 8250_pci: Remove redundant PCI IDs
-
-Driver complains that PCI IDs are not needed for some of the LAVA cards:
-
-[    0.297252] serial 0000:04:00.0: Redundant entry in serial pci_table.
-[    0.297252] Please send the output of lspci -vv, this
-[    0.297252] message (0x1407,0x0120,0x0000,0x0000), the
-[    0.297252] manufacturer and name of serial board or
-[    0.297252] modem board to <linux-serial@vger.kernel.org>.
-
-Do as suggested.
-
-Reported-by: Jimmy A <jimand04@hotmail.com>
-Closes: https://lore.kernel.org/r/VI1P194MB052751BE157EFE9CEAB75725CE362@VI1P194MB0527.EURP194.PROD.OUTLOOK.COM
-Signed-off-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-Link: https://lore.kernel.org/r/20240403224152.945099-1-andy.shevchenko@gmail.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
- drivers/tty/serial/8250/8250_pci.c | 6 ------
- 1 file changed, 6 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
-index 0d35c77fad9e..e2e4f99f9d34 100644
---- a/drivers/tty/serial/8250/8250_pci.c
-+++ b/drivers/tty/serial/8250/8250_pci.c
-@@ -5010,12 +5010,6 @@ static const struct pci_device_id serial_pci_tbl[] = {
- 	{	PCI_VENDOR_ID_LAVA, PCI_DEVICE_ID_LAVA_QUATRO_B,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
- 		pbn_b0_bt_2_115200 },
--	{	PCI_VENDOR_ID_LAVA, PCI_DEVICE_ID_LAVA_QUATTRO_A,
--		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_bt_2_115200 },
--	{	PCI_VENDOR_ID_LAVA, PCI_DEVICE_ID_LAVA_QUATTRO_B,
--		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
--		pbn_b0_bt_2_115200 },
- 	{	PCI_VENDOR_ID_LAVA, PCI_DEVICE_ID_LAVA_OCTO_A,
- 		PCI_ANY_ID, PCI_ANY_ID, 0, 0,
- 		pbn_b0_bt_4_460800 },
 -- 
-2.44.0
-
+2.43.0.rc1.1.gbec44491f096
 
 
