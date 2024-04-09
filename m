@@ -1,185 +1,103 @@
-Return-Path: <linux-serial+bounces-3325-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3327-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C2B3589DF90
-	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 17:47:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E2E189DF98
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 17:49:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7D212294F61
-	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 15:47:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12BA91F23541
+	for <lists+linux-serial@lfdr.de>; Tue,  9 Apr 2024 15:49:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 654A113D61E;
-	Tue,  9 Apr 2024 15:46:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9142A136E0C;
+	Tue,  9 Apr 2024 15:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="GC2vcVMQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BjzMzTx8"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f47.google.com (mail-ua1-f47.google.com [209.85.222.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAFCC13D511;
-	Tue,  9 Apr 2024 15:46:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7BD135A6C;
+	Tue,  9 Apr 2024 15:48:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712677589; cv=none; b=HZ8AIETrHs3duprg0Xj4e6RnZYm3EbaB451Zuesls5fLguRguXbEuIqnGV3wK8HqURhZWeGU/pYO/SZk5jNuqxsURhpe7KdzGsBD96q+wTg5I0W7rWTah7Qe58XjJn8+NI+ltyDXw6EeNRE+UQi0qdYALqFP8YtjCZ9p11pSnls=
+	t=1712677707; cv=none; b=qnB9QcQd9luUe2pDAAqcaappS61K2MugXiWueamM+7VQPtWVxrvIhNsoJZMaMjlW4BTFqJlgL6tWBUR556zKfAJIODmfGXVGbiNv2/D5rNR36stsQlxIXgyTmH1ZQXIA6NIKa1Qen7Ek7hh7ZzgjRL3irkQcJGbbSaC1MS2qaVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712677589; c=relaxed/simple;
-	bh=6x/FrKL87ewHXSXoisJ7nhcJbDHKEiI+7bcxmW/B1qM=;
-	h=From:To:Cc:Date:Message-Id:In-Reply-To:References:MIME-Version:
-	 Subject; b=mHCESJg9pN53VTDa+SSURkDwOgqEs2F/zyFbGq5MCYfWarKdNK++YIfEyp4nNI0UweZ6JyAkZIPQME68tlA4WPjqUpAlgLNhltXVI0Tkcveoix25LPf8um7p674I+HcY2mB8v5zk8aKrSHukgarEB8x3slPTg6zFXItAQ7p8p60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=GC2vcVMQ; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
-	:From:subject:date:message-id:reply-to;
-	bh=Ss04GV4f/pOz5I7Yz0x/U2smmfe+lfKuSyhMTC2CfLg=; b=GC2vcVMQEtwI/H1X3Mq1oT/DYO
-	CHS+awi25MbLqUMpbqLYN4xIpZGkrh8ImSkqK4begQ63o25p5xWk7qrPZzNYYvK7gx/qUMozFzqOu
-	IzoTe6wfwjh4my46paPLmBOc5PY7ovHQUnp9KeLFRj+fAabFPIBz/CwtpNN0K3ltBN/w=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:44750 helo=pettiford.lan)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1ruDfw-0002NM-2o; Tue, 09 Apr 2024 11:46:20 -0400
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	peterz@infradead.org,
-	mingo@kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	hugo@hugovil.com,
-	andy.shevchenko@gmail.com,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Andy Shevchenko <andy@kernel.org>
-Date: Tue,  9 Apr 2024 11:42:53 -0400
-Message-Id: <20240409154253.3043822-6-hugo@hugovil.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20240409154253.3043822-1-hugo@hugovil.com>
-References: <20240409154253.3043822-1-hugo@hugovil.com>
+	s=arc-20240116; t=1712677707; c=relaxed/simple;
+	bh=eAvKh6eqc1wAK0+874dWwmF7seYGKqPybSL7QY7bLNg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FbJw+2J5WgJc+iQRJaQ/oaWqQUbshILaL+xwOnTkkSXhYMlpN9ZDimnaEjd46X+f02/dFElSZStYgjnKikaLaE+UoiTHgOsGrIqmtKk8Opf0OUcg453scWS5C+yz+/hhlANObdglqLnVRrP4ra971u6imRcX1rcyIOFZ50z3560=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BjzMzTx8; arc=none smtp.client-ip=209.85.222.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f47.google.com with SMTP id a1e0cc1a2514c-7e3c4736d6dso1149045241.2;
+        Tue, 09 Apr 2024 08:48:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1712677705; x=1713282505; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=eAvKh6eqc1wAK0+874dWwmF7seYGKqPybSL7QY7bLNg=;
+        b=BjzMzTx87/3YpS288k9v2S7RDYo/4j47YPreIAqjQ5F4wVbf0o3w/bgcDBLiEI6/8U
+         4sKNNZl0WrbzVm/cnFXiaqSwnt+OhmwrOPeiZQE7jBD+XkNkqR63cpAMJZI6hm/f8P5m
+         jO4MAn97DKWlgjns8vyWAPNn4HFS4UMFM65Bcnx7YD2/rsUMWm69ExLW084c+uBhsraG
+         wPuQcDatVTaIZZ4uY2hRWfpwlkICpxwqz/1fgEmLH6hJEcydsai3etwFCtg7q6Oo6Z1G
+         YC2CoxQTIss2qry5k4yIRigiBZU3dlnv1KRLYgBktO0GS9FTKfjpmzKXrjwBSaqZZEQt
+         Uobg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1712677705; x=1713282505;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eAvKh6eqc1wAK0+874dWwmF7seYGKqPybSL7QY7bLNg=;
+        b=Pou9lvB8NWLuNOE8Ym6X5o9KMku3BC9g1U2JCP9tfrGchfI543+2dtOmrnduVnhkrs
+         AF6zNVfPca0bZlQ9t2HWWSvz6f0RuUnnJ8TxnMUC/e2n2HE6X2lX8lQCcw1yCn1ryTZO
+         v5Y0kY77gQuA0t7bKbatzHN+a9+SVqzNWU9Kc2TLfpOWfS9stDYjaw1ZQGUQHT0jFJK/
+         LNgLgPSNYxcS0db7ah6k0Kk0/mplSNVkAuIup6ohkKxnxqh8EHpzXoBxOqLDhqj/a3A9
+         FaemgOItbnpwal4Z0N1rZhA6+vheQMmVz8/fxiAg4u7Rzq1AsWPT/Q4qNca/Jp0Yw7Er
+         Yy4g==
+X-Forwarded-Encrypted: i=1; AJvYcCULguOf1+HQgSAXO0CQN/Rv+lTq0qbmW2omjT07hxExGE6IGLJD97tzQ1C/5kBwOWXpufd8wR8YE/uVcIYcbvgUN6Kdn6Vrbdax8a0kNx2FnLwn0mvsz7j4p+rw3Z8H0+4wcwbZiiA6I2OS
+X-Gm-Message-State: AOJu0YwjEGJDRIab+n3vcwMGrGY+rVmCSW2ktsd3vqJgnIYv3fPSmozS
+	BDeHI3ftbR/zySeZExXtGFOC0Ea01UEbgIa+bkylSsvJiDVh23yRvFi4wVSEYjUV8Ne3M48hrIJ
+	QTPPiF7rET4/af51H3YDyPpAPOiM=
+X-Google-Smtp-Source: AGHT+IFS2mvcddKNspVYdssJARe9I7BdEwwxCNlX1LVamupkex1tiGvtbAsY8MM0xLcMmRQFzdfoDyuUwwm6kV4/T+A=
+X-Received: by 2002:a05:6122:2016:b0:4da:a82e:95f5 with SMTP id
+ l22-20020a056122201600b004daa82e95f5mr284978vkd.5.1712677704783; Tue, 09 Apr
+ 2024 08:48:24 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-Subject: [PATCH v4 5/5] serial: sc16is7xx: split into core and I2C/SPI parts (sc16is7xx_regcfg)
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+References: <20240403161559.19970-1-apais@linux.microsoft.com> <3358869b-db3a-40f3-b02b-4f1b46d5d724@kernel.org>
+In-Reply-To: <3358869b-db3a-40f3-b02b-4f1b46d5d724@kernel.org>
+From: Allen <allen.lkml@gmail.com>
+Date: Tue, 9 Apr 2024 08:48:12 -0700
+Message-ID: <CAOMdWS+fq=hW0MpcCKYrJ5tYHBqVDPRu85cfpH215RwJWQz_HQ@mail.gmail.com>
+Subject: Re: [PATCH] tty: Convert from tasklet to BH workqueue
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Allen Pais <apais@linux.microsoft.com>, linux-kernel@vger.kernel.org, tj@kernel.org, 
+	keescook@chromium.org, gregkh@linuxfoundation.org, richard.genoud@gmail.com, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > The only generic interface to execute asynchronously in the BH context is
+> > tasklet; however, it's marked deprecated and has some design flaws. To
+> > replace tasklets, BH workqueue support was recently added. A BH workqueue
+> > behaves similarly to regular workqueues except that the queued work items
+> > are executed in the BH context.
+> >
+> > This patch converts drivers/tty/* from tasklet to BH workqueue.
+>
+> Quickly looking into the changes, could you also elaborate why not to
+> convert most (all?) of them to (non-BH) wq? Or threaded IRQs. Much of
+> the code comes from the pre-WQ era.
+>
 
-Since each I2C/SPI probe function can modify sc16is7xx_regcfg at the same
-time, change structure to be constant and do the required modifications on
-a local copy.
+ You are right. The idea I had was to convert every instance of tasklet to
+bh workqueues in the kernel. I will send out a v2, which will use
+threaded IRQ's.
 
-Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-Reviewed-by: Andy Shevchenko <andy@kernel.org>
----
- drivers/tty/serial/sc16is7xx.c     |  2 +-
- drivers/tty/serial/sc16is7xx.h     |  2 +-
- drivers/tty/serial/sc16is7xx_i2c.c | 11 +++++++----
- drivers/tty/serial/sc16is7xx_spi.c | 11 +++++++----
- 4 files changed, 16 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index 1eb440f0c9cd0..1e99ddd70b376 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -1705,7 +1705,7 @@ const struct of_device_id __maybe_unused sc16is7xx_dt_ids[] = {
- EXPORT_SYMBOL_GPL(sc16is7xx_dt_ids);
- MODULE_DEVICE_TABLE(of, sc16is7xx_dt_ids);
- 
--struct regmap_config sc16is7xx_regcfg = {
-+const struct regmap_config sc16is7xx_regcfg = {
- 	.reg_bits = 5,
- 	.pad_bits = 3,
- 	.val_bits = 8,
-diff --git a/drivers/tty/serial/sc16is7xx.h b/drivers/tty/serial/sc16is7xx.h
-index 2ee3ce83d95a4..afb784eaee45b 100644
---- a/drivers/tty/serial/sc16is7xx.h
-+++ b/drivers/tty/serial/sc16is7xx.h
-@@ -19,7 +19,7 @@ struct sc16is7xx_devtype {
- 	int	nr_uart;
- };
- 
--extern struct regmap_config sc16is7xx_regcfg;
-+extern const struct regmap_config sc16is7xx_regcfg;
- 
- extern const struct of_device_id sc16is7xx_dt_ids[];
- 
-diff --git a/drivers/tty/serial/sc16is7xx_i2c.c b/drivers/tty/serial/sc16is7xx_i2c.c
-index de51d1675abfd..3ed47c306d855 100644
---- a/drivers/tty/serial/sc16is7xx_i2c.c
-+++ b/drivers/tty/serial/sc16is7xx_i2c.c
-@@ -14,17 +14,20 @@ static int sc16is7xx_i2c_probe(struct i2c_client *i2c)
- {
- 	const struct sc16is7xx_devtype *devtype;
- 	struct regmap *regmaps[SC16IS7XX_MAX_PORTS];
-+	struct regmap_config regcfg;
- 	unsigned int i;
- 
- 	devtype = i2c_get_match_data(i2c);
- 	if (!devtype)
- 		return dev_err_probe(&i2c->dev, -ENODEV, "Failed to match device\n");
- 
-+	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
-+
- 	for (i = 0; i < devtype->nr_uart; i++) {
--		sc16is7xx_regcfg.name = sc16is7xx_regmap_name(i);
--		sc16is7xx_regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i);
--		sc16is7xx_regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
--		regmaps[i] = devm_regmap_init_i2c(i2c, &sc16is7xx_regcfg);
-+		regcfg.name = sc16is7xx_regmap_name(i);
-+		regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regmaps[i] = devm_regmap_init_i2c(i2c, &regcfg);
- 	}
- 
- 	return sc16is7xx_probe(&i2c->dev, devtype, regmaps, i2c->irq);
-diff --git a/drivers/tty/serial/sc16is7xx_spi.c b/drivers/tty/serial/sc16is7xx_spi.c
-index f110c4e6dce63..73df36f8a7fd8 100644
---- a/drivers/tty/serial/sc16is7xx_spi.c
-+++ b/drivers/tty/serial/sc16is7xx_spi.c
-@@ -18,6 +18,7 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- {
- 	const struct sc16is7xx_devtype *devtype;
- 	struct regmap *regmaps[SC16IS7XX_MAX_PORTS];
-+	struct regmap_config regcfg;
- 	unsigned int i;
- 	int ret;
- 
-@@ -37,17 +38,19 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
- 	if (!devtype)
- 		return dev_err_probe(&spi->dev, -ENODEV, "Failed to match device\n");
- 
-+	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
-+
- 	for (i = 0; i < devtype->nr_uart; i++) {
--		sc16is7xx_regcfg.name = sc16is7xx_regmap_name(i);
-+		regcfg.name = sc16is7xx_regmap_name(i);
- 		/*
- 		 * If read_flag_mask is 0, the regmap code sets it to a default
- 		 * of 0x80. Since we specify our own mask, we must add the READ
- 		 * bit ourselves:
- 		 */
--		sc16is7xx_regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i) |
-+		regcfg.read_flag_mask = sc16is7xx_regmap_port_mask(i) |
- 			SC16IS7XX_SPI_READ_BIT;
--		sc16is7xx_regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
--		regmaps[i] = devm_regmap_init_spi(spi, &sc16is7xx_regcfg);
-+		regcfg.write_flag_mask = sc16is7xx_regmap_port_mask(i);
-+		regmaps[i] = devm_regmap_init_spi(spi, &regcfg);
- 	}
- 
- 	return sc16is7xx_probe(&spi->dev, devtype, regmaps, spi->irq);
--- 
-2.39.2
-
+Thanks.
 
