@@ -1,51 +1,51 @@
-Return-Path: <linux-serial+bounces-3398-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3399-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7495C8A1E7E
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 20:37:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 878B08A1E84
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 20:37:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 159851F28D12
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 18:37:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B821F1C249A5
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 18:37:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05AE91386B3;
-	Thu, 11 Apr 2024 18:10:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377E013A257;
+	Thu, 11 Apr 2024 18:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="NncTN4tR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Pkslds6r"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBF84F20A;
-	Thu, 11 Apr 2024 18:10:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DE6A13A248;
+	Thu, 11 Apr 2024 18:11:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712859006; cv=none; b=H8VD1G1GpxQCN6mpXw+DsKPrA6hCgzgWskpMsu1Vl+pNgpnBNw8zfHjdVbwvQ3orfg9KfcSGZFZUUbPZVVK9F2aA0/yoIltAV8yAc3bS9fAKdyDS17FwuXR+w2bqyQe9bI5XUfGKKZ4s+G4XQRUOGiuJiks8Bn/00Nz1gWtkdOA=
+	t=1712859100; cv=none; b=gzU/LJYMSIWjvKi3yBN5bq1FJ5waIcHCZ1KiOFwIKdQgopAL+/9htDgy7RxYQlhBz8qBmDhe2CgIFUNml9mW8NAw8H9agtBP03WuNLYg1X3sc38bq60QDv0mG7cShS0Qfj3ukIHuCxvVb/vcMQa50Th85P/2TvlRlcSDMEYSTxs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712859006; c=relaxed/simple;
-	bh=ZGBgyafpmKoKHUJVnGr1ydBDerMlQpXQky8psG7f2Z8=;
+	s=arc-20240116; t=1712859100; c=relaxed/simple;
+	bh=6PD3j62MZIhS1PTwrJR+fB5FOccOx8hNCngLSnkhUUM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UyeGWJwGlFYRS9AkNcEHPqUw9FM3v1MYPEBtnBXQt0jcoVFAIvYqbkNlqyUJ1jd8G9Ppdau92V4uSiwTXZNTfyG8peVQDsmZYJbFZJjFMbpl916OlQ7xP92YtLd9n9hDNNOkvJibRua5Xqlfkes5WIzeZ5fUqB2hHYznJuY28u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=NncTN4tR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E288EC072AA;
-	Thu, 11 Apr 2024 18:10:05 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=gLMkAAf8EFPt3g0CmBA+kZaAwLh4/FB9PezoucqmDP7NNU6YeDd3Smj/aBRdkapv28CYYnH4V4Ekpr0Ediu6e82jdv2IY3YpHAAmTvfLBGajnvMOAtkcV9u/tgVmN1Hp//LPsHAf5Tlf4rA1+hsxVtrStszgDIn261WBP3HSivE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Pkslds6r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3FF53C072AA;
+	Thu, 11 Apr 2024 18:11:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1712859006;
-	bh=ZGBgyafpmKoKHUJVnGr1ydBDerMlQpXQky8psG7f2Z8=;
+	s=korg; t=1712859099;
+	bh=6PD3j62MZIhS1PTwrJR+fB5FOccOx8hNCngLSnkhUUM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NncTN4tRRsKOdV9NtIGff+qoDc46Z4ObDpdAgzuruKoHADJX5L7lRNQrV8yzYPfjY
-	 0C85GAbh2ZxuNe77XxZ0YHHxV4Q42syNW8mUeV0SnTO5EZ1yiawD6eSxWSTyEIo4ra
-	 saisB5m3XEdmKzSIcY4DFtN4CUGAZeHBtSpH/MbQ=
-Date: Thu, 11 Apr 2024 20:10:03 +0200
+	b=Pkslds6rM2DQ0uj78jhCYHoC3+F9IXK8RCTl8maGsIdCcCfwsycdXHUzmvFi/EEHQ
+	 VDSsNkmQpbGmBxme6A8UVgEEB149FZUp7oxCQYyBMAUuABd135KFCg1/Fm2f/S5hw/
+	 S2lBQrPLx5x3J7Z12Rrwqaq176a87h1io9r95HWo=
+Date: Thu, 11 Apr 2024 20:11:36 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Roman Storozhenko <romeusmeister@gmail.com>
 Cc: jirislaby@kernel.org, Julia.Lawall@inria.fr, skhan@linuxfoundation.org,
 	javier.carrasco.cruz@gmail.com, linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
 Subject: Re: [PATCH] sysrq: Auto release device node using __free attribute
-Message-ID: <2024041146-exciting-predefine-05bb@gregkh>
+Message-ID: <2024041111-tummy-boil-a6aa@gregkh>
 References: <20240411180256.61001-1-romeusmeister@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -93,7 +93,28 @@ On Thu, Apr 11, 2024 at 08:02:56PM +0200, Roman Storozhenko wrote:
 > +	struct device_node *np __free(device_node) =
 > +		of_find_node_by_path("/chosen/linux,sysrq-reset-seq");
 > +
+>  	if (!np) {
+>  		pr_debug("No sysrq node found");
+>  		return;
+> @@ -781,8 +782,6 @@ static void sysrq_of_get_keyreset_config(void)
+>  
+>  	/* Get reset timeout if any. */
+>  	of_property_read_u32(np, "timeout-ms", &sysrq_reset_downtime_ms);
+> -
+> -	of_node_put(np);
+>  }
+>  #else
+>  static void sysrq_of_get_keyreset_config(void)
 
-Did you run this through checkpatch.pl?  Please do so.
+Also, this change really makes no sense at all, the pointer never goes
+out of scope except when the function is over, at the bottom.  So why
+make this complex change at all for no benefit?
 
+In other words, properly understand the change you are making and only
+make it if it actually makes sense.  It does not make any sense here,
+right?
+
+thanks,
+
+greg k-h
 
