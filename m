@@ -1,120 +1,108 @@
-Return-Path: <linux-serial+bounces-3387-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3389-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 775F08A17DB
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 16:53:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A4BD8A1B00
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 19:17:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 188F11F21CE1
-	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 14:53:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C935428759E
+	for <lists+linux-serial@lfdr.de>; Thu, 11 Apr 2024 17:17:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01203DDC5;
-	Thu, 11 Apr 2024 14:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF6C20199A;
+	Thu, 11 Apr 2024 15:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="fgSGCrKR"
+	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="N+JmWxX8"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C051D534
-	for <linux-serial@vger.kernel.org>; Thu, 11 Apr 2024 14:53:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 732DC1FFC5C;
+	Thu, 11 Apr 2024 15:43:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1712847217; cv=none; b=jEPHKmDsxHwXVvSspvArCiMsO/uWXJgEltHARkZZbKQdeZyesBXCz4S/HRh6qQjERu4lpL1tARZnsLZpmDNfbOqNLHOZTow4BRAkYe3Wo1NIdjp+71mFEYoI3Sag3D6AsZecQ1lf44lsG3MmD8zKlMwEUCCp5iNv6SR4dSkVwsc=
+	t=1712850214; cv=none; b=UUPtjEslIPE4H0bQih5T1hJ8h+2RTxnVFlFAUlYeMoX4Hc9D9XLeHtPu4qJdE4COXlgVcohAUExXqWWq+zs7GKNfLqKzfYWo9VdM1fnIOzyOq3x9PdLpl1Rk8J+RmHpKhxhuOtUrr1XGRA8ps3OZKGYuPDBSaL2JlVpOYU132+o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1712847217; c=relaxed/simple;
-	bh=ZpHSd37phWC8OBSuiKJwJvzQ6fOrCaYaa0oNtpIRLfo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XzKCvcENxYUpHfav/C9Q4BwJlRdQXjhBvS1Ku0QTUXH9WUgZ+bz86kAzRrABPnJuSiiMbXBLhJUZLK9dLJ/YL701nQR03b3SOdTxr9FXHLhWP2AAGYvsfnoDy7rZQOwtbKnTwOmANwI3OkG5k4yF9XgOEXZ7Qvg2PBfVcgJZVtk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=fgSGCrKR; arc=none smtp.client-ip=198.175.65.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1712847217; x=1744383217;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZpHSd37phWC8OBSuiKJwJvzQ6fOrCaYaa0oNtpIRLfo=;
-  b=fgSGCrKRbq05YAgQlVRHrbjn/GN4FAsBov0GiwChF91FlMAaB3h2+0RU
-   e9BFZC9E8JDgvvZG0P3inr6ikXOIvT/GATvvGT+mbC3K5e5BFwUgeS/zD
-   77i9FxxrlxvBdrKtZ1QuTTGD1fuW1jyWp7iJ/4itNK6nipTWunZgkBaTn
-   1u0VWSSMCxOBrPr0j50LWOvJJwQrJhsXGkX5aBNWkNI3co18X2TKWmlNW
-   QulAZvDRC9GIFcXdH9LjZoJJofkA9mdM4CZwZgirW5MrT8KpJVdpQUAgl
-   bx8zFERoyOj8mzPj//sGRmJyOJfVwJf3djfWhJ/an6d8R45JGKGimgeHA
-   g==;
-X-CSE-ConnectionGUID: hpVAQCqJR3uvhoK1DqA/fw==
-X-CSE-MsgGUID: dIBgmiQXQjCBAjNZTBDN/A==
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="12050052"
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="12050052"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 07:53:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,11041"; a="915465142"
-X-IronPort-AV: E=Sophos;i="6.07,193,1708416000"; 
-   d="scan'208";a="915465142"
-Received: from smile.fi.intel.com (HELO smile) ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2024 07:53:31 -0700
-Received: from andy by smile with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ruvns-00000003Nu2-2qx7;
-	Thu, 11 Apr 2024 17:53:28 +0300
-Date: Thu, 11 Apr 2024 17:53:28 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Tony Lindgren <tony@atomide.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org
-Subject: Re: [PATCH] serial: core: Fix missing shutdown and startup for
- serial base port
-Message-ID: <Zhf5aHnL5mGapB1J@smile.fi.intel.com>
-References: <20240411055848.38190-1-tony@atomide.com>
+	s=arc-20240116; t=1712850214; c=relaxed/simple;
+	bh=G/uDq8R2cEJGETysdgyw+/FbbvpRatIhc4DdkmlZI7U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rQ6I8/gSc3L2JqJPDzOUSPO2tvZ2+KaHCiytmffbjlLY7p+m5vLA4kkf/CCAMEdh1ZwGIDt/zn+NNbQ0E5zxk7bofBRQMdiAvdDriS2SX3cV2ys6XOwca+0VTFccLwQxbmikR9ipiRuUC095udtHYjNN7yhQf6ku3SEoxjj+ZQA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=N+JmWxX8; arc=none smtp.client-ip=74.208.4.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
+	s=s1-ionos; t=1712850207; x=1713455007; i=parker@finest.io;
+	bh=Wmyh4+ECtBW0Jh/HVjgWQOVgBLp1r/1BdeWBCqXIMJU=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+	b=N+JmWxX8X2C7iukAkyyle1+I3fOz7RM7RDk0GDHH1HhP0zu4JLEFcd96sXkELpB+
+	 LGM7jd0Py4pCpqzkTpJBwzgA9f6TXel4lA9P6+E/UYc4Xyjn2dLRirSBwaEhDkWmT
+	 c9NlzfkZ8xvBwLiYXt8O2ksx54Efyft1Tg7ZH6Re4U2epCTeEN6wiUpEhQjdJKsPL
+	 yA+aLj6vqvjlG8Tl1UBQpGjyF0ej4sSTpW77Jne7iFWmbgy24wnmsnnUqoQR1rCKe
+	 Gw0X80eq9/TVFx9gCFn63ZCu00MrEzAvG/hj7k60UA2ZwmBeYOh9LpT9qH7HIB7rE
+	 rhwueu2nxhw5l41jyw==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus002
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0LsBB3-1suW0J0tXL-00to1W; Thu, 11 Apr
+ 2024 17:30:04 +0200
+From: parker@finest.io
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	linux-pci@vger.kernel.org
+Cc: Parker Newman <pnewman@connecttech.com>
+Subject: [PATCH 0/2] serial: exar: add Connect Tech serial cards to Exar driver
+Date: Thu, 11 Apr 2024 11:29:25 -0400
+Message-ID: <cover.1712846025.git.pnewman@connecttech.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240411055848.38190-1-tony@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:xqtzeB7BoSjGN76zplJXS9B9wmmGlf1dciTVJVO/D8DMswVfxcC
+ Jz8+JXKQu2GMLzZdvxrVG+dGGWoe5r6dmqzd1bx14wa+dKMu8noevmQx9rlyXprlTMdukSG
+ yK1KHNe8K1OskvxzGad1doerz6uOFgiNwdm8wlIDIPXjtFGa8D60PJM7kJU4bK3YcfJRJbO
+ LY0Vnmona40ZK0nlDWQ8g==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:XfH5YioreMY=;q20CEaQ7J56knqbZMJLYmfWUUgK
+ XmmlL0se7pW3gdsuAS3egnk7UTa8F/j+4dt/4tR5asMi+6zB/Jf1X1g82huV5o65LTh6dki74
+ eIQpVRbePI17eH1RF6lgve0cXxMVNAqzMwkXOxsWEtxcTXygI7O+K2IWK+q/Wgg3HEZbr8SpH
+ Z9jXS88vufPqjIw8K4//vG/gBYKqsl75/0cf5Pj6XEq8jHf8MAVo9kDnXAcWprNqvxLFFQVLW
+ tYe0NfpjrSfFL7TSJRbn0vAd9VqiB+xoTkzS6W89M1MvkvOrlUWmx+s24uHwaH6NDEmxef8re
+ ikMFZ3BIc5rlXC9nljVrPd8R2JcIg/qIagUHzKQwt2nvaN9mJ44W4XOi6F0hZSh/wlglDUNjo
+ KbJLybG2nbd2YkqBWuZK5QphcJpEkjRdqIdZgvy6n0pJvXWPixXk9Y7ZtlhcLJYXWtxYOQI4B
+ vsi+RMh4V+6LofVYOWcSeQGn1ROB6sq5Us9p+V7CBNkInVgGX3Ev85QbG8CLLYO8NKIR91W3M
+ Y/sheKDNQLL6ndiVYV29qdM1o1g5mqsd/toh8eJSdxBKx1fpm3dAhxdkVWChmac+MBulMIT5B
+ VxCiSeWOU/kbFOf6CQvjqqvUTrAFvPhIr0mYcDzotaoY+txoQspkd6ZS0Bv8uQI17Z5V6ZS7J
+ TJivTsfZWQDFShp9oCjTQ02Z6s6SXB3Sd8YZyCwerftwdYOnKh8pQ6kwcoVPcC5XuIeVINfWn
+ FPT6kNji1yLowUUeWUVAafL6tXJdZja6KDt8Ht/1Mq6DrXvnxi5oZE=
 
-On Thu, Apr 11, 2024 at 08:58:45AM +0300, Tony Lindgren wrote:
-> We are seeing start_tx being called after port shutdown as noted by Jiri.
-> This happens because we are missing the startup and shutdown related
-> functions for the serial base port.
-> 
-> Let's fix the issue by adding startup and shutdown functions for the
-> serial base port to block tx flushing for the serial base port when the
-> port is not in use.
+From: Parker Newman <pnewman@connecttech.com>
 
-I tried to test this on the current max3100.c driver, but this doesn't change
-anything to me. The scenario is that:
+Hello,
+These patches add proper support for most of Connect Tech's (CTI) Exar
+based serial cards. Previously, only a subset of CTI's cards would work
+with the Exar driver while the rest required the CTI out-of-tree driver.
+These patches are intended to phase out the out-of-tree driver.
 
-- load the driver with dyndbg on
-- attach device (I have done it via SSDT overlay)
-- call `stty -F /dev/ttyMAX0` to see it works
-- call `stty -F /dev/ttyMAX0 115200` to setup speed
-- test case:
-  a) run `cat /proc/interrupts > /dev/ttyMAX0`
-  b) press Ctrl + C
-  c) (most cases) press Ctrl + C
-- repeat the previous step several times
+I am new to the mailing lists and contributing to the kernel so please
+let me know if I have made any mistakes or if you have any feedback.
 
-The outcome (with or without this change) is that
-- it repeatedly calls start_tx()
-- most of the times as you may notice it requires actually to press
-  Ctrl + C _twice to stop the queueing
+Thank you,
 
-The testing environment is the tty-next + this patch.
+Parker Newman (2):
+  serial: exar: add missing CTI/Exar PCI IDs to include/linux/pci_ids.h
+  serial: exar: adding CTI PCI/PCIe serial port support to 8250_exar
 
-I admit that max3100 may be buggy, but this change doesn't fix anything for it.
+ drivers/tty/serial/8250/8250_exar.c | 1092 +++++++++++++++++++++++++--
+ include/linux/pci_ids.h             |  104 ++-
+ 2 files changed, 1094 insertions(+), 102 deletions(-)
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+=2D-
+2.43.2
 
 
