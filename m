@@ -1,118 +1,124 @@
-Return-Path: <linux-serial+bounces-3480-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3484-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 515548A6B24
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 14:36:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A01B8A6B8E
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 14:57:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CFCD284070
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 12:36:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87FFB1C21CA1
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 12:57:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54DFE12B153;
-	Tue, 16 Apr 2024 12:35:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 473A012C467;
+	Tue, 16 Apr 2024 12:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="ICedfnS+"
+	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="qzyu3HDw"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444621804A
-	for <linux-serial@vger.kernel.org>; Tue, 16 Apr 2024 12:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B613512BF17;
+	Tue, 16 Apr 2024 12:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713270957; cv=none; b=fqJ7B4vWT33DSUR9TOT5teacX/U9fVfvzEQmkV0xCYYE2WKHnSF82slv8+sD670DTHGlKw7wSnxyjip40baEQb/jzvY/xEKEqEt0P9vOYvEQX5bdQZIhYgoreus5smEDK8MmMqiR5mU2UA2rfXziGqq2IRuaoy7VSWaTzvvE4+U=
+	t=1713272216; cv=none; b=WbAz8wMOjASHFIRjWR+5aYKstCRre24B5EfrhbNmHMFJD3/PjTdBAeNbBu6/xHfqn8CCvXWBa9aAmRJJdynJZnhaOveu0bh8EW+bQ5gvghj+hBPOt1cjRaweNDV8Yf3FmJhSQ+Jx739HtQBG3XYiI2hIM2/010y5li0l3IJr/2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713270957; c=relaxed/simple;
-	bh=kRk3QnAZ3qr1PcFUmSrslq3HTppGMx2/2WOyXWDOFfk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=rE9IZAC1lGKnW6upqdx4RCo1dX0FQkqooojSaXDUTbzi0PWMul+wFGjfJFiQvDIql8T9LVqbnXaiVo3EcUpna0ggM5sJ1cVzEnmke3dnhSQR+jPdDLJj/STMuIN3NiEh3VkNx7aSczUuU4xuoGDILlIlPk5wPyiuqO9cJpiZ268=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=ICedfnS+; arc=none smtp.client-ip=194.117.254.33
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	sang-engineering.com; h=from:to:cc:subject:date:message-id
-	:in-reply-to:references:mime-version:content-transfer-encoding;
-	 s=k1; bh=rK8csEqpyjcNZo4plK8L+bE/v5scXoLguzVWeStfOtQ=; b=ICedfn
-	S+Hq8mdLli3RH2Ar+6cfnLlqR62/BKNyOQQhwLDCNXm8LgM/lMJ8e+kSrqceYg5m
-	wHZWDf3zqOAmXTbvo4zzS9Hjr/WF/G1QxgDD5j1lff9QqSgPKdRDdnYig12OiiYM
-	k/lbxgmWbTdMcI0W/nOoXxuMfAaG0QnIAjvkqYz6UWepdQijbbDEIcsQjXK3DoZk
-	le7OECG5gb+gwPZ4Dm36dvVxss8kAouoM6BffztLAIhJpiA58RS50TRu6exjSbTh
-	zZHg2CPyMfBzU/IeMCVyCjzeuU8mUbVa4oVAz67mvp6wFgjFJqmtGpOVT2UBH3s+
-	mk1PvTIskR0clTKA==
-Received: (qmail 2408539 invoked from network); 16 Apr 2024 14:35:53 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 16 Apr 2024 14:35:53 +0200
-X-UD-Smtp-Session: l3s3148p1@otaM+jUW7psgAwDPXxiyACzheF6dGXh7
-From: Wolfram Sang <wsa+renesas@sang-engineering.com>
-To: linux-renesas-soc@vger.kernel.org
-Cc: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Dirk Behme <dirk.behme@de.bosch.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1713272216; c=relaxed/simple;
+	bh=MMQ3grICziFyYiJYeHdgPY+a770lc7HcR4L+n90Xu8Y=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=l9fRKSViV2O19EK+eHxSQfSeF/I4VzFvP/YJfqzJha0w1OiJSuQNGmpT8FvBsnR1xNH4HevPYIM0n2OcU6hCq2iw/lQ8AFVsIcf1Oh+RtxVkx4g67hhp9ifCziqqNUrSWnqvFJW2OTXkjpElvA/M5Ri8TyWPUGAHz0WAEVNNiNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=qzyu3HDw; arc=none smtp.client-ip=74.208.4.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
+	s=s1-ionos; t=1713272196; x=1713876996; i=parker@finest.io;
+	bh=wL/KAbcH2tXEiPNBgmqFulNL95RAhinmWk+wtvoRBYc=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=qzyu3HDwk11sejv9EGlNAhtNrYsCXI0YD+LGDjygQGXJd9I3a792NvuTfWgqTaPS
+	 FvrOK/jFufSR2pF0CgEx+fuZV+zMnmts0cQ2c4R1XDtcHCjgLVQf3LcTg/n/NCv26
+	 svSH//IdMVMZVHRx1I0qXRkyq9SDGDTMbWpbK10s/f9s8cx65q8XpJFop5JrC5E0f
+	 XVL0vYK2b4psEH0nwoMZszzLlbt0PPDCMiR+AostreDLJQEPkpxIanXQCIZ7HaTF4
+	 hdvIPOaFiwKa5FtZTO1EudSfu5WbnxECLNjl+Ea4Ksjhc6Y2G1AwIWW87HcRW4yYa
+	 k36hjt/Ed71axIKckw==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus002
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0LsSYo-1su9aF3AFs-00udVd; Tue, 16 Apr
+ 2024 14:56:35 +0200
+From: Parker Newman <parker@finest.io>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Aleksandar Mitev <amitev@visteon.com>,
 	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
-Subject: [RFC PATCH 2/2] serial: sh-sci: always cancel hrtimer when DMA RX is invalidated
-Date: Tue, 16 Apr 2024 14:35:48 +0200
-Message-ID: <20240416123545.7098-6-wsa+renesas@sang-engineering.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20240416123545.7098-4-wsa+renesas@sang-engineering.com>
-References: <20240416123545.7098-4-wsa+renesas@sang-engineering.com>
+Cc: Parker Newman <pnewman@connecttech.com>
+Subject: [PATCH v3 0/8] serial: exar: add Connect Tech serial cards to Exar driver
+Date: Tue, 16 Apr 2024 08:55:27 -0400
+Message-ID: <cover.1713270624.git.pnewman@connecttech.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:10U5Sb675CI7WDlz1l0p6GFG/u98AGH61P8kQoCcaEFMUXDTwdw
+ /JNxfxDNGYjim5/F8Cz6yzstmR0rlIdO5JHBNVNn4cGg59oa3psi2lQXw7qgu2jfPeLNAV2
+ 08J5IWGdg0ybsotCfYORDiXJPbtgP8rmP1NsRqjjzA6XlHKQoJ4HkpIs5pGsz/h/HfjAPzM
+ Or78+RwwQWzXJZ7uWCdEA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ZVF0042suao=;qazLWPJ4GIcXFx+vT2hDiqx9AP/
+ PBtGww9i0xm0z3/KxVBz7SrlCkCWwXU+hAnI1iUUIf9O4V6YbBekMk6LWAUlvMNVMLoaxigvp
+ sn/hiP26FwRGCjBKJhQKbARzINBaIo1X6vCSbUjQ/AaO0XF1mhFTVVqg1hX7cgvEt0k6XNOUb
+ TfMN3V7QviOp2Ci9AxUkW/uxBWgbAl/koKWvt+uyvlkJAevBFlIjyld4eN5pGJuLmHmMpz9Co
+ /Go8HxrKylqIvnTHPNQ6gCWBBOzDXjDxhfctxFZpuhQRcztPOG0WpcpsF9VMkEicYp1YqYE+i
+ kZevMwtUqtU7b3qXoH2xbBkZL6jNJJYOrl6eYgH1zFGVL9V/rR1VlNPhAx8yzqLqIkEkcma7y
+ Cq1nE0iEWnG0x31LhsLWV4ihgjP71BMU5ZxPPIz/E0MJEUCKv3USbPjU7kx/3nBo7YAUzwBl6
+ MfT8ktk/dfJ5uqAUSGH9JgzpTnTbzWQf/Xx5vfsJEaKm7H/+/Eb9kF9Imu35GStWNirn6aIEo
+ BmBn8VWNjnBVaDkrcKfk/H7nc9r5v6i2eytrDxZHs80B7dw8PPLhmw17iKjZEr+FhQI6wmKrh
+ TaZQLtpvhvQ5TKUM8UuVLTsnKltwgVIuZRTffU7DVTGXxPP/booS6sXdeBm2GCufcXg0fitUn
+ LTvbqoBjNFpsKJ5mneaoIZEK+Dgk3LGWwdYpzXesgieO2CXo4rUP1+1q7ClOfx3lBE8YIxqAk
+ 30vdRHCCoCdVIBTU1iV36EpTXs6R/rFVjQGUwOIlVviqIe/YSTie2g=
 
-Clear the timer whenever 'chan_rx' is cleared to avoid an OOPS.
-Currently, the driver only runs the timer when 'chan_rx' is set before.
-However, it is good defensive programming to make sure the hrtimer is
-always stopped before clearing the 'chan_rx' pointer.
+From: Parker Newman <pnewman@connecttech.com>
 
-Reported-by: Dirk Behme <dirk.behme@de.bosch.com>
-Closes: https://lore.kernel.org/r/ee6c9e16-9f29-450e-81da-4a8dceaa8fc7@de.bosch.com
-Fixes: 9ab765566086 ("serial: sh-sci: Remove timer on shutdown of port")
-Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
----
+Hello,
+These patches add proper support for most of Connect Tech's (CTI) Exar
+based serial cards. Previously, only a subset of CTI's cards would work
+with the Exar driver while the rest required the CTI out-of-tree driver.
+These patches are intended to phase out the out-of-tree driver.
 
-Locking needs to be double-checked here. This patch is mainly calling
-for opinions.
+I am new to the mailing lists and contributing to the kernel so please
+let me know if I have made any mistakes or if you have any feedback.
 
- drivers/tty/serial/sh-sci.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+Changes in v2:
+- Put missing PCI IDs in 8250_exar.c instead of pci_ids.h
+- Split large patch into smaller ones
 
-diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
-index 1e3c26c11c49..5ad73933c1c5 100644
---- a/drivers/tty/serial/sh-sci.c
-+++ b/drivers/tty/serial/sh-sci.c
-@@ -1262,6 +1262,7 @@ static void sci_dma_rx_chan_invalidate(struct sci_port *s)
- {
- 	unsigned int i;
- 
-+	hrtimer_cancel(&s->rx_timer);
- 	s->chan_rx = NULL;
- 	for (i = 0; i < ARRAY_SIZE(s->cookie_rx); i++)
- 		s->cookie_rx[i] = -EINVAL;
-@@ -2242,14 +2243,6 @@ static void sci_shutdown(struct uart_port *port)
- 		       scr & (SCSCR_CKE1 | SCSCR_CKE0 | s->hscif_tot));
- 	uart_port_unlock_irqrestore(port, flags);
- 
--#ifdef CONFIG_SERIAL_SH_SCI_DMA
--	if (s->chan_rx_saved) {
--		dev_dbg(port->dev, "%s(%d) deleting rx_timer\n", __func__,
--			port->line);
--		hrtimer_cancel(&s->rx_timer);
--	}
--#endif
--
- 	if (s->rx_trigger > 1 && s->rx_fifo_timeout > 0)
- 		del_timer_sync(&s->rx_fifo_timer);
- 	sci_free_irq(s);
--- 
-2.43.0
+Changes in v3:
+- Refactored patches to be easier to follow (based on feedback of v2)
+- Patch specific changes listed in corresponding patch
+
+Thank you,
+
+Parker Newman (8):
+  serial: exar: adding missing CTI and Exar PCI ids
+  serial: exar: remove old Connect Tech setup
+  serial: exar: added a exar_get_nr_ports function
+  serial: exar: add optional board_init function
+  serial: exar: moved generic_rs485 further up in 8250_exar.c
+  serial: exar: add CTI cards to exar_get_nr_ports
+  serial: exar: add CTI specific setup code
+  serial: exar: fix: fix crash during shutdown if setup fails
+
+ drivers/tty/serial/8250/8250_exar.c | 1079 +++++++++++++++++++++++++--
+ 1 file changed, 1013 insertions(+), 66 deletions(-)
+
+
+base-commit: fec50db7033ea478773b159e0e2efb135270e3b7
+=2D-
+2.43.2
 
 
