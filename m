@@ -1,120 +1,101 @@
-Return-Path: <linux-serial+bounces-3489-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3491-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1CE08A6B9D
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 14:58:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D63DE8A6CD4
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 15:51:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7225EB2284C
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 12:58:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9143B281CBF
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Apr 2024 13:51:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5639212DD99;
-	Tue, 16 Apr 2024 12:56:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 536A612C7FB;
+	Tue, 16 Apr 2024 13:51:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="EWYhDEmy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="B3KQcMIo"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B301E12C7FA;
-	Tue, 16 Apr 2024 12:56:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E549E129A72;
+	Tue, 16 Apr 2024 13:51:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713272219; cv=none; b=b9zB4TPO/HVpNXgIKI9rUU7IYSewF/Co/I7zX0QxnS8p7U1UoWXf83IqDDYogin73ghfIhGo0la9hWOHHTkfpcnIayghaZA+TdrcIFdliNby8VCBm5OOoWFRGDGHoj9cKrryOJE3dwTvx7luOYp+ZWXGkQk2P+molsYLqMmxJeI=
+	t=1713275509; cv=none; b=XzvriW7i54QCsS6Y9mxZxp4F8Ad+HDYSWWhk52H9xBKe3A+nRPxyr0hH7vcEHOSI1K8K0MyAEFGzLk6TN5TA0iU+v+dmQAMph3EBEnSmMEHmY06RXV63UkFXtSkkcU7xQZrQWiuLNsXKXBwAVdaOw9PNnoPex4WQSMO/X8gR5hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713272219; c=relaxed/simple;
-	bh=BeHbDLxRX4WOrHYa4ThT+3HJ8zBUg6fW2R74rAnsV38=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tVR5wdFdSMic4xKez7LMslkdYgJ1APH1bqZwS81blo7L/tdMeo8mMzRThgkaCE+R51O2QpmpGqEsCAazmCAn3AaXvvDJUy375dmjNwLnlHNb1EoASM48qvGoYrv2xldbAaszDc9FeZw2gw+mAMDj80XivsqrJ+NGH90FOGYmxtc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=EWYhDEmy; arc=none smtp.client-ip=74.208.4.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
-	s=s1-ionos; t=1713272198; x=1713876998; i=parker@finest.io;
-	bh=kAv0oBFkgwwU3Vt2YCqpLc+ik9GcQOdElLHJtyXfBOo=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=EWYhDEmySObpxDKJlYLm19HJhmWDuGRRG7zLtQ+qS8WdDpBpzpSiAxEk2FogTDKq
-	 JDTZD05z/D04Hnt/UvQ4/KvKZgkJfSTQKbPUfdDnznn1cf5qcotxk87hRZ6+oa0mK
-	 zF1hxawKorfmyFSRu/N0HomgvXvOcT62xSeMSTOkb/+kY+y0KmlUiy1GD5edooMJI
-	 0ba2PcJSk26I35eMprZ+kDNUXAeE5ZcM3YrnsuQqLfuuSruhYrK0Y59AYvLSTaGCo
-	 EiKy8p/uZQk5E11ukcjaPSI7ZUsRUthZNMBycLfsA/bYKw9JOS6nmmP2pCGynUwmh
-	 RgaFX/mrfD6yEeRWSw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus002
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0M5uwh-1shFHT0wnJ-017VYa; Tue, 16 Apr
- 2024 14:56:38 +0200
-From: Parker Newman <parker@finest.io>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Parker Newman <pnewman@connecttech.com>
-Subject: [PATCH v3 8/8] serial: exar: fix: fix crash during shutdown if setup fails
-Date: Tue, 16 Apr 2024 08:55:35 -0400
-Message-ID: <1a21fffe403d7181e0404db1ed92140c306f97b7.1713270624.git.pnewman@connecttech.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <cover.1713270624.git.pnewman@connecttech.com>
-References: <cover.1713270624.git.pnewman@connecttech.com>
+	s=arc-20240116; t=1713275509; c=relaxed/simple;
+	bh=Ab6ExhI50HHlXfTzEgRQO3WrIT25v+iB5W0OUeFHTs4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lJ+FmPVcvPtp7zvLUHx475Lz1N9YlcUFrzIYXD8mx5zkciEehBekjvk0bfb38trOJrx1IQbg9TRmd4XQGgce9bYYGLTfbEMI8KHd6vyReww8ukBFqn1MiKOK/nCIZHoetQU48eN/zNpv94BbhbJQqVoDIRJHPFG5a1qsonaXET0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=B3KQcMIo; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1713275508; x=1744811508;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Ab6ExhI50HHlXfTzEgRQO3WrIT25v+iB5W0OUeFHTs4=;
+  b=B3KQcMIobTk9dI3HVShyqhCfk/szc1CA6RqM43tTk/aHiB1QpP5aF5sV
+   /79cZdH4Bf4Ci+SbCpYy1heBBHhzZ63NW1gWxuHqM7QEk98R7FIWCKQgk
+   K1oJo8w63pYgdsh+Lzgie8LHoefxEZIywrXH5gVGj7kh4a02fn1i80o+3
+   XsAVu7H/Noqj7vUIaHmWFiMYP26xc16fSaPl9GidVArZBIpQLlLdBZ23n
+   tx7uXuDjqIKQjZTFwSkHngoJFNHF4MFZCzA7g8/i9WAIJxxmgzkOXbxyu
+   h550VzTdtG/fqsbjktaG6cw+l/eUq294KUDQJ3FM7/XmTEDFN3ag+gIWZ
+   A==;
+X-CSE-ConnectionGUID: mxKUn/M7RaqLE0d3xeEo5g==
+X-CSE-MsgGUID: sG7XSuPuTROBgg/WUtIEJA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11046"; a="20134949"
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="20134949"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 06:51:47 -0700
+X-CSE-ConnectionGUID: Q2HgK0eoSS6kDOKfyNho/Q==
+X-CSE-MsgGUID: tGetGZBlQsafQxNQgcVz4w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,206,1708416000"; 
+   d="scan'208";a="53246815"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Apr 2024 06:51:44 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.97)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1rwjDp-00000004i8a-004e;
+	Tue, 16 Apr 2024 16:51:41 +0300
+Date: Tue, 16 Apr 2024 16:51:40 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Guanbing Huang <albanhuang0@gmail.com>
+Cc: gregkh@linuxfoundation.org, rafael.j.wysocki@intel.com,
+	linux-acpi@vger.kernel.org, tony@atomide.com,
+	john.ogness@linutronix.de, yangyicong@hisilicon.com,
+	jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, lvjianmin@loongson.cn,
+	albanhuang@tencent.com, tombinfan@tencent.com
+Subject: Re: [PATCH v8 1/3] PNP: Add dev_is_pnp() macro
+Message-ID: <Zh6CbFv1steiQUHO@smile.fi.intel.com>
+References: <cover.1713234515.git.albanhuang@tencent.com>
+ <4e68f5557ad53b671ca8103e572163eca52a8f29.1713234515.git.albanhuang@tencent.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:Aix2Gfbz3WAlz2Z+lR82+NyyweP0ySGfxPJud5y3h/eaUD+TfCK
- tNX9oGSruoLdOu9OVjQ9Uo+0rMlWuAnj6QsQuf3NDwyJeJenh9G0YNuqjDrvxGC9To3Prd5
- jnZUmHyyBgT1l7zjRXaSm1ujrg3CmsH+J0VneP9UY/0irnodH4Aa//OhmPjPqbOQZeA8qvd
- qvFGMX5q3L8Sz2gc/pDIg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:R9jOjENT1WY=;ejdCrwwafJxLraDIM3YWdGe5Gf8
- TGgftdLfb0YEcoJYUk0MjEIP5PuK3s748EFwOTKaLY+Pq67vKwXlBwwF6Qr2vRrcq7L3SIdyI
- ysVumb/Co+kA88d4EnuG+4x/6O0tWghnHZXILOYGY+grItIiuXDDBue+YGPsojqQe/vQFCu5j
- AnM5ofSPS1mRszGgXFvhgtEyU56eKQwL/kQPAumflvQARki2PgJ4EtskR9xbqSQuv0Lv64oH1
- 4BHQXvS8+9kES+adbpXhgmg8qJx0KNTUNBRlc2QE3qzfSZqa67dmyl9sG1+75pkPjusK5YWqO
- dbNGBATZ2m8olWBCF3w/91oDCqfQZ5sASj4VQ+iFfbEMhI9UE5bX+ve05LagaY3wxSKdQD57K
- 85LMfFDKXgdBsYuNP3iCqh0/eKX7k8Ut8ntFm/p+/9WiPYFFbN41dn+hjOFfmhhCK+KAaBpLC
- EnvcA5GERyQum/2sHmHkh2gkjT+K4S7xvi9KNWBmRztfGF4+MFs929LvBWT/MZ1c29emR83Ao
- RZSvao8gY2jnbrYQvmBdmHxzFDr0qHlmjqS9mOZTXXjDpb1+S+bUJdhSFTpIzFsWz0Ak0iQdR
- Csqskd5/909oaQ3kbEe042qJU62/boQ1w7xDTaMMdUARd0u1l2ktaUbvJtXIjCHJLGpYZC/4Q
- OV4ZW0lBaNndXjHuKj0L55EB0NoyqPeg+rN9YX4gufMj9w9ko44hKulEjeQX/xzkmNgQVOt0V
- eiF47/CMa5tfT5XvMX9PeNVTtTPxP1P+frurlBoSXwIT7gPCDQTyvg=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4e68f5557ad53b671ca8103e572163eca52a8f29.1713234515.git.albanhuang@tencent.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-From: Parker Newman <pnewman@connecttech.com>
+On Tue, Apr 16, 2024 at 11:16:18AM +0800, Guanbing Huang wrote:
+> From: Guanbing Huang <albanhuang@tencent.com>
+> 
+> Add dev_is_pnp() macro to determine whether the device is a PNP device.
 
-If a port fails to register with serial8250_register_8250_port() the
-kernel can crash when shutting down or module removal.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-This is because "priv->line[i]" will be set to a negative error code
-and in the exar_pci_remove() function serial8250_unregister_port() is
-called without checking if the "priv->line[i]" value is valid.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Signed-off-by: Parker Newman <pnewman@connecttech.com>
-=2D--
- drivers/tty/serial/8250/8250_exar.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250=
-/8250_exar.c
-index 501b9f3e9c89..f5a395ed69d1 100644
-=2D-- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -1671,7 +1671,8 @@ static void exar_pci_remove(struct pci_dev *pcidev)
- 	unsigned int i;
-
- 	for (i =3D 0; i < priv->nr; i++)
--		serial8250_unregister_port(priv->line[i]);
-+		if (priv->line[i] >=3D 0)
-+			serial8250_unregister_port(priv->line[i]);
-
- 	/* Ensure that every init quirk is properly torn down */
- 	if (priv->board->exit)
-=2D-
-2.43.2
 
 
