@@ -1,196 +1,128 @@
-Return-Path: <linux-serial+bounces-3566-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3572-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F7728A8CCD
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 22:12:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 860368A8CF7
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 22:33:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8782AB248F0
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 20:11:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41AE8288914
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 20:33:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA91636AEC;
-	Wed, 17 Apr 2024 20:11:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2DF143D546;
+	Wed, 17 Apr 2024 20:32:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VCK+0+hT"
+	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="sLatIE9L"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B19922324;
-	Wed, 17 Apr 2024 20:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A60AE60262;
+	Wed, 17 Apr 2024 20:32:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713384712; cv=none; b=WgG5hc/R2ylEcbTuuSxujfXCXO8uBeMS6zOhEfzMFVIJ7oKNNAYsIZMd00s8XDLF4ghaQfIN+jz+KrhznkUi0KRSSFP6lOLrmy+UHDHHJdaDh2qq5mAUzqmMiYy8mg37KqUJC7G2b0qwpVbGM1LXiW/hclBo+ZJVezdap59GjtI=
+	t=1713385928; cv=none; b=mZLXggDQRsI+bKRA/HFvBBCkLarGgpcyUwponLEbLYMdjMhgbDbudsjqL0SILFiPF2Kk63pnu7kFpnjaC/1wais4cU2uCmliRz/AfB68xLr06arl9FTBv24Ah0gD4Nc+bmlJ9sfD1KFe7TlEq3p+BSURlv7riM16Pru0hY6Wemo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713384712; c=relaxed/simple;
-	bh=XD0lQbHLXLAn/+S5GwtU0Lbsu1BpfgFic/mCjoxxyow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PY2l62J0N+z9TZaY80SI4+C40KV6Rmiv2mhGXub5uf56HSNF1UWqMi5q8Xm28mlby7Z39WEXHL9LCuPeDphR81mAC8JCGIE8/Zm4qkSyYb3FTEw2Ym4DbghvNB4Pa5+/KH8K7x32vN2C3TJp7ZEXieqOtGcTDg7zP/+wa1sSrZ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VCK+0+hT; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-516d1c8dc79so82036e87.1;
-        Wed, 17 Apr 2024 13:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713384709; x=1713989509; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YkXJYCCAFQIB+kTCCd8sU0ZfFeu7ir+DVLkLbSTNUGY=;
-        b=VCK+0+hTk4ttiQy2uXosmIuQli97FvL98EsWs4h/SY30apA76b+in+4DERUK6jRt0A
-         jqFVZ/4X3P0brxpZWRTnGNwUwz1kmlW0JbmRxUzdMgQVNfMql5qSvupBJ37fWCX4F1KD
-         /PPPPkWNGWgEEZ4UbleWCyDOMrK/3tTOvpuQQjvBzhKFbqUeGNXKO73GuHOwc0s6q9ia
-         Q69of+BelUK8r2mwtvxQd40hoPhLIHR8H7GBfikNoDYOGmOj2webpmOkyQiwFv1teGxv
-         wVRvzoUl0/jNwbtiUFoM1tcUM79tgU6F1LBgisJM7J8julYl9RD+r4AGlpyI8xopc3yQ
-         7nLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713384709; x=1713989509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YkXJYCCAFQIB+kTCCd8sU0ZfFeu7ir+DVLkLbSTNUGY=;
-        b=AIwdpkamBIsJPjEw07XuEegm/NPNa38NlAnV18uEoVsOsEX5E6GXcfVcNR1f+mLmYW
-         AkP4rWnk0/mGDYh0rJo7m/OT+j7iycLLrZ7Go+zCMtAAZ9WQOr/3ZekCLOyTVWRatZmO
-         RF/sKzqIjJ5IqO59GSXdO7mbmfDOYMjuRNYHaCCM4VU4bfIJK232cjxiyacNrBS41+mH
-         zoIKjUXsfh3SRRWQppics4G4EdyqasFPSnaX3Ny/3B86fUra8PCZGVw3bUanFmj4wein
-         5AfQLAEz3Sf6Rvwu1mjGXzRK1EsBhTwmwH5XqGEj6mDM7nWEdvr62roIj/eEdKKiKTxp
-         1RiQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdQZOTb29YtvLVvTIybplabM1ZxlWZJbM86Et94w2tfUYLMl0FMnQpw7YkxnVA6IHzuEdSPrDohxh6doh/8hFJNihkmeVfsD/vVCpxbhZwU/rywm0nb7VB2hD6rrdXlSsQve/a6Bs242P+Bah1ffmEoxYT0xp9F2OmooVR4gQuI9CDEaIq
-X-Gm-Message-State: AOJu0Yzqf3GY6GF+5zCELSO7gryLNiPsvs1urxsZtjcguIo/5j1IKrQ/
-	SGxT+juVFz6Bb1gLcAbvnqobYvbx6EdaktyA7m+gqvZD0XE7hKcwIhSdaGbr
-X-Google-Smtp-Source: AGHT+IEimNL9Jzkg+4WuFGUWNsLVtlVgbYacCQGaS4hEtgXZrKILR+Dv3UKvX+SXrk3ibvZAdcxVBg==
-X-Received: by 2002:ac2:4424:0:b0:518:9952:2740 with SMTP id w4-20020ac24424000000b0051899522740mr173861lfl.41.1713384708981;
-        Wed, 17 Apr 2024 13:11:48 -0700 (PDT)
-Received: from mobilestation.baikal.int (srv1.baikalchip.ru. [87.245.175.227])
-        by smtp.gmail.com with ESMTPSA id bp32-20020a05651215a000b00518f6b9a5d7sm971036lfb.137.2024.04.17.13.11.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Apr 2024 13:11:48 -0700 (PDT)
-Date: Wed, 17 Apr 2024 23:11:46 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Viresh Kumar <vireshk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, dmaengine@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/4] dmaengine: dw: Simplify prepare CTL_LO methods
-Message-ID: <lzcgxh7trwoksd4bx2fsybellbngvpwhgq2a76ou2iufemockp@3dca4bfox2ps>
-References: <20240416162908.24180-1-fancer.lancer@gmail.com>
- <20240416162908.24180-4-fancer.lancer@gmail.com>
- <Zh7LyszPd2sNfWRm@smile.fi.intel.com>
+	s=arc-20240116; t=1713385928; c=relaxed/simple;
+	bh=snUlQ8CUBvwt6t0rQcr2fBcuXmMSzuXKMUaznWhkeSc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=F2LqG7UG75VP7W7tO2GDhx6Mmgiw4w1x6GqOFtdTL+LgdyjvAKbfPXbQ0lz+PJt4y081BGBAdAX8zupXC92taOJ0sp4FPykLuNlyJ+DPJhIwnWFjLbFjoEGlQl3JZioTf9asBPCJCdwjkbQhDDMZsSNwwx6aM7VpoRy3CK7QK/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=sLatIE9L; arc=none smtp.client-ip=74.208.4.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
+	s=s1-ionos; t=1713385914; x=1713990714; i=parker@finest.io;
+	bh=zvVys0faffVpris9ppwK6fTUXrOggQ+stC07pDGKPks=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=sLatIE9LDzt0WajpvGCr4uskAHe/yyqH7XaRP37DRUobo+hvSNb6CQO7y5FIq76y
+	 ovjTtYK+Q6wKcD6yuTvhy/nLvpysCsmjwDwWpSb1tCbuGYvnguxdgRJB2ipBY99lC
+	 MR6j4wCNLgAzxhYj4w8Afx1Ov52+5+VskoNOrOAMKOuUPfsRXiRZkQys4lqEXo8LX
+	 xAqM0nugCcJHS6wRf5zNHA+AixlwwAaugGXJQ6J6pHX8R7ImExDfIRu2HxbNHord7
+	 nswKP1iRNUjEGBXqurPasK3uQzIA2CQVYlHU+igbsXnSdkS79T3jolAFIcd8UV40c
+	 dBf871M7BxpRP5MnWA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus004
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 1MbS8j-1sZ0bI3p7Z-00brjB; Wed, 17 Apr
+ 2024 22:31:54 +0200
+From: Parker Newman <parker@finest.io>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: Parker Newman <pnewman@connecttech.com>
+Subject: [PATCH v4 0/7] serial: exar: add Connect Tech serial cards to Exar driver
+Date: Wed, 17 Apr 2024 16:31:22 -0400
+Message-ID: <cover.1713382717.git.pnewman@connecttech.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Zh7LyszPd2sNfWRm@smile.fi.intel.com>
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pxhcMpEC6sD5WyFezOqtCU6EWMiMS1pMpoe2ZSE50fqA/DSe0UI
+ Shv36TiDEyzj94uGFXp3V0hgfQcbZ+rwgcatCxQhNqL/6l1r1IfxZdkho3BJUFIFpz75zd2
+ xHfW96in4DiY/0uJb/l6klgwdEYroQZ8rU9cJO1IerAEM+BnwDK+ZErHjPpZ/qUXztYuJj+
+ YFbax3Q9XmqiQMj8uEaMw==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:bayDW9b21A8=;KlaPduv0NnbVVEkA3q2/aYIF2hD
+ BMy+RMfabRkxmR32Agv4r7Zl/XmcI7NwlhPg3Gs+njDfVsmRd89m8xP1WgNihHc6xINq+kn0Q
+ WED5pjvaOpUaBK7TizoFbRCw/UOQsKcCDkpl5iYjdkHirODtktMB+jIVSOZPfnqGsouQpgn4+
+ REezCQS6d2n7WwH4tEKgNOK4hEEwPAAxgP1iMuc6TkaKIEo8cdvw9wCpeNjEiC8voILAXRxXN
+ /b1mYdK4dfV8hG8HRoSSA1+ydbAEboakoJyjuSwObTFstqBRwlWfUzWM9KJOqqUbNOtImmwJ1
+ w1daMUTIYHWNhtQDbW3TcITw6FnEM1G4WCzWEzHZBxQ+hdlK3oxr0dBsI4qdCtrARUD3X8nV9
+ YeuhNFAwDSsnqoGr2/3Vd2cYikxFyGwk76EEEC1TDm5/lIDLHVipHTQ34WI2H+d/ySY8jqGN+
+ 9wUOOv0zdJDU5G4LZ7jYVw0dowCNaYu0RuOJKylbaGs5qU94sgk6UE0A7R0OnY4SNqbPotqsO
+ jKApFAQWFRHVYajJyjI0NmMN7q2WpAfas1F7fkZ4M9pqwtJO4ibMjdpVdz1q8tH6DO5D5t10Y
+ uCgahT/KNZFnFzG9hEXxDgaVdK/SeupV5jD7ezdwS+4BLVhlm77Il91s4WDdok6pJW34eqfqB
+ ossMACyyESD3wVWCKwNntYJgHbFPOsQV5yNlvXAUC1Pa9UQkwxR8q02z6kAuAog+fSbnM3afs
+ ubSYOrJPMSxlKt2PeyrUPlJtUNjHZnAsONNoiMX4QfiwiZNRIiLPd0=
 
-On Tue, Apr 16, 2024 at 10:04:42PM +0300, Andy Shevchenko wrote:
-> On Tue, Apr 16, 2024 at 07:28:57PM +0300, Serge Semin wrote:
-> > Currently the CTL LO fields are calculated on the platform-specific basis.
-> > It's implemented by means of the prepare_ctllo() callbacks using the
-> > ternary operator within the local variables init block at the beginning of
-> > the block scope. The functions code currently is relatively hard to
-> > comprehend and isn't that optimal since implies four conditional
-> > statements executed and two additional local variables defined. Let's
-> > simplify the DW AHB DMA prepare_ctllo() method by unrolling the ternary
-> > operators into the normal if-else statement, dropping redundant
-> > master-interface ID variables and initializing the local variables based
-> > on the singly evaluated DMA-transfer direction check. Thus the method will
-> > look much more readable since now the fields content can be easily
-> > inferred right from the if-else branch. Provide the same update in the
-> > Intel DMA32 core driver for sake of the driver code unification.
-> > 
-> > Note besides of the effects described above this update is basically a
-> > preparation before dropping the max burst encoding callback. It will
-> > require calling the burst fields calculation methods right in the
-> > prepare_ctllo() callbacks, which would have made the later function code
-> > even more complex.
-> 
-> Yeah, this is inherited from the original driver where it used to be a macro.
-> 
-> ...
-> 
-> > +	if (dwc->direction == DMA_MEM_TO_DEV) {
-> > +		sms = dwc->dws.m_master;
-> > +		smsize = 0;
-> > +		dms = dwc->dws.p_master;
-> > +		dmsize = sconfig->dst_maxburst;
-> 
+From: Parker Newman <pnewman@connecttech.com>
 
-> I would group it differently, i.e.
-> 
-> 		sms = dwc->dws.m_master;
-> 		dms = dwc->dws.p_master;
-> 		smsize = 0;
-> 		dmsize = sconfig->dst_maxburst;
+Hello,
+These patches add proper support for most of Connect Tech's (CTI) Exar
+based serial cards. Previously, only a subset of CTI's cards would work
+with the Exar driver while the rest required the CTI out-of-tree driver.
+These patches are intended to phase out the out-of-tree driver.
 
-Could you please clarify, why? From my point of view it was better to
-group the source master ID and the source master burst size inits
-together.
+I am new to the mailing lists and contributing to the kernel so please
+let me know if I have made any mistakes or if you have any feedback.
 
-> 
-> > +	} else if (dwc->direction == DMA_DEV_TO_MEM) {
-> > +		sms = dwc->dws.p_master;
-> > +		smsize = sconfig->src_maxburst;
-> > +		dms = dwc->dws.m_master;
-> > +		dmsize = 0;
-> > +	} else /* DMA_MEM_TO_MEM */ {
-> > +		sms = dwc->dws.m_master;
-> > +		smsize = 0;
-> > +		dms = dwc->dws.m_master;
-> > +		dmsize = 0;
-> > +	}
-> 
-> Ditto for two above cases.
-> 
-> >  static u32 idma32_prepare_ctllo(struct dw_dma_chan *dwc)
-> >  {
-> >  	struct dma_slave_config	*sconfig = &dwc->dma_sconfig;
-> > -	u8 smsize = (dwc->direction == DMA_DEV_TO_MEM) ? sconfig->src_maxburst : 0;
-> > -	u8 dmsize = (dwc->direction == DMA_MEM_TO_DEV) ? sconfig->dst_maxburst : 0;
+Changes in v2:
+- Put missing PCI IDs in 8250_exar.c instead of pci_ids.h
+- Split large patch into smaller ones
 
-> > +	u8 smsize, dmsize;
-> > +
-> > +	if (dwc->direction == DMA_MEM_TO_DEV) {
-> > +		smsize = 0;
-> > +		dmsize = sconfig->dst_maxburst;
-> > +	} else if (dwc->direction == DMA_DEV_TO_MEM) {
-> > +		smsize = sconfig->src_maxburst;
-> > +		dmsize = 0;
-> > +	} else /* DMA_MEM_TO_MEM */ {
-> > +		smsize = 0;
-> > +		dmsize = 0;
-> > +	}
-> 
-> 	u8 smsize = 0, dmsize = 0;
-> 
-> 	if (dwc->direction == DMA_MEM_TO_DEV)
-> 		dmsize = sconfig->dst_maxburst;
-> 	else if (dwc->direction == DMA_DEV_TO_MEM)
-> 		smsize = sconfig->src_maxburst;
-> 
-> ?
-> 
-> Something similar also can be done in the Synopsys case above, no?
+Changes in v3:
+- Refactored patches to be easier to follow (based on feedback of v2)
+- Patch specific changes listed in corresponding patch
 
-As in case of the patch #1 the if-else statement here was designed
-like that intentionally: to signify that the else clause implies the
-DMA_MEM_TO_MEM transfer. Any other one (like DMA_DEV_TO_DEV) would
-need to have the statement alteration. Moreover even though your
-version looks smaller, but it causes one redundant store operation.
-Do you think it still would be better to use your version despite of
-my reasoning? 
+Changes in v4:
+- Rebased to tty-testing branch
+- Removed v3 patch 8/8, "bug" didn't happen in current driver
+- Patch specific changes listed in corresponding patch
 
--Serge(y)
+Thank you,
 
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
-> 
-> 
+Parker Newman (7):
+  serial: exar: remove old Connect Tech setup
+  serial: exar: added a exar_get_nr_ports function
+  serial: exar: add optional board_init function
+  serial: exar: moved generic_rs485 further up in 8250_exar.c
+  serial: exar: add CTI cards to exar_get_nr_ports
+  serial: exar: add CTI specific setup code
+  serial: exar: fix checkpach warnings
+
+ drivers/tty/serial/8250/8250_exar.c | 981 ++++++++++++++++++++++++++--
+ 1 file changed, 916 insertions(+), 65 deletions(-)
+
+
+base-commit: b86ae40ffcf5a16b9569b1016da4a08c4f352ca2
+=2D-
+2.43.2
+
 
