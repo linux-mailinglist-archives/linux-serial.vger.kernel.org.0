@@ -1,30 +1,31 @@
-Return-Path: <linux-serial+bounces-3522-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3524-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A3838A7F11
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 11:04:39 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A3578A7F15
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 11:04:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7AE071C20832
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 09:04:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D5DF1F26608
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 09:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 366AF12837C;
-	Wed, 17 Apr 2024 09:04:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D925D12CDAF;
+	Wed, 17 Apr 2024 09:04:37 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1120480614
-	for <linux-serial@vger.kernel.org>; Wed, 17 Apr 2024 09:04:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A79080614
+	for <linux-serial@vger.kernel.org>; Wed, 17 Apr 2024 09:04:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713344674; cv=none; b=uWHrG+P2p6IGK9ZX0k/971eLWpyCCieebDTo+TGLwwyZ2TKm/ChmU/nDRIuB/mjowXf5tZJNaAT2lhKyGyx6yfe4+/LQB7BqWjTQxUgS2pdU160CVgarrtPQHu7h4pS+a12MqvEpzJR7LwtDZ1XJ/C9VD53Hba2pnFwoOEsLrSU=
+	t=1713344677; cv=none; b=MsdoNZNuxU5p1uXx0BviNpTTs4PbB04TthoTYwbWgVBCowhtxsp6DgE0kSCQz85D0tUr7oXd80R8DJdVRvfKEFXiLuLanjqxbUnt5hwF++LoFtx3BEYTn+29V0XG8NFLn7goeoPD1oHIhJF6vIowd8cVWH5YWkWHHkyMoH28tec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713344674; c=relaxed/simple;
-	bh=Vy9RxpGJFkyUUn1WJcrbkWAi2j1VMThp4FrzwrvO4aY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BS4VU9iLt9jv39I5/1qOxswVyv7CQB4bm9FXqcgmPEofZYchzmuG96nCJiusSc9dmxXTmck90KLt6OgrhAspsu2FgrRljNF/zZl/yWAni89GTAqA8xsZGzc6iRZHhJDD7bWpDpBHy2RkKkhspiCAFDlGSlZ9gr45e8mnbNMV6YU=
+	s=arc-20240116; t=1713344677; c=relaxed/simple;
+	bh=jz6AwetzGMEFARbI09ryhM79Cpp+5tcl5jRCkdSNET4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NFK5agT6YT5KssPd3O99qgmVr+LCizWVQ4ewhZG6ZxvVBQ4i9YVmoDDD3GdTkk4ZyXcpdD6g2qebK7aseILDMuVaXQ0BR9uvbpfTXYH/YhSBM+tSbroePKr38/lJ5prjiEkWFN5JieAhPQHI+DG55/aBvl+lwi8bZbfd/Sg0wsM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -32,15 +33,15 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rx1DD-0004ol-PA; Wed, 17 Apr 2024 11:04:15 +0200
+	id 1rx1DD-0004om-PA; Wed, 17 Apr 2024 11:04:15 +0200
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rx1DB-00ClGE-Q8; Wed, 17 Apr 2024 11:04:13 +0200
+	id 1rx1DB-00ClGH-Va; Wed, 17 Apr 2024 11:04:13 +0200
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.96)
 	(envelope-from <ukl@pengutronix.de>)
-	id 1rx1DB-002hLw-2J;
+	id 1rx1DB-002hM0-2s;
 	Wed, 17 Apr 2024 11:04:13 +0200
 From: =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -57,11 +58,14 @@ Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Vladimir Zapolskiy <vladimir_zapolskiy@mentor.com>,
 	linux-serial@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 0/2] serial: stm32: Two fixes
-Date: Wed, 17 Apr 2024 11:03:26 +0200
-Message-ID: <cover.1713344161.git.u.kleine-koenig@pengutronix.de>
+	linux-arm-kernel@lists.infradead.org,
+	stable@vger.kernel.org
+Subject: [PATCH 1/2] serial: stm32: Return IRQ_NONE in the ISR if no handling happend
+Date: Wed, 17 Apr 2024 11:03:27 +0200
+Message-ID:  <5f92603d0dfd8a5b8014b2b10a902d91e0bb881f.1713344161.git.u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <cover.1713344161.git.u.kleine-koenig@pengutronix.de>
+References: <cover.1713344161.git.u.kleine-koenig@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -69,7 +73,7 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=710; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=Vy9RxpGJFkyUUn1WJcrbkWAi2j1VMThp4FrzwrvO4aY=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmH5BfsTno6WspytFGVGdPtgzDOQ57SnStMVreu xnM2THkVyGJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZh+QXwAKCRCPgPtYfRL+ ThT0B/44IBFxXJkLjJrE/ZG1oW5gVoGKgsjniS6CKQaN3sKpXtV58WnkjbVzW/iQNtUyNH0oVKj CU5w+Uf2f1Ht2+HFLei+OBZKtRczvYGbg03N34JytZkuIw1OOTwcSm180aqgAnRE5tDtX8+Y34t 0OcAyitQ9FFpZWu/mUTFdkg9bzAmq3AckFCC1TH5cChVcTfAjCKybeMY8zO4mcau9DLGik+y/25 uOSzEFI95gj+Z18uL3fend9iOdVqaiXwfs2AxeeZTx8o+dlVjttT/2SYFBWYl4UFxDFg0aQJ7il DA66aUf0nvLSJGXlsz5mywjXv95Hq3AfrGhJ+Mp9ZR2jzwBA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2801; i=u.kleine-koenig@pengutronix.de; h=from:subject:message-id; bh=jz6AwetzGMEFARbI09ryhM79Cpp+5tcl5jRCkdSNET4=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBmH5BgGqqxohanUIs9ldgC3LKg8mUkUOW5enTWc nNTWDud12aJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZh+QYAAKCRCPgPtYfRL+ Tn61B/wLkA8sd9+OtnXiV7D2HuC8Y3rIY+yd3AqI83nlYd01ePT6tnPUuatJgNSOV1d5bvjLaJm Ww7/8w3VW765fy5wfteHQLWausCQyAutmj+F6PnsX/OwEPLE4g4nxolcav8z+bREIaOtvDzyxy7 a/pNV+1rHNPJdvh/WU7yxwYahJbXPp/8CE1ULP4jU1fSzERqTXO9Ezig1qg5F1j4DDjhP4XxX57 ZBQ6Vr0E385ebYDSFYLSHM95N1xNfBpWjXb3Rs575gZMYo/3U+2F8eiw0j4QvXFfEHIOaAOBqGy pNB5jT61gSQrg8z709OwewOeRD9EqDtj7zvOHIteSZzbR+9u
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -77,27 +81,86 @@ X-SA-Exim-Mail-From: ukl@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-serial@vger.kernel.org
 
-Hello,
+If there is a stuck irq that the handler doesn't address, returning
+IRQ_HANDLED unconditionally makes it impossible for the irq core to
+detect the problem and disable the irq. So only return IRQ_HANDLED if
+an event was handled.
 
-this series contains to fixes that target v6.9 and IMHO should also get
-backported to stable. For that reason I added a Cc: stable line to both
-patches.
+A stuck irq is still problematic, but with this change at least it only
+makes the UART nonfunctional instead of occupying the (usually only) CPU
+by 100% and so stall the whole machine.
 
-The first patch isn't very critical, it only improves the driver's
-behaviour if another problem pops up in the future that results in an
-unhandled irq. The second fixes a real problem for me.
+Fixes: 48a6092fb41f ("serial: stm32-usart: Add STM32 USART Driver")
+Cc: stable@vger.kernel.org
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+ drivers/tty/serial/stm32-usart.c | 12 ++++++++++--
+ 1 file changed, 10 insertions(+), 2 deletions(-)
 
-Best regards
-Uwe
-
-Uwe Kleine-König (2):
-  serial: stm32: Return IRQ_NONE in the ISR if no handling happend
-  serial: stm32: Reset .throttled state in .startup()
-
- drivers/tty/serial/stm32-usart.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
-
-base-commit: 4eab358930711bbeb85bf5ee267d0d42d3394c2c
+diff --git a/drivers/tty/serial/stm32-usart.c b/drivers/tty/serial/stm32-usart.c
+index 8c66abcfe6ca..2bea1d7c9858 100644
+--- a/drivers/tty/serial/stm32-usart.c
++++ b/drivers/tty/serial/stm32-usart.c
+@@ -849,6 +849,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 	const struct stm32_usart_offsets *ofs = &stm32_port->info->ofs;
+ 	u32 sr;
+ 	unsigned int size;
++	irqreturn_t ret = IRQ_NONE;
+ 
+ 	sr = readl_relaxed(port->membase + ofs->isr);
+ 
+@@ -857,11 +858,14 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 	    (sr & USART_SR_TC)) {
+ 		stm32_usart_tc_interrupt_disable(port);
+ 		stm32_usart_rs485_rts_disable(port);
++		ret = IRQ_HANDLED;
+ 	}
+ 
+-	if ((sr & USART_SR_RTOF) && ofs->icr != UNDEF_REG)
++	if ((sr & USART_SR_RTOF) && ofs->icr != UNDEF_REG) {
+ 		writel_relaxed(USART_ICR_RTOCF,
+ 			       port->membase + ofs->icr);
++		ret = IRQ_HANDLED;
++	}
+ 
+ 	if ((sr & USART_SR_WUF) && ofs->icr != UNDEF_REG) {
+ 		/* Clear wake up flag and disable wake up interrupt */
+@@ -870,6 +874,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 		stm32_usart_clr_bits(port, ofs->cr3, USART_CR3_WUFIE);
+ 		if (irqd_is_wakeup_set(irq_get_irq_data(port->irq)))
+ 			pm_wakeup_event(tport->tty->dev, 0);
++		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	/*
+@@ -884,6 +889,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 			uart_unlock_and_check_sysrq(port);
+ 			if (size)
+ 				tty_flip_buffer_push(tport);
++			ret = IRQ_HANDLED;
+ 		}
+ 	}
+ 
+@@ -891,6 +897,7 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 		uart_port_lock(port);
+ 		stm32_usart_transmit_chars(port);
+ 		uart_port_unlock(port);
++		ret = IRQ_HANDLED;
+ 	}
+ 
+ 	/* Receiver timeout irq for DMA RX */
+@@ -900,9 +907,10 @@ static irqreturn_t stm32_usart_interrupt(int irq, void *ptr)
+ 		uart_unlock_and_check_sysrq(port);
+ 		if (size)
+ 			tty_flip_buffer_push(tport);
++		ret = IRQ_HANDLED;
+ 	}
+ 
+-	return IRQ_HANDLED;
++	return ret;
+ }
+ 
+ static void stm32_usart_set_mctrl(struct uart_port *port, unsigned int mctrl)
 -- 
 2.43.0
 
