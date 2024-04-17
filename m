@@ -1,149 +1,210 @@
-Return-Path: <linux-serial+bounces-3569-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3575-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A50858A8CEF
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 22:32:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F033A8A8D07
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 22:35:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A32B285CF5
-	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 20:32:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4DBD28A5B4
+	for <lists+linux-serial@lfdr.de>; Wed, 17 Apr 2024 20:35:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F040347F72;
-	Wed, 17 Apr 2024 20:32:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A3083D546;
+	Wed, 17 Apr 2024 20:35:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="spwjUayj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XVesQ+Zh"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 680E844C9E;
-	Wed, 17 Apr 2024 20:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94E7B22324;
+	Wed, 17 Apr 2024 20:35:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713385922; cv=none; b=Twq9c2jfmG8OaC7Mhwg6Scor6p59vrDZzOWMRV6DbFyFq2Pqa02hzhl7Y1jH0vH1aAaovP8/HJhPpsT5OT+ORPdRHg3yztO3QwlXj7PLN9ue5c2WktxC9P73Gnw9eWwhTzT22oqNH6QckRRWIl5YY38wrd824qqn4aI7ZZsAOmc=
+	t=1713386145; cv=none; b=Vxz+b73Zhnhdii2WxJmaRFWjzjsPRzviLP6+V0A+jCX7W1lBUQCuhYTnaRmCz6rY9n3HdI9gyqW/P0BL8eyAVQtLoEcwNtL9byV9UuCoLkrD8cyEnffqNdl/FMHbzuUVumx/SRPQj4nXskPMCMkvVTlbi3kDLUs3KPa2nlBOJY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713385922; c=relaxed/simple;
-	bh=cQOIUn28R7ZCsWq0fLJEMttNYm5HrXEpOQPtfYumEqg=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=N2XcUwAQMywMXvTTW03w3TWvRRmkHtURq4EssyNJy1vrzwG3znSpA0+Vla+z5IYL7NoBOvdMidfinpEoUXjAoMQ2dnjY7SndPTn6dNnQG0mnE94lsQkNXvicJ03nuV8Dp0v7MgWKEgD2ZCtQ9BWyBcY38T0TmbLaqdl2fipHSK0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=spwjUayj; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
-	s=s1-ionos; t=1713385916; x=1713990716; i=parker@finest.io;
-	bh=3mlaqrL+/WwAOWO2/+h06ofeEnSKj96AzK/VqPbMGLo=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=spwjUayjd2TABBZIxW+c819UGgqmEfjETKw/uSEEkEYV7zDpioAr6cacZ7x1wNgC
-	 C9XzN9Z2jiG4dDdpwVKDNpeyJHhouf1Ha/TIN9scW0gXte2eYl5zvn7y3CqTIlyjG
-	 dXScDqMaYlBxrUsMUAf6QoRB5jQ6qS5Y7XtYPBXkPlZpXyjnDGI9jlgJUPPbEnRgH
-	 NoQuXCUSpE3ETcIyz1sPGMdXFLSzZMgQiHthY4THbLTKCwUBLAYUEC0UGK7t6LyBP
-	 I1VyYYmT76lRJD8Ih2WB7EUrcHXbFxL6RXyS0uifcsrbQlnukT7TOj8sS973i9bb2
-	 YeXe5tofDWwQrGAhKA==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus004
- [74.208.5.2]) with ESMTPSA (Nemesis) id 1M5fxm-1s4KoQ0XN4-007Bs6; Wed, 17 Apr
- 2024 22:31:56 +0200
-From: Parker Newman <parker@finest.io>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Parker Newman <pnewman@connecttech.com>
-Subject: [PATCH v4 7/7] serial: exar: fix checkpach warnings
-Date: Wed, 17 Apr 2024 16:31:29 -0400
-Message-ID: <f7fa6c16cb5f2c8c1c7cb7d29f80bc7be53f91ab.1713382717.git.pnewman@connecttech.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <cover.1713382717.git.pnewman@connecttech.com>
-References: <cover.1713382717.git.pnewman@connecttech.com>
+	s=arc-20240116; t=1713386145; c=relaxed/simple;
+	bh=I6EJ1mP91iVz//8c5ia8HdkNztwtT3dmN/fNeMRppuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QBgnekPicobWahSMr11geql/xWKQWrzYl3P5LXwsPJ9pvR/RzFaYrzdgN6TI53sRdgS0U5ua3DiDOxHnxE1Ew8mJ+ewq0uUrX/FdGRcUqSkr9YSYtL/CG0JNIw9/MBz4jzKiQcivSeYk6x4EbFaZllxMpOSERmonsiF4yVVVVvU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XVesQ+Zh; arc=none smtp.client-ip=209.85.167.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-516d4d80d00so115906e87.0;
+        Wed, 17 Apr 2024 13:35:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713386142; x=1713990942; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R38L2lZrS+14WeM7ceh5Hp6+XyP4h36lYdwyJTOLv3o=;
+        b=XVesQ+Zhs/VE2C1W/74tIZerg5ra8xzGQlkZZUZt9vFyGHpz2IjUfU7ys5suniB99a
+         T/X+jX3t2dpduabwYEAgQxDRR56cNFcNs2Bzn9twcSxmOyduLcnNH76VGfXPv38+yssv
+         b6/W2ZMWu5e5OMyWzqeqfYiPP124Bw8lwPMb382kBoJe2t2fLNafD0sWG2KNb+O80+t3
+         JzoAWrHXjpwpyjxlz5fPQouBp07bI44oAMMerW7i6wSFMp6OwP1SGDfN0+EFGg5Cxp2j
+         tLBqDYOrjal32/l/OorWoDt5RTsi/TRTGELpXEYEZd2QInsjqfjujxvC1RLBBl7QC6rE
+         DB0A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713386142; x=1713990942;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R38L2lZrS+14WeM7ceh5Hp6+XyP4h36lYdwyJTOLv3o=;
+        b=CTVtrCFj+H3O9Hgu4n/nXQEeMu9eAnuKrvWVHwMZpXsu2jCjSadcHVz8hmWPtV+F4q
+         uRgDmoVi2UvMRY7jeDmLsK9950Bvtq5Rr1wYB65DSXe7wG4k8rsqcKq/dtRivDxX64ga
+         W2PIYbdz3yPCYEVxXCBsquRT1iG8ZMm3w91/ul0WOBNP47iTQp0vAzksR1vsoU4QwF00
+         I4bedHUBCJ3Dm8z1U0gKSL0tyAgBRj2MtyKElrOJSX7BvviRCCCcQDrZ11QL7IYZbIpN
+         CxHoe36bLsShuxJHqJQUqzyiBiUvgIn0NrPOJGFRooDtrk+O0X554OiV39IgwD3PjRq5
+         IbmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXtdEg9drOqnKQ4QKIFkB5TXu1F6pJDqrbX9do2HR5sp+Wy7mvhIbDhW4eqW3egZLux0DQG6YLVieoGkUx1lWRVdF10ZqjW/VRhIhVFh4OWWJpZW25/mXCNKRY/6PsfWW7AybaXZzz3l0jUK5tnbXhCe5LZYeccXll7lDePIgZXlO0TmobA
+X-Gm-Message-State: AOJu0YzraD+PLP1py/m0Y+T6NENP5sH3iIat9duB9/iibsAWR6oBc/Je
+	nd76XPNMd+2GBRBICB0vU3b5bD1IjaqHBXwECuWQk/1DQi5sJV0Y9BzFd/jX
+X-Google-Smtp-Source: AGHT+IFzQCpXyGVXKC8TGbH66IqAoulsoDP52wOdk6FAg211hiRNAveryXSiQmrNmpifkseQiOOn9A==
+X-Received: by 2002:ac2:456c:0:b0:515:d038:5548 with SMTP id k12-20020ac2456c000000b00515d0385548mr224508lfm.31.1713386141501;
+        Wed, 17 Apr 2024 13:35:41 -0700 (PDT)
+Received: from mobilestation.baikal.int (srv1.baikalchip.ru. [87.245.175.227])
+        by smtp.gmail.com with ESMTPSA id q13-20020ac2514d000000b00515d1dfab34sm2056041lfd.81.2024.04.17.13.35.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 17 Apr 2024 13:35:41 -0700 (PDT)
+Date: Wed, 17 Apr 2024 23:35:39 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Viresh Kumar <vireshk@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, dmaengine@vger.kernel.org, linux-serial@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] dmaengine: dw: Simplify max-burst calculation
+ procedure
+Message-ID: <tez5uqt4lg2qf5nooxuqo2rqhkqzzzbpeysdcbljokznbztkhj@j5t7cy4gd4pd>
+References: <20240416162908.24180-1-fancer.lancer@gmail.com>
+ <20240416162908.24180-5-fancer.lancer@gmail.com>
+ <Zh7NfmffgSBSjVWv@smile.fi.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:rmQ6lvyO9pcnLqF+oMyPzW9wbsk5Q3xtHL1O3lWF5U+UZndGBr3
- 7w9Xot12CLhbAYxoy0wJ+Ne6eXqebMrO+jM+iUWIoRXgT5uZpLyv+8gz40NbbvnPxTA4o4R
- iAqJsu1PjiH5yUqRYdZ9oM2TwN8cTOWaFAImOlDFmSCTQgBxqNDzKEeW/kEf+iG4PEeUPnE
- xQadyyuJUeFPXt8jd+Sjw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:tecjjXD4p7U=;yGo4BdNr+vZQPdaOqVSoWRi35md
- X1J2LPXuMabQkd2cG6i0FxPUdqdkCx+bWHs5QkCszvuMIIsNzNRw0DHvrF8HqoLFAR7iTtD3g
- h5BqWJzac+KPcQFmU9yPpKpQqaN4XUlIVFrv3Qi5RnQ7H2D/Q6iprDoAFS8wr8xowj+V0mOjV
- fSy01PPWZILRWfvhJug/6Au+Cy7+2sBK7VjOxokGzTi+PNUF/iVaEkj2rpCrQ95d3u16fW0nb
- Kg8ah1un8PTwPmngIuQbjl6S72OjqlDmyMEf2TdQ0DqNB5cI08oTQXI9XJAuCVSDK82r7mB0d
- 2WPUJ+efgMZekBupb4mUoMn4hZ/KAhFvXmTsjH2ebWZsslV4cEc5JjYKncItpAzZDd2AEfISa
- esuRreZv4eOQ+yeu8yuMh9YGJx2tm3U8t+jwMhz6L3pDZW5mPdoeo6S5UpMxWJxQ4YQV85nYM
- ZsmWSm5zSRa/oaJUFOepNmnSRbWVNe9Dy+57DrFPl7hRumyRguf1Psw78M6Gcw6iQeb/Pj8dK
- fcl2o6iJr3/Qm7h6bUYojCJtyMsLZC1B0MTM5mYB/u8wZKGxOwvx3JBFU7vrkcOf9V60E/2sw
- SWeGbchB8FM5cSJg0eRlguqkJLkb74m0fD+rwm7qQPJrCHFPW/c0gJLoVDV7XxbekoPIzGTLd
- uzNtH6QNlv98lTxvBNUGtYAB33RV3Qhybx2kViTeyyxe7iNNGVTo6FK6M7FFwzc/XMNylcTI3
- 7U46a8Fxpeu9L76BidXoBMwsjWkq3EUQDQCyjmrwOTa5psM/VRuiJc=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Zh7NfmffgSBSjVWv@smile.fi.intel.com>
 
-From: Parker Newman <pnewman@connecttech.com>
+On Tue, Apr 16, 2024 at 10:11:58PM +0300, Andy Shevchenko wrote:
+> On Tue, Apr 16, 2024 at 07:28:58PM +0300, Serge Semin wrote:
+> > In order to have a more coherent DW AHB DMA slave configuration method
+> > let's simplify the source and destination channel max-burst calculation
+> > procedure:
+> > 
+> > 1. Create the max-burst verification method as it has been just done for
+> > the memory and peripheral address widths. Thus the DWC DMA slave config
+> 
 
--Fix several "missing identifier name" warnings from checkpatch in
-struct exar8250_platform and struct exar8250_board.
-Example:
+> dwc_config() method
+> 
+> ?
 
-WARNING: function definition argument <arg> should also have an
-identifier name
+Right. I'll just directly refer to the dwc_config() method here.
 
-- Fix space before tab warning from checkpatch:
-WARNING: please, no space before tabs
-+ * 0^I^I2 ^IMode bit 0$
+> 
+> > method will turn to a set of the verification methods execution.
+> > 
+> > 2. Since both the generic DW AHB DMA and Intel DMA32 engines support the
+> 
 
-Signed-off-by: Parker Newman <pnewman@connecttech.com>
-=2D--
-Changes in v4:
-- Moved to separate patch
+> "i" in iDMA 32-bit stands for "integrated", so 'Intel iDMA 32-bit'
 
- drivers/tty/serial/8250/8250_exar.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+Ok. Thanks for clarification.
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250=
-/8250_exar.c
-index 6985aabe13cc..5e42558cbb01 100644
-=2D-- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -147,7 +147,7 @@
-  *
-  * MPIO		Port	Function
-  * ----		----	--------
-- * 0		2 	Mode bit 0
-+ * 0		2	Mode bit 0
-  * 1		2	Mode bit 1
-  * 2		2	Terminate bus
-  * 3		-	<reserved>
-@@ -229,8 +229,8 @@ struct exar8250_platform {
- 	int (*rs485_config)(struct uart_port *port, struct ktermios *termios,
- 			    struct serial_rs485 *rs485);
- 	const struct serial_rs485 *rs485_supported;
--	int (*register_gpio)(struct pci_dev *, struct uart_8250_port *);
--	void (*unregister_gpio)(struct uart_8250_port *);
-+	int (*register_gpio)(struct pci_dev *pcidev, struct uart_8250_port *port=
-);
-+	void (*unregister_gpio)(struct uart_8250_port *port);
- };
+> 
+> > power-of-2 bursts only, then the specified by the client driver max-burst
+> > values can be converted to being power-of-2 right in the max-burst
+> > verification method.
+> > 
+> > 3. Since max-burst encoded value is required on the CTL_LO fields
+> > calculation stage, the encode_maxburst() callback can be easily dropped
+> > from the dw_dma structure meanwhile the encoding procedure will be
+> > executed right in the CTL_LO register value calculation.
+> > 
+> > Thus the update will provide the next positive effects: the internal
+> > DMA-slave config structure will contain only the real DMA-transfer config
+> > value, which will be encoded to the DMA-controller register fields only
+> > when it's required on the buffer mapping; the redundant encode_maxburst()
+> > callback will be dropped simplifying the internal HW-abstraction API;
+> > DWC-config method will look more readable executing the verification
+> 
 
- /**
-@@ -245,8 +245,8 @@ struct exar8250_board {
- 	unsigned int num_ports;
- 	unsigned int reg_shift;
- 	int     (*board_init)(struct exar8250 *priv, struct pci_dev *pcidev);
--	int	(*setup)(struct exar8250 *, struct pci_dev *,
--			 struct uart_8250_port *, int);
-+	int	(*setup)(struct exar8250 *priv, struct pci_dev *pcidev,
-+			 struct uart_8250_port *port, int idx);
- 	void	(*exit)(struct pci_dev *pcidev);
- };
+> dwc_config() method
+> 
+> ?
 
-=2D-
-2.43.2
+Ok.
 
+> 
+> > functions one-by-one.
+> 
+> ...
+> 
+> > +static void dwc_verify_maxburst(struct dma_chan *chan)
+> 
+
+> It's inconsistent to the rest of _verify methods. It doesn't verify as it
+> doesn't return anything. Make it int or rename the function.
+
+Making it int won't make much sense since currently the method doesn't
+imply returning an error status. IMO using "verify" was ok, but since
+you don't see it suitable please suggest a better alternative. mend,
+fix, align?
+
+> 
+> > +{
+> > +	struct dw_dma_chan *dwc = to_dw_dma_chan(chan);
+> > +
+> > +	dwc->dma_sconfig.src_maxburst =
+> > +		clamp(dwc->dma_sconfig.src_maxburst, 1U, dwc->max_burst);
+> > +	dwc->dma_sconfig.dst_maxburst =
+> > +		clamp(dwc->dma_sconfig.dst_maxburst, 1U, dwc->max_burst);
+> > +
+> > +	dwc->dma_sconfig.src_maxburst =
+> > +		rounddown_pow_of_two(dwc->dma_sconfig.src_maxburst);
+> > +	dwc->dma_sconfig.dst_maxburst =
+> > +		rounddown_pow_of_two(dwc->dma_sconfig.dst_maxburst);
+> > +}
+> 
+> ...
+> 
+> >  static int dwc_verify_p_buswidth(struct dma_chan *chan)
+> > -		reg_burst = rounddown_pow_of_two(dwc->dma_sconfig.src_maxburst);
+> > +		reg_burst = dwc->dma_sconfig.src_maxburst;
+> 
+
+> Seems you have a dependency, need a comment below that maxburst has to be
+> "verified" [whatever] first.
+
+Ok.
+
+> 
+> ...
+> 
+> > +static inline u8 dw_dma_encode_maxburst(u32 maxburst)
+> > +{
+> > +	/*
+> > +	 * Fix burst size according to dw_dmac. We need to convert them as:
+> > +	 * 1 -> 0, 4 -> 1, 8 -> 2, 16 -> 3.
+> > +	 */
+> > +	return maxburst > 1 ? fls(maxburst) - 2 : 0;
+> > +}
+> 
+
+> Split these moves to another preparatory patch.
+
+Ok.
+
+-Serge(y)
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
+> 
+> 
 
