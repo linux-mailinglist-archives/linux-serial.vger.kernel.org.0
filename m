@@ -1,241 +1,194 @@
-Return-Path: <linux-serial+bounces-3600-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3602-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A1098A9B38
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Apr 2024 15:26:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 033138A9B8D
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Apr 2024 15:47:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1959A1F2373C
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Apr 2024 13:26:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 846821F23959
+	for <lists+linux-serial@lfdr.de>; Thu, 18 Apr 2024 13:47:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9624E15FD16;
-	Thu, 18 Apr 2024 13:25:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D961635B3;
+	Thu, 18 Apr 2024 13:46:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b="g03tgqlm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LpWa/Ywr"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from forward500c.mail.yandex.net (forward500c.mail.yandex.net [178.154.239.208])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f172.google.com (mail-il1-f172.google.com [209.85.166.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0A191607B7;
-	Thu, 18 Apr 2024 13:25:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.208
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F21FE84D02;
+	Thu, 18 Apr 2024 13:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713446747; cv=none; b=VCNnfKJqV9LS/ngswJwAC2qGNJHurinYXZeX+XjRpfXelBOdFy71YZ3ljy8yhGOzYocl3IFrntI/Usi2sPvMMPA++L3ChEZUCpRyyWZVLQ98s2fVLMh+hfbED378+T6RPJDLBhz/KyzWfjbnFOzm0L2GdEyAbcypTQakCec/7/s=
+	t=1713448007; cv=none; b=LRdv9pdj1E9hA7yjfO5TgleVkZiooGLoxYntXwweS4SFHV5dlvFtiumIbN1E0248rBAFotkll96l4XT9n8MkXh+xwu21iaggxLtpjndKw+ee/Vpz+Wi2TzUydJr4smrKDbJ0igG4mceyPpQhic6lqI0/0Fqi1aeqvt59IbivLlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713446747; c=relaxed/simple;
-	bh=316iesLTpesEW+mMqiUlnSfsLRZCpN89vKmk0hopAVI=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KQz57tmWKxaSlYUUUlpA7mN4HfyyU4MpFgxVZGQnQoigCmMNpkcGIIjut6bavKq3pmJYCaLG+W93WMjPYgEnmyjEHwiaLK1+lcHZJimBiLFDS8srDLJPodtFgJxONqZ7++rhhAVNlIaOKyzNWPP8SBv1JiNGu6YBBRor1JVQY/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru; spf=pass smtp.mailfrom=ya.ru; dkim=pass (1024-bit key) header.d=ya.ru header.i=@ya.ru header.b=g03tgqlm; arc=none smtp.client-ip=178.154.239.208
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ya.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ya.ru
-Received: from mail-nwsmtp-smtp-production-main-38.myt.yp-c.yandex.net (mail-nwsmtp-smtp-production-main-38.myt.yp-c.yandex.net [IPv6:2a02:6b8:c05:84:0:640:40f8:0])
-	by forward500c.mail.yandex.net (Yandex) with ESMTPS id A67CF6141F;
-	Thu, 18 Apr 2024 16:25:37 +0300 (MSK)
-Received: by mail-nwsmtp-smtp-production-main-38.myt.yp-c.yandex.net (smtp/Yandex) with ESMTPSA id HPFFWsDX0Cg0-9RDYRYzA;
-	Thu, 18 Apr 2024 16:25:36 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ya.ru; s=mail;
-	t=1713446736; bh=NnsLyYUHpsog8bfJ51lGJAeIHrXGTvcsmPGgAsASHuE=;
-	h=Message-Id:Date:In-Reply-To:Cc:Subject:References:To:From;
-	b=g03tgqlmtVWz/Mx1dZYoPBmdgWd7XN0u+QXa+gbY+ZudiYoOLrYv2pMTOJEDUAuUy
-	 yB0Yd1I9Ri+dUrU8bhJQCQA23q8wYz+Ng6z+zlMcB215Cm30eUQGUD9ES1lmiEmSnL
-	 eLhw5AGEil7WP5hpeuTRTSV72ENoAkEHnURL3Ecc=
-Authentication-Results: mail-nwsmtp-smtp-production-main-38.myt.yp-c.yandex.net; dkim=pass header.i=@ya.ru
-From: Konstantin <rilian.la.te@ya.ru>
-To: 
-Cc: Konstantin <ria.freelander@gmail.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Lech Perczak <lech.perczak@camlingroup.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH 3/3] serial: sc16is7xx: add support for EXAR XR20M1172 UART
-Date: Thu, 18 Apr 2024 16:25:05 +0300
-Message-Id: <20240418132508.3447800-4-rilian.la.te@ya.ru>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240418132508.3447800-1-rilian.la.te@ya.ru>
-References: <20240418132508.3447800-1-rilian.la.te@ya.ru>
+	s=arc-20240116; t=1713448007; c=relaxed/simple;
+	bh=gW8dXb6Q7XLgPxHV9ikTqeBfKystElfghh0UjTRZTNM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FFaGRXNREFjYNJXwzkKRX4UQ8t9E4WHjB7gVT+RrOfx5XzWpFNFLHTBzJI0uOKJV/ElRRf5h+p709K5lyYKmRdFEo/n21bdoaNuFVaVXHBuY3UVT8LY4VO7UoWfdMIGMU/V62Wt6WrcjBIWg/eI6/vaSaoaWzV2Rn3rs48SvCGE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LpWa/Ywr; arc=none smtp.client-ip=209.85.166.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-il1-f172.google.com with SMTP id e9e14a558f8ab-36b309dd33bso3371805ab.1;
+        Thu, 18 Apr 2024 06:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713448004; x=1714052804; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=gGi5waHieAvVi8Tc0QBDOeAQpOHxjESm7pISzq4RViM=;
+        b=LpWa/YwrYoOCU7WOeyVz2mrF77xcv5USUALUzHA0tGllyY5xwXKxPVYgSeTlvA4RP4
+         J98oIs1dttVACOlyFtj6cNhejSOMMVqFb+d2ExPskQ41xP25NghE7SeUbzaa1K1STD+c
+         pcCfqfxrW24+li+xYaKhM+H5jkrS0KsIGvAm0mtaERf74LV6uMiicYqNbO5Ph5T1YrwH
+         9zqxiutmvhzBLhc10eISOp2lkIuFdkRBhwn7detKJmasjVn2+OoimbzOTIj4XSFUqkPm
+         ekWVJNgvUIQHXORk7m21nqZ5nyOqQr0grGJC2B8G7C4Y1hqRp3KiKjkT4q3G8J/G91dC
+         ggMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713448004; x=1714052804;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gGi5waHieAvVi8Tc0QBDOeAQpOHxjESm7pISzq4RViM=;
+        b=G+Gg+kqDhM0D5qtYFKzsMVeLGKX9BsEd9/eQ97+pRtJa6XMvJs3mLB++w/GglqxzvS
+         Lzjq30GeOeLtKGnU/D1isQxUjticFRu0p0h7d7KBGyBR0slyDp6UOq5IrcdGWNPL5FFI
+         YAUEE9A3NAMaJBPu8r6LxlqpVdECRJ93aDjDVKjWnl1Tc/TF8WN7Fw5FN3zcWUpQtqLc
+         APO1tWbaGgCv3FBi5QDw4tuNjEG6SdQXiQ1ngp6SzqoZ1LgVwqsq8HJKwluCM/2m/yZa
+         SPghbUWUNmnVIcVSuQb/lkLJNgnDsP5KKMO5A85UsDlu5hOS3I/A79hpiFrdHWJq4VQG
+         LPJw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYX263+dbLhBsiYhKzomOw3+4oK/PBR5EPfNON76AdVaaSq+an2qx2aT2nPiANd2TcwGZkJ3HykiIPZq9KWfm8OheORhRQydkQpgfsJEf1jRrinjcGc+lsojXnVVWY5j/67K8GmEom1hyZ
+X-Gm-Message-State: AOJu0Yzqg2Y3AcPwI3hoH4hpvDQFJdDJA3ZV97z5BPuMmh9tCYMgwOxd
+	fZT22uW0DzO6lw3Q2eoACRkApR4h+m7cW65POWeAmDkm8dyjPIUBmcPsmf1asE9Wb1OBQYhvTEz
+	+QNXb5ShW8KhYFTIZtq56SZ6tRx4=
+X-Google-Smtp-Source: AGHT+IEoY8D9Jpg7uMpntADhnxTP1sKLam3YuKyv3a9rM9dkzBnvXCPvVhYLBXcdJYl4EkepVCeAZDTepPa7Rbz+bLU=
+X-Received: by 2002:a05:6e02:152d:b0:36b:2218:c913 with SMTP id
+ i13-20020a056e02152d00b0036b2218c913mr3495688ilu.6.1713448004122; Thu, 18 Apr
+ 2024 06:46:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20240418124349.26289-1-esa.laakso@fidelix.com> <2024041840-roundworm-sedate-9167@gregkh>
+In-Reply-To: <2024041840-roundworm-sedate-9167@gregkh>
+From: Esa Laakso <fidelix.laakso@gmail.com>
+Date: Thu, 18 Apr 2024 16:46:32 +0300
+Message-ID: <CAM3Ruo1=38jYvbHPwnTPHo5nyNO1d8e6AcM_5nzU0-04GWn85g@mail.gmail.com>
+Subject: Re: [PATCH RFC] pty: Add parity enabling routine
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: jirislaby@kernel.org, linux-serial@vger.kernel.org, 
+	kari.argillander@gmail.com, linux-kernel@vger.kernel.org, 
+	Esa Laakso <esa.laakso@fidelix.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Konstantin <ria.freelander@gmail.com>
+to 18. huhtik. 2024 klo 15.53 Greg KH (gregkh@linuxfoundation.org) kirjoitti:
+>
+> On Thu, Apr 18, 2024 at 03:43:49PM +0300, Esa Laakso wrote:
+> > There are some cases where parity selection is required for passing
+> > it forward to a virtualized terminal. In this sepcific use-case, we
+> > want to use pty to send and receive serial data to a serial
+> > multiplexer. By using a pty, we avoid writing a custom tty driver.
+> >
+> > There is very little evidence on the reasoning on why this option is
+> > hard-coded to be disabled. AFAIK it has been as such since 1996. With
+> > the lack of information about why this is, and based on the fact there
+> > are other similar fields that are not hard-coded, it is considered safe
+> > to enable this option.
+> >
+> > Still, in order not to be too intrusive about the change, add it only on
+> > the condition that the termios flag `EXTPROC` is turned on. This way
+> > there is very little chance it will cause any unintended problems in any
+> > other implementation.
+>
+> You need to document that EXTPROC thing somewhere, otherwise someone is
+> going to ask about this in 20 years and be confused :)
 
-Its register set is mostly compatible with SC16IS762, but
-it has a support for additional division rates of UART
-with special DLD register. So, add handling this register
-via UPF_MAGIC_MULTIPLIER port flag.
+True! Is it enough if this is documented as a comment? I would like to add it
+to the actual documentation, but AFAICS there does not seem to be a proper
+location for it...
 
-Signed-off-by: Konstantin Pugin <ria.freelander@gmail.com>
----
- drivers/tty/serial/sc16is7xx.c | 54 ++++++++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 3 deletions(-)
+>
+> > Signed-off-by: Esa Laakso <esa.laakso@fidelix.com>
+> > Signed-off-by: Esa Laakso <fidelix.laakso@gmail.com>
+>
+> Do not sign off on something twice, use your real email address only
+> once, that's all that is needed.
 
-diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
-index a300eebf1401..7fc1c19b3891 100644
---- a/drivers/tty/serial/sc16is7xx.c
-+++ b/drivers/tty/serial/sc16is7xx.c
-@@ -65,6 +65,7 @@
- /* Special Register set: Only if ((LCR[7] == 1) && (LCR != 0xBF)) */
- #define SC16IS7XX_DLL_REG		(0x00) /* Divisor Latch Low */
- #define SC16IS7XX_DLH_REG		(0x01) /* Divisor Latch High */
-+#define SC16IS7XX_DLD_REG		(0x02) /* Divisor Latch Mode (only on EXAR chips) */
- 
- /* Enhanced Register set: Only if (LCR == 0xBF) */
- #define SC16IS7XX_EFR_REG		(0x02) /* Enhanced Features */
-@@ -218,6 +219,20 @@
- #define SC16IS7XX_TCR_RX_HALT(words)	((((words) / 4) & 0x0f) << 0)
- #define SC16IS7XX_TCR_RX_RESUME(words)	((((words) / 4) & 0x0f) << 4)
- 
-+/* Divisor Latch Mode bits (EXAR extension)
-+ *
-+ * EXAR hardware is mostly compatible with SC16IS7XX, but supports additional feature:
-+ * 4x and 8x divisor, instead of default 16x. It has a special register to program it.
-+ * Bits 0 to 3 is fractional divisor, it used to set value of last 16 bits of
-+ * uartclk * (16 / divisor) / baud, in case of default it will be uartclk / baud.
-+ * Bits 4 and 5 used as switches, and should not be set to 1 simultaneously.
-+ */
-+
-+#define SC16IS7XX_DLD_16X		0
-+#define SC16IS7XX_DLD_DIV(m)	((m) & 0xf)
-+#define SC16IS7XX_DLD_8X		BIT(4)
-+#define SC16IS7XX_DLD_4X		BIT(5)
-+
- /*
-  * TLR register bits
-  * If TLR[3:0] or TLR[7:4] are logical 0, the selectable trigger levels via the
-@@ -310,6 +325,7 @@ struct sc16is7xx_devtype {
- 	char	name[10];
- 	int	nr_gpio;
- 	int	nr_uart;
-+	bool has_dld;
- };
- 
- #define SC16IS7XX_RECONF_MD		(1 << 0)
-@@ -522,6 +538,13 @@ static const struct sc16is7xx_devtype sc16is762_devtype = {
- 	.nr_uart	= 2,
- };
- 
-+static const struct sc16is7xx_devtype xr20m1172_devtype = {
-+	.name		= "XR20M1172",
-+	.nr_gpio	= 8,
-+	.nr_uart	= 2,
-+	.has_dld	= true,
-+};
-+
- static bool sc16is7xx_regmap_volatile(struct device *dev, unsigned int reg)
- {
- 	switch (reg) {
-@@ -559,13 +582,29 @@ static int sc16is7xx_set_baud(struct uart_port *port, int baud)
- 	struct sc16is7xx_one *one = to_sc16is7xx_one(port, port);
- 	u8 lcr;
- 	u8 prescaler = 0;
--	unsigned long clk = port->uartclk, div = clk / 16 / baud;
-+	u8 divisor = 16;
-+	u8 dld_mode = SC16IS7XX_DLD_16X;
-+	bool has_dld = !!(port->flags & UPF_MAGIC_MULTIPLIER);
-+	unsigned long clk = port->uartclk, div, div16;
-+
-+	if (has_dld)
-+		while (DIV_ROUND_CLOSEST(port->uartclk, baud) < divisor)
-+			divisor /= 2;
-+
-+	div16 = clk * (16 / divisor) / baud;
-+	div = div16 / 16; /* For divisor = 16, it is the same as clk / 16 / baud */
- 
- 	if (div >= BIT(16)) {
- 		prescaler = SC16IS7XX_MCR_CLKSEL_BIT;
- 		div /= 4;
- 	}
- 
-+	/* Count additional divisor for EXAR devices */
-+	if (divisor == 8)
-+		dld_mode = SC16IS7XX_DLD_8X;
-+	if (divisor == 4)
-+		dld_mode = SC16IS7XX_DLD_4X;
-+
- 	/* Enable enhanced features */
- 	sc16is7xx_efr_lock(port);
- 	sc16is7xx_port_update(port, SC16IS7XX_EFR_REG,
-@@ -586,12 +625,14 @@ static int sc16is7xx_set_baud(struct uart_port *port, int baud)
- 	regcache_cache_bypass(one->regmap, true);
- 	sc16is7xx_port_write(port, SC16IS7XX_DLH_REG, div / 256);
- 	sc16is7xx_port_write(port, SC16IS7XX_DLL_REG, div % 256);
-+	if (has_dld)
-+		sc16is7xx_port_write(port, SC16IS7XX_DLD_REG, dld_mode | SC16IS7XX_DLD_DIV(div16));
- 	regcache_cache_bypass(one->regmap, false);
- 
- 	/* Restore LCR and access to general register set */
- 	sc16is7xx_port_write(port, SC16IS7XX_LCR_REG, lcr);
- 
--	return DIV_ROUND_CLOSEST(clk / 16, div);
-+	return DIV_ROUND_CLOSEST(clk / divisor, div);
- }
- 
- static void sc16is7xx_handle_rx(struct uart_port *port, unsigned int rxlen,
-@@ -1014,6 +1055,7 @@ static void sc16is7xx_set_termios(struct uart_port *port,
- 	unsigned int lcr, flow = 0;
- 	int baud;
- 	unsigned long flags;
-+	bool has_dld = !!(port->flags & UPF_MAGIC_MULTIPLIER);
- 
- 	kthread_cancel_delayed_work_sync(&one->ms_work);
- 
-@@ -1093,7 +1135,7 @@ static void sc16is7xx_set_termios(struct uart_port *port,
- 	/* Get baud rate generator configuration */
- 	baud = uart_get_baud_rate(port, termios, old,
- 				  port->uartclk / 16 / 4 / 0xffff,
--				  port->uartclk / 16);
-+				  port->uartclk / (has_dld ? 4 : 16));
- 
- 	/* Setup baudrate generator */
- 	baud = sc16is7xx_set_baud(port, baud);
-@@ -1550,6 +1592,9 @@ static int sc16is7xx_probe(struct device *dev,
- 		s->p[i].port.type	= PORT_SC16IS7XX;
- 		s->p[i].port.fifosize	= SC16IS7XX_FIFO_SIZE;
- 		s->p[i].port.flags	= UPF_FIXED_TYPE | UPF_LOW_LATENCY;
-+		/* If we have DLD register, then set UPF_MAGIC_MULTIPLIER flag */
-+		if (devtype->has_dld)
-+			s->p[i].port.flags |= UPF_MAGIC_MULTIPLIER;
- 		s->p[i].port.iobase	= i;
- 		/*
- 		 * Use all ones as membase to make sure uart_configure_port() in
-@@ -1688,6 +1733,7 @@ static const struct of_device_id __maybe_unused sc16is7xx_dt_ids[] = {
- 	{ .compatible = "nxp,sc16is752",	.data = &sc16is752_devtype, },
- 	{ .compatible = "nxp,sc16is760",	.data = &sc16is760_devtype, },
- 	{ .compatible = "nxp,sc16is762",	.data = &sc16is762_devtype, },
-+	{ .compatible = "exar,xr20m1172",	.data = &xr20m1172_devtype, },
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, sc16is7xx_dt_ids);
-@@ -1776,6 +1822,7 @@ static const struct spi_device_id sc16is7xx_spi_id_table[] = {
- 	{ "sc16is752",	(kernel_ulong_t)&sc16is752_devtype, },
- 	{ "sc16is760",	(kernel_ulong_t)&sc16is760_devtype, },
- 	{ "sc16is762",	(kernel_ulong_t)&sc16is762_devtype, },
-+	{ "xr20m1172",	(kernel_ulong_t)&xr20m1172_devtype, },
- 	{ }
- };
- 
-@@ -1826,6 +1873,7 @@ static const struct i2c_device_id sc16is7xx_i2c_id_table[] = {
- 	{ "sc16is752",	(kernel_ulong_t)&sc16is752_devtype, },
- 	{ "sc16is760",	(kernel_ulong_t)&sc16is760_devtype, },
- 	{ "sc16is762",	(kernel_ulong_t)&sc16is762_devtype, },
-+	{ "xr20m1172",	(kernel_ulong_t)&xr20m1172_devtype, },
- 	{ }
- };
- MODULE_DEVICE_TABLE(i2c, sc16is7xx_i2c_id_table);
--- 
-2.34.1
+Alright. I'm unable to use our company e-mail as it adds a signature by force,
+so I wasn't sure what the proper protocol for this was. Thanks for the info.
 
+>
+> > ---
+> >
+> > We are looking for some assistance on this patch, or just a green light
+> > to submit it, if it is good to go.
+> >
+> > We would need to know if the change is valid in context of pty, as
+> > there seems to be fairly little information about the reasoning behind
+> > the hard-coded values.
+> >
+> > Our guess is that they have been as such forever and nobody has had a
+> > reason to change them. We have a reason to change them, and we would
+> > like to know if it is safe to do so and possibly contribute in the
+> > process. Either by just using the patch for ourselves or submitting
+> > it here.
+> >
+> > For the record, this is my first patch submitted upstream. Please let
+> > me know if something is incorrect or missing.
+> > ---
+> >
+> >  drivers/tty/pty.c | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/tty/pty.c b/drivers/tty/pty.c
+> > index 07394fdaf522..e2d9718dcea0 100644
+> > --- a/drivers/tty/pty.c
+> > +++ b/drivers/tty/pty.c
+> > @@ -267,7 +267,9 @@ static void pty_set_termios(struct tty_struct *tty,
+> >               }
+> >       }
+> >
+> > -     tty->termios.c_cflag &= ~(CSIZE | PARENB);
+> > +     tty->termios.c_cflag &= ~(CSIZE);
+> > +     if (!L_EXTPROC(tty))
+> > +             tty->termios.c_cflag &= ~(PARENB);
+>
+> Some description of how you tested this in the changelog would also be
+
+With "changelog", do you mean the commit message? I'll do that.
+
+> good, and a comment here too as to what you are doing.
+
+We are using a (legacy) hardware serial port multiplexer in our device. In order
+to avoid writing a kernel driver for this, we decided the next best approach is
+to have a rust driver in userspace and use pty:s instead of tty:s. This way we
+get to have access to the needed parts of the termios structure, plus any other
+niceties that come with pty code without having to implement those ourselves.
+Our rust code hosts a pty master, takes the termios settings defined by the
+slave endpoint and passes the relevant parts to the multiplexer. This way we can
+take almost any software that uses a serial and it will have a high chance
+working out of the box.
+
+We use EXTPROC flag to get the termios settings asyncronously from the slaves to
+the master. When termios is used by the process attached to the slave pty, it
+will send a byte to indicate change of options. We then pass those settings on
+the multiplexer, resulting in a minimal delay.
+
+When doing this, we noted that we were unable to control the parity flag, as it
+would always be disabled. This meant that we were unable to pass it onto the
+multiplexer. This did not apply to other similar, non-effecting settings like
+baudrate, which does nothing on pty:s either (AFAIK). Hence the careful change
+here, where we used the EXTPROC to determine the behavior of the PARENB bit.
+
+We can still change this to NOT be EXTPROC dependent, but we felt that such we
+could cause a regression due to lack of knowledge. Very little to no info on the
+PARENB flag, or any of the other relevant flags could be found on the
+pty. Let us
+know if you deem otherwise.
+
+>
+> thanks,
+>
+> greg k-h
 
