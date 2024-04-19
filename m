@@ -1,128 +1,110 @@
-Return-Path: <linux-serial+bounces-3672-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3676-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C389A8AB05D
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:10:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7652B8AB08E
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:17:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FDEC284961
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:10:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C46F3B21DC0
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:17:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8EF312E1CD;
-	Fri, 19 Apr 2024 14:08:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81A0712E1C4;
+	Fri, 19 Apr 2024 14:17:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q7oQWewo"
+	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="DDO8Rh3U"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B984712DDB8;
-	Fri, 19 Apr 2024 14:08:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA3C12D745;
+	Fri, 19 Apr 2024 14:17:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.194
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713535682; cv=none; b=dK5Tb56XpgxLO245k4ryebuCzB0kwTEDI3ziKRsQbDoKtbEmIHEMGgFNhaSrlFGPyzCWiVwD6L0TA5UccOKpFpsbVPkplwzRuxXfwXJNYMWkdadCCLRdZtI8ELmzFyYQ7N4IB814Dyyg9yvOqiayLOq5OlQ8qMd8tRRHh4EVoBU=
+	t=1713536253; cv=none; b=VBzGuKZ7yMRP79yt5/MA7trTeI6eF2VkgRG4hi4LsGWEJU0Fz+8+znIdcfrLGt00eoiXgXRuSnkMe2mUT3XD174Wmfpj7YiDoQDL/PTkLxctcFcWhIkKqgTIy8qc/XA90lNZ72vprZHXqtZGzzmhpWm2A+Q/SH2z1bmgIkbLi/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713535682; c=relaxed/simple;
-	bh=rjZuH2RNoPHVFiJFLYwvZB1FBSLtOukO9uEvQlaCLC8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=az5KbzkTNGZSNxq9OYI1DXm0jAempLXHShJw1WOjdTjQvNqU+w+mWU/RLQv6NMYiv6syL+7e3mVYrfDrJ4oaTyQSXDK13lh9jdl6jHxdnfh71NW5eWRqWogyO4B7b0+Q5TVldIX+X7qsX7q9c1Pq135JDtHs5HBAeDzo3fChxm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q7oQWewo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25936C4AF68;
-	Fri, 19 Apr 2024 14:07:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1713535682;
-	bh=rjZuH2RNoPHVFiJFLYwvZB1FBSLtOukO9uEvQlaCLC8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=q7oQWewoDaWdOgYxMQ2ukGY48LSdhEWx1Otl6NL/TTr+dfGVMzoDhU3xs8U+Vh03h
-	 h5b0vAwEUh0w5Y49GqRXTA3x6vXCtnvxjQ4gozeRKlb9SXka7NLec8p11CW/x98aJl
-	 h5Lb+91utT3HTnj0JuWh7Xi436hMqCY/QTT9qqXHmHFOk931dWFEtI8LLQsVwB7nz8
-	 LG5253uOY1du1nubU90M1bj7wt/5V/bTVlruSp8dRagHLqh2Bo5QGeuSWXlnz5Hipz
-	 /gecHLXUIG2MGhaiGur1A5yaQe4R7eEow4vtXUbWk7COMzVEaOYU8P2WPM54eleU2Z
-	 X9eUEDw0nTkew==
-Date: Fri, 19 Apr 2024 15:07:52 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Konstantin Pugin <rilian.la.te@ya.ru>
-Cc: Konstantin Pugin <ria.freelander@gmail.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Lech Perczak <lech.perczak@camlingroup.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v4 2/3] dt-bindings: sc16is7xx: Add compatible line for
- XR20M1172 UART
-Message-ID: <20240419-glue-pyramid-584728c0076a@spud>
-References: <20240419124506.1531035-1-rilian.la.te@ya.ru>
- <20240419124506.1531035-3-rilian.la.te@ya.ru>
+	s=arc-20240116; t=1713536253; c=relaxed/simple;
+	bh=vTbu8+uaAy9bIlLRAIIsaySyMLKaBd92pRdl6Gb8tBg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=D3g5qXuWyVi/71M8NsmIleLisHZlXmf09q1w05wziyDKAevZSpMDDJD+eC3qAv/KgWVzXd3IIDflHhDf/P80L5UORiYaXheqij5G6nx6FtEw7XY5wNcjc6GB+xgAONHsmO2tWfgbAVgmTdcvAcZ2vnlvSahZjJYSmSST/znwKaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=DDO8Rh3U; arc=none smtp.client-ip=74.208.4.194
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
+	s=s1-ionos; t=1713536243; x=1714141043; i=parker@finest.io;
+	bh=mMKORGqoebFxU+tv5m8Uye3wb8KIjSNC+fOYILy9MRs=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=DDO8Rh3UWZjPUHImOKNZXT4lVFtCcdI4PEDtWFQx9Rj7Q12X73QZUUrhvZoYGqgI
+	 RbtR7jLx62RdN14FSDWuTwVmSlPgOkU4d5TiYPcpq8Dv3J+yeQWh7IRy4yi8l7LFW
+	 qvWT6NcUiff0PESU547DW8ut0mDmYgC+5v62Ihe+rR2iMLNcXilSM9JGkDM2IrAOo
+	 ywfsW+7A9xL7j7xNPxVz1V3xRv1owaYdRBFQRvbw+cu1bw/kKN9ULQH9sP96gLdaB
+	 6xK1UNFF6XmYlbJLmHoMBAEQz9BpgTvsTE/7oS6uwMMoWBHrkO5TJVviRtfShFr3+
+	 pCLXLNqUaJdOVwIZjA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus003
+ [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lr0UP-1sbGfQ08d1-00egVb; Fri, 19 Apr
+ 2024 16:17:23 +0200
+From: Parker Newman <parker@finest.io>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Parker Newman <pnewman@connecttech.com>
+Subject: [PATCH v2 0/4] serial: exar: fix kbuild warnings and code style
+Date: Fri, 19 Apr 2024 10:17:00 -0400
+Message-ID: <cover.1713533298.git.pnewman@connecttech.com>
+X-Mailer: git-send-email 2.43.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="ov99zUVbexXa5Um/"
-Content-Disposition: inline
-In-Reply-To: <20240419124506.1531035-3-rilian.la.te@ya.ru>
-
-
---ov99zUVbexXa5Um/
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:pI/AEIEjLuATnt6yZm7in2tJg0aZALvjwgtfzsBtL8HMkPlIzjt
+ yXdw8+9jqhwsZ7Jcub1xoe1a31Rkc7prrtJyWSaao7MugbUc8a8YcBbDO77fSuaC+N0rTXP
+ wmLjBbylXMgFninlmuvFY1ECa70y442bjg1GKGbBweOD6+cl1qKPYgYFOTkZ1luKR4BcAWG
+ DphKeBrDzYWrOlvO79f/w==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:7Drs03ndMec=;0KMHNMJLDPMine7dJjdqCUEXfb/
+ TiOX8WZktknVlhT5Qu0U2qH1MHHySIq4h7aCcltCv93SwN7AZtwxZS6wR0ae9QQYtGV437iX4
+ zbHAS0sfJKrihg4nA/pytGrHhpLNI1ZlxX64xghcN+pYTA0wN7H/QqYGDNegH0rr/0c9PAK6B
+ BkCGF4XzZT3ltfoQ3rQZl/9tjqRT4ghN41dqCmYY0AtY0Rum4KVJsU2rvzfXFDl5kXktateqW
+ 9OZmFa6MWc/XtfLOUu5i6zwznZLn9GNfXOLePVJFjlF1sOIIn2APhgJGCWTYfp5BOpI/EVYwE
+ JUMkqETv/ViYeq+RnmYjyhTK7MuJXCcm/Hv712EYH4Fl6wX/y2UvzN09x7kUUOQ5a3ZYqjYUd
+ bXkq2Djk26n+pRlG4R37iIHXIQ/f2Zg23JSXKxIpLkHzmgwK+kelUN6jiYpyisrStJsJhjZh3
+ bJkt3gbIfkLt2GmOUeAHpaEzWVYAT3Pxg0MPyNz4YqbicUI20giA+/vOw+BCu+j7l0cF0ctGv
+ PWQJqoNl09YOEUBmemQ4w2/E7+V13k/Uni8T54ioM9rYWkY6ybn1Cq1SuG59roUQMYkKv+JS5
+ sont0mgz/O5XMa1Wbs6T5IbsSFnvf9gi9DDmgKY04/Wk32KUKL1xSfqwFSfpHX3FrB751ovnb
+ o4jMEN6mT8z53Z1UcePJ+0CSBXciFTH5vqx79kyR6cF9hulGkTgyp85JklldG7GPjF/olHo3F
+ X38H/A9Ve4unHJb5TLe6xNQrcuTiq947EUQj9xN+zGfcbbuG0F23AU=
 
-On Fri, Apr 19, 2024 at 03:45:02PM +0300, Konstantin Pugin wrote:
-> From: Konstantin Pugin <ria.freelander@gmail.com>
->=20
-> Add EXAR XR20M1172 UART compatible line into devicetree documentation.
+From: Parker Newman <pnewman@connecttech.com>
 
-What you're doing is obvious from the diff, why this exar device is
-related to the nxp devices is what should be mentioned here.
+This is a series of small patches fixing kbuilds error and code style
+issues based on feedback during review of main patches.
 
-Thanks,
-Conor.
+Original patches thread:
+Link: https://lore.kernel.org/linux-serial/cover.1713382717.git.pnewman@co=
+nnecttech.com/
 
->=20
-> Reviewed-by: Vladimir Zapolskiy <vz@mleia.com>
-> Signed-off-by: Konstantin Pugin <ria.freelander@gmail.com>
-> ---
->  Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml =
-b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> index 5dec15b7e7c3..c4bedf23368b 100644
-> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> @@ -12,6 +12,7 @@ maintainers:
->  properties:
->    compatible:
->      enum:
-> +      - exar,xr20m1172
->        - nxp,sc16is740
->        - nxp,sc16is741
->        - nxp,sc16is750
-> --=20
-> 2.34.1
->=20
+Parker Newman (4):
+  serial: exar: add missing kernel doc function parameters
+  serial: exar: use return dev_err_probe instead of returning error code
+  serial: exar: return bool from exar_ee_read_bit()
+  serial: exar: remove ternaries from
+    cti_get_port_type_xr17c15x_xr17v25x()
 
---ov99zUVbexXa5Um/
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/tty/serial/8250/8250_exar.c | 36 ++++++++++++++---------------
+ 1 file changed, 18 insertions(+), 18 deletions(-)
 
------BEGIN PGP SIGNATURE-----
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZiJ6uAAKCRB4tDGHoIJi
-0s5fAP9IKK3nOQ4Jai8TvAbCaITTWmCJhHo3WB/T9hOiaHVNVQD/cVSvMGYRW79m
-TbjX6eFGGbOtnYE3sPYmC7tlV8+2PAw=
-=EuDz
------END PGP SIGNATURE-----
+base-commit: c6795fbffc4547b40933ec368200bd4926a41b44
+=2D-
+2.43.2
 
---ov99zUVbexXa5Um/--
 
