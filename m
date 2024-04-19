@@ -1,152 +1,157 @@
-Return-Path: <linux-serial+bounces-3673-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3679-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DF028AB082
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:15:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 047788AB0AD
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:24:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D2D61F27222
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:15:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 838EF1F210E6
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A02C12C817;
-	Fri, 19 Apr 2024 14:15:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCFB812DD93;
+	Fri, 19 Apr 2024 14:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eL0F9+1G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SxLY3P9L"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6F14F214;
-	Fri, 19 Apr 2024 14:15:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6B2712D1FE;
+	Fri, 19 Apr 2024 14:24:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713536143; cv=none; b=a/Ostu7B+wG+CLOwgYbLdH6EX1EA64E9khQ8AX+7WEvmFE7nZNyby/55CQBjYK5W+OrqN8JJQJjOA8CdXZ0mMjXrg5+lfllCCaTo2glajxy9qJ+FVaq+bvJFc2Lwkjgvtj4A/jETV4ccUyk2cHGzlJvZLwUyzG66fu5fxgolvwQ=
+	t=1713536657; cv=none; b=rE5xeN1Km59hn9u4I3FaNwFiv/T373R/thp6CyTlvCPp2Dd0FcYwgx6eiknUNuKVWX4XlUgyMJeZh1SLTrrl19AnzMgdvetz1ZH87luwUG+Fj9UXTGEZW43tp7jTAvOH5UbFtEUQ0zYhtb1DUId8sLDDgzJm017u13lL93hfLNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713536143; c=relaxed/simple;
-	bh=W0mdvqs2asOd11DMoCEkH+mk70+oTv/de/UTORfTO0M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=p2CLh97j/PNLm7ICjHpEqjSE4a3Em+ua2RMdYzYJ6JCC6LSMPQEl0ZTqBI7AbAGQmTkFEL7Jz7zvcro7KtP/sHE4Rly9Vzxhp/7vT1oZZ8fCeXLOwTsIgbDJUKFvd3f1tf2Yy3gkG+eJv0MmG6fVDwospSw6s/q0sbWhMJdXObo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eL0F9+1G; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-518a3e0d2ecso3277417e87.3;
-        Fri, 19 Apr 2024 07:15:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1713536139; x=1714140939; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=od1HuzfQ62qye8I9y6ria+FsgJWb4Ms5/RYXQrdJrHw=;
-        b=eL0F9+1GDvvDxXN3ndO1S3ip3Xz7Dgi//9lN2dAgAipFm8xZJl5UHELNMIse7T7ALA
-         KP2aj8NOHi+IoYGEs3dL7vwe4UTfzVu98XAI7LoXSxko4sz3QVdVzlPSvPo8/XlIrPVv
-         Rp8O96zIGT9cYa7ieWgXsKClSLKGyx0irWwCfgpYMCX45YxYFFhLWk8Xk7YgvO6ZaMMu
-         8P9JVEhYYPnuTePNSJcnXKHsTgUeGIwQqeLwjtxXVNATHtfK0H8cGFlsrcQzGD0p2ITz
-         35VoEWxZHWmHYWy9yMZ8RiHJqgK4B9ke7ld2aOiHIpMBa8j1JwIB52kVkOCnXrp74Cnm
-         47iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713536139; x=1714140939;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=od1HuzfQ62qye8I9y6ria+FsgJWb4Ms5/RYXQrdJrHw=;
-        b=hxKhZdjt7aLa7bRFM/+Ub7XqrpJQ/TvWMG8ujVSWRbGsjCH1FpUSlFwFEBKcBqN5U/
-         hz0zHDkLl39BwewD95c/6k4CS9wJPJQI6JN1go9KSA7gKxbb3UfHDOEhGT8FHlPIeuGz
-         gM19rFzDnFhIYX15Dk9dh1cPauho1wYcPHvEg4UfXmwZR/hQIlE8KjlqWt71rPeBRakF
-         g2FgeCESnGR0dGx+/fIo0kXW2qQpONlcbs65H3CBPtLlFHHCWOPAKC6rNM0TbS514wcE
-         pkzF7u3f1h2OXzXkcOocy3YD+ZstUEW1C5fn3NFmcdmaNjwXQOzeOtKoh0RFknmlWC6j
-         hQ6A==
-X-Forwarded-Encrypted: i=1; AJvYcCUdDch2fhWB6Q+7lgk/PX2UOO05MKuAHOxN9rUqMJ/OqTIvyUH0FFBv+eAawH9HvB5KuMslarSAtD6oqeZplG/dS2F0a0CjibS7c9kRTnpF6HwScLnwOdvxltXitSfwZY6tYFp7zR1J18OuoRAdPXT+0HbhcMnelne0IFbLUTaaKvnXXA3HFA==
-X-Gm-Message-State: AOJu0Yzu9HoE6pTXmUDdSnMzzLOznSsS/EBzNkEJD4OjnFwDdj6WB6bO
-	8lygIwyEdTf8Hf0zWgrGEOrRaW2FdJVi0Qqix9mQIklPBluPoXLIfmNdRb8gA0arvuqQcByk1SG
-	X8w3ygJjzRVVlneTXIt5Gs/3xiug=
-X-Google-Smtp-Source: AGHT+IE1lEiJ+HQHyKO37TEXweZDgaRCH2dQqiCpfF+bVzG/msLkLTqXljXaNiBmiD8F6JAq7LVM4pgzv4o3VJhcgAI=
-X-Received: by 2002:a05:6512:38c1:b0:513:ca40:fafc with SMTP id
- p1-20020a05651238c100b00513ca40fafcmr1600944lft.11.1713536138669; Fri, 19 Apr
- 2024 07:15:38 -0700 (PDT)
+	s=arc-20240116; t=1713536657; c=relaxed/simple;
+	bh=SdssixGdlPbY8jaq8GaNsgqoDDyzwfpqA2Jhpw+VFec=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MAEE7YZ9ukNDuAbEQtcxe4etLqQAfIfRa00stXJ3ftA2XqHlh/h/RCmtqPfvVtwTL1SP/v3JQxL2IzWJUGEdFyodT8izCaY0wz+uawpxoXzb0h7Js72ZNkkfeMZoKE9tmmFMGE591RdyeVMJZvvD7rQee/1BsaNkP8nNAMPIxHk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SxLY3P9L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAC2EC072AA;
+	Fri, 19 Apr 2024 14:24:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1713536657;
+	bh=SdssixGdlPbY8jaq8GaNsgqoDDyzwfpqA2Jhpw+VFec=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=SxLY3P9L2qLfmVMeCpmqihqVr+SmUfgjv+eFg47OCDiG9EG0NPWvx+wcmWDt4KxMc
+	 CcZfuEGI2rSQEO1T9ENnpWHhSZ+Z5Gd/qfzzm1bK7SU/U6GTVLL7NnmN2QIoQ6NMUe
+	 uN0mfInPBEyYhbJQGB7cW3JyjgqCXPSzZUodcVdnaNtt86AwpvR6eoYlg4kJgbkbUn
+	 FwqpgskuVcrJ1jo4+nHGJ25by7Thq63ZiuBOKlVAjSmI3biMno0yyULBRsN2X71niW
+	 JZdxewuW8GqaG5sPhxSCPqHpmRLhgvn9YcXaCY3ERFlgwCFjHm+tHVt4/+ON1+H17K
+	 zzarKwCHMgDew==
+Message-ID: <dc6573ba-37cb-4394-9a89-16b6f8caa7ad@kernel.org>
+Date: Fri, 19 Apr 2024 16:24:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240419124506.1531035-1-rilian.la.te@ya.ru> <20240419124506.1531035-3-rilian.la.te@ya.ru>
- <20240419-glue-pyramid-584728c0076a@spud>
-In-Reply-To: <20240419-glue-pyramid-584728c0076a@spud>
-From: "Konstantin P." <ria.freelander@gmail.com>
-Date: Fri, 19 Apr 2024 17:17:43 +0300
-Message-ID: <CAF1WSuy4OJVTU5VJdn23BSw4aTAq7i8UQ416V7BxveuQ+5=-1w@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 2/3] dt-bindings: sc16is7xx: Add compatible line for
  XR20M1172 UART
-To: Conor Dooley <conor@kernel.org>
-Cc: Konstantin Pugin <rilian.la.te@ya.ru>, Vladimir Zapolskiy <vz@mleia.com>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Lech Perczak <lech.perczak@camlingroup.com>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+To: "Konstantin P." <ria.freelander@gmail.com>,
+ Conor Dooley <conor@kernel.org>
+Cc: Konstantin Pugin <rilian.la.te@ya.ru>, Vladimir Zapolskiy <vz@mleia.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ Lech Perczak <lech.perczak@camlingroup.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+References: <20240419124506.1531035-1-rilian.la.te@ya.ru>
+ <20240419124506.1531035-3-rilian.la.te@ya.ru>
+ <20240419-glue-pyramid-584728c0076a@spud>
+ <CAF1WSuy4OJVTU5VJdn23BSw4aTAq7i8UQ416V7BxveuQ+5=-1w@mail.gmail.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAF1WSuy4OJVTU5VJdn23BSw4aTAq7i8UQ416V7BxveuQ+5=-1w@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Apr 19, 2024 at 5:08=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Fri, Apr 19, 2024 at 03:45:02PM +0300, Konstantin Pugin wrote:
-> > From: Konstantin Pugin <ria.freelander@gmail.com>
-> >
-> > Add EXAR XR20M1172 UART compatible line into devicetree documentation.
->
-> What you're doing is obvious from the diff, why this exar device is
-> related to the nxp devices is what should be mentioned here.
->
-> Thanks,
-> Conor.
+On 19/04/2024 16:17, Konstantin P. wrote:
+> On Fri, Apr 19, 2024 at 5:08 PM Conor Dooley <conor@kernel.org> wrote:
+>>
+>> On Fri, Apr 19, 2024 at 03:45:02PM +0300, Konstantin Pugin wrote:
+>>> From: Konstantin Pugin <ria.freelander@gmail.com>
+>>>
+>>> Add EXAR XR20M1172 UART compatible line into devicetree documentation.
+>>
+>> What you're doing is obvious from the diff, why this exar device is
+>> related to the nxp devices is what should be mentioned here.
+>>
+>> Thanks,
+>> Conor.
+> 
+> It is already mentioned in cover letter and in previous patches in the
+> series. Do I need to repeat it in DTS patch?
+> If so, I will do it.
+> 
+> Citation from my cover letter:
+> 
+> EXAR XR20M1172 UART is mostly SC16IS762-compatible, but
+> it has additional register which can change UART multiplier
+> to 4x and 8x, similar to UPF_MAGIC_MULTIPLIER does. So, I used this
+> flag to guard access to its specific DLD register. It seems than
+> other EXAR SPI UART modules also have this register, but I tested
+> only XR20M1172.
+> Yes, in datasheet this register is called "DLD - Divisor Fractional"
+> or "DLD - Divisor Fractional Register", calling depends on datasheet
+> version.
 
-It is already mentioned in cover letter and in previous patches in the
-series. Do I need to repeat it in DTS patch?
-If so, I will do it.
+Commits must stand on their own. Cover letter is not merged. This is the
+place where you add new hardware, so here you describe and explain the
+hardware.
 
-Citation from my cover letter:
+Best regards,
+Krzysztof
 
-EXAR XR20M1172 UART is mostly SC16IS762-compatible, but
-it has additional register which can change UART multiplier
-to 4x and 8x, similar to UPF_MAGIC_MULTIPLIER does. So, I used this
-flag to guard access to its specific DLD register. It seems than
-other EXAR SPI UART modules also have this register, but I tested
-only XR20M1172.
-Yes, in datasheet this register is called "DLD - Divisor Fractional"
-or "DLD - Divisor Fractional Register", calling depends on datasheet
-version.
-
-Also, comparision from NXP itself:
-http://www.bdtic.com/download/nxp/75017168.pdf (pp12-13 is about XR20M1172)=
-.
-
-> >
-> > Reviewed-by: Vladimir Zapolskiy <vz@mleia.com>
-> > Signed-off-by: Konstantin Pugin <ria.freelander@gmail.com>
-> > ---
-> >  Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yam=
-l b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> > index 5dec15b7e7c3..c4bedf23368b 100644
-> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
-> > @@ -12,6 +12,7 @@ maintainers:
-> >  properties:
-> >    compatible:
-> >      enum:
-> > +      - exar,xr20m1172
-> >        - nxp,sc16is740
-> >        - nxp,sc16is741
-> >        - nxp,sc16is750
-> > --
-> > 2.34.1
-> >
 
