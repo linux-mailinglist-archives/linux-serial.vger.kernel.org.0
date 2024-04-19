@@ -1,170 +1,152 @@
-Return-Path: <linux-serial+bounces-3674-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3673-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3761F8AB08C
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:17:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DF028AB082
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 16:15:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4771C1C2339D
-	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:17:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D2D61F27222
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Apr 2024 14:15:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0DF12D769;
-	Fri, 19 Apr 2024 14:17:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A02C12C817;
+	Fri, 19 Apr 2024 14:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="C4kmhbju"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eL0F9+1G"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E53912C817;
-	Fri, 19 Apr 2024 14:17:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD6F14F214;
+	Fri, 19 Apr 2024 14:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713536252; cv=none; b=ZCGo9PJ5kYseY3J5fhUZt0sCf6gS2b7dEuvrxw1QP/8HiGD8XIYsn00gwUhcYIoDajaXlJqxIPb+hm1x8IgMG4SE5FHFSv0XhaH6opkPT5impyEE9BUU02RSryxKsOWTw7YqdaoetvxJwtyInpLG80zaL0rOFcvX5D4+To8hhdg=
+	t=1713536143; cv=none; b=a/Ostu7B+wG+CLOwgYbLdH6EX1EA64E9khQ8AX+7WEvmFE7nZNyby/55CQBjYK5W+OrqN8JJQJjOA8CdXZ0mMjXrg5+lfllCCaTo2glajxy9qJ+FVaq+bvJFc2Lwkjgvtj4A/jETV4ccUyk2cHGzlJvZLwUyzG66fu5fxgolvwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713536252; c=relaxed/simple;
-	bh=euXPQiBqqIG2+cRuTUbXpVJ3280d78ADpFb0BaPYG54=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cqb8kk6kIykoulvCGoR1Pk78thQZ+Hz8IIz1PSv5d9bRzTGcqe/xMHEV6QcSpIWzeG14QU7eEU8+f9eWcR0cw50wfHqS/H88Tx+a/bniiVHD4eZClxAiy5dZYHzhnzibUgrUlrQXvhKkEehMLVSdjxnZYLKg/E9Ge5hM+DWVEAA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=C4kmhbju; arc=none smtp.client-ip=74.208.4.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
-	s=s1-ionos; t=1713536244; x=1714141044; i=parker@finest.io;
-	bh=nWFQ37RsfGMWOYIzH+ps6Dt2wTvbrcgBevzsVRsv/OM=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=C4kmhbjuw5LZ4uH/ZvMGpZMC8feopacN9/1dZM+U2FhwgHfhiMWbLD4mW2osHRbA
-	 4fuFeC9c+RTsKh8ZOJTkm6tfo0imZzKCQicXHDVUodnNDX1P9YVwy9PQsysVICifD
-	 uCaoS0JvMe5pvRAGvooUBLG+6qUD9eniZM+4RAuznate8zUcuroWiO9Y6WsyKHzDY
-	 Yp3kmZgz8aIDCjmkkPPY+iRuQRYLoMsgDiwc5sk66chxynEGC6o0qSEeWelIsZEFC
-	 IRrFHJfoAqSzjImeo+m9mHWBZHgmjYoF0c/LmDHD8/8uCjg0EXHUPBOpYpi7V+1Hw
-	 NCocvfFzJoOuxfc7VQ==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus003
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0MO8aA-1s3Ih62rx6-005cbY; Fri, 19 Apr
- 2024 16:17:24 +0200
-From: Parker Newman <parker@finest.io>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Parker Newman <pnewman@connecttech.com>
-Subject: [PATCH v2 4/4] serial: exar: remove ternaries from cti_get_port_type_xr17c15x_xr17v25x()
-Date: Fri, 19 Apr 2024 10:17:04 -0400
-Message-ID: <d672326427b1026c7700303eedef8594f2688def.1713533298.git.pnewman@connecttech.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <cover.1713533298.git.pnewman@connecttech.com>
-References: <cover.1713533298.git.pnewman@connecttech.com>
+	s=arc-20240116; t=1713536143; c=relaxed/simple;
+	bh=W0mdvqs2asOd11DMoCEkH+mk70+oTv/de/UTORfTO0M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=p2CLh97j/PNLm7ICjHpEqjSE4a3Em+ua2RMdYzYJ6JCC6LSMPQEl0ZTqBI7AbAGQmTkFEL7Jz7zvcro7KtP/sHE4Rly9Vzxhp/7vT1oZZ8fCeXLOwTsIgbDJUKFvd3f1tf2Yy3gkG+eJv0MmG6fVDwospSw6s/q0sbWhMJdXObo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eL0F9+1G; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-518a3e0d2ecso3277417e87.3;
+        Fri, 19 Apr 2024 07:15:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1713536139; x=1714140939; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=od1HuzfQ62qye8I9y6ria+FsgJWb4Ms5/RYXQrdJrHw=;
+        b=eL0F9+1GDvvDxXN3ndO1S3ip3Xz7Dgi//9lN2dAgAipFm8xZJl5UHELNMIse7T7ALA
+         KP2aj8NOHi+IoYGEs3dL7vwe4UTfzVu98XAI7LoXSxko4sz3QVdVzlPSvPo8/XlIrPVv
+         Rp8O96zIGT9cYa7ieWgXsKClSLKGyx0irWwCfgpYMCX45YxYFFhLWk8Xk7YgvO6ZaMMu
+         8P9JVEhYYPnuTePNSJcnXKHsTgUeGIwQqeLwjtxXVNATHtfK0H8cGFlsrcQzGD0p2ITz
+         35VoEWxZHWmHYWy9yMZ8RiHJqgK4B9ke7ld2aOiHIpMBa8j1JwIB52kVkOCnXrp74Cnm
+         47iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1713536139; x=1714140939;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=od1HuzfQ62qye8I9y6ria+FsgJWb4Ms5/RYXQrdJrHw=;
+        b=hxKhZdjt7aLa7bRFM/+Ub7XqrpJQ/TvWMG8ujVSWRbGsjCH1FpUSlFwFEBKcBqN5U/
+         hz0zHDkLl39BwewD95c/6k4CS9wJPJQI6JN1go9KSA7gKxbb3UfHDOEhGT8FHlPIeuGz
+         gM19rFzDnFhIYX15Dk9dh1cPauho1wYcPHvEg4UfXmwZR/hQIlE8KjlqWt71rPeBRakF
+         g2FgeCESnGR0dGx+/fIo0kXW2qQpONlcbs65H3CBPtLlFHHCWOPAKC6rNM0TbS514wcE
+         pkzF7u3f1h2OXzXkcOocy3YD+ZstUEW1C5fn3NFmcdmaNjwXQOzeOtKoh0RFknmlWC6j
+         hQ6A==
+X-Forwarded-Encrypted: i=1; AJvYcCUdDch2fhWB6Q+7lgk/PX2UOO05MKuAHOxN9rUqMJ/OqTIvyUH0FFBv+eAawH9HvB5KuMslarSAtD6oqeZplG/dS2F0a0CjibS7c9kRTnpF6HwScLnwOdvxltXitSfwZY6tYFp7zR1J18OuoRAdPXT+0HbhcMnelne0IFbLUTaaKvnXXA3HFA==
+X-Gm-Message-State: AOJu0Yzu9HoE6pTXmUDdSnMzzLOznSsS/EBzNkEJD4OjnFwDdj6WB6bO
+	8lygIwyEdTf8Hf0zWgrGEOrRaW2FdJVi0Qqix9mQIklPBluPoXLIfmNdRb8gA0arvuqQcByk1SG
+	X8w3ygJjzRVVlneTXIt5Gs/3xiug=
+X-Google-Smtp-Source: AGHT+IE1lEiJ+HQHyKO37TEXweZDgaRCH2dQqiCpfF+bVzG/msLkLTqXljXaNiBmiD8F6JAq7LVM4pgzv4o3VJhcgAI=
+X-Received: by 2002:a05:6512:38c1:b0:513:ca40:fafc with SMTP id
+ p1-20020a05651238c100b00513ca40fafcmr1600944lft.11.1713536138669; Fri, 19 Apr
+ 2024 07:15:38 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20240419124506.1531035-1-rilian.la.te@ya.ru> <20240419124506.1531035-3-rilian.la.te@ya.ru>
+ <20240419-glue-pyramid-584728c0076a@spud>
+In-Reply-To: <20240419-glue-pyramid-584728c0076a@spud>
+From: "Konstantin P." <ria.freelander@gmail.com>
+Date: Fri, 19 Apr 2024 17:17:43 +0300
+Message-ID: <CAF1WSuy4OJVTU5VJdn23BSw4aTAq7i8UQ416V7BxveuQ+5=-1w@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] dt-bindings: sc16is7xx: Add compatible line for
+ XR20M1172 UART
+To: Conor Dooley <conor@kernel.org>
+Cc: Konstantin Pugin <rilian.la.te@ya.ru>, Vladimir Zapolskiy <vz@mleia.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Lech Perczak <lech.perczak@camlingroup.com>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org, 
+	linux-serial@vger.kernel.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:e14IZuYugv8xagY2QPH0Fz/gGkBpK3QfnisJhgzbn3Dkbz+BL0I
- 20gTiAWsLO6wCszC1oSJiGjHckV+U3ENhRVrU3cCcVBy8hVPmU43YfgMKkkJV3Miij/2a9L
- qGcmxoX38afdWBqvWwRqo+26G+89lN3jxTXtOZBFEB9kLl8Vgg1dZd6LU4Byo6ownImBol+
- uo/Ek/bJ2Ed823bg39t+Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:BwRiKUOze6Y=;EvYC6pMJhilTeMZfsCFEDNjmvwa
- 1xcpwMRk0KxyE0nLMPkEU8VCHdzOHujxlZjB3OMCkjSZAdAbLhTBLVv9K1GBWVfkN3YO+YZKf
- OjVPqHTWKP98b3oDn/jBv+k3IkDc78i7MT90/Ovn+ETgPrTWRlyHWQn49Aq6U4CDjYRyZzWBI
- UEJoe3inA9OSt7nHabADMY1+qH1iTq0rXrLtj1+QgSAZbgMi4HJZBow3nmDq/XfX4jXNkPAu2
- 4deOsTC3xvfZoQ/7R5nN+iKiZ4rxkMIhJWXbxglAT536IQxCrIy7IQzypjT4qhxCeJ6+6qDak
- HfPYmUumPNdTXtc3mkRPcRyYpgYvPB1tGrrA1B8VMY2tV+N0DF7BTAOGvku/LuJNYbOTPhpAg
- AM4N7MQlZz6i5EgaFrDiwwT50bHyJ1jQ9XsjFbawuNfJ+rRfL85Nc0OnbNkjSPWkd+HqjndDS
- aXkuyg6PPh2AnFJrdaVctAU3BJAKlqUDCozs23kFB9Vo5xNiI5ZYO3KVXSjUj0KQvARiQ59uh
- xH7HrJKBHCbbMgpPzXTROqHa2+2szeyrGP7llb+z/2cZyY5QeBoLOUvbiQ14LmiSuP9H8uVHG
- qTFx0BQMGMjO9vWuhm+ropH6dwk0xhagfV9vzy6qLwNQzX5pKaxawhEAp9LRG02MNGI3gEnUU
- 0rNYGKJqMaQMHF7S/ij2gAWzTyYLNxUIV5iZ/gN+mbtpjiGFnvDqkiUQYmWExB60KTbWC1T1P
- q738Vv259C7KUbOZbJzG1ousVHtm09KHepYVs1aF1H59SooDzM2xB0=
 
-From: Parker Newman <pnewman@connecttech.com>
+On Fri, Apr 19, 2024 at 5:08=E2=80=AFPM Conor Dooley <conor@kernel.org> wro=
+te:
+>
+> On Fri, Apr 19, 2024 at 03:45:02PM +0300, Konstantin Pugin wrote:
+> > From: Konstantin Pugin <ria.freelander@gmail.com>
+> >
+> > Add EXAR XR20M1172 UART compatible line into devicetree documentation.
+>
+> What you're doing is obvious from the diff, why this exar device is
+> related to the nxp devices is what should be mentioned here.
+>
+> Thanks,
+> Conor.
 
-Remove ternary operators from cti_get_port_type_xr17c15x_xr17v25x() for
-better readability.
+It is already mentioned in cover letter and in previous patches in the
+series. Do I need to repeat it in DTS patch?
+If so, I will do it.
 
-Signed-off-by: Parker Newman <pnewman@connecttech.com>
-=2D--
-Changes in v2:
-- Removed ternary operators completely
+Citation from my cover letter:
 
- drivers/tty/serial/8250/8250_exar.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+EXAR XR20M1172 UART is mostly SC16IS762-compatible, but
+it has additional register which can change UART multiplier
+to 4x and 8x, similar to UPF_MAGIC_MULTIPLIER does. So, I used this
+flag to guard access to its specific DLD register. It seems than
+other EXAR SPI UART modules also have this register, but I tested
+only XR20M1172.
+Yes, in datasheet this register is called "DLD - Divisor Fractional"
+or "DLD - Divisor Fractional Register", calling depends on datasheet
+version.
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250=
-/8250_exar.c
-index 8665d3b7b673..521d2acf4004 100644
-=2D-- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -726,7 +726,7 @@ static enum cti_port_type cti_get_port_type_xr17c15x_x=
-r17v25x(struct exar8250 *p
- 							struct pci_dev *pcidev,
- 							unsigned int port_num)
- {
--	enum cti_port_type port_type;
-+	enum cti_port_type port_type =3D CTI_PORT_TYPE_RS232;
+Also, comparision from NXP itself:
+http://www.bdtic.com/download/nxp/75017168.pdf (pp12-13 is about XR20M1172)=
+.
 
- 	switch (pcidev->subsystem_device) {
- 	// RS232 only cards
-@@ -737,23 +737,22 @@ static enum cti_port_type cti_get_port_type_xr17c15x=
-_xr17v25x(struct exar8250 *p
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_8_SP_232_NS:
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_8_XPRS_LP_232:
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_8_XPRS_LP_232_NS:
--		port_type =3D CTI_PORT_TYPE_RS232;
- 		break;
- 	// 1x RS232, 1x RS422/RS485
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_1_1:
--		port_type =3D (port_num =3D=3D 0) ?
--			CTI_PORT_TYPE_RS232 : CTI_PORT_TYPE_RS422_485;
-+		if (port_num)
-+			port_type =3D CTI_PORT_TYPE_RS422_485;
- 		break;
- 	// 2x RS232, 2x RS422/RS485
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_2_2:
--		port_type =3D (port_num < 2) ?
--			CTI_PORT_TYPE_RS232 : CTI_PORT_TYPE_RS422_485;
-+		if (port_num > 1)
-+			port_type =3D CTI_PORT_TYPE_RS422_485;
- 		break;
- 	// 4x RS232, 4x RS422/RS485
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_4_4:
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_4_4_SP:
--		port_type =3D (port_num < 4) ?
--			CTI_PORT_TYPE_RS232 : CTI_PORT_TYPE_RS422_485;
-+		if (port_num > 3)
-+			port_type =3D CTI_PORT_TYPE_RS422_485;
- 		break;
- 	// RS232/RS422/RS485 HW (jumper) selectable
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_2:
-@@ -789,13 +788,13 @@ static enum cti_port_type cti_get_port_type_xr17c15x=
-_xr17v25x(struct exar8250 *p
- 		break;
- 	// 6x RS232, 2x RS422/RS485
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_6_2_SP:
--		port_type =3D (port_num < 6) ?
--			CTI_PORT_TYPE_RS232 : CTI_PORT_TYPE_RS422_485;
-+		if (port_num > 5)
-+			port_type =3D CTI_PORT_TYPE_RS422_485;
- 		break;
- 	// 2x RS232, 6x RS422/RS485
- 	case PCI_SUBDEVICE_ID_CONNECT_TECH_PCI_UART_2_6_SP:
--		port_type =3D (port_num < 2) ?
--			CTI_PORT_TYPE_RS232 : CTI_PORT_TYPE_RS422_485;
-+		if (port_num > 1)
-+			port_type =3D CTI_PORT_TYPE_RS422_485;
- 		break;
- 	default:
- 		dev_err(&pcidev->dev, "unknown/unsupported device\n");
-=2D-
-2.43.2
-
+> >
+> > Reviewed-by: Vladimir Zapolskiy <vz@mleia.com>
+> > Signed-off-by: Konstantin Pugin <ria.freelander@gmail.com>
+> > ---
+> >  Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yam=
+l b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> > index 5dec15b7e7c3..c4bedf23368b 100644
+> > --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> > +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+> > @@ -12,6 +12,7 @@ maintainers:
+> >  properties:
+> >    compatible:
+> >      enum:
+> > +      - exar,xr20m1172
+> >        - nxp,sc16is740
+> >        - nxp,sc16is741
+> >        - nxp,sc16is750
+> > --
+> > 2.34.1
+> >
 
