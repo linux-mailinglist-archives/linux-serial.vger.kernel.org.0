@@ -1,137 +1,212 @@
-Return-Path: <linux-serial+bounces-3797-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3799-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B422B8B0A6B
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 15:06:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75BFC8B0C61
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 16:22:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E64D11C22C8F
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 13:06:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F40AA1F27705
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 14:22:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C165D15B150;
-	Wed, 24 Apr 2024 13:06:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3091515E5C9;
+	Wed, 24 Apr 2024 14:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="McPBIgIf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PhQFf29g"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+Received: from mail-wm1-f41.google.com (mail-wm1-f41.google.com [209.85.128.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C04B015B143
-	for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 13:06:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B3215B99E
+	for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 14:22:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713963993; cv=none; b=a/x03DYiPx3UoBgxLHHKa5YQN5ebfveT6UFtXZ80d4NZTzE2lPpMeMCwDTEAltj2rmOhcmeRVdolGpV9fqzUKukA9VtnUm1VG1u+xCiux+252XdKVI7svFtoTh8oF4MvxucIEPY95X9yQ7JegkCy/hsSP7wn9neEAzj1+FEv5vY=
+	t=1713968524; cv=none; b=tnSElOIp28rQpmJGfutD0ACBaAfyubS7SUscV/cS2iGvQ9p4r24fWtbTVP0+6VBdx0uvX5EXai1havz7yJEKiOujp0kMbBy2C8DHPhf+QPNHiFHcxj3RUgLDCrFzyDmqyH0IWTDpOKQ4VtsU1qr2rGN0dfGxM5bI/bJ3PXcaUkc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713963993; c=relaxed/simple;
-	bh=lvGq478npegdfe7X33ro4L3C4YXKBVJlBkfyJxEJbXo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ekJwiLCh8xG62bE6npk+p8qrkQ4YsS5z/S3+BBiKxU9zvzGXufD7fh4C8o/9Y8FRUCN/m7QB4EPCLxPoMt84V604eTreYWEtJVtR3cqaatsy2SYsOiYZezF5AP1FlsMwairbvGO2NrTiT6ZPMrwcgmAOzOIj9kV2dH15dZA/Wyo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=McPBIgIf; arc=none smtp.client-ip=209.85.210.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-6ed32341906so6568274b3a.1
-        for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 06:06:30 -0700 (PDT)
+	s=arc-20240116; t=1713968524; c=relaxed/simple;
+	bh=zQ4ggdIVSkhmIl2fRvA4hlHqqYytUieTW/CMICOA+M0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qci/cHn5q1gVrDmR6aM0ZEeujPexAAtGw4dqxf29F/Q0FXXbcKcytMKQpTdiAvluPB5Cp1lvkxoFZaP0kZzGhivCeriMOlpul4ySoTYt9CvoAVpPs0oZZj2w7bzJsR9arY7ZpXxQ5zVNKfzlNw6xnkASZxmeemWJimXw16shM/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PhQFf29g; arc=none smtp.client-ip=209.85.128.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-41b09fb205dso4603585e9.0
+        for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 07:22:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1713963990; x=1714568790; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZWmvHblwyLfpV+rEC2PSqDTFbQMnE4MDRNUxWTIYKmE=;
-        b=McPBIgIfkGSRkg6nVkKfnpiWJ72i3SZ6PIocpp0PgvijkzJ+L2JrlrVVGO8WWp9/Ko
-         7HIZz0gNBSsAWkm3GzQy5UtULLMz2J4uEXvZVt8J7x1Pr0BnRsxRf9CqlRrxvzVU+H8X
-         n43ZvyrPBXhvaigwVjMMFttxgWzH+bjK2wI+E=
+        d=linaro.org; s=google; t=1713968521; x=1714573321; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rbu3CtHQPDzqG7bcEJAxBge0HJMTre8Cbx1YM3r4SiU=;
+        b=PhQFf29ga/hT0xj/PCph+ZrNplHd6tQQd2dn6+TdsALaGumsnp/f7mNw3b29JafvXu
+         oYhouAbiojPQzZpKLxPUuyfOEIC32hqc5lSca7zFClv20+P+7QPDNGDtVk8flDL43TZP
+         ZGoga8Wxo9dBfZO8zI6iaap847E1kt7WM5d+G+DBcliy1lXQ6UZ9qpXhXfPAOj2HcEyD
+         K4pLuPVeQYpXr/W7WzhCr7oHxFJg/Lpx27phdOvuaVz6VGN5IxdMqA+oa88Mj4+Or1HM
+         8IoTq+EWUDWlOd2fY535+gPVk1iqGx5NhUyRcUVWNnbbur3NO1uB3xGx0wUwdJ84P/0h
+         tvtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1713963990; x=1714568790;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1713968521; x=1714573321;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZWmvHblwyLfpV+rEC2PSqDTFbQMnE4MDRNUxWTIYKmE=;
-        b=muMZmOJQ9xIdXi3P8SDOttvEB6v1df8VPj2mdM2gjOvmkZ3B+CgaWR45cgPPopeu38
-         2KxIYyEPmnl1NkSJCv1R4yndiH+XjNCeW8FkgiYG7SfpTbeoWcg85XE+befQP06pJETW
-         J8xlQIZXsUJ6qo8EEETlVbevOFuCVZm1BTgw0qyyH+5iH0VCMasT93YN4oQw6MCKnkKo
-         UH5FPvWAbNmh6vADqPdAXHK16vuKtVvkEc0KyfkB3RdkRhNfkbu+u5lWI1kF9n1gItxg
-         UfWnsCEZ5f9c8ZH9L53ZkxwuyI1ug14j7Q0G0Y+zyhNlvod8jOfhjo/c+fro0TnkteK2
-         dg0Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXXXXUiXXCkA58MfB+4y2SAsgPmwm7v0krU/wV8xFNAB4eQzwCCe3vI1DovvgqQdItuL9uhbhTJiyVEtePi06mUCpR5m96GkgqtoeFI
-X-Gm-Message-State: AOJu0YyJB+VioV1OFq5z97cAmg6cr3dZ+GCZvEvyrnzrlQHOuuIv+pCP
-	jcjznYadA5DpnIaIHQIv8WNEQhLwPOI3vtvrH32Zvs/4CyPT4HWddZgho1jm6A==
-X-Google-Smtp-Source: AGHT+IGxaNdfLyHIQirpTurMn+c1hdzjWlDQY5IRavD5VXu6cW703ROJBZd0shDax7VyQ2G08e/VqQ==
-X-Received: by 2002:a05:6a20:c6cd:b0:1ad:7fd1:ee2e with SMTP id gw13-20020a056a20c6cd00b001ad7fd1ee2emr2131046pzb.13.1713963989985;
-        Wed, 24 Apr 2024 06:06:29 -0700 (PDT)
-Received: from treapking.tpe.corp.google.com ([2401:fa00:1:10:836:835b:e0f2:a3a0])
-        by smtp.gmail.com with ESMTPSA id y5-20020a637d05000000b005f3d2a9a91bsm9981158pgc.89.2024.04.24.06.06.27
+        bh=rbu3CtHQPDzqG7bcEJAxBge0HJMTre8Cbx1YM3r4SiU=;
+        b=jXjmWAqL6cV+AnKbAknB6Ac1zVG/LkY+wVawnGNLWSVQD8Nc+XJxUOvgkv10PwIyxO
+         UDocxEhgyTMC8BKTNTs3yw9hCX7Ru2RNz0ZiUgV7gqtu2Duktox1Xjiq/6Dt1MOzF7aV
+         waLnc99N95hDUf4xmL1j2HHstx0K4P7rBSAbJG1qiOz+tXUEvqU6UXDTquLrg0a/5UUZ
+         /DR4req+UX9RyU2FjUqSq8QLPS/JK3lBj+4ADhqx3BlPIbUYLbYkg4MFqo/ZnSALzssr
+         OEyGQToprqDtXX+sV9bx6SQpymT81jlsS4TeXFD6MgGNz68GLh1OhJs/T664G/VBVBL+
+         z98A==
+X-Forwarded-Encrypted: i=1; AJvYcCWGjdO/lOkwpL/VYdSaR1mCRliQnHdLIkRBoHVmcOKsqu0ifAAGOMpH5DWgs2phY/c5vK3910ZW6Iasd5ITBNtRG8KDgNmBFNH79fx9
+X-Gm-Message-State: AOJu0Yxmn5fC1ri/HgcCJoOfvcCnsYffO3zVhtRgUo9LGcc9Sj7XYXPm
+	JDSP2JIf8aUJtspZSePSyZrIK3AanH3pXyPTwmk4nJRSflvuqlfx1YTp2vHkZTs=
+X-Google-Smtp-Source: AGHT+IGqxAXxOtPD63SKaGX/vtzm4PnE/j4LFLNS+70NxHdpPcb3rgN8pMmwPYmCLEzyUXpYw1Y9NQ==
+X-Received: by 2002:a05:600c:154f:b0:418:e08c:817 with SMTP id f15-20020a05600c154f00b00418e08c0817mr1761473wmg.32.1713968520750;
+        Wed, 24 Apr 2024 07:22:00 -0700 (PDT)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id je12-20020a05600c1f8c00b004183edc31adsm27649971wmb.44.2024.04.24.07.22.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 24 Apr 2024 06:06:29 -0700 (PDT)
-From: Pin-yen Lin <treapking@chromium.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Cc: linux-kernel@vger.kernel.org,
-	Hilda Wu <hildawu@realtek.com>,
-	Pin-yen Lin <treapking@chromium.org>,
-	KidmanLee <kidman@realtek.com>,
-	linux-mediatek@lists.infradead.org,
-	Archie Pusaka <apusaka@chromium.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	linux-serial@vger.kernel.org,
-	Al Cooper <alcooperx@comcast.net>,
-	linux-arm-kernel@lists.infradead.org,
-	Hsin-Te Yuan <yuanhsinte@chromium.org>
-Subject: [PATCH v2] serial: 8520_mtk: Set RTS on shutdown for Rx in-band wakeup
-Date: Wed, 24 Apr 2024 20:58:08 +0800
-Message-ID: <20240424130619.2924456-1-treapking@chromium.org>
-X-Mailer: git-send-email 2.44.0.769.g3c40516874-goog
+        Wed, 24 Apr 2024 07:22:00 -0700 (PDT)
+From: Daniel Thompson <daniel.thompson@linaro.org>
+Date: Wed, 24 Apr 2024 15:21:41 +0100
+Subject: [PATCH v2] serial: kgdboc: Fix NMI-safety problems from keyboard
+ reset code
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20240424-kgdboc_fix_schedule_work-v2-1-50f5a490aec5@linaro.org>
+X-B4-Tracking: v=1; b=H4sIAHQVKWYC/42NUQ6CMBBEr0L22xqKRcAv72EIacsWNpDWbBU1h
+ LtbOYGfbzLzZoWITBjhkq3AuFCk4BMUhwzsqP2AgvrEUOSFypVsxDT0JtjO0buLdsT+OWP3Cjw
+ Jl1ujlKn1qVSQ5nfGVNrVtzbxSPER+LM/LfKX/iFdpJDCOdnUtTxXFZbXmbzmcAw8QLtt2xfsN
+ 8yIwQAAAA==
+To: Jason Wessel <jason.wessel@windriver.com>, 
+ Douglas Anderson <dianders@chromium.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: kgdb-bugreport@lists.sourceforge.net, linux-kernel@vger.kernel.org, 
+ linux-serial@vger.kernel.org, Liuye <liu.yeC@h3c.com>, 
+ stable@vger.kernel.org, Daniel Thompson <daniel.thompson@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=4055;
+ i=daniel.thompson@linaro.org; h=from:subject:message-id;
+ bh=zQ4ggdIVSkhmIl2fRvA4hlHqqYytUieTW/CMICOA+M0=;
+ b=owEBbQKS/ZANAwAKAXzjJV0594ihAcsmYgBmKRV5Wm2kC9hXmk1syJZaOzjZr40TcSJ3+kCD8
+ Le6DrhAgK+JAjMEAAEKAB0WIQQvNUFTUPeVarpwrPB84yVdOfeIoQUCZikVeQAKCRB84yVdOfeI
+ oe8JEACq4DWqHSaha3tdg43NRvx3r3lp+1RIoZJTpXkJvDcRqZBur0QZaN5enNHuOZ7h23bi0z0
+ 3G/06X0RqQLXPnROu0bhZGwOHxEwZsdyZwkOI8K786wrJtxZ8OeKlKPKjh/jXd8/TuEFlJvKxBA
+ kqalG7vC2g8E4NaI9o/SJZ/G8u3HQUgmBBt2J9yqOPI65yQHst89j4MTQkWIl067p8GKYKvYI7x
+ hu4Dh4dYnKZYezWiV+4r/Scb4E344be3xvwhpL7Mlx3//qTSm6SEqsTfF/R3Rryp8Y3aWNDlyEx
+ mWVdmPZvMnXRMMU4X8mPafGACNPGMCUH5nUrWScO492cvqy3DiqP3XtiqbuKcp90d1U8Ycgbubf
+ m+5JWlSDixrC1nQn6AJhWR/pL9F5PieinPIrA/ZxMQlMRUZVmmo4eMs4TS4u7zY/570eMmjj8FH
+ tx1yQrX6yu8/OyVwWm/jBkulK0p4ErHxbNqad8++8QglVZ/Z7LjWzVlpEYF/cj0Sd+TwGFxsu22
+ N+DUnLN2BhwwVpnHG+4t0fxpM3RHTZjNQZ3S2U3C2m7f0Yucm5ojCRWU3NYvDq+ZO9DQtkUuds/
+ I4WaG+g6zGRwtcVfbf06Ih1m+++WZHVfrLOTe495+m4RhFVBOCqRqh72aLihN42svzQ9fFEWBE6
+ ZGCViho+/fVYTQg==
+X-Developer-Key: i=daniel.thompson@linaro.org; a=openpgp;
+ fpr=E38BE19861669213F6E2661AA8A4E3BC5B7B28BE
 
-When Rx in-band wakeup is enabled, set RTS to true in mtk8250_shutdown()
-so the connected device can still send message and trigger IRQ when the
-system is suspended.
+Currently, when kdb is compiled with keyboard support, then we will use
+schedule_work() to provoke reset of the keyboard status.  Unfortunately
+schedule_work() gets called from the kgdboc post-debug-exception
+handler.  That risks deadlock since schedule_work() is not NMI-safe and,
+even on platforms where the NMI is not directly used for debugging, the
+debug trap can have NMI-like behaviour depending on where breakpoints
+are placed.
 
-Fixes: 18c9d4a3c249 ("serial: When UART is suspended, set RTS to false")
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+Fix this by using the irq work system, which is NMI-safe, to defer the
+call to schedule_work() to a point when it is safe to call.
 
+Reported-by: Liuye <liu.yeC@h3c.com>
+Closes: https://lore.kernel.org/all/20240228025602.3087748-1-liu.yeC@h3c.com/
+Cc: stable@vger.kernel.org
+Reviewed-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Daniel Thompson <daniel.thompson@linaro.org>
 ---
+@Greg: I'm assuming this could/should go via your tree but feel free
+       to share an ack if you want me to hoover it up instead.
 
 Changes in v2:
-- Replase serial8250_set_mctrl() with serial8250_do_set_mctrl()
+- Fix typo in the big comment (thanks Doug)
+- Link to v1: https://lore.kernel.org/r/20240419-kgdboc_fix_schedule_work-v1-1-ff19881677e5@linaro.org
+---
+ drivers/tty/serial/kgdboc.c | 30 +++++++++++++++++++++++++++++-
+ 1 file changed, 29 insertions(+), 1 deletion(-)
 
- drivers/tty/serial/8250/8250_mtk.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index c365a349421a..b9cca210e171 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -209,15 +209,19 @@ static int mtk8250_startup(struct uart_port *port)
+diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
+index 7ce7bb1640054..58ea1e1391cee 100644
+--- a/drivers/tty/serial/kgdboc.c
++++ b/drivers/tty/serial/kgdboc.c
+@@ -19,6 +19,7 @@
+ #include <linux/console.h>
+ #include <linux/vt_kern.h>
+ #include <linux/input.h>
++#include <linux/irq_work.h>
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/serial_core.h>
+@@ -48,6 +49,25 @@ static struct kgdb_io		kgdboc_earlycon_io_ops;
+ static int                      (*earlycon_orig_exit)(struct console *con);
+ #endif /* IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE) */
  
- static void mtk8250_shutdown(struct uart_port *port)
- {
--#ifdef CONFIG_SERIAL_8250_DMA
- 	struct uart_8250_port *up = up_to_u8250p(port);
- 	struct mtk8250_data *data = port->private_data;
-+	int irq = data->rx_wakeup_irq;
++/*
++ * When we leave the debug trap handler we need to reset the keyboard status
++ * (since the original keyboard state gets partially clobbered by kdb use of
++ * the keyboard).
++ *
++ * The path to deliver the reset is somewhat circuitous.
++ *
++ * To deliver the reset we register an input handler, reset the keyboard and
++ * then deregister the input handler. However, to get this done right, we do
++ * have to carefully manage the calling context because we can only register
++ * input handlers from task context.
++ *
++ * In particular we need to trigger the action from the debug trap handler with
++ * all its NMI and/or NMI-like oddities. To solve this the kgdboc trap exit code
++ * (the "post_exception" callback) uses irq_work_queue(), which is NMI-safe, to
++ * schedule a callback from a hardirq context. From there we have to defer the
++ * work again, this time using schedule_work(), to get a callback using the
++ * system workqueue, which runs in task context.
++ */
+ #ifdef CONFIG_KDB_KEYBOARD
+ static int kgdboc_reset_connect(struct input_handler *handler,
+ 				struct input_dev *dev,
+@@ -99,10 +119,17 @@ static void kgdboc_restore_input_helper(struct work_struct *dummy)
  
-+#ifdef CONFIG_SERIAL_8250_DMA
- 	if (up->dma)
- 		data->rx_status = DMA_RX_SHUTDOWN;
- #endif
+ static DECLARE_WORK(kgdboc_restore_input_work, kgdboc_restore_input_helper);
  
--	return serial8250_do_shutdown(port);
-+	serial8250_do_shutdown(port);
++static void kgdboc_queue_restore_input_helper(struct irq_work *unused)
++{
++	schedule_work(&kgdboc_restore_input_work);
++}
 +
-+	if (irq >= 0)
-+		serial8250_do_set_mctrl(&up->port, TIOCM_RTS);
++static DEFINE_IRQ_WORK(kgdboc_restore_input_irq_work, kgdboc_queue_restore_input_helper);
++
+ static void kgdboc_restore_input(void)
+ {
+ 	if (likely(system_state == SYSTEM_RUNNING))
+-		schedule_work(&kgdboc_restore_input_work);
++		irq_work_queue(&kgdboc_restore_input_irq_work);
  }
  
- static void mtk8250_disable_intrs(struct uart_8250_port *up, int mask)
+ static int kgdboc_register_kbd(char **cptr)
+@@ -133,6 +160,7 @@ static void kgdboc_unregister_kbd(void)
+ 			i--;
+ 		}
+ 	}
++	irq_work_sync(&kgdboc_restore_input_irq_work);
+ 	flush_work(&kgdboc_restore_input_work);
+ }
+ #else /* ! CONFIG_KDB_KEYBOARD */
+
+---
+base-commit: 0bbac3facb5d6cc0171c45c9873a2dc96bea9680
+change-id: 20240419-kgdboc_fix_schedule_work-f0cb44b8a354
+
+Best regards,
 -- 
-2.44.0.769.g3c40516874-goog
+Daniel Thompson <daniel.thompson@linaro.org>
 
 
