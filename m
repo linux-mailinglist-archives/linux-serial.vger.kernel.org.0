@@ -1,256 +1,123 @@
-Return-Path: <linux-serial+bounces-3785-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3788-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 234FC8AFD3B
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 02:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 48CA88B0177
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 08:00:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 465C71C213D6
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 00:15:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7ADBB1C227CF
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Apr 2024 06:00:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A7F8363;
-	Wed, 24 Apr 2024 00:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDC1F156C49;
+	Wed, 24 Apr 2024 06:00:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ENojtHOd"
+	dkim=pass (1024-bit key) header.d=siemens.com header.i=daniel.starke@siemens.com header.b="HDJwnIUq"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mta-64-227.siemens.flowmailer.net (mta-64-227.siemens.flowmailer.net [185.136.64.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7FBF193
-	for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 00:15:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E59A15696D
+	for <linux-serial@vger.kernel.org>; Wed, 24 Apr 2024 06:00:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.136.64.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1713917752; cv=none; b=qmawyCbo3U7WSbBwxYIYruAXrQFhBFjOVTdZPrZZsDHVNHNSaCZXyBApxcdhU6oMKGBcKOm106EIu/sCcX3B3JTz9OvnFT44l/YNL4HlDjHb3ubRp/vwkjHAxMNearMgxzTocP5IjWQPMCGglxoZCSCc+YBMCTMvTDeeXUuiTxU=
+	t=1713938429; cv=none; b=SskmHbZdPxj+xmHi3mPOTJY2R2LlIUbprAKT83vX56slqZAJ0lKfMjNAPETbkmoYcd2soC0IqOMgOr/uVxsRgBZFrxaftGycrHSEcMmfnkSVRj11AkG5IBS9LcOnIpekDYR/e+Y2ew0VPkbpIqa+WJAC4DVXrNyzevKvHefXlhU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1713917752; c=relaxed/simple;
-	bh=txmM8AxcQAAnQxUzKbokq71Wk3YTmkhZ/DPOgxhV9dQ=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=LDoTGq31Xc5r0Ob4EzYz7URCb6bDiEx8s8nilvHa9SGEBZpqIC/dlpqs/efWhp7bTCdgFFTqj739gPjF0JYjR4IK7BnVsnMMQttAUHcyak4w5SETCqf4SF22TjKvMGqNwFy6VnxdXFHidqqoT83OAnSj+hLEN2+syyBYlTSPVEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ENojtHOd; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1713917751; x=1745453751;
-  h=date:from:to:cc:subject:message-id;
-  bh=txmM8AxcQAAnQxUzKbokq71Wk3YTmkhZ/DPOgxhV9dQ=;
-  b=ENojtHOdqb61wrXB+fi+3zi6abBiO4JTL23BCzXyEYxXJ8IJg7Ua/LHv
-   BHgnwLSM+KTcp4JEkQqoyo1TidzY+EJ3q79RpQeLIq3VB8jR0TmLDVOu6
-   JAla/WfdE7nB2fJar3K1a2MnBsELai0gAlYvXT8feOeVA31P9mKa2eMXb
-   w1O3eiKV8sNGh1p+8XFWB64yH1KXI1SwWNpT+uBaV9WGbX3mr0770qxlv
-   fSz9+nJPoMr5reuvX82yOc2Qmy1E+iX1UMV3O5qbGKijlfqkvMMrUhPSg
-   crPsywwpqUPEccOfRzDruap+XpRriTaXCcwh9PLO5eHjjUbuzlBE/CiOJ
-   w==;
-X-CSE-ConnectionGUID: nlO0eKb/SgOjchWvdHHKQA==
-X-CSE-MsgGUID: 1bfO8aZ9SBOh1lwtTYdgWw==
-X-IronPort-AV: E=McAfee;i="6600,9927,11053"; a="20678173"
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="20678173"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Apr 2024 17:15:50 -0700
-X-CSE-ConnectionGUID: Ah+FALV0SzKj2vlBFZKl+g==
-X-CSE-MsgGUID: UygWVjjQSdqKy17cQJmXKw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.07,222,1708416000"; 
-   d="scan'208";a="29016587"
-Received: from lkp-server01.sh.intel.com (HELO e434dd42e5a1) ([10.239.97.150])
-  by fmviesa003.fm.intel.com with ESMTP; 23 Apr 2024 17:15:48 -0700
-Received: from kbuild by e434dd42e5a1 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1rzQIc-0000ei-1E;
-	Wed, 24 Apr 2024 00:15:46 +0000
-Date: Wed, 24 Apr 2024 08:15:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: linux-serial@vger.kernel.org
-Subject: [tty:tty-testing] BUILD SUCCESS
- 660a708098569a66a47d0abdad998e29e1259de6
-Message-ID: <202404240824.ITo3H9QQ-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1713938429; c=relaxed/simple;
+	bh=nvIPui2ny2LbHagQUrcXOUnm1wNFXZyyF3UpKRbeMkQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=BrOI2kBuVZsb+uSfeJ5+xTi8TFK4lblIemmkA04ji9PHhLRW9pucsEmkLOmC3rRMwlTsapoLz5QcrW/caMWHupM5tp3O09QFcj0/Q5hFMn/iEBOi26HOyOqjPmgQLYr+63aIojIXOn9fBUwau3L8yXGBJaFTQMIs/AY9mESN4Ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com; dkim=pass (1024-bit key) header.d=siemens.com header.i=daniel.starke@siemens.com header.b=HDJwnIUq; arc=none smtp.client-ip=185.136.64.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=siemens.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rts-flowmailer.siemens.com
+Received: by mta-64-227.siemens.flowmailer.net with ESMTPSA id 20240424055011c49cbd2ab7ca720011
+        for <linux-serial@vger.kernel.org>;
+        Wed, 24 Apr 2024 07:50:11 +0200
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=2vHGINbeeSfwsgWaZmnck2tclo2bm4vX2z5Axlbkzok=;
+ b=HDJwnIUqO1418xKMoN5ekvJn0kW8nJx9BMhr2NG/hAeSmjMlQfUjO1Vu6RBskW29ENxssN
+ ysFD/QROGZ1OyhxDQ7Vvefzk44D7h0eNlHuu9TooZPIMSePqISL5U0hQ0WpVRKsvsDKfPYpc
+ ZBYq5eZ41B85m3AsesZ02cxghGoUY=;
+From: "D. Starke" <daniel.starke@siemens.com>
+To: linux-serial@vger.kernel.org,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	ilpo.jarvinen@linux.intel.com
+Cc: linux-kernel@vger.kernel.org,
+	j51569436@gmail.com,
+	Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH 1/2] tty: n_gsm: fix possible out-of-bounds in gsm0_receive()
+Date: Wed, 24 Apr 2024 07:48:41 +0200
+Message-Id: <20240424054842.7741-1-daniel.starke@siemens.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-branch HEAD: 660a708098569a66a47d0abdad998e29e1259de6  Merge 6.9-rc5 into tty-next
+From: Daniel Starke <daniel.starke@siemens.com>
 
-elapsed time: 731m
+Assuming the following:
+- side A configures the n_gsm in basic option mode
+- side B sends the header of a basic option mode frame with data length 1
+- side A switches to advanced option mode
+- side B sends 2 data bytes which exceeds gsm->len
+  Reason: gsm->len is not used in advanced option mode.
+- side A switches to basic option mode
+- side B keeps sending until gsm0_receive() writes past gsm->buf
+  Reason: Neither gsm->state nor gsm->len have been reset after
+  reconfiguration.
 
-configs tested: 163
-configs skipped: 3
+Fix this by changing gsm->count to gsm->len comparison from equal to less
+than. Also add upper limit checks against the constant MAX_MRU in
+gsm0_receive() and gsm1_receive() to harden against memory corruption of
+gsm->len and gsm->mru.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+All other checks remain as we still need to limit the data according to the
+user configuration and actual payload size.
 
-tested configs:
-alpha                             allnoconfig   gcc  
-alpha                            allyesconfig   gcc  
-alpha                               defconfig   gcc  
-arc                              allmodconfig   gcc  
-arc                               allnoconfig   gcc  
-arc                              allyesconfig   gcc  
-arc                                 defconfig   gcc  
-arc                   randconfig-001-20240424   gcc  
-arc                   randconfig-002-20240424   gcc  
-arm                              allmodconfig   gcc  
-arm                               allnoconfig   clang
-arm                              allyesconfig   gcc  
-arm                                 defconfig   clang
-arm                   randconfig-001-20240424   gcc  
-arm                   randconfig-002-20240424   gcc  
-arm                   randconfig-003-20240424   gcc  
-arm                   randconfig-004-20240424   clang
-arm64                            allmodconfig   clang
-arm64                             allnoconfig   gcc  
-arm64                               defconfig   gcc  
-arm64                 randconfig-001-20240424   clang
-arm64                 randconfig-002-20240424   gcc  
-arm64                 randconfig-003-20240424   gcc  
-arm64                 randconfig-004-20240424   clang
-csky                             allmodconfig   gcc  
-csky                              allnoconfig   gcc  
-csky                             allyesconfig   gcc  
-csky                                defconfig   gcc  
-csky                  randconfig-001-20240424   gcc  
-csky                  randconfig-002-20240424   gcc  
-hexagon                          allmodconfig   clang
-hexagon                           allnoconfig   clang
-hexagon                          allyesconfig   clang
-hexagon                             defconfig   clang
-hexagon               randconfig-001-20240424   clang
-hexagon               randconfig-002-20240424   clang
-i386                             allmodconfig   gcc  
-i386                              allnoconfig   gcc  
-i386                             allyesconfig   gcc  
-i386         buildonly-randconfig-001-20240423   clang
-i386         buildonly-randconfig-002-20240423   clang
-i386         buildonly-randconfig-003-20240423   gcc  
-i386         buildonly-randconfig-004-20240423   clang
-i386         buildonly-randconfig-005-20240423   clang
-i386         buildonly-randconfig-006-20240423   gcc  
-i386                                defconfig   clang
-i386                  randconfig-001-20240423   gcc  
-i386                  randconfig-002-20240423   gcc  
-i386                  randconfig-003-20240423   clang
-i386                  randconfig-004-20240423   gcc  
-i386                  randconfig-005-20240423   clang
-i386                  randconfig-006-20240423   clang
-i386                  randconfig-011-20240423   gcc  
-i386                  randconfig-012-20240423   clang
-i386                  randconfig-013-20240423   clang
-i386                  randconfig-014-20240423   gcc  
-i386                  randconfig-015-20240423   gcc  
-i386                  randconfig-016-20240423   clang
-loongarch                        allmodconfig   gcc  
-loongarch                         allnoconfig   gcc  
-loongarch                           defconfig   gcc  
-loongarch             randconfig-001-20240424   gcc  
-loongarch             randconfig-002-20240424   gcc  
-m68k                             allmodconfig   gcc  
-m68k                              allnoconfig   gcc  
-m68k                             allyesconfig   gcc  
-m68k                                defconfig   gcc  
-microblaze                       allmodconfig   gcc  
-microblaze                        allnoconfig   gcc  
-microblaze                       allyesconfig   gcc  
-microblaze                          defconfig   gcc  
-mips                              allnoconfig   gcc  
-mips                             allyesconfig   gcc  
-nios2                            allmodconfig   gcc  
-nios2                             allnoconfig   gcc  
-nios2                            allyesconfig   gcc  
-nios2                               defconfig   gcc  
-nios2                 randconfig-001-20240424   gcc  
-nios2                 randconfig-002-20240424   gcc  
-openrisc                          allnoconfig   gcc  
-openrisc                         allyesconfig   gcc  
-openrisc                            defconfig   gcc  
-parisc                           allmodconfig   gcc  
-parisc                            allnoconfig   gcc  
-parisc                           allyesconfig   gcc  
-parisc                              defconfig   gcc  
-parisc                randconfig-001-20240424   gcc  
-parisc                randconfig-002-20240424   gcc  
-parisc64                            defconfig   gcc  
-powerpc                          allmodconfig   gcc  
-powerpc                           allnoconfig   gcc  
-powerpc                          allyesconfig   clang
-powerpc               randconfig-001-20240424   clang
-powerpc               randconfig-002-20240424   gcc  
-powerpc               randconfig-003-20240424   gcc  
-powerpc64             randconfig-001-20240424   gcc  
-powerpc64             randconfig-002-20240424   gcc  
-powerpc64             randconfig-003-20240424   gcc  
-riscv                            allmodconfig   clang
-riscv                             allnoconfig   gcc  
-riscv                            allyesconfig   clang
-riscv                               defconfig   clang
-riscv                 randconfig-001-20240424   gcc  
-riscv                 randconfig-002-20240424   clang
-s390                             allmodconfig   clang
-s390                              allnoconfig   clang
-s390                             allyesconfig   gcc  
-s390                                defconfig   clang
-s390                  randconfig-001-20240424   gcc  
-s390                  randconfig-002-20240424   clang
-sh                               allmodconfig   gcc  
-sh                                allnoconfig   gcc  
-sh                               allyesconfig   gcc  
-sh                                  defconfig   gcc  
-sh                    randconfig-001-20240424   gcc  
-sh                    randconfig-002-20240424   gcc  
-sparc                            allmodconfig   gcc  
-sparc                             allnoconfig   gcc  
-sparc                               defconfig   gcc  
-sparc64                          allmodconfig   gcc  
-sparc64                          allyesconfig   gcc  
-sparc64                             defconfig   gcc  
-sparc64               randconfig-001-20240424   gcc  
-sparc64               randconfig-002-20240424   gcc  
-um                               allmodconfig   clang
-um                                allnoconfig   clang
-um                               allyesconfig   gcc  
-um                                  defconfig   clang
-um                             i386_defconfig   gcc  
-um                    randconfig-001-20240424   gcc  
-um                    randconfig-002-20240424   clang
-um                           x86_64_defconfig   clang
-x86_64                            allnoconfig   clang
-x86_64                           allyesconfig   clang
-x86_64       buildonly-randconfig-001-20240424   clang
-x86_64       buildonly-randconfig-002-20240424   clang
-x86_64       buildonly-randconfig-003-20240424   gcc  
-x86_64       buildonly-randconfig-004-20240424   gcc  
-x86_64       buildonly-randconfig-005-20240424   gcc  
-x86_64       buildonly-randconfig-006-20240424   gcc  
-x86_64                              defconfig   gcc  
-x86_64                randconfig-001-20240424   clang
-x86_64                randconfig-002-20240424   clang
-x86_64                randconfig-003-20240424   gcc  
-x86_64                randconfig-004-20240424   gcc  
-x86_64                randconfig-005-20240424   clang
-x86_64                randconfig-006-20240424   clang
-x86_64                randconfig-011-20240424   clang
-x86_64                randconfig-012-20240424   gcc  
-x86_64                randconfig-013-20240424   gcc  
-x86_64                randconfig-014-20240424   gcc  
-x86_64                randconfig-015-20240424   clang
-x86_64                randconfig-016-20240424   gcc  
-x86_64                randconfig-071-20240424   clang
-x86_64                randconfig-072-20240424   clang
-x86_64                randconfig-073-20240424   gcc  
-x86_64                randconfig-074-20240424   clang
-x86_64                randconfig-075-20240424   gcc  
-x86_64                randconfig-076-20240424   gcc  
-x86_64                          rhel-8.3-rust   clang
-xtensa                            allnoconfig   gcc  
-xtensa                randconfig-001-20240424   gcc  
-xtensa                randconfig-002-20240424   gcc  
+Reported-by: j51569436@gmail.com
+Closes: https://bugzilla.kernel.org/show_bug.cgi?id=218708
+Tested-by: j51569436@gmail.com
+Fixes: e1eaea46bb40 ("tty: n_gsm line discipline")
+Cc: stable@vger.kernel.org
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index f5b0d91d32a7..7c697dab6f84 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -2913,7 +2913,10 @@ static void gsm0_receive(struct gsm_mux *gsm, u8 c)
+ 		break;
+ 	case GSM_DATA:		/* Data */
+ 		gsm->buf[gsm->count++] = c;
+-		if (gsm->count == gsm->len) {
++		if (gsm->count >= MAX_MRU) {
++			gsm->bad_size++;
++			gsm->state = GSM_SEARCH;
++		} else if (gsm->count >= gsm->len) {
+ 			/* Calculate final FCS for UI frames over all data */
+ 			if ((gsm->control & ~PF) != UIH) {
+ 				gsm->fcs = gsm_fcs_add_block(gsm->fcs, gsm->buf,
+@@ -3026,7 +3029,7 @@ static void gsm1_receive(struct gsm_mux *gsm, u8 c)
+ 		gsm->state = GSM_DATA;
+ 		break;
+ 	case GSM_DATA:		/* Data */
+-		if (gsm->count > gsm->mru) {	/* Allow one for the FCS */
++		if (gsm->count > gsm->mru || gsm->count > MAX_MRU) {	/* Allow one for the FCS */
+ 			gsm->state = GSM_OVERRUN;
+ 			gsm->bad_size++;
+ 		} else
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+2.34.1
+
 
