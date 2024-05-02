@@ -1,135 +1,127 @@
-Return-Path: <linux-serial+bounces-3974-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-3976-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04CCF8B9D43
-	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2024 17:21:00 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 519878B9D61
+	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2024 17:29:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B86F52899EB
-	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2024 15:20:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 006CE1F210AC
+	for <lists+linux-serial@lfdr.de>; Thu,  2 May 2024 15:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415E815B551;
-	Thu,  2 May 2024 15:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A36415AACC;
+	Thu,  2 May 2024 15:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OnYL2Wel"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l9U77uTj"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32FC315B542;
-	Thu,  2 May 2024 15:19:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0502015B117;
+	Thu,  2 May 2024 15:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714663180; cv=none; b=a+DlaxlFnASogJ2SwsqzELpfX18d4e/z0ONJNEw/qJroq3Jfb+VnfWVihASnpNZZg6YS1G21jgZ/ZQ57QgZRcu7rsNmO41X03TV1bNfYaaA80yF+vimb6f6Lfx5Kze5I55tKztXNxmK7oE9c3/bL4BjqDYECivmTEiipXQvC6FU=
+	t=1714663752; cv=none; b=Im/q4XQgD1L66OOuYpZYC7TeVRkUznnFc0V1tpt8moRMNI1kHzhZB6vuH6BQeN+KStMqBdIUPLaE/7VX3EcPc9+J8xpD6dvTsdIWvL+m2xpAKJwiW8R8SPXRFt6kM4QHQnVZpxv9nHpku1eVplcA9TSSam1tyMp0qZ8rdrIAMEw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714663180; c=relaxed/simple;
-	bh=n1DeKUM4aLNcooNqYpGbDSVGwX6VR+Afv8wFc8GMbkI=;
+	s=arc-20240116; t=1714663752; c=relaxed/simple;
+	bh=cPGa8qLZCWdSfi3FLowd1sGPDmQvoIjKXRVt4ZJcvo0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qZA7+oBiaqTpK2eCI7ZbB3rSb6oIt2z3dp+HEeTk186TKGOxWSFH0wRP+wzGY48fxmCdN88h5TkgLkDWF0ePHdsDVyKsPW4RqJFkcQOCqc6i6JpoRHeUAyBDimxdJMIiYA5YukzylhMDGX8Cu7sJ+zWunPOvi2f3Sx2yq8wpTjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OnYL2Wel; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=IJsuST65HBrJzM+KmYVjqpffhM2rrHgWQGyED3wIj6r1YxO2Ej5RQfV42itU7dzrzo0YlthboToieaOzCXMsy51AAY2jJxBiUTvBPRNd7uYK/G91pIPSonvveFxeBSqi4x0awx7ligWgUBs+Nn0F4u/tvNjYQqtGM/Wmls+CgZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l9U77uTj; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714663178; x=1746199178;
+  t=1714663751; x=1746199751;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=n1DeKUM4aLNcooNqYpGbDSVGwX6VR+Afv8wFc8GMbkI=;
-  b=OnYL2WeltcsyRovVM/zlc2f7kcHZcPu3lcxpHWq9jnF4Zc6QajL3qq9U
-   Zx5yF5ST+/fjN7uXXMyzDJqWBGR+duS/SFN0zLszq17OV7Isot183bNIe
-   IhAsLfCLC12K14N/wZJ5bxo6l75B9AfH0XrIy0VxrqKg4RirnrEeLndcf
-   PZWbCL6c7SNLT1qw5W421nj5zkBCKWhF13xRnlS6byUim4WtjI2HX4ixL
-   DoR3i8Sa1mfWAeiynTBVkQIuO17/1THdFdGAUyQz+weki92YIyF/82QCH
-   aLrNUGQwZPQKwEMC++IjBRvbBUqSUOQ5m0u6f3BrlKWEDcfwUdHqejcf8
-   g==;
-X-CSE-ConnectionGUID: c4OmON4MS92qFESS9zmWxQ==
-X-CSE-MsgGUID: NFOFAUKwSPaKkvjhd5koOA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="21842113"
+   mime-version:in-reply-to;
+  bh=cPGa8qLZCWdSfi3FLowd1sGPDmQvoIjKXRVt4ZJcvo0=;
+  b=l9U77uTj8rsuUsMksX4V7ADV/1V1GOAG5FGpJaI30v34khSnEbjJ1gwk
+   rARBBA1fXZ4WxdmEcCfuqpD+IEPEImFUuMyjf0CxHIB6digPPvtkT1qb0
+   vho4sDIlOzOvnUfRWVn7wRqBoe/87FSVmErWs13jdw9Dbg7G3OgDIIpvd
+   j5wPiq6ntXcGL3VvSaUPKJlxde4yh7zMCct8se0r8lbi3Jsgj6cUq/VmV
+   OcvDeHsYDXX14b0JBZGUu6nHcv16OtwBlsBQVWLyUgzv++maIc/LklO9z
+   4g+g9VBLPO93pX+2EdQY2HvQPCvAL7sIJk3wFqvtJO+Bvzv5pxtvZ7tgB
+   A==;
+X-CSE-ConnectionGUID: EpXw65IiSmW8drCIqrapCw==
+X-CSE-MsgGUID: OzXC1p55SWeS3CHSZDdqNA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11062"; a="21585714"
 X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="21842113"
-Received: from orviesa005.jf.intel.com ([10.64.159.145])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:19:37 -0700
-X-CSE-ConnectionGUID: CXEHONopTVuw2k/4+H0Zog==
-X-CSE-MsgGUID: 7+3dj0IOSH+O8NEXTU5TUw==
+   d="scan'208";a="21585714"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:29:10 -0700
+X-CSE-ConnectionGUID: qW6WCQrGQ8OLazAZ0dlIGQ==
+X-CSE-MsgGUID: B6Bb5c08RSC2Z3CHlB3T0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,247,1708416000"; 
-   d="scan'208";a="31960845"
+   d="scan'208";a="27160860"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:19:36 -0700
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 May 2024 08:29:09 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1s2YDd-00000003MMd-1Kl0;
-	Thu, 02 May 2024 18:19:33 +0300
-Date: Thu, 2 May 2024 18:19:33 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Weifeng Liu <weifeng.liu.z@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-serial@vger.kernel.org,
-	Maximilian Luz <luzmaximilian@gmail.com>,
-	Hans de Goede <hdegoede@redhat.com>
-Subject: Re: [RFC PATCH 1/2] platform/surface: aggregator: Defer probing when
- serdev is not ready
-Message-ID: <ZjOvBeNi-R81EX63@smile.fi.intel.com>
-References: <20240502040255.655957-2-weifeng.liu.z@gmail.com>
- <20240502040255.655957-3-weifeng.liu.z@gmail.com>
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1s2YMr-00000003MXs-3dAB;
+	Thu, 02 May 2024 18:29:05 +0300
+Date: Thu, 2 May 2024 18:29:05 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Parker Newman <parker@finest.io>
+Cc: Parker Newman <pnewman@connecttech.com>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v1 03/13] serial: 8250_exar: Kill CTI_PCI_DEVICE()
+Message-ID: <ZjOxQWc1OtGWatKC@smile.fi.intel.com>
+References: <20240502144626.2716994-1-andriy.shevchenko@linux.intel.com>
+ <20240502144626.2716994-4-andriy.shevchenko@linux.intel.com>
+ <20240502111314.63d66b54@SWDEV2.connecttech.local>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20240502040255.655957-3-weifeng.liu.z@gmail.com>
+In-Reply-To: <20240502111314.63d66b54@SWDEV2.connecttech.local>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, May 02, 2024 at 12:02:46PM +0800, Weifeng Liu wrote:
-> This is an attempt to alleviate race conditions in the SAM driver where
-> essential resources like serial device and GPIO pins are not ready at
-> the time ssam_serial_hub_probe() is called.  Instead of giving up
-> probing, a better way would be to defer the probing by returning
-> -EPROBE_DEFER, allowing the kernel try again later.
-> 
-> However, there is no way of identifying all such cases from other real
-> errors in a few days.  So let's take a gradual approach identify and
-> address these cases as they arise.  This commit marks the initial step
-> in this process.
+On Thu, May 02, 2024 at 11:13:14AM -0400, Parker Newman wrote:
+> On Thu,  2 May 2024 17:43:57 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> > The CTI_PCI_DEVICE() duplicates EXAR_DEVICE(). Kill the former.
 
 ...
 
-> +	/* The following step can fail when it's called too early before the
-> +	 * underlying uart device is ready (in this case -ENXIO is returned).
+> > -// For Connect Tech cards with Connect Tech vendor/device PCI IDs (FPGA based)
+> > -#define CTI_PCI_DEVICE(devid, bd) {                     \
+> > -	PCI_DEVICE_SUB(                                 \
+> > -		PCI_VENDOR_ID_CONNECT_TECH,             \
+> > -		PCI_DEVICE_ID_CONNECT_TECH_PCI_##devid, \
 
-UART
 
-> +	 * Instead of simply giving up and losing everything, we can defer
-> +	 * the probing by returning -EPROBE_DEFER so that the kernel would be
-> +	 * able to retry later. */
+#define PCI_DEVICE_SUB(vend, dev, subvend, subdev) \
+        .vendor = (vend), .device = (dev), \
+        .subvendor = (subvend), .subdevice = (subdev)
 
-/*
- * Use correct style for the comments.
- * Here is the example.
- */
+#define PCI_DEVICE_DATA(vend, dev, data) \
+        .vendor = PCI_VENDOR_ID_##vend, .device = PCI_DEVICE_ID_##vend##_##dev, \
+        .subvendor = PCI_ANY_ID, .subdevice = PCI_ANY_ID, 0, 0, \
+        .driver_data = (kernel_ulong_t)(data)
 
->  	status = serdev_device_open(serdev);
-> -	if (status)
-> +	if (status == -ENXIO)
-> +		status = -EPROBE_DEFER;
-> +	if (status) {
-> +		dev_err_probe(&serdev->dev, status,
-> +			      "failed to open serdev device\n");
->  		goto err_devopen;
-> +	}
 
-...
+> > -		PCI_ANY_ID,                             \
+> > -		PCI_ANY_ID), 0, 0,                      \
+> > -		(kernel_ulong_t)&bd                     \
+> > -	}
+> > -
+> >  #define EXAR_DEVICE(vend, devid, bd) { PCI_DEVICE_DATA(vend, devid, &bd) }
 
-Hans, not sure if it helps, but we added similar into I²C and SPI code.
+> This is not correct. The CTI_PCI_DEVICE() macro is for cards that have the
+> Connect Tech PCI Vendor ID (not Sub-Vendor ID). EXAR_DEVICE() is for cards with
+> Exar PCI Vendor ID.
 
-2dea645ffc21 ("i2c: acpi: Return error pointers from i2c_acpi_new_device()")
-
-9c22ec4ac27b ("spi: Return deferred probe error when controller isn't yet available")
+Above I added current code of these macros, can you elaborate how it's incorrect?
 
 -- 
 With Best Regards,
