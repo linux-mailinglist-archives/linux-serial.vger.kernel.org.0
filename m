@@ -1,165 +1,147 @@
-Return-Path: <linux-serial+bounces-4031-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4033-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 163E98BAFEC
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 17:33:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 882368BB003
+	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 17:36:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 25BDEB2216A
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 15:33:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42D5D28433E
+	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 15:36:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AEDB153598;
-	Fri,  3 May 2024 15:33:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAFAD15444F;
+	Fri,  3 May 2024 15:35:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nYRa2Eql"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="A0AaBGf1"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8956715357A;
-	Fri,  3 May 2024 15:33:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E13D154C08;
+	Fri,  3 May 2024 15:35:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714750427; cv=none; b=bYiAUqUoJ/+mFTUySJbJy81VrcQAcosUT1uvGVa2uCjgUrHLWwnd3jEQnl53IaZHokG4tJYDNSNA1TOZuTf5KYx3jpUKb8UpZIoGbwX7hdWsbgNRZAV8mxOfxVj4X1KiDm06Ec3I5ZP4tKC8aFuUy977pDyjSR/VsdBJrMOZnlg=
+	t=1714750552; cv=none; b=lCVyOAr0E4j2KuhSBim19U+/FdfmnsbwG4srOGgsq7R6uxGBziibzhyb14XPclMe7rgSanxTwuukzoJ4//QPsia/ZUucpUE+octeWinvfwg5hJSqUM4D885cCZb38SOLRxU4sH5+fCe1+Vwt/OPLvnIQ/UDbA1m+43zsdrNHbDk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714750427; c=relaxed/simple;
-	bh=JXQcDcKWqzjhdoLVmcGoX/pJLAV7051JyL1j7rqs0Jo=;
+	s=arc-20240116; t=1714750552; c=relaxed/simple;
+	bh=+qiUyuHYdoF2a6KXNUlTVYCi8PbGgXjnFiDn9PglpeM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=R3n2yBsq6YoFb2Q2IF77tuaY+VuwFRKx+t3kv4s9gHQ1ip8PWmfs9mH3BppX7yK7rX6ej5InZr2ZyMq7x+IQ+yKJ7J0vg3SX747Yfu8sDVwNPEMciVOKRz6pVIov6u17sT26Cj+RMCrciUb/cukydOx/zeFTMi1sxwRaywvwE/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nYRa2Eql; arc=none smtp.client-ip=192.198.163.9
+	 Content-Type:Content-Disposition:In-Reply-To; b=I98qLxEamfBZ2b5OjzIkFaYjXjiiwb6HhW5Kc9JXzo8sHpbpi22aICiEpKWPjtrGxSiGPVuxTg8YqSxgr/76ESh+XtzNiqz0bqbljbrZBgnC1gsbSYAJFG4/hMNT7BJ7rCbwR8yzIA1450Gib3/lx+va6k/p63PhzotG8c8YYdI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=A0AaBGf1; arc=none smtp.client-ip=198.175.65.13
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1714750426; x=1746286426;
+  t=1714750551; x=1746286551;
   h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JXQcDcKWqzjhdoLVmcGoX/pJLAV7051JyL1j7rqs0Jo=;
-  b=nYRa2EqljJr8J6rVpiBF3eZWhS5Y30rkmnjwqiHmCCIyhawMVNLWwe1U
-   62fzBkwKTBDeJddyahyWkyUW15NjO1cYGbZwhBNOe/3ePeM5Q/Ek9Xa5x
-   g6rZZZJ5DfHQ5wt8CP779NO7A0b3MHg+SdUryigX31KwP6f84XlmcuXvL
-   tB0Q1DxUKHYm16wjaEeSISXVXJq6RiYjI7kaxtIHxh64iABGtsiAf3Jpe
-   OWrI9qwGzV6EXvOcwIAwxZubnJKmzym6yNlyBnWjRLsqbEgWF+EXj8aV6
-   jS0NPRsFGdVZAZh9HhZbGaO3pkDTKY478fYT/sxYbJQ5ttp32YUXPPuhp
-   g==;
-X-CSE-ConnectionGUID: FLhLzZYYRKaUk3O8ueYiRA==
-X-CSE-MsgGUID: xHl3SvzuQtOlIz3FO5Zbow==
-X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="21246756"
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=+qiUyuHYdoF2a6KXNUlTVYCi8PbGgXjnFiDn9PglpeM=;
+  b=A0AaBGf1O9E4ZxdNzyCRS5m2yuwUj3QWAZAeGg9R3wvQ6jZGs6Cb0JiY
+   NvB3o6lh0UaPyJOrlxOWTY5yy5Kbr2+Pm9ad8ZVCnnF57amXvolL0ZaD3
+   fAMJnyo7bu7jNRcIm9kOWJ6LkkCZrCUgkDeHD7jsDqFQkJEdPbmGNhdCE
+   qwChnI1f2qFfkVMPVBASXVIJViqAY6dFyGFYRifHzF45sWUfR+8FNTbeH
+   oe8eUrmYZewXhNOZDdfwEpoK5yB5XOv76UWCxEZ1ChTeu2WTlM6F3ExIE
+   M1L2XzT9qnwyEa/TyPVHOi1Sn/53jrdSRISTq+koV2wfA/R06deb1enTd
+   Q==;
+X-CSE-ConnectionGUID: 1AXXTsaBQJ+FPpljLtAkmQ==
+X-CSE-MsgGUID: WfT/VcznQzuf0gQkdadWXA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="21713269"
 X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="21246756"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:33:38 -0700
-X-CSE-ConnectionGUID: NnLN++MEQZeMqitbiHkXBQ==
-X-CSE-MsgGUID: E5c4JURLQzmMoyl+EcK2qA==
+   d="scan'208";a="21713269"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:35:51 -0700
+X-CSE-ConnectionGUID: U3TqNEvQQwCYqIVjk76aMA==
+X-CSE-MsgGUID: UjPF7OFaR/acqaIhouctQA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
-   d="scan'208";a="27565553"
+   d="scan'208";a="27358043"
 Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:33:36 -0700
+  by orviesa010.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 08:35:49 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.97)
 	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1s2uui-00000003goA-3q75;
-	Fri, 03 May 2024 18:33:32 +0300
-Date: Fri, 3 May 2024 18:33:32 +0300
+	id 1s2uwr-00000003gr7-3yxQ;
+	Fri, 03 May 2024 18:35:45 +0300
+Date: Fri, 3 May 2024 18:35:45 +0300
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Parker Newman <parker@finest.io>
-Cc: Parker Newman <pnewman@connecttech.com>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Parker Newman <pnewman@connecttech.com>,
+	LKML <linux-kernel@vger.kernel.org>,
+	linux-serial <linux-serial@vger.kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v1 00/13] serial: 8250_exar: Clean up the driver
-Message-ID: <ZjUDzB2aRjBa9dII@smile.fi.intel.com>
+Subject: Re: [PATCH v1 11/13] serial: 8250_exar: Use BIT() in exar_ee_read()
+Message-ID: <ZjUEURneUmZ4nmbC@smile.fi.intel.com>
 References: <20240502144626.2716994-1-andriy.shevchenko@linux.intel.com>
- <20240502114645.4445b3da@SWDEV2.connecttech.local>
- <ZjO4vYEBzxU3fpzC@smile.fi.intel.com>
- <20240502120840.02c65f30@SWDEV2.connecttech.local>
- <ZjPL5z7ah-Qkct6l@smile.fi.intel.com>
- <20240502134949.5e780635@SWDEV2.connecttech.local>
- <ZjPVEr7D0lEf86kQ@smile.fi.intel.com>
- <20240503083638.0f8d9afb@SWDEV2.connecttech.local>
- <20240503104730.3e0f55d0@SWDEV2.connecttech.local>
+ <20240502144626.2716994-12-andriy.shevchenko@linux.intel.com>
+ <702a9145-5bc1-c765-a1fa-278702741637@linux.intel.com>
+ <ZjPLQeTEKvt7B3mj@smile.fi.intel.com>
+ <20240503102632.112a34bd@SWDEV2.connecttech.local>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20240503104730.3e0f55d0@SWDEV2.connecttech.local>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20240503102632.112a34bd@SWDEV2.connecttech.local>
 Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, May 03, 2024 at 10:47:30AM -0400, Parker Newman wrote:
-> On Fri, 3 May 2024 08:36:38 -0400
-> Parker Newman <parker@finest.io> wrote:
-> 
-> > On Thu, 2 May 2024 21:01:54 +0300
-> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >
-> > > On Thu, May 02, 2024 at 01:49:49PM -0400, Parker Newman wrote:
-> > > > On Thu, 2 May 2024 20:22:47 +0300
-> > > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > On Thu, May 02, 2024 at 12:08:40PM -0400, Parker Newman wrote:
-> > > > > > On Thu, 2 May 2024 19:01:01 +0300
-> > > > > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > On Thu, May 02, 2024 at 11:46:45AM -0400, Parker Newman wrote:
-> > > > > > > > On Thu,  2 May 2024 17:43:54 +0300
-> > > > > > > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > > >
-> > > > > > > > > After a rework for CONNTECH was done, the driver may need a bit of
-> > > > > > > > > love in order to become less verbose (in terms of indentation and
-> > > > > > > > > code duplication) and hence easier to read.
-> > > > > > > > >
-> > > > > > > > > This clean up series fixes a couple of (not so critical) issues and
-> > > > > > > > > cleans up the recently added code. No functional change indented by
-> > > > > > > > > the cleaning up part.
-> > > > > > > >
-> > > > > > > > Just an FYI I submitted a patch series that fixed several of these issues but I
-> > > > > > > > think it fell through the cracks (I know everyone is very busy!).
-> > > > > > > >
-> > > > > > > > Link: https://lore.kernel.org/linux-serial/cover.1713533298.git.pnewman@connecttech.com/
-> > > > > > > >
-> > > > > > > > I believe my previous patch series is no longer required. This one fixes
-> > > > > > > > everything.
-> > > > > > >
-> > > > > > > I haven't noticed that, if it contains duplicated patches, I may replace mine
-> > > > > > > with yours if you insist.
-> > > > > > >
-> > > > > > > In any case it's better to reply there that you prefer this series to be
-> > > > > > > applied, so Greg will not pick it up.
-> > > > > > >
-> > > > > >
-> > > > > > I do not have a preference. I am fine with using yours if it is easier on
-> > > > > > the maintainers.
-> > > > >
-> > > > > Up to you, there is no issue to take your patches in case they are the same
-> > > > > (or quite similar) as mine. I can pick them up, just tell me if you want this
-> > > > > to happen with a list of the patches (as mail Message-Id).
-> > > >
-> > > > Just use yours.
-> > >
-> > > Okay, thanks!
-> > >
-> > > If you are going to test, better to pay attention to the BIT() conversion patch
-> > > as Ilpo noted an issue. I believe it's easy to drop (via local git-rebase run)
-> > > or move and test separately.
-> > >
-> >
-> > I am working on testing now but patches 7 and 12 did not apply with git am.
-> > Both failed around lines 1095/1096.
-> > I can apply them manually but I may be using the wrong branch (tty-next).
-> > Which branch/commit did you create your patches from? I don't see it in the
-> > patch submission.
-> 
-> I figured it out. git am was applying the typo fix patch out of order.
-> Sorry, I didn't notice that. Patches should be fine.
-> 
-> I can do a final test once you decide what to do with the BIT() conversion patch.
+On Fri, May 03, 2024 at 10:26:32AM -0400, Parker Newman wrote:
+> On Thu, 2 May 2024 20:20:01 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > On Thu, May 02, 2024 at 07:08:21PM +0300, Ilpo Järvinen wrote:
+> > > On Thu, 2 May 2024, Andy Shevchenko wrote:  
 
-Can you revert it and test the rest? So we will know that they are okay.
-Or does the above implies that you already performed such a test?
+...
+
+> > > >  	// Send address to read from
+> > > > -	for (i = 1 << (UART_EXAR_REGB_EE_ADDR_SIZE - 1); i; i >>= 1)
+> > > > -		exar_ee_write_bit(priv, (ee_addr & i));
+> > > > +	for (i = UART_EXAR_REGB_EE_ADDR_SIZE - 1; i >= 0; i--)
+> > > > +		exar_ee_write_bit(priv, ee_addr & BIT(i));
+> > > >  
+> > > >  	// Read data 1 bit at a time
+> > > >  	for (i = 0; i <= UART_EXAR_REGB_EE_DATA_SIZE; i++) {
+> > > > -		data <<= 1;
+> > > > -		data |= exar_ee_read_bit(priv);
+> > > > +		if (exar_ee_read_bit(priv))
+> > > > +			data |= BIT(i);  
+> > > 
+> > > Does this end up reversing the order of bits? In the original, data was left
+> > > shifted which moved the existing bits and added the lsb but the replacement
+> > > adds highest bit on each iteration?  
+> > 
+> > Oh, seems a good catch!
+> > 
+> > I was also wondering, but missed this somehow. Seems the EEPROM is in BE mode,
+> > so two loops has to be aligned.
+> > 
+> 
+> I just tested this and Ilpo is correct, the read loop portion is backwards as 
+> expected. This is the corrected loop:
+> 
+>     // Read data 1 bit at a time
+>     for (i = UART_EXAR_REGB_EE_DATA_SIZE; i >= 0; i--) {
+>         if (exar_ee_read_bit(priv))
+>             data |= BIT(i);
+>     }
+> 
+> I know this looks wrong because its looping from 16->0 rather than the 
+> more intuitive 15->0 for a 16bit value. This is actually correct however 
+> because according to the AT93C46D datasheet there is always dummy 0 bit
+> before the actual 16 bits of data.
+> 
+> I hope that helps,
+
+Yes, it helps and means that we need that comment to be added to the code. Is
+it the same applicable to the write part above (for address)? Because AFAIU
+mine is one bit longer than yours. Maybe in the original code is a bug? Have
+you tried to read high addresses?
+
 
 -- 
 With Best Regards,
