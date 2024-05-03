@@ -1,160 +1,118 @@
-Return-Path: <linux-serial+bounces-4036-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4041-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAEB58BB184
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 19:13:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB1A88BB1A5
+	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 19:20:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550D81F22F19
-	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 17:13:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 489661F22E4B
+	for <lists+linux-serial@lfdr.de>; Fri,  3 May 2024 17:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B985E157E61;
-	Fri,  3 May 2024 17:12:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7051E15884A;
+	Fri,  3 May 2024 17:19:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X5bpwIbT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DGxVYpHv"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8161178276;
-	Fri,  3 May 2024 17:12:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2D27158203;
+	Fri,  3 May 2024 17:19:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1714756376; cv=none; b=XQJZ7DdZOTrRF3bKGrIX1qYQUU8KU/EuFomh4w8l2w/66gz1nTlfHd+7NN0HYUJ8m8H2bbNf1pDgheT8BrmQMxQDHKAdOP3+LmXbZ5E/jJ1uBw5FL0K5SFWfnQTvt/Yk5jlX1SJbih5+S2x7ZqlTb4jB+/IEfimr409sp9quFxY=
+	t=1714756785; cv=none; b=MqSHgig02R4rqyLarNEehRVokPXW8E0PBw6Wy/GX2EV7yI+WDhACkle9+8o/hBLshZHYCD1gYoutwoh660opkngQyeCd2Z9o062fjz5vQkNJUOhw/3Mc68bFXggeo366WJJu2Az1c/sRmmsPiL0dtzs+U+jkthMoYS5kPS0vNtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1714756376; c=relaxed/simple;
-	bh=j1AlBmA8EvR89RnAFEz1pY/E0yUi35JufxzFz9CJ0aY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OUX9lwRAnq5roOimv/F4oVYdZpCiQHClY+XGwmFLsU/bwUi5rl2wMD/qMsGzPVA6qQVtKxYE6Gz6jZQLpyu1Ng4hHl6CoZOGi5QRul2jpODX2bFTT7Simjn2/X0NmT42+Yefv77TbaOf+TPXHdLl3qaTFIxn2DhZrErynryWa9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X5bpwIbT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69D46C116B1;
-	Fri,  3 May 2024 17:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1714756376;
-	bh=j1AlBmA8EvR89RnAFEz1pY/E0yUi35JufxzFz9CJ0aY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X5bpwIbT9mTSo+G1s5jqROstAZvjypQL7s6c2tLAQ7VbQitlkGrEhRbNW/j3ZsJMW
-	 zUud7VDAvN8lABU9AdCzSkl+VkSpWYl9DzDDXQK/+2ShanKw/XNteSUI+KGIIqXFS3
-	 UhRXda6SJsIgb5vtEP8M8LqEMCzijTSLy+j0paxRCh+FntKRbvJqb7p+VnVDslz+9E
-	 RPsN6jOcDc+d9yTqHLREDlVmSP9VCYug1ZuqQcH6oXuSc3SYeF1+WdGtbnSIJe4eWy
-	 cIn8Qs8Lg6N08dMOqCuNO1eXfM/akKJ5ayzKHHR0HlRSpR9iVAvFnXPjbwNIpvg/U8
-	 Gq6m0tOCYYiPg==
-Date: Fri, 3 May 2024 18:12:49 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Christoph Fritz <christoph.fritz@hexdev.de>
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Oliver Hartkopp <socketcan@hartkopp.net>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>,
-	"David S . Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Andreas Lauser <andreas.lauser@mercedes-benz.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Pavel Pisa <pisa@cmp.felk.cvut.cz>, linux-can@vger.kernel.org,
-	netdev@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-input@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v3 06/11] dt-bindings: net/can: Add serial (serdev) LIN
- adapter
-Message-ID: <20240503-fading-extruding-2105bbd8b479@spud>
-References: <20240502182804.145926-1-christoph.fritz@hexdev.de>
- <20240502182804.145926-7-christoph.fritz@hexdev.de>
+	s=arc-20240116; t=1714756785; c=relaxed/simple;
+	bh=8c8iP3FfxTPGyNOsn6h/6Zno90lXdQeEM+LI0vu8P7A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Cry05Noqo4LvcEM0zMEONkVun26Ovavjl/yWndJ7hzftooP29pkmO+gcbuj6E/JYe7kD3GeMh+uG5H9FX/Gdm798L95NwGP0c2yg7WY7GV9oDvGOK0otjIQxLftSIaAXyg4HcnDfMhXsbbQQWYq7H24lpfa/tiIuVldLsYnpSw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DGxVYpHv; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1714756784; x=1746292784;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=8c8iP3FfxTPGyNOsn6h/6Zno90lXdQeEM+LI0vu8P7A=;
+  b=DGxVYpHvcLNcoZA+Qvy63Vm8AoapoBUbbpHDnWBeesYLakWHdS91G3zt
+   2gKISHorLs6sAobJKRBgfxFwDc1XbjjRQGqZ2ZUxGH1YZ/4k2ijfUo3wE
+   0aAWXL33KYM+/euUB/+o+yZbH1C5RbUjzOwpm9bkivIa4P5UzhLR0vlqR
+   SqKLN3zfx3hECABmSzKmLVAHG3JRxX1YopVHViEr8ef7Ph7c557bhB/fg
+   x7xt2kbCezsoIjxGEWJlFfEweiDgDqCdX4IaIeSHSfPtFu5hqWKNuBIOH
+   k98a0FYjwEKOoZb5KjOVr4UUrie/3rgVQ2Q11drfbX5zgrpqLi+LmfIpX
+   g==;
+X-CSE-ConnectionGUID: qZEu6/DjQEqvaNFD3YtDfQ==
+X-CSE-MsgGUID: 4J2hlghTQKKxbAwThideCA==
+X-IronPort-AV: E=McAfee;i="6600,9927,11063"; a="11107802"
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="11107802"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 May 2024 10:19:41 -0700
+X-CSE-ConnectionGUID: W58FNlqnR3WRr4kBXcJHZA==
+X-CSE-MsgGUID: WT028gfPS5i4u6L8v5aKyg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.07,251,1708416000"; 
+   d="scan'208";a="58415414"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa002.jf.intel.com with ESMTP; 03 May 2024 10:19:39 -0700
+Received: by black.fi.intel.com (Postfix, from userid 1003)
+	id 1D0A719E; Fri,  3 May 2024 20:19:37 +0300 (EEST)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Parker Newman <pnewman@connecttech.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Subject: [PATCH v2 00/13] serial: 8250_exar: Clean up the driver
+Date: Fri,  3 May 2024 20:15:52 +0300
+Message-ID: <20240503171917.2921250-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="wALyyOjqkAbb5csW"
-Content-Disposition: inline
-In-Reply-To: <20240502182804.145926-7-christoph.fritz@hexdev.de>
+Content-Transfer-Encoding: 8bit
 
+After a rework for CONNTECH was done, the driver may need a bit of
+love in order to become less verbose (in terms of indentation and
+code duplication) and hence easier to read.
 
---wALyyOjqkAbb5csW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This clean up series fixes a couple of (not so critical) issues and
+cleans up the recently added code. No functional change indented by
+the cleaning up part.
 
-On Thu, May 02, 2024 at 08:27:59PM +0200, Christoph Fritz wrote:
-> Add dt-bindings for serial LIN bus adapters. These adapters are
-> basically just LIN transceivers that are hard-wired to serial devices.
->=20
-> Signed-off-by: Christoph Fritz <christoph.fritz@hexdev.de>
-> ---
->  .../bindings/net/can/hexdev,lin-serdev.yaml   | 32 +++++++++++++++++++
->  1 file changed, 32 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/can/hexdev,lin-=
-serdev.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.=
-yaml b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
-> new file mode 100644
-> index 0000000000000..c178eb9be1391
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/can/hexdev,lin-serdev.yaml
-> @@ -0,0 +1,32 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/can/hexdev,lin-serdev.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Serial LIN Adapter
-> +
-> +description:
-> +  LIN transceiver, mostly hard-wired to a serial device, used for commun=
-ication
-> +  on a LIN bus.
-> +  For more details on an adapter, visit <https://hexdev.de/hexlin#tty>.
-> +
-> +maintainers:
-> +  - Christoph Fritz <christoph.fritz@hexdev.de>
-> +
-> +properties:
-> +  compatible:
-> +    const: hexdev,lin-serdev
+Parker, please test this and give your formal Tested-by tag
+(you may do it by replying to this message if all patches are
+ successfully tested; more details about tags are available in
+ the Submitting Patches documentation).
 
-Maybe I've just missed something on earlier versions that I didn't
-read, but the name of the device on the website you link is "hexLIN",
-so why is "lin-serdev" used here instead?
+In v2:
+- fixed the EEPROM reading data loop (Ilpo, Parker)
 
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    serial {
-> +        linbus {
-> +            compatible =3D "hexdev,lin-serdev";
-> +        };
-> +    };
-> --=20
-> 2.39.2
->=20
+Andy Shevchenko (13):
+  serial: 8250_exar: Don't return positive values as error codes
+  serial: 8250_exar: Describe all parameters in kernel doc
+  serial: 8250_exar: Kill CTI_PCI_DEVICE()
+  serial: 8250_exar: Use PCI_SUBVENDOR_ID_IBM for subvendor ID
+  serial: 8250_exar: Trivia typo fixes
+  serial: 8250_exar: Extract cti_board_init_osc_freq() helper
+  serial: 8250_exar: Kill unneeded ->board_init()
+  serial: 8250_exar: Decrease indentation level
+  serial: 8250_exar: Return directly from switch-cases
+  serial: 8250_exar: Switch to use dev_err_probe()
+  serial: 8250_exar: Use BIT() in exar_ee_read()
+  serial: 8250_exar: Make type of bit the same in exar_ee_*_bit()
+  serial: 8250_exar: Keep the includes sorted
 
---wALyyOjqkAbb5csW
-Content-Type: application/pgp-signature; name="signature.asc"
+ drivers/tty/serial/8250/8250_exar.c | 459 ++++++++++++----------------
+ 1 file changed, 203 insertions(+), 256 deletions(-)
 
------BEGIN PGP SIGNATURE-----
+-- 
+2.43.0.rc1.1336.g36b5255a03ac
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZjUbEQAKCRB4tDGHoIJi
-0swqAQCF8l5qprfFPZ6cZ7vHJYmcFVMucGf+WHsQS/KyE583BwEAv8DFN0XXp2jS
-E0yi6lEyzextMZsTck5ziHMgFfOMZAk=
-=6TI4
------END PGP SIGNATURE-----
-
---wALyyOjqkAbb5csW--
 
