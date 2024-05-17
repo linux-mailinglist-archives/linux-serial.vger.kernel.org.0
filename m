@@ -1,248 +1,118 @@
-Return-Path: <linux-serial+bounces-4209-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4213-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D3038C80DA
-	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 08:18:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 969358C8873
+	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 16:51:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32A1E282ED8
-	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 06:18:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7116E1C21182
+	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 14:51:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80D3C11C94;
-	Fri, 17 May 2024 06:18:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 794DC1863F;
+	Fri, 17 May 2024 14:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="bRTxpj/I"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2100.outbound.protection.partner.outlook.cn [139.219.146.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A662A125AE;
-	Fri, 17 May 2024 06:18:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.100
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715926726; cv=fail; b=Tx4Yyv2ajELtyeepLE9Kg+q21bzNUulcRX6qSL7IfbYEFmdaQfX/CUXEaY8uzIQvV5JGIB91ryownIAi7438jxkNLNxsLgmNLRqTn7JIQeLYH/R9OnrCTPsRZYowtyvMV7sEEVCAybByQZ5bGzF/LV4QWUysl7JFbVQHMQYaC2U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715926726; c=relaxed/simple;
-	bh=nVLlZzeC0Us5FkY+nUPc4t+BRTtI++PuZaC+XgC7SB8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=pYLNlJ6Yhlw6A3hZJPEY/Xq2IPsO5DPsb0uyzwCUzIiaVeXab8gqodvltJGhKbbTm5NKgz23jajbTVzyqJvnY4nrBnb/bjvziI07l3ZludanHCoRS8gMsKFJZNNcP9q49U5Ofce2J/R5BYooJUW1ZgH20sRlx+ah7qVyIhzNttY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Omk2gL9YSbHYX10YsFCgR2wkYDHGJ1Jm6CGzp04XYP3tRZSu124+oPbNFmplZC6Z4WqSeEYWG95CVMbNW4Zr50FRbZHEzyGCv7mOtlTD+Gu4VHvVJJD9+IG5IB3wEQU3mLFHUKdvibeZahNf2EqdXTfZMqVC9qQnDvC5k2ZZ1d9xTKxjonKhoE2GyK41hdehdAfpkuHtd5ZeDBKCuzn5T1MfLqwdizurP2rb437YDkKV89fnVDRrE7Ofo7O819Pq2av/M5G6NL8m2mde4UClE6w21trCEw04T09/UkCkeC3OQVSq5F1EhbJtJyCA93NjF7VF5reOfELrXyhh1RsGtg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IE4zIxAhMRPh9qWj9lE/eBl6HO2y+aTeVuj1F4gxdxQ=;
- b=XOCsxzoCh6u+u1hiCIrVzVuOkY3HLLShTyxR36g5f7FdQoDT+WVPe2SloHXEIWJq8klLxnYRr+6EUCjPUxKavnKY6np+PJfB9Oya/9gVJMpCHsewX4w7wTgaMRQCAfbIM4eKEJEhQUxW0Ui9fssa2l5A0yAajj8DqJ5H7q+Rk+nW3U+ersWPn1Z2Cv6yqcFMoi8QWVX/kJlKpLj7dBYLAju8T3Y9VBCz8m0tapr6rD+f7lJTPaxQpHnH6zrB0kwJil3g7THxv6tYfab0O9gCbbZwIOL5h/ycrx/oQbc+7ooFxtF9C6qPSiurGoUPO9CC+KCa8q18+EK/Ej6BfZo92w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=starfivetech.com; dmarc=pass action=none
- header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=starfivetech.com;
-Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:7::14) by ZQ2PR01MB1164.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:12::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Fri, 17 May
- 2024 06:17:24 +0000
-Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
- ([fe80::5de:15b9:3114:4f45]) by ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
- ([fe80::5de:15b9:3114:4f45%5]) with mapi id 15.20.7472.044; Fri, 17 May 2024
- 06:17:24 +0000
-From: Hal Feng <hal.feng@starfivetech.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A354067A1A
+	for <linux-serial@vger.kernel.org>; Fri, 17 May 2024 14:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715957485; cv=none; b=gZ9N2GRrmq+dt7sOcAqoj63irWt7yt0GG5Onu2FOwVKhxkSelGiFa0EcqOSimrdMOmJ3aAKfI3E9SdT8eWdZWfEKiJJMSRQwC+qh7yFy74tC5FvbMFpAD/W5haiF3j/dzTYo1pla8xINUdUlTxKI4aCWhtZq/IYo/S3h+41yXHs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715957485; c=relaxed/simple;
+	bh=1aOVgw6hSgat6smy0lHMoNOBWlOufPQjFo20G/kY2sE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gR0Yp9O72IBruzJgoF9DkjNR1L5C73smmp9oN/hKk+XWeXBnPFdmnCDbCVlIMoxQ2WYogfuRVWd24KzIPYzkHEjcGptWgYnYavioipsEH8+U5lhzVBjCiDq+xtvuc6fCaEbj3zdqjscIuV4GOTp76QnUpoMdIqPuTZjYKbikJcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=bRTxpj/I; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-41fd5dc04f0so1618855e9.0
+        for <linux-serial@vger.kernel.org>; Fri, 17 May 2024 07:51:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1715957481; x=1716562281; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=u1U5jaDar7OfZ99raGWnoHg7cFZibmJ1aTqNn0ttXSs=;
+        b=bRTxpj/IblmdTrVz9jPdjA02CBwgQhIQGFeNdKndT9KjyNTETRvDogbciVpdjB6tE5
+         cWEsCIfStXkQVEgyo/B7JvHqrOM4QrbsAdqptilRiyTl8cEp0n7hZvbSEHXlNZ58PuHP
+         C6r1y2juBKpD1dVKVu3V31Cy34N+FTTxeBk3SYZNwiEckTFrqBdNks5CE/IAsAUYJXkz
+         aWOCMKCu44htiDocsNttkMi0RDRJnU2n2i40aY0G2WO4g6svcEJ6+KBIgODaO4e7OZYU
+         hDBMGH14pphwJspN6n3JoyRScMIULwLGyGIZincb2QZTX88Ts/ZaHHmzguOjiu7eB8nd
+         /Usw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1715957481; x=1716562281;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u1U5jaDar7OfZ99raGWnoHg7cFZibmJ1aTqNn0ttXSs=;
+        b=SbDxxLeOJyjxnw7+2IaGuPVRmLdE3Arwe7Nz21dhpbVDNKVzq6lNmXTIfsu6QGNirz
+         YVJfQzg8eUhhbh7fOiHAJg4J7+cjmosmeo/9d8uzB3l+D30xJZCY25+WLJdq4m48u0Lj
+         BPKbxyzS4S7i0YCESHY9xqr7ByTC7CW+XRA6W72mC1n1HUhVAGrdkkoXUuq4yV2Y2V9S
+         yk51TZ6foR8E8yQ+sZ46uRdMP69oi6/ym5MJadG3VJ9kPwc8tq1QGli4uiUuS3xXQWMv
+         RnVXvpcLr1sZkK6/yUDOe5VqYddfsjntKu4iBn/ChcZUWP6FpLPWn4hHNC53MgWCVEGk
+         q4dQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWfDH1MHg5JUdWhZDIBbe7Tc0tUkA0eKEs2pQAPryvnwDPjZXqGvbYVFg4ATSdGALmCo9a5OBy2KafMvw1C7aXAEyV4/98WOh/oAtCM
+X-Gm-Message-State: AOJu0YxtPiawJDAsTwe0y51+N+ik0w5rfnd+nmfSOQ97o3ncyV94pDSO
+	B8qkbNsf4VsHnX71momivEnd3KdzgJ8WHKBmeUOemXErThzD1peDiStCWXBQQc0=
+X-Google-Smtp-Source: AGHT+IGSNgAtmWQfb0w8Kl65ihzrKqCApb6t06Ku0iJmdFWRb730Oyxyj8fQ3oS7uwaOTj9nQj/rrg==
+X-Received: by 2002:a05:600c:19c8:b0:41f:d84b:1ade with SMTP id 5b1f17b1804b1-41feac5560amr234770785e9.27.1715957480894;
+        Fri, 17 May 2024 07:51:20 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.50])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4200e518984sm242602035e9.23.2024.05.17.07.51.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 17 May 2024 07:51:20 -0700 (PDT)
+Date: Fri, 17 May 2024 16:51:18 +0200
+From: Petr Mladek <pmladek@suse.com>
+To: John Ogness <john.ogness@linutronix.de>
+Cc: Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-kernel@vger.kernel.org,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-	Hal Feng <hal.feng@starfivetech.com>,
-	devicetree@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 3/3] riscv: dts: starfive: jh7110: Add the core reset and jh7110 compatible for uarts
-Date: Fri, 17 May 2024 14:17:13 +0800
-Message-ID: <20240517061713.95803-4-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.43.2
-In-Reply-To: <20240517061713.95803-1-hal.feng@starfivetech.com>
-References: <20240517061713.95803-1-hal.feng@starfivetech.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SH0PR01CA0012.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c311:5::24) To ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
- (2406:e500:c550:7::14)
+	Russell King <linux@armlinux.org.uk>,
+	Tony Lindgren <tony@atomide.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Hongyu Xie <xiehongyu1@kylinos.cn>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH printk v5 09/30] serial: core: Introduce wrapper to set
+ @uart_port->cons
+Message-ID: <Zkdu5v-ifyGNCV_n@pathway.suse.cz>
+References: <20240502213839.376636-1-john.ogness@linutronix.de>
+ <20240502213839.376636-10-john.ogness@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: ZQ2PR01MB1307:EE_|ZQ2PR01MB1164:EE_
-X-MS-Office365-Filtering-Correlation-Id: fde5e8fc-bfec-485e-4ac4-08dc763904ab
-X-MS-Exchange-SenderADCheck: 1
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info:
-	WMY847P/GwP1fHRINUFrMDoBR6ljjcfGnVnYI8s3ORUgpv2CbwjSbs95eCCYR03i6bl4ozXQ/nlGSbQsjl1jOlDnA4ZLjQsdzPH8bKTJAfES4nVRUL3JzqBEknzLQNr+db9bemf8doazSq9pPXP0+ytyLGymBZNAh5PmnC0SIyLtjJwsyMcfAlWEO7WYhj8swn68cztaydCgIweod3d8tnJDZzyFtlO7gw3l3PEAjAhAHhaQwE3V24jrb14L2kvLqbUwVknIuqJ0O0ssv+xYsqXiWum16xxXgtUP4YT8uJB6zHuadpfT47MeA6UJgR41L0dSBOcap9omJRoip6Gcypj5/+FHf8TWTlqHeVkJo9evL05ZR/NoPqTlBsYkL7HYZ3RWcNhXBldNiAOHg0rxWb8ImMflmTD3tC2mcS6jCVRpWXX/xJOHimBf/lFB0FX9Ech2Y5GBg/uYPPsKS+i7W2Yp1McDDOh+6CSB0TbSaKPVqdWw9pn3d3xCWlvuSdIi+Pxpy+nWAvh3OWy2t7zq842ywynwjQITqogZ4dvOWiw7wwFcsP1ffC4EOHi5QY0r4htDI0RiC5tmOyR6Drk20YL/KzKbNrY+OaT6kqztMADGbsHGbFSwlyXfgVHMqdXb5E3nZyPt9GQFhsDjQSoXiA==
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(41320700004)(52116005)(7416005)(38350700005)(921011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?IaJ+p3XH640YzhI7qK28IjPHQZfTs8ZD827YY6U0AMAtauhFvpD0cOVmQg0X?=
- =?us-ascii?Q?u+UcYOtHixSS94P3xVVcC0Qdktxbc0JdLBMMGlLxf7IIUg0NoJtO6zx9XWN5?=
- =?us-ascii?Q?OZxmmQWSKCsl4FQGeMJF61aTyy9vQNzFZCLZ79B98KvesVQuZLJtayzewhxc?=
- =?us-ascii?Q?I+g8GuLiCsfXoTm/5QTbhT/tbI+4SODqXng9a389Ri4ftrErXro+vmIZ13C3?=
- =?us-ascii?Q?frhbGDiCCOvYKC1caYEdXZ32QAyGRCphpN63YH8WKoGAdHhLHwFZsMykx7fO?=
- =?us-ascii?Q?kruFSBCkkbgub15IeGT+e84R0FH+wZMgQYAhHC/GhZFqcRmIZHQEl2G6enn1?=
- =?us-ascii?Q?O9DnnT239iP0Bc6600bkzGjARBU3G2v9AJhkPDxbXiBfD4koSVIWrubz/efs?=
- =?us-ascii?Q?6m+c3fyhofUgBtklhjrlwzdNaAmm3pCPl2fAyEIq5j2oLjQVfMz3wmiKmmZO?=
- =?us-ascii?Q?LsZZ1xPp7V8C2lLRVLzdODbIqM1xUeM4K5WjpiDfFV2Pm8HN5QsaJVwxm2TP?=
- =?us-ascii?Q?gopgzvVDaW3PQtYmsEqktNYZGFUoox/OQvN6U1MCPPp+F1bFoSKZwdbgtNwy?=
- =?us-ascii?Q?zxBZdjBc5RwiuhznNGHTzudSIUTPNLLIhLrUZcqgD4s3ULKZDr2AZkUyyCom?=
- =?us-ascii?Q?wSY/RWcx5y4r64YTx7T7QHdUxdEOEkmGAOVrzQM+gRteHu/HxRkmRZEVCs0B?=
- =?us-ascii?Q?Iw6kVcLZl+5+2zGyaQnhMnkowSGwub0/LbyPvRK+IfAxLTVRFPmRrUyHYhFs?=
- =?us-ascii?Q?VhBsB6EAt/D1OkaiIg8iOSA+PWiUzi//AF2SKMyORYQJlUejVH53fBvw+ivj?=
- =?us-ascii?Q?uInV2aZrKVv5MHSkuCmSyxxCPck15sxHy3Pv3s+E5826y805FMXhLNpT8wJV?=
- =?us-ascii?Q?jXrSAvgkTy+OI4dKIEy+GbO21TAsY5I7TawbNSf/Pm7C73e7RnoXj/5SfS/4?=
- =?us-ascii?Q?GvnP2HDx3USotTHEgZyC5SYUNHjjuG0YaQw3L9KJHkSMvGv0X3twRBYA8LjR?=
- =?us-ascii?Q?rV0fMc8Z/uXLEinPcDYhZ5CCmZ7MFKhHFcd371Q+DGiuZ6m4P3WvzhXZVEC2?=
- =?us-ascii?Q?9xmtkmE3Hqz+inrosfab6LIOaonM4gYBGFyjEGBUIvMnI6uEQYEM9PtfmI8G?=
- =?us-ascii?Q?nz2TXqKpR8rEWXoxsiup1M07hmlIrAwiem+AEdPur24O5xRdHOJ9T9H4/Abq?=
- =?us-ascii?Q?683j52fKdHoRFpy10ir4drBKSCpb+H2cRUrWIJWyz3XYAdBmt4BLgXfy8VMK?=
- =?us-ascii?Q?5WiCgkD/iW49GP3FPP9Flc4LXg1AaBiwH/XqrJ5dCxEp8lkjnCJ90fu7Q+BJ?=
- =?us-ascii?Q?1rrGBxT15P1C0kv2RiJEVGDwHr3PKO85zz1eWz7grybnFe763G50/Mus43zf?=
- =?us-ascii?Q?DNv5gi5d5Uwwj958rSV5ficJqGvrqMYSz8SzlHb5+HwZpmx5unmTuR2CNfNZ?=
- =?us-ascii?Q?IUvuA9uVmL2FGePyKTaUFP6GaajpL26it3OwgLf5yBD0PiOrjz6LXNoZUwrb?=
- =?us-ascii?Q?yPcwLekmhESkvdKoXW/bD7ndqu3cGLPw+bVu01+0u8KdXkNxO6fykvYme/e/?=
- =?us-ascii?Q?Vw6kKrbFhCrQ2kEXYdHSNvPU8SIIU2moTS08x8q+l2V3gaTKQkPfIK6LGu3E?=
- =?us-ascii?Q?oA=3D=3D?=
-X-OriginatorOrg: starfivetech.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fde5e8fc-bfec-485e-4ac4-08dc763904ab
-X-MS-Exchange-CrossTenant-AuthSource: ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2024 06:17:24.4392
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ZdU+GRXhlw/fRG2nyinryx7R2G2TRexKTC2MlfgfQdbr0B48ZsHPXAoAgWMo8hK4XQctoX8UfF9LQ6V8VN5lhJL7wfaMaeYL9eMqxNWZMh8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ2PR01MB1164
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240502213839.376636-10-john.ogness@linutronix.de>
 
-Add the core reset for uarts, which is necessary for uarts to work.
+On Thu 2024-05-02 23:44:18, John Ogness wrote:
+> Introduce uart_port_set_cons() as a wrapper to set @cons of a
+> uart_port. The wrapper sets @cons under the port lock in order
+> to prevent @cons from disappearing while another context is
+> holding the port lock. This is necessary for a follow-up
+> commit relating to the port lock wrappers, which rely on @cons
+> not changing between lock and unlock.
+> 
+> Signed-off-by: John Ogness <john.ogness@linutronix.de>
 
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 30 ++++++++++++++----------
- 1 file changed, 18 insertions(+), 12 deletions(-)
+Reviewed-by: Petr Mladek <pmladek@suse.com>
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index 4a5708f7fcf7..872f52253a2e 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -387,12 +387,13 @@ plic: interrupt-controller@c000000 {
- 		};
- 
- 		uart0: serial@10000000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x10000000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART0_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART0_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART0_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART0_APB>,
-+				 <&syscrg JH7110_SYSRST_UART0_CORE>;
- 			interrupts = <32>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -400,12 +401,13 @@ uart0: serial@10000000 {
- 		};
- 
- 		uart1: serial@10010000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x10010000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART1_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART1_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART1_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART1_APB>,
-+				 <&syscrg JH7110_SYSRST_UART1_CORE>;
- 			interrupts = <33>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -413,12 +415,13 @@ uart1: serial@10010000 {
- 		};
- 
- 		uart2: serial@10020000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x10020000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART2_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART2_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART2_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART2_APB>,
-+				 <&syscrg JH7110_SYSRST_UART2_CORE>;
- 			interrupts = <34>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -642,12 +645,13 @@ stg_syscon: syscon@10240000 {
- 		};
- 
- 		uart3: serial@12000000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x12000000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART3_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART3_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART3_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART3_APB>,
-+				 <&syscrg JH7110_SYSRST_UART3_CORE>;
- 			interrupts = <45>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -655,12 +659,13 @@ uart3: serial@12000000 {
- 		};
- 
- 		uart4: serial@12010000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x12010000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART4_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART4_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART4_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART4_APB>,
-+				 <&syscrg JH7110_SYSRST_UART4_CORE>;
- 			interrupts = <46>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
-@@ -668,12 +673,13 @@ uart4: serial@12010000 {
- 		};
- 
- 		uart5: serial@12020000 {
--			compatible = "snps,dw-apb-uart";
-+			compatible = "starfive,jh7110-uart", "snps,dw-apb-uart";
- 			reg = <0x0 0x12020000 0x0 0x10000>;
- 			clocks = <&syscrg JH7110_SYSCLK_UART5_CORE>,
- 				 <&syscrg JH7110_SYSCLK_UART5_APB>;
- 			clock-names = "baudclk", "apb_pclk";
--			resets = <&syscrg JH7110_SYSRST_UART5_APB>;
-+			resets = <&syscrg JH7110_SYSRST_UART5_APB>,
-+				 <&syscrg JH7110_SYSRST_UART5_CORE>;
- 			interrupts = <47>;
- 			reg-io-width = <4>;
- 			reg-shift = <2>;
--- 
-2.43.2
-
+Best Regards,
+Petr
 
