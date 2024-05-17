@@ -1,173 +1,155 @@
-Return-Path: <linux-serial+bounces-4208-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4210-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BD4C8C8057
-	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 06:22:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3337E8C80F6
+	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 08:33:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86A08B218F0
-	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 04:22:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 267DCB2173F
+	for <lists+linux-serial@lfdr.de>; Fri, 17 May 2024 06:33:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196BEBE4E;
-	Fri, 17 May 2024 04:22:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=schmorgal.com header.i=@schmorgal.com header.b="GA6z9qSQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E965713AC5;
+	Fri, 17 May 2024 06:33:29 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from CHN02-SH0-obe.outbound.protection.partner.outlook.cn (mail-sh0chn02on2101.outbound.protection.partner.outlook.cn [139.219.146.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951A3BA2E
-	for <linux-serial@vger.kernel.org>; Fri, 17 May 2024 04:22:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1715919743; cv=none; b=LeGcY/ANzE4H32WuPCHsW0kwH+ENN3C8tD36WJU+PHTKIpDxJTMY9n/W2dR5YW5DF8wRdE7hbtRvHYSjuWVLVlgUB1iWlRTeNsi0L/ArAkguV9AmfqgdlhLYSBJDKBUlQWR9G6JDddMwaljvIdm7fzeI1Wrxtt/0vQuryHN9wBo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1715919743; c=relaxed/simple;
-	bh=clGt/NkziH5Rht90QTXQDeCp0nC6Z0KNWcrwIzDDtuQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MJAuTneqRRZLJuLqev9O7YVUapduF84tr5vVE/U+9urbbaGHj10GhoL7FR+QKI+OLSBGuckq1LnYggIIsiwiamx1Ex4nOwnfLr1/3O6C80zy2JBC0qtsneeHonxmj//G+OKySF3vomq2dQe+jqdumh9BELbIjqgi+WXttQdpHOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schmorgal.com; spf=pass smtp.mailfrom=schmorgal.com; dkim=pass (1024-bit key) header.d=schmorgal.com header.i=@schmorgal.com header.b=GA6z9qSQ; arc=none smtp.client-ip=209.85.216.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=schmorgal.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=schmorgal.com
-Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2ba0bbc7302so198119a91.2
-        for <linux-serial@vger.kernel.org>; Thu, 16 May 2024 21:22:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=schmorgal.com; s=google; t=1715919741; x=1716524541; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4ynFbEUJKTr0niWu5r21fVbQhgmdmrbtHlCRTbOdhFU=;
-        b=GA6z9qSQPJDcmdam+ps9+CMSVfrFfdCpNFc9VARe7olccSEpd+b8us/HTiwxMuc6Kx
-         I+2sBzZAF+iuEYgHDX9QL9Qo2zVdBmzSQtJDGnLP1p66VRI2PpuuY7InzA7NA39rBv0L
-         jbXudm+ALzLLYE2e60B/RFDtjHz3G4KgHBQmU=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1715919741; x=1716524541;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ynFbEUJKTr0niWu5r21fVbQhgmdmrbtHlCRTbOdhFU=;
-        b=cZyNccA5eGfCiPcAzE8ay8vgQOVwt1t8UjGecFX9zemfhlkSERlWnOc3ibmdu2LznR
-         T4Yq3HayWRfU2JnZY96U+4dcthGwmnJe43dMgaVEthhFoiou1kF5NW1ONsBQfxs/H5/y
-         +Fi16HEInJpdEXKeTyNRgMI0ZLB7TJ4MfjFbwfxC2v2XoQKPwfVMKiz30wLGZyNqjfXJ
-         xOglZ3a8Bi0NzJZGbwLxkfJtbhJJN4si7FkhOFZ/CgLVnZIspaKWY1FQCXw1E+1l7a0r
-         kHvy+BeWG1JlofJp7U/aQxxUGbmNuKXNT4baApxJZoUzmtbMROd+rh4J+uoSrxpsS+hy
-         IfbQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVhJHvGtIOp28s20YUKv8h1AweA13ozbcIVTrlTL6biqYLAcpj7tPUYurlqStsRY560kar+v5hcjyoGmBuAIIRz+eKzrlpJcs0ujmfu
-X-Gm-Message-State: AOJu0YwurVJrzniPk8jCcCPP+chKbR2hi6BoFN9udRE4aWYnNK9CHg6t
-	norSZ497oHVOyd76tZhluDntNDODBTnVrYxsLz0j7ZgY6rCHe5iFiI51n/fYLjg=
-X-Google-Smtp-Source: AGHT+IH70wGfsC60Qwjp2RdHj3AWLhfWm5tjfABx/+v3IJ5TudDw/SRpqup28pLDE6y4mzVIyJLn1g==
-X-Received: by 2002:a17:902:da8f:b0:1eb:2e59:d6a with SMTP id d9443c01a7336-1ef44049772mr239109195ad.3.1715919739290;
-        Thu, 16 May 2024 21:22:19 -0700 (PDT)
-Received: from [192.168.1.33] ([50.37.206.39])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-1ef0b9d4278sm151112155ad.12.2024.05.16.21.22.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 16 May 2024 21:22:18 -0700 (PDT)
-Message-ID: <77b71bd9-42be-40e8-8b96-196e214c8afb@schmorgal.com>
-Date: Thu, 16 May 2024 21:22:17 -0700
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B134404;
+	Fri, 17 May 2024 06:33:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=139.219.146.101
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1715927609; cv=fail; b=gEy/DIlzoAVtj83MuqC8lwQU//wbhvfWkJ7F2cbrTq+AfTfCp1yvqmE5p1rTckqiYegk4hfOJYnGBAP6B1YNXgbLBnZRMum0IJcLDBdDWm+8x3nshBKhBgiY8V5LsPH/HTl3eXQYOIxAEkBaFk2zvAlraP5uOTxseIHIgHx5ews=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1715927609; c=relaxed/simple;
+	bh=r2UqC70KrqVWdlWdqPn6KKzkK9izA845qtEZiHrGBQs=;
+	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=dMe3WSytWSvhSG0H8O5Jgxx2JpAm+2Ngw/PfAJL9Cg/9bd90/i3QgJA7pvxBQuT4M3iwuWA3jcaOdlb160vOq5SlltBf3PBaM42UlcmiGhA9v42svCLP1NcffgSHL6TFD8Eg5NzG6RcADmSLUSoSBrtyGDkdORqsxXvb1pc+f0k=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com; spf=pass smtp.mailfrom=starfivetech.com; arc=fail smtp.client-ip=139.219.146.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=starfivetech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=starfivetech.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nCODFjQCIsci/Z4lW129bxNA4JNL2Y8qI/Onr3T3sf6Llhhj+/8RJz+1rQy1EOIiBAnvnbgPeMXY02vAn9915kgw+xhXFdZWRFfVwQxtv9ppMsTUqLf+WrErh65VlNigZYrlKtzgJtsdBXDvGwdQ2BAmLAEyAPVZEjwqQpZPTJQ2Zw7svkc3ZPJKiS7gwK7ACv/9cfm1Afm4DqIiIwvb+7JQnTDwQU2jO5e23p3fBRhoGrTZM9GS1wUyCvrZlv0MQTXLiky1sX9Pr7X794k5rrHJ77SsUGexWwDZpJxE+9mw2s9+ZtOL7yODVPKRK6VyCLQludlSQ+3fWkv6BeMSzw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=i6Tih7vkpntM2JZIpBPkQty3njo7thVYiUmFvqckrJg=;
+ b=Ko4WgYMRK2hAn/BDOLE0APa3DaXUPTtPZxH+NjNIU46YMT8nieWla4I7WnXMHAp5KT5LhOVDBWwoHhx0I6i6gKcvcph1e+tzWqmDaVHfxfmNUU5BC5aKuMJVA5Kbjus6zhquKHaLjUAvlNWf0gC85FhM1YYKn8zZq7UWXf52AzoWEUMlcaH0UdJAu8WcVLo/fGLkB6NPhBg0WYZozCLe5EZFaPtZ94V5Gu6uEhlF+1Doib3H4fBhsfdwElq0slBQOEU12TQOs+u8GwZkPf62CPJIE3sB+1hjKzuzMvNqa8dWbNUjbLJ09o/KjYfTvzEF8D8O7QEfMQQ3zYSql5mYOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=starfivetech.com; dmarc=pass action=none
+ header.from=starfivetech.com; dkim=pass header.d=starfivetech.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=starfivetech.com;
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:7::14) by ZQ2PR01MB1164.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:12::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7472.44; Fri, 17 May
+ 2024 06:17:20 +0000
+Received: from ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ ([fe80::5de:15b9:3114:4f45]) by ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ ([fe80::5de:15b9:3114:4f45%5]) with mapi id 15.20.7472.044; Fri, 17 May 2024
+ 06:17:20 +0000
+From: Hal Feng <hal.feng@starfivetech.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Albert Ou <aou@eecs.berkeley.edu>
+Cc: Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+	Hal Feng <hal.feng@starfivetech.com>,
+	devicetree@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/3] Add the core reset for UARTs of StarFive JH7110
+Date: Fri, 17 May 2024 14:17:10 +0800
+Message-ID: <20240517061713.95803-1-hal.feng@starfivetech.com>
+X-Mailer: git-send-email 2.43.2
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SH0PR01CA0012.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c311:5::24) To ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+ (2406:e500:c550:7::14)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] serial: core: only stop transmit when HW fifo is empty
-To: Jonas Gorski <jonas.gorski@gmail.com>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, stable@vger.kernel.org
-References: <20240303150807.68117-1-jonas.gorski@gmail.com>
-Content-Language: en-US
-From: Doug Brown <doug@schmorgal.com>
-In-Reply-To: <20240303150807.68117-1-jonas.gorski@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: ZQ2PR01MB1307:EE_|ZQ2PR01MB1164:EE_
+X-MS-Office365-Filtering-Correlation-Id: 122dd484-3aa7-4ea1-9d9e-08dc76390266
+X-MS-Exchange-SenderADCheck: 1
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info:
+	hWfM8a5fXU4LW3XsisYOSgk/3HMoLkZZioTuTxgC1pCrju/bhegNAxbrzJmhmufXrfFgvPmOiKmmsG78nzKFR7RWJQDQ/+M/D99HceIiM8LYaCwZCJozKUASjubMyoy/r/DGwYfhr8/MNat+7JL/Y36gzz3ZCwhJro+1wdlEWRIPA5oblLs1WVa8nOo1gXEKx2U9mZ0VTgZxCPhAeB1kwnXko6swoSnQQ4l+AtKBtXdYqUyvIxQWDWqlOmHh2aPxvX/LlSukEJgbVDl+SLdQSGNI+qoZVH+vaP+s3LpxnjQEMA1IkoWRpsX9bEzexikZjZx71nNzT9jf6sQrY7McjCO8JYDz0JaKclq8Ht6SwuOGrSR8rLwktWSARbjGYg6BxlGV+EHcxG5ZpCh3LTwvTOAovGAF5Mw4YODJ+6dPbTOHKT3Rjbr7w/QgedVKxl/uT+UWnSe/NE5v6cgJUI/5eLxmsybjGKqDV0zHdNrxu1gEI1JPQwPSecZRx5oieElqDOEAn5slqoEAmRYDwbOTlwlIIkS9sFczPtFPMKdH2jcMnt0iIMtmyXpVKKuDmOdic3PEUZ4Z596wBTd8a28yhUDa/2tuOiGTFTX6EV1jAgLSkiYGKG4HuetRu1nxfKYwrJ/LobMLf6X4+INFyU3v8Q==
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn;PTR:;CAT:NONE;SFS:(13230031)(1800799015)(366007)(41320700004)(52116005)(7416005)(38350700005)(921011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1iuc1zH1FwWBYrukmDJksmVdpYMt1ZQmHhFYaxzZ5+hMhsnxjothO9cC5vW1?=
+ =?us-ascii?Q?zsXqTtzuO4UIhWPHLpnXADvytb0jenFs4TeCf45bniQA6aFLm0Zz8OtNb0tM?=
+ =?us-ascii?Q?AQf8rwQX+y4BxI5OrGaqKdVU7NWQZz2/uFBehRG8SM1fZxaKR4JPbCDXJKLj?=
+ =?us-ascii?Q?DDSi6zKdj4YdoNDfOIs+eAhn0S7oEqhx1XGBt1osAE0e7dELD+zxpzfCUMtD?=
+ =?us-ascii?Q?gYXNOe+lS4yGu4vl4tFCyY2YdKkymKBxUxU4E4pm8dmLhI7ND9Xka1L20RE3?=
+ =?us-ascii?Q?xGvnhzHjHIV2HXmXBfdZ6l7KHYi+pwX967kMCtY/lrVzB5SoHnTh5HmZyPWA?=
+ =?us-ascii?Q?/9H9bgWA0O/udk4ngASk/Jsap4wPsv2MSdRaWB4yW41ifrkfCaM/PooNxLo8?=
+ =?us-ascii?Q?hP5ylDehlwCENS0pdk2MZ8D3m0N1Gv1UU+DZoA5edxED6KtOrdZ2bCdqTmzJ?=
+ =?us-ascii?Q?T9nbbEb/rbu55v7fchBaWbaWWOo4++Nb3xkLz1hheCvmoa60jPA7rOn7Qd1c?=
+ =?us-ascii?Q?4CymywW0ja7N2fKBHkDPFSZut6I/oics3XKsvWz7+jLMBwp1s6r9beLq70yj?=
+ =?us-ascii?Q?FZyD03Fn55Td+ri6c6JpNJ/O6V9kqYeCRqZgTL9xpETDfgPlcxvasD63wu4P?=
+ =?us-ascii?Q?aExhYb3oyUY8pH9eQH260+K/CDBAe7zXvo6I3becl3/w9wFkW17IvKLwFcr+?=
+ =?us-ascii?Q?UsgonJU00YaaWu71pV1hVfDsCy35R48RorxEmNovJoa8TPAR8/ViXHVNzSt3?=
+ =?us-ascii?Q?Vi7MMoEwnAP6bnvwZJNSxeC5PUaWzuKpFEMKdQyoiUHsC600psJZuJhySDMi?=
+ =?us-ascii?Q?56KGh7//y6WhlrdGTc3hKIDJvQZozpAAoOcK8ueCt2KitjkeXoaq1KyIkc3q?=
+ =?us-ascii?Q?lKxQQYALPvRfHw7tguG3Isw0+U7d6oI/WcdmIQC2YJSrurpFhCuAetDCj7Qo?=
+ =?us-ascii?Q?JOIrLE7p9qe16Ft7Vkx8TiexJ1puJRdpFiJNuIWYPxZ/okWrs58h7IqDwvow?=
+ =?us-ascii?Q?OUPuop7VkEznU+RdTIJmZvZbh+k3iz1XhJi56+LRmTfvUxQA5Yw2MgOU2v8M?=
+ =?us-ascii?Q?iikX3Ezry8wd7MtQx4RhJFErNns88wnERLyeTp90YWLg/VTatzb4MqYn4fFW?=
+ =?us-ascii?Q?wsBKV5Zbc8t+3qKZsQ6C4hOqe/ZmPcLBavcS1M63P+ZD7s/YQq09/PpA9CNj?=
+ =?us-ascii?Q?IMWGrOxxs6ItVyB/giOd5sFFZubB4r3AtGNEPdThPWSi1ouiKIRTguoHD0S5?=
+ =?us-ascii?Q?7XytG1IvJ94dKdIlUoda0kT51GFwGl0GUUEIZA/uN4uZYJhF3vHVb6BSZw+g?=
+ =?us-ascii?Q?tmD+OpbdV3F3M5WQvjEZzD9Cc0SCX1i4JNFkKgjJcdy8Ei+GsHwPJTcYYF2n?=
+ =?us-ascii?Q?Rmb/ylkkzvI3GoWDbNhaPnCiF4AG97MkHfzBLkm4JaI7j1W8ctUOG6JeGqDQ?=
+ =?us-ascii?Q?LV+OC2D7zH0aqjaH4ZWJznXIdqgWbXBD+Plb+4H3s7VR7JZ9bmWOGn5snTcy?=
+ =?us-ascii?Q?NI6UDz8MWQ9U39ORCTQmjAk1R9KUxe61DqTK8VPXf+5M72kQ+ewIlFeBDTy+?=
+ =?us-ascii?Q?7ThFiDgjseCWYPn8/iGMWL4z5yaGw8B1n0xQdYAxRr65KMg3W3R5BjJtIVio?=
+ =?us-ascii?Q?+w=3D=3D?=
+X-OriginatorOrg: starfivetech.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 122dd484-3aa7-4ea1-9d9e-08dc76390266
+X-MS-Exchange-CrossTenant-AuthSource: ZQ2PR01MB1307.CHNPR01.prod.partner.outlook.cn
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 May 2024 06:17:20.6574
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 06fe3fa3-1221-43d3-861b-5a4ee687a85c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: MR5VcgBhUz+QiaSRKnFCFFhioWZqmIGbASIrx9+CZGQDj9BDAM9sbx9Bc/7h/+diVgXHkRByuvLykmc2NEMsObMtFMQblAfKcynNvZtzYrY=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ZQ2PR01MB1164
 
-Hello,
+The UART of StarFive JH7110 needs two reset signals (apb, core) to
+initialize. This patch series adds the missing core reset.
 
-On 3/3/2024 7:08 AM, Jonas Gorski wrote:
-> If the circular buffer is empty, it just means we fit all characters to
-> send into the HW fifo, but not that the hardware finished transmitting
-> them.
-> 
-> So if we immediately call stop_tx() after that, this may abort any
-> pending characters in the HW fifo, and cause dropped characters on the
-> console.
-> 
-> Fix this by only stopping tx when the tx HW fifo is actually empty.
-> 
-> Fixes: 8275b48b2780 ("tty: serial: introduce transmit helpers")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
-> ---
-> (this is v2 of the bcm63xx-uart fix attempt)
-> 
-> v1 -> v2
-> * replace workaround with fix for core issue
-> * add Cc: for stable
-> 
-> I'm somewhat confident this is the core issue causing the broken output
-> with bcm63xx-uart, and there is no actual need for the UART_TX_NOSTOP.
-> 
-> I wouldn't be surprised if this also fixes mxs-uart for which
-> UART_TX_NOSTOP was introduced.
-> 
-> If it does, there is no need for the flag anymore.
->   include/linux/serial_core.h | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
-> index 55b1f3ba48ac..bb0f2d4ac62f 100644
-> --- a/include/linux/serial_core.h
-> +++ b/include/linux/serial_core.h
-> @@ -786,7 +786,8 @@ enum UART_TX_FLAGS {
->   	if (pending < WAKEUP_CHARS) {					      \
->   		uart_write_wakeup(__port);				      \
->   									      \
-> -		if (!((flags) & UART_TX_NOSTOP) && pending == 0)	      \
-> +		if (!((flags) & UART_TX_NOSTOP) && pending == 0 &&	      \
-> +		    __port->ops->tx_empty(__port))			      \
->   			__port->ops->stop_tx(__port);			      \
->   	}								      \
->   									      \
+Hal Feng (3):
+  dt-bindings: serial: snps-dw-apb-uart: Add one more reset signal for
+    StarFive JH7110 SoC
+  serial: 8250_dw: Use reset array API to get resets
+  riscv: dts: starfive: jh7110: Add the core reset and jh7110 compatible
+    for uarts
 
-I just upgraded to kernel 6.9 and discovered through a git bisect that
-this patch (7bfb915a597a301abb892f620fe5c283a9fdbd77) causes a problem
-with the legacy pxa.c serial driver (CONFIG_SERIAL_PXA_NON8250). I'm
-using it with a PXA168-based ARM device for a serial console as well as
-getty. With this patch applied, transmissions get hung up before they
-finish. The data isn't lost, because the next time a transmit occurs,
-the delayed data finally goes out -- but something seems to be causing
-it to get stuck right at the end of many, but not all, transmissions.
-For example, if I type "ps" and hit enter, nothing shows up until I hit
-enter again, which finally kickstarts the whole TX process and then I
-get all of the queued ps output.
+ .../bindings/serial/snps-dw-apb-uart.yaml     | 14 ++++++++-
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 30 +++++++++++--------
+ drivers/tty/serial/8250/8250_dw.c             |  2 +-
+ 3 files changed, 32 insertions(+), 14 deletions(-)
 
-I'm really confused about this symptom because it seems at face value
-like this patch would only ever improve the situation by preventing
-stop_tx() from being called too early. There's something about the pxa
-driver that is happier when stop_tx() is called with an empty buffer
-even if the UART is reporting that it's not empty yet. I tested some
-other random systems in qemu and couldn't reproduce this issue, so the
-problem may very well be limited just to this driver/hardware...
 
-I realize this driver is old and deprecated (I'm likely one of the few
-users left of it) so I'm hesitant to call it a regression. Maybe it's
-really a bug in this driver that the new patch exposes? I even thought,
-"heck, I should probably be using the newer 8250_pxa driver instead",
-but that one is even worse -- it drops TX characters like crazy,
-regardless of whether this patch is applied. I want to look into that
-problem eventually.
+base-commit: a38297e3fb012ddfa7ce0321a7e5a8daeb1872b6
+-- 
+2.43.2
 
-I'm hoping there is some kind of simple fix that can be made to the pxa
-driver to work around it with this new behavior. Can anyone think of a
-reason that this driver would not like this change? It seems
-counterintuitive to me -- the patch makes perfect sense.
-
-Thanks,
-Doug
 
