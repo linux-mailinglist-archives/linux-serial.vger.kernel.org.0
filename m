@@ -1,221 +1,160 @@
-Return-Path: <linux-serial+bounces-4289-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4292-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A5198CFEA8
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2024 13:13:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D3FA8D003E
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2024 14:41:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A384E1C2101C
-	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2024 11:13:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BDB61F23696
+	for <lists+linux-serial@lfdr.de>; Mon, 27 May 2024 12:41:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87A813BC2B;
-	Mon, 27 May 2024 11:13:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UhffPI/f"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3516215E5B8;
+	Mon, 27 May 2024 12:41:31 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from gauss.telenet-ops.be (gauss.telenet-ops.be [195.130.132.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4FE113BC11;
-	Mon, 27 May 2024 11:13:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0261715ECC3
+	for <linux-serial@vger.kernel.org>; Mon, 27 May 2024 12:41:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.130.132.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1716808416; cv=none; b=LlSU5tSP7ekmWicTZUX624gfJKR+AgZ9rYen6XWZr/59WWCZk3WgC38QHXG1+RxhASHDHZ6yNgfdrlrSWcghQoqemobXnto4RxqU+rc+bpXr3O8JE39fD3eV5d3GqJiEg+IbwMb4y3CcRJ1PbrQ5IbzRA/Wgl6Xxv8FAkiPEtYw=
+	t=1716813691; cv=none; b=JuZ2bMZ6bWapY25Jb51v/mGXkBnflIR4dmMO73A+GSWcYJgDAdHpk0tnGCtzMoJo1uBU/Izq27NXvdgTx2cG+4HeB+1C7s3LZuavUXfVWkleoUBRVpwxOFlN8ZnVQ1nPmHvYoGEGbi/+F8Vu1dmmZcX9sDdT1v6QXuTgwEYYlWM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1716808416; c=relaxed/simple;
-	bh=afdDbhmD9ThP1FKZTIsEe/wj5S44yknEdyXRvW/hwco=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ohkPDpJC2Rn4Vr+eIdxsc5V2LK4R5+30A0Vggi6uh+xR7K2UltsJ3IzkKIPij6PA91yRp8wqP7MZ2D6lFafgnSUXdC2edkUAKe9smVVSd8liBja2i6ECB7pezGAkKsrj/csvgWtiDRsZMM1GI3WrfW5Xj4D8QNMuUPTUuwEynV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UhffPI/f; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1716808415; x=1748344415;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=afdDbhmD9ThP1FKZTIsEe/wj5S44yknEdyXRvW/hwco=;
-  b=UhffPI/fa0ytd3xp/4Yg+JTrzCXLBdnFtaii2cMaqq+B0uy/NTOo5tjh
-   2RKlV+1cpb0XCedJ7mRzGUYp9IrPnkgQWcXcR1NwuNl/5QxapngANtTl8
-   PFXxqHzLiyHAPEOmmH7ITVQd+35TW3/uCKTHuh81VadGh8DqdcIFGwonX
-   5/0kb+Q5xDzJtLJi2CYLm25KtRSbqEJnu9Qf7LUKQvoivPoIGSJgEOoQA
-   Vim1RBC3NXY6LXGPaNigAqwTG5Dg6k4Wu8ji9hKq1V3EXZJUQGqGZ3bdh
-   q38jNxS/MAX6anNhVCy2DBuZ26+rFc2/w2XGs1qIz4ZoE31Cs40Vt5P1P
-   A==;
-X-CSE-ConnectionGUID: sKOhbvxISu+GW5VuNg+XLQ==
-X-CSE-MsgGUID: D3S0EL7zSaS25dlmLDxCWA==
-X-IronPort-AV: E=McAfee;i="6600,9927,11084"; a="16069203"
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="16069203"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 04:13:34 -0700
-X-CSE-ConnectionGUID: fwN1LcrQSqe8uHf9/d/h2w==
-X-CSE-MsgGUID: zxrOB3amRoymbBaomYW/Rw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.08,192,1712646000"; 
-   d="scan'208";a="35219496"
-Received: from oandoniu-mobl3.ger.corp.intel.com (HELO tlindgre-MOBL1) ([10.245.244.124])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 May 2024 04:13:27 -0700
-Date: Mon, 27 May 2024 14:13:19 +0300
-From: Tony Lindgren <tony.lindgren@linux.intel.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Tony Lindgren <tony@atomide.com>,
+	s=arc-20240116; t=1716813691; c=relaxed/simple;
+	bh=8hdldazWVA2zqxn3teJVpbzPafUsFkhaXGXuAlZegCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=OhHl2tNhtW3zzOKsUBiocWLGr/xhR7UxqWo9sZyyPyJJUpUN4TZqdURJKJXoF/gK4WQZW2hR5AiJ3CXKgyv7hhdqPdnaYeNSkO2Ui9xIHGARG2QxteY1PiHx/1/qwyaXqsH5ycGTpcyAwmCg9yD350oxhpMHIVEz/fLWLTA7isk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be; spf=none smtp.mailfrom=linux-m68k.org; arc=none smtp.client-ip=195.130.132.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=glider.be
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux-m68k.org
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+	by gauss.telenet-ops.be (Postfix) with ESMTPS id 4VnwHq2DL9z4x0Ln
+	for <linux-serial@vger.kernel.org>; Mon, 27 May 2024 14:41:27 +0200 (CEST)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed80:c993:5573:f894:7353])
+	by andre.telenet-ops.be with bizsmtp
+	id UChF2C0032nC7mg01ChF7d; Mon, 27 May 2024 14:41:19 +0200
+Received: from rox.of.borg ([192.168.97.57])
+	by ramsan.of.borg with esmtp (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sBZeD-00CfTd-4Q;
+	Mon, 27 May 2024 14:41:14 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+	(envelope-from <geert@linux-m68k.org>)
+	id 1sBZf8-003hdW-RS;
+	Mon, 27 May 2024 14:41:14 +0200
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Jonathan Corbet <corbet@lwn.net>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	John Ogness <john.ogness@linutronix.de>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Dhruva Gole <d-gole@ti.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Johan Hovold <johan@kernel.org>,
-	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, Sebastian Reichel <sre@kernel.org>,
-	linux-doc@vger.kernel.org
-Subject: Re: [PATCH v7 1/7] printk: Save console options for
- add_preferred_console_match()
-Message-ID: <ZlRqz2b0ZrtkxScL@tlindgre-MOBL1>
-References: <20240327110021.59793-1-tony@atomide.com>
- <20240327110021.59793-2-tony@atomide.com>
- <ZlC6_Um4P4b-_WQE@pathway.suse.cz>
+	Jiri Slaby <jirislaby@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>
+Cc: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	Peng Fan <peng.fan@nxp.com>,
+	linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH/RFC 0/3] pmdomain: renesas: rmobile-sysc: Remove serial console handling
+Date: Mon, 27 May 2024 14:41:10 +0200
+Message-Id: <cover.1716811405.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZlC6_Um4P4b-_WQE@pathway.suse.cz>
+Content-Transfer-Encoding: 8bit
 
-Hi,
+	Hi all,
 
-On Fri, May 24, 2024 at 06:06:21PM +0200, Petr Mladek wrote:
-> I have finally found time to looks at this again.
+Since commit a47cf07f60dcb02d ("serial: core: Call
+device_set_awake_path() for console port"), the serial driver properly
+handles the case where the serial console is part of the awake path, and
+it looked like we could start removing special serial console handling
+from PM Domain drivers like the R-Mobile SYSC PM Domain driver.
+Unfortunately the devil is in the details, as usual...
 
-Great good to hear.
+Earlycon relies on the serial port to be initialized by the firmware
+and/or bootloader.  Linux is not aware of any hardware dependencies that
+must be met to keep the port working, and thus cannot guarantee they
+stay met, until the full serial driver takes over.
 
-> First, about breaking the preferred console:
-> 
-> The patchset still causes the regression with /dev/console association
-> as already reported for v3, see
-> https://lore.kernel.org/r/ZWnvc6-LnXdjOQLY@alley
+E.g. all unused clocks and unused PM Domains are disabled in a late
+initcall.  As this happens after the full serial driver has taken over,
+the serial port's clock and/or PM Domain are no longer deemed unused,
+and this is typically not a problem.
 
-Thanks and sorry for missing this issue. I thought I had this issue
-already handled, but looking at what I tested with earlier, looks like
-I had the console options the wrong way around.
- 
-> I used the following kernel command line:
-> 
->    earlycon=uart8250,io,0x3f8,115200 console=ttyS0,115200 console=tty0 ignore_loglevel log_buf_len=1M
-> 
-> The patchset caused that /dev/console became associated with
-> ttyS0 instead of tty0, see the "C" flag:
-> 
-> 	original # cat /proc/consoles
-> 	tty0                 -WU (EC    )    4:1
-> 	ttyS0                -W- (E  p a)    4:64
-> 
->    vs.
-> 
-> 	patched # cat /proc/consoles
-> 	ttyS0                -W- (EC p a)    4:64
-> 	tty0                 -WU (E     )    4:1
+However, if the serial port's clock or PM Domain is shared with another
+device, and that other device is runtime-suspended before the full
+serial driver has probed, the serial port's clock and/or PM Domain will
+be disabled inadvertently.  Any subsequent serial console output will
+cause a crash or system lock-up.  E.g. on R/SH-Mobile SoCs, the serial
+ports share their PM Domain with several other I/O devices.  After the
+use of pwm (Armadillo-800-EVA) or i2c (KZM-A9-GT) during early boot,
+before the full serial driver takes over, the PM Domain containing the
+early serial port is powered down, causing a lock-up when booted with
+"earlycon".
 
-OK
+This RFC patch series aims to provide a mechanism for handling this, and
+to fix it for the PM Domain case:
+  1. The first patch provides a mechanism to let the clock and/or PM
+     Domain subsystem or drivers handle this, by exporting the clock and
+     PM Domain dependencies for the serial port, as available in the
+     system's device tree,
+  2. The second patch introduces a new flag to handle a PM domain that
+     must be kept powered-on during early boot, and by setting this flag
+     if the PM Domain contains the serial console (originally I handled
+     this inside rmobile-sysc, but it turned out to be easy to
+     generalize this to other platforms in the core PM Domain code).
+  3. The third patch removes the no longer needed special console
+     handling from the R-Mobile SYSC PM Domain driver.
 
-> I have added some debugging messages which nicely show the reason.
-> In the original code, __add_preferred_console() is called twice
-> when processing the command line:
-> 
-> [    0.099312] __add_preferred_console[0]: ttyS, 0 (preferrred_console == 0)
-> [    0.099982] __add_preferred_console[1]: tty, 0 (preferrred_console == 1)
+I did not fix the similar clock issue, as it is more complex (there can
+be multiple clocks, and each clock provider can have its own value of
+#clock-cells), and I do not need it for Renesas ARM platforms.
 
-OK thanks for tracking down where things go wrong.
+This has been tested on the APE6-EVM, Armadillo-800-EVA, and KZM-A9-GT
+development boards, with and without earlycon, including s2ram with and
+without no_console_suspend.
 
-> The code thinks that "ttyS0" has been mentioned on the command line
-> once again. And preferred_console is _wrongly_ set back to '0'.
-> 
-> My view:
-> 
-> The delayed __add_preferred_console() is a way to hell.
-> 
-> The preferences are defined by the ordering on the command line.
-> All entries have to be added when the command line options are
-> being proceed to keep the order.
+Notes:
+  - This should not be needed on RZ/G3S, where each serial port device
+    has its own PM Domain,
+  - drivers/clk/imx/clk.c and drivers/pmdomain/imx/scu-pd.c have special
+    handling for the of_stdout device, but is probably not affected, as
+    each serial port seems to share its PM Domain only with the serial
+    port's clock controller.
 
-To me it seems we can fix this by keeping track of the console position
-in the kernel command line. I'll send a fix for this to discuss.
+Thanks for your comments!
 
-> A solution might be to store "devname" separately in
-> struct console_cmdline and allow empty "name". We could
-> implement then a function similar to
-> add_preferred_console_match() which would try to match
-> "devname" and set/update "name", "index" value when matched.
-> 
-> Note that we might also need to add some synchronization
-> if it might be possible to modify struct console_cmdline
-> in parallel.
+Geert Uytterhoeven (3):
+  earlycon: Export clock and PM Domain info from FDT
+  pmdomain: core: Avoid earlycon power-down
+  pmdomain: renesas: rmobile-sysc: Remove serial console handling
 
-OK certainly no objection from me if we can make this happen without
-making things more complex :)
- 
-> Second, about the possible duplication:
-> 
-> I might get it wrong. IMHO, in principle, this patchset tries
-> to achieve similar thing as the "match()" callback, see
-> the commit c7cef0a84912cab3c9 ("console: Add extensible
-> console matching").
-> 
-> The .match() callback in struct console is to match, for example,
-> console=uart8250,io,0x3f8,115200 when the uart8250 driver
-> calls register_console() when it is being properly initialized
-> as "ttyS".
-> 
-> BTW: The .match() needs saved options because it internally calls
->      .setup() callback. IMHO, this is a very ugly detail
->      which complicates design of the register_console() code.
-> 
-> 
-> Both approaches try to match a "driver/device-specific name" with
-> the generic "ttySX".
-> 
->     console=uart8250,io,0x3f8,115200	=> ttyS0
-> vs.
->     console=00:00:0.0,115200		=> ttyS0
-> 
-> 
-> Where console=uart8250,io,0x3f8,115200 is handled by:
-> 
->     - "uart" is added to console_cmdline[]
->     - matched directly via newcon->match() callback
-> 
-> vs. console=00:00:0.0,115200
-> 
->     - 00:00:0.0 is added to conopt[]
->     - "ttyS0" added to console_cmdline[] when "00:00:0.0" initialized
->     - "ttyS0" is then matched directly
-> 
-> 
-> Question: Would it it be able to use the existing .match() callback
-> 	  also to match the DEVNAME?
-> 
-> 	  Or somehow reuse the approach?
+ drivers/pmdomain/core.c                 | 24 ++++++++++++++++--
+ drivers/pmdomain/renesas/rmobile-sysc.c | 33 +------------------------
+ drivers/tty/serial/earlycon.c           | 14 ++++++++++-
+ include/linux/pm_domain.h               |  4 +++
+ include/linux/serial_core.h             | 10 ++++++++
+ 5 files changed, 50 insertions(+), 35 deletions(-)
 
-Thanks, I'll take a look if .match(), or some parts related to it, can
-be used.
+-- 
+2.34.1
 
-> 	  Could register_console() know how to generate possible
-> 	  DEVNAME for the given struct console?
+Gr{oetje,eeting}s,
 
-I don't think we can make much assumptions about the devices early on,
-and we also have the console index -1 issue.
+						Geert
 
-Regards,
+--
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Tony
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+							    -- Linus Torvalds
 
