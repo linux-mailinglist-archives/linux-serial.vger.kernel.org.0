@@ -1,55 +1,55 @@
-Return-Path: <linux-serial+bounces-4432-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4430-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F25F18FB009
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2024 12:41:12 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C6388FAFE4
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2024 12:35:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7CDA61F233E2
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2024 10:41:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A6816B20B6A
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Jun 2024 10:35:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 411C7145B1A;
-	Tue,  4 Jun 2024 10:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C66F6142E68;
+	Tue,  4 Jun 2024 10:35:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="VfTQiEK6"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="akhxL64f"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21FE9144D2C;
-	Tue,  4 Jun 2024 10:40:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74A0A2566;
+	Tue,  4 Jun 2024 10:35:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1717497606; cv=none; b=QP726Uk73fvYTlIfQHRqTKLC509pxI8gO1pUd//BsYRK8QyRIm2MTuXPWCRvjRtgJL5WNC6zP//nHQB3LGo76uLzCODVkGz2EJdYYDJv7RpHhWFnc/3LF7nw3g7z9NXCWIQmUi2ZhfLAvPLm+7RSPZL5i9qfZ9VWOl/Dp700H+w=
+	t=1717497312; cv=none; b=NSZHDt6MEVRBaroc39orRhXYhYPJ7mgFbFRfFKIKGRZZ4EwUFbsrSbw1qml+73PU3E0QYK+pz15mRK3L3/p2c9d/zDME3lCFgN/b33HSh4UcYVg4GkP6sw+JXh6mZ0k/m1Fpoh8GrwG6QQsH3vU57qlTl2vhiJaOUDbkjj1SyZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1717497606; c=relaxed/simple;
-	bh=ofGGe7pYu7+4nliYpZKxLnR3ezTfWQzQpya2z8TbzAM=;
+	s=arc-20240116; t=1717497312; c=relaxed/simple;
+	bh=VMEhza1tCBIRlBFUJ2DApprezBBCi/jSLZpOp5JsPk0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=vCOzZ8FKl6+3JnPUnx/5p4ACAGENDJPHTLgALQodbiZDRaBUw7v7KBzn4QK2QLaXnjKCg4BoaGNcmotsoiVNUPh/okDro8hx4brDRC6tnUvUQZvgN6H1D9CEpelYjBgt31+yEtxVzoTJ8tbU8TLS4yeOwH17Pw4ghAqGovfE9yM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=VfTQiEK6; arc=none smtp.client-ip=185.125.188.121
+	 In-Reply-To:Content-Type; b=gnBEyec4zuylLpOBJbYXo3/gAy2EitJycmKrCAzX1Mdr5Z9xHlbWAdQAcp2G3mQFImyWrxTDOdVpzE8ucWh6vJYP+71nr1iDjwSYLX9smKS1rtHp125pOX2ybVgJqJid8pmfVE/iKp5rPJpzXB8eYWkJH9JZbuO15BOKQJ7F0cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=akhxL64f; arc=none smtp.client-ip=185.125.188.121
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
 Received: from [192.168.0.106] (unknown [123.112.65.116])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 7EF6E3F1E9;
-	Tue,  4 Jun 2024 10:34:29 +0000 (UTC)
+	by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 97EC9407AA;
+	Tue,  4 Jun 2024 10:35:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20210705; t=1717497273;
-	bh=401YlDvjkeBbO2ZQMYij/HBNYPBcwsxZ/aOmo3EOcqk=;
+	s=20210705; t=1717497308;
+	bh=0qN7APW3C08pfmAL54/1it/XbVrqAdruDujLrrCtYAc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
 	 In-Reply-To:Content-Type;
-	b=VfTQiEK6gI/wKCztu5heKCH0gm0E5xPVoTfjujjmIeGbeRrnW/CnjxXYQeDzE6HFH
-	 01KW6/nWb8XxVxa+r7QbLvs/ZNBSULEkHWhCFAOdk4MligvbocAIqtie3Vc9rPelhK
-	 g7VPqa0i6ffV20eNkW9DrN3dA+E8XXodqjoTPTXRnPhnmgjvQzND8aZhcASo2RGnV9
-	 syLwFBeX4cIUd28nRyztYoIRkprpcWJfnR4knXeNcEYw5mLZ4jLnu8M/vfIqFLMhdb
-	 pBYvl5jgpGitKu/qrZAS7wGD7WYs33/bpOz1vT0KBrDqS/SHVogjE6nviBqsZEuJpN
-	 3julSLqdAGDNA==
-Message-ID: <405d24a3-7e61-46a1-b185-83299706cedd@canonical.com>
-Date: Tue, 4 Jun 2024 18:34:23 +0800
+	b=akhxL64fVY9d++cOINZECE94pVZLzHVruKcPULHwhiYn+Ek2hK3yuAvHhCyffi/K0
+	 nzBMhXn+GcW58tn6Q/QPd94MyY9egC5GcLypLSVvZiZ6tvk790KWFsJ5bg8Tzij17S
+	 QQW3ip0VDDafpAupN2FH86IaVcuK4dOSpBJrfnuB1j+JQ+LMN0DpNGVFmryZXKwlhI
+	 1HiP1mCCb7UJu63BlpBUMhEbUzA4Pbi5q/Qk1x96pjmheMa80jq5H2baLIsKRQJDhu
+	 vsyoCOSJEeY4V7M8kWnsf5A13dyuNBKPWwqD+FV9WmSGAkbeJXXUDY2vNJSZUVq/bI
+	 CiOLzYYQ2NvWg==
+Message-ID: <bf7ed22b-e75a-470b-ad69-0ea0be958024@canonical.com>
+Date: Tue, 4 Jun 2024 18:35:01 +0800
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -57,150 +57,62 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] serial: sc16is7xx: setup reset pin if it is defined
- in device tree
-To: Hugo Villeneuve <hugo@hugovil.com>
+Subject: Re: [PATCH 1/2] dt-bindings: serial: sc16is7xx: add reset-gpios
+To: Rob Herring <robh@kernel.org>
 Cc: linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
  gregkh@linuxfoundation.org, jirislaby@kernel.org, hvilleneuve@dimonoff.com
 References: <20240603123710.649549-1-hui.wang@canonical.com>
- <20240603123710.649549-2-hui.wang@canonical.com>
- <20240603091112.d3491b3be00830126580662e@hugovil.com>
+ <20240603131850.GA148307-robh@kernel.org>
 Content-Language: en-US
 From: Hui Wang <hui.wang@canonical.com>
-In-Reply-To: <20240603091112.d3491b3be00830126580662e@hugovil.com>
+In-Reply-To: <20240603131850.GA148307-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi Hugo,
 
-Will address all your comment in the v2.
-
-Thanks,
-
-Hui.
-
-On 6/3/24 21:11, Hugo Villeneuve wrote:
-> On Mon,  3 Jun 2024 20:37:10 +0800
-> Hui Wang <hui.wang@canonical.com> wrote:
->
-> Hi Hui,
->
->> Certain designs connect a gpio to the reset pin, and the reset pin
->> needs to be setup correctly before accessing the chip.
->>
->> Here adding a function to handle the reset pin. This change has no
->> impact if there is no reset_gpios defined in the device tree.
+On 6/3/24 21:18, Rob Herring wrote:
+> On Mon, Jun 03, 2024 at 08:37:09PM +0800, Hui Wang wrote:
+>> In some designs, the chip reset pin is connected to a gpio, this
+>> gpio needs to be set correctly before probing the driver, so adding
+>> a reset-gpios in the device tree.
 >>
 >> Signed-off-by: Hui Wang <hui.wang@canonical.com>
 >> ---
->>   drivers/tty/serial/sc16is7xx.c     | 22 ++++++++++++++++++++++
->>   drivers/tty/serial/sc16is7xx.h     |  2 ++
->>   drivers/tty/serial/sc16is7xx_i2c.c |  2 ++
->>   drivers/tty/serial/sc16is7xx_spi.c |  2 ++
->>   4 files changed, 28 insertions(+)
+>>   Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml | 4 ++++
+>>   1 file changed, 4 insertions(+)
 >>
->> diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
->> index bf0065d1c8e9..53bfb603b03c 100644
->> --- a/drivers/tty/serial/sc16is7xx.c
->> +++ b/drivers/tty/serial/sc16is7xx.c
->> @@ -19,6 +19,7 @@
->>   #include <linux/kthread.h>
->>   #include <linux/mod_devicetable.h>
->>   #include <linux/module.h>
->> +#include <linux/of_gpio.h>
->>   #include <linux/property.h>
->>   #include <linux/regmap.h>
->>   #include <linux/sched.h>
->> @@ -1467,6 +1468,27 @@ static const struct serial_rs485 sc16is7xx_rs485_supported = {
->>   	.delay_rts_after_send = 1,	/* Not supported but keep returning -EINVAL */
->>   };
+>> diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+>> index 5dec15b7e7c3..62aff6e034cb 100644
+>> --- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+>> +++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+>> @@ -28,6 +28,9 @@ properties:
+>>     clocks:
+>>       maxItems: 1
 >>   
->> +void sc16is7xx_setup_reset_pin(struct device *dev)
-> Potentially rename to sc16is7xx_reset() based on my comments below
-> about software reset.
+>> +  reset-gpios:
+>> +    maxItems: 1
+>> +
+>>     clock-frequency:
+>>       description:
+>>         When there is no clock provider visible to the platform, this
+>> @@ -120,6 +123,7 @@ examples:
+>>               compatible = "nxp,sc16is752";
+>>               reg = <0x54>;
+>>               clocks = <&clk20m>;
+>> +            reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+> Missing the header for the define.
 >
->> +{
->> +	struct device_node *np = dev->of_node;
->> +	int reset_gpio, err;
->> +
->> +	reset_gpio = of_get_named_gpio(np, "reset-gpios", 0);
-> Maybe use devm_gpiod_get_optional() to simplify and avoid OF-specific
-> code.
+> Test your bindings before sending.
+
+OK, got it.
+
+Thanks.
+
 >
->> +	if (!gpio_is_valid(reset_gpio))
->> +		return;
->> +
->> +	err = devm_gpio_request_one(dev, reset_gpio, GPIOF_OUT_INIT_LOW,
->> +				    "sc16is7xx-reset");
->> +	if (err) {
->> +		dev_err(dev, "failed to request sc16is7xx-reset-gpios: %d\n", err);
->> +		return;
-> When this error happens, you return no error to the calling function,
-> why? If you specify a reset GPIO in your device tree, and you cannot use
-> it, seems like an error worth reporting.
->
->> +	}
->> +
->> +	/* Deassert the reset pin */
-> Do you respect the manufacturer's minimum reset pulse width? The
-> datasheet states that its 3 us, so maybe add a delay before deassertion.
->
->> +	gpio_set_value_cansleep(reset_gpio, 1);
->> +}
->> +EXPORT_SYMBOL_GPL(sc16is7xx_setup_reset_pin);
->> +
->>   int sc16is7xx_probe(struct device *dev, const struct sc16is7xx_devtype *devtype,
->>   		    struct regmap *regmaps[], int irq)
->>   {
->> diff --git a/drivers/tty/serial/sc16is7xx.h b/drivers/tty/serial/sc16is7xx.h
->> index afb784eaee45..f4ae114cc41a 100644
->> --- a/drivers/tty/serial/sc16is7xx.h
->> +++ b/drivers/tty/serial/sc16is7xx.h
->> @@ -33,6 +33,8 @@ const char *sc16is7xx_regmap_name(u8 port_id);
->>   
->>   unsigned int sc16is7xx_regmap_port_mask(unsigned int port_id);
->>   
->> +void sc16is7xx_setup_reset_pin(struct device *dev);
->> +
->>   int sc16is7xx_probe(struct device *dev, const struct sc16is7xx_devtype *devtype,
->>   		    struct regmap *regmaps[], int irq);
->>   
->> diff --git a/drivers/tty/serial/sc16is7xx_i2c.c b/drivers/tty/serial/sc16is7xx_i2c.c
->> index 3ed47c306d85..9833c3b935c2 100644
->> --- a/drivers/tty/serial/sc16is7xx_i2c.c
->> +++ b/drivers/tty/serial/sc16is7xx_i2c.c
->> @@ -21,6 +21,8 @@ static int sc16is7xx_i2c_probe(struct i2c_client *i2c)
->>   	if (!devtype)
->>   		return dev_err_probe(&i2c->dev, -ENODEV, "Failed to match device\n");
->>   
->> +	sc16is7xx_setup_reset_pin(&i2c->dev);
-> Move this call inside sc16is7xx_probe() function, since it is common to
-> both i2c and spi interfaces. Also, you will see in sc16is7xx_probe()
-> that we already issue a software reset. If you
-> specify a hardware reset pin, then you shouldn't issue the software
-> reset.
->
->> +
->>   	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
->>   
->>   	for (i = 0; i < devtype->nr_uart; i++) {
->> diff --git a/drivers/tty/serial/sc16is7xx_spi.c b/drivers/tty/serial/sc16is7xx_spi.c
->> index 73df36f8a7fd..ce38561faaf0 100644
->> --- a/drivers/tty/serial/sc16is7xx_spi.c
->> +++ b/drivers/tty/serial/sc16is7xx_spi.c
->> @@ -38,6 +38,8 @@ static int sc16is7xx_spi_probe(struct spi_device *spi)
->>   	if (!devtype)
->>   		return dev_err_probe(&spi->dev, -ENODEV, "Failed to match device\n");
->>   
->> +	sc16is7xx_setup_reset_pin(&spi->dev);
->> +
->>   	memcpy(&regcfg, &sc16is7xx_regcfg, sizeof(struct regmap_config));
->>   
->>   	for (i = 0; i < devtype->nr_uart; i++) {
+>>               interrupt-parent = <&gpio3>;
+>>               interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+>>               nxp,modem-control-line-ports = <0 1>; /* Ports 0 and 1 as modem control lines */
 >> -- 
 >> 2.34.1
 >>
->>
->>
->
 
