@@ -1,157 +1,119 @@
-Return-Path: <linux-serial+bounces-4634-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4636-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7325A9087A7
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2024 11:38:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5BDB9908A6D
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2024 12:49:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C0F41F22008
-	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2024 09:38:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 039791F23629
+	for <lists+linux-serial@lfdr.de>; Fri, 14 Jun 2024 10:49:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 534A31922F7;
-	Fri, 14 Jun 2024 09:38:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0CD2194C84;
+	Fri, 14 Jun 2024 10:49:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="PFpSLKrJ"
+	dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b="OeFerS/+"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73075146D60;
-	Fri, 14 Jun 2024 09:38:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AD57194C8F;
+	Fri, 14 Jun 2024 10:49:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.120
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1718357930; cv=none; b=CARVsPWt0iXfv7Ux+EY/sonJg6+K+r9OS7MuhKVHuFajCymaf5xmzGYTxYDp+tbdq5g6H8h2THbiEsSLoh8DLSkp2Va1uLYeywv4TSsWtNj2H2ujrszqn1kot4XjISMYRVB72wMPD1Tg1PQ2C3cmRvGIZ3fKyjDiKeysw5GiHiA=
+	t=1718362147; cv=none; b=OmZq1YDhkKi0nrdTBpHzn0LcvjzlxMVzGneP4KMq8M2sr57I4yI+DbJ9Jf5dm7KTU7FYNfMAZq94tvc3ZPBuKcGZykMJgZJVLFlZADMUti/yZB29CRh/55G7dAd1PZ/gaIRn2d/QF6j4z7XiUNDSMlT6zpvmL2ULFYFS/ajIs20=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1718357930; c=relaxed/simple;
-	bh=kW+SCAQawYl8bZMtdCDZoUjYRzo1vwUwV0SeNPSeCSM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZN5ESiE72h9Iq7jdkXgwLcR/Tohq3EjULAj0992bwU5d0r+xpf6/EMX1r/Guh9FYFNL+DpTv+KjYMeU1fZ5VYea6NaUgGueVNwcX0FpgFbAT15Fmv41fzUja+CKFXk1mLsDQSPoSEPM5gqKUMS4DXzyXgs3uaiICgs/n7fPBjgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=PFpSLKrJ; arc=none smtp.client-ip=198.47.19.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 45E9cGDA028195;
-	Fri, 14 Jun 2024 04:38:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1718357896;
-	bh=+NFx58AC1+71lCRJDZfMbX16MlBwFV95gQE5TWMIO4Q=;
-	h=Date:Subject:To:CC:References:From:In-Reply-To;
-	b=PFpSLKrJELc6ngh9c31BMZPkzItAmQU/yGRdFI0BrL9B5R52McQnNTkKvICmf2lTY
-	 NVWFOjRShlhjanbrzF+WWOO37xHRBu7LEzhl/fb2MoSG1td2KqXaIkmT4QixJm8M6S
-	 c4JOQSBztuqwXcupkcaIda2IKNlUZlhiLPGcqyvw=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 45E9cGfa019267
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 14 Jun 2024 04:38:16 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 14
- Jun 2024 04:38:15 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 14 Jun 2024 04:38:15 -0500
-Received: from [172.24.18.200] (lt5cd2489kgj.dhcp.ti.com [172.24.18.200])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 45E9cCJh106972;
-	Fri, 14 Jun 2024 04:38:12 -0500
-Message-ID: <ee080b5d-49eb-4c5e-8076-76b1928dc5e0@ti.com>
-Date: Fri, 14 Jun 2024 15:08:11 +0530
+	s=arc-20240116; t=1718362147; c=relaxed/simple;
+	bh=0OQ7fAQz268gKpsmJc8+bAZ72791gLCH1pCX1SeyqQQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=LL2g8ecEv5TN4CHQGrcN33xqaxJEQYFi8ZglzQ4zJeyIjVDqb1kevyMebeZtQHslkEktfRWliFhH3jvsxoWv1N74i+2Ee00/o110jNA2dJ8BUWr6e6WCB1GN4rUGgRlIm32+WunWtJ1+nxZYbs9VlYwaPTxE+Aa6sVwMTMkKqBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (2048-bit key) header.d=canonical.com header.i=@canonical.com header.b=OeFerS/+; arc=none smtp.client-ip=185.125.188.120
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
+Received: from hwang4-ThinkPad-T14s-Gen-2a.conference (unknown [123.112.65.116])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 381B440EED;
+	Fri, 14 Jun 2024 10:32:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+	s=20210705; t=1718361127;
+	bh=bnS7kqTuI1oofRO47Dt2B1kbXI+rXgnlYIL3KGjU60o=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+	b=OeFerS/+6vvsJPCYDQ1QLKW9IBoj5olWVVzfZs8thBePbdpHGc5eCZRHM1ntwxLBG
+	 SGhbYfSV8s8Vl4MQ33vmf9Z1BTA9wiLpx6JWqhrKW0Pb85kuESlYVJvAJwqSGUdMYx
+	 9iQlkbd5111W2D0G2SyWPf3zYBfaiWeoNrNw5du38kjD36IWZEPPTbTqGw++CagIpc
+	 l5H1bzrkcROlos9k11XarB2LJbLvTnOvACcgQyhdOExOb7HiYnz3dAKOHr0eLoX3gc
+	 26NgGM3YfYMrCQDWK6O6AuQHp9AviSXUA99PqmVPxi1YKd/bv0I8LJyikM3+S97Od7
+	 QEI+8VhIjYdQw==
+From: Hui Wang <hui.wang@canonical.com>
+To: linux-serial@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	gregkh@linuxfoundation.org
+Cc: jirislaby@kernel.org,
+	hvilleneuve@dimonoff.com,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	andy@kernel.org,
+	lech.perczak@camlingroup.com,
+	Maarten.Brock@sttls.nl,
+	hui.wang@canonical.com
+Subject: [PATCH v5 1/2] dt-bindings: serial: sc16is7xx: add reset-gpios
+Date: Fri, 14 Jun 2024 18:29:51 +0800
+Message-Id: <20240614102952.679806-1-hui.wang@canonical.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] serial: 8250_omap: Implementation of Errata i2310
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-CC: <vigneshr@ti.com>, <nm@ti.com>, Tony Lindgren <tony@atomide.com>,
-        Greg
- Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby
-	<jirislaby@kernel.org>, <ronald.wahl@raritan.com>,
-        <thomas.richard@bootlin.com>, <tglx@linutronix.de>,
-        LKML
-	<linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>
-References: <20240614061314.290840-1-u-kumar1@ti.com>
- <9ed7e96a-c538-aac1-5b52-b7b1d72bb6a0@linux.intel.com>
-Content-Language: en-US
-From: "Kumar, Udit" <u-kumar1@ti.com>
-In-Reply-To: <9ed7e96a-c538-aac1-5b52-b7b1d72bb6a0@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 
+In some designs, the chip reset pin is connected to a GPIO, and this
+GPIO needs to be set correctly before probing the driver, so add a
+reset-gpios in the device tree.
 
-On 6/14/2024 1:58 PM, Ilpo Järvinen wrote:
-> On Fri, 14 Jun 2024, Udit Kumar wrote:
->
->> As per Errata i2310[0], Erroneous timeout can be triggered,
->> if this Erroneous interrupt is not cleared then it may leads
->> to strom of interrupts, therefore apply Errata i2310 solution.
->>
->> [0] https://www.ti.com/lit/pdf/sprz536 page 23
->>
->> Signed-off-by: Udit Kumar <u-kumar1@ti.com>
->> ---
->>   drivers/tty/serial/8250/8250_omap.c | 25 ++++++++++++++++++++-----
->>   1 file changed, 20 insertions(+), 5 deletions(-)
->>
->> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
->> index 170639d12b2a..38eb639f78d3 100644
->> --- a/drivers/tty/serial/8250/8250_omap.c
->> +++ b/drivers/tty/serial/8250/8250_omap.c
->> @@ -115,6 +115,10 @@
->>   /* RX FIFO occupancy indicator */
->>   #define UART_OMAP_RX_LVL		0x19
->>   
->> +/* Timeout Low and High */
->> +#define UART_OMAP_TO_L                 0x26
->> +#define UART_OMAP_TO_H                 0x27
->> +
->>   /*
->>    * Copy of the genpd flags for the console.
->>    * Only used if console suspend is disabled
->> @@ -663,13 +667,24 @@ static irqreturn_t omap8250_irq(int irq, void *dev_id)
->>   
->>   	/*
->>   	 * On K3 SoCs, it is observed that RX TIMEOUT is signalled after
->> -	 * FIFO has been drained, in which case a dummy read of RX FIFO
->> -	 * is required to clear RX TIMEOUT condition.
->> +	 * FIFO has been drained or erroneously.
->> +	 * So apply solution of Errata i2310 as mentioned in
->> +	 * https://www.ti.com/lit/pdf/sprz536
->>   	 */
->>   	if (priv->habit & UART_RX_TIMEOUT_QUIRK &&
->> -	    (iir & UART_IIR_RX_TIMEOUT) == UART_IIR_RX_TIMEOUT &&
->> -	    serial_port_in(port, UART_OMAP_RX_LVL) == 0) {
->> -		serial_port_in(port, UART_RX);
->> +		(iir & UART_IIR_RX_TIMEOUT) == UART_IIR_RX_TIMEOUT) {
->> +		unsigned char efr2, timeout_h, timeout_l;
->> +
->> +		efr2 = serial_in(up, UART_OMAP_EFR2);
->> +		timeout_h = serial_in(up, UART_OMAP_TO_H);
->> +		timeout_l = serial_in(up, UART_OMAP_TO_L);
->> +		serial_out(up, UART_OMAP_TO_H, 0xFF);
->> +		serial_out(up, UART_OMAP_TO_L, 0xFF);
->> +		serial_out(up, UART_OMAP_EFR2, 0x1);
-> Eh, this doesn't match the workaround in the errata???
->
-> Also, don't use literals but name the bits with defines (for the correct
-> bit there's probably a pre-existing define but it's not named as good as
-> it could be, I'd say it should be named as
-> UART_OMAP_EFR2_TIMEOUT_PERIODIC).
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Hui Wang <hui.wang@canonical.com>
+---
+No change in the v5
 
+ Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml | 5 +++++
+ 1 file changed, 5 insertions(+)
 
-Thanks, will address in v2.
+diff --git a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+index 5dec15b7e7c3..88871480018e 100644
+--- a/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
++++ b/Documentation/devicetree/bindings/serial/nxp,sc16is7xx.yaml
+@@ -28,6 +28,9 @@ properties:
+   clocks:
+     maxItems: 1
+ 
++  reset-gpios:
++    maxItems: 1
++
+   clock-frequency:
+     description:
+       When there is no clock provider visible to the platform, this
+@@ -91,6 +94,7 @@ unevaluatedProperties: false
+ examples:
+   - |
+     #include <dt-bindings/interrupt-controller/irq.h>
++    #include <dt-bindings/gpio/gpio.h>
+     i2c {
+         #address-cells = <1>;
+         #size-cells = <0>;
+@@ -120,6 +124,7 @@ examples:
+             compatible = "nxp,sc16is752";
+             reg = <0x54>;
+             clocks = <&clk20m>;
++            reset-gpios = <&gpio5 13 GPIO_ACTIVE_LOW>;
+             interrupt-parent = <&gpio3>;
+             interrupts = <7 IRQ_TYPE_EDGE_FALLING>;
+             nxp,modem-control-line-ports = <0 1>; /* Ports 0 and 1 as modem control lines */
+-- 
+2.34.1
 
-
->
->> +		serial_in(up, UART_IIR);
->> +		serial_out(up, UART_OMAP_EFR2, efr2);
->> +		serial_out(up, UART_OMAP_TO_H, timeout_h);
->> +		serial_out(up, UART_OMAP_TO_L, timeout_l);
 
