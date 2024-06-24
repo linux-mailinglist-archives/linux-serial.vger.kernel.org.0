@@ -1,115 +1,164 @@
-Return-Path: <linux-serial+bounces-4726-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4729-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B91C914EB9
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2024 15:35:08 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05CAF914EDA
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2024 15:37:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 765681C21F71
-	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2024 13:35:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A8A31F2331A
+	for <lists+linux-serial@lfdr.de>; Mon, 24 Jun 2024 13:37:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE5B143759;
-	Mon, 24 Jun 2024 13:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A89BD1411C9;
+	Mon, 24 Jun 2024 13:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9W3mh5/"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="ILygvCUw"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 766B7142E6F;
-	Mon, 24 Jun 2024 13:31:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7935113E888;
+	Mon, 24 Jun 2024 13:33:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719235901; cv=none; b=kc0XJEj42g4nxhSijNVSyf9AqPacZX1Atg9qIrz6Ss4fzMYv6pl1DPuevaAvpraGSJcBC9fhBRlKXXrhma7CUq1WMvrM6Sb50fTNlsPuXxt7Y/rdKJztyffjOwbgaYShLZtt3Mx7jAvW+caBGJErttYdUN8NkgwcBunCJssDnro=
+	t=1719236014; cv=none; b=uVvTY34c8rRSmpTIdShVN9FpfHwRTVxzZPC8Xrw8gPlbM8PgagtkFC4Otj/ObffTasP3YyA5LB091jXdKu4F8FxF1e1MM6ZZvt7ugM+GZhjt7UVu1L97/diFxYnPE2LR1zLzW9S6P90FDNMmQcIONRh+wuJN4mdk+xNU04ZRIsI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719235901; c=relaxed/simple;
-	bh=JT50kJAxXSVLOVDE7qwzG8MW4VwAdei3qjuQkLBLq2I=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cYb3GdySmHFVX1gDyZWDhSI9yNqs2Hc3fnXRmFE/0FXV4LTn/1eTOMUZECjX4y6QJI/k/X3UgVZxnfy0HFY7g/jtctGQ26ii+988/60MkJNbPOFtL/NXPIWmJ2uIjMkPb5yfPJBsYzIrZ2nT4AjgxDX0ZDE2xKG70fJ7Gp7iDLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9W3mh5/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17AD9C4AF0A;
-	Mon, 24 Jun 2024 13:31:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1719235901;
-	bh=JT50kJAxXSVLOVDE7qwzG8MW4VwAdei3qjuQkLBLq2I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=O9W3mh5/6j2/ymSepi34zTH0gKwchWbRSK39XTO5jYJpvAqt17dzFu2a0AZDXz6rx
-	 cebHPWIUdsF/+GDvyoN9OE61NuAfeMVjPcG+4IxKZKMBreUUd9+3crkQpvxaLuFcvl
-	 2ySztRlAr8kGuuXrWrIvmiXinBsG1gYcn+mdwyYTEP/Mo1TZn6Fdja7d5uLRflzWPK
-	 +HhYkEeltBypGo+/LZoNdtwmIVN8H3E/Bv3udMJcfkfOzGsf8xik5hxqbR9DL4NJXO
-	 sbLk//HCOjm4VU8dq7YB5hIPR3M/5OmLzg/FR+Tz1lbIRl5j06auNFdBobQDZIvPAT
-	 ymvQ+XQDw/xpw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan+linaro@kernel.org>)
-	id 1sLjnP-000000001wY-0gzi;
-	Mon, 24 Jun 2024 15:31:47 +0200
-From: Johan Hovold <johan+linaro@kernel.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Cc: Konrad Dybcio <konrad.dybcio@linaro.org>,
-	Douglas Anderson <dianders@chromium.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-arm-msm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan+linaro@kernel.org>,
-	stable@vger.kernel.org
-Subject: [PATCH 3/3] serial: qcom-geni: fix garbage output after buffer flush
-Date: Mon, 24 Jun 2024 15:31:35 +0200
-Message-ID: <20240624133135.7445-4-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.44.1
-In-Reply-To: <20240624133135.7445-1-johan+linaro@kernel.org>
-References: <20240624133135.7445-1-johan+linaro@kernel.org>
+	s=arc-20240116; t=1719236014; c=relaxed/simple;
+	bh=9zFosSwVy43COA5LXpYQ2Dm9NEd+eTcGR2GIviXSK5M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E8FT6sFL5aiWkwejHnJn+437ZnuL+KeiFEIG/IjU2iSo42PInW5dx/sOXQR/bBR9uOPIckTBp5hBgTGmR7YqELShB34kRcEp1E27lX0oOVuPNKuO57ok09Z4TBkJWR/pXQshb60fBLKktqm2AtceZGpctbWhFecRzITgW1eMiUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=ILygvCUw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A801BC2BBFC;
+	Mon, 24 Jun 2024 13:33:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1719236014;
+	bh=9zFosSwVy43COA5LXpYQ2Dm9NEd+eTcGR2GIviXSK5M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ILygvCUwZtEwOsboz813cE78GyGTV1+Q536rrkhlPHQ5+yLrn2GWhzLTMIuP+Arum
+	 U3ndDYX9c8/ks0zT8QwCcVoUCfVeR3VOjK/RMfZmee50qL5/Y/ROePNjN6JkQF7Kbu
+	 4ZIGVuG0AkQKOXMzrX4zEOUvwWnZolPBaO00g44g=
+Date: Mon, 24 Jun 2024 15:33:31 +0200
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Cc: Jiri Slaby <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] serial: imx: ensure RTS signal is not left active after
+ shutdown
+Message-ID: <2024062427-cheating-cloning-3de1@gregkh>
+References: <20240524121246.1896651-1-linux@rasmusvillemoes.dk>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240524121246.1896651-1-linux@rasmusvillemoes.dk>
 
-The Qualcomm GENI serial driver does not handle buffer flushing and
-outputs garbage (or NUL) characters for the remainder of any active TX
-command after the write buffer has been cleared.
+On Fri, May 24, 2024 at 02:12:45PM +0200, Rasmus Villemoes wrote:
+> If a process is killed while writing to a /dev/ttymxc* device in RS485
+> mode, we observe that the RTS signal is left high, thus making it
+> impossible for other devices to transmit anything.
+> 
+> Moreover, the ->tx_state variable is left in state SEND, which means
+> that when one next opens the device and configures baud rate etc., the
+> initialization code in imx_uart_set_termios dutifully ensures the RTS
+> pin is pulled down, but since ->tx_state is already SEND, the logic in
+> imx_uart_start_tx() does not in fact pull the pin high before
+> transmitting, so nothing actually gets on the wire on the other side
+> of the transceiver. Only when that transmission is allowed to complete
+> is the state machine then back in a consistent state.
+> 
+> This is completely reproducible by doing something as simple as
+> 
+>   seq 10000 > /dev/ttymxc0
+> 
+> and hitting ctrl-C, and watching with a logic analyzer.
+> 
+> Signed-off-by: Rasmus Villemoes <linux@rasmusvillemoes.dk>
+> ---
+> 
+> A screen dump from a logic analyzer can be seen at:
+> 
+>   https://ibb.co/xCcP7Jy
+> 
+> This is on an imx8mp board, with /dev/ttymxc0 and /dev/ttymxc2 both
+> configured for rs485 and connected to each other. I'm writing to
+> /dev/ttymxc2. This demonstrates both bugs; that RTS is left high when
+> a write is interrupted, and that a subsequent write actually fails to
+> have RTS high while TX'ing.
+> 
+> I'm not sure what commit to name as a Fixes:. This certainly happens
+> on 6.6 and onwards, but I assume the problem exists since the tx_state
+> machine was introduced in cb1a60923609 (serial: imx: implement rts
+> delaying for rs485), and possibly even before that.
+> 
+> 
+>  drivers/tty/serial/imx.c | 50 ++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 50 insertions(+)
+> 
+> diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
+> index 2eb22594960f..35a47f4ab6ed 100644
+> --- a/drivers/tty/serial/imx.c
+> +++ b/drivers/tty/serial/imx.c
+> @@ -1551,6 +1551,7 @@ static void imx_uart_shutdown(struct uart_port *port)
+>  	struct imx_port *sport = (struct imx_port *)port;
+>  	unsigned long flags;
+>  	u32 ucr1, ucr2, ucr4, uts;
+> +	int loops;
+>  
+>  	if (sport->dma_is_enabled) {
+>  		dmaengine_terminate_sync(sport->dma_chan_tx);
+> @@ -1613,6 +1614,55 @@ static void imx_uart_shutdown(struct uart_port *port)
+>  	ucr4 &= ~UCR4_TCEN;
+>  	imx_uart_writel(sport, ucr4, UCR4);
+>  
+> +	/*
+> +	 * We have to ensure the tx state machine ends up in OFF. This
+> +	 * is especially important for rs485 where we must not leave
+> +	 * the RTS signal high, blocking the bus indefinitely.
+> +	 *
+> +	 * All interrupts are now disabled, so imx_uart_stop_tx() will
+> +	 * no longer be called from imx_uart_transmit_buffer(). It may
+> +	 * still be called via the hrtimers, and if those are in play,
+> +	 * we have to honour the delays.
+> +	 */
+> +	if (sport->tx_state == WAIT_AFTER_RTS || sport->tx_state == SEND)
+> +		imx_uart_stop_tx(port);
+> +
+> +	/*
+> +	 * In many cases (rs232 mode, or if tx_state was
+> +	 * WAIT_AFTER_RTS, or if tx_state was SEND and there is no
+> +	 * delay_rts_after_send), this will have moved directly to
+> +	 * OFF. In rs485 mode, tx_state might already have been
+> +	 * WAIT_AFTER_SEND and the hrtimer thus already started, or
+> +	 * the above imx_uart_stop_tx() call could have started it. In
+> +	 * those cases, we have to wait for the hrtimer to fire and
+> +	 * complete the transition to OFF.
+> +	 */
+> +	loops = port->rs485.flags & SER_RS485_ENABLED ?
+> +		port->rs485.delay_rts_after_send : 0;
+> +	while (sport->tx_state != OFF && loops--) {
+> +		uart_port_unlock_irqrestore(&sport->port, flags);
+> +		msleep(1);
+> +		uart_port_lock_irqsave(&sport->port, &flags);
+> +	}
+> +
+> +	if (dev_WARN_ONCE(sport->port.dev, sport->tx_state != OFF,
+> +			  "unexpected tx_state %d\n", sport->tx_state)) {
 
-Implement the flush_buffer() callback and use it to cancel any active TX
-command when the write buffer has been emptied.
+Please don't reboot devices that have panic-on-warn enabled for
+something like this, as you are handling it, but that didn't help for
+those devices that had that option turned on :(
 
-Fixes: a1fee899e5be ("tty: serial: qcom_geni_serial: Fix softlock")
-Cc: stable@vger.kernel.org	# 5.0
-Reported-by: Douglas Anderson <dianders@chromium.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/tty/serial/qcom_geni_serial.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+thanks,
 
-diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-index 72addeb9f461..5fbb72f1c0c7 100644
---- a/drivers/tty/serial/qcom_geni_serial.c
-+++ b/drivers/tty/serial/qcom_geni_serial.c
-@@ -1084,6 +1084,11 @@ static void qcom_geni_serial_shutdown(struct uart_port *uport)
- 	qcom_geni_serial_clear_tx_fifo(uport);
- }
- 
-+static void qcom_geni_serial_flush_buffer(struct uart_port *uport)
-+{
-+	qcom_geni_serial_clear_tx_fifo(uport);
-+}
-+
- static int qcom_geni_serial_port_setup(struct uart_port *uport)
- {
- 	struct qcom_geni_serial_port *port = to_dev_port(uport);
-@@ -1540,6 +1545,7 @@ static const struct uart_ops qcom_geni_console_pops = {
- 	.request_port = qcom_geni_serial_request_port,
- 	.config_port = qcom_geni_serial_config_port,
- 	.shutdown = qcom_geni_serial_shutdown,
-+	.flush_buffer = qcom_geni_serial_flush_buffer,
- 	.type = qcom_geni_serial_get_type,
- 	.set_mctrl = qcom_geni_serial_set_mctrl,
- 	.get_mctrl = qcom_geni_serial_get_mctrl,
--- 
-2.44.1
-
+greg k-h
 
