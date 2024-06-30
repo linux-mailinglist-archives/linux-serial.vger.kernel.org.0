@@ -1,172 +1,79 @@
-Return-Path: <linux-serial+bounces-4809-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4811-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C14C91D278
-	for <lists+linux-serial@lfdr.de>; Sun, 30 Jun 2024 17:38:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6466291D2AA
+	for <lists+linux-serial@lfdr.de>; Sun, 30 Jun 2024 18:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 47B5D1C20995
-	for <lists+linux-serial@lfdr.de>; Sun, 30 Jun 2024 15:38:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D6521C209CE
+	for <lists+linux-serial@lfdr.de>; Sun, 30 Jun 2024 16:28:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CEE5156C69;
-	Sun, 30 Jun 2024 15:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F38D21552E3;
+	Sun, 30 Jun 2024 16:28:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="OAM7af0S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XDsg4qJc"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 858E6155739;
-	Sun, 30 Jun 2024 15:37:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE3A25B1E0;
+	Sun, 30 Jun 2024 16:28:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1719761876; cv=none; b=Fe5n1lojfrT4WIyamxAe4Jj8jCdhdpgbdMumv7L9i5j5Vnvtab3vd2TAvXU3Do9QjCiaeY7xIv/SxkBsMb/rRxpxaNf5BYbJfMqsPH1GGiFEqIWLaSOxv/ZqfqJc56PpgdIUPJR9pkfL99KFAuglVLYzZBTuNchX78UWa1aKN4E=
+	t=1719764886; cv=none; b=kPAKzfM4OG3HFhiHY1SJ5/gJ1pDz7bDePZOf2Jtp6udJqCjGsR5+bbNHowABY0u/oRMtnHecTnflzK1WbFDGp/Edr1i7Hz+T4gQ7rbdZ6z6k7rWwRQAQ/oeH3J0+Y9O0NEpH1+TttXB3f/OjZPbuS7TbeUiJ2P4lssEQvB7kePI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1719761876; c=relaxed/simple;
-	bh=htFaQCpdyD71n4pNPL8ZQEsGXm5kTTzIwWkMkp+T2HM=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=J+zzIXfmQ0U6K0A+ZwgBhhGUBeC/efKkLUZtVFWLqQKjSjz+c8OOpfMxwl9m9M5QK88+f8zfpFsTmjmVJY3kWkt+r5YKmiY1C7+8E3cBR4IEy7ADB8B2COlalTiE1TPFXAUGOeLYAzhgGCZWev038tm9RLMAydy1yX7BHAiTV+o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=OAM7af0S; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1719761845; x=1720366645; i=wahrenst@gmx.net;
-	bh=P9b6UEReDpU77Jd10Cj2qEnGBLfdX01BBvJz6wX6RDo=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=OAM7af0SnCS1ZARK4RA4CkYk6exCAufqxsQsCgLR3fzwetYAHxX8NmH/xwsSHH52
-	 fn1X+6k5daXF2o1dCVvJQcbRKkBqB9dCRlPuxjhk4WWwPfkESO8kqXJQGd5/e+Yea
-	 daEuJ0eMROYKxns6+GMiGnSo8oeUg63Xb80p1qAWsD+UaUL0OQ5vgEcr/v6NvqRND
-	 ir43c+JlVVjWo4dAVHoaJ9y77syEzO06rQGJ3d0mrWPETWcKuseoLBKc+qZPFETen
-	 q7UsPqvgIG1dtXKZ3gzaFHF2ghr6cyavqKQWFVWFrYsSvc2NhQZ8RTZPj78V/oL87
-	 qifxeKiHGa1paw5yYg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from stefanw-SCHENKER ([37.4.248.43]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MGz1V-1sbMbW2khX-00EpCe; Sun, 30
- Jun 2024 17:37:25 +0200
-From: Stefan Wahren <wahrenst@gmx.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jassi Brar <jassisinghbrar@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Minas Harutyunyan <hminas@synopsys.com>
-Cc: Dave Stevenson <dave.stevenson@raspberrypi.com>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	David Airlie <airlied@gmail.com>,
-	Daniel Vetter <daniel@ffwll.ch>,
-	Lukas Wunner <lukas@wunner.de>,
-	Peter Robinson <pbrobinson@gmail.com>,
-	dri-devel@lists.freedesktop.org,
-	bcm-kernel-feedback-list@broadcom.com,
-	linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kernel-list@raspberrypi.com,
-	Stefan Wahren <wahrenst@gmx.net>
-Subject: [PATCH 09/11] usb: dwc2: Skip clock gating on Broadcom SoCs
-Date: Sun, 30 Jun 2024 17:36:50 +0200
-Message-Id: <20240630153652.318882-10-wahrenst@gmx.net>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20240630153652.318882-1-wahrenst@gmx.net>
-References: <20240630153652.318882-1-wahrenst@gmx.net>
+	s=arc-20240116; t=1719764886; c=relaxed/simple;
+	bh=dUSY9WlVjpaC0jibaT6PWQbRPziL6WMnbcskSU/tty8=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=nWxqlycWDOedj1nuUcg2JekMTlE4VdkIu4NT+AEd1JJFSYIVRnB/ODWjbE9gJsVHLlysD+YQQmSs/7dDK7DQlRz4XvnGmyP0Ht0U0R1PXtnQoHgHCAudszeezaFgy57iPrE/p1TjWGFtoLc7EYj5QmYqSqGTfLs/IwxENo1gqe0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XDsg4qJc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B0715C2BD10;
+	Sun, 30 Jun 2024 16:28:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1719764886;
+	bh=dUSY9WlVjpaC0jibaT6PWQbRPziL6WMnbcskSU/tty8=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=XDsg4qJc4g0Kf/WJs+dKn2xM4TRVTMz9LPV+m3yCr67ZRUnOafqPATXkWxqi+acIM
+	 6hV4PJz1olhmRMXkW6Sz0eIparoVKzaWprMXF0KbGJ/b+GcL8PsNfDCzQ/JEyfEXgL
+	 b8Og9zv80b7+dkpQnvVsgJHQralqBKHcgfoihBj/oRQstCUu8AaxEhQM/ZLl4k9YbD
+	 aED/xaiyJ38NvMHdHjWaU+1XBJ7BUvfzTHBxBLraJ9uk5IQYeVzl1uiOWDS1ynujrH
+	 IT0bwprbBjd1TawDz7w3zVVjeYnqi+E371GbKsv8IPqtLx6sH0pN8MeFNxr5P87aQn
+	 C9XNRcQLUGuPA==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id A65F3C433E9;
+	Sun, 30 Jun 2024 16:28:06 +0000 (UTC)
+Subject: Re: [GIT PULL] TTY / Serial driver fixes for 6.10-rc6
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <ZoFnsuNJy_Fz8_qE@kroah.com>
+References: <ZoFnsuNJy_Fz8_qE@kroah.com>
+X-PR-Tracked-List-Id: <linux-serial.vger.kernel.org>
+X-PR-Tracked-Message-Id: <ZoFnsuNJy_Fz8_qE@kroah.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.10-rc6
+X-PR-Tracked-Commit-Id: cc8d5a2f09a54405321769abfd6ec3395482336a
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 3e334486ec5cc6e79e7b0c4f58757fe8e05fbe5a
+Message-Id: <171976488667.24413.1678305741571152562.pr-tracker-bot@kernel.org>
+Date: Sun, 30 Jun 2024 16:28:06 +0000
+To: Greg KH <gregkh@linuxfoundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Jiri Slaby <jslaby@suse.cz>, Stephen Rothwell <sfr@canb.auug.org.au>, Andrew Morton <akpm@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:pI9X3saIj1rv3u8rkYVt5Z2mn5Afvx+C+DmVZ9+PgFr6tyA0tFT
- f2di+bJIcWOzMogkgezYjB2heHLGJEe8mitLQMHh9hvvizU9Hub7dsnOj4PIXEncKhn0sOG
- qFyhE2FzXXiMAY4c3kL70pxuCzZlNgA5sOSR1b7MqrlnsWwpJm+DpDqU60tldbwLzD8KCtz
- q+ZBsE8ao6B1eNETfpP5Q==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:r+xf4Y+CXp8=;dAxB9no4yNcRmM23mLNbkn4eZo0
- gJCfajaBuonOEWkB8tcs8u29OtY9HzcchKLFC269zRzIh6A2oqV3NtDMHpkfbEANkUhMm1Qcb
- 179qo1P8aCyoO/ZyOP3ZYJajVnrKo8+HKOMH6JbZxKE/sd7oqzPwf9icHwS8tpiEGs/qhnWYx
- cOtF3xjeahz5zE56PFH9Vp2Pmq7m1oohwh6A8exJYoNuVmcucmwcRc8rgo6cTcET2UH+s+JC9
- Rlqs9/AsBxgLNy4sRWcZFVpQ5EKrrlLu7VP+JuCdBhPHpkr4kdbFfpRyOjqUD8FuJkacwdble
- v8N11NQXp2AaMNUB+f1IDYAzDywiNcJGZedSkfMTWJJYdUEZL4eB4RevvWZ8/nJ/o0uAFrp2M
- MtHBholgzoF2F5MMKzaFF7HLSmUZcC/iRa3ZQkXEyXk+8G1u5EjBHuqJ4cVOC+NtYHusYEjVt
- mVMr0/pC7dBf/dhJCvJ8KcN+T7XgVKG03fpRzG3il+g66/V/NBjECOhZQ1gythLP+ara/KBNA
- svb7saNx+lZ/Mj3ieDkFFbEaJ0MGVa7vQXozZpJ6Ta03U7nsrJVPaqIfEr/ykkq7h/DlFKPYt
- n43yd5fgYkm4l1a1JOM3WoM9kgTecGab53+kFTRW7z8yrhAEceUbBjvivjLK4kyM1Pkb2RgyK
- P/VcJyHNUyDtZ31jvnVzDzUaksEjHH26JoYQ6SYmoKnL/4ceTi/s/wDDtGDyF3/gGPiVWDj3Z
- n41gLwUZ869NfKYPmkpKfJjYec8zWnthXdSKxtJPCUU+sbNSxWlnBffvZl2zGz6pFOqwebFbp
- MqDNR8LlYtDj15hOgxvhLT5CCquAP/IoO4r60kKWmcFpE=
 
-On resume of the Raspberry Pi the dwc2 driver fails to enable
-HCD_FLAG_HW_ACCESSIBLE before re-enabling the interrupts.
-This causes a situation where both handler ignore a incoming port
-interrupt and force the upper layers to disable the dwc2 interrupt line.
-This leaves the USB interface in a unusable state:
+The pull request you sent on Sun, 30 Jun 2024 16:12:02 +0200:
 
-irq 66: nobody cared (try booting with the "irqpoll" option)
-CPU: 0 PID: 0 Comm: swapper/0 Tainted: G W          6.10.0-rc3
-Hardware name: BCM2835
-Call trace:
-unwind_backtrace from show_stack+0x10/0x14
-show_stack from dump_stack_lvl+0x50/0x64
-dump_stack_lvl from __report_bad_irq+0x38/0xc0
-__report_bad_irq from note_interrupt+0x2ac/0x2f4
-note_interrupt from handle_irq_event+0x88/0x8c
-handle_irq_event from handle_level_irq+0xb4/0x1ac
-handle_level_irq from generic_handle_domain_irq+0x24/0x34
-generic_handle_domain_irq from bcm2836_chained_handle_irq+0x24/0x28
-bcm2836_chained_handle_irq from generic_handle_domain_irq+0x24/0x34
-generic_handle_domain_irq from generic_handle_arch_irq+0x34/0x44
-generic_handle_arch_irq from __irq_svc+0x88/0xb0
-Exception stack(0xc1b01f20 to 0xc1b01f68)
-1f20: 0005c0d4 00000001 00000000 00000000 c1b09780 c1d6b32c c1b04e54 c1a5e=
-ae8
-1f40: c1b04e90 00000000 00000000 00000000 c1d6a8a0 c1b01f70 c11d2da8 c11d4=
-160
-1f60: 60000013 ffffffff
-__irq_svc from default_idle_call+0x1c/0xb0
-default_idle_call from do_idle+0x21c/0x284
-do_idle from cpu_startup_entry+0x28/0x2c
-cpu_startup_entry from kernel_init+0x0/0x12c
-handlers:
-[<f539e0f4>] dwc2_handle_common_intr
-[<75cd278b>] usb_hcd_irq
-Disabling IRQ #66
+> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.10-rc6
 
-Disabling clock gatling workaround this issue.
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/3e334486ec5cc6e79e7b0c4f58757fe8e05fbe5a
 
-Fixes: 0112b7ce68ea ("usb: dwc2: Update dwc2_handle_usb_suspend_intr funct=
-ion.")
-Link: https://lore.kernel.org/linux-usb/3fd0c2fb-4752-45b3-94eb-42352703e1=
-fd@gmx.net/T/
-Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
-=2D--
- drivers/usb/dwc2/params.c | 1 +
- 1 file changed, 1 insertion(+)
+Thank you!
 
-diff --git a/drivers/usb/dwc2/params.c b/drivers/usb/dwc2/params.c
-index 5a1500d0bdd9..66580de52882 100644
-=2D-- a/drivers/usb/dwc2/params.c
-+++ b/drivers/usb/dwc2/params.c
-@@ -23,6 +23,7 @@ static void dwc2_set_bcm_params(struct dwc2_hsotg *hsotg=
-)
- 	p->max_transfer_size =3D 65535;
- 	p->max_packet_count =3D 511;
- 	p->ahbcfg =3D 0x10;
-+	p->no_clock_gating =3D true;
- }
-
- static void dwc2_set_his_params(struct dwc2_hsotg *hsotg)
-=2D-
-2.34.1
-
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
