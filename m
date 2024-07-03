@@ -1,155 +1,225 @@
-Return-Path: <linux-serial+bounces-4896-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4899-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3408B9267BF
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 20:07:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BCE9926A37
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 23:28:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66D421C24DF2
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 18:07:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F7761F22C60
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 21:28:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48D181862BA;
-	Wed,  3 Jul 2024 18:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6217A191F80;
+	Wed,  3 Jul 2024 21:28:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X3bpvJgx"
+	dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b="cegEaOyM"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailfilter03-out30.webhostingserver.nl (mailfilter03-out30.webhostingserver.nl [195.211.72.164])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D201CF9D4;
-	Wed,  3 Jul 2024 18:07:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720030064; cv=none; b=i9XdwKQC4XV3xSPFlK/JYqpMJIbcTREXhPXjgN0PglgwgMJJxS/+FIgelBReg3LS8Wzr9omICAep/mLO8s/VRcYZWAgXPeH3ibLmzwNTHG0n6qRVW0wTQiJm72dFqXlMnCR8jdlYTenorftNIGnZvhQN6COL5MjlO98R8wLz1qE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720030064; c=relaxed/simple;
-	bh=7VkdfXXbnQAAagurnl0t1uowHfXXxqv6JWqV5yzvHyc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CiMPUxASSVAdQ8N1jrJ4jlLETUK7VWDp3bpK1DeOHc+gim4rshy99CIXb9XQjsp7n9GbL6+VnGBgMdVXmLlMVfo34rFFswixa9gasJlyUYqZ0OkyMARPECxh1EncSIm+fCuZJJ8KcUj3zfgBnQWwkNnfSOHqyyF1gRKjH2P3384=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X3bpvJgx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2346AC2BD10;
-	Wed,  3 Jul 2024 18:07:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720030063;
-	bh=7VkdfXXbnQAAagurnl0t1uowHfXXxqv6JWqV5yzvHyc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=X3bpvJgxZPWMXNOzcyielDafYLsorlGeMfGsYxZsE3DcfgNG38u+IpqkFauqV7JBb
-	 5vrbm1WYc3A6PpB/BYRkykAD7OTF0Cj7mNGz1MOi0sa5ZMS/EgfduMIqZfBT2ojOEE
-	 bFo2aTY3NN6jY868V+Ef+HPG5nwsrIILcL4gaARoEmQ/3VJxlw8KNvls5K1NJbvrcL
-	 liQUqmGsYZrzJg5w0kk4/LvcK6Tdp62Zk7+kzOZ/GnWL+VAWuwzwfMk9DNJ/Cy73bN
-	 +KSVQC/fntqBgC8EoMj80EdF4hoVvz6Kgpa3QHWVeUvUPp8LsLtGUtLPC5Ip21htEj
-	 aLChwBO4AdEcA==
-Date: Wed, 3 Jul 2024 12:07:42 -0600
-From: Rob Herring <robh@kernel.org>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Saravana Kannan <saravanak@google.com>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Tony Lindgren <tony@atomide.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Emilio =?iso-8859-1?Q?L=F3pez?= <emilio@elopez.com.ar>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFCE5191F6F
+	for <linux-serial@vger.kernel.org>; Wed,  3 Jul 2024 21:28:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=195.211.72.164
+ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1720042104; cv=pass; b=foJiMP0gq1RddN2uh2RUkGNj0FOolUCW658AaL7sPIV9YuKP2oAXzpqjP1CRqAhdiJj3heyTey9Zd5NhRBlleJro0d9hOd2Re6dKXEQEbaQb0Mn7eyAoG1GglrA7UqqolZkftcXOcyp8cnyXpfxu9MSc5QEUJZHYAltfhvW17AA=
+ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1720042104; c=relaxed/simple;
+	bh=Lzr/U/qKnONsBIfrOpzHoAvCwRD3pTy9JeYEDVNUKpI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=fTUJJFlMl4/QPdYkcampWZNCgrk4PUs51UrpiwcKVRyjSiQzkcAZzzpj/RSEiU01Grnrhu4hETfSWg96NOhVT1rU+ev+jjsW5mzr+1VlUMYnoDvOvkur2GRz5mAyvoxBC6GvpR5iDPTk+1Ol2m0qBH0GDW+QqwhncBEsVXICOUQ=
+ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl; spf=pass smtp.mailfrom=exalondelft.nl; dkim=pass (2048-bit key) header.d=exalondelft.nl header.i=@exalondelft.nl header.b=cegEaOyM; arc=pass smtp.client-ip=195.211.72.164
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=exalondelft.nl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=exalondelft.nl
+ARC-Seal: i=2; a=rsa-sha256; t=1720042033; cv=pass;
+	d=webhostingserver.nl; s=whs1;
+	b=tmUNeLmp+mvw2XoHIqFvjKueqOF2Y9EmvWhGiYt0Z0ESP3wwRZZVUmGKHVWVtlA+E3Ir/IQvgwzZm
+	 W+uCqVH2icFheuth3M5eYU1JsnIlfp5X1VscFxi7kPjNQ4zbzZRr0aS/SbRNTsfYI957q6OQMZEjg7
+	 DSekKxml7vzttqkVLgu2PLICVnfLRS7BotXXXfyDCtGHdNrLIYTLnddtimByb2X5I4p+1mI5F50pmJ
+	 OeRVcKCK3A0PCvMmTEURgJmVrXlVwN/PGGscvxnj3Vu0cbgpkuRVtKof94rx0PqBagoNOS03Blyn5y
+	 3PREs0NX5Nn0Opn6j/1Fs1NTjQaEf9Q==
+ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed;
+	d=webhostingserver.nl; s=whs1;
+	h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+	 dkim-signature:from;
+	bh=PaY4INhElQh8/bXzT7uDWTqQXybclID2iv+hsZtCnWw=;
+	b=sk0mZ3cmyQofEMrUrdi1y744Qyxxy+Trl685Nsz/Qv13ikGP6ZrbWk6iLWjdPfIC0q6W2zatAvg86
+	 XRFWytylrRTkWkykwP0Yj6Pjk1dtmSubJNOFTfZQcQ28mFybdhYBpm4hkXBaMLt8CG57lUMTBYTZ28
+	 bEJHHHxF19ycTCQtv/WwSrqrdy+Y6/CuROEIAgkHhxrmOtBC/2s1qqxouXqF5MNS1tuMwtte1g2MdW
+	 a6iDOx0+5pJF6phs1eX7SdWIdTCXnpenmQeM+G49oGWk0HPIMZmT2sMRPRnByLHNeJO0nCWk5QqwuM
+	 6uRI2f+QTVdV7KR5aG7LlmJAbKS1Png==
+ARC-Authentication-Results: i=2; mailfilter03.webhostingserver.nl;
+	spf=pass smtp.mailfrom=exalondelft.nl smtp.remote-ip=141.138.168.154;
+	dmarc=pass header.from=exalondelft.nl;
+	arc=pass header.oldest-pass=0;
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=exalondelft.nl; s=whs1;
+	h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+	 from;
+	bh=PaY4INhElQh8/bXzT7uDWTqQXybclID2iv+hsZtCnWw=;
+	b=cegEaOyMQrcQzAFpISnntR0AP6FXwM7nUfJPILRNXLUtMhwKym0QowEcfUkd9qivS64ngtJ6lmj2Q
+	 tPh+fmd1TP31u7wH/ByloBMtooPo6TJuq8ytIX3MhpKsGmZFJ1fXtjqq1MmF/s9ExUJeb6CGKpITTq
+	 +UdBf9UmWkzXS1sQ5wlh155Jl2AZqfX3cHCI2DMQb9FLED0lmPod10X4SB1EWekHKPH2g9UCGQWg25
+	 qJB5WFHqVH+t5iZVUVCmuc1TnL+IfsA/6z3UCRjMDijyEMw2S0PLOAWgRRXZzH/9zOj1lvI+XL+Qm+
+	 mjJ2dM17WyHE3E1CefLb18Q68I+8Zbw==
+X-Halon-ID: 00a1e1b1-3983-11ef-b271-001a4a4cb9a5
+Received: from s198.webhostingserver.nl (s198.webhostingserver.nl [141.138.168.154])
+	by mailfilter03.webhostingserver.nl (Halon) with ESMTPSA
+	id 00a1e1b1-3983-11ef-b271-001a4a4cb9a5;
+	Wed, 03 Jul 2024 23:27:08 +0200 (CEST)
+ARC-Seal: i=1; cv=none; a=rsa-sha256; d=webhostingserver.nl; s=whs1; t=1720042028;
+	 b=w6uZ5pl58x6/D4JL6lkxYe1ddu7EpXNtcji6KZWzgXtHDjcdmoNp3ib0yuXKP7V00Kki8QtnzJ
+	  JszmtbRpoFqR09Mouzj8a8QSqmMCojwmwXNxpRTi2Ze3NNzF/w013KY8czyzh5mZkFM5uKRQCa
+	  dY8+Dl87dWYxRIYA6lbfUR+M65ZoVIFwb5Wqh6rPCppHJxRKXLR3K4h3JRPWQVSysv2DEWost2
+	  Wr9RgMUXhJRR8Pm9jafMgEUiBt4Rr03ieE5Qk7xZ13K5WXtojNQDsUOzYGEvo1SUYw7P6VIQIa
+	  erzHtyJkaTaHgN5V3slR6ZO5GwNMkHPOh3LB0y/AFWLdRA==;
+ARC-Authentication-Results: i=1; webhostingserver.nl; smtp.remote-ip=2a02:a466:68ed:1:46c9:4818:36c:3aae;
+	iprev=pass (2a02-a466-68ed-1-46c9-4818-36c-3aae.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:46c9:4818:36c:3aae;
+	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
+	spf=softfail smtp.mailfrom=exalondelft.nl;
+	dmarc=skipped header.from=exalondelft.nl;
+	arc=none
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed; d=webhostingserver.nl; s=whs1; t=1720042028;
+	bh=Lzr/U/qKnONsBIfrOpzHoAvCwRD3pTy9JeYEDVNUKpI=;
+	h=Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:Cc:To:From;
+	b=O3TKpDHQ+bl+w2US9vaXuM2LgwTQT01FydvX4BETgWU7wEmUkRmZ5FTt8pmYbFtDZ2/C0rzyAL
+	  pWrcP4nrhJ59EMHboZGxOnd1GJUKUNwH+O86lfZ2CtxqKMVYH2LJy4FnqtYENp8hyEsF5j+YS+
+	  03+OyUKd/I/ViC6gpDrjLfOdhAaAzrYCF5isNzS4p0Do6Kl5D6ShISBp4JygM6f7740gBlflmq
+	  dtLuqYJu7vKMKHrvtTpOcvLXY+tQ/NIy6gACwHqDGgsuvAP+zy+AUv5xPDPmYX8z1h5mYU13tx
+	  y2v0+6Ck+DkHqodMOSw5y9XpvHCXhVsNiMff5ZxbcOSxjg==;
+Authentication-Results: webhostingserver.nl;
+	iprev=pass (2a02-a466-68ed-1-46c9-4818-36c-3aae.fixed6.kpn.net) smtp.remote-ip=2a02:a466:68ed:1:46c9:4818:36c:3aae;
+	auth=pass (PLAIN) smtp.auth=ferry.toth@elsinga.info;
+	spf=softfail smtp.mailfrom=exalondelft.nl;
+	dmarc=skipped header.from=exalondelft.nl;
+	arc=none
+Received: from 2a02-a466-68ed-1-46c9-4818-36c-3aae.fixed6.kpn.net ([2a02:a466:68ed:1:46c9:4818:36c:3aae] helo=submission)
+	by s198.webhostingserver.nl with esmtpa (Exim 4.97.1)
+	(envelope-from <ftoth@exalondelft.nl>)
+	id 1sP7VL-0000000CSYn-23jx;
+	Wed, 03 Jul 2024 23:27:07 +0200
+From: Ferry Toth <ftoth@exalondelft.nl>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Richard Leitner <richard.leitner@linux.dev>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Naveen N. Rao" <naveen.n.rao@linux.ibm.com>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-	llvm@lists.linux.dev, linux-clk@vger.kernel.org,
-	linux-omap@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	patches@opensource.cirrus.com, linux-sound@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 00/20] Simplify of_property_for_each_u32()
-Message-ID: <20240703180742.GB1245093-robh@kernel.org>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+	Ferry Toth <ftoth@exalondelft.nl>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: neil.armstrong@linaro.org,
+	AlCooper <alcooperx@gmail.com>,
+	AlexanderShiyan <shc_work@mail.ru>,
+	AlexandreBelloni <alexandre.belloni@bootlin.com>,
+	AlexandreTorgue <alexandre.torgue@foss.st.com>,
+	AlimAkhtar <alim.akhtar@samsung.com>,
+	AndrewMorton <akpm@linux-foundation.org>,
+	"AneeshKumarK . V" <aneesh.kumar@kernel.org>,
+	AngeloGioacchinoDelRegno <angelogioacchino.delregno@collabora.com>,
+	BaolinWang <baolin.wang@linux.alibaba.com>,
+	BaruchSiach <baruch@tkos.co.il>,
+	BjornAndersson <andersson@kernel.org>,
+	ClaudiuBeznea <claudiu.beznea@tuxon.dev>,
+	"DavidS . Miller" <davem@davemloft.net>,
+	FabioEstevam <festevam@gmail.com>,
+	HammerHsieh <hammerh0314@gmail.com>,
+	=?ISO-8859-15?Q?Christian_K=F6nig?= <christian.koenig@amd.com>,
+	ChristopheLeroy <christophe.leroy@csgroup.eu>,
+	ChunyanZhang <zhang.lyra@gmail.com>,
+	JeromeBrunet <jbrunet@baylibre.com>,
+	JonathanHunter <jonathanh@nvidia.com>,
+	KevinHilman <khilman@baylibre.com>,
+	KonradDybcio <konrad.dybcio@linaro.org>,
+	KrzysztofKozlowski <krzysztof.kozlowski@linaro.org>,
+	KumaravelThiagarajan <kumaravel.thiagarajan@microchip.com>,
+	LaxmanDewangan <ldewangan@nvidia.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	"MaciejW . Rozycki" <macro@orcam.me.uk>,
+	ManivannanSadhasivam <manivannan.sadhasivam@linaro.org>,
+	MartinBlumenstingl <martin.blumenstingl@googlemail.com>,
+	MatthiasBrugger <matthias.bgg@gmail.com>,
+	MaximeCoquelin <mcoquelin.stm32@gmail.com>,
+	MichaelEllerman <mpe@ellerman.id.au>,
+	MichalSimek <michal.simek@amd.com>,
+	"NaveenN . Rao" <naveen.n.rao@linux.ibm.com>,
+	NicolasFerre <nicolas.ferre@microchip.com>,
+	NicholasPiggin <npiggin@gmail.com>,
+	OrsonZhai <orsonzhai@gmail.com>,
+	=?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>,
+	PatriceChotard <patrice.chotard@foss.st.com>,
+	PeterKorsgaard <jacmet@sunsite.dk>,
+	RichardGenoud <richard.genoud@gmail.com>,
+	RussellKing <linux@armlinux.org.uk>,
+	SaschaHauer <s.hauer@pengutronix.de>,
+	ShawnGuo <shawnguo@kernel.org>,
+	StefaniSeibold <stefani@seibold.net>,
+	SumitSemwal <sumit.semwal@linaro.org>,
+	TaichiSugaya <sugaya.taichi@socionext.com>,
+	TakaoOrito <orito.takao@socionext.com>,
+	TharunKumarP <tharunkumar.pasumarthi@microchip.com>,
+	ThierryReding <thierry.reding@gmail.com>,
+	TimurTabi <timur@kernel.org>,
+	VineetGupta <vgupta@kernel.org>,
+	MarekSzyprowski <m.szyprowski@samsung.com>,
+	PhilEdworthy <phil.edworthy@renesas.com>
+Subject: [PATCH/RFC v1 0/1] 
+Date: Wed,  3 Jul 2024 22:56:36 +0200
+Message-ID: <20240703212613.56024-1-ftoth@exalondelft.nl>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
+Content-Transfer-Encoding: 8bit
+X-ACL-Warn: Sender domain ( exalondelft.nl ) must match your domain name used in authenticated email user ( ferry.toth@elsinga.info ).
+X-ACL-Warn: From-header domain ( exalondelft.nl} ) must match your domain name used in authenticated email user ( ferry.toth@elsinga.info )
+X-Antivirus-Scanner: Clean mail though you should still use an Antivirus
 
-On Wed, Jul 03, 2024 at 12:36:44PM +0200, Luca Ceresoli wrote:
-> [Note: to reduce the noise I have trimmed the get_maintainers list
-> manually. Should you want to be removed, or someone else added, to future
-> versions, just tell me. Sorry for the noise.]
-> 
-> This series aims at simplifying of_property_for_each_u32() as well as
-> making it more difficult to misuse it in the future.
-> 
-> The long-term goal is changing this pattern:
-> 
->   struct property *prop;
->   const __be32 *p;
->   u32 val;
->  
->   of_property_for_each_u32(np, "xyz", prop, p, val) { ... }
-> 
-> to this:
-> 
->   u32 val;
-> 
->   of_property_for_each_u32(np, "xyz", val) { ... }
-> 
-> So, removing the 3rd and 4th arguments which are typically meant to be
-> internal. Those two parameters used to be unavoidable until the kernel
-> moved to building with the C11 standard unconditionally. Since then, it is
-> now possible to get rid of them. However a few users of
-> of_property_for_each_u32() do actually use those arguments, which
-> complicates the transition. For this reason this series does the following:
-> 
->  * Add of_property_for_each_u32_new(), which does not have those two
->    arguments (patch 1)
->  * Convert _almost_ every usage to of_property_for_each_u32_new()
->  * Rename of_property_for_each_u32() to of_property_for_each_u32_old() and
->    deprecate it, as a incentive to code not (yet) in mainline to upgrade
->    to the *_new() version (last patch)
+Since 1788cf6a91d9 "tty: serial: switch from circ_buf to kfifo" serial 
+transmit when using DMA uses kfifo with a SG list with a single entry. 
+This obviously lead to 2 separate DMA transfers when the buffer wraps 
+around.  
 
-I don't really see the point of introducing the _old variant. Let's get 
-this done in one step.
+On the receiving end depending on the UART the receive DMA might 
+terminate when there is a moment of silence (an interchar gap) of a few 
+(typcially 5) characters length. The receivers FIFO will help to extend 
+that time (depending on FIFO length and threshold).  Currently high 
+speed UARTs (HSU) can have baud rates of 3.5MBd which means terminating 
+a DMA transfer and handling a receive interrupt to set up a new DMA 
+transfer has to complete in 180us which is hard to guarantee. Especially 
+under heavy interrupt load.
 
-> 
-> The plan for the next series is to additionally:
-> 
->  * Convert the few remaining of_property_for_each_u32_old() instantes to
->    of_property_for_each_u32_new()
->  * Remove of_property_for_each_u32_old()
->  * Rename of_property_for_each_u32_new() to of_property_for_each_u32()
+As most serial protocols will transfer maximally a buffer length at a 
+time it makes sense to eliminate the interchar gap on buffer wraps by 
+using a SG list with 2 entries.
 
-Honestly, I think there's few enough users we could just convert the 
-whole thing in one patch. It's all got to go thru 1 tree anyways. If 
-there's new cases in -next, then I'd be happy to send it to Linus at the 
-end of the merge window.
+The following patch has been tested on Merrifield (Intel Edison) which 
+is slow (500MHz) but has a HSU that can transmit up to 3.5MBd.
 
-Rob
+This patch should be viewed as a preparation for a follow-up patch that 
+remove the interrupt on the receiving end entirely.
+
+But first I would like to make sure that: 1) either all users can 
+actually handle 2 SG entries 2) if not, get your advice on how to best 
+make the number of entries configurable per platform
+
+Possibly on RZN1 due to aa63d786cea2 ("serial: 8250: dw: Add support for 
+DMA flow controlling devices") we might anticipate problems.
+
+Please test on your platform and let me know  your suggestions.
+
+Thanks!
+
+Ferry Toth (1):
+  tty: serial: 8250_dma: use sgl with 2 nents to take care of buffer
+    wrap
+
+ drivers/tty/serial/8250/8250_dma.c | 19 ++++++++++---------
+ 1 file changed, 10 insertions(+), 9 deletions(-)
+
+-- 
+2.43.0
+
 
