@@ -1,111 +1,111 @@
-Return-Path: <linux-serial+bounces-4905-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4906-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78EA19273AD
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 12:08:21 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 642EB9273D4
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 12:19:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 01DF5B21FD3
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 10:08:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 962021C2236A
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 10:19:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B38B1AB901;
-	Thu,  4 Jul 2024 10:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6D961AB8E0;
+	Thu,  4 Jul 2024 10:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WCQjqfLP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IQkuvRu0"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9E2E1AB508;
-	Thu,  4 Jul 2024 10:08:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B8741A01DE;
+	Thu,  4 Jul 2024 10:19:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720087693; cv=none; b=D32AvVIzgB+++VcA6+Hfc6/TS5zA7XPVNbaF6mVQQYFIfPBm0hhRNAYUvh1Fzx/jMMJ1eVEap9de5epvyS7tZy/Way96V0TG0EVuQDwDfHLlwlvqA3uIIi0LPraoIjELmimK0/JnkObLyKivyoBzGL3FF2MM3rWGBmWoYdjSS+w=
+	t=1720088361; cv=none; b=CAGsyUvmyJWTrsnJqRzjUbVN4f73mtQuj5Z2B+jiKVvSaj5fbZYf2bTw/vaV3iU1XA+s55SWrcunXIu0dkGQB9Whw0HnNgi/T1WskIo9gxv6AvBJKk4vMaC1Qc7RN+E4WnHyEk3GKN9zw7yCinyoPaJS9EWpIFQxIUHBIr1FvQM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720087693; c=relaxed/simple;
-	bh=4L+j5Nb3YdQBIueSA07q/26gPF/oUqNFVZ1jfZL8ij8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=h/PkldlddKJyugNZVcELE6/7inlWbnW4iZvk+ZAdMrycV3h8cBsRerjPFItWgnzpkqH13XI5H5zWl2uYpQihty5hN6Ef6YbCCHF9kcWHLhpBkc0QsM6C0aONsi/1gSAzM5HD8bzTJTX+1nAzN5RImJRis8kcUaxYr2/OL0mzdYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WCQjqfLP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59EADC3277B;
-	Thu,  4 Jul 2024 10:08:13 +0000 (UTC)
+	s=arc-20240116; t=1720088361; c=relaxed/simple;
+	bh=yC9f+13GlnQBZfPodnuKrBIAUjBeF0HnvZN2s4amVgw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Afj51X75CNTYIR6TbhkYfSwVUKlxqbo5Y8BCT7LTAy3MH5GMpOjyGdPBCrMrbEtFbwOrOr/4nfD1J3F7u8bqwKasqodzHdiCILfvE0+ivbHiZjvNOXgB/jiY32DJyHHVIA628S6DfXaf6V7sh8HcKlMtdnTuzci8fY4VVjpmLww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IQkuvRu0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2517BC3277B;
+	Thu,  4 Jul 2024 10:19:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1720087693;
-	bh=4L+j5Nb3YdQBIueSA07q/26gPF/oUqNFVZ1jfZL8ij8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WCQjqfLPaxHLmhe3DumLRvPJ9rGhBGH4sSFlDDCYfZ2pLQfZcca1yascUph7jg+hm
-	 ZkO8o2yMQj6EuPl99C6k9mJUtrcx5hSmhCRmnvyDVhhdEhbiPo7sU9Q3VYYnVd3sqT
-	 d+QAQ9lUs0aih2fyXnkh0XBZxa54CzaTnVYhBP9kA8qaYtlYeSbWJplWUk2J/mIf+d
-	 gKLo7pvBQWbTrys4teWQZKx/vQwPI/TIZVdxbH6T52TlsdTCFoJp5j033VA9c7Yh6I
-	 gnLGuu5gMUzx8ojovcsGKBTeXdcEKjP1QjHYIN1u+/UPlkor8tPM8pVuvwXPpLIEYX
-	 DBG1+y+PVfcrA==
+	s=k20201202; t=1720088361;
+	bh=yC9f+13GlnQBZfPodnuKrBIAUjBeF0HnvZN2s4amVgw=;
+	h=From:To:Cc:Subject:Date:From;
+	b=IQkuvRu00G0PLTyvwwwQDE2g1kUihrAd4Td1HUtsWgyiujuykBCjpwViOnxlJMQ+K
+	 Crd5gciK55I+pZWE8DwXxZddjIrTk8VKwZaMa+ntmAF0kogxcZWEk9MVzgzrKpJQtU
+	 p9GUKrL4o0sXjOZLTDrM3GpPhiZttfdAnae0218nDZEPhJ3zzXCNhISwm9sX+aUjj2
+	 PqCX/Kp3M6S4aGNd+1p8wyDuFIpnGCc7W3FkAlhOgECpOrW72hP7YiKNio2unFXumV
+	 dT4QI/OqBmEYWAGfOSYrOs9yiczr5t4HdHELh04enZFUyr5D7DSGcXdiMe6rwgdU1q
+	 9gr4ONOYcP4nw==
 Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1sPJNt-000000007p9-0V98;
-	Thu, 04 Jul 2024 12:08:13 +0200
-Date: Thu, 4 Jul 2024 12:08:13 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Doug Anderson <dianders@chromium.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1sPJYe-000000007zL-1NZQ;
+	Thu, 04 Jul 2024 12:19:21 +0200
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: Douglas Anderson <dianders@chromium.org>,
 	Konrad Dybcio <konrad.dybcio@linaro.org>,
 	Bjorn Andersson <andersson@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Subject: Re: [PATCH 2/3] serial: qcom-geni: fix soft lockup on sw flow
- control and suspend
-Message-ID: <ZoZ0jSbohdYAqY4E@hovoldconsulting.com>
-References: <20240624133135.7445-1-johan+linaro@kernel.org>
- <20240624133135.7445-3-johan+linaro@kernel.org>
- <CAD=FV=UauWffRM45FsU2SHoKtkVaOEf=Adno+jV+Ashf7NFHuA@mail.gmail.com>
- <CAD=FV=XPKqjMcWhqk4OKxSOPgDKh-VM4J4oMEdQtgpFBw8WSXA@mail.gmail.com>
- <ZnvJQDX6NkyRCA8y@hovoldconsulting.com>
+	linux-arm-msm@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 0/3] serial: qcom-geni: fix lockups
+Date: Thu,  4 Jul 2024 12:18:02 +0200
+Message-ID: <20240704101805.30612-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.44.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZnvJQDX6NkyRCA8y@hovoldconsulting.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jun 26, 2024 at 09:54:40AM +0200, Johan Hovold wrote:
-> On Mon, Jun 24, 2024 at 02:58:39PM -0700, Doug Anderson wrote:
+Since 6.10-rc1, Qualcomm machines with a serial port can easily lock up
+hard, for example, when stopping a getty on reboot.
 
-> > 1. The function is named qcom_geni_serial_clear_tx_fifo() which
-> > implies that when it finishes that the hardware FIFO will have nothing
-> > in it. ...but how does your code ensure this?
-> 
-> Yeah, I realised after I sent out the series that this may not be the
-> case. I was under the impression that cancelling a command would discard
-> the data in the FIFO (e.g. when starting the next command) but that was
-> probably an error in my mental model.
+This was triggered by the kfifo conversion, which turned an existing bug
+that caused the driver to print discarded characters after a buffer
+flush into a hard lockup.
 
-I went back and did some more reverse engineering and have now confirmed
-that the hardware works as I assumed for v1, that is, that cancelling a
-command leaves data in the fifo, which is later discarded when a new
-command is issued.
+This series fixes the regression and a related soft lockup issue that
+can be triggered on software flow control and on suspend.
 
-> > 3. On my hardware you're setting the FIFO level to 16 here. The docs I
-> > have say that if the FIFO level is "less than" the value you set here
-> > then the interrupt will go off and further clarifies that if you set
-> > the register to 1 here then you'll get interrupted when the FIFO is
-> > empty. So what happens with your solution if the FIFO is completely
-> > full? In that case you'd have to set this to 17, right? ...but then I
-> > could believe that might confuse the interrupt handler which would get
-> > told to start transmitting when there is no room for anything.
-> 
-> Indeed. I may implicitly be relying on the absence of hardware flow
-> control as well so that waiting for one character to be sent is what
-> makes this work.
+Doug has posted an alternative series of fixes here that depends on
+reworking the driver a fair bit here:
 
-I'm keeping the watermark level unchanged in v2 and instead restart tx
-by issuing a short transfer command to clear any stale data from the
-fifo which could prevent the watermark interrupt from firing.
+	https://lore.kernel.org/lkml/20240610222515.3023730-1-dianders@chromium.org/
+
+This rework has a significant impact on performance on some platforms,
+but fortunately it seems such a rework can be avoided.
+
+There are further bugs in the console code (e.g. that can lead to lost
+characters) that this series does not address, but those can be fixed
+separately (and I've started working on that).
 
 Johan
+
+
+Changes in v2
+ - restart tx by issuing a transfer command when there is stale data in
+   the fifo
+ - reorder and rename patches
+ - rename cancel tx helper
+
+Johan Hovold (3):
+  serial: qcom-geni: fix soft lockup on sw flow control and suspend
+  serial: qcom-geni: fix hard lockup on buffer flush
+  serial: qcom-geni: do not kill the machine on fifo underrun
+
+ drivers/tty/serial/qcom_geni_serial.c | 51 ++++++++++++++++++++-------
+ 1 file changed, 38 insertions(+), 13 deletions(-)
+
+-- 
+2.44.1
+
 
