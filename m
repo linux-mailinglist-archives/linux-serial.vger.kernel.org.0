@@ -1,176 +1,134 @@
-Return-Path: <linux-serial+bounces-4897-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-4900-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9656926A24
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 23:23:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22B16926CCA
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 02:48:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 80167284214
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Jul 2024 21:23:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8920AB22CED
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Jul 2024 00:48:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6755191F84;
-	Wed,  3 Jul 2024 21:23:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFB2C4437;
+	Thu,  4 Jul 2024 00:48:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="nXfomUYn"
+	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="rrcR++WZ"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C237191F6D
-	for <linux-serial@vger.kernel.org>; Wed,  3 Jul 2024 21:23:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD241FA4
+	for <linux-serial@vger.kernel.org>; Thu,  4 Jul 2024 00:48:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1720041808; cv=none; b=QfNnIoEIgB4y6dVaVNTWHUn3/0TYGOv30DFNKbTc7DOBZCtJjrYCeJRxMHHKVQLxoi/OSZILna6uXsIPKEFsX+DsnSUWXUL4eWvI450fELMKQzUaW4WNW0q6qvYudlJZPSa+7vpMe08Un7WB5555Zhvl4XJjVkXR2L0slc6vrvo=
+	t=1720054122; cv=none; b=j8ZAq2jPogMnWqXDHYgmd+AhHunih+cYweVK/DgEf6Af6F2ryy+UU2foJGZvgxOrMQg7Few6j6cM89Y98Cd+TNp/NgM1KCi6QhuRvzYqkJTLXzv6hI7OC3qpG51PykZKLQNssWlXwXpNuHOq23LZcq0/ClMUGnIsm5Y7fOghzaA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1720041808; c=relaxed/simple;
-	bh=1yCUJShNVEleKhhq5ttC7d+C2KlI7KvONMEvrwhI5X0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Siq8mOAljeb2pVCBevrvw36FmvU9mAJpz8qHdzURwS4Pp/exUBLOt3k20+ina5nSOOn64tf5zVwNMnwyqOY4bf87vk87QajWhPImthjrv4N0tKkUzgkAyUUUe1BO1DKMu67X3EkKc/OoXuvWU7haUlZB7SBiWD6fieG5NTPqwEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=nXfomUYn; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-a77abe5c709so60595966b.2
-        for <linux-serial@vger.kernel.org>; Wed, 03 Jul 2024 14:23:26 -0700 (PDT)
+	s=arc-20240116; t=1720054122; c=relaxed/simple;
+	bh=2COa0HWJqWitOaZ8dVW69x5naK4O3xfqMmhxjvE1qdM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C8K+E7hW2FRWc/GgPrEwwLEX/cSrKUHkmhBvzfEdT0BmAmyAiRLdSE8W0LpfO/CYQMNj34YlBETECWU01EodGo0drWwsl8mlcZt2GTOWHMFG2oQ7nfAR9PTzKHeTCTFrRFihO3zrhrcVnICnv0VPDBcoi6pPjB5FNe0PomFGmso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=rrcR++WZ; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-1fb0d88fd25so898505ad.0
+        for <linux-serial@vger.kernel.org>; Wed, 03 Jul 2024 17:48:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1720041805; x=1720646605; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
-        b=nXfomUYnbzj9LIVMPNRYyGPrGSgzQo3TYNnoG9X6sbtMdvka2gkBTWeWFH82v3YY6y
-         FpKutlnlUYALdpJAw5zXMSlyPvSu9EOBXKZO6nM48K2lmmuMVaihjB2V4N8NIAeLICoA
-         8Uu26Fln/UY28RYLPeehl3Nqzi8hopZLB4IgW8EaEqF9COvqp8YTsl4SWDtCjS2PFUzL
-         tygWBTwykzO88IpSKXeemkGeoic+DrezgiZcsHKtkACDRstfeu+ctDVlME2MjqdFZz+x
-         j8jWMtVy55HHvUxAKVW7SN1SWTLn/M5rn5xatBJuTs1sdL2Mq/8rTtvNj3n3KPEq2RrC
-         6LzA==
+        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1720054120; x=1720658920; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j8cn2ejmCXJ6G+eZPnZq9ZYI/4KIpY2mI/Ezi+jalfM=;
+        b=rrcR++WZEjPDOoq/Jtccbm1U4aQ8XyCwHRf1xZGYNzRQ6tv5u2rYo3D73xPiFFqQXm
+         t6mHXVPjdRRJpHVh3So/rmc1rXbM9uOMN14nD5vZ3/ZHtG8kVFfkpEE9IsHR48Cp5hLC
+         93uT4gXEOpHQl4hs+2NtNObx193XxFy4RbG+BB1Edzd00VfYu/UpY7MqVlRSM6dOFOhc
+         KR6XKtbCwEhCzwbWCdV7VFTmfL72HO60Yt/FM6AaPeNJCkGPTwlxlt38tU/vE1hs8J6T
+         Bm8vHsyjAfteTHKjZN1wby7V46RIOkb/kZ8nvtpiriusZ8dEzNxRYF8dajX5/7sY07y6
+         0vlA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1720041805; x=1720646605;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rmKjZalCS3qgqBNUJ2X1ny0z1S/+Ouz6++2zspqi0Zc=;
-        b=tauZChZ2JmcLTd9VSFx3KjspIzs3OCPmpihO0Q/3QzxCA57d/tS7P/eS2yj4uxmq9H
-         i4NSn7xH6a3PIFYKfFzFEDwiDvRlAt2jHAtJh38QRD+2gQqNjzk+6RPaEeTXG5zfSezp
-         /T0WhoQin+yTqzb1pEteKRFvuoEvBhALjO8OFsp56+XSCz1EQpJXInsRsSjl/bmDVD0d
-         pZgynNf5Wtsoh1FH7gBpv23b8SZZoFsaEfS0Xu0uo1HZ+4AaSr9tsIV2ho0Qrhj5sYS8
-         QVKaTSlFWGAuo6u1kqTVWnXzoXaIVLTnCMLT2A0YkR0iaIGkSTMxpyOHbdMeIrC3k3ur
-         V7bg==
-X-Forwarded-Encrypted: i=1; AJvYcCXo7CknCqbWF/kjSLFLoczy3XCJ56FIeAANj/tvsgw2BktIC2ZS/RgggU87RMURReS88e/I4IkwJ1zavHmMgfsNuBKMswYhEKVwOxR0
-X-Gm-Message-State: AOJu0Yx+eAIHNn3pjQpofv64yJfJH9x1blDcIc2iMoszN+dLAH4ZO5uu
-	Kh6gPtsvRQeyiqhLX8+zRSQO807W3z/i7Brw6sU5JfmVtevGBmbljNHQQCKu0Hg=
-X-Google-Smtp-Source: AGHT+IEiDeirJZbiRR9WOgvKVRp5lPoOHJBTmQD67pQvhrzI/8nB0fQNgTn38F10sD2qUfAawYddVg==
-X-Received: by 2002:a17:907:1c15:b0:a72:883f:f3dd with SMTP id a640c23a62f3a-a75144a8a02mr1042146966b.56.1720041804879;
-        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
-Received: from localhost ([2a02:8071:b783:6940:5696:f293:6e5e:98bf])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a72ab0651c0sm541105666b.123.2024.07.03.14.23.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 03 Jul 2024 14:23:24 -0700 (PDT)
-Date: Wed, 3 Jul 2024 23:23:22 +0200
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc: Miguel Ojeda <ojeda@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Saravana Kannan <saravanak@google.com>, Nathan Chancellor <nathan@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Tony Lindgren <tony@atomide.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Emilio =?utf-8?B?TMOzcGV6?= <emilio@elopez.com.ar>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Jonathan Cameron <jic23@kernel.org>, Lee Jones <lee@kernel.org>, 
-	Shawn Guo <shawnguo@kernel.org>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Richard Leitner <richard.leitner@linux.dev>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Mark Brown <broonie@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, "Naveen N. Rao" <naveen.n.rao@linux.ibm.com>, 
-	Damien Le Moal <dlemoal@kernel.org>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-clk@vger.kernel.org, linux-omap@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-samsung-soc@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	linux-iio@vger.kernel.org, linux-pwm@vger.kernel.org, linux-serial@vger.kernel.org, 
-	linux-usb@vger.kernel.org, patches@opensource.cirrus.com, linux-sound@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 13/20] pwm: samsung: convert to
- of_property_for_each_u32_new()
-Message-ID: <l2xret6kx4qwee3c3abmmhz5uop7zuobxath2eou2utklztkgl@c7lskt3xk3wj>
-References: <20240703-of_property_for_each_u32-v1-0-42c1fc0b82aa@bootlin.com>
- <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
+        d=1e100.net; s=20230601; t=1720054120; x=1720658920;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j8cn2ejmCXJ6G+eZPnZq9ZYI/4KIpY2mI/Ezi+jalfM=;
+        b=tSQmo2UNqclvNkLKhbtTqiZ/bVoQj6/G8vQ/gaSy990AWblt99Smvlp+lCrQMZBj3t
+         1NrRg5TxaquO/B3gJMvPcY49ZM9d2SagW/Zo4tNpJiGkB5CPkPTAuArPy0VoYTDkmNCq
+         7UEj9N+oGpnRon7S04ivnGCwV6Ds++abQWPqfDKfnlY0SIAOyCVGnMWK0MzS7PQ3iby8
+         9GiZJbB1CSCWAr5eIUWIPjb19JjGBr6baxysTie3I8199LTWO8Rl6zTxaUv7qzLq6FbK
+         JDR6EK3+giTdgwyUpcyjfgZNmnQda4g/7fe4t5mp6XKjdTO/nBzIuCmwKJ4rWGnd5CHx
+         rtVg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoYa3orYZixJTh3AJKbiReTFYx+adFRKzV88IxwDwUou08FiQ17MjVDk0iF/Ti0qyWtFtBJ3TTynzFao7ftXZFPaCqXQg6WD8HdvCl
+X-Gm-Message-State: AOJu0YziSBwEqL+4bUyEAn8GD1OBIaYAkj2hQFuJXiBQL1fgD0004Kgu
+	q5nDKXnRu14fSupgDorT+DxB8LHXavo40W1I9KaGNfMzUOkBl4YWt5ifASnQTVY=
+X-Google-Smtp-Source: AGHT+IFZ3U86C/lboDH2rxZfJ1yaega9D0tCmZ+SV9C8fIfhnpir2evwRGIG7EXufs9qWN9lYP/GPg==
+X-Received: by 2002:a17:902:d583:b0:1f7:1d71:25aa with SMTP id d9443c01a7336-1fb345044a2mr2175645ad.6.1720054120423;
+        Wed, 03 Jul 2024 17:48:40 -0700 (PDT)
+Received: from [10.4.10.38] (pool-108-26-179-17.bstnma.fios.verizon.net. [108.26.179.17])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-1fb18b1fde8sm20274345ad.297.2024.07.03.17.48.30
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 03 Jul 2024 17:48:40 -0700 (PDT)
+Message-ID: <6be424e0-c746-48e8-94fe-8d5d2eb6cc03@rivosinc.com>
+Date: Wed, 3 Jul 2024 20:48:25 -0400
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="3uu6b6ybcnfri4lk"
-Content-Disposition: inline
-In-Reply-To: <20240703-of_property_for_each_u32-v1-13-42c1fc0b82aa@bootlin.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 10/11] riscv: defconfig: enable SpacemiT SoC
+To: Yixun Lan <dlan@gentoo.org>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Yangyu Chen <cyy@cyyself.name>, Anup Patel <anup@brainfault.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, Samuel Holland <samuel.holland@sifive.com>,
+ Lubomir Rintel <lkundrak@v3.sk>, devicetree@vger.kernel.org,
+ Palmer Dabbelt <palmer@dabbelt.com>, linux-serial@vger.kernel.org,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Inochi Amaoto <inochiama@outlook.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Meng Zhang <zhangmeng.kevin@spacemit.com>
+References: <20240703-k1-01-basic-dt-v3-0-12f73b47461e@gentoo.org>
+ <20240703-k1-01-basic-dt-v3-10-12f73b47461e@gentoo.org>
+Content-Language: en-US
+From: Jesse Taube <jesse@rivosinc.com>
+In-Reply-To: <20240703-k1-01-basic-dt-v3-10-12f73b47461e@gentoo.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---3uu6b6ybcnfri4lk
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-Hello,
+On 7/3/24 10:55, Yixun Lan wrote:
+> From: Yangyu Chen <cyy@cyyself.name>
+> 
+> Enable SpacemiT SoC config in defconfig to allow the default upstream
+> kernel to boot on Banana Pi BPI-F3 board.
+> 
+> Signed-off-by: Yangyu Chen <cyy@cyyself.name>
+> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+> Signed-off-by: Yixun Lan <dlan@gentoo.org>
+Tested-by: Jesse Taube <jesse@rivosinc.com>
 
-On Wed, Jul 03, 2024 at 12:36:57PM +0200, Luca Ceresoli wrote:
-> Simplify code using of_property_for_each_u32_new() as the two additional
-> parameters in of_property_for_each_u32() are not used here.
->=20
-> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Thanks,
+Jesse Taube
 > ---
->  drivers/pwm/pwm-samsung.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/pwm/pwm-samsung.c b/drivers/pwm/pwm-samsung.c
-> index efb60c9f0cb3..fef02a0b023e 100644
-> --- a/drivers/pwm/pwm-samsung.c
-> +++ b/drivers/pwm/pwm-samsung.c
-> @@ -510,8 +510,6 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
->  	struct samsung_pwm_chip *our_chip =3D to_samsung_pwm_chip(chip);
->  	struct device_node *np =3D pwmchip_parent(chip)->of_node;
->  	const struct of_device_id *match;
-> -	struct property *prop;
-> -	const __be32 *cur;
->  	u32 val;
-> =20
->  	match =3D of_match_node(samsung_pwm_matches, np);
-> @@ -520,7 +518,7 @@ static int pwm_samsung_parse_dt(struct pwm_chip *chip)
-> =20
->  	memcpy(&our_chip->variant, match->data, sizeof(our_chip->variant));
-> =20
-> -	of_property_for_each_u32(np, "samsung,pwm-outputs", prop, cur, val) {
-> +	of_property_for_each_u32_new(np, "samsung,pwm-outputs", val) {
->  		if (val >=3D SAMSUNG_PWM_NUM) {
->  			dev_err(pwmchip_parent(chip),
->  				"%s: invalid channel index in samsung,pwm-outputs property\n",
->=20
-
-Acked-by: Uwe Kleine-K=F6nig <u.kleine-koenig@baylibre.com>
-
-Feel free to merge this together with the change from the first patch.
-
-Best regards
-Uwe
-
---3uu6b6ybcnfri4lk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmaFwUcACgkQj4D7WH0S
-/k6PuggAu8WCVFGH6QIMKU3X2rf+i2w61Hm9yGoz/E1JXjYYwhvN07D9QQrg3lFk
-uuvOlwgkdfuIHAsZupm4B503z6Cr+9e1c0yd2UsXZkR+Y5e5uAcWpFrqQPpsUjg6
-K4y5iO46KFiNdoyIw5vaEqa9r+2MGaV/6utEBzK71uNVzWWnYAxGJSrp9BXXUlRN
-ZUz4u7b3Yp+kmsIoFWF2SYjPB08bXS+XlNegSLFuhFLAklD1WtMgdfiyFyqVm20f
-wxAtUX4pOe9E7HV+9qcyWKkbxhOVOOD6iG1CnatgtZoAeRfvmcNx+o2M4x8H0qXK
-hetCnR7IsLL80SX5lvKiYYw2At4OEA==
-=UQNH
------END PGP SIGNATURE-----
-
---3uu6b6ybcnfri4lk--
+>   arch/riscv/configs/defconfig | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
+> index 12dc8c73a8acf..5287ae81bbb78 100644
+> --- a/arch/riscv/configs/defconfig
+> +++ b/arch/riscv/configs/defconfig
+> @@ -29,6 +29,7 @@ CONFIG_ARCH_MICROCHIP=y
+>   CONFIG_ARCH_RENESAS=y
+>   CONFIG_ARCH_SIFIVE=y
+>   CONFIG_ARCH_SOPHGO=y
+> +CONFIG_ARCH_SPACEMIT=y
+>   CONFIG_SOC_STARFIVE=y
+>   CONFIG_ARCH_SUNXI=y
+>   CONFIG_ARCH_THEAD=y
+> 
 
