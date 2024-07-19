@@ -1,214 +1,185 @@
-Return-Path: <linux-serial+bounces-5026-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5028-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DAB9934CE6
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jul 2024 14:07:38 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E74CF9377B7
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2024 14:25:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DDC2FB220E3
-	for <lists+linux-serial@lfdr.de>; Thu, 18 Jul 2024 12:07:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D01961C212FA
+	for <lists+linux-serial@lfdr.de>; Fri, 19 Jul 2024 12:25:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 879EE137905;
-	Thu, 18 Jul 2024 12:07:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7DC512D1FF;
+	Fri, 19 Jul 2024 12:25:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f3oWJDfr"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2JVZkk+p"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875A012C473;
-	Thu, 18 Jul 2024 12:07:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A129875808;
+	Fri, 19 Jul 2024 12:25:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721304452; cv=none; b=G4oGTJXyUVcpYMgleQQ/pO3XA9EMYZaUtqIv4nDThJFDG1PV3pkOmuVayqJcvTElVmmV2Xpx2vyDq3tyTwe2P5tJmhBex9LoHabAKEE0j1uMBvIobCoOmz+djwzTtQTxi48PuBHENabxECN7tFrzZ6eadw3IXUR2403+uXb833g=
+	t=1721391931; cv=none; b=FRy9WaR3NH8rPaxJgk6hPncDZksfOjkazDRfAr+xNhXI7TXpG0YBCzDt6Ssl4yGg7379CmubzimeS30z9BrOssA20Pw2PGXTU3QtQNDAwtVW7zJVSJkXxWnGQ5aJqwv4TD8SS40aPapeKgXPc1nu3Jnj+xrXVeyL6+yv5TKgTwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721304452; c=relaxed/simple;
-	bh=01nn3RyXxWlN75AcsNF/m8TgQhjzMhrIjCdTNAtMqUs=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=K6EqQ7j4rcysD8CaNNZTot4IHxUboecCsfnPxCq7XmrhDY1pTU+aOgBMemGEs+pwGuMPEofEfd5lhmAjoyMoH/xcCactk1dEWffk/a8Iu39hmwuEM2CeI45gtLkEzM0CTfO8Om0dFERA78K4DRhzDSjCksjn4NrX/3ImJNZvGtg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f3oWJDfr; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1721304451; x=1752840451;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=01nn3RyXxWlN75AcsNF/m8TgQhjzMhrIjCdTNAtMqUs=;
-  b=f3oWJDfrSvGdDTbzM0ziYo6l8QxXh96zHzFU3EJbfiUS97CWfpjrmf9r
-   OPidnDxOVnRMGFtxzzwl9mtRVUflfz6Aq+qUkShqitoKeU1Z/RYX1Vnhf
-   0SWkfHhjSgIwQJpe48yHQum/2wT3wRh2nTaa1PjFBGCBOKy35bR20Pvv0
-   lJrWhIsUx1Jy/ZMP7EYk2EiG/BwNLaK0XlBfQtj802XPGS2wViFGPsHFN
-   Ckdh9Ldg0L6OQqFd4+cN/XRqT516fci0h91yXhJiVIlHZSEoVQyP7S/sw
-   eeVRm/oYWHq7q95tTBNNcl8ztylrBuLG82Swri8XcAu9lxG0rdtdAYACQ
-   w==;
-X-CSE-ConnectionGUID: AoTDH4GHQCWPdRolQt7taA==
-X-CSE-MsgGUID: SFYl9nSER4OXPHIp2CT2Sw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11136"; a="41385445"
-X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="41385445"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 05:07:29 -0700
-X-CSE-ConnectionGUID: Lun8KLN+Q4aEJbUOb5ecQQ==
-X-CSE-MsgGUID: wmuz3NaZQnG42N/YPylLYw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,217,1716274800"; 
-   d="scan'208";a="88228670"
-Received: from ijarvine-desk1.ger.corp.intel.com (HELO localhost) ([10.245.247.144])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Jul 2024 05:07:11 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Thu, 18 Jul 2024 15:07:07 +0300 (EEST)
-To: Ferry Toth <ftoth@exalondelft.nl>
-cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>, 
-    Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Thomas Gleixner <tglx@linutronix.de>, 
-    John Ogness <john.ogness@linutronix.de>, 
-    LKML <linux-kernel@vger.kernel.org>, 
-    linux-serial <linux-serial@vger.kernel.org>, neil.armstrong@linaro.org, 
-    AlCooper <alcooperx@gmail.com>, AlexanderShiyan <shc_work@mail.ru>, 
-    AlexandreBelloni <alexandre.belloni@bootlin.com>, 
-    AlexandreTorgue <alexandre.torgue@foss.st.com>, 
-    AlimAkhtar <alim.akhtar@samsung.com>, 
-    AndrewMorton <akpm@linux-foundation.org>, 
-    "AneeshKumarK . V" <aneesh.kumar@kernel.org>, 
-    AngeloGioacchinoDelRegno <angelogioacchino.delregno@collabora.com>, 
-    BaolinWang <baolin.wang@linux.alibaba.com>, 
-    BaruchSiach <baruch@tkos.co.il>, BjornAndersson <andersson@kernel.org>, 
-    ClaudiuBeznea <claudiu.beznea@tuxon.dev>, 
-    "DavidS . Miller" <davem@davemloft.net>, FabioEstevam <festevam@gmail.com>, 
-    HammerHsieh <hammerh0314@gmail.com>, 
-    =?ISO-8859-15?Q?Christian_K=F6nig?= <christian.koenig@amd.com>, 
-    ChristopheLeroy <christophe.leroy@csgroup.eu>, 
-    ChunyanZhang <zhang.lyra@gmail.com>, JeromeBrunet <jbrunet@baylibre.com>, 
-    JonathanHunter <jonathanh@nvidia.com>, KevinHilman <khilman@baylibre.com>, 
-    KonradDybcio <konrad.dybcio@linaro.org>, 
-    KrzysztofKozlowski <krzysztof.kozlowski@linaro.org>, 
-    KumaravelThiagarajan <kumaravel.thiagarajan@microchip.com>, 
-    LaxmanDewangan <ldewangan@nvidia.com>, 
-    linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-    "MaciejW . Rozycki" <macro@orcam.me.uk>, 
-    ManivannanSadhasivam <manivannan.sadhasivam@linaro.org>, 
-    MartinBlumenstingl <martin.blumenstingl@googlemail.com>, 
-    MatthiasBrugger <matthias.bgg@gmail.com>, 
-    MaximeCoquelin <mcoquelin.stm32@gmail.com>, 
-    MichaelEllerman <mpe@ellerman.id.au>, MichalSimek <michal.simek@amd.com>, 
-    "NaveenN . Rao" <naveen.n.rao@linux.ibm.com>, 
-    NicolasFerre <nicolas.ferre@microchip.com>, 
-    NicholasPiggin <npiggin@gmail.com>, OrsonZhai <orsonzhai@gmail.com>, 
-    =?ISO-8859-15?Q?Pali_Roh=E1r?= <pali@kernel.org>, 
-    PatriceChotard <patrice.chotard@foss.st.com>, 
-    PeterKorsgaard <jacmet@sunsite.dk>, 
-    RichardGenoud <richard.genoud@gmail.com>, 
-    RussellKing <linux@armlinux.org.uk>, SaschaHauer <s.hauer@pengutronix.de>, 
-    ShawnGuo <shawnguo@kernel.org>, StefaniSeibold <stefani@seibold.net>, 
-    SumitSemwal <sumit.semwal@linaro.org>, 
-    TaichiSugaya <sugaya.taichi@socionext.com>, 
-    TakaoOrito <orito.takao@socionext.com>, 
-    TharunKumarP <tharunkumar.pasumarthi@microchip.com>, 
-    ThierryReding <thierry.reding@gmail.com>, TimurTabi <timur@kernel.org>, 
-    VineetGupta <vgupta@kernel.org>, 
-    MarekSzyprowski <m.szyprowski@samsung.com>, 
-    PhilEdworthy <phil.edworthy@renesas.com>
-Subject: Re: [PATCH v1 1/1] tty: serial: 8250_dma: use sgl with 2 nents to
- take care of buffer wrap
-In-Reply-To: <20240716214055.102269-1-ftoth@exalondelft.nl>
-Message-ID: <b31d654f-07f5-7a4b-1dc2-97b30ec4dad5@linux.intel.com>
-References: <20240716214055.102269-1-ftoth@exalondelft.nl>
+	s=arc-20240116; t=1721391931; c=relaxed/simple;
+	bh=Xk2qDeqcxb0wEjPMTrR4IbGZzakWRpKrs+ppoypfJC4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=Hh7A0Zk27ApB4scTKQfN6wnOAYe9+sbtv7PArhy8P78qxWTMvqPp1BLw9tTJZrdNmr48LWDDzQ/SzLVdraK97wVgMpMOeDt1pRdtSoQrWNiiGHkG/kg1/4Li41AyMHDYpj+bX6KsJvG2fC56usucNl6GBsKGSvbOLyx7X3ABbZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2JVZkk+p; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A475C32782;
+	Fri, 19 Jul 2024 12:25:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1721391931;
+	bh=Xk2qDeqcxb0wEjPMTrR4IbGZzakWRpKrs+ppoypfJC4=;
+	h=Date:From:To:Cc:Subject:From;
+	b=2JVZkk+piCr5Hy4lQiBRgeqPkoY99eX8V5TXgz4wxqzt4Uy893czBUW1pfZMSxhk2
+	 lszD11sEvIu9K+82u5ho3kOLsDHjVCwuQ2EKQRRxwQ9sHUbRNsLznS6P1jAJZGsEIZ
+	 Ww0emMdGy3ICEvrnjM0JZvYyh+BmRoONumhmFX2U=
+Date: Fri, 19 Jul 2024 14:25:27 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jiri Slaby <jslaby@suse.cz>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY / Serial driver changes for 6.11-rc1
+Message-ID: <ZppbNwwYDV4y0Leg@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1792353095-1721304427=:1055"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The following changes since commit 22a40d14b572deb80c0648557f4bd502d7e83826:
 
---8323328-1792353095-1721304427=:1055
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+  Linux 6.10-rc6 (2024-06-30 14:40:44 -0700)
 
-On Tue, 16 Jul 2024, Ferry Toth wrote:
+are available in the Git repository at:
 
-> Previously 8250_dma used a circular xmit->buf as DMA output buffer. This
-> causes messages that wrap around in the circular buffer to be
-> transmitted using 2 DMA transfers. Depending on baud rate and processor
-> load this can cause an interchar gap in the middle of the message. On
-> the receiving end the gap may cause a short receive timeout, possibly
-> long enough to terminate a DMA transfer, but too short to restart a
-> receive DMA transfer in time thus causing a receive buffer overrun.
->=20
-> This is especially a problem for devices with high speed UARTs (HSU)
-> where even deep 64 byte FIFO's are not sufficient to handle interrupt
-> latency.
->=20
-> The circular buffer has now been replaced by kfifo which requires a SG
-> list with a single entry, which still causes 2 dma transfers when a wrap
-> around occurs. Fix this by allowing up to 2 entries in the sgl.
->=20
-> Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
-> Signed-off-by: Ferry Toth <ftoth@exalondelft.nl>
-> ---
->  drivers/tty/serial/8250/8250_dma.c | 19 ++++++++++---------
->  1 file changed, 10 insertions(+), 9 deletions(-)
->=20
-> diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250=
-/8250_dma.c
-> index 8a353e3cc3dd..d215c494ee24 100644
-> --- a/drivers/tty/serial/8250/8250_dma.c
-> +++ b/drivers/tty/serial/8250/8250_dma.c
-> @@ -89,7 +89,9 @@ int serial8250_tx_dma(struct uart_8250_port *p)
->  =09struct tty_port=09=09=09*tport =3D &p->port.state->port;
->  =09struct dma_async_tx_descriptor=09*desc;
->  =09struct uart_port=09=09*up =3D &p->port;
-> -=09struct scatterlist sg;
-> +=09struct scatterlist=09=09*sg;
-> +=09struct scatterlist=09=09sgl[2];
-> +=09int i;
->  =09int ret;
-> =20
->  =09if (dma->tx_running) {
-> @@ -110,18 +112,17 @@ int serial8250_tx_dma(struct uart_8250_port *p)
-> =20
->  =09serial8250_do_prepare_tx_dma(p);
-> =20
-> -=09sg_init_table(&sg, 1);
-> -=09/* kfifo can do more than one sg, we don't (quite yet) */
-> -=09ret =3D kfifo_dma_out_prepare_mapped(&tport->xmit_fifo, &sg, 1,
-> +=09sg_init_table(sgl, ARRAY_SIZE(sgl));
-> +
-> +=09ret =3D kfifo_dma_out_prepare_mapped(&tport->xmit_fifo, sgl, ARRAY_SI=
-ZE(sgl),
->  =09=09=09=09=09   UART_XMIT_SIZE, dma->tx_addr);
-> =20
-> -=09/* we already checked empty fifo above, so there should be something =
-*/
-> -=09if (WARN_ON_ONCE(ret !=3D 1))
-> -=09=09return 0;
-> +=09dma->tx_size =3D 0;
-> =20
-> -=09dma->tx_size =3D sg_dma_len(&sg);
-> +=09for_each_sg(sgl, sg, ret, i)
-> +=09=09dma->tx_size +=3D sg_dma_len(sg);
-> =20
-> -=09desc =3D dmaengine_prep_slave_sg(dma->txchan, &sg, 1,
-> +=09desc =3D dmaengine_prep_slave_sg(dma->txchan, sgl, ret,
->  =09=09=09=09       DMA_MEM_TO_DEV,
->  =09=09=09=09       DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
->  =09if (!desc) {
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.11-rc1
 
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
+for you to fetch changes up to 17199dfccd4b7f7e0c059ef43bef6e0078423476:
 
-I envision though that this would be part of serial core so that it's not=
-=20
-limited to 8250 DMA but that can be changed on top of this at a later=20
-time.
+  Documentation: kernel-parameters: Add DEVNAME:0.0 format for serial ports (2024-07-04 15:41:44 +0200)
 
---=20
- i.
+----------------------------------------------------------------
+TTY/Serial updates for 6.11-rc1
 
---8323328-1792353095-1721304427=:1055--
+Here is a small set of tty and serial driver updates for 6.11-rc1.  Not
+much happened this cycle, unlike the previous kernel release which had
+lots of "excitement" in this part of the kernel.  Included in here are
+the following changes:
+  - dt binding updates for new platforms
+  - 8250 driver updates
+  - various small serial driver fixes and updates
+  - printk/console naming and matching attempt #2 (was reverted for
+    6.10-final, should be good to go this time around, acked by the
+    relevant maintainers).
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Andy Shevchenko (3):
+      serial: 8250: Extract RSA bits
+      serial: 8250: Extract platform driver
+      serial: 8250_platform: Explicitly show we initialise ISA ports only once
+
+Greg Kroah-Hartman (2):
+      Merge tag 'v6.10-rc4' into tty-next
+      Merge 6.10-rc6 into tty-next
+
+Hal Feng (3):
+      dt-bindings: serial: snps-dw-apb-uart: Add one more reset signal for StarFive JH7110 SoC
+      serial: 8250_dw: Use reset array API to get resets
+      riscv: dts: starfive: jh7110: Add the core reset and jh7110 compatible for uarts
+
+Hans de Goede (1):
+      vt: keyboard: Use led_set_brightness() in LED trigger activate() callback
+
+Hui Wang (2):
+      dt-bindings: serial: sc16is7xx: add reset-gpios
+      serial: sc16is7xx: hardware reset chip if reset-gpios is defined in DT
+
+Jeff Johnson (1):
+      tty: add missing MODULE_DESCRIPTION() macros
+
+Kanak Shilledar (1):
+      dt-bindings: serial: vt8500-uart: convert to json-schema
+
+Lad Prabhakar (5):
+      dt-bindings: serial: renesas,scif: Move ref for serial.yaml at the end
+      dt-bindings: serial: renesas,scif: Validate 'interrupts' and 'interrupt-names'
+      dt-bindings: serial: renesas,scif: Make 'interrupt-names' property as required
+      dt-bindings: serial: Add documentation for Renesas RZ/V2H(P) (R9A09G057) SCIF support
+      serial: sh-sci: Add support for RZ/V2H(P) SoC
+
+Rafał Miłecki (1):
+      dt-bindings: serial: mediatek,uart: add MT7988
+
+Rasmus Villemoes (1):
+      serial: imx: stop casting struct uart_port to struct imx_port
+
+Shresth Prasad (1):
+      tty: sunsu: Simplify device_node cleanup by using __free
+
+Tony Lindgren (3):
+      printk: Add match_devname_and_update_preferred_console()
+      serial: core: Add serial_base_match_and_update_preferred_console()
+      Documentation: kernel-parameters: Add DEVNAME:0.0 format for serial ports
+
+ Documentation/admin-guide/kernel-parameters.txt    |  19 +
+ .../devicetree/bindings/serial/mediatek,uart.yaml  |   1 +
+ .../devicetree/bindings/serial/nxp,sc16is7xx.yaml  |   5 +
+ .../devicetree/bindings/serial/renesas,scif.yaml   | 136 ++++--
+ .../bindings/serial/snps-dw-apb-uart.yaml          |  18 +-
+ .../bindings/serial/via,vt8500-uart.yaml           |  46 +++
+ .../devicetree/bindings/serial/vt8500-uart.txt     |  27 --
+ arch/riscv/boot/dts/starfive/jh7110.dtsi           |  30 +-
+ drivers/tty/amiserial.c                            |   1 +
+ drivers/tty/goldfish.c                             |   1 +
+ drivers/tty/n_gsm.c                                |   1 +
+ drivers/tty/n_hdlc.c                               |   1 +
+ drivers/tty/serial/8250/8250.h                     |  29 +-
+ drivers/tty/serial/8250/8250_core.c                | 460 +--------------------
+ drivers/tty/serial/8250/8250_dw.c                  |   2 +-
+ drivers/tty/serial/8250/8250_parisc.c              |   1 +
+ drivers/tty/serial/8250/8250_pcilib.c              |   1 +
+ drivers/tty/serial/8250/8250_platform.c            | 337 +++++++++++++++
+ drivers/tty/serial/8250/8250_port.c                |   1 +
+ drivers/tty/serial/8250/8250_pxa.c                 |   1 +
+ drivers/tty/serial/8250/8250_rsa.c                 | 133 ++++++
+ drivers/tty/serial/8250/Makefile                   |   6 +-
+ drivers/tty/serial/8250/serial_cs.c                |   1 +
+ drivers/tty/serial/esp32_acm.c                     |   1 +
+ drivers/tty/serial/esp32_uart.c                    |   1 +
+ drivers/tty/serial/imx.c                           |  41 +-
+ drivers/tty/serial/owl-uart.c                      |   1 +
+ drivers/tty/serial/sc16is7xx.c                     |  31 +-
+ drivers/tty/serial/serial_base.h                   |  16 +
+ drivers/tty/serial/serial_base_bus.c               |  37 ++
+ drivers/tty/serial/serial_core.c                   |   4 +
+ drivers/tty/serial/serial_mctrl_gpio.c             |   1 +
+ drivers/tty/serial/sh-sci.c                        |  55 ++-
+ drivers/tty/serial/sunsu.c                         |  37 +-
+ drivers/tty/synclink_gt.c                          |   1 +
+ drivers/tty/ttynull.c                              |   1 +
+ drivers/tty/vt/keyboard.c                          |   4 +-
+ include/linux/printk.h                             |   4 +
+ include/linux/serial_sci.h                         |   1 +
+ kernel/printk/console_cmdline.h                    |   1 +
+ kernel/printk/printk.c                             | 103 ++++-
+ 41 files changed, 1000 insertions(+), 598 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/serial/via,vt8500-uart.yaml
+ delete mode 100644 Documentation/devicetree/bindings/serial/vt8500-uart.txt
+ create mode 100644 drivers/tty/serial/8250/8250_platform.c
+ create mode 100644 drivers/tty/serial/8250/8250_rsa.c
 
