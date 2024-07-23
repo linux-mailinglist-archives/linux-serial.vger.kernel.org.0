@@ -1,50 +1,56 @@
-Return-Path: <linux-serial+bounces-5044-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5046-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B54293A0BE
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2024 14:59:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDDB093A39E
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2024 17:16:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BACE22837E4
-	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2024 12:59:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 898151F23ACD
+	for <lists+linux-serial@lfdr.de>; Tue, 23 Jul 2024 15:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEF2153804;
-	Tue, 23 Jul 2024 12:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59C94153824;
+	Tue, 23 Jul 2024 15:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eoLyfYrs"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="PyltflEA"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23426153582;
-	Tue, 23 Jul 2024 12:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157C93D55D;
+	Tue, 23 Jul 2024 15:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1721739518; cv=none; b=UCogVBd9UnX82FDGQ320z7H8xhbqiGsN45g5BwjS8+ImIkBu49cA9ZNHVidLBK4ChwgNqfwipbY3afEchB4UWZ4zH6ur7vIfyFOgeQ1umuDugfM0/dOg47DoC1VHvMOPjv/jrti3hZoxGkLMAZP3YVV7blXGFgSixWPvBTiAXxc=
+	t=1721747765; cv=none; b=qgwAesU4Pis4IXmMQ9DMigjMoXoDWKG+gb/ok2JUXhL6oaZFw/cDcHTvuRnvlRUgSx0vM0XMctf5DdDqzfYxBjqa0lrpCWFrk4//abr1g1UVnwguWiBmWJWT5aUKMDJrjiXNzkfllpAJzNxJ79aQnhDgpoJ12XGzhu0SW0e67vM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1721739518; c=relaxed/simple;
-	bh=kSeQcsb2Iy9mD89DI1W9T/W97Me0c16VuTNwoa3LxLA=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=RbRQQf9I8GRTsQq3ZslctnowvNrpFoshe8I4J36WHqGvTE5w3H1zUkcoBgAPO2ENGqPh2qQx3CCM4dIjo0xw8rNyE7e7CAi5NN/IoZTtczTZ7ohgKvi0+yxy5gWsB4T4zwOqt5Aj1fq3CZCJX2+EjtbZRGsIPFluGpXD4bsCGT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eoLyfYrs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 8FEC1C4AF0E;
-	Tue, 23 Jul 2024 12:58:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1721739517;
-	bh=kSeQcsb2Iy9mD89DI1W9T/W97Me0c16VuTNwoa3LxLA=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=eoLyfYrsPmZ4wJcbTOllWPiC4ezzKszwpMpeBouBczI4KxP78lbuw6Rm9QzzsnXfJ
-	 ncVEDyayw/Ji/3WF9egitc7fyjGxjysuPyy7C6Mp531OL04vpgKkoV08jqe9hSieAq
-	 3C0rmxGiPiE2rGpo7DVOMOIH3aDPhogS/Pl6C1QcYr4GvXiZXOt5iAeo1lALnHF+IO
-	 80zc5nX2Tr43BvuS1p7jaGcJ69OyXQVMz8VJsYki0rQg07xvbwQ+mH5OXPogvO2OiE
-	 wO0UJ5T3DkDkvWzPZjmDuVTTLZO/HOBbcD3OuL0/yBh2vk6XUFR7C5B6/oibDUV5OD
-	 9JWPx8Y1whATg==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 86B28C43140;
-	Tue, 23 Jul 2024 12:58:36 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1721747765; c=relaxed/simple;
+	bh=wcmAco8bkzi70O9n+d6uvvToZXg1RK9zjr+X5LzojVw=;
+	h=From:To:Cc:Date:Message-Id:MIME-Version:Subject; b=mx/gmsH8dRbiXVSIVVEsfoTTldmhZKSLPJ0ya8x7yUbHEr2CXo/vCVMAHvc641yiqHj37Mqgagpxagj1hE/RfG5ItKun8lEUAl2yFrWl1JiJu5C4VwMLN635E4SbbDd5j8zpM9hqBTZwIfkczrf+JO2O3GyMiq4JJVgAs2Ae8Sc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=PyltflEA; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+	:From:subject:date:message-id:reply-to;
+	bh=Y2b2wyHe/Scg6YoHbNFbNDMijEkXHLcw9K/zw4LWlE0=; b=PyltflEAT72vIxHXC5uuoWyL6V
+	ZBr6/u3LuZkePxDFimN8cxHr0giBdTAVa9m9N83C8PUR6EiFSE9TS5AUMPFwqx5jAGOMKMdQlqdKZ
+	zknBIL07QMoikhnNlMShepd3HOfKKp3FxJ+pc75LVgfswC1GUhWmDxuZngI3iEFPBmas=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:36238 helo=pettiford.lan)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1sWGwG-0003Y2-QS; Tue, 23 Jul 2024 10:56:29 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	hvilleneuve@dimonoff.com,
+	jringle@gridpoint.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	hugo@hugovil.com
+Date: Tue, 23 Jul 2024 08:52:59 -0400
+Message-Id: <20240723125302.1305372-1-hugo@hugovil.com>
+X-Mailer: git-send-email 2.39.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -52,50 +58,37 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 0/3] Add the core reset for UARTs of StarFive JH7110
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <172173951654.10883.8693881019606490911.git-patchwork-notify@kernel.org>
-Date: Tue, 23 Jul 2024 12:58:36 +0000
-References: <20240604084729.57239-1-hal.feng@starfivetech.com>
-In-Reply-To: <20240604084729.57239-1-hal.feng@starfivetech.com>
-To: Hal Feng <hal.feng@starfivetech.com>
-Cc: linux-riscv@lists.infradead.org, robh@kernel.org, krzk+dt@kernel.org,
- gregkh@linuxfoundation.org, jirislaby@kernel.org,
- ilpo.jarvinen@linux.intel.com, p.zabel@pengutronix.de, conor+dt@kernel.org,
- palmer@dabbelt.com, paul.walmsley@sifive.com, aou@eecs.berkeley.edu,
- emil.renner.berthing@canonical.com, devicetree@vger.kernel.org,
- linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+Subject: [PATCH 0/2] serial: sc16is7xx: fix registers accesses and Tx FIFO corruption
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-Hello:
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-This series was applied to riscv/linux.git (for-next)
-by Greg Kroah-Hartman <gregkh@linuxfoundation.org>:
+Hello,
+this patch series fixes enhanced/special register set accesses and Tx
+FIFO corruption.
 
-On Tue,  4 Jun 2024 16:47:26 +0800 you wrote:
-> The UART of StarFive JH7110 needs two reset signals (apb, core) to
-> initialize. This patch series adds the missing core reset.
-> 
-> Changes since v1:
-> - Set maxItems to 1 for resets from other platforms.
-> 
-> History:
-> v1: https://lore.kernel.org/all/20240517061713.95803-1-hal.feng@starfivetech.com/
-> 
-> [...]
+I have tested the changes on a custom board with two SC16IS752 DUART over
+a SPI interface using a Variscite IMX8MN NANO SOM. The four UARTs are
+configured in RS-485 mode.
 
-Here is the summary with links:
-  - [v2,1/3] dt-bindings: serial: snps-dw-apb-uart: Add one more reset signal for StarFive JH7110 SoC
-    (no matching commit)
-  - [v2,2/3] serial: 8250_dw: Use reset array API to get resets
-    (no matching commit)
-  - [v2,3/3] riscv: dts: starfive: jh7110: Add the core reset and jh7110 compatible for uarts
-    https://git.kernel.org/riscv/c/4ed81d9dd75f
+Thank you.
 
-You are awesome, thank you!
+Hugo Villeneuve (2):
+  serial: sc16is7xx: fix TX fifo corruption
+  serial: sc16is7xx: fix invalid FIFO access with special register set
+
+ drivers/tty/serial/sc16is7xx.c | 25 +++++++++++++++----------
+ 1 file changed, 15 insertions(+), 10 deletions(-)
+
+
+base-commit: 933069701c1b507825b514317d4edd5d3fd9d417
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.39.2
 
 
