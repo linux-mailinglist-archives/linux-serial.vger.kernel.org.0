@@ -1,77 +1,52 @@
-Return-Path: <linux-serial+bounces-5273-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5275-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7F37949490
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 17:30:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D873949BED
+	for <lists+linux-serial@lfdr.de>; Wed,  7 Aug 2024 01:11:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 86A392817A9
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 15:30:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 305891C22C18
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 23:11:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8F622A8E5;
-	Tue,  6 Aug 2024 15:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9341B1791FC;
+	Tue,  6 Aug 2024 23:10:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="k88V720B"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyM4t6ui"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E14DE1DDEA
-	for <linux-serial@vger.kernel.org>; Tue,  6 Aug 2024 15:29:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C414175D36;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722958200; cv=none; b=GCYtrqQBgHEONEuzSVmc6Yy9SK0bQ5bc7suVECUq0zM5YDzQNOoJ5F5UH/vtuHzXe3X51k8Tq5rat8YFUzSx4n+zzmLHVQ/XxB2nzD9oiBFPly9dFbCduD0XeBfA4uxZ4okRjCsWn1y2heUTHjPHUO2cZsSUracFIVXxsVXm09I=
+	t=1722985803; cv=none; b=C9Co98XRZCnGA7XDLLJs+3PgZitmSxvlZ+PwO3xWFjojlTbLYMipEaveWo3oGck79bIz0aLmDipxGQEcjy1EfJdgku21R7ak8KanTIVClW4oR+zHCr6rfrPYAXkJljEGOVpIhmcOWxi72W6I6yOvjeL1N+ZQYFIqFhLvGtY+uzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722958200; c=relaxed/simple;
-	bh=PF0Vxx/H/Fh+6ybEWx6+PwT0mzFwGK4sk9orjriQwGU=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aEhSmfz6KPuR3gFfom5LEEZnaC2y4yjbuDGwITWo1TEvnWu0vlWD1OULZyGXc0W1oTl1ct3Ogz4wecobPeq4CRdBWQxU9gSaaeAwtgI7TvW8ml/G/8WtyT30XgUY+mpFH8lSJYqPR5IKaLsd+NhMR6ULTxV3JGTezL3ilvZObn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=k88V720B; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-52f04b3cb33so1858140e87.0
-        for <linux-serial@vger.kernel.org>; Tue, 06 Aug 2024 08:29:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1722958197; x=1723562997; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=McdwXMf+aVpukum1jWBbRDvrxSrkWixRhMvgP59hNnk=;
-        b=k88V720BVBKIcCJIBbzvwKHL25gQJ8JtselYsz6TfTylt3yw8/WpSgPMdTnLaZpbW3
-         WXkKMw5ptMOGQsm7/TZ/JJqQoR5/jCTV8qeE51wqgBGmOwwLhje8UW86vDMe1ibWfQP0
-         hJ3X9MIUXvYARLmhN/ScGKpB+rLEaURk8X0+QWJvjEjfEu2yJGw1u9z6c/5YH6FN2foM
-         HwrXclkvislpuZpLkijGPmU2lK7MELLgdYQpupam3dBimBXzueLCwIN1nsY+bWXkOGyI
-         ZUlKM8ye49MSCNiW9meRItSJWH82SMmletmSLNJEv3RI6SXWJ7rQWy2LATFnPm8MCDKi
-         F9OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1722958197; x=1723562997;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=McdwXMf+aVpukum1jWBbRDvrxSrkWixRhMvgP59hNnk=;
-        b=Nwmwoh+QygqAiQooCmS7ZRvTzkbNH+qV5/7GYydcYL2JQdrxsO2W7h/4NBB/fxP7t8
-         IOMsi7Mx5/CWjt/bdUmLThgimtAtvyFdBbUUyarNGFZYAzJnR4lYUtXNFSoWXP9i4B02
-         ROhTvnVO1b/3cbMQIJFSqiG4WeIZIO6J1BHOtW6EiytNvvPYMPHBuhkoJR9WOPT7T9YI
-         HXloLuc2PHdtgqeTNg4xbFfO5EyVTBnL9FU9Z7Vjzsap1KYbFvaE3852p1mVaiSPowNy
-         lddNncXnYdmBrOJAROcCLQS8tl+sgHxQKuN5VbZwI7J6FeEpmQUiQTQ3pBaKG32jqE8i
-         MZYg==
-X-Forwarded-Encrypted: i=1; AJvYcCUaePKdmWZ8zo9EZMFkgbRWzIgeC04X/PbO40+SSN2jMCdg+CeeYH94RW1VywjHb5nPPR1iYBGm86l/LoXv1aQ2FbDRZUn3v7ovboMQ
-X-Gm-Message-State: AOJu0YzDzqDtJX2EymbfR3PN1bvZ7072nhOMfBPtTPATqeoOcM1RecFV
-	HZ6vV40S/Sh34oSuKPlY5GllnKFZGjhwJIt851q5go9xCHtzeoKKqyQNLGlsF4CRM/XzxIVwFdc
-	UC0YL3Q==
-X-Google-Smtp-Source: AGHT+IFyj16EIZLaKK/87iLqK95suicQ+dQY2KgzMLkd9+nLfafpYvKVTsIdMVkQYiVfRocIZ68TBA==
-X-Received: by 2002:a05:6512:3e26:b0:52c:dd25:9ac6 with SMTP id 2adb3069b0e04-530bb38cae9mr13232800e87.29.1722958196994;
-        Tue, 06 Aug 2024 08:29:56 -0700 (PDT)
-Received: from puffmais.c.googlers.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9d4294fsm555274266b.103.2024.08.06.08.29.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 08:29:56 -0700 (PDT)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Tue, 06 Aug 2024 16:29:46 +0100
-Subject: [PATCH 2/2] tty: serial: samsung_tty: cast the interrupt's void
- *id just once
+	s=arc-20240116; t=1722985803; c=relaxed/simple;
+	bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=NrX/0vj3hSccTxNv+2yDRxsRnitgFZAmoDvOv39JapwOuQdSGag4A2uW+OnOHFI52IX7n3/g9b7XrV4cZ6GigjXXVYfDZwt5H2ZA0jKfLhXZNX13U5fzpkIFEJyWpTFzQCIB0gSeC8Z6EU3aMfvIkba/AwHhbCfvpkjkknlkC78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyM4t6ui; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B3CB0C32786;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1722985802;
+	bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=XyM4t6uixRdVtkkTDbe0NOXLXZ37CozxQGFZMrfsO/1RoZeoVND7Z91irbEFkZG1o
+	 QK9utNoPH7ktjzxgS9PHoD3qn/DNgqvVdZsgReOQMjUrT2TlQWFkqaNximTlbkANJw
+	 fwIaCs8OsL+5RpaxQ7RQgnnJNhR2sK1DHuPhkA26DmsSHTA9hDidEKUXDf1733zm99
+	 S42u2FVCM/ikVhxmWNb19aaYerJ5H8KgfmYrOTZTuTaNNyjHX7w/yoQnm1GFvnWvt/
+	 BEBQiXjUFnQg6HPQgb/LURhqtACOPKxOuV9p3+Gjq6Aluocc6VajyOLbdkqKccoIPM
+	 bvFunUNgxUrOA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 96120C49EA1;
+	Tue,  6 Aug 2024 23:10:02 +0000 (UTC)
+From: Daniel Gomez via B4 Relay <devnull+da.gomez.samsung.com@kernel.org>
+Subject: [PATCH 00/12] Enable build system on macOS hosts
+Date: Wed, 07 Aug 2024 01:09:14 +0200
+Message-Id: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -80,119 +55,196 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20240806-samsung-tty-cleanup-v1-2-a68d3abf31fe@linaro.org>
-References: <20240806-samsung-tty-cleanup-v1-0-a68d3abf31fe@linaro.org>
-In-Reply-To: <20240806-samsung-tty-cleanup-v1-0-a68d3abf31fe@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
+X-B4-Tracking: v=1; b=H4sIABqtsmYC/x3MQQqAIBBA0avErBuwCKyuEi1MpxqoFCcjiO6et
+ HyL/x8QikwCffFApIuF/ZFRlQXY1RwLIbtsqFXdqFZp3I31glPizaGkEHw8sbNGOa2NmyoNuQy
+ RZr7/6zC+7wcg7OjoZQAAAA==
+To: Masahiro Yamada <masahiroy@kernel.org>, 
+ Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
+ Lucas De Marchi <lucas.demarchi@intel.com>, 
+ =?utf-8?q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, 
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+ David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
+ William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
+ Kirk Reiser <kirk@reisers.ca>, 
+ Samuel Thibault <samuel.thibault@ens-lyon.org>, 
+ Paul Moore <paul@paul-moore.com>, 
+ Stephen Smalley <stephen.smalley.work@gmail.com>, 
+ Ondrej Mosnacek <omosnace@redhat.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+ James Morse <james.morse@arm.com>, 
+ Suzuki K Poulose <suzuki.poulose@arm.com>, 
+ Zenghui Yu <yuzenghui@huawei.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.13.0
+ Jiri Slaby <jirislaby@kernel.org>, 
+ Nick Desaulniers <ndesaulniers@google.com>, 
+ Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org, 
+ intel-xe@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
+ speakup@linux-speakup.org, selinux@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+ linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
+ Finn Behrens <me@kloenk.dev>, 
+ "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com, 
+ Daniel Gomez <da.gomez@samsung.com>, 
+ Nick Desaulniers <nick.desaulniers@gmail.com>
+X-Mailer: b4 0.14.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1722985800; l=5760;
+ i=da.gomez@samsung.com; s=20240621; h=from:subject:message-id;
+ bh=srDtPMkx+3Ib/2vxXDsh66x8GKusBSCFnXcAPZ0/fJs=;
+ b=LiLIkclk6gyjYUEvcQG/jWd8xczYA+IguM7XsmOaFyvBmuk7FzB0cX6xsiSYYX3g4q3i4pKTn
+ rvltGN/7ZboBznQAO+ngrBCel8MYDLLj7yJ1vi5dIVQBZPHBahIv5wm
+X-Developer-Key: i=da.gomez@samsung.com; a=ed25519;
+ pk=BqYk31UHkmv0WZShES6pIZcdmPPGay5LbzifAdZ2Ia4=
+X-Endpoint-Received: by B4 Relay for da.gomez@samsung.com/20240621 with
+ auth_id=175
+X-Original-From: Daniel Gomez <da.gomez@samsung.com>
+Reply-To: da.gomez@samsung.com
 
-The interrupt handler routines and helpers are casting the 'void *'
-pointer to 'struct exynos_uart_port *' all over the place.
+This patch set allows for building the Linux kernel for arm64 in macOS with
+LLVM.
 
-There is no need for that, we can do the casting once and keep passing
-the 'struct exynos_uart_port *', simplifying the code and saving a few
-lines of code.
+Patches are based on previous Nick's work and suggestions [1][2][3] to
+enable build system in macOS hosts.
 
-No functional changes.
+Since macOS does not provide some of the headers available in the GNU
+C Library (glibc), the patches include a copy of these headers from
+glibc-2.40, with minor modifications detailed in the commit message.
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
+To set up the environment:
+
+* Provide build dependencies (installed via Homebrew):
+
+	coreutils, findutils, gnu-sed, gnu-tar, grep, llvm, make and pkg-config.
+
+* A case sensitive volume for building:
+
+	diskutil apfs addVolume /dev/disk<N> "Case-sensitive APFS" linux
+
+* And include in your PATH all GNU tools required by the Linux kernel as
+well as LLVM:
+
+	PATH="/opt/homebrew/opt/coreutils/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/findutils/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/gnu-sed/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/gnu-tar/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/grep/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/make/libexec/gnubin:$PATH"
+	PATH="/opt/homebrew/opt/llvm/bin:$PATH"
+
+* Start the build using LLVM:
+
+	make LLVM=1 allyesconfig
+	make LLVM=1 -j$(nproc)
+
+I believe other architectures could also be supported if we can move
+forward this initiative. Additionally, we could incorporate Rust
+support. I understand that Finn Behrens has some patches [4][5] based on
+Nick's previous work.
+
+[1]: WIP: build Linux on MacOS
+https://github.com/ClangBuiltLinux/linux/commit/f06333e29addbc3d714adb340355f471c1dfe95a
+
+[2] Subject: [PATCH] scripts: subarch.include: fix SUBARCH on MacOS hosts
+https://lore.kernel.org/all/20221113233812.36784-1-nick.desaulniers@gmail.com/
+
+[3] Subject: Any interest in building the Linux kernel from a MacOS host?
+https://lore.kernel.org/all/CAH7mPvj64Scp6_Nbaj8KOfkoV5f7_N5L=Tv5Z9zGyn5SS+gsUw@mail.gmail.com/
+
+[4] https://github.com/kloenk/linux/commits/rust-project_macos-dylib/
+
+[5] https://kloenk.eu/posts/build-linux-on-m1-macos/
+
+To: Masahiro Yamada <masahiroy@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nicolas@fjasle.eu>
+To: Lucas De Marchi <lucas.demarchi@intel.com>
+To: Thomas Hellström <thomas.hellstrom@linux.intel.com>
+To: Rodrigo Vivi <rodrigo.vivi@intel.com>
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+To: Thomas Zimmermann <tzimmermann@suse.de>
+To: David Airlie <airlied@gmail.com>
+To: Daniel Vetter <daniel@ffwll.ch>
+To: William Hubbs <w.d.hubbs@gmail.com>
+To: Chris Brannon <chris@the-brannons.com>
+To: Kirk Reiser <kirk@reisers.ca>
+To: Samuel Thibault <samuel.thibault@ens-lyon.org>
+To: Paul Moore <paul@paul-moore.com>
+To: Stephen Smalley <stephen.smalley.work@gmail.com>
+To: Ondrej Mosnacek <omosnace@redhat.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+To: Will Deacon <will@kernel.org>
+To: Marc Zyngier <maz@kernel.org>
+To: Oliver Upton <oliver.upton@linux.dev>
+To: James Morse <james.morse@arm.com>
+To: Suzuki K Poulose <suzuki.poulose@arm.com>
+To: Zenghui Yu <yuzenghui@huawei.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jiri Slaby <jirislaby@kernel.org>
+To: Nick Desaulniers <ndesaulniers@google.com>
+To: Bill Wendling <morbo@google.com>
+To: Justin Stitt <justinstitt@google.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-kbuild@vger.kernel.org
+Cc: intel-xe@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: speakup@linux-speakup.org
+Cc: selinux@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: kvmarm@lists.linux.dev
+Cc: linux-serial@vger.kernel.org
+Cc: llvm@lists.linux.dev
+Cc: Finn Behrens <me@kloenk.dev>
+Cc: Daniel Gomez (Samsung) <d+samsung@kruces.com>
+Cc: gost.dev@samsung.com
+
+Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
 ---
- drivers/tty/serial/samsung_tty.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
+Daniel Gomez (11):
+      kbuild: add header_install dependency to scripts
+      file2alias: fix uuid_t definitions for macos
+      drm/xe: xe_gen_wa_oob: fix program_invocation_short_name for macos
+      accessiblity/speakup: genmap and makemapdata require linux/version.h
+      selinux/genheaders: include bitsperlong and posix_types headers
+      selinux/mdp: include bitsperlong and posix_types headers
+      include: add elf.h support
+      include: add endian.h support
+      scripts/mod: add byteswap support
+      tty/vt: conmakehash requires linux/limits.h
+      scripts/kallsyms: add compatibility support for macos
 
-diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
-index 1c6d0ffe5649..971765aaeaca 100644
---- a/drivers/tty/serial/samsung_tty.c
-+++ b/drivers/tty/serial/samsung_tty.c
-@@ -707,9 +707,8 @@ static void enable_rx_pio(struct s3c24xx_uart_port *ourport)
- 
- static void s3c24xx_serial_rx_drain_fifo(struct s3c24xx_uart_port *ourport);
- 
--static irqreturn_t s3c24xx_serial_rx_chars_dma(void *dev_id)
-+static irqreturn_t s3c24xx_serial_rx_chars_dma(struct s3c24xx_uart_port *ourport)
- {
--	struct s3c24xx_uart_port *ourport = dev_id;
- 	struct uart_port *port = &ourport->port;
- 	struct s3c24xx_uart_dma *dma = ourport->dma;
- 	struct tty_struct *tty = tty_port_tty_get(&ourport->port.state->port);
-@@ -843,9 +842,8 @@ static void s3c24xx_serial_rx_drain_fifo(struct s3c24xx_uart_port *ourport)
- 	tty_flip_buffer_push(&port->state->port);
- }
- 
--static irqreturn_t s3c24xx_serial_rx_chars_pio(void *dev_id)
-+static irqreturn_t s3c24xx_serial_rx_chars_pio(struct s3c24xx_uart_port *ourport)
- {
--	struct s3c24xx_uart_port *ourport = dev_id;
- 	struct uart_port *port = &ourport->port;
- 
- 	uart_port_lock(port);
-@@ -855,13 +853,11 @@ static irqreturn_t s3c24xx_serial_rx_chars_pio(void *dev_id)
- 	return IRQ_HANDLED;
- }
- 
--static irqreturn_t s3c24xx_serial_rx_irq(void *dev_id)
-+static irqreturn_t s3c24xx_serial_rx_irq(struct s3c24xx_uart_port *ourport)
- {
--	struct s3c24xx_uart_port *ourport = dev_id;
--
- 	if (ourport->dma && ourport->dma->rx_chan)
--		return s3c24xx_serial_rx_chars_dma(dev_id);
--	return s3c24xx_serial_rx_chars_pio(dev_id);
-+		return s3c24xx_serial_rx_chars_dma(ourport);
-+	return s3c24xx_serial_rx_chars_pio(ourport);
- }
- 
- static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport)
-@@ -928,9 +924,8 @@ static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport)
- 		s3c24xx_serial_stop_tx(port);
- }
- 
--static irqreturn_t s3c24xx_serial_tx_irq(void *id)
-+static irqreturn_t s3c24xx_serial_tx_irq(struct s3c24xx_uart_port *ourport)
- {
--	struct s3c24xx_uart_port *ourport = id;
- 	struct uart_port *port = &ourport->port;
- 
- 	uart_port_lock(port);
-@@ -950,11 +945,11 @@ static irqreturn_t s3c64xx_serial_handle_irq(int irq, void *id)
- 	irqreturn_t ret = IRQ_HANDLED;
- 
- 	if (pend & S3C64XX_UINTM_RXD_MSK) {
--		ret = s3c24xx_serial_rx_irq(id);
-+		ret = s3c24xx_serial_rx_irq(ourport);
- 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_RXD_MSK);
- 	}
- 	if (pend & S3C64XX_UINTM_TXD_MSK) {
--		ret = s3c24xx_serial_tx_irq(id);
-+		ret = s3c24xx_serial_tx_irq(ourport);
- 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_TXD_MSK);
- 	}
- 	return ret;
-@@ -971,11 +966,11 @@ static irqreturn_t apple_serial_handle_irq(int irq, void *id)
- 	if (pend & (APPLE_S5L_UTRSTAT_RXTHRESH | APPLE_S5L_UTRSTAT_RXTO)) {
- 		wr_regl(port, S3C2410_UTRSTAT,
- 			APPLE_S5L_UTRSTAT_RXTHRESH | APPLE_S5L_UTRSTAT_RXTO);
--		ret = s3c24xx_serial_rx_irq(id);
-+		ret = s3c24xx_serial_rx_irq(ourport);
- 	}
- 	if (pend & APPLE_S5L_UTRSTAT_TXTHRESH) {
- 		wr_regl(port, S3C2410_UTRSTAT, APPLE_S5L_UTRSTAT_TXTHRESH);
--		ret = s3c24xx_serial_tx_irq(id);
-+		ret = s3c24xx_serial_tx_irq(ourport);
- 	}
- 
- 	return ret;
+Nick Desaulniers (1):
+      scripts: subarch.include: fix SUBARCH on MacOS hosts
 
+ Makefile                               |    2 +-
+ arch/arm64/kernel/pi/Makefile          |    1 +
+ arch/arm64/kernel/vdso32/Makefile      |    1 +
+ arch/arm64/kvm/hyp/nvhe/Makefile       |    2 +-
+ drivers/accessibility/speakup/Makefile |    2 +
+ drivers/gpu/drm/xe/xe_gen_wa_oob.c     |    8 +-
+ drivers/tty/vt/Makefile                |    1 +
+ include/byteswap/byteswap.h            |   35 +
+ include/elf/elf.h                      | 4491 ++++++++++++++++++++++++++++++++
+ include/endian/bits/uintn-identity.h   |   48 +
+ include/endian/endian.h                |   63 +
+ scripts/Makefile                       |    3 +-
+ scripts/kallsyms.c                     |    4 +
+ scripts/mod/Makefile                   |    6 +
+ scripts/mod/file2alias.c               |    3 +
+ scripts/selinux/genheaders/Makefile    |    3 +-
+ scripts/selinux/mdp/Makefile           |    3 +-
+ scripts/subarch.include                |    3 +-
+ 18 files changed, 4672 insertions(+), 7 deletions(-)
+---
+base-commit: 1e391b34f6aa043c7afa40a2103163a0ef06d179
+change-id: 20240807-macos-build-support-9ca0d77adb17
+
+Best regards,
 -- 
-2.46.0.rc2.264.g509ed76dc8-goog
+Daniel Gomez <da.gomez@samsung.com>
+
 
 
