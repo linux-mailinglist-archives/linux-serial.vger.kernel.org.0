@@ -1,74 +1,76 @@
-Return-Path: <linux-serial+bounces-5274-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5272-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4A05949492
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 17:30:17 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id A41F8949497
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 17:30:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 889ED1F254D2
-	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 15:30:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1D36FB24FA2
+	for <lists+linux-serial@lfdr.de>; Tue,  6 Aug 2024 15:30:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 136AE2BAE5;
-	Tue,  6 Aug 2024 15:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5813428DC1;
+	Tue,  6 Aug 2024 15:30:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AOENyDJQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="FHho+nBb"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F30FA1799B
-	for <linux-serial@vger.kernel.org>; Tue,  6 Aug 2024 15:29:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7372D1CFA9
+	for <linux-serial@vger.kernel.org>; Tue,  6 Aug 2024 15:29:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1722958201; cv=none; b=dAOlgGb5ZGlX/ord1oAEBfkSkClpJKkKcMMURBtyCtBE1B2fQNO0Oy2WXB8Jr372lBxk674BxjHPjos741UqHjSjPrW57xMtBjUW4DxZQqWkgh98XxLqhVv8N3wCOQeN1ZgCWkn35RmNd1yMyaDPXxrOvZnmgA/5zkEtnmw1bnQ=
+	t=1722958200; cv=none; b=RKFW3WrcDcm1uYFqYPLu9uxz1XKeMZZakwCEVgW0gCx/jWMvW3SGwME1ZK8PbyRbsXlwGQt9jcmhUU4Fn2Lac8q3G3tdLgxEtrfY+QMd2UegiOl6r0hdQdvESXnOkK/5ZAQghniH5eyTtxGdt531PuuFN9etwG/onU47Ha9vRIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1722958201; c=relaxed/simple;
-	bh=fv3k8stKYzTS9UIEU0lpQcQQUZi9Zykq6iQUOmCKotg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cBO8HRbtG5bk4PAog/OThnRyWWLlG3cfiqY91Ej81kp/qZoYxsFzS2htPLf10mFh5oDFef/lU3k+0xhhxLdl4BM0+VN9AWMQdg+EbmvFddIe5a4pdTM/ItFvae2Ya6Sdw+nbyX6ji9wTfJ7WNPFdvmZvZv8TucUZTws3xIJQHRY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AOENyDJQ; arc=none smtp.client-ip=209.85.208.169
+	s=arc-20240116; t=1722958200; c=relaxed/simple;
+	bh=bPeZihTCF+Ow/O7uL47gsdFVGSiVkl8vSkFqcaDBcF0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=fQkJogb4WPZQg+PeBeidbESRTwpbbAe8XZKxy8zdzm3bnKKAvSRgQ2mdKS393ZUQv6/hKHBim7JPfBxy9Hh3/H/CQ/gGg0PPeOe6nk0Jh4/IdP2qX+m1VyYDNt8JjXh+XvaWgV7GxXSDNNhwfmjCkYyWlXmfl/bCL533MO+lvJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=FHho+nBb; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-2ef248ab2aeso12908411fa.0
-        for <linux-serial@vger.kernel.org>; Tue, 06 Aug 2024 08:29:57 -0700 (PDT)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-52efe4c7c16so1425083e87.0
+        for <linux-serial@vger.kernel.org>; Tue, 06 Aug 2024 08:29:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google; t=1722958196; x=1723562996; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tprBLK1iiveUCYg/AarvtiLLOVA4FPbpWQNyejze9a8=;
-        b=AOENyDJQT9RsnmqkYhSmNjqbmoIPl2GreifPvxDRVZqWItvYwuvAFg5azGunEwqyva
-         FozNoYBlhoQYmPVKOq/eVmqP0fzqbmV++lcjBCu6kbU14P5yFNK1jwfF+w8AGJ8QG6DW
-         cKkbJjbe4WNrFFps3peFbI8L3B2zfGlN5kKfTB7Q8Z0WLvDo0m0AEasN5Nkl3DgooB+4
-         m9sOolWq21P/FeT61GBme75ZmvQ58+w5hRGSvPrZUrlbVavVecO88uYujGZTeJJCJPzJ
-         sF1fj9a3PRaUVmOQRMJxU0ji08IKvpOMbMP9mEhvqjLpJd9RW4EeRJmw0GKZeI7vbj1f
-         vXWQ==
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Rk2Awb+sGDAUp2fed+2uqRPu8RHHDA4mh3PcSw6gyEg=;
+        b=FHho+nBbmIvVErziWtqg1ezzjYrPDFztv2R1cezhc4jRqjKO510g0JZE2akgrISH04
+         Tc7zVLSv/oGHkwrxNpQ8j8vcxV+OOhjsbJZX3QHzdSI8Pr9PLZJlkZQu3V09Y6qrWNkJ
+         SskT2xzdrTKyv9dsHg0ZTsV+FS7g/6TJjf3XDlBN8xHgj88wZSgogUF7CQE+DhGlteS6
+         zhMc2HZpdiOy0EDr9h/gRuXxuEDg+OmtPvjAVGkVWcgLMZRcHvu5c4nSLILPu8HjD6UK
+         pn0sNUFtVgIajWG7y4dGxoT3i+2hz/rZa1N46MWkNP54I90smA6yX7kev0LKfu1iEkyf
+         6cvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20230601; t=1722958196; x=1723562996;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tprBLK1iiveUCYg/AarvtiLLOVA4FPbpWQNyejze9a8=;
-        b=WGq/ZGVwIJVhiyPN7CyaxrygR1JbMsewPZVNHlNpDGTd1//aDpSkVsm9Y7HECBOyxB
-         2nM1tAuSjOKVirIzUM8MwZZVVCqNpmt/AxRJDAd02jc5Z/ryacKXNG7HZNm9EvN2gxgZ
-         ikw4xgcQIyVvvuRO/Ta8QAz709Ltctow2NJvTnhgpM4MlLtgGB0pIwX8lzZKdFtXgB55
-         6m+pKNvN5jhsA4z+Oe2yDA7luh7cSfYSIKzjVjRuNGuVNhQBjNWY/s6P61bZrgcC9dvP
-         e6Yia1zdURkoO4qpsmcOpho2CMu0p+Fc4nXavLUDPRUDw/RpUrbfICsqLBUAwQjRfVMc
-         hZRA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIoZB3vRW0BIHNRlOkA82l8Ba34y96qQLDGOQ2INdZ03yzgc5nhQ4jiyQgQwzkau/7Ng1hZeDcLt1L2GjSqjUW0VoEAS4YfaenuH0p
-X-Gm-Message-State: AOJu0Yx8T91587AqrvKQYp+7X2iXidV5Z36ObLb/rwW3aDH0yAhUY7Hq
-	V5sGr9W2Q1IbVkw0YPz8Wabmw6YQOk7Uil0bajs2Cg2AHGyXCdCwX8QZ9mrjs6s=
-X-Google-Smtp-Source: AGHT+IHRZmLaStmO8UYKkVKFqiPyc0B8sPefyyWX408Vg/RWnhXs/VBIaM9S0t9/2UoAAbzROa8OcA==
-X-Received: by 2002:a2e:9cc9:0:b0:2ef:1c0f:a0f3 with SMTP id 38308e7fff4ca-2f15aa88b76mr125008231fa.6.1722958195923;
-        Tue, 06 Aug 2024 08:29:55 -0700 (PDT)
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Rk2Awb+sGDAUp2fed+2uqRPu8RHHDA4mh3PcSw6gyEg=;
+        b=UwsvfnYoxMUHZDMsCin5VrlRv4TMfq15aU09CXKjZ8lAVOaCvsV4R++kI+IkJh+Lcy
+         h1iMESt244oH4FwxYoCO7wrFv7VThr3YUGa7v0O4lHGES9WryGAWGxFAGb+rQGshu+Yj
+         dCqK/R/a/AWZoDvFloRvPM2aVaSxSdfbZZOol6Z7FJDRWGbXN9+jEOwPLlwSTieLjfz7
+         wWI1oJHPIA5wyxhcnPCRdtGLHi8T1jL/fMru9TS5qiopOhkeEmYIduOFYnFxxiNbthOu
+         xNsySJbVTmPV85UuLNjM9ttFzmrfKCqAN/jaY/BP4OXdnobSXyOOb+vFskw99VMlJfJv
+         B6nQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVWwV3roBmwg0pvecNaHDRfmbOJhsvGryfizzsvPstkwqCjF5XDSj8nRirhKAHFsuAV/hkaOIAA9jVvug4mPYhXvdDaErB90VUTz1H3
+X-Gm-Message-State: AOJu0YyF177fqM2ePytFa00nOe2zhM40q1zqI7Gy5eWoFNFLIiyLI+c1
+	ls8+GcrAlxoha/44Ic5poJu760i8ZGznY9MamlppfifyDReuxvpX2a5pHXyZIvw=
+X-Google-Smtp-Source: AGHT+IEzRSe9RZ8IZ7a79GIk6K9Ld7GIQxp37hHU2EYAuNypM9NuHuI6ejLRItdRTqLiJvXepFVECQ==
+X-Received: by 2002:ac2:4c88:0:b0:530:bbe7:4db3 with SMTP id 2adb3069b0e04-530bbe74f4cmr7491016e87.39.1722958196387;
+        Tue, 06 Aug 2024 08:29:56 -0700 (PDT)
 Received: from puffmais.c.googlers.com (64.227.90.34.bc.googleusercontent.com. [34.90.227.64])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9d4294fsm555274266b.103.2024.08.06.08.29.55
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-a7dc9d4294fsm555274266b.103.2024.08.06.08.29.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 Aug 2024 08:29:55 -0700 (PDT)
+        Tue, 06 Aug 2024 08:29:56 -0700 (PDT)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Subject: [PATCH 0/2] tty: serial: samsung_tty: simple cleanups
-Date: Tue, 06 Aug 2024 16:29:44 +0100
-Message-Id: <20240806-samsung-tty-cleanup-v1-0-a68d3abf31fe@linaro.org>
+Date: Tue, 06 Aug 2024 16:29:45 +0100
+Subject: [PATCH 1/2] tty: serial: samsung_tty: drop unused argument to irq
+ handlers
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -77,9 +79,9 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAGlBsmYC/x3MwQpAQBCA4VfRnE3tbkheRQ4Ts0yxtINI3t3m+
- B3+/wHlKKzQZA9EPkVlDQk2z6CfKIyMMiSDM64wtalQadEjjLjvN/YzUzg29J7YlrYkVxeQyi2
- yl+u/tt37fnhqy7ZlAAAA
+Message-Id: <20240806-samsung-tty-cleanup-v1-1-a68d3abf31fe@linaro.org>
+References: <20240806-samsung-tty-cleanup-v1-0-a68d3abf31fe@linaro.org>
+In-Reply-To: <20240806-samsung-tty-cleanup-v1-0-a68d3abf31fe@linaro.org>
 To: Krzysztof Kozlowski <krzk@kernel.org>, 
  Alim Akhtar <alim.akhtar@samsung.com>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
@@ -92,26 +94,68 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.13.0
 
-While looking through the samsung tty driver, I've spotted a few things that
-can be simplified by removing unused function arguments and by avoiding some
-duplicated variables and casting.
+The 'irq' argument is not used in any of the callees, we can just drop
+it and simplify the code.
 
-There are no functional changes here.
+No functional changes.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
-André Draszik (2):
-      tty: serial: samsung_tty: drop unused argument to irq handlers
-      tty: serial: samsung_tty: cast the interrupt's void *id just once
+ drivers/tty/serial/samsung_tty.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
- drivers/tty/serial/samsung_tty.c | 25 ++++++++++---------------
- 1 file changed, 10 insertions(+), 15 deletions(-)
----
-base-commit: 1e391b34f6aa043c7afa40a2103163a0ef06d179
-change-id: 20240806-samsung-tty-cleanup-ffae1515a284
+diff --git a/drivers/tty/serial/samsung_tty.c b/drivers/tty/serial/samsung_tty.c
+index dc35eb77d2ef..1c6d0ffe5649 100644
+--- a/drivers/tty/serial/samsung_tty.c
++++ b/drivers/tty/serial/samsung_tty.c
+@@ -855,7 +855,7 @@ static irqreturn_t s3c24xx_serial_rx_chars_pio(void *dev_id)
+ 	return IRQ_HANDLED;
+ }
+ 
+-static irqreturn_t s3c24xx_serial_rx_irq(int irq, void *dev_id)
++static irqreturn_t s3c24xx_serial_rx_irq(void *dev_id)
+ {
+ 	struct s3c24xx_uart_port *ourport = dev_id;
+ 
+@@ -928,7 +928,7 @@ static void s3c24xx_serial_tx_chars(struct s3c24xx_uart_port *ourport)
+ 		s3c24xx_serial_stop_tx(port);
+ }
+ 
+-static irqreturn_t s3c24xx_serial_tx_irq(int irq, void *id)
++static irqreturn_t s3c24xx_serial_tx_irq(void *id)
+ {
+ 	struct s3c24xx_uart_port *ourport = id;
+ 	struct uart_port *port = &ourport->port;
+@@ -950,11 +950,11 @@ static irqreturn_t s3c64xx_serial_handle_irq(int irq, void *id)
+ 	irqreturn_t ret = IRQ_HANDLED;
+ 
+ 	if (pend & S3C64XX_UINTM_RXD_MSK) {
+-		ret = s3c24xx_serial_rx_irq(irq, id);
++		ret = s3c24xx_serial_rx_irq(id);
+ 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_RXD_MSK);
+ 	}
+ 	if (pend & S3C64XX_UINTM_TXD_MSK) {
+-		ret = s3c24xx_serial_tx_irq(irq, id);
++		ret = s3c24xx_serial_tx_irq(id);
+ 		wr_regl(port, S3C64XX_UINTP, S3C64XX_UINTM_TXD_MSK);
+ 	}
+ 	return ret;
+@@ -971,11 +971,11 @@ static irqreturn_t apple_serial_handle_irq(int irq, void *id)
+ 	if (pend & (APPLE_S5L_UTRSTAT_RXTHRESH | APPLE_S5L_UTRSTAT_RXTO)) {
+ 		wr_regl(port, S3C2410_UTRSTAT,
+ 			APPLE_S5L_UTRSTAT_RXTHRESH | APPLE_S5L_UTRSTAT_RXTO);
+-		ret = s3c24xx_serial_rx_irq(irq, id);
++		ret = s3c24xx_serial_rx_irq(id);
+ 	}
+ 	if (pend & APPLE_S5L_UTRSTAT_TXTHRESH) {
+ 		wr_regl(port, S3C2410_UTRSTAT, APPLE_S5L_UTRSTAT_TXTHRESH);
+-		ret = s3c24xx_serial_tx_irq(irq, id);
++		ret = s3c24xx_serial_tx_irq(id);
+ 	}
+ 
+ 	return ret;
 
-Best regards,
 -- 
-André Draszik <andre.draszik@linaro.org>
+2.46.0.rc2.264.g509ed76dc8-goog
 
 
