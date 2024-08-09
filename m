@@ -1,181 +1,85 @@
-Return-Path: <linux-serial+bounces-5401-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5403-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A47ED94CFEF
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2024 14:17:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D8694D02D
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2024 14:29:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513A7284837
-	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2024 12:17:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3E836B228F9
+	for <lists+linux-serial@lfdr.de>; Fri,  9 Aug 2024 12:29:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3B60193088;
-	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fRN/2jYx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B105F1946D1;
+	Fri,  9 Aug 2024 12:29:01 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CC7A190684;
-	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9749318E02F;
+	Fri,  9 Aug 2024 12:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723205754; cv=none; b=rvgutAaVDLYHGwThMRbQoWwn3YwImYQuWZrjIBb/uAnc7FHzd7vG03kHEMOkA7qpEmDjOtMjL1qRLoBYevf6lipOOcqCPQ/OFhb52jVPs1b7AXwMJqHFk/Gbz977ymSgJB6+GejFyGbVXtBdexZEgLVBjjHroQV6M618uNzSkbE=
+	t=1723206541; cv=none; b=VQwQmC/nN4mWBvR1tH9jsBjB+crj1INlSO6n5spdvow/V05MGwNd9xn+c4vYpTs1MNVaiOT/utkAcP+8Ei2Y/C+/ochaKztQ9Q/5nkvJedZ7RnwCnr72sZrN8+os2dqm4f8+P03tlbzlEggn7P3k3Mdya57/uJJHRbxRAkSo8VA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723205754; c=relaxed/simple;
-	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qshsMgUTJs6RgoRo0sS0PW/HblWgP2MrNw8xIqGyKtUPE8lKS3p3yzftWqwp4Wg/AhNEH0J+TERBjwnQDTNWG+7XzRILYP2oSVzPT3hA+SFCUkfUBz0mlXV8F2hShjQwc+Acd8x+9wxWBET6+uWIiYC0i3wFRNHQXiO/kBG1ZzE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fRN/2jYx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 433BBC4AF18;
-	Fri,  9 Aug 2024 12:15:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1723205754;
-	bh=YmzphMja6XXmXFsRDikB4wVg7CMV9XsA3fHfiK6varY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fRN/2jYxvxAK2rPD3+0naMbaZ/DnT37y8CwrQvdGhQ5zxh/2Z+G0bnaEdZKNDyS3l
-	 yBGIzBnKK5I66olifKJ+Xe3c70z15ijiIrBrEwB8qDXOFo1cXjMwLfbE1HwtSELDcr
-	 cr3NGFHumQf2V5oaCmKYbFErdr17fgRqOndlWO6eoZG9HF+4kHn0PRVEaR2u64sl7w
-	 6+nHVpfU8Y9irVsV+NuCz95HvmH+bk0DRm7Hiqr7Ca/EProf7zoSean45ouoNR9xqX
-	 WvQT1EfO599+KS8CWjkHm6uEsz2r2ssdlmB3ttsSVZ4xxM6fFpReUasLUCFVn8H5O8
-	 rE0BWb9/quglQ==
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-530ae4ef29dso3603303e87.3;
-        Fri, 09 Aug 2024 05:15:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWorwrTi7DfiwYb9aTtQcGBWX3PNyaKplciWD27/8RvsxSxdAEZpLpUoEDyyBi5oEF4RSJ397JsK0LQYetHpef6eCm2n/TfImWbULEEjusBh8M4gAFM/GgFZm6oa09eFLVddjX0DMqE0DZhTWa4hSxJObbqmk8u38Q0K9hjZd5rpWRIpXxJCZ4Q0HLxTQcpuOhTxHWYpzgzuCNiiLKHYmhYFQ==
-X-Gm-Message-State: AOJu0YwJjs3rQUFLHpOLuZ4PZE0sqFsB6Cxlm8Zz1L62qPVPWowrB39P
-	zIE61RjUPPv+2gPtrymOTihbS5IStMrmosjoPkOXB71WkBVsH3l2lm931kCnwLiFxhdPVe7NGNW
-	g7bH3j1BjDyOt/IgmK03PjOA2g8w=
-X-Google-Smtp-Source: AGHT+IGlPsd9qpxK+kaW4uaKRNj+aYSzSne6anO3DKhp0I4fJNAaAhyO1zxPErAVmUP4wrg91CYucQo7Gmyudhjr2sM=
-X-Received: by 2002:a05:6512:2311:b0:52c:db76:2a7a with SMTP id
- 2adb3069b0e04-530ee9b76bemr1127480e87.34.1723205752741; Fri, 09 Aug 2024
- 05:15:52 -0700 (PDT)
+	s=arc-20240116; t=1723206541; c=relaxed/simple;
+	bh=QhTmdNiPQBdgYv29JclUBwXooYWQFaOtO2exgAChwo4=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=a+1164yTBkB56TE98dSp1PV0f0AGV7EkDMWec+BgjnHnzUoPsoULL/Ry/qHVXtp1PWOJ0zP4RQBpTYfKHViyl6sE5tSwwLRAdP902N8tB1AdRVTJS9+6n7F1SdR3gh2gYRGPMSf+odeRNGzLpTvDhl+c1tQQZuYRB/NCrmFD2cc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+Received: from i53875b02.versanet.de ([83.135.91.2] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1scOiz-0006Nc-37; Fri, 09 Aug 2024 14:28:05 +0200
+From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To: linux-kernel@vger.kernel.org,
+ Detlev Casanova <detlev.casanova@collabora.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Andi Shyti <andi.shyti@kernel.org>,
+ Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>,
+ Lee Jones <lee@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Chris Morgan <macromorgan@hotmail.com>,
+ Jonas Karlman <jonas@kwiboo.se>, Tim Lunn <tim@feathertop.org>,
+ Muhammed Efe Cetin <efectn@protonmail.com>, Andy Yan <andyshrk@163.com>,
+ Jagan Teki <jagan@edgeble.ai>, Dragan Simic <dsimic@manjaro.org>,
+ Detlev Casanova <detlev.casanova@collabora.com>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Shresth Prasad <shresthprasad7@gmail.com>, Ondrej Jirman <megi@xff.cz>,
+ Weizhao Ouyang <weizhao.ouyang@arm.com>, Alexey Charkov <alchark@gmail.com>,
+ Jimmy Hon <honyuenkwun@gmail.com>, Finley Xiao <finley.xiao@rock-chips.com>,
+ Yifeng Zhao <yifeng.zhao@rock-chips.com>,
+ Elaine Zhang <zhangqing@rock-chips.com>, Liang Chen <cl@rock-chips.com>,
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-rockchip@lists.infradead.org, linux-i2c@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-serial@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCH 03/10] dt-bindings: i2c: i2c-rk3x: Add rk3576 compatible
+Date: Fri, 09 Aug 2024 14:28:03 +0200
+Message-ID: <2741894.hTDNKPQEx9@diego>
+In-Reply-To: <20240802214612.434179-4-detlev.casanova@collabora.com>
+References:
+ <20240802214612.434179-1-detlev.casanova@collabora.com>
+ <20240802214612.434179-4-detlev.casanova@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240807-macos-build-support-v1-0-4cd1ded85694@samsung.com> <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
-In-Reply-To: <20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 9 Aug 2024 21:15:16 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
-Message-ID: <CAK7LNARafZ=zFMeoDdiMh=ZRU_XiJ08Naf=oAdYpOiUN02HizQ@mail.gmail.com>
-Subject: Re: [PATCH 11/12] tty/vt: conmakehash requires linux/limits.h
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 
-On Wed, Aug 7, 2024 at 8:10=E2=80=AFAM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Daniel Gomez <da.gomez@samsung.com>
->
-> macOS hosts do not provide the linux/limits.h header required for
-> conmakehash. To address this, ensure that usr/include is included in
-> the conmakehash HOSTCFLAGS. This will provide the necessary header for
-> successful compilation on macOS.
->
-> Fixes error:
-> HOSTCC  drivers/tty/vt/conmakehash - due to target missing
->   clang -Wp,-MMD,drivers/tty/vt/.conmakehash.d -Wall
-> -Wmissing-prototypes -Wstrict-prototypes -O2 -fomit-frame-pointer
-> -std=3Dgnu11   -I ./scripts/include     -o drivers/tty/vt/conmakehash
-> drivers/tty/vt/conmakehash.c
-> drivers/tty/vt/conmakehash.c:15:10: fatal error: 'linux/
->    limits.h' file not found 15 | #include <linux/limits.h>    |
->    ^~~~~~~~~~~~~~~~
+Am Freitag, 2. August 2024, 23:45:30 CEST schrieb Detlev Casanova:
+> Just like RK356x and RK3588, RK3576 is compatible to the existing
+> rk3399 binding.
+> 
+> Signed-off-by: Detlev Casanova <detlev.casanova@collabora.com>
+
+Acked-by: Heiko Stuebner <heiko@sntech.de>
 
 
-The error is reported at line 15 of drivers/tty/vt/conmakehash.c
-
-
-The line 15 is #include <stdlib.h>:
-
-https://github.com/torvalds/linux/blob/v6.11-rc1/drivers/tty/vt/conmakehash=
-.c#L15
-
-
-So, host programs cannot include <stdlib.h> on your build machine.
-
-
-
-drivers/tty/vt/conmakehash.c has only 5 include directives:
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <sysexits.h>
-#include <string.h>
-#include <ctype.h>
-
-
-You cannot build this, your build machine cannot build anything.
-
-
-
-
-
-
-
-
-
-> 1 error generated.
-> make[5]: *** [scripts/Makefile.host:116: drivers/tty/vt/conmakehash]
-> Error 1
-> make[4]: *** [scripts/Makefile.build:485: drivers/tty/vt] Error 2
-> make[3]: *** [scripts/Makefile.build:485: drivers/tty] Error 2
-> make[2]: *** [scripts/Makefile.build:485: drivers] Error 2
-> make[1]: *** [/Volumes/src/kernel/linux-next/Makefile:1925: .] Error 2
-> make: *** [Makefile:224: __sub-make] Error 2
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  drivers/tty/vt/Makefile | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/tty/vt/Makefile b/drivers/tty/vt/Makefile
-> index 2c8ce8b592ed..d266895357e5 100644
-> --- a/drivers/tty/vt/Makefile
-> +++ b/drivers/tty/vt/Makefile
-> @@ -13,6 +13,7 @@ obj-$(CONFIG_CONSOLE_TRANSLATIONS)    +=3D consolemap.o=
- consolemap_deftbl.o
->  clean-files :=3D consolemap_deftbl.c defkeymap.c
->
->  hostprogs +=3D conmakehash
-> +HOSTCFLAGS_conmakehash.o =3D -I$(srctree)/usr/include
->
->  quiet_cmd_conmk =3D CONMK   $@
->        cmd_conmk =3D $(obj)/conmakehash $< > $@
->
-> --
-> Git-146)
->
->
-
-
---
-Best Regards
-Masahiro Yamada
 
