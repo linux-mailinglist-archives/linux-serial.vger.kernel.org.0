@@ -1,205 +1,279 @@
-Return-Path: <linux-serial+bounces-5456-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5460-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 29DC994F20F
-	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2024 17:49:39 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06B4894F239
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2024 17:58:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D5CC6281E81
-	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2024 15:49:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FCF6B2530B
+	for <lists+linux-serial@lfdr.de>; Mon, 12 Aug 2024 15:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08216187339;
-	Mon, 12 Aug 2024 15:49:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79668187346;
+	Mon, 12 Aug 2024 15:58:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="LuGryWLQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ied3QKyZ"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FE51186298;
-	Mon, 12 Aug 2024 15:49:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8ACB4186E5A;
+	Mon, 12 Aug 2024 15:58:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1723477749; cv=none; b=LA/XnK5dy83pCSTEQ0+cX6heBNAcVseDqVwdro6HoQ/0DWD3vVnoXkQEqB/MJ/xYR/Hk2tYelKNVLiqjZfRlm9Or4bPoCQoY/mNiMO1WGNCdFcdMJ1JFybz0ZV03p5OjDV14/WCPZHnUNyS57/P7mGXwUsmLpSCe1NSaSmfkSho=
+	t=1723478301; cv=none; b=EATnUb3nSaJxSBtqzqwGF8p0GmPNeQhPqtaEU0pfilgapyL44s3wSih5NM6zwW0U6Qza++PqJkrlkXC6vHgyIn+DyrAGHWJt7oARQ1LqqC2/MgAul3uBwEkPj8t6qcP0zbkYB2NGc4aUhdU2pMrOEIC+rRdIKSsVRmGoBVZRiLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1723477749; c=relaxed/simple;
-	bh=nTJueB6tgQfuqsoeCX67y92PwedAzw7ogpVO79oK5Kc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=s4FoXfh4fXS6rqyBSqq9eyZt5VbFizBCT8b2k+/JsTY8mJb9NFRPgBuINqZrswNjNCMfqQNL7e9drCN1PA22h3otI4m+aVvE/eYSIFYiqwOE7hAtFjNsHvHu7/ae/Wen9QlIfS0hyGVBCuoF9EZxB/WH945zexCQvi2A88IbdYs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=LuGryWLQ; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1723477748; x=1755013748;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=nTJueB6tgQfuqsoeCX67y92PwedAzw7ogpVO79oK5Kc=;
-  b=LuGryWLQ1uncwVDd45NBBKbvft85zNVUArrpR6h+MoGF1Pphex2hUXk4
-   36/rBB7pZWDX+cZQ26i7sFtERfTn2wyA+fJ8AZIItB0F8z0BRRrad43In
-   d1PFOvPc8O5XFG5O8tvJkuFN7LuTy+EtOErQnooA03Nt3SM25bZv0Yc1+
-   8O79h+zPHuX/QcRB/K5wjA3uUrz//cgylrV6WqW7AlAdgfExwmt3Y3rXL
-   NZivxA0Uj3tmmS0jcMDulvAq/ShkYWlCqHG7aaJc4DaHZkG/vIggHfC0X
-   mnZHUOlIIGz+tFoFmV9Jjuk0c3lrmGTvpyhSj151AQJf4b/jFDFzIzHBB
-   g==;
-X-CSE-ConnectionGUID: /nsK80HeQemny4YLCGIaHA==
-X-CSE-MsgGUID: YrVRa3D9SYOUSXmbVmVVdw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11162"; a="21160808"
-X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
-   d="scan'208";a="21160808"
-Received: from orviesa010.jf.intel.com ([10.64.159.150])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Aug 2024 08:49:08 -0700
-X-CSE-ConnectionGUID: bR+hjvaFQeiXfZ9FXCVycA==
-X-CSE-MsgGUID: bPeC7LZGTNukLtjl9AZbIA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.09,283,1716274800"; 
-   d="scan'208";a="58187005"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa010.jf.intel.com with ESMTP; 12 Aug 2024 08:49:07 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id 1064B858; Mon, 12 Aug 2024 18:49:03 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
+	s=arc-20240116; t=1723478301; c=relaxed/simple;
+	bh=gUCjJDEJFDyz+livsnJi5Irrop+hF08mCdxZsNWwFtU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=YgbZG3UFHDuhUjhTy+q7RiLWSrS7XIKqWH1n2b671fKxLHeVf9f9QYMILGNje8NqaX+OFW1uHKs1acAoVYEZyyRdaQJWh1gLcKnzTfXGTHw1q3ETl4ARc0uk8A7bStC8OUEYbylyUlGWIdzfWHMkFzq1Yen72vIX+7h9tC719Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ied3QKyZ; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-426526d30aaso31405965e9.0;
+        Mon, 12 Aug 2024 08:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1723478298; x=1724083098; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=O8dH5c6euhGkhzqUhg15r5whJ9sGjRiQsrYOxQFbfwQ=;
+        b=ied3QKyZM/19vrnbo9GyXdVZMtA9h85orpTCmas8UX0gIhAHUFejH8hrz2M0jlhwYi
+         Eif5iYWpJ6MIiNZkW9kUovwCl+4q4vHdiGItuvdB473o+KcUKtenOsTl7/al7R8AQSlI
+         tNJxaSD47RALw/Op++NV/VcxRMnYFqJ+3B6qH8MF7q0jnUp6sje1LnBzClpvXf0uF5fC
+         u5Fvj+EQN6t/MA8MeMkmDJqB7jJen8lEinRSajKzasqkb7HA6E+b0RpIUOGpnjeI3djV
+         BPmPhCngr51N0lq2QdiPP50GluQgRJEaBef9+0N+qgq4Siq81X0z3u0vKdwHteROe0Or
+         rNHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1723478298; x=1724083098;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8dH5c6euhGkhzqUhg15r5whJ9sGjRiQsrYOxQFbfwQ=;
+        b=AvFVxEDV5PZbjsY38apJKTfXXhSV8DXfIcLSqNse6rOWA6ga+09Syg+NAJzLNP24tD
+         gMet1auforSmwkbAcc/8NmHSHHSd8dI67mwkiIslMDqvBfSYd9sLRlkA23swIfm2pPH5
+         3qR2LLLYZsy83yzJZj7EDsvCbeRy2zBvE8QXZ9IljtCwZdmAQm6wY7JG0V6mQBdH+ipX
+         FULBI1jfk4WxRmw1Zo7JjsDAJxHewFxXaXkdX2ooWfGq5POkPvpmC0lAggkOHAePuRN+
+         caPoKht9r54d01MQBqMOypKB4dw3Q6Wy4+OzKDzJaObzE07lHM5eF0HYpn2maNwoiFM9
+         +XmQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVyUwxUsXx8bcqJryC3X9Bk05hp6rfu2HojZ+vcXUInw7EKwn5HuZZ8Mc7jI2w6m95yCoJwVc3LCG1OeKZ3@vger.kernel.org, AJvYcCXJOkVwfp3THihft6WUu/g6J1W/qAx5seJIWJTeCULCAQh2kXwffvYJKT4A9yXwRJA76+OCzlph1v1HI6/H@vger.kernel.org, AJvYcCXyPw218zhm+FB9W2ceAFfTZCB7iQ2bRhHt7I9DWZcgrJSX8AAifYlqv7c0ojJ32N1J0ynkkzhaI7hCvP8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYGFDbI+JuZYAHFsivWEoXMvilr93bcYrbJCsIf0oAHAZJ1dOA
+	We++JsGz0H5DMbjL9RMKKZD9DEWnNqQTn5mU3gyANSDYxFsf9uk4+nzTyw==
+X-Google-Smtp-Source: AGHT+IGmluI+NxRw/DB+Gk5D4DxrNk5HnM/7KxqWahp2ny7w9p8D/538swlQYaWEONiqdjzFcvYnVA==
+X-Received: by 2002:a05:600c:4f0d:b0:426:5cdf:2674 with SMTP id 5b1f17b1804b1-429d47f5c0dmr7033835e9.4.1723478297538;
+        Mon, 12 Aug 2024 08:58:17 -0700 (PDT)
+Received: from toolbox (31-10-206-125.static.upc.ch. [31.10.206.125])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-429c750ec0bsm106880045e9.15.2024.08.12.08.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 12 Aug 2024 08:58:17 -0700 (PDT)
+Date: Mon, 12 Aug 2024 17:58:15 +0200
+From: Max Krummenacher <max.oss.09@gmail.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Sunil V L <sunilvl@ventanamicro.com>
-Subject: [PATCH v1 7/7] serial: 8250_platform: Unify comment style
-Date: Mon, 12 Aug 2024 18:47:09 +0300
-Message-ID: <20240812154901.1068407-8-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
-In-Reply-To: <20240812154901.1068407-1-andriy.shevchenko@linux.intel.com>
-References: <20240812154901.1068407-1-andriy.shevchenko@linux.intel.com>
+	linux-kbuild@vger.kernel.org,
+	Max Krummenacher <max.krummenacher@toradex.com>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Daniel Gomez <da.gomez@samsung.com>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH] tty: vt: conmakehash: remove non-portable code printing
+ comment header
+Message-ID: <ZroxFwCTr8oOO-tf@toolbox>
+References: <20240809160853.1269466-1-masahiroy@kernel.org>
+ <ZrojDUbr1EvlARXK@toolbox>
+ <CAK7LNARCRQ_K=4vAQxgQiq_w8ss5+uhGnY1L7nre=H3eWeq6zA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAK7LNARCRQ_K=4vAQxgQiq_w8ss5+uhGnY1L7nre=H3eWeq6zA@mail.gmail.com>
 
-Unify comment style and fix indentation in some cases.
-While at it, add that it supports ACPI enumerated non-PNP devices.
+On Tue, Aug 13, 2024 at 12:44:40AM +0900, Masahiro Yamada wrote:
+> On Mon, Aug 12, 2024 at 11:58 PM Max Krummenacher <max.oss.09@gmail.com> wrote:
+> >
+> > On Sat, Aug 10, 2024 at 01:07:20AM +0900, Masahiro Yamada wrote:
+> > > Commit 6e20753da6bc ("tty: vt: conmakehash: cope with abs_srctree no
+> > > longer in env") included <linux/limits.h>, which invoked another
+> > > (wrong) patch that tried to address a build error on macOS.
+> > >
+> > > According to the specification [1], the correct header to use PATH_MAX
+> > > is <limits.h>.
+> > >
+> > > The minimal fix would be to replace <linux/limits.h> with <limits.h>.
+> > I can change that in a v2.
+> 
+> 
+> You cannot.
+> 
+> Your buggy commit already landed in Linus' tree:
+> 
+> https://github.com/torvalds/linux/commit/6e20753da6bc651e02378a0cdb78f16c42098c88
+> 
+> 
+> 
+> 
+> 
+> > >
+> > > However, the following commits seem questionable to me:
+> > >
+> > >  - 3bd85c6c97b2 ("tty: vt: conmakehash: Don't mention the full path of the input in output")
+> > >  - 6e20753da6bc ("tty: vt: conmakehash: cope with abs_srctree no longer in env")
+> > >
+> > > These commits made too many efforts to cope with a comment header in
+> > > drivers/tty/vt/consolemap_deftbl.c:
+> > >
+> > >   /*
+> > >    * Do not edit this file; it was automatically generated by
+> > >    *
+> > >    * conmakehash drivers/tty/vt/cp437.uni > [this file]
+> > >    *
+> > >    */
+> >
+> > This is the output you get when keeping the build artifacts within the
+> > linux source tree.
+> > However if you keep the artifacts outside the source tree
+> > (make O=/somepath ...) the output looks like this:
+> >
+> >     /*
+> >      * Do not edit this file; it was automatically generated by
+> >      *
+> >      * conmakehash /path-to-kernel-source-tree/drivers/tty/vt/cp437.uni > [this file]
+> >      *
+> >      */
+> >
+> > i.e. it does keep a reference to where in your filesystem the kernel
+> > source did reside when building which is against the goal of having a
+> > reproducable build.
+> 
+> 
+> 
+> You do not need to educate me.
+> 
+> It is well described in commit 3bd85c6c97b2d232638594bf828de62083fe3389
+> and I know how it works.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/tty/serial/8250/8250_platform.c | 35 ++++++++++++++-----------
- 1 file changed, 19 insertions(+), 16 deletions(-)
+Sorry about that. I read your new commit as a comment to mine.
+Thanks for fixing the bug I added.
 
-diff --git a/drivers/tty/serial/8250/8250_platform.c b/drivers/tty/serial/8250/8250_platform.c
-index f4a0731ff134..30b4d12ab05b 100644
---- a/drivers/tty/serial/8250/8250_platform.c
-+++ b/drivers/tty/serial/8250/8250_platform.c
-@@ -2,7 +2,9 @@
- /*
-  *  Universal/legacy platform driver for 8250/16550-type serial ports
-  *
-- *  Supports: ISA-compatible 8250/16550 ports
-+ *  Supports:
-+ *	      ISA-compatible 8250/16550 ports
-+ *	      ACPI 8250/16550 ports
-  *	      PNP 8250/16550 ports
-  *	      "serial8250" platform devices
-  */
-@@ -24,9 +26,9 @@
- 
- /*
-  * Configuration:
-- *    share_irqs   Whether we pass IRQF_SHARED to request_irq().
-+ * share_irqs:     Whether we pass IRQF_SHARED to request_irq().
-  *                 This option is unsafe when used on edge-triggered interrupts.
-- * skip_txen_test  Force skip of txen test at init time.
-+ * skip_txen_test: Force skip of txen test at init time.
-  */
- unsigned int share_irqs = SERIAL8250_SHARE_IRQS;
- unsigned int skip_txen_test;
-@@ -63,9 +65,9 @@ static void __init __serial8250_isa_init_ports(void)
- 		nr_uarts = UART_NR;
- 
- 	/*
--	 * Set up initial isa ports based on nr_uart module param, or else
-+	 * Set up initial ISA ports based on nr_uart module param, or else
- 	 * default to CONFIG_SERIAL_8250_RUNTIME_UARTS. Note that we do not
--	 * need to increase nr_uarts when setting up the initial isa ports.
-+	 * need to increase nr_uarts when setting up the initial ISA ports.
- 	 */
- 	for (i = 0; i < nr_uarts; i++)
- 		serial8250_setup_port(i);
-@@ -132,11 +134,12 @@ static int serial8250_probe_acpi(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	/* Default clock frequency*/
-+	/* default clock frequency */
- 	uart.port.uartclk = 1843200;
- 	uart.port.type = PORT_16550A;
- 	uart.port.dev = &pdev->dev;
- 	uart.port.flags |= UPF_SKIP_TEST | UPF_BOOT_AUTOCONF;
-+
- 	ret = uart_read_and_validate_port_properties(&uart.port);
- 	/* no interrupt -> fall back to polling */
- 	if (ret == -ENXIO)
-@@ -206,8 +209,8 @@ static int serial8250_probe_platform(struct platform_device *dev, struct plat_se
- }
- 
- /*
-- * Register a set of serial devices attached to a platform device.  The
-- * list is terminated with a zero flags entry, which means we expect
-+ * Register a set of serial devices attached to a platform device.
-+ * The list is terminated with a zero flags entry, which means we expect
-  * all entries to have at least UPF_BOOT_AUTOCONF set.
-  */
- static int serial8250_probe(struct platform_device *pdev)
-@@ -292,7 +295,7 @@ static struct platform_driver serial8250_isa_driver = {
- 
- /*
-  * This "device" covers _all_ ISA 8250-compatible serial devices listed
-- * in the table in include/asm/serial.h
-+ * in the table in include/asm/serial.h.
-  */
- struct platform_device *serial8250_isa_devs;
- 
-@@ -321,8 +324,7 @@ static int __init serial8250_init(void)
- 	if (ret)
- 		goto unreg_uart_drv;
- 
--	serial8250_isa_devs = platform_device_alloc("serial8250",
--						    PLAT8250_DEV_LEGACY);
-+	serial8250_isa_devs = platform_device_alloc("serial8250", PLAT8250_DEV_LEGACY);
- 	if (!serial8250_isa_devs) {
- 		ret = -ENOMEM;
- 		goto unreg_pnp;
-@@ -361,7 +363,7 @@ static void __exit serial8250_exit(void)
- 	/*
- 	 * This tells serial8250_unregister_port() not to re-register
- 	 * the ports (thereby making serial8250_isa_driver permanently
--	 * in use.)
-+	 * in use).
- 	 */
- 	serial8250_isa_devs = NULL;
- 
-@@ -394,12 +396,13 @@ MODULE_ALIAS_CHARDEV_MAJOR(TTY_MAJOR);
- 
- #ifdef CONFIG_SERIAL_8250_DEPRECATED_OPTIONS
- #ifndef MODULE
--/* This module was renamed to 8250_core in 3.7.  Keep the old "8250" name
-- * working as well for the module options so we don't break people.  We
-+/*
-+ * This module was renamed to 8250_core in 3.7. Keep the old "8250" name
-+ * working as well for the module options so we don't break people. We
-  * need to keep the names identical and the convenient macros will happily
-  * refuse to let us do that by failing the build with redefinition errors
-- * of global variables.  So we stick them inside a dummy function to avoid
-- * those conflicts.  The options still get parsed, and the redefined
-+ * of global variables. So we stick them inside a dummy function to avoid
-+ * those conflicts. The options still get parsed, and the redefined
-  * MODULE_PARAM_PREFIX lets us keep the "8250." syntax alive.
-  *
-  * This is hacky.  I'm sorry.
--- 
-2.43.0.rc1.1336.g36b5255a03ac
+Regards
+Max
 
+> 
+> 
+> 
+> > >
+> > > With this commit, the header part of the generate C file will be
+> > > simplified as follows:
+> > >
+> > >   /*
+> > >    * Automatically generated file; Do not edit.
+> > >    */
+> >
+> > This is not what I observed, for me with this proposed commit the
+> > comment becomes with or without the 'O=somepath':
+> >
+> >     /*
+> >      * Do not edit this file; it was automatically generated by
+> >      *
+> >      * conmakehash cp437.uni > [this file]
+> >      *
+> >      */
+> >
+> > i.e. it strips the directory path of the chartable source file used.
+> 
+> 
+> 
+> See my patch closely.
+> 
+> I deleted the line "* conmakehash %s > [this file]\n\"
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> > Regards
+> > Max
+> >
+> > >
+> > > BTW, another series of excessive efforts for a comment header can be
+> > > seen in the following:
+> > >
+> > >  - 5ef6dc08cfde ("lib/build_OID_registry: don't mention the full path of the script in output")
+> > >  - 2fe29fe94563 ("lib/build_OID_registry: avoid non-destructive substitution for Perl < 5.13.2 compat")
+> > >
+> > > [1]: https://pubs.opengroup.org/onlinepubs/009695399/basedefs/limits.h.html
+> > >
+> > > Fixes: 6e20753da6bc ("tty: vt: conmakehash: cope with abs_srctree no longer in env")
+> > > Reported-by: Daniel Gomez <da.gomez@samsung.com>
+> > > Closes: https://lore.kernel.org/all/20240807-macos-build-support-v1-11-4cd1ded85694@samsung.com/
+> > > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> > > ---
+> > >
+> > >  drivers/tty/vt/conmakehash.c | 12 ++----------
+> > >  1 file changed, 2 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/tty/vt/conmakehash.c b/drivers/tty/vt/conmakehash.c
+> > > index 82d9db68b2ce..a931fcde7ad9 100644
+> > > --- a/drivers/tty/vt/conmakehash.c
+> > > +++ b/drivers/tty/vt/conmakehash.c
+> > > @@ -11,8 +11,6 @@
+> > >   * Copyright (C) 1995-1997 H. Peter Anvin
+> > >   */
+> > >
+> > > -#include <libgen.h>
+> > > -#include <linux/limits.h>
+> > >  #include <stdio.h>
+> > >  #include <stdlib.h>
+> > >  #include <sysexits.h>
+> > > @@ -79,7 +77,6 @@ int main(int argc, char *argv[])
+> > >  {
+> > >    FILE *ctbl;
+> > >    const char *tblname;
+> > > -  char base_tblname[PATH_MAX];
+> > >    char buffer[65536];
+> > >    int fontlen;
+> > >    int i, nuni, nent;
+> > > @@ -245,20 +242,15 @@ int main(int argc, char *argv[])
+> > >    for ( i = 0 ; i < fontlen ; i++ )
+> > >      nuni += unicount[i];
+> > >
+> > > -  strncpy(base_tblname, tblname, PATH_MAX);
+> > > -  base_tblname[PATH_MAX - 1] = 0;
+> > >    printf("\
+> > >  /*\n\
+> > > - * Do not edit this file; it was automatically generated by\n\
+> > > - *\n\
+> > > - * conmakehash %s > [this file]\n\
+> > > - *\n\
+> > > + * Automatically generated file; Do not edit.\n\
+> > >   */\n\
+> > >  \n\
+> > >  #include <linux/types.h>\n\
+> > >  \n\
+> > >  u8 dfont_unicount[%d] = \n\
+> > > -{\n\t", basename(base_tblname), fontlen);
+> > > +{\n\t", fontlen);
+> > >
+> > >    for ( i = 0 ; i < fontlen ; i++ )
+> > >      {
+> > > --
+> > > 2.43.0
+> > >
+> 
+> 
+> 
+> --
+> Best Regards
+> 
+> Masahiro Yamada
 
