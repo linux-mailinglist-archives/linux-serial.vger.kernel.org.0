@@ -1,111 +1,149 @@
-Return-Path: <linux-serial+bounces-5611-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5613-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81F5295D2E4
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 18:16:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3490695D3A3
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 18:39:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B591B1C21C87
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 16:16:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5176284D04
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 16:39:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A105418C920;
-	Fri, 23 Aug 2024 16:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F83518BC08;
+	Fri, 23 Aug 2024 16:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sdeqLSoS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQmHvxqb"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A6574194A4B
-	for <linux-serial@vger.kernel.org>; Fri, 23 Aug 2024 16:13:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6343818A6C7;
+	Fri, 23 Aug 2024 16:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724429582; cv=none; b=fhC0JagbLyKl/apHHEh4GCYvHT39HTEen6sO+tMLHBc4h+O9qIvIeTsmowJ5AoTm/wCwQybhvZma6/Kk4n+E8ik5jH1xUWKOqsGTHNGGJlsIvcWQeUmPPKmkjkwAevIyHUfE45qUDPEcsX+clmiQNT3J6EGsLj1zA4KS/vo9OwQ=
+	t=1724431155; cv=none; b=s2n6ptisuyIQ4PIVlYpdExPARDImcGqSH7l0c9DoBxDit1TDvLc6sZOBd1WTttIHtKE+h65lUpn8QppyLPvdfsw9IM0unRpOFwaTXi09rAVIKpstSk3PLGG/eoaCEvEfTHJYr4HA1gR51uzzk5iQUFxMKDlCqHekeI1R/Xp0VJg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724429582; c=relaxed/simple;
-	bh=v3tl121UFcqjaRW1cQWXFFukEED+sZyQ1Hsg/FKSyTw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SaWoXbyoSqDJJ+AM7lAa4qWb75NbjlgIgYDum5BJWY3VCKDe4KjXfvve1btlcL5qOA4Qqp2VspB8zwI8sWQrDggtvfgvw15GWkLqVIfZWDO8ghth4PnUlDR1Ww1gj/s75h8p9kwjFoPj++kfUoVL9w+rFUJ/GbJcNVuXTEfIxos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sdeqLSoS; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-53351642021so2253815e87.3
-        for <linux-serial@vger.kernel.org>; Fri, 23 Aug 2024 09:13:00 -0700 (PDT)
+	s=arc-20240116; t=1724431155; c=relaxed/simple;
+	bh=37bNjvVUVCnwm4dabjuxz+DsxHpI2MJeGgPnKPYD6eg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z0dovCjxwUbEMLNSJu1vEcx4/xvvU2buDaoEQsvfJiRH/fqlJ2CqRnFLV89EdX5/y8GgVrV8wCJL2b1v3fnbAejkjF/tdasm22yKkdYlbZhgIu2haJ9cvtoTGMbWP2si3Ko3wEb1IL9nqzmj+rlu0rxW1aKcC+32xOL3YmsCVxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQmHvxqb; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5333b2fbedaso3542657e87.0;
+        Fri, 23 Aug 2024 09:39:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1724429579; x=1725034379; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=v3tl121UFcqjaRW1cQWXFFukEED+sZyQ1Hsg/FKSyTw=;
-        b=sdeqLSoS+cceR6ApQSN6cimmYONbktn16U4f0nXIbhbinKuLz03woTI8WuAR2goGow
-         QVm0m/9uiYxGwUhQHbyekpGFcwzPJhEMqrE6G8d6oHVY/a+Cl5Pfr6reG2t/3oahIjfu
-         dRGTR+3velXi48dsyPAgWclGpqRbnySvY/bxdxBkZW1cyIM/lEIK9Lt+pI06uf9hrxhT
-         QhpW9N6fB5+xwh5qF6P4ht86uVQmw9Snxb0Damnty9Cxhms/6Xr3nIfFtcoSHCwf2d8R
-         b7rDlIskAQUJwLEwNTukRKmtyfH7Ek2tX7fi1eLyFJERo5C6uHp9NGd6pzazFnjAu2It
-         IoRg==
+        d=gmail.com; s=20230601; t=1724431151; x=1725035951; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=2WRjvniXybxQWI+iJ2ujBTSF1lPf98KW9vC1KUIKZrI=;
+        b=DQmHvxqbMZeuoOWaVdOOVVQYxUgZllenoCH7ZZ/AB9xAdVg7N5K/gt8+ERdzqZC8TE
+         wdnZgUfarh4+N8hJtAAS2USf4YqHTmIMpIVnMsTbHJZZYYU0W62c4vrAd4yqWuDlVqot
+         Ptj9uWZHAVHVdJZ3uWMR1bCon/BYlrktyi3dKYQeacQTeSipIZdA5aHqgry+qkhj2LjR
+         JtkMa6yFKqZXy1fWgoc9BWOoNBNZ4xNVaR0FGrxi1VsBzG4hYBz3jPVU0pEPi0wfK4rA
+         cwdhgTnUTUxHfBGV1nktuxyadO6ou5IJtJzxX+fT5PkZIHs2yWO41H7Glx2GEq5Fc1Qb
+         zdrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724429579; x=1725034379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=v3tl121UFcqjaRW1cQWXFFukEED+sZyQ1Hsg/FKSyTw=;
-        b=Ex1LWrR76DeWjTucshdNlVwA6WZguU5v7nisTbgiyn3EM7W3qX9Y8yw/l0iJf6bTkL
-         oo03qaNnQ9XA360ChJoQOPXA2meJZzUMyrO5dYLhiBNnwfTYY2ZV/gLhQd5oedi7N0/o
-         TSbr4ZVHqTfEFmJ3bGih55hkPXGmWxPVude9BomFP+Aj7IQI5g0mSaWE2lz9itrc4Aec
-         2DFRhQNOMdd7hcRDRkNSa/EPz79DZAjwhYKOMslr4+JrHqMmmGkFthMHMLEcL8peAJnU
-         xGgV3zUGYymzS3Nz1saC3wu/6aksRCaXJAHwTPawD5RvScAtgJiCmEZLApkBNpPGDt9A
-         /bfQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUDFvAp1OVKXfoSCqUynvmcnPsVpTZ8D6yZoCAOy8iY8DNPbRQ4+htrV+S2p2uIw+GZNJjVKa8bYtADHPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHbVtRpzVxLTahkYuxO+8Lz6xOni4wFt50AfpQ1mo/Z0gP0Uql
-	2CHLpZLCcqNiJdevpLjRQmaOwqt/3sj6gEnBH/DimALEJ6HxmW5DbskgXJNt0HhpuI8c3LNBPZd
-	FlVtZmOmv4Qw84mgyygqQiYITphOurjDh1g3EdA==
-X-Google-Smtp-Source: AGHT+IH1hynyymLz1ZuEZUhvfWZZ/Hkkj2g0Tl04dlGTeLjC9tjjJISAp+o+SHgwFRjXGoZ1puRhp7iBRORVJcZyH3Q=
-X-Received: by 2002:a05:6512:6cf:b0:52f:c14e:2533 with SMTP id
- 2adb3069b0e04-534387be6d8mr1996904e87.48.1724429578471; Fri, 23 Aug 2024
- 09:12:58 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1724431151; x=1725035951;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2WRjvniXybxQWI+iJ2ujBTSF1lPf98KW9vC1KUIKZrI=;
+        b=Vu+aW09CpPXo26MTIsGQVNESPy5SucRZWD+RxebrpIdirVuh9q2+3zlo+DWjv2HHkk
+         uEqfIY6VgCXtu5qeCM3VqVDHKsowMnfiDGoOyAJDAAtbpVXgAiX5BDgZwOwItkFcqOg5
+         +R+siZXXnIutz0ARizB6nDhOFgeGVz35hRfkvPTfNYgw5vnz5a8hsxv5qp+CE8qNA2Nr
+         izOgU0ih2+RByvEaurN2FPQesKYeSWae9UjDgC5LqwtgHJPoVHZqP9DGZFmxaZaJIeMl
+         fTW7cFZK+4LOBt3nCvlUG3FzNZYj1fSMQR8VnGxigYDQlKyxS+R1LmyuHFdMwwgMzJfB
+         sIvA==
+X-Forwarded-Encrypted: i=1; AJvYcCUSTWbxQRwrlrw7YukxOS14IhSejq4s/ZpwQWiU1J4Mz7NpoBJtfLFkSxTwK2u4jT5WadbEVjO9mIeWyeul@vger.kernel.org, AJvYcCUwyd1O1UQQ1Q8MC7ertWGZ+HsluP2JY5ywgtfgteQWAY32xg9QBrJ3k+7QdfnHPKsNdc2OEaKS4J629uF2@vger.kernel.org, AJvYcCV5qRYVDXBEmXrpo1uh6Ua2t515nI0I0THRoEd7MIIR6hi0opex6OOrtPUSKFz/drdaeAxg5Une3nQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwgDDTh2LfdR+sj/FxYA/+yEQZUCf/Wm9eZqj5dSQucjqI1YOnu
+	72cVZcJpE8Cx1aVfCRHVCq9mB+HtkEAjmBcCN6lVA8VNO80ZuLqF
+X-Google-Smtp-Source: AGHT+IGiGfLhmgN/ZEt1qGQRBjLYK4n4/sf9dIyAH2LAsgYySPXwh7hMCdqr9AL1FkYv2kkstxYUqA==
+X-Received: by 2002:a05:6512:318f:b0:52c:d834:4f2d with SMTP id 2adb3069b0e04-5343877ab14mr1678549e87.18.1724431150764;
+        Fri, 23 Aug 2024 09:39:10 -0700 (PDT)
+Received: from mobilestation ([178.176.56.174])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea5940asm607500e87.159.2024.08.23.09.39.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 23 Aug 2024 09:39:10 -0700 (PDT)
+Date: Fri, 23 Aug 2024 19:39:07 +0300
+From: Serge Semin <fancer.lancer@gmail.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
+	Viresh Kumar <vireshk@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+	Vinod Koul <vkoul@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	dmaengine@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] dmaengine: dw: Prevent tx-status calling desc
+ callback (Fix UART deadlock!)
+Message-ID: <mdyifrhjufjwp2tko54gfw34riepov5bo4a4tefhrtfmuystao@wpjfsgikebki>
+References: <20240802080756.7415-1-fancer.lancer@gmail.com>
+ <n6grskuq722vnogwp5obiwzv4pxs5bbqddadesffezhvba5cjh@d6shcrvpxujg>
+ <CAHp75VdXqS6xqdsQCyhaMNLvzwkFn9HU8k9SLcT=KSwF9QPN4Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240811-dt-bindings-serial-peripheral-props-v1-0-1dba258b7492@linaro.org>
- <20240811-dt-bindings-serial-peripheral-props-v1-5-1dba258b7492@linaro.org>
-In-Reply-To: <20240811-dt-bindings-serial-peripheral-props-v1-5-1dba258b7492@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Fri, 23 Aug 2024 18:12:47 +0200
-Message-ID: <CACRpkdagjGv79pJy8Ry2+OM8ShCE8sWNafQtzrPM_-2MJYNzLQ@mail.gmail.com>
-Subject: Re: [PATCH 5/6] dt-bindings: bluetooth: reference serial-peripheral-props.yaml
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Rob Herring <robh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
-	Luiz Augusto von Dentz <luiz.dentz@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Johan Hovold <johan@kernel.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Daniel Kaehn <kaehndan@gmail.com>, linux-serial@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sound@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHp75VdXqS6xqdsQCyhaMNLvzwkFn9HU8k9SLcT=KSwF9QPN4Q@mail.gmail.com>
 
-On Sun, Aug 11, 2024 at 8:17=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+Hi Andy
 
-> Reference common serial properties schema (for children of UART
-> controllers) to bring common definition of "current-speed" and
-> "max-speed" properties.
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Fri, Aug 23, 2024 at 04:21:24PM +0300, Andy Shevchenko wrote:
+> On Fri, Aug 23, 2024 at 12:48 PM Serge Semin <fancer.lancer@gmail.com> wrote:
+> >
+> > Hi folks
+> >
+> > Any comments or suggestion about the change? The kernel occasionally
+> > _deadlocks_ without it for the DW UART + DW DMAC hardware setup.
+> 
+> I have no time to look at that, but FWIW with a stress tests on older
+> machines I have seen something similar from time to time (less than
+> 10% reproducibility ration IIRC).
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Thanks for the response. I also used to have the system hanging up at
+the very rare occasion, but after I decreased the size of the Rx
+DMA-buffer (to fix a platform-specific problem) and sped up the port
+the deadlock probability dramatically increased so I managed to debug
+the hanging ups.
 
-Yours,
-Linus Walleij
+> 
+> P.S. Is there is any possibility to have a step-by-step reproducer?
+
+There is a good chance that my approach might be platform-specific
+(but the problem is general for sure), but here is what I did to
+make the deadlock reproducible at the reasonable time:
+1. Revert the patch in the subject (if it's applied)
+2. Decrease the Rx DMA-buffer size:
+drivers/tty/serial/8250/8250_dma.c: dma->rx_size = SZ_512;
+3. Increase the serial communication baud-rate:
+stty -F /dev/ttyS1 1500000 raw -echo -echok -echoe;
+4. Loopback the ttyS1 interface: connect Tx and Rx pins.
+5. Start pushing data to the ttS1 interface by the chunks someway
+greater than 512 bytes. Like this:
+while :; do echo -n "-"; head -c 65536 /dev/zero > /dev/ttyS1; done
+
+In my case the system almost always hangs up after 10-50-100-200
+iterations of the one-liner above.
+
+> Also can we utilise (and update if needed) the open source project
+> https://github.com/cbrake/linux-serial-test?
+
+I guess the utility can be used to reproduce the problem, but the
+data integrity check wasn't required in my case. I am also not sure
+whether the loopback-test is required to reproduce the denoted
+deadlock, since only the Rx code-path causes it. So most likely the
+heavy inbound traffic shall be enough.
+
+-Serge(y)
+
+> 
+> -- 
+> With Best Regards,
+> Andy Shevchenko
 
