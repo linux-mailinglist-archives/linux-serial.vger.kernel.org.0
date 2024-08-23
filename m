@@ -1,149 +1,194 @@
-Return-Path: <linux-serial+bounces-5613-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5617-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3490695D3A3
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 18:39:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16E6095D3DC
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 19:00:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5176284D04
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 16:39:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A1B7B24F5A
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Aug 2024 17:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F83518BC08;
-	Fri, 23 Aug 2024 16:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B27818BC25;
+	Fri, 23 Aug 2024 17:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQmHvxqb"
+	dkim=pass (1024-bit key) header.d=camlingroup.com header.i=@camlingroup.com header.b="A70FbLCS"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from eu-smtp-delivery-197.mimecast.com (eu-smtp-delivery-197.mimecast.com [185.58.86.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6343818A6C7;
-	Fri, 23 Aug 2024 16:39:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 582FE18951C
+	for <linux-serial@vger.kernel.org>; Fri, 23 Aug 2024 17:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.58.86.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1724431155; cv=none; b=s2n6ptisuyIQ4PIVlYpdExPARDImcGqSH7l0c9DoBxDit1TDvLc6sZOBd1WTttIHtKE+h65lUpn8QppyLPvdfsw9IM0unRpOFwaTXi09rAVIKpstSk3PLGG/eoaCEvEfTHJYr4HA1gR51uzzk5iQUFxMKDlCqHekeI1R/Xp0VJg=
+	t=1724432404; cv=none; b=mdqJ8ARNIdIQrjO2ThGa1l54MVOgCJDmYt+G/RKHetMca2OMDnNbCbulUWM6M0JHr/bAS4Bgc9sxzvmjGoFAKVzzQSyIr5gf0XAqra+vCI7d3+U08QyABg0S3D/L8eHv2zi95mOnQT6xWEDK4djvyeenItpAZE34KOHN/Q6+w0E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1724431155; c=relaxed/simple;
-	bh=37bNjvVUVCnwm4dabjuxz+DsxHpI2MJeGgPnKPYD6eg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z0dovCjxwUbEMLNSJu1vEcx4/xvvU2buDaoEQsvfJiRH/fqlJ2CqRnFLV89EdX5/y8GgVrV8wCJL2b1v3fnbAejkjF/tdasm22yKkdYlbZhgIu2haJ9cvtoTGMbWP2si3Ko3wEb1IL9nqzmj+rlu0rxW1aKcC+32xOL3YmsCVxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQmHvxqb; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5333b2fbedaso3542657e87.0;
-        Fri, 23 Aug 2024 09:39:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1724431151; x=1725035951; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2WRjvniXybxQWI+iJ2ujBTSF1lPf98KW9vC1KUIKZrI=;
-        b=DQmHvxqbMZeuoOWaVdOOVVQYxUgZllenoCH7ZZ/AB9xAdVg7N5K/gt8+ERdzqZC8TE
-         wdnZgUfarh4+N8hJtAAS2USf4YqHTmIMpIVnMsTbHJZZYYU0W62c4vrAd4yqWuDlVqot
-         Ptj9uWZHAVHVdJZ3uWMR1bCon/BYlrktyi3dKYQeacQTeSipIZdA5aHqgry+qkhj2LjR
-         JtkMa6yFKqZXy1fWgoc9BWOoNBNZ4xNVaR0FGrxi1VsBzG4hYBz3jPVU0pEPi0wfK4rA
-         cwdhgTnUTUxHfBGV1nktuxyadO6ou5IJtJzxX+fT5PkZIHs2yWO41H7Glx2GEq5Fc1Qb
-         zdrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1724431151; x=1725035951;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2WRjvniXybxQWI+iJ2ujBTSF1lPf98KW9vC1KUIKZrI=;
-        b=Vu+aW09CpPXo26MTIsGQVNESPy5SucRZWD+RxebrpIdirVuh9q2+3zlo+DWjv2HHkk
-         uEqfIY6VgCXtu5qeCM3VqVDHKsowMnfiDGoOyAJDAAtbpVXgAiX5BDgZwOwItkFcqOg5
-         +R+siZXXnIutz0ARizB6nDhOFgeGVz35hRfkvPTfNYgw5vnz5a8hsxv5qp+CE8qNA2Nr
-         izOgU0ih2+RByvEaurN2FPQesKYeSWae9UjDgC5LqwtgHJPoVHZqP9DGZFmxaZaJIeMl
-         fTW7cFZK+4LOBt3nCvlUG3FzNZYj1fSMQR8VnGxigYDQlKyxS+R1LmyuHFdMwwgMzJfB
-         sIvA==
-X-Forwarded-Encrypted: i=1; AJvYcCUSTWbxQRwrlrw7YukxOS14IhSejq4s/ZpwQWiU1J4Mz7NpoBJtfLFkSxTwK2u4jT5WadbEVjO9mIeWyeul@vger.kernel.org, AJvYcCUwyd1O1UQQ1Q8MC7ertWGZ+HsluP2JY5ywgtfgteQWAY32xg9QBrJ3k+7QdfnHPKsNdc2OEaKS4J629uF2@vger.kernel.org, AJvYcCV5qRYVDXBEmXrpo1uh6Ua2t515nI0I0THRoEd7MIIR6hi0opex6OOrtPUSKFz/drdaeAxg5Une3nQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwgDDTh2LfdR+sj/FxYA/+yEQZUCf/Wm9eZqj5dSQucjqI1YOnu
-	72cVZcJpE8Cx1aVfCRHVCq9mB+HtkEAjmBcCN6lVA8VNO80ZuLqF
-X-Google-Smtp-Source: AGHT+IGiGfLhmgN/ZEt1qGQRBjLYK4n4/sf9dIyAH2LAsgYySPXwh7hMCdqr9AL1FkYv2kkstxYUqA==
-X-Received: by 2002:a05:6512:318f:b0:52c:d834:4f2d with SMTP id 2adb3069b0e04-5343877ab14mr1678549e87.18.1724431150764;
-        Fri, 23 Aug 2024 09:39:10 -0700 (PDT)
-Received: from mobilestation ([178.176.56.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5334ea5940asm607500e87.159.2024.08.23.09.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 23 Aug 2024 09:39:10 -0700 (PDT)
-Date: Fri, 23 Aug 2024 19:39:07 +0300
-From: Serge Semin <fancer.lancer@gmail.com>
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Andy Shevchenko <andy@kernel.org>, 
-	Viresh Kumar <vireshk@kernel.org>, Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
-	Vinod Koul <vkoul@kernel.org>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	dmaengine@vger.kernel.org, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] dmaengine: dw: Prevent tx-status calling desc
- callback (Fix UART deadlock!)
-Message-ID: <mdyifrhjufjwp2tko54gfw34riepov5bo4a4tefhrtfmuystao@wpjfsgikebki>
-References: <20240802080756.7415-1-fancer.lancer@gmail.com>
- <n6grskuq722vnogwp5obiwzv4pxs5bbqddadesffezhvba5cjh@d6shcrvpxujg>
- <CAHp75VdXqS6xqdsQCyhaMNLvzwkFn9HU8k9SLcT=KSwF9QPN4Q@mail.gmail.com>
+	s=arc-20240116; t=1724432404; c=relaxed/simple;
+	bh=71aSqMyY+8n4Hsz11U1n1pKQlpKRxMK97gdfHxV8das=;
+	h=Message-ID:Date:From:Subject:To:CC:MIME-Version:Content-Type; b=dDD0L3EAqTVbvUO3NYlvnY1h9tAPmuw6Ekc0dtL+Pe4cSMdpSPRJxcdyK0nVF7tGUxB9Jcoe7pmUnowZFt3b2am5+O48N3YoVzOKqAsTMwjoaAQ/VbwEtV9VJXJ6zJiuRNR+oSqpTZVYmTQ6k13MkzBWMTC2y6k93fbi9u6rmFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=camlingroup.com; spf=pass smtp.mailfrom=camlingroup.com; dkim=pass (1024-bit key) header.d=camlingroup.com header.i=@camlingroup.com header.b=A70FbLCS; arc=none smtp.client-ip=185.58.86.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=camlingroup.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=camlingroup.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=camlingroup.com;
+	s=mimecast20210310; t=1724432400;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=+7xb2Zyyu8QWyvP6ycd464RZ4gf+jReIhx99MhLGDi4=;
+	b=A70FbLCSN/rFtljzDxbDARnh3H0CzyHsV8Z6ZhhhC4B16A0m8Hypla5oXZRtkz0zBP9Ucf
+	0nKT9ZScxCinJk7waMu6+OrN1ugo/WWeyr8XFDedjePJGLn5fmHE6LEvze3qGoI50E4pRH
+	Jlz6ijzQxS/AZe16imrubCJrw52BB8M=
+Received: from GBR01-CWX-obe.outbound.protection.outlook.com
+ (mail-cwxgbr01lp2045.outbound.protection.outlook.com [104.47.85.45]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ uk-mta-248-ahZbjC_pMVybcvxgj-9SYA-1; Fri, 23 Aug 2024 17:53:17 +0100
+X-MC-Unique: ahZbjC_pMVybcvxgj-9SYA-1
+Received: from LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:20b::7)
+ by LO2P123MB6200.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:268::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7897.19; Fri, 23 Aug
+ 2024 16:53:15 +0000
+Received: from LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::55a9:7dae:8812:f567]) by LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM
+ ([fe80::55a9:7dae:8812:f567%5]) with mapi id 15.20.7897.014; Fri, 23 Aug 2024
+ 16:53:15 +0000
+Message-ID: <7deb753f-bf86-47ce-89bf-8277aca4293e@camlingroup.com>
+Date: Fri, 23 Aug 2024 18:53:13 +0200
+User-Agent: Mozilla Thunderbird
+From: Lech Perczak <lech.perczak@camlingroup.com>
+Subject: [PATCH v3 0/3] serial: sc16is7xx: cosmetic cleanup
+To: linux-serial@vger.kernel.org,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Hugo Villeneuve
+ <hvilleneuve@dimonoff.com>, Andy Shevchenko <andy@kernel.org>,
+ =?UTF-8?Q?Krzysztof_Drobi=C5=84ski?= <k.drobinski@camlintechnologies.com>,
+ =?UTF-8?Q?Pawe=C5=82_Lenkow?= <pawel.lenkow@camlingroup.com>,
+ Kirill Yatsenko <kirill.yatsenko@camlingroup.com>
+X-ClientProxiedBy: BEXP281CA0001.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::11)
+ To LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM (2603:10a6:600:20b::7)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHp75VdXqS6xqdsQCyhaMNLvzwkFn9HU8k9SLcT=KSwF9QPN4Q@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LO4P123MB5272:EE_|LO2P123MB6200:EE_
+X-MS-Office365-Filtering-Correlation-Id: e94db93d-e480-4da0-ad97-08dcc39414b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?v+sypVwJ/gZmWOXMNxHiqmZuUkPk3Py3HvlueaB3uYHui3qcOJk15Le5pax/?=
+ =?us-ascii?Q?azJgGM902HLDs/7kQ3k5HXz7/P7iPAwxf6TWzsuMHNqGNc66KpYlOkRIH4fq?=
+ =?us-ascii?Q?hO2quhuoTwBp/SvEwntouMVhr5DsUXOAM4nVNa6PrBh31cGy+9HYHhoqDtCG?=
+ =?us-ascii?Q?WjTvSOclS1DZyydrFCZ+Nd91+rD4I06lLkCBZtKyAev+MGFYRB8dbn22r8au?=
+ =?us-ascii?Q?5W88znDXyAAsgdVYiZLMDIt1JuY++WjT6naZlRiAalcPgzP9Lw3kEyD4sueE?=
+ =?us-ascii?Q?47RbkmN/NlxlufQ3Rg89wFrUFPp9fiz9QiiYhsOPjglrF1aLteeitove0iHn?=
+ =?us-ascii?Q?9z9fIxWepajXyGy4FBME+RTrze0bKtWxHGFJzkInSeHyfUQLLjDu0A+ggH7m?=
+ =?us-ascii?Q?6hgJ8KV8gA93SBN5jXO31FVotc9e6OYH54gpFJbXqdFjWfDFnBOKyKpfXmAA?=
+ =?us-ascii?Q?FmMg+2mLAVxQ1snrxsPD36u272Y+ZF3Qd5QiqFd3CT9xTSL45ZHl7IGMOJvF?=
+ =?us-ascii?Q?6goFMlujVmaqdChXxJDrbgXRMf/Sd69i6jDkCl62KAFwiQa9zVYDXZOffL1B?=
+ =?us-ascii?Q?27E2XkHkVK4SK8W1437PHJhSjOpUY+mQ+V1kk5HNgMnA4/2c36QvWg8R/TvO?=
+ =?us-ascii?Q?4dLxpAh3q5FtfNlfpDXAhO8HZKwQqPBIOKDt3OMCO4xenrk+ntI8M3DqX5iB?=
+ =?us-ascii?Q?jDD2ycRDBJV2f8i6PvwgNA88TnmC8EljFFZ9SMIhAqiP16JNkxV1oqPkn+cn?=
+ =?us-ascii?Q?VxPZhyGGAlk2yFOiiLzrmiGNzDxDVhgbwMPgWhydVXZqvQ0ANLumD969CC0b?=
+ =?us-ascii?Q?y1dCCIxjW2sI+4I9YPFzj9be+fLOC9RczMi7unVL+vahJoJtI7676992hoZO?=
+ =?us-ascii?Q?0U14tJW8MSBapxumQwF1GHqz3ttl6KeQKNMcYZxf0jOtnkh9oKjIEzXgBpX0?=
+ =?us-ascii?Q?0nao/rQ2Y4JEvFtO3SJj8iXM4aP0TqqM8NvT7fc3nmNIAK/r/vMSNpPG2oyj?=
+ =?us-ascii?Q?QdeKlZ1hv6xozsKfhwHGcHsEiYkYQL5UNLE2HkaaY/WyYmI+mWjC448FBFkp?=
+ =?us-ascii?Q?/1cSxxsEildKBA5VS2aQB4Nr6ok7g34IUjxwKkUO2mTFKL+kpKOi04TWKz7N?=
+ =?us-ascii?Q?eb7/RzPoA47CZUBGPH41kEKp1UFhQVmQDhBu0nQJZPXxVL7ZWa01n3FNNoG0?=
+ =?us-ascii?Q?5KArnFLlqCRMqIGuPXHtllsGh1CEwupmfFb6i3WJEK/8EL+RiOdJ8SZkLmo4?=
+ =?us-ascii?Q?ZAfTsfcPNyF0nB22HZkQj6S80A2DS7Pn9FFkkiwrPa2sRIif4uOG+ozelTx4?=
+ =?us-ascii?Q?7hHtS55sKJdIOSnMqNTTXiygaczGFg9CcdaIr9iTf4RVAg=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1102
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?akPB2H2e+wYacU2KRgmCD10EvZbhU8creXg9BaP1agHALDg9KPGfc99P8N1k?=
+ =?us-ascii?Q?R6XjRp97lh4JKES34tI+oHi5DYrqF3Pe5EyJZTZ5yS1bc0Ru0cUCo/f+REG0?=
+ =?us-ascii?Q?QLRMLEjSy5H8XpeDVdlyClRGncuI5uw4HmSsHSmThR+V8UkpBiVCV/R3SkX9?=
+ =?us-ascii?Q?oYuvNvH5j9sFEY+SwkBB8seRJrysXkvwGe1ES461FrA/CJmNNj2v0LqmEZhI?=
+ =?us-ascii?Q?JzGrAtSX6UhMmODhwnA9NLq99CXc1Q48Xide6G9Pi+fgoEZsW95bud7LBNCJ?=
+ =?us-ascii?Q?EdrfETIqRhppe0pl+wH5BSRgIwx9wCUD3IfLaUhngU0aawQ5mIQgaaTJ+4/q?=
+ =?us-ascii?Q?2A4+8hUvI3H9r4hcHFoDg5zd/uzMM1RKe8lACQ2zfw62T+y93V9a68JQJXIx?=
+ =?us-ascii?Q?qt930w2Nh8Na4Tih5jLJpl+f4nvTj/ou+aXIvhSzWCgM2MqtA/Rv8QAOawfO?=
+ =?us-ascii?Q?cFjK99ur5agzqKHV4xNvLfCDgUyEZLzCIFKGAgNQVlHmNA75d0drlYsQ99x1?=
+ =?us-ascii?Q?+bvai6IzUaqW0i6z9LOhaZr/Dih23xZjwITsoQ+o+jFKP3GAsKbtbJi4ApyU?=
+ =?us-ascii?Q?QYC1ETSI3zla7epuL+AqxYjXC2gNP7Mtl0f9uImltqPL3nE9kF0hOyDMUIQE?=
+ =?us-ascii?Q?y7KQBN4rCukGI0B2q+/qOoe1a3JWQZg+DJ6W0bzuYrG1nOBvfuJw4A9HTC2b?=
+ =?us-ascii?Q?KREWeKZJHZq1Inz+SgPFZrcmIW6LpfR0As2kNdDOM0OpZF5ZOosrkdOz1ZjU?=
+ =?us-ascii?Q?ZHMQgayl4Kms9XcqFnXLk/u79m27J0lJM7msnDkfZMEkAEVjtKDXanTRg9ys?=
+ =?us-ascii?Q?HMyLJIj72KusfRu/OotmGISkf6iQqATrp9JGoDTKTl0yupsNW6lDzXjmZHs9?=
+ =?us-ascii?Q?OQnlCD30uVv1K6UUtZjATpwLRfk3DcienSfjLTgOYGKaCKlJh4W9e31VcuHC?=
+ =?us-ascii?Q?pBufZvZ+B9fw5sxy3c6hV132mRgjkjtgYwAbvJHDlA0jWK2Y4K1c68wSm2HQ?=
+ =?us-ascii?Q?HYY4+1fHqkiiDn7w21rgLqFAC4KkHi0wZEfldw8wnZeo9TmkuVj7exbETrM4?=
+ =?us-ascii?Q?teCRY0Z1ZewvZ8Ml8iAscWdNcGnFdNWwFeH5squkn4Nw52HbMNTnD83KQsZJ?=
+ =?us-ascii?Q?4q3KzuH+GTGf3kJx8EOAhYTFIZy3UUpiyFuRSujzo2ADCXH/INqo8CCvv9G/?=
+ =?us-ascii?Q?C+riCzZ0A1mWW5Cnj0s/rWrI4aRrk13YdAOVoq++AVf+iVHQtQaHrwRaWuFP?=
+ =?us-ascii?Q?FxKqKy6tBa0x3ksL02M5DIBNaGfvqenIpiH4EuXwrSC3qfalXfp1saj2FeHG?=
+ =?us-ascii?Q?JDxEoCTGFIL/jBMn7KC8VC4bY5Q7dMBMyteZWxLORk9yQqEbSFzmLajhLgs2?=
+ =?us-ascii?Q?udwOC4jN9VOj9boI1RUdrj6vYjtqGI02ZZAsfbqCTcZN//5wX06CPMN3iVve?=
+ =?us-ascii?Q?PbH61Lkf+W60UbSc+BrjXxYBrjQfq5UNXWbhGLGF5AkshRmX4Dly0LDeNlED?=
+ =?us-ascii?Q?N8F51CbaNIhLxtxBuuW8w6Ni9GpYxuY5oZDJ+TvLMjebubplbU8mdbyTOlQC?=
+ =?us-ascii?Q?i6YIXqmRMJJAHTgJooRrMDpJawCFZJhVFKplA5DoxHbVwGmq35atdwhi9ppQ?=
+ =?us-ascii?Q?Uh2U+VSH18+UoVtoVJan9hkgoy5WQO0wnkhASmv1a38TqcXUZX8dt4kJI56d?=
+ =?us-ascii?Q?TadDQQ=3D=3D?=
+X-OriginatorOrg: camlingroup.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e94db93d-e480-4da0-ad97-08dcc39414b6
+X-MS-Exchange-CrossTenant-AuthSource: LO4P123MB5272.GBRP123.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Aug 2024 16:53:15.1805
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fd4b1729-b18d-46d2-9ba0-2717b852b252
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4KQYZ+Lygi0SkHyv54gEY3P9AKKWSmEqYYILQnk6lWkDi7eebzDPwYp5D2uiP4lEAZvIeKhBEnLR0MueZ6yPAYhzRjDJAHGzv2cZvPRTmls=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO2P123MB6200
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: camlingroup.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy
+When submitting previous, functional fixes, Tomasz Mo=C5=84 omitted those
+two cosmetic patches, that kept lurking in our company tree - likely
+by oversight. Let's submit them.
 
-On Fri, Aug 23, 2024 at 04:21:24PM +0300, Andy Shevchenko wrote:
-> On Fri, Aug 23, 2024 at 12:48 PM Serge Semin <fancer.lancer@gmail.com> wrote:
-> >
-> > Hi folks
-> >
-> > Any comments or suggestion about the change? The kernel occasionally
-> > _deadlocks_ without it for the DW UART + DW DMAC hardware setup.
-> 
-> I have no time to look at that, but FWIW with a stress tests on older
-> machines I have seen something similar from time to time (less than
-> 10% reproducibility ration IIRC).
+Signed-off-by: Lech Perczak <lech.perczak@camlingroup.com>
+---
+v3:
+No code changes in patches 1 and 2.
+- Pick up Reviewed-by from Andy in patch 1
+- Adjust commit message in patch 2
+- Perform further cleanup in bit constants,
+  use GENMASK for SC16IS7XX_IIR_* and reuse bit definitions in
+  SC16IS7XX_LSR_BRK_ERROR_MASK in patch 3.
 
-Thanks for the response. I also used to have the system hanging up at
-the very rare occasion, but after I decreased the size of the Rx
-DMA-buffer (to fix a platform-specific problem) and sped up the port
-the deadlock probability dramatically increased so I managed to debug
-the hanging ups.
+v2:
+- Converted bitmask definitions to use BIT macro
+  (thanks Jiri Slaby for the idea)
+- Removed redundant comments in patch 2 altogether
+- Fixed commit messages (thanks Andy Shevchenko for
+  thorough review)
 
-> 
-> P.S. Is there is any possibility to have a step-by-step reproducer?
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>
+Cc: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Cc: Andy Shevchenko <andy@kernel.org>
 
-There is a good chance that my approach might be platform-specific
-(but the problem is general for sure), but here is what I did to
-make the deadlock reproducible at the reasonable time:
-1. Revert the patch in the subject (if it's applied)
-2. Decrease the Rx DMA-buffer size:
-drivers/tty/serial/8250/8250_dma.c: dma->rx_size = SZ_512;
-3. Increase the serial communication baud-rate:
-stty -F /dev/ttyS1 1500000 raw -echo -echok -echoe;
-4. Loopback the ttyS1 interface: connect Tx and Rx pins.
-5. Start pushing data to the ttS1 interface by the chunks someway
-greater than 512 bytes. Like this:
-while :; do echo -n "-"; head -c 65536 /dev/zero > /dev/ttyS1; done
+Lech Perczak (3):
+  serial: sc16is7xx: remove SC16IS7XX_MSR_DELTA_MASK
+  serial: sc16is7xx: fix copy-paste errors in EFR_SWFLOWx_BIT constants
+  serial: sc16is7xx: convert bitmask definitions to use BIT() macro
 
-In my case the system almost always hangs up after 10-50-100-200
-iterations of the one-liner above.
+ drivers/tty/serial/sc16is7xx.c | 181 +++++++++++++++++----------------
+ 1 file changed, 92 insertions(+), 89 deletions(-)
 
-> Also can we utilise (and update if needed) the open source project
-> https://github.com/cbrake/linux-serial-test?
 
-I guess the utility can be used to reproduce the problem, but the
-data integrity check wasn't required in my case. I am also not sure
-whether the loopback-test is required to reproduce the denoted
-deadlock, since only the Rx code-path causes it. So most likely the
-heavy inbound traffic shall be enough.
+base-commit: 0c3836482481200ead7b416ca80c68a29cfdaabd
+--=20
+2.34.1
 
--Serge(y)
-
-> 
-> -- 
-> With Best Regards,
-> Andy Shevchenko
 
