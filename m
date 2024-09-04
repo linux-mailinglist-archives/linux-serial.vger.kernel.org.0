@@ -1,119 +1,162 @@
-Return-Path: <linux-serial+bounces-5844-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5852-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 401EE96AE14
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2024 03:50:17 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D8C596B30A
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2024 09:38:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F15F9286B5A
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2024 01:50:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C75241F227E6
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Sep 2024 07:38:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39B4FBF0;
-	Wed,  4 Sep 2024 01:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jsadccl/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 565CE1465BD;
+	Wed,  4 Sep 2024 07:38:57 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D6A3211;
-	Wed,  4 Sep 2024 01:50:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from cmccmta2.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90389146D54;
+	Wed,  4 Sep 2024 07:38:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725414608; cv=none; b=P/ngmW3zT49Xqd2PnAeBwkh+ve5BVICmDE1NTYJJdge74KefuwVaHAus5pnukVrZSS2SSLiCWPVFgajGbLhQmUgfgv7Maiu2IiHL7mIEzJCKeaKEm22D8AYgHVw20feYYaYE8TzUddHTEotVZfuAFLz1TJFNODzCZo2g5GsHyL0=
+	t=1725435537; cv=none; b=HzxecAMNlIZYf3H6CxnhJ8YBqgbvCWXgKsVZr3d3KqSFfA4OuX6eMVADq3ivxESJ5tNEuUby5Nniq6EmUXQ/5LRm0322tnKn8vcZVKo0PEd8l1zCb6exPhmVovL1I8o3+0bOW0Jyar97jUbC8OqW7VyAIBk8T2vI0oxKLy50nms=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725414608; c=relaxed/simple;
-	bh=4AQxlfwksI8M0lXuPBfgDWfUUeO7Xwm6/Q69FGEDaqE=;
-	h=Date:Content-Type:MIME-Version:From:To:Cc:In-Reply-To:References:
-	 Message-Id:Subject; b=Bf07VAvSoWJ+nAeiW8MfCQS4ADKdpvknOTWLeIM8dFcLjGGXZAONCiXaRg7qZNZ2BiKBX2f3e3TFVIpfhMebThfTvG/O8+fTMhxTGCR3iI+i/Qg1FonPxKcOSLwCsAI0s53+Zpasrty0f5gmxRpP7ePt9KgKuoto+FQ0/NAIxqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jsadccl/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 853F8C4CEC4;
-	Wed,  4 Sep 2024 01:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725414607;
-	bh=4AQxlfwksI8M0lXuPBfgDWfUUeO7Xwm6/Q69FGEDaqE=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=jsadccl/9E+PbXaq+qBmbPd7/PjPSWuCGCCzZgXrCdzxotTCt+t4Jh4/bmoJd9CVw
-	 H8TFVkWCnT6PO3N5msofWRplIEzvDa/Eg5k4rOBS65A+0zhdG8IyexgNbEl8PJPjw+
-	 IPqvsG8xcWU4KoDxTm0aKsnESTEtPBfW/2JJhC2yZ7oNtXlbcdYda/gKsGnl9kjiks
-	 zYIezEibBc9qTHTav6i6r2l9PCUv9D8lgvmxWdNEEHSR/qOB+sf1qlb4hUUhVYAkeY
-	 sRh9O478wwJmKVRY2p7fE4R/AvzwSGarhGRI5N4ZYyVZuwxFz3ZGhNiy/K7VPANfL9
-	 HopuyFoAQZ++g==
-Date: Tue, 03 Sep 2024 20:50:06 -0500
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1725435537; c=relaxed/simple;
+	bh=z++EeMTUVFxeUBjT8sx1xnif4BDfuTsQgwzKkIHmxAw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=bssgS8fSn2NZ6EDjo9l/4Sm5FC/5FHDz4pKGcuYNrfgBofhW0hoaoiC/5wdO36sbwHO0TUHDiWyogdYYD/wE8+EvTlHs58AIZDX9DAcgiOnWKmIyV7VIeW5f/NC0gmyB3W7pnftSA3CQEa46O8/9p8xP3vvdXsGSb4qj4AoRrzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
+	by rmmx-syy-dmz-app05-12005 (RichMail) with SMTP id 2ee566d80e8aa99-e3a9c;
+	Wed, 04 Sep 2024 15:38:50 +0800 (CST)
+X-RM-TRANSID:2ee566d80e8aa99-e3a9c
+X-RM-TagInfo: emlType=0                                       
+X-RM-SPAM-FLAG:00000000
+Received:from localhost.localdomain (unknown[223.108.79.97])
+	by rmsmtp-syy-appsvr07-12007 (RichMail) with SMTP id 2ee766d80e89503-19a46;
+	Wed, 04 Sep 2024 15:38:50 +0800 (CST)
+X-RM-TRANSID:2ee766d80e89503-19a46
+From: zhangjiao2 <zhangjiao2@cmss.chinamobile.com>
+To: gregkh@linuxfoundation.org
+Cc: jirislaby@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	zhang jiao <zhangjiao2@cmss.chinamobile.com>
+Subject: [PATCH] serial: pic32_uart: Use devm for kasprintf and request_irq
+Date: Wed,  4 Sep 2024 13:53:53 +0800
+Message-Id: <20240904055353.102273-1-zhangjiao2@cmss.chinamobile.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nikunj Kela <quic_nkela@quicinc.com>
-Cc: devicetree@vger.kernel.org, cristian.marussi@arm.com, 
- rui.zhang@intel.com, linux-spi@vger.kernel.org, lee@kernel.org, 
- krzk+dt@kernel.org, will@kernel.org, linux-arm-msm@vger.kernel.org, 
- linus.walleij@linaro.org, joro@8bytes.org, linux-kernel@vger.kernel.org, 
- robin.murphy@arm.com, quic_psodagud@quicinc.com, conor+dt@kernel.org, 
- kernel@quicinc.com, sudeep.holla@arm.com, linux-serial@vger.kernel.org, 
- linux-i2c@vger.kernel.org, herbert@gondor.apana.org.au, 
- konradybcio@kernel.org, jassisinghbrar@gmail.com, 
- linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org, andersson@kernel.org, 
- lukasz.luba@arm.com, iommu@lists.linux.dev, linux-watchdog@vger.kernel.org, 
- broonie@kernel.org, rafael@kernel.org, davem@davemloft.net, 
- arm-scmi@vger.kernel.org, thara.gopinath@gmail.com, viresh.kumar@linaro.org, 
- linux@roeck-us.net, amitk@kernel.org, wim@linux-watchdog.org, 
- andi.shyti@kernel.org, linux-arm-kernel@lists.infradead.org, 
- tglx@linutronix.de, linux-crypto@vger.kernel.org
-In-Reply-To: <20240903220240.2594102-14-quic_nkela@quicinc.com>
-References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-1-quic_nkela@quicinc.com>
- <20240903220240.2594102-14-quic_nkela@quicinc.com>
-Message-Id: <172541460656.3237041.12121704663662726692.robh@kernel.org>
-Subject: Re: [PATCH v2 13/21] dt-bindings: pinctrl: Add SA8255p TLMM
+Content-Transfer-Encoding: 8bit
+
+From: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+
+Use devm_kasprintf and devm_request_irq to simplify code.
+
+Signed-off-by: zhang jiao <zhangjiao2@cmss.chinamobile.com>
+---
+ drivers/tty/serial/pic32_uart.c | 31 +++++++++++--------------------
+ 1 file changed, 11 insertions(+), 20 deletions(-)
+
+diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
+index 261c8115a700..0119a4d81521 100644
+--- a/drivers/tty/serial/pic32_uart.c
++++ b/drivers/tty/serial/pic32_uart.c
+@@ -484,7 +484,7 @@ static int pic32_uart_startup(struct uart_port *port)
+ 	 */
+ 	sport->enable_tx_irq = false;
+ 
+-	sport->irq_fault_name = kasprintf(GFP_KERNEL, "%s%d-fault",
++	sport->irq_fault_name = devm_kasprintf(port->dev, GFP_KERNEL, "%s%d-fault",
+ 					  pic32_uart_type(port),
+ 					  sport->idx);
+ 	if (!sport->irq_fault_name) {
+@@ -493,49 +493,49 @@ static int pic32_uart_startup(struct uart_port *port)
+ 		goto out_disable_clk;
+ 	}
+ 	irq_set_status_flags(sport->irq_fault, IRQ_NOAUTOEN);
+-	ret = request_irq(sport->irq_fault, pic32_uart_fault_interrupt,
++	ret = devm_request_irq(port->dev, sport->irq_fault, pic32_uart_fault_interrupt,
+ 			  IRQF_NO_THREAD, sport->irq_fault_name, port);
+ 	if (ret) {
+ 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
+ 			__func__, sport->irq_fault, ret,
+ 			pic32_uart_type(port));
+-		goto out_f;
++		goto out_disable_clk;
+ 	}
+ 
+-	sport->irq_rx_name = kasprintf(GFP_KERNEL, "%s%d-rx",
++	sport->irq_rx_name = devm_kasprintf(port->dev, GFP_KERNEL, "%s%d-rx",
+ 				       pic32_uart_type(port),
+ 				       sport->idx);
+ 	if (!sport->irq_rx_name) {
+ 		dev_err(port->dev, "%s: kasprintf err!", __func__);
+ 		ret = -ENOMEM;
+-		goto out_f;
++		goto out_disable_clk;
+ 	}
+ 	irq_set_status_flags(sport->irq_rx, IRQ_NOAUTOEN);
+-	ret = request_irq(sport->irq_rx, pic32_uart_rx_interrupt,
++	ret = devm_request_irq(port->dev, sport->irq_rx, pic32_uart_rx_interrupt,
+ 			  IRQF_NO_THREAD, sport->irq_rx_name, port);
+ 	if (ret) {
+ 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
+ 			__func__, sport->irq_rx, ret,
+ 			pic32_uart_type(port));
+-		goto out_r;
++		goto out_disable_clk;
+ 	}
+ 
+-	sport->irq_tx_name = kasprintf(GFP_KERNEL, "%s%d-tx",
++	sport->irq_tx_name = devm_kasprintf(port->dev, GFP_KERNEL, "%s%d-tx",
+ 				       pic32_uart_type(port),
+ 				       sport->idx);
+ 	if (!sport->irq_tx_name) {
+ 		dev_err(port->dev, "%s: kasprintf err!", __func__);
+ 		ret = -ENOMEM;
+-		goto out_r;
++		goto out_disable_clk;
+ 	}
+ 	irq_set_status_flags(sport->irq_tx, IRQ_NOAUTOEN);
+-	ret = request_irq(sport->irq_tx, pic32_uart_tx_interrupt,
++	ret = devm_request_irq(port->dev, sport->irq_tx, pic32_uart_tx_interrupt,
+ 			  IRQF_NO_THREAD, sport->irq_tx_name, port);
+ 	if (ret) {
+ 		dev_err(port->dev, "%s: request irq(%d) err! ret:%d name:%s\n",
+ 			__func__, sport->irq_tx, ret,
+ 			pic32_uart_type(port));
+-		goto out_t;
++		goto out_disable_clk;
+ 	}
+ 
+ 	local_irq_save(flags);
+@@ -557,15 +557,6 @@ static int pic32_uart_startup(struct uart_port *port)
+ 
+ 	return 0;
+ 
+-out_t:
+-	free_irq(sport->irq_tx, port);
+-	kfree(sport->irq_tx_name);
+-out_r:
+-	free_irq(sport->irq_rx, port);
+-	kfree(sport->irq_rx_name);
+-out_f:
+-	free_irq(sport->irq_fault, port);
+-	kfree(sport->irq_fault_name);
+ out_disable_clk:
+ 	clk_disable_unprepare(sport->clk);
+ out_done:
+-- 
+2.33.0
 
 
-On Tue, 03 Sep 2024 15:02:32 -0700, Nikunj Kela wrote:
-> Add compatible for TLMM block representing support on SA8255p.
-> 
-> SA8255p uses the same TLMM block as SA8775p however the ownership
-> of pins are split between Firmware VM and Linux VM on SA8255p. For
-> example, pins used by UART are owned and configured by Firmware VM
-> while pins used by ethernet are owned and configured by Linux VM.
-> Therefore, adding a sa8255p specific compatible to mark the difference.
-> 
-> Signed-off-by: Nikunj Kela <quic_nkela@quicinc.com>
-> ---
->  .../devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml    | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-
-My bot found errors running 'make dt_binding_check' on your patch:
-
-yamllint warnings/errors:
-./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:22:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:23:11: [warning] wrong indentation: expected 12 but found 10 (indentation)
-./Documentation/devicetree/bindings/pinctrl/qcom,sa8775p-tlmm.yaml:26:9: [warning] wrong indentation: expected 10 but found 8 (indentation)
-
-dtschema/dtc warnings/errors:
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20240903220240.2594102-14-quic_nkela@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
 
 
