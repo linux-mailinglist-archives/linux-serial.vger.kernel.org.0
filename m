@@ -1,126 +1,174 @@
-Return-Path: <linux-serial+bounces-5915-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5917-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DAE196DB8C
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 16:18:32 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C59E96DC22
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 16:41:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DC6C31F2107E
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 14:18:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 064F0B27721
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 14:41:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FFFE19E7F0;
-	Thu,  5 Sep 2024 14:17:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40F3A823DF;
+	Thu,  5 Sep 2024 14:40:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nOR8sf8A"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ctAAP0P5"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7790119DFB9;
-	Thu,  5 Sep 2024 14:17:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10CADF59;
+	Thu,  5 Sep 2024 14:40:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725545857; cv=none; b=Wl8/wQfk1F/rJixOwlgeeklOpvn5Mab/KdHpVMMOquTBDb3zhuYWdcJVg4XmwSbsZJNgLoZywVXxytCJ6JOL0rJXsStKIiATSAGvnz13AuiMunK1+767rBzQV2LOagle46xY7lQP2L4Vlwf04cyT+xJER2GntismcpFl9ZefTBA=
+	t=1725547202; cv=none; b=Qxu4FekcxJWPFuJMIvcVn57TzZTRAe+CJdw4Ug8BhABWCTR0slRdKtKUzPe7hWWS2m/x0VuUlekZFmHqklX0YIkjPwCgFZCdImM0R6BGPZmzujUqPlroBF0AxxEpv0WxS8eNYTMm3mkFCAIYxRqdum33zNzqHvnXWSIAnIFMUWk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725545857; c=relaxed/simple;
-	bh=9BBi/Zg7/2x89Qut/E++ANe43rMRcd/lBsTYheptkgs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aL+Nz8ayIIiOkSGBaFD04ORC9jZ+oU6OQFpB4sB2EvG3pqrsk+hfzD5maj8zCkYsaGPbgdOTQA9I8/eTcRQ5+QFSMQaTgcdaocKPazqOJV/Ihex8t+DedETwKsK/lm1qlUhV2CGB4xhmObytTTscKDx2oGddCe6nCGlB9jbD1eE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nOR8sf8A; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725545856; x=1757081856;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9BBi/Zg7/2x89Qut/E++ANe43rMRcd/lBsTYheptkgs=;
-  b=nOR8sf8ATwpW1lND5nAiOR081riXR/QoiF46Sq3UwKA5JzK3FAshvSmC
-   PZEtCgcaZPeJJxXXbfrPBizqDUHZTEr5Ej6WpFYAzIgIlS1JdlEqvzXbb
-   vMb3kPI6W4Yn6TFgjMWREb8TUEAMZduthUH2wWZU/YkPiNoVXNwBZyC7V
-   WvedkiawQLi14T/HfnobtR2b0n68mVyKmLpypQghf5O5GnMHCUtRdnbSA
-   sfNe4M5qeEOJhRKmSC2QK3BC9FUaDdmxLZhxoDEN6BG6/1+Whbjgehjtn
-   cFAdyUf+hPSC1RU2VNRKIiUOKxkkEV95aZ6lmFdYHUl0mU+m7XjdnISr+
-   g==;
-X-CSE-ConnectionGUID: k8gV53DwRmG00aQR3d+ScQ==
-X-CSE-MsgGUID: I2ilqzF9SbyS/saFYgGKrA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="34932186"
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="34932186"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 07:17:15 -0700
-X-CSE-ConnectionGUID: wiasB9b+Shyr0vLZOviwCA==
-X-CSE-MsgGUID: 7sU8rQyCRvCuEC/eBhflXg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,205,1719903600"; 
-   d="scan'208";a="65872768"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 07:17:10 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1smDIH-00000005Q4X-3aq6;
-	Thu, 05 Sep 2024 17:17:05 +0300
-Date: Thu, 5 Sep 2024 17:17:05 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Petr Mladek <pmladek@suse.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Rengarajan S <rengarajan.s@microchip.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Florian Fainelli <f.fainelli@gmail.com>,
-	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Derek Barbosa <debarbos@redhat.com>
-Subject: Re: [PATCH tty-next v1 0/2] convert 8250 to nbcon
-Message-ID: <Ztm9YYFpCDh18u_Q@smile.fi.intel.com>
-References: <20240905134719.142554-1-john.ogness@linutronix.de>
- <2024090554-mating-humiliate-292b@gregkh>
- <87cyli2nqo.fsf@jogness.linutronix.de>
+	s=arc-20240116; t=1725547202; c=relaxed/simple;
+	bh=ScsJ/sSZ8TsQkwyMo0M+FcEpfaUH5Q9oQFniQdLjNuc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MRQ1vPzfVfxy8OWnqaea6lOFkrHgNUq+dD/i70Ntp8CWfEWp29gxYqqtuOvRm6Wv/lSSN2t/Gu0Ip6xx9G/pM7NePt5zgNu2PoCSxs69Qy5qWwz8IGEVRbi4lxzUGRSXrAr9UaKaIKTET2Wr5ccUVvBLpeaL42AuEhdmDtV4fps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ctAAP0P5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60885C4CEC5;
+	Thu,  5 Sep 2024 14:39:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725547201;
+	bh=ScsJ/sSZ8TsQkwyMo0M+FcEpfaUH5Q9oQFniQdLjNuc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ctAAP0P5WPKg/SbrRbi13HN6rk8EOQS69N3Kw+76EslOsW7St7WHCBMHYbCheO5vS
+	 DCl+WnLDw09kynRiJDilAYWKPMl+Zjt51i2b8aH9ciMdTR0uL1mZbeGn59t7Q9THF2
+	 XGNQtoZgAF5a6dFHr8gWk1fkEwMatLspkatSelaVXI4xtubrFW7Ojy+PfL7Dk0A07j
+	 CPp+sPMq/uX2VEeVeucK8HWl+2HypEDlRPi8jDSlWCuH0M9YSNbWHvUjGlJwgDnu1G
+	 ZXOFhu3e9zikRTW/Aopgjv1dagPA46W6k4qHvXA8IEmGHpwabq/QnUWm4FxOqvviR1
+	 DXeGn0m2lFkoQ==
+Message-ID: <b1ad1c7a-0995-48e0-8ebc-46a39a5ef4b3@kernel.org>
+Date: Thu, 5 Sep 2024 16:39:50 +0200
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87cyli2nqo.fsf@jogness.linutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 16/21] dt-bindings: spi: document support for SA8255p
+To: Nikunj Kela <quic_nkela@quicinc.com>, Andrew Lunn <andrew@lunn.ch>
+Cc: andersson@kernel.org, konradybcio@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, rafael@kernel.org,
+ viresh.kumar@linaro.org, herbert@gondor.apana.org.au, davem@davemloft.net,
+ sudeep.holla@arm.com, andi.shyti@kernel.org, tglx@linutronix.de,
+ will@kernel.org, robin.murphy@arm.com, joro@8bytes.org,
+ jassisinghbrar@gmail.com, lee@kernel.org, linus.walleij@linaro.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, broonie@kernel.org,
+ cristian.marussi@arm.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ wim@linux-watchdog.org, linux@roeck-us.net, linux-arm-msm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-crypto@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-i2c@vger.kernel.org, iommu@lists.linux.dev,
+ linux-gpio@vger.kernel.org, linux-serial@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-watchdog@vger.kernel.org,
+ kernel@quicinc.com, quic_psodagud@quicinc.com,
+ Praveen Talari <quic_ptalari@quicinc.com>
+References: <20240828203721.2751904-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-1-quic_nkela@quicinc.com>
+ <20240903220240.2594102-17-quic_nkela@quicinc.com>
+ <sdxhnqvdbcpmbp3l7hcnsrducpa5zrgbmkykwfluhrthqhznxi@6i4xiqrre3qg>
+ <b369bd73-ce2f-4373-8172-82c0cca53793@quicinc.com>
+ <9a655c1c-97f6-4606-8400-b3ce1ed3c8bf@kernel.org>
+ <516f17e6-b4b4-4f88-a39f-cc47a507716a@quicinc.com>
+ <2f11f622-1a00-4558-bde9-4871cdc3d1a6@lunn.ch>
+ <204f5cfe-d1ed-40dc-9175-d45f72395361@quicinc.com>
+ <70c75241-b6f1-4e61-8451-26839ec71317@kernel.org>
+ <75768451-4c85-41fa-82b0-8847a118ea0a@quicinc.com>
+ <ce4d6ea9-0ba7-4587-b4a7-3dcb2d6bb1a6@kernel.org>
+ <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <4896510e-6e97-44e0-b3d7-7a7230f935ec@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 05, 2024 at 04:18:31PM +0206, John Ogness wrote:
-> On 2024-09-05, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
-> > On Thu, Sep 05, 2024 at 03:53:17PM +0206, John Ogness wrote:
-> >> The recent printk rework introduced a new type of console NBCON
-> >> that will perform printing via a dedicated kthread during
-> >> normal operation. For times when the kthread is not available
-> >> (early boot, panic, reboot/shutdown) the NBCON console will
-> >> print directly from the printk() calling context (even if from
-> >> NMI).
-> >> 
-> >> Futher details about NBCON consoles are available here [0].
-> >
-> > Really?  That link calls them "NOBKL", is that the same thing?
+On 05/09/2024 16:15, Nikunj Kela wrote:
 > 
-> Sorry. Yes, they are the same thing. It was renamed because NOBKL did
-> not look nice.
+> On 9/5/2024 7:09 AM, Krzysztof Kozlowski wrote:
+>> On 05/09/2024 16:03, Nikunj Kela wrote:
+>>> On 9/5/2024 1:04 AM, Krzysztof Kozlowski wrote:
+>>>> On 04/09/2024 23:06, Nikunj Kela wrote:
+>>>>> On 9/4/2024 9:58 AM, Andrew Lunn wrote:
+>>>>>>> Sorry, didn't realize SPI uses different subject format than other
+>>>>>>> subsystems. Will fix in v3. Thanks
+>>>>>> Each subsystem is free to use its own form. e.g for netdev you will
+>>>>>> want the prefix [PATCH net-next v42] net: stmmac: dwmac-qcom-ethqos:
+>>>>> of course they are! No one is disputing that.
+>>>>>> This is another reason why you should be splitting these patches per
+>>>>>> subsystem, and submitting both the DT bindings and the code changes as
+>>>>>> a two patch patchset. You can then learn how each subsystem names its
+>>>>>> patches.
+>>>>> Qualcomm QUPs chips have serial engines that can be configured as
+>>>>> UART/I2C/SPI so QUPs changes require to be pushed in one series for all
+>>>>> 3 subsystems as they all are dependent.
+>>>> No, they are not dependent. They have never been. Look how all other
+>>>> upstreaming process worked in the past.
+>>> Top level QUP node(patch#18) includes i2c,spi,uart nodes.
+>>> soc/qcom/qcom,geni-se.yaml validate those subnodes against respective
+>>> yaml. The example that is added in YAML file for QUP node will not find
+>>> sa8255p compatibles if all 4 yaml(qup, i2c, spi, serial nodes) are not
+>>> included in the same series.
+>>>
+>> So where is the dependency? I don't see it. 
 > 
-> NBCON stands for "No BKL Console".
+> Ok, what is your suggestion on dt-schema check failure in that case as I
+> mentioned above? Shall we remove examples from yaml that we added?
 
-New Brave Console :-)
+I don't understand what sort of failure you want to fix and why examples
+have any problem here. I said it multiple times already but I think you
+never confirmed. Do you understand how patches are merged? That they go
+via different trees but everything must be 100% bisectable?
 
--- 
-With Best Regards,
-Andy Shevchenko
-
+Best regards,
+Krzysztof
 
 
