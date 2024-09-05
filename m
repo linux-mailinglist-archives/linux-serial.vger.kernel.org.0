@@ -1,77 +1,88 @@
-Return-Path: <linux-serial+bounces-5906-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5908-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3563C96DAB1
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 15:47:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B346696DAD9
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 15:54:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8E84FB22094
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 13:47:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3090F1F23786
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Sep 2024 13:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7452A19D8B7;
-	Thu,  5 Sep 2024 13:47:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9176D19C579;
+	Thu,  5 Sep 2024 13:53:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NeYeEDCb";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XzdR8k34"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lyHTfygO"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A1617C9AE;
-	Thu,  5 Sep 2024 13:47:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D478A199938;
+	Thu,  5 Sep 2024 13:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725544044; cv=none; b=tnUm7He9bD+obd7ZgBC5gnAkPvzyCyP6favUojyLJVyZjIZ5G/5HPAmJQ1u9E7zRjBwXs8ylTYyJ7ToUieMkORoulyd13v8G1FB9WwkZfp/jCEvV6FpKlwU7omC+vfJSMdsgkCq0w/YBAA1YTGmciPK4aG2ijnqz1vgsmCLSH5U=
+	t=1725544437; cv=none; b=tmLxW13hgnPlk9AKPhUOzdhmu3SJMHbeDgPoXkU9yuo9x59oewaA5b4B6lHyDPLb+Ub7fTuH9qV+8hD8/q87R9spwLG0o6cxFSxJvJpoX/eF3WUQzeg3JsyNp31nl51837x9YZ1kul6FzkW66vrS2xj7iGDhNGz4FK+J85V/E1o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725544044; c=relaxed/simple;
-	bh=AOn6Ll9ai4K/u6uf9vZ+jX0+M6RhyBBOqA4799es7aE=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=a5Uggr71AD7V8SnFZVzzKH9PBkrw1QngXfS2DLRcwcvk60HUBVqZMWrIJY/6Cu+ssXppKd3lSQSzlG/wU1xzFETkXK4QIbppCgPvKEVewajubF5JT2e3aBaoe49CpAI/7WX4+4e4xcNYqJ4kx2tWFy51Wslo9M3vtMnwCRgQsQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NeYeEDCb; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XzdR8k34; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1725544041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qlP6kusqtPG5pPJZY/w1PqH3fKGrdHhT4n2wnmhWeF0=;
-	b=NeYeEDCbzT0P1OYbMjJHWVskJLk4BmvRZ60tzMCNWwNNZScyGGA69+qtp15gmB+OJntq7J
-	kjG35W9+Ws7z1mc2Z2PBcKmcAO2wbGRlISYmXnTNZxc9zFwUf9Qf6mNldoQKlTrnYvOqSY
-	HScPivxmP/H91fpWV03aeUubkn4htfghoNvcrYPll0YuYCHO4rLwnNjOmpegxNiL4eDxed
-	MvLM92vY8WjW3djdACW2qJytyKD5pBtg3oJMAAJZ2g62BoJUz05z/9FglFG/GUL1llomr7
-	M9cdOqiVZBfAc8g55xGUV4CNB+ah2FcMOPrnL450Xv0BVbIZPnzAZpKy2FpIXw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1725544041;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=qlP6kusqtPG5pPJZY/w1PqH3fKGrdHhT4n2wnmhWeF0=;
-	b=XzdR8k34wZGMeFazggmgjYlFxCnm7Z4nx2H5h//zhSrPqt5uFQyMcaasZthP1pmAJFVx73
-	FkMaivFzpCV2TCBw==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Petr Mladek <pmladek@suse.com>,
+	s=arc-20240116; t=1725544437; c=relaxed/simple;
+	bh=ldpMruZmOqq5mhdXAGLxXTdCZJ/TZ6YWaXl34z7WL7c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tnkWl0cAKAGfHNSc/nFTYJipAhByOmy+V2qZyFMS5FXzxABoKs+V5jEur0wUZOBqP480BptzwxZ4byrRon4NRXEVe7L8cIiGpYKkYXmCSseiew6I4t+jyIjGr5BsMQsPP8qy2aQD1WfbdmB1OUP9jWKRev3LQBtSusv7TND+qGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lyHTfygO; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725544436; x=1757080436;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ldpMruZmOqq5mhdXAGLxXTdCZJ/TZ6YWaXl34z7WL7c=;
+  b=lyHTfygOy2kZFZB6mlOonVx4JzsJepIwJeWpNXCGoDpY8rCoPrfKBKcX
+   8KuDZ7MV8722Y/IHl7E9Xfpjl1SL+UwZ4FzgQz6brxWzxpFyPwUm4pdIZ
+   nO7PuYp7XZoDneV/mb6XynfJrhAfNFpKtzRL5GRiNINW5yBdsuR8Yj6Kg
+   wtcv18oh0I2GRz0IiUSbCJ+9A59J1A3cDC26I5oTo6Agycm4+JPWN+Hdk
+   NUy1/FoUs3IvHV1887yv79ESi4WSnkmjFjS6JVpgmuWNzAREEv9Jqnpgn
+   EKrKqkPh4NhqB0Ibf1asmVjfJHdRe9baNwWi4pXsgSJvnIW4yirt0ML4j
+   g==;
+X-CSE-ConnectionGUID: 2Mw24WXKRxCyGbAT1UeGFw==
+X-CSE-MsgGUID: 4jbRu4qgTniczEkZev9RRw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11186"; a="34926614"
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="34926614"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 06:53:55 -0700
+X-CSE-ConnectionGUID: CIZf5RD5Rtm3Rp8Eq3xcig==
+X-CSE-MsgGUID: CwJZnJ4kQimy8JftNu/arA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,204,1719903600"; 
+   d="scan'208";a="70045366"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmviesa005.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Sep 2024 06:53:50 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1smCvj-00000005Phr-0ZLy;
+	Thu, 05 Sep 2024 16:53:47 +0300
+Date: Thu, 5 Sep 2024 16:53:46 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: John Ogness <john.ogness@linutronix.de>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Petr Mladek <pmladek@suse.com>,
 	Sergey Senozhatsky <senozhatsky@chromium.org>,
 	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Tony Lindgren <tony@atomide.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@pengutronix.de>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	Rengarajan S <rengarajan.s@microchip.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
 	Florian Fainelli <f.fainelli@gmail.com>,
 	Jeff Johnson <quic_jjohnson@quicinc.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: [PATCH next v1 2/2] serial: 8250: Revert "drop lockdep annotation from serial8250_clear_IER()"
-Date: Thu,  5 Sep 2024 15:53:19 +0206
-Message-Id: <20240905134719.142554-3-john.ogness@linutronix.de>
-In-Reply-To: <20240905134719.142554-1-john.ogness@linutronix.de>
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Derek Barbosa <debarbos@redhat.com>
+Subject: Re: [PATCH tty-next v1 0/2] convert 8250 to nbcon
+Message-ID: <Ztm36qPI7fVteSX_@smile.fi.intel.com>
 References: <20240905134719.142554-1-john.ogness@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -79,33 +90,59 @@ List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240905134719.142554-1-john.ogness@linutronix.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-The 8250 driver no longer depends on @oops_in_progress and
-will no longer violate the port->lock locking constraints.
+On Thu, Sep 05, 2024 at 03:53:17PM +0206, John Ogness wrote:
+> The recent printk rework introduced a new type of console NBCON
+> that will perform printing via a dedicated kthread during
+> normal operation. For times when the kthread is not available
+> (early boot, panic, reboot/shutdown) the NBCON console will
+> print directly from the printk() calling context (even if from
+> NMI).
+> 
+> Futher details about NBCON consoles are available here [0].
+> 
+> This series converts the 8250 driver to an NBCON console,
+> providing both threaded and atomic printing implementations.
+> Users can verify the UART console is an NBCON console via the
+> proc filesystem. For example:
+> 
+> $  cat /proc/consoles
+> ttyS0                -W- (EC N  a)    4:64
+> 
+> The 'N' shows that it is an NBCON console.
+> 
+> There will also be a dedicated printing kthread. For example:
+> 
+> $ ps ax | grep pr/
+>    16 root       0:00 [pr/ttyS0]
 
-This reverts commit 3d9e6f556e235ddcdc9f73600fdd46fe1736b090.
+Wondering if this can use the DEVNAME instead of opaque (to some extent) ttySx?
+Or is it using the same what has been passed to the console= kernel command line
+parameter?
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
----
- drivers/tty/serial/8250/8250_port.c | 3 +++
- 1 file changed, 3 insertions(+)
+> Derek Barbosa performed extensive tests [1] using this driver
+> and encountered no issues. On the contrary, his tests showed
+> the improved reliability and non-interference features of the
+> NBCON-based driver.
+> 
+> Since this is the first console driver to be converted to an
+> NBCON console, it may include variables and functions that
+> could be abstracted to all UART consoles (such as the
+> @console_newline_needed field). However, we can abstract such
+> things later as more consoles are converted to NBCON.
+> 
+> John Ogness
+> 
+> [0] https://lore.kernel.org/lkml/20230302195618.156940-1-john.ogness@linutronix.de
+> [1] https://lore.kernel.org/lkml/ZsdoD6PomBRsB-ow@debarbos-thinkpadt14sgen2i.remote.csb
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index ce841c62900d..1b4524f6d9b9 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -712,6 +712,9 @@ static void __serial8250_clear_IER(struct uart_8250_port *up)
- 
- static inline void serial8250_clear_IER(struct uart_8250_port *up)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	__serial8250_clear_IER(up);
- }
- 
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
 
