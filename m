@@ -1,119 +1,106 @@
-Return-Path: <linux-serial+bounces-5950-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5956-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44B6196F48D
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 14:47:21 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 292FA96F525
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 15:15:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B5E51C2165D
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 12:47:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AAFC5B21D41
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 13:15:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13041AB6F4;
-	Fri,  6 Sep 2024 12:46:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77E901CEE96;
+	Fri,  6 Sep 2024 13:14:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZyqBRwd2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iVexM4QK"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 202262745B;
-	Fri,  6 Sep 2024 12:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48CE01CEAB5;
+	Fri,  6 Sep 2024 13:14:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725626817; cv=none; b=CS3vbSR/w6kYPBARYTU6ySqHjKETenR8wuGBzv8//wnWoXg+g18Xn8Spu8gU92ExLPMeLbuxKjNUJvWnUu+U7hcSHPjaV49e/EBcNrzBcAw3/I4BT3RTYKxqueV9O0RY3DCfk7Zh5TOwsWFGb13qgqMK82RN5vH3TXUoGOnDkwU=
+	t=1725628499; cv=none; b=V2+7dsUlN9gWMHfXKANyFZErucg4s4eFqbbkWjynktt6jvabDUgmL4b0QMD5qxohfAUP/y/O58VInAyVkrL+lmzjahNoiZkcJBz4kuIkl/oFMiALJv/WL8Fgs8suDeAEFtCdatoFq04kzJown0VhTMLEDseue4M2RIGHEtcuU8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725626817; c=relaxed/simple;
-	bh=/XZTcQNtG+IZxyO6e2tb51gbAtM2zivjLfErdoGLLDs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tTP4UdO9VdqXa6Ct5lBAd1kpBIaBe0mTrGLRLAUjak6eXYMrlKWz0cMHQynzMhrD8afxkIMqv2T50TXOFcjdcA/ckACCDMsrPrihKF62KltF/k8FG2i+2s0DfBazJdJmDNAnUmrIdOd/ba2cXfSPlEurp1zeaaag8EjSmNU6BjI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZyqBRwd2; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1725626816; x=1757162816;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/XZTcQNtG+IZxyO6e2tb51gbAtM2zivjLfErdoGLLDs=;
-  b=ZyqBRwd2A+eMcIpyExrX5KBBdVLNBSEk0kz1qHUcNvSOwXB4/tZSYgiS
-   qjeB5ipcmhirPnlhCL32dKxzWSj5MFtxuWDYTXaN5sij+ii2V0Sqain1b
-   tD3Yllr4o2DLwuwqRxgM/LG33uYDP3N2CbP+qpsoTuMztt/3jMxnvPHlp
-   MyMIUDxIvZbfYcwaOAi+WViyDnmlbjcn7jlMEMCbotE3c9BMz+eBh7K44
-   6EYujfXUw0HiVLiojq1PUU2lNNCrqt9pkO/mdu/KXtUDHVNwEXDRXsRnN
-   55CU5FSppf3CFlj9pjC9i2MRe/6F+R08OUlJD2jcBYay5kWYrcG7ocRtD
-   A==;
-X-CSE-ConnectionGUID: Z6Kl5V7GQw+L3t9lqn7wqA==
-X-CSE-MsgGUID: mZZkp+vwQS6qMOqaBUmILg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="34958716"
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="34958716"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 05:46:55 -0700
-X-CSE-ConnectionGUID: SA/+jLtOTHK2rAbFnu0Jrg==
-X-CSE-MsgGUID: HFN8Du0ZQwKZZMAoDKWMiw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.10,207,1719903600"; 
-   d="scan'208";a="65926319"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa009.jf.intel.com with ESMTP; 06 Sep 2024 05:46:53 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id BB76C1BE; Fri, 06 Sep 2024 15:46:51 +0300 (EEST)
-Date: Fri, 6 Sep 2024 15:46:51 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Parker Newman <parker@finest.io>
-Cc: Parker Newman <pnewman@connecttech.com>, linux-kernel@vger.kernel.org,
+	s=arc-20240116; t=1725628499; c=relaxed/simple;
+	bh=/MSmBe/YFSZf6t5Cgd2TYXBoOQQtu13KM1KOhOLJX7k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=aN0Wt8LCEqwa8LK2ABYvRSWgdzxzibBGxpT8G6/VEKql8vummb2EpHDX5TLWsQFoTE416/IVsI7XmF9OckwBP3j4ZubzkCCjErnRfeIEWXbELl/P+ACQCyfszwe/bALcYTS540auLwLbSuglE3Amha74/gONhhSL45NzbaVrtrM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iVexM4QK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98E69C4CEC9;
+	Fri,  6 Sep 2024 13:14:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1725628498;
+	bh=/MSmBe/YFSZf6t5Cgd2TYXBoOQQtu13KM1KOhOLJX7k=;
+	h=From:To:Cc:Subject:Date:From;
+	b=iVexM4QKRBgesXubBEfxNA5k2qdQ9HW7mdZ9xk3hGNoRZNCYb5VgGdRgR2zjfjTJT
+	 MBt/We3EIxVXnZEyzAaQL/29ZlBoxKulgd/hJ/vQuNmqaiFDRAjzpQekFuaOgNi4hK
+	 MPcbFfJdcZN7n+6kVJkczvAurYdGbLvZPRRl5yH5C9wWl9UChUCtuLQsiF9eQwfoyq
+	 kNoX7wsMVzMM988N7fk/IuA4jFdKZDzv4qgJw5CUVsT7j7m0d1iE/sdvnbAu6F8EWR
+	 Lacxf9YYNgoas7+yIuNYzcja1jXhHj/jYxVT3w0ibiyG4rVC5Nk3YzvT/haTo15AEk
+	 5icGBizZzfqYA==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan+linaro@kernel.org>)
+	id 1smYo3-000000006Aa-0ABJ;
+	Fri, 06 Sep 2024 15:15:19 +0200
+From: Johan Hovold <johan+linaro@kernel.org>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	=?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= <nfraprado@collabora.com>,
+	linux-arm-msm@vger.kernel.org,
 	linux-serial@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Subject: Re: [PATCH v2 00/13] serial: 8250_exar: Clean up the driver
-Message-ID: <Ztr5u2wEt8VF1IdI@black.fi.intel.com>
-References: <20240503171917.2921250-1-andriy.shevchenko@linux.intel.com>
- <20240503143303.15bf82bc@SWDEV2.connecttech.local>
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH v2 0/8] serial: qcom-geni: fix console corruption
+Date: Fri,  6 Sep 2024 15:13:28 +0200
+Message-ID: <20240906131336.23625-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.44.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240503143303.15bf82bc@SWDEV2.connecttech.local>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, May 03, 2024 at 02:33:03PM -0400, Parker Newman wrote:
-> On Fri,  3 May 2024 20:15:52 +0300
-> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> 
-> > After a rework for CONNTECH was done, the driver may need a bit of
-> > love in order to become less verbose (in terms of indentation and
-> > code duplication) and hence easier to read.
-> >
-> > This clean up series fixes a couple of (not so critical) issues and
-> > cleans up the recently added code. No functional change indented by
-> > the cleaning up part.
-> >
-> > Parker, please test this and give your formal Tested-by tag
-> > (you may do it by replying to this message if all patches are
-> >  successfully tested; more details about tags are available in
-> >  the Submitting Patches documentation).
-> 
-> I was able to test the Connect Tech related code and everything is
-> work as expected. I can't test the non-CTI related changes but they
-> are pretty minor.
-> 
-> Tested-by: Parker Newman <pnewman@connecttech.com>
+This series is a follow-on series to the lockup fixes [1] that addresses
+a number of issues in the Qualcomm GENI console code, including corrupt
+console output during boot, which is a problem for automated CI testing.
 
-Sorry for blast from the past, but I have some instersting information
-for you. We now have spi-gpio and 93c46 eeprom drivers available to be
-used from others via software nodes, can you consider updating your code
-to replace custom bitbanging along with r/w ops by the instantiating the
-respective drivers?
+Johan
+
+[1] https://lore.kernel.org/lkml/20240704101805.30612-1-johan+linaro@kernel.org/
+
+Changes in v2
+ - determine poll timeout in set_termios() and avoid hard coding fifo
+   size in calculation
+ - move fifo drain helper under console ifdef to avoid an unused function
+   warning as reported by the kernel test robot
+ - drop a redundant active check from fifo drain helper
+
+
+Douglas Anderson (3):
+  soc: qcom: geni-se: add GP_LENGTH/IRQ_EN_SET/IRQ_EN_CLEAR registers
+  serial: qcom-geni: fix arg types for qcom_geni_serial_poll_bit()
+  serial: qcom-geni: introduce qcom_geni_serial_poll_bitfield()
+
+Johan Hovold (5):
+  serial: qcom-geni: fix fifo polling timeout
+  serial: qcom-geni: fix false console tx restart
+  serial: qcom-geni: fix console corruption
+  serial: qcom-geni: disable interrupts during console writes
+  serial: qcom-geni: fix polled console corruption
+
+ drivers/tty/serial/qcom_geni_serial.c | 137 +++++++++++++++-----------
+ include/linux/soc/qcom/geni-se.h      |   9 ++
+ 2 files changed, 87 insertions(+), 59 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.44.2
 
 
