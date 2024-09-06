@@ -1,145 +1,138 @@
-Return-Path: <linux-serial+bounces-5961-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5964-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 824A396F584
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 15:37:33 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 66F0A96F63A
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 16:05:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEB6F1C21A37
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 13:37:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F32B4B240A0
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 14:05:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D7A71D2F4C;
-	Fri,  6 Sep 2024 13:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CE981CF5FF;
+	Fri,  6 Sep 2024 14:05:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OpCDsoBo";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0H2W7ryt"
+	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="MKR5WGhj"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406551D27B5;
-	Fri,  6 Sep 2024 13:35:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48699156F5F;
+	Fri,  6 Sep 2024 14:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725629735; cv=none; b=eOP5DohnyxiBvXqAmx3AtU3h/vWt32+95dvvUQsqyfVm7U1V6pVAgNusxmttZMc0AwWaPfkCvvm9X/ihFpCTnbdvcJtddvjuugAqZ04s2Guy8eGZWnyBFPGBZ09JgKwb96Tbcit0pO9CJR5A3VnQP3r19NS6vmZ4iIxIPgtDDd4=
+	t=1725631512; cv=none; b=QMMrtgx554trOeKGyxSsUD2HKWw3uFvI2pBtjRIH9+2/qL8nmO70psZhiW6XjIAeB+9yFIzIXBq7ml4DgGy0QIph6e5u3jRm8BcWghdcV8ZFD/d/9sMK13/jRLPudjaJhwna5PR3UAdTyQcsMt4A3CtDB6f3js1txuhaD/lCvFw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725629735; c=relaxed/simple;
-	bh=KT1UWBeJCZyaYe1ARP8SSElfIfCgLk9cDNxklEkXu6A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Ih8hVtXdQZKYpD8JTsj6X8sh9OBy4ffJnMs/z1FJm+IKZwB9BWeEM/BvyDgjpwr2/HTZlzPaaZbKChejBIn1kHaKm5+VmJaF1IJw2RCLcnmz+2DV13ZSFEs0qiUPUm/KwtSqGtMZ6yB3hlyNip/be2Sok63kslog47E3gFyAhO0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OpCDsoBo; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0H2W7ryt; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1725629731;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EBQ/CG5T/049lQPrktYqvc/FJ3lMexeBJgDccAp6KNk=;
-	b=OpCDsoBo7YYpL+uxCtzQjJQC9fHihaAbASwRudn4yjC4drrzJSf+12yCoIqQJPHva+yArb
-	Z/PD2xNatC3LTXohIrWejYsYz7z0rUve7XyTLSu65Ddh4ZZjlb1Cp3Y6lOKNZNGfbFzmRs
-	8pc3fmVttwzDoCGypizA257fWnYHEVAuTX48+oiDCQevKxZ+IhBFjEs7+P8CCTC8jVBHDQ
-	0VkLB7QIkiXDifTCpDBrjCKSEQuUDS16ZqGENFDjKu55BlntODKgfaA9P0bF0GOMLU0Mj2
-	q2V5ns27UCmP9H+VxeGUQuEr8hIWiHdnkr7VqO8/N2QOJDEBq3YBL5GLmO8RuQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1725629731;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=EBQ/CG5T/049lQPrktYqvc/FJ3lMexeBJgDccAp6KNk=;
-	b=0H2W7rytLzilnNweNYsu8IV9YkKkmobeGnpzXj9d7v6s0RawvIaipIxE3mIQkED1Yv4yZh
-	tIkf/FmVyxC/azAA==
-To: Petr Mladek <pmladek@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>,
- Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner
- <tglx@linutronix.de>, linux-serial@vger.kernel.org,
- linux-kernel@vger.kernel.org, Andy Shevchenko
- <andriy.shevchenko@linux.intel.com>, Tony Lindgren <tony@atomide.com>,
- "Paul E. McKenney" <paulmck@kernel.org>, Uwe =?utf-8?Q?Kleine-K=C3=B6nig?=
- <u.kleine-koenig@pengutronix.de>, Ilpo =?utf-8?Q?J=C3=A4rvinen?=
- <ilpo.jarvinen@linux.intel.com>, Serge Semin <fancer.lancer@gmail.com>,
- Rengarajan S <rengarajan.s@microchip.com>, Wolfram Sang
- <wsa+renesas@sang-engineering.com>
-Subject: Re: [PATCH next v1 1/2] serial: 8250: Switch to nbcon console
-In-Reply-To: <Ztr3f8M2FaT2Rz1c@pathway.suse.cz>
-References: <20240905134719.142554-1-john.ogness@linutronix.de>
- <20240905134719.142554-2-john.ogness@linutronix.de>
- <Ztr3f8M2FaT2Rz1c@pathway.suse.cz>
-Date: Fri, 06 Sep 2024 15:41:30 +0206
-Message-ID: <87mskkdhwd.fsf@jogness.linutronix.de>
+	s=arc-20240116; t=1725631512; c=relaxed/simple;
+	bh=qY3+B14GBIIFJBGWDvhJ6U35yjbaHf2wTguFXuxr7SI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Cfezocmev+TnAeVAn5BLZ3fcg3PNu4yc1M66ol8RDbnyDfhlenMI/O93OM7XUX9H9W8DKOug1K+VyOTOGamzYfQQiClGuGQxi1Mq7ZuLZaAoK0MXXk7C69a7ZEfiqisDHG5iCb/uRMbcCaKZvGpCsFUH51/cOFus3tiFRnLG4yk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=MKR5WGhj; arc=none smtp.client-ip=74.208.4.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
+	s=s1-ionos; t=1725631509; x=1726236309; i=parker@finest.io;
+	bh=FvEIc1kd/SLBsjKUr8msz1hzEsJdR3MUWGjJ7Yf9v9g=;
+	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:In-Reply-To:
+	 References:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=MKR5WGhjL9Nf8jW2jyUnJAzBz+tpt1akzFMjbHrBLnk/Ep9kJ1G7RxMPJTC3E9r8
+	 jEQctUcst3VPJDz+RvLpFdDgl0+T/6gmVkZzEZMekLEmNjXarFhRH2iPFQpVI9+H2
+	 Z9LMmlf9GKB8GV8QDlArYF9q819AwvBFujgfyKXjcmq5XqpTS12QmutTZYVuBBFXA
+	 WGr2SKXcsHsuzoffKE4pidCNQnBFcNOu1G61WXCIktcSQQKB2gyNRVowC6y+gULJm
+	 knIoogyhZ+el773Wb+jUc4apGo+PBqBLojCgyshx4UEA66DT1zO2umahxoD7Onk0b
+	 A5Bna6DLLE5YPtdTrA==
+X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
+Received: from SWDEV2.connecttech.local ([98.159.241.229]) by
+ mrelay.perfora.net (mreueus004 [74.208.5.2]) with ESMTPSA (Nemesis) id
+ 1MVMmB-1se9gu3BLz-00WCPS; Fri, 06 Sep 2024 15:51:43 +0200
+Date: Fri, 6 Sep 2024 09:51:41 -0400
+From: Parker Newman <parker@finest.io>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Parker Newman <pnewman@connecttech.com>, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v2 00/13] serial: 8250_exar: Clean up the driver
+Message-ID: <20240906095141.021318c8@SWDEV2.connecttech.local>
+In-Reply-To: <Ztr5u2wEt8VF1IdI@black.fi.intel.com>
+References: <20240503171917.2921250-1-andriy.shevchenko@linux.intel.com>
+	<20240503143303.15bf82bc@SWDEV2.connecttech.local>
+	<Ztr5u2wEt8VF1IdI@black.fi.intel.com>
+Organization: Connect Tech Inc.
+X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:jbuEN7qYhKL+u2Q5zfcb9gO+afvs4U+drzVioJxQfRdsRZMzZty
+ D7SF1ssEeOrIpyKr8gnqKmh69Ia7D3CEeTEbNN2kqsJPmuBe03SD/imiKE6A+zDXwX4oTBF
+ XgQMiYtGYFvuDrRVepuDDkZisDroq6fuqMOzKyJmIUHmA0z/WxOC3G3p8fTKVcsgYdtmX/m
+ m8OhqiAtjuXNAV5iRLGfQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Ff+vd29p42U=;IB2LxpD7UNZa4e86g5pLeO4pf0n
+ RewUk4kCCjf6U1bw6VgJS4MZhWy/RFAKia8hkkktbY5xZN6i2/5p3wNM+gcklurAvBxkQfhun
+ KgO5mu3PuEpQwRrCilZQYdBGbFTnn+pOL7cNjcjjPyzwhMkSKwXUwCF2AHCtQ9WsLpYw/wqDs
+ hqkzRpfvTajMYexm+bQ4lHA6Jcg36/42H3IsdYkB9uzX4cixI1jGkcskQyr03gwQKWrGOTVlD
+ nr42MucdiYBYaxLv6/uI5gv7hII+yC/QLRRoaXhi4vJq+66px7x9hHNyXAtnlaDCLYrfSSkTK
+ dAkYi+T7T699Si+NjImY/Ton3pzPgYzq2bXd88JKyq7hQT0h7EWdbyAIl1Jf/GxTI/uy2706I
+ ZrX4lUGytmCECbfWAq6jtkv8h23XZC4KbmT1srbCFlkezw2Iz5VACZkyoPvLvK9tHjYpq6tdL
+ RVzWmiqU/KeBgnj5xBYWLph9jzMGnjXIp3BrMn7N6XEfFwoKXozQvLyXVDqiAxQvSZCyuldzT
+ meVixa3/mvqUMn7kVIXrXh4Z0OFwpyCBOqUFsUZ0wSnPwWZ6ZRpcHp8/nuOhVCn8MlcRPB+R1
+ Y+IDfPUvuOsQp8mY4UqWcEeTWsVxLlDsurSp6oyOXe6ciLoSud46QudifgxGZlm8E2VuG9ieh
+ ARQ0fO8xgM/s1a/EmXV7UT9nNlV42bz97LSU6lcSDTYcnIX4NJN+EZ6BPhg9+p0ogKsnd3rAd
+ Qn9c+koHVweJKjnOlBs+qa+NQaSuL+A2g==
 
-On 2024-09-06, Petr Mladek <pmladek@suse.com> wrote:
->> +#ifdef USE_SERIAL_8250_LEGACY_CONSOLE
+On Fri, 6 Sep 2024 15:46:51 +0300
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+
+> On Fri, May 03, 2024 at 02:33:03PM -0400, Parker Newman wrote:
+> > On Fri,  3 May 2024 20:15:52 +0300
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > > After a rework for CONNTECH was done, the driver may need a bit of
+> > > love in order to become less verbose (in terms of indentation and
+> > > code duplication) and hence easier to read.
+> > >
+> > > This clean up series fixes a couple of (not so critical) issues and
+> > > cleans up the recently added code. No functional change indented by
+> > > the cleaning up part.
+> > >
+> > > Parker, please test this and give your formal Tested-by tag
+> > > (you may do it by replying to this message if all patches are
+> > >  successfully tested; more details about tags are available in
+> > >  the Submitting Patches documentation).
+> >
+> > I was able to test the Connect Tech related code and everything is
+> > work as expected. I can't test the non-CTI related changes but they
+> > are pretty minor.
+> >
+> > Tested-by: Parker Newman <pnewman@connecttech.com>
 >
-> Just for record. I agree that it is better to simply remove the
-> obsolete legacy code.
-
-Agreed. I will be removing it for v2.
-
->> +#ifndef USE_SERIAL_8250_LEGACY_CONSOLE
->> +	if (uart_console(&p->port)) {
->> +		dev_warn(p->port.dev, "no atomic printing for rs485 consoles\n");
->> +		p->port.cons->write_atomic = NULL;
->> +	}
+> Sorry for blast from the past, but I have some instersting information
+> for you. We now have spi-gpio and 93c46 eeprom drivers available to be
+> used from others via software nodes, can you consider updating your code
+> to replace custom bitbanging along with r/w ops by the instantiating the
+> respective drivers?
 >
-> Wait! This makes the rs485 consoles much less usable for debugging.
-> They might have troubles to see the emergency and panic messages.
-> Or do I miss anything, please?
->
-> Is this acceptable? Why?
 
-It is not acceptable. I am looking into making the atomic part work for
-RS485 as well. My main problem is testing since I will need to get my
-hands or real RS485 hardware.
+Hi Andy,
+The Exar UARTs don't actually use MPIO/GPIO for the EEPROM.
+They have a dedicated "EEPROM interface" which is accessed by the
+REGB (0x8E) register. It is a very simple bit-bang interface though,
+one bit per signal.
 
->>  	wait_for_xmitr(up, UART_LSR_THRE);
->>  	serial_port_out(port, UART_TX, ch);
->> +
->> +	if (ch == '\n')
->> +		up->console_newline_needed = false;
->> +	else
->> +		up->console_newline_needed = true;
->
-> I might be just dumb but this code confused me. I missed that the
-> variable was actually set after printing the character. I inverted
-> the logic in my head and it did not make sense.
->
-> I vote for adding a comment. Or better make the code more
-> straightforward by renaming the variable and inverting the logic:
->
-> 	if (ch == '\n')
-> 		up->console_line_ended = true;
-> 	else
-> 		up->console_line_ended = false;
+I guess in theory I could either add  GPIO wrapper to toggle these bits
+and use the spi-gpio driver but I am not sure if that really improves thin=
+gs?
+Maybe using the spi-bitbang driver directly is more appropriate?
+What do you think?
 
-OK. I will add a comment, rename the variable, and invert the logic.
-
->> +void serial8250_console_write_thread(struct uart_8250_port *up,
->> +				     struct nbcon_write_context *wctxt)
->> +{
->> +	struct uart_8250_em485 *em485 = up->em485;
->> +	struct uart_port *port = &up->port;
->> +	unsigned int ier;
->> +
->> +	touch_nmi_watchdog();
->
-> This should not be needed in the write_thread() variant because
-> it allows to schedule after emitting one record.
-
-Agreed.
-
-Thanks.
-
-John
+Thanks,
+Parker
 
