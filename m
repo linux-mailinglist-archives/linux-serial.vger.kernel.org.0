@@ -1,170 +1,139 @@
-Return-Path: <linux-serial+bounces-5963-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-5965-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1411296F62C
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 16:03:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B08E396F69F
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 16:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 93B38B236FA
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 14:03:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 023982854DE
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Sep 2024 14:25:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A551CF2B7;
-	Fri,  6 Sep 2024 14:03:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C53B31D1F56;
+	Fri,  6 Sep 2024 14:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dyMY9vi+"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hqJCXL2A"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EF91CE710;
-	Fri,  6 Sep 2024 14:03:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2757E1D1F4C;
+	Fri,  6 Sep 2024 14:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1725631400; cv=none; b=lipExuMDc8F+9uWwRie6TbU1zgfHqw5FbNq5nrSKAUU6//EvgMd0yM5AIAfRWyyjoSVovy5umS6sEgiYTWNN+Z9xlJbsXEqSHU1pSFcdkiGUU5aBlAKPFGcG9AxFEHFAt2FqtynRU+Ogc688XSJKsuCOHQ4quJrC/xrUbQFb9KQ=
+	t=1725632691; cv=none; b=MjJ3fS+LnlJRpDWcbr/wN4Pq6dWeu+bmTV/yLbUi1fztovLZCKw+D4JYyNb4JUnudqkifPxEMjydzIGjUQ0sK+bGagq4gN2wXM94T0bEZr2FN5BLYb5FDI/oijCQuxqqkOUV7dKe6kReQMN0qjZP2/NX2j3LiEC9k0ZmZDf5rTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1725631400; c=relaxed/simple;
-	bh=cCvVFVarD948ikan+/2TaJVbsKjZAcxCYUNJAassXuo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=OWd1PtOIHBGAnVjXZkqX/yTHbq4qk6YMIQDLl2d9dIxgejiMunr7oa2CFdF6KSNmHDZUZUyGRD8lp0ckbNNVBEhFgWDOxxqbvatNO85mncgwdAiJQob/NI7nUAdFeBEpYYQCjmGN3icHdX4A127mQYwWR9YhPDnsuLW0idaaa+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dyMY9vi+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21929C4CED1;
-	Fri,  6 Sep 2024 14:03:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1725631400;
-	bh=cCvVFVarD948ikan+/2TaJVbsKjZAcxCYUNJAassXuo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dyMY9vi+Iv/1EE4rQ5BwnYhfwk66+LJ4z96MdbykYSppKKoQ6y3a0sNfUu/b88uyD
-	 CnMZ+ONw74z6CdB7oB6DTdO6H33Yg0CqFxIeKoXjlAeH7r+IeYZBwiBhKopg0VRDv1
-	 gzpGPqLViAnfIcvPs8ONYWfyESePiuh7ufuvViitOGQLxvTFW462hGXk6bbFU2yUaH
-	 L9ypC5UisZq5so1J2EZ4Zsx2oDa8QzGHtDF2R5KDWuQbRupAZrdUcRbDK0gOWrBwUd
-	 QfmUhasthbSt1k+8xvJ7JF5Ifym3SEZdnZdQXjE4OvCP9je+KurLddBgNN2nspGq59
-	 NazYJG1NuiiDw==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5353cd2fa28so2454042e87.3;
-        Fri, 06 Sep 2024 07:03:20 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU9Ztj0X90dyL2yOZ5gj/wvCM65BvxCpNwyOknReamq75SMC2NkdqpJz56gX9j4NHxzZH+r7bge2MdgJasK@vger.kernel.org, AJvYcCVQ8UKofh5or87mhXLGx6p/fn9B/cNsUV7Ywbfsl5cwQ9krl2d9E1PeqmneWw+2fWv+TBULLAo1fzckXoQ=@vger.kernel.org, AJvYcCWSvbQVsS1kM+a+nQNiq5IN1aPl11nYq68EM11GPInmyu9cOYE1+WWXlIYKftPuH40OCXFZ/phmDQ==@vger.kernel.org, AJvYcCWwgkqSt084qNDp0FC7B1jEbyfM8OrWri/fU8DH47qjvcS3TIxg9b8nH0MN7dvMDcbYyrUMF23xodXeFVAT@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8eI12/qluUNH9CvjhpwrrPKz+LAUqXJ5FCymIGaDswDejbzpg
-	x4WpKNcTusFvZ9BkUQrTSYVvKM6Nu4uWr9KfYiVJv7yhawpGOKFVjKfqtbBt4tbw0v6Da2PFg5l
-	sCgt+U0XvogxbzofSD4wsElwkaH0=
-X-Google-Smtp-Source: AGHT+IEwm1OihzyduuH3GdpU3yiLq9gm3KuXayVrsg5BxQSVxVXk/rmKiVyZVYISmyKuN7IvBRI5rMb23e03P34iqD4=
-X-Received: by 2002:a05:6512:39ce:b0:536:54df:bff2 with SMTP id
- 2adb3069b0e04-53658812f84mr1830079e87.54.1725631398698; Fri, 06 Sep 2024
- 07:03:18 -0700 (PDT)
+	s=arc-20240116; t=1725632691; c=relaxed/simple;
+	bh=qHBHB2kdrNFDSiFJgTc2SnouAy6yPXOIwzYtL6xR0lw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=npUvs3OUHdrN3Zv8eY2bcmVqLc86o4+MhJG2k2HTB2Z9PctUmCnlt1tw27eNvEnQozGT1z1oqqY+8J8fZA0G7PlKbwyi64L6gCAzRZAA2UyJF+mUvQ2KvU6z1zQVk99U6zkmaFYEt3V5C2FYwn2wNh+N452EpWHDDISoU/zfgYk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hqJCXL2A; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1725632690; x=1757168690;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qHBHB2kdrNFDSiFJgTc2SnouAy6yPXOIwzYtL6xR0lw=;
+  b=hqJCXL2AL2hsyMjqLIAFhuZCxHWFbfjbOUpeJh6Uu28ck2lGtnFUac0m
+   XlcI7FNdzxsRecwOgZx7Iz6BMrVi046KlMzPoxVKSxtHHUzBiASiehTvr
+   tHPCFAkJPHdmM+h7b5qUB1VQkVo69HL2Am6V75kf2P9JMf0Nk08RDskwJ
+   cCs2d35egeWZG8Junx8jGIPXXDBuOABZeQV2RNFKEvzkbtAGJq7P24ybs
+   XHInSj7ZQmjqv0TNWkeGv0CIpX50FTn8rBCVKpn28fCChguZG1DvEBIM4
+   DOn21EbFbvR7oW8pfr9yltFOfWsEPOCgqgFMcWbqP8GAJGDHdjN7INBh/
+   A==;
+X-CSE-ConnectionGUID: tKOtkQqeR/OC2OXfIBeVMQ==
+X-CSE-MsgGUID: KGNzHPUrTECS9xGGuEIqGg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11187"; a="35778570"
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="35778570"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 07:24:49 -0700
+X-CSE-ConnectionGUID: f8pegL7PQz6Jb13k4USfxg==
+X-CSE-MsgGUID: ObgZyOa6SPurGhtR4M+cAA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,208,1719903600"; 
+   d="scan'208";a="70771114"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Sep 2024 07:24:48 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1smZtF-00000005pGm-0Clu;
+	Fri, 06 Sep 2024 17:24:45 +0300
+Date: Fri, 6 Sep 2024 17:24:44 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Parker Newman <parker@finest.io>
+Cc: Parker Newman <pnewman@connecttech.com>, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH v2 00/13] serial: 8250_exar: Clean up the driver
+Message-ID: <ZtsQrFgH86AkKgPp@smile.fi.intel.com>
+References: <20240503171917.2921250-1-andriy.shevchenko@linux.intel.com>
+ <20240503143303.15bf82bc@SWDEV2.connecttech.local>
+ <Ztr5u2wEt8VF1IdI@black.fi.intel.com>
+ <20240906095141.021318c8@SWDEV2.connecttech.local>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com> <20240906-macos-build-support-v2-5-06beff418848@samsung.com>
-In-Reply-To: <20240906-macos-build-support-v2-5-06beff418848@samsung.com>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Fri, 6 Sep 2024 23:02:42 +0900
-X-Gmail-Original-Message-ID: <CAK7LNAQGuXzuA5tNSv0q_AMAy8Zw5MtG2RFRW0nQOwCO8Z5FLw@mail.gmail.com>
-Message-ID: <CAK7LNAQGuXzuA5tNSv0q_AMAy8Zw5MtG2RFRW0nQOwCO8Z5FLw@mail.gmail.com>
-Subject: Re: [PATCH v2 5/8] scripts: add bee-headers support
-To: da.gomez@samsung.com
-Cc: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas@fjasle.eu>, 
-	Lucas De Marchi <lucas.demarchi@intel.com>, 
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>, 
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, 
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>, 
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault <samuel.thibault@ens-lyon.org>, 
-	Paul Moore <paul@paul-moore.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	James Morse <james.morse@arm.com>, Suzuki K Poulose <suzuki.poulose@arm.com>, 
-	Zenghui Yu <yuzenghui@huawei.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
-	Simona Vetter <simona.vetter@ffwll.ch>, linux-kernel@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, intel-xe@lists.freedesktop.org, 
-	dri-devel@lists.freedesktop.org, speakup@linux-speakup.org, 
-	selinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, linux-serial@vger.kernel.org, llvm@lists.linux.dev, 
-	Finn Behrens <me@kloenk.dev>, "Daniel Gomez (Samsung)" <d+samsung@kruces.com>, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240906095141.021318c8@SWDEV2.connecttech.local>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Fri, Sep 6, 2024 at 8:01=E2=80=AFPM Daniel Gomez via B4 Relay
-<devnull+da.gomez.samsung.com@kernel.org> wrote:
->
-> From: Daniel Gomez <da.gomez@samsung.com>
->
-> endian.h header is not provided by default in macOS. Use pkg-config with
-> the new development package 'bee-headers' [1] to find the path where the
-> headers are installed.
->
-> [1] Bee Headers Project links:
-> https://github.com/bee-headers/headers
-> https://github.com/bee-headers/homebrew-bee-headers
->
-> It requires to install bee-headers Homebrew Tap:
->   brew tap bee-headers/bee-headers
->   brew install bee-headers/bee-headers/bee-headers
->
-> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
-> ---
->  scripts/Makefile     | 4 +++-
->  scripts/mod/Makefile | 5 +++++
->  2 files changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/scripts/Makefile b/scripts/Makefile
-> index 6bcda4b9d054..40f6a9159f8c 100644
-> --- a/scripts/Makefile
-> +++ b/scripts/Makefile
-> @@ -25,8 +25,10 @@ generate_rust_target-rust :=3D y
->  rustdoc_test_builder-rust :=3D y
->  rustdoc_test_gen-rust :=3D y
->
-> -HOSTCFLAGS_sorttable.o =3D -I$(srctree)/tools/include
-> +HOSTCFLAGS_sorttable.o =3D -I$(srctree)/tools/include \
-> +       $(shell $(HOSTPKG_CONFIG) --cflags bee-headers 2> /dev/null)
->  HOSTLDLIBS_sorttable =3D -lpthread
-> +HOSTCFLAGS_insert-sys-cert.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-=
-headers 2> /dev/null)
->  HOSTCFLAGS_asn1_compiler.o =3D -I$(srctree)/include
->  HOSTCFLAGS_sign-file.o =3D $(shell $(HOSTPKG_CONFIG) --cflags libcrypto =
-2> /dev/null)
->  HOSTLDLIBS_sign-file =3D $(shell $(HOSTPKG_CONFIG) --libs libcrypto 2> /=
-dev/null || echo -lcrypto)
-> diff --git a/scripts/mod/Makefile b/scripts/mod/Makefile
-> index 75c12c045f21..33bb032039ba 100644
-> --- a/scripts/mod/Makefile
-> +++ b/scripts/mod/Makefile
-> @@ -9,6 +9,11 @@ modpost-objs   :=3D modpost.o file2alias.o sumversion.o =
-symsearch.o
->  devicetable-offsets-file :=3D devicetable-offsets.h
->
->  HOSTCFLAGS_file2alias.o +=3D -D_UUID_T -D__GETHOSTUUID_H
-> +HOSTCFLAGS_modpost.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-headers =
-2> /dev/null)
-> +HOSTCFLAGS_file2alias.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-heade=
-rs 2> /dev/null)
-> +HOSTCFLAGS_sumversion.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-heade=
-rs 2> /dev/null)
-> +HOSTCFLAGS_symsearch.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-header=
-s 2> /dev/null)
-> +HOSTCFLAGS_mk_elfconfig.o =3D $(shell $(HOSTPKG_CONFIG) --cflags bee-hea=
-ders 2> /dev/null)
->
->  $(obj)/$(devicetable-offsets-file): $(obj)/devicetable-offsets.s FORCE
->         $(call filechk,offsets,__DEVICETABLE_OFFSETS_H__)
+On Fri, Sep 06, 2024 at 09:51:41AM -0400, Parker Newman wrote:
+> On Fri, 6 Sep 2024 15:46:51 +0300
+> Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > On Fri, May 03, 2024 at 02:33:03PM -0400, Parker Newman wrote:
+> > > On Fri,  3 May 2024 20:15:52 +0300
+> > > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
+> > >
+> > > > After a rework for CONNTECH was done, the driver may need a bit of
+> > > > love in order to become less verbose (in terms of indentation and
+> > > > code duplication) and hence easier to read.
+> > > >
+> > > > This clean up series fixes a couple of (not so critical) issues and
+> > > > cleans up the recently added code. No functional change indented by
+> > > > the cleaning up part.
+> > > >
+> > > > Parker, please test this and give your formal Tested-by tag
+> > > > (you may do it by replying to this message if all patches are
+> > > >  successfully tested; more details about tags are available in
+> > > >  the Submitting Patches documentation).
+> > >
+> > > I was able to test the Connect Tech related code and everything is
+> > > work as expected. I can't test the non-CTI related changes but they
+> > > are pretty minor.
+> > >
+> > > Tested-by: Parker Newman <pnewman@connecttech.com>
+> >
+> > Sorry for blast from the past, but I have some instersting information
+> > for you. We now have spi-gpio and 93c46 eeprom drivers available to be
+> > used from others via software nodes, can you consider updating your code
+> > to replace custom bitbanging along with r/w ops by the instantiating the
+> > respective drivers?
+> 
+> Hi Andy,
+> The Exar UARTs don't actually use MPIO/GPIO for the EEPROM.
+> They have a dedicated "EEPROM interface" which is accessed by the
+> REGB (0x8E) register. It is a very simple bit-bang interface though,
+> one bit per signal.
+> 
+> I guess in theory I could either add  GPIO wrapper to toggle these bits
+> and use the spi-gpio driver but I am not sure if that really improves things?
+> Maybe using the spi-bitbang driver directly is more appropriate?
+> What do you think?
+
+Yes, spi-bitbang seems better in this case.
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-
-Same as 4/8.
-
-NACK.
-
-
-
-
---
-Best Regards
-
-Masahiro Yamada
 
