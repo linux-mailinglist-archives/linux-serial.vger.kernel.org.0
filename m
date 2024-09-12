@@ -1,166 +1,189 @@
-Return-Path: <linux-serial+bounces-6068-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6070-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4088B976FB5
-	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2024 19:39:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9AC0397703F
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2024 20:20:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0752E284B8A
-	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2024 17:39:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C368A1F234C8
+	for <lists+linux-serial@lfdr.de>; Thu, 12 Sep 2024 18:20:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CA961C0DC0;
-	Thu, 12 Sep 2024 17:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C0681BFDED;
+	Thu, 12 Sep 2024 18:20:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="U1Y3vEOI"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CPsmgtEM"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32ED1BFDEA
-	for <linux-serial@vger.kernel.org>; Thu, 12 Sep 2024 17:39:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38D08156F44;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726162753; cv=none; b=DhI1JTJnsMRvBCVA/SDI5oS4uJghNijBRoOojRTDRKIle0Vs3TnP/Xcg7nZOMPFSUzUJ/7t4yjfOdVPq//fKK2Iybr6PvagwvVKilSQLRmg3mcGLIljMZ257TjNuOKVjkr0Proko8Rn3H1OS0tlPs9CHfyyUBbEvXCl+7z7xgfQ=
+	t=1726165215; cv=none; b=ZNEKBiFfRkqaizsiQhkCCdLOm7UASt4bPtmFUpLoid63ZK3HA7xYs0wC4pvuixtx0TX7J9JUmo7NGcgfReionkTjrfh4JmBUhC0xLgMnczuiFUZq5GsBvKZDbOYF/obEGzgR2fg+w0olCGyYqGtZxu9ccsjUr2yATV2C/wtXA7k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726162753; c=relaxed/simple;
-	bh=sdvuNJYXbnl+iyClqdVA5O83W4ftzy+TWXXAq64uN7o=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dHVPNd7IeG20NNGBOQopXP6203m16AlQ3CmS9cXTRZtH203o/gxh1BDGD0qYg4Leczi2+ivzxIR8925NJZplSJ9WiNAOf0wMXwbVCdfxI5Mv/vE3YU0IwGWmUnt5Zupe6gHnQ4dKVM7E/3qbeDyO7fSvmRH/2LSIH9wMNm99SBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=U1Y3vEOI; arc=none smtp.client-ip=209.85.166.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-39d4a4e4931so4198905ab.2
-        for <linux-serial@vger.kernel.org>; Thu, 12 Sep 2024 10:39:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1726162750; x=1726767550; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qECmHjc9dK1dFT5mGpczd6pcWBHqdXTgofYQGynhgPc=;
-        b=U1Y3vEOItKe8tEuj3rwDpOKtrApa7FG5bxRYPzR0tof42evGHKbnPzFBXaUQsS6KTT
-         znu39CIx0KyRHwig0KURQgTIhGoccC4LB8vDWMzuInXsTft2w3Ggc+qjLR+fzAwEQsgi
-         pj+O5eR0jv35WqhXYJX0RAUKTjBJeN4f1nVCY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1726162750; x=1726767550;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qECmHjc9dK1dFT5mGpczd6pcWBHqdXTgofYQGynhgPc=;
-        b=AgFlmNZA4xlbaUYCaHsZEf1j1kC0vl9OHE+gzKrnbxW1E2Er0ogCwFV19EHm5Gj+2U
-         6ZfMIrbStZwegeeY2UsisX4cvgodKdBw8ZMasK9wClmyNfyCSb4zj3yF8Yjv/rZwQniR
-         ahqKhc1e7F4m9avIhF8ab2jqBGfIG77Ixu/OqETJYhZLb+Hsp5xYHNKqv0UyLPCL5lq7
-         Mq38Sb9T6tKH3lCkO4cfD8+3o7tC82tFcgzpW9273ki10dOoqNjzpEpibTJG/NwkWG/K
-         9Pn44zEJq6SLqYNeU9wVmYGuIUP0IUAR8tpZZmIsLBJYz0Yhq0Yh6hHdKbz4O9Ld4VGP
-         /Qzw==
-X-Gm-Message-State: AOJu0Yz5cZT5K8dMLe4YfCc4Lp1nW1tZ1fhPFrorInwxwjLjCoKvxZve
-	YiM28N98l+VFPKzudzBsjbsan1hhqI12YenECtH/j2/iGo/SaHO8ep1EnOMaVpL0Xds1fwqnjmA
-	=
-X-Google-Smtp-Source: AGHT+IHL4MH+QIKEB9bCMel4ROL7d0o5CwGYlEvbEC0U2AMuWF6C9AaGEEJwAGhel0XN8qNUrPvZtg==
-X-Received: by 2002:a92:c24d:0:b0:39f:6fcc:fcc with SMTP id e9e14a558f8ab-3a0848ae8c0mr36173705ab.4.1726162750451;
-        Thu, 12 Sep 2024 10:39:10 -0700 (PDT)
-Received: from rrangel920.bld.corp.google.com (h24-56-189-226.arvdco.broadband.dynamic.tds.net. [24.56.189.226])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3a05900e618sm32570135ab.55.2024.09.12.10.39.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 12 Sep 2024 10:39:09 -0700 (PDT)
-From: Raul E Rangel <rrangel@chromium.org>
-To: linux-serial@vger.kernel.org
-Cc: pmladek@suse.com,
-	rafael.j.wysocki@intel.com,
-	ribalda@chromium.org,
-	Raul E Rangel <rrangel@chromium.org>,
-	Len Brown <lenb@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Robert Moore <robert.moore@intel.com>,
-	acpica-devel@lists.linux.dev,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ACPI: SPCR: Add support for rev 3
-Date: Thu, 12 Sep 2024 11:36:21 -0600
-Message-ID: <20240912113616.3.I1b7a5033a2191cb0cdbadc2d51666a97f16cc663@changeid>
-X-Mailer: git-send-email 2.46.0.662.g92d0881bb0-goog
-In-Reply-To: <20240912173901.3969597-1-rrangel@chromium.org>
-References: <20240912173901.3969597-1-rrangel@chromium.org>
+	s=arc-20240116; t=1726165215; c=relaxed/simple;
+	bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=IjQ4CC9l+6npKfeG9EA6qDO0rYNXR+VP71G/IbfS2rQ+MbBjVBIc0X5Mdb19EyUEO/mlV3O9U1vJQxYhjBydjEG0MnT7rWGNeXgTwoYyI6Ta7V17qhdSdbponnvU9R782VRkDhMxDmKjNcAQzRO2dVOYrv5u75n7fT08u5lKtxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CPsmgtEM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B1314C4CEC3;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1726165214;
+	bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+	h=From:Subject:Date:List-Id:To:Cc:Reply-To:From;
+	b=CPsmgtEMMAtyNjuTtYzJv2ymvFQzEQ0PP4IxrBdr25a91/xfA+vLhNsSL+sUbEenZ
+	 pnswG6UKzPGA3YNk0qQSUQCjyTyrSSHYiRpO5q6F/kJ4uTcf4RAHSqE1IviTh391YH
+	 LKwVAYm+pHsrWoYTohF3ihvZtSMZZl2stoW3B9u1nAmd+ymbmPPmHRjZ2ixy5YTA5g
+	 29/F5vNMp75kXNPU1jh5NV0QUUrwuLjW4nf/0ah2QpS+z28d2jKOzGh8ljkpwWfo+Z
+	 okGMUadVfBH17b24RjwzDTPHAc88HGbAbD3zk/VmYj0a/3gErJdJXm9vc/gOPciRmZ
+	 DM5sYzwjSuwLg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9552CEED61F;
+	Thu, 12 Sep 2024 18:20:14 +0000 (UTC)
+From: Arturs Artamonovs via B4 Relay <devnull+arturs.artamonovs.analog.com@kernel.org>
+Subject: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
+Date: Thu, 12 Sep 2024 19:24:45 +0100
+Message-Id: <20240912-test-v1-0-458fa57c8ccf@analog.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO0x42YC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDIxMDSwNL3ZLU4hJdi9Rk0zRzs7RUsxQjJaDSgqLUtMwKsDHRsbW1ACfUB0l
+ WAAAA
+X-Change-ID: 20240909-test-8ec5f76fe6d2
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Utsav Agarwal <Utsav.Agarwal@analog.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Olof Johansson <olof@lixom.net>, soc@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-serial@vger.kernel.org, 
+ Arturs Artamonovs <arturs.artamonovs@analog.com>, adsp-linux@analog.com, 
+ Arturs Artamonovs <Arturs.Artamonovs@analog.com>, 
+ Nathan Barrett-Morrison <nathan.morrison@timesys.com>
+X-Mailer: b4 0.15-dev-7be4f
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1726165513; l=5160;
+ i=arturs.artamonovs@analog.com; s=20240909; h=from:subject:message-id;
+ bh=w0yUEeGO5zWa5Zok2P2rOyXgtDKvVgmOUJ+a/Az1hj4=;
+ b=zbt6V9124O55F0SjvPefnGSMeoqnQ6n0nQAX5r5d9ePtZmwiyfZElo/Gxg9IU9a3CrDXAI7ll
+ FFhs3bUdzCqBvTjA8ZWx3jPfHROQJaT88gsBroCxlNiuQ/0z7ZsVUF8
+X-Developer-Key: i=arturs.artamonovs@analog.com; a=ed25519;
+ pk=UXODIid/MrmBXvqkX4PeEfetDaNAw9xKMINHIc5oZCk=
+X-Endpoint-Received: by B4 Relay for arturs.artamonovs@analog.com/20240909
+ with auth_id=206
+X-Original-From: Arturs Artamonovs <arturs.artamonovs@analog.com>
+Reply-To: arturs.artamonovs@analog.com
 
-Revision 3 supports specifying the UART input clock. This allows for
-proper computation of the UART divisor when the baud rate is specified.
+This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
+SoC's and used by customers for some time . Patch series contains minimal set
+of changes to add ADSP-SC598 support to upstream kernel. This series include
+UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
+board into serial shell and able to reset the board. Current SOM board
+requires I2C expander to enable UART output.
 
-The earlycon code can accept the following format (See `parse_options`
-in `earlycon.c`.):
-* <name>,io|mmio|mmio32|mmio32be,<addr>,<baud>,<uartclk>,<options>
+UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
+ADSP-SC5xx related bug fixes and improvments.
 
-This change makes it so the uartclk is passed along if it's defined in
-the SPCR table.
-
-Booting with `earlycon` and a SPCR v3 table that has the uartclk and
-baud defined:
-[    0.028251] ACPI: SPCR: console: uart,mmio32,0xfedc9000,115200,48000000
-[    0.028267] earlycon: uart0 at MMIO32 0x00000000fedc9000 (options '115200,48000000')
-[    0.028272] printk: legacy bootconsole [uart0] enabled
-
-Link: https://learn.microsoft.com/en-us/windows-hardware/drivers/serports/serial-port-console-redirection-table
-
-Signed-off-by: Raul E Rangel <rrangel@chromium.org>
-
+Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
 ---
+Arturs Artamonovs (21):
+      arm64: Add ADI ADSP-SC598 SoC
+      reset: Add driver for ADI ADSP-SC5xx reset controller
+      dt-bindigs: arm64: adi,sc598 bindings
+      dt-bindings: arm64: adi,sc598: Add ADSP-SC598 SoC bindings
+      clock:Add driver for ADI ADSP-SC5xx PLL
+      include: dt-binding: clock: add adi clock header file
+      clock: Add driver for ADI ADSP-SC5xx clock
+      dt-bindings: clock: adi,sc5xx-clocks: add bindings
+      gpio: add driver for ADI ADSP-SC5xx platform
+      dt-bindings: gpio: adi,adsp-port-gpio: add bindings
+      irqchip: Add irqchip for ADI ADSP-SC5xx platform
+      dt-bindings: irqchip: adi,adsp-pint: add binding
+      pinctrl: Add drivers for ADI ADSP-SC5xx platform
+      dt-bindings: pinctrl: adi,adsp-pinctrl: add bindings
+      i2c: Add driver for ADI ADSP-SC5xx platforms
+      dt-bindings: i2c: add i2c/twi driver documentation
+      serial: adi,uart: Add driver for ADI ADSP-SC5xx
+      dt-bindings: serial: adi,uart4: add adi,uart4 driver documentation
+      arm64: dts: adi: sc598: add device tree
+      arm64: defconfig: sc598 add minimal changes
+      MAINTAINERS: add adi sc5xx maintainers
 
- drivers/acpi/spcr.c   | 5 ++++-
- include/acpi/actbl3.h | 6 +++---
- 2 files changed, 7 insertions(+), 4 deletions(-)
+ .../devicetree/bindings/arm/analog/adi,sc5xx.yaml  |   24 +
+ .../bindings/clock/adi,sc5xx-clocks.yaml           |   65 ++
+ .../bindings/gpio/adi,adsp-port-gpio.yaml          |   69 ++
+ Documentation/devicetree/bindings/i2c/adi,twi.yaml |   71 ++
+ .../interrupt-controller/adi,adsp-pint.yaml        |   51 +
+ .../bindings/pinctrl/adi,adsp-pinctrl.yaml         |   83 ++
+ .../devicetree/bindings/serial/adi,uart.yaml       |   85 ++
+ .../bindings/soc/adi/adi,reset-controller.yaml     |   38 +
+ MAINTAINERS                                        |   22 +
+ arch/arm64/Kconfig.platforms                       |   13 +
+ arch/arm64/boot/dts/Makefile                       |    1 +
+ arch/arm64/boot/dts/adi/Makefile                   |    2 +
+ arch/arm64/boot/dts/adi/sc598-som-ezkit.dts        |   14 +
+ arch/arm64/boot/dts/adi/sc598-som.dtsi             |   58 ++
+ arch/arm64/boot/dts/adi/sc59x-64.dtsi              |  367 +++++++
+ arch/arm64/configs/defconfig                       |    6 +
+ drivers/clk/Kconfig                                |    9 +
+ drivers/clk/Makefile                               |    1 +
+ drivers/clk/adi/Makefile                           |    4 +
+ drivers/clk/adi/clk-adi-pll.c                      |  151 +++
+ drivers/clk/adi/clk-adi-sc598.c                    |  329 ++++++
+ drivers/clk/adi/clk.h                              |   99 ++
+ drivers/gpio/Kconfig                               |    8 +
+ drivers/gpio/Makefile                              |    1 +
+ drivers/gpio/gpio-adi-adsp-port.c                  |  145 +++
+ drivers/i2c/busses/Kconfig                         |   17 +
+ drivers/i2c/busses/Makefile                        |    1 +
+ drivers/i2c/busses/i2c-adi-twi.c                   |  940 ++++++++++++++++++
+ drivers/irqchip/Kconfig                            |    9 +
+ drivers/irqchip/Makefile                           |    2 +
+ drivers/irqchip/irq-adi-adsp.c                     |  310 ++++++
+ drivers/pinctrl/Kconfig                            |   12 +
+ drivers/pinctrl/Makefile                           |    1 +
+ drivers/pinctrl/pinctrl-adsp.c                     |  919 +++++++++++++++++
+ drivers/reset/Makefile                             |    1 +
+ drivers/soc/Makefile                               |    1 +
+ drivers/soc/adi/Makefile                           |    5 +
+ drivers/soc/adi/system.c                           |  257 +++++
+ drivers/tty/serial/Kconfig                         |   19 +-
+ drivers/tty/serial/Makefile                        |    1 +
+ drivers/tty/serial/adi_uart.c                      | 1045 ++++++++++++++++++++
+ include/dt-bindings/clock/adi-sc5xx-clock.h        |   93 ++
+ include/dt-bindings/pinctrl/adi-adsp.h             |   19 +
+ include/linux/soc/adi/adsp-gpio-port.h             |   85 ++
+ include/linux/soc/adi/cpu.h                        |  107 ++
+ include/linux/soc/adi/rcu.h                        |   55 ++
+ include/linux/soc/adi/sc59x.h                      |  147 +++
+ include/linux/soc/adi/system_config.h              |   65 ++
+ include/uapi/linux/serial_core.h                   |    3 +
+ 49 files changed, 5829 insertions(+), 1 deletion(-)
+---
+base-commit: da3ea35007d0af457a0afc87e84fddaebc4e0b63
+change-id: 20240909-test-8ec5f76fe6d2
 
-diff --git a/drivers/acpi/spcr.c b/drivers/acpi/spcr.c
-index cd36a97b0ea2c7..67ae42afcc59ef 100644
---- a/drivers/acpi/spcr.c
-+++ b/drivers/acpi/spcr.c
-@@ -209,9 +209,12 @@ int __init acpi_parse_spcr(bool enable_earlycon, bool enable_console)
- 	if (!baud_rate) {
- 		snprintf(opts, sizeof(opts), "%s,%s,0x%llx", uart, iotype,
- 			 table->serial_port.address);
--	} else {
-+	} else if (table->header.revision <= 2 || !table->uartclk) {
- 		snprintf(opts, sizeof(opts), "%s,%s,0x%llx,%d", uart, iotype,
- 			 table->serial_port.address, baud_rate);
-+	} else {
-+		snprintf(opts, sizeof(opts), "%s,%s,0x%llx,%d,%d", uart, iotype,
-+			 table->serial_port.address, baud_rate, table->uartclk);
- 	}
- 
- 	pr_info("console: %s\n", opts);
-diff --git a/include/acpi/actbl3.h b/include/acpi/actbl3.h
-index 8f775e3a08fdfb..afe45a2379866a 100644
---- a/include/acpi/actbl3.h
-+++ b/include/acpi/actbl3.h
-@@ -92,10 +92,10 @@ struct acpi_table_slit {
- /*******************************************************************************
-  *
-  * SPCR - Serial Port Console Redirection table
-- *        Version 2
-+ *        Version 3
-  *
-  * Conforms to "Serial Port Console Redirection Table",
-- * Version 1.03, August 10, 2015
-+ * Version 1.08, October 7, 2021
-  *
-  ******************************************************************************/
- 
-@@ -120,7 +120,7 @@ struct acpi_table_spcr {
- 	u8 pci_function;
- 	u32 pci_flags;
- 	u8 pci_segment;
--	u32 reserved2;
-+	u32 uartclk;
- };
- 
- /* Masks for pci_flags field above */
+Best regards,
 -- 
-2.46.0.662.g92d0881bb0-goog
+Arturs Artamonovs <arturs.artamonovs@analog.com>
+
 
 
