@@ -1,195 +1,180 @@
-Return-Path: <linux-serial+bounces-6113-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6115-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18869977E0C
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2024 12:55:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B5DE978236
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2024 16:06:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3FE9D1C24813
-	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2024 10:55:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B563A1C22686
+	for <lists+linux-serial@lfdr.de>; Fri, 13 Sep 2024 14:06:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8461D86C2;
-	Fri, 13 Sep 2024 10:55:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6BCD1DC04F;
+	Fri, 13 Sep 2024 14:05:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="TEOdKZD9"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="4NVa4cCm";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="X2knGMLG"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2059.outbound.protection.outlook.com [40.107.102.59])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A973533C8;
-	Fri, 13 Sep 2024 10:55:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.102.59
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726224936; cv=fail; b=sNuQGwfux4jnjeQp9KSLJhR7mb9BBfpWXRi4vvqTFzKsj/kWRuu3do/nYydJrxuJ8uEmI1xZAEIn/g/uEVSlhS4o4539vuR80X4jdfzt9Y7xI2WBffKx6u+jtvLn1LW8oppqezSRLi5YvjxpmAi890Tc/UzOtxoC8EKr1lt11Rs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726224936; c=relaxed/simple;
-	bh=QylGNLablQfr3gXMb+17pyvDhVX9JCav3jMXTa+VDfg=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=CgPGTWvwOCpNqqBHeGz0wjEWbUgIqIlv4f+p0PkqQXSyXmpCE0JXm6CfDt0lozZKgTjBptdJCpMMq/4JpF8oiUcIgzT29fhRhUf6nqumjfyqo0aByMukRNCCPDxWd6Umf/n91x2Hku21scgSIv1R4pHgopje3VOK7rseMUXjPnk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=TEOdKZD9; arc=fail smtp.client-ip=40.107.102.59
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=AnrhuZ+HQP4xBx4fUzl081j0gPvrH4c8qpFa2fPyjNBO9sgN0cyPzpUPAI/iCrm6shHSTXyUqEU3tYAs4h+2oUulzKN06ltqPuRAgkJdPGycmJn7czrn+e9BivDQumQ9qCwX7Ju+/B4sFG0uTNj8gEw7DB3EMlxDoA4PynfQsWFmsVI3gXrSJQiu3BDHSbru6DYIVk4Tp37r/67z0VkV1rHLzgyrhZll4vfircJ1k1YPlufyXMcWcB6G2v1TcTEBuTk3CBqaWpEtJKLG/KYp59qEGqgdltfbWOAOiyLltdzm/qVzafTLO8GYqG/+w+jl/UhZksED4tBWI1DaIXw7kA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4eo1znd6lWL9yQN7KhhyLBKgAkuEnCXjCKIWw8CUGF0=;
- b=ivR5byDMfkJ4h/1oYVEA6cgj3FaDzgcXZzBB7pvdotPARhF56ryXbV36+rxZQGfaqQfTbAbsUzGqxhPvy4+ytbO0c5ypcHpcbs3wRoXWp0VVMnEv4Pzzf5ur2EB0fmGrPuQF7eKdnEa73T92Sfeu6Ubz75orPdErpPMs5AwR+hzOz0DZeBA0EC9DHzE5lS0Oe3lC4sEjF/v7gmfY3YuVhXKW69tNxO9BJpb2657dxzfB2Jk2ZDSB+mO9SVnhWLuyskNPqsTQhvLcvBRVVYACiRRIjZ3WUl+qUh6QUKzUPdEM9B/jizVNanx5rKefpbvnsD+nDcmeYZ4Crpzc5/Cauw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4eo1znd6lWL9yQN7KhhyLBKgAkuEnCXjCKIWw8CUGF0=;
- b=TEOdKZD9vHMmPCPcOcKJmonv2GaCs/8AnNv66IRA9HLvolzoUe1QrvegadpHqG68XbhHgpcIHIyiWR4f7LU+14KEVyJNKn9w3G3y5cgybnjX2KWEeGdWQQn4aiIQov601KRc7mm5YNdg1F2TupB3ibZgRw+a+6X7sCLPVpM7I9U=
-Received: from BN9PR03CA0198.namprd03.prod.outlook.com (2603:10b6:408:f9::23)
- by PH0PR12MB7929.namprd12.prod.outlook.com (2603:10b6:510:284::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.25; Fri, 13 Sep
- 2024 10:55:31 +0000
-Received: from BL02EPF0001A101.namprd05.prod.outlook.com
- (2603:10b6:408:f9:cafe::de) by BN9PR03CA0198.outlook.office365.com
- (2603:10b6:408:f9::23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.27 via Frontend
- Transport; Fri, 13 Sep 2024 10:55:31 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- BL02EPF0001A101.mail.protection.outlook.com (10.167.241.132) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.7918.13 via Frontend Transport; Fri, 13 Sep 2024 10:55:30 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 13 Sep
- 2024 05:55:27 -0500
-From: Michal Simek <michal.simek@amd.com>
-To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
-	<michal.simek@xilinx.com>, <git@xilinx.com>
-CC: <stable@vger.kernel.org>, Benjamin Gaignard <benjamin.gaignard@st.com>,
-	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, "open
- list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
-	<devicetree@vger.kernel.org>, "open list:TTY LAYER AND SERIAL DRIVERS"
-	<linux-serial@vger.kernel.org>
-Subject: [PATCH v2] dt-bindings: serial: rs485: Fix rs485-rts-delay property
-Date: Fri, 13 Sep 2024 12:55:23 +0200
-Message-ID: <1b60e457c2f1bfa2284291ad58af02c982936ac8.1726224922.git.michal.simek@amd.com>
-X-Mailer: git-send-email 2.43.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8158E1DB521;
+	Fri, 13 Sep 2024 14:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726236345; cv=none; b=PrE5o8/VebHhrMnUR2CU2+aORuoWhpxADQedSZ9tkd9irlzz2KYODrvH+KXcC2k+9xwIpb6FSnL5Iz+4PP/QXvMBUw5Nyy2N0G4epTsGIw91lSog7JCr3CB7/pbBK7dEpERKM1YgWC60VMX6pGJtCMjapm7yIsEfDPThGnB9jlA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726236345; c=relaxed/simple;
+	bh=VgUE9iKQg3t9VILMC/cL4jeuipS0PmTMx2nqI8uzrew=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=UBQb6OOoY9ShTd+U4mclG6bOQoMaPU2g0+LwPjzU+f8Yn3I6dkoWemc3Q1+esRJn8eUg5mlY8eoiJdbxTUhXObfm+EDGPRAka1DrbYlzmXXa4imvPMVRPWjy4/0zQ2zXXq7y364XvZVZQCd3ItPZ/qV0lXaYZzZW0lzEkahp73c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=4NVa4cCm; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=X2knGMLG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1726236339;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=swhm+/MbcA57eNfow0mlHpf/Bf7nq7jlFlNjFeLsrNA=;
+	b=4NVa4cCm3nArFN5av6pTBoRtSxKgctX8tZ+wDbAbV469krBRu0WHybtjuh5k0FeT4zcj9f
+	WSh40348ACMz8Jb93bTUQ3d54nfpl9bfWQRQ81GaQ2i69v9p1bMZ/gStNkzPKjQT5IF91U
+	mMtZlgVPRReRJzkCJCLPOO5Ymzollhh510nCCw2j/nstIXoSxLwuCE1RCTBgR9pHzPbwM1
+	GZ6l57M4L2iRZovP3US0VwEg3P+ZM7FR1ESklVOGR4lRkIn1gFuUeg0+lgX3lzZ8SwCCOz
+	qbJhvUlpMjLyy88tpaL3jfRnLBFHuiy+FIMUQ9hnGXFnm6wmG3NF3CtHdK8Rvw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1726236339;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=swhm+/MbcA57eNfow0mlHpf/Bf7nq7jlFlNjFeLsrNA=;
+	b=X2knGMLGxyjeD2tCXBkMs/3UrRaazvTBviH5qIku+vFcKkqdhMX6re4AeRwHzccY/s/QuD
+	XhhzdNyCBCL2GBDA==
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Esben Haabendal <esben@geanix.com>,
+	linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sunil V L <sunilvl@ventanamicro.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Florian Fainelli <f.fainelli@gmail.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	Rengarajan S <rengarajan.s@microchip.com>,
+	Serge Semin <fancer.lancer@gmail.com>,
+	"Paul E. McKenney" <paulmck@kernel.org>,
+	Tony Lindgren <tony@atomide.com>,
+	Udit Kumar <u-kumar1@ti.com>,
+	Ronald Wahl <ronald.wahl@raritan.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Thomas Richard <thomas.richard@bootlin.com>,
+	Griffin Kroah-Hartman <griffin@kroah.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Peter Collingbourne <pcc@google.com>
+Subject: [PATCH next v2 0/4] convert 8250 to nbcon
+Date: Fri, 13 Sep 2024 16:11:34 +0206
+Message-Id: <20240913140538.221708-1-john.ogness@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1988; i=michal.simek@amd.com; h=from:subject:message-id; bh=QylGNLablQfr3gXMb+17pyvDhVX9JCav3jMXTa+VDfg=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhrQnUjJZ39bf4RVqPml7Jjsrb2H7XuPl9Qe12t/Ify1d+ X39o02fOmJZGASZGGTFFFmkba6c2Vs5Y4rwxcNyMHNYmUCGMHBxCsBEdtUyzK/MN798u3hj85Js k6/bQ13Xv/olkcgwP1L3D68j1/VZl34wdW7bnZnZrDhHAQA=
-X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF0001A101:EE_|PH0PR12MB7929:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9d24bf4f-a935-4add-0f12-08dcd3e29604
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|7416014|376014|1800799024|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?IDKSojHV3i2tF/Oc5DbEKxXs49H5+J4nRH/cn28ENCiPMa5gwG+1eRqBbqCo?=
- =?us-ascii?Q?YBAW/2XhWpBqhkM31mauRqk7ReOMPmM9C+WuCwu0tOiXXI5yWO7KA5fxEG59?=
- =?us-ascii?Q?11sJMQyHBLLdb9gq5gbqr3maAwN8O/filp3iR7757yaeTRwtXYD2nA0sc6vl?=
- =?us-ascii?Q?V5xy9S6hC8iJZ+EjRgnFxCUI0TQUpTuVP/JIdrVqCXDW4DD3Hy5HaVX9LQ8B?=
- =?us-ascii?Q?vqpT3yfADhV8yXiIXd5DIcjzvW8l1gvtLZtX29chriUTnzxbp8uftUvZHl3L?=
- =?us-ascii?Q?BxxZzisk5t2Q7taccDcCZmkjSKDlL7WPmDw5qknTPjJEeUshLZdMej+3/qdd?=
- =?us-ascii?Q?gn/BvLSKF9+hZMc7rsrB2+kOLoxx+13q9ygekhyikwofTRakPNiB0NQgWCqZ?=
- =?us-ascii?Q?ofneextXvm4fH2GdKHLE5rxazFqMawNk0IiNysauxg8KQsx+8RHUCUHfyu4e?=
- =?us-ascii?Q?T+w+mBAGIj4DxGz1NyeQ4AF7IiUacFqdd867/P9pwAMKEBXBEnpytpnSs8/Y?=
- =?us-ascii?Q?Ked74AC0qEYI4py/Sco4Bz56nkV17OuqSfudyoRWW1DYF11RkUZgG0MKwEo+?=
- =?us-ascii?Q?uqO42w6eh6dIts7HbGGG41+vZ7G9oJvdBnSckYvHLJdYtYXIDQ9BRMDXIJN2?=
- =?us-ascii?Q?4Lkm129McgnE7kqR10E4RIBd/3YcN3TFE346yZnbLhg+/ILgifccBJlHYTWl?=
- =?us-ascii?Q?LvPR130hE/JvD/vNp3lUFSuVASm+atY2taml4l22uDp5n7NjSPu/+QDAuGoa?=
- =?us-ascii?Q?IA3Hrroxu4PggP9+HJKf6/6wvVq58Bfbiuogw9hSePYzOW23HR5wTVdyO09l?=
- =?us-ascii?Q?CA9YMV/Iz6Q3oNAY/9/soW6O3x6eQCgAxdN2TiAG5rW3v/RYjhnSutfVgIq2?=
- =?us-ascii?Q?qQxu6yDC8uFmHj20DeQrianwAK5OGJd3nmempipb19TWuKU/pyuVptEVX1cb?=
- =?us-ascii?Q?6BEqo1MzP5xkqI7Y7yb/Hy3l6ZUuA9DJBTBboMElhnt8wBTRD8RuO2Np+szE?=
- =?us-ascii?Q?mif/i95BGFJXB55FFsEZ78cyqVwsrRxhmFswHJ2Ifp10Bd9NjQuIFvtE5CDB?=
- =?us-ascii?Q?85c846QwPrKqJ/Vq+6OB4qUsss+nPFYbymhCftF+/pZszThoufdYzQHIQeOF?=
- =?us-ascii?Q?Dca/s+QQfbRbSUGMCJOqfSLTLWupfl4Gtww4v/QfJtTVapJjjrkaFCKlFaym?=
- =?us-ascii?Q?b5KxsRYbDWGDXpR7us8T5bCuW4W64Mdl+ePpjek9bV3eJ0hr/YQ1OJl0aYWF?=
- =?us-ascii?Q?BbcCSkB7czPEyjZlfW193q9HDfTZWm0uOzbivI9n7n8xu4r9si163ukZu+SA?=
- =?us-ascii?Q?pskQ5wzIYkupDVK6AEHQVeeByoKmkH7jEFWfxq0dfYeV62dXWd/CXMUixr3E?=
- =?us-ascii?Q?t5W5BrHRkeCUFADRVOZJgYLkEj6Fu8KWibP7qOx2ogR0CssCLgAWbFf7JKde?=
- =?us-ascii?Q?oqlsQA4OdyLNy94H7CpnanIygPOu+Hca?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(7416014)(376014)(1800799024)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Sep 2024 10:55:30.8623
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9d24bf4f-a935-4add-0f12-08dcd3e29604
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	BL02EPF0001A101.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB7929
 
-Code expects array only with 2 items which should be checked.
-But also item checking is not working as it should likely because of
-incorrect items description.
+The recent printk rework introduced a new type of console NBCON
+that will perform printing via a dedicated kthread during
+normal operation. For times when the kthread is not available
+(early boot, panic, reboot/shutdown) the NBCON console will
+print directly from the printk() calling context (even if from
+NMI).
 
-Fixes: d50f974c4f7f ("dt-bindings: serial: Convert rs485 bindings to json-schema")
-Signed-off-by: Michal Simek <michal.simek@amd.com>
-Cc: <stable@vger.kernel.org>
----
+Futher details about NBCON consoles are in the cover letter of
+v1 of the NBCON series [0]. (Note that they were originally
+named NOBKL consoles, but were later renamed to NBCON.)
 
-Changes in v2:
-- Remove maxItems properties which are not needed
-- Add stable ML to CC
+This is v2 of a series to convert the 8250 driver to an NBCON
+console, providing both threaded and atomic printing
+implementations. v1 of this series is here [1].
 
- .../devicetree/bindings/serial/rs485.yaml     | 19 +++++++++----------
- 1 file changed, 9 insertions(+), 10 deletions(-)
+Users can verify the UART console is an NBCON console via the
+proc filesystem. For example:
 
-diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
-index 9418fd66a8e9..9665de41762e 100644
---- a/Documentation/devicetree/bindings/serial/rs485.yaml
-+++ b/Documentation/devicetree/bindings/serial/rs485.yaml
-@@ -18,16 +18,15 @@ properties:
-     description: prop-encoded-array <a b>
-     $ref: /schemas/types.yaml#/definitions/uint32-array
-     items:
--      items:
--        - description: Delay between rts signal and beginning of data sent in
--            milliseconds. It corresponds to the delay before sending data.
--          default: 0
--          maximum: 100
--        - description: Delay between end of data sent and rts signal in milliseconds.
--            It corresponds to the delay after sending data and actual release
--            of the line.
--          default: 0
--          maximum: 100
-+      - description: Delay between rts signal and beginning of data sent in
-+          milliseconds. It corresponds to the delay before sending data.
-+        default: 0
-+        maximum: 50
-+      - description: Delay between end of data sent and rts signal in milliseconds.
-+          It corresponds to the delay after sending data and actual release
-+          of the line.
-+        default: 0
-+        maximum: 100
- 
-   rs485-rts-active-high:
-     description: drive RTS high when sending (this is the default).
+$  cat /proc/consoles
+ttyS0                -W- (EC N  a)    4:64
+
+The 'N' shows that it is an NBCON console.
+
+There will also be a dedicated printing kthread. For example:
+
+$ ps ax | grep pr/
+   16 root       0:00 [pr/ttyS0]
+
+Derek Barbosa performed extensive tests [2] using this driver
+and encountered no issues. On the contrary, his tests showed
+the improved reliability and non-interference features of the
+NBCON-based driver.
+
+Since this is the first console driver to be converted to an
+NBCON console, it may include variables and functions that
+could be abstracted to all UART consoles (such as the
+@console_line_ended field). However, we can abstract such
+things later as more consoles are converted to NBCON.
+
+Here are the changes since v1:
+
+- Remove legacy write() code rather than hide it under the
+  macro USE_SERIAL_8250_LEGACY_CONSOLE.
+
+- Implement write_atomic() support for RS485 by splitting out
+  the IER register modifications into separate wrapper
+  functions.
+
+- Update the RS485 call sites to use the new wrapper functions.
+
+- Implement write_atomic() support for modem control by
+  deferring to a new dedicated irq_work.
+
+- Rename @console_newline_needed to @console_line_ended and
+  invert the logic.
+
+Note that this series is based on the "for-next" branch of the
+printk git [3]. This is because the tty-next tree does not have
+the NBCON series and thus causes problems for the kbuild
+robots. However, this series does apply cleanly on the tty-next
+tree (it just will not build).
+
+John Ogness
+
+[0] https://lore.kernel.org/lkml/20230302195618.156940-1-john.ogness@linutronix.de
+[1] https://lore.kernel.org/lkml/20240905134719.142554-1-john.ogness@linutronix.de
+[2] https://lore.kernel.org/lkml/ZsdoD6PomBRsB-ow@debarbos-thinkpadt14sgen2i.remote.csb
+[3] https://git.kernel.org/pub/scm/linux/kernel/git/printk/linux.git
+
+John Ogness (4):
+  serial: 8250: Split out IER from rs485_start_tx()
+  serial: 8250: Split out IER from rs485_stop_tx()
+  serial: 8250: Switch to nbcon console
+  serial: 8250: Revert "drop lockdep annotation from
+    serial8250_clear_IER()"
+
+ drivers/tty/serial/8250/8250.h      |   3 +
+ drivers/tty/serial/8250/8250_core.c |  35 +++-
+ drivers/tty/serial/8250/8250_omap.c |   2 +-
+ drivers/tty/serial/8250/8250_port.c | 248 ++++++++++++++++++----------
+ include/linux/serial_8250.h         |   9 +-
+ 5 files changed, 200 insertions(+), 97 deletions(-)
+
+
+base-commit: b794563ea12fb46d9499da9e30c33d9607e33697
 -- 
-2.43.0
+2.39.2
 
 
