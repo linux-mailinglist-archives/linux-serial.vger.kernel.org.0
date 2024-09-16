@@ -1,160 +1,199 @@
-Return-Path: <linux-serial+bounces-6179-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6181-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3675979DCE
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2024 11:05:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A153979ED2
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2024 11:55:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D1C02815D5
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2024 09:05:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9EA391F23E2C
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Sep 2024 09:55:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF2C14831D;
-	Mon, 16 Sep 2024 09:05:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61892147C9B;
+	Mon, 16 Sep 2024 09:55:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cy2w1NgN"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Cwf6HcyN"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2084.outbound.protection.outlook.com [40.107.223.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 821AA5476B;
-	Mon, 16 Sep 2024 09:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726477527; cv=none; b=NuQlvtgjc7mzG5tVeUHrmKJBGTMtfO/PSZNvvYfiOnZ3FR34PbVZbnjZaVVr3ISwaDx5su1uSm8j9rlv0R4tnoxDZvFYKb+YjPD8Y8HV81MJhGjguxPYyFB6rTqaRiJekNYzKS9B6K1Yuu4PntM433O0JCvtdgU0a0d2EM7uleg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726477527; c=relaxed/simple;
-	bh=wBxUqQLLrwq59Zhb3C0KoQvKRZb8B40EpK018OhlRMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U4dyRh8hNXyNwB+1wrK0InIi5P94joO7dSKvIGf2I2lVKqbLcC4Gfzf9cPrL+opspAKJLFwJGx9G0Fmm9mMXT6JEQ1S35W59cu5NO1Rkcu+TGsc5oyhD93lT6k4lAslLerV2q1mV5jRoGdgzzCKxr4IFtKY9WaSNORmxTY/X7t8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cy2w1NgN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D4F3C4CEC4;
-	Mon, 16 Sep 2024 09:05:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1726477526;
-	bh=wBxUqQLLrwq59Zhb3C0KoQvKRZb8B40EpK018OhlRMQ=;
-	h=Date:Subject:List-Id:To:Cc:References:From:In-Reply-To:From;
-	b=Cy2w1NgNyoRLL+7QPzvUnLAdrIN4k6r1jLnw5u+zWW1Bqhf9afydJkemaxo4zgASM
-	 i6yVpDpSNHtDEh4KesVe0tMbeH5EQaE0wxDvs+Xam0k7JXZOBFOjgGoaMnbpvU5uQ/
-	 0Us39SocfsYqG8PLeukXZKZ9qt1WSkZlsywwuV6GXMwCHZmpynUo8W696AQi5FSzKV
-	 SRG3C8DGM42pS1NSrCVtkgWF+Cb/8jfphx9iqL+TldnMK4tezDxPo+o7T2jgM1ZIxM
-	 fACLBDjfPWE1MakSShVw5iAefszB538u1Lvypxv8YwT3lR5Cf3uCx0o3Vlse8VCJ1Y
-	 C1Fn03Vo1x1Gw==
-Message-ID: <58e9506d-cb27-4808-bc73-422af4154fa1@kernel.org>
-Date: Mon, 16 Sep 2024 11:05:15 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B35991CF83;
+	Mon, 16 Sep 2024 09:55:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1726480544; cv=fail; b=um5FKYndzgqnwc4p5P5+1Eqz66lDHB0QQlsL6K1idD2wOPQOPEWwyJTEvg+5XWd5JDI8tH/2hDwxJDyaMsZFO0nmV8LFSiaKXk++cq+83vAPEOkcL4pU431qCNLTn4ea/alCW8on+RL6+MUwROjOZnbiAxNAdRYNyIhTvQVvoWo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1726480544; c=relaxed/simple;
+	bh=N1tm6HN4zEU2Hrcj6s0R6d6MUIeyLXPUfa67sqp0koQ=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=tKCq3WrQBlgejpiZwtoZIrMR8KLrUrRzeAv6ijB4s5grpf6KEMHtPZW0LvhOmFkGXSwDhhcp15+bxoK7KJiS1EiIwutiUUM5uRir6Id2vjFCrbUZPin9TEDZxTMjphJx7axtk8FJP+StlNmH+8rtsDLVh3z5WS5Y1xs63C2mLqU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Cwf6HcyN; arc=fail smtp.client-ip=40.107.223.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I/PijElXJUIjeojEi6KxbM1v9qy/ULNiuLxFE4F4Tna2vNOvHNWOFHr4pYYWRLWI3/refSiA53y+Dl+H3PYzN4s3IRC595hzyKz+pSS5Wbk8Cm49PTE05Jlx7uzj1V+6+kMKvVE6aZrF5VS53W/utrXFv++UglNh1zwGMADhQxXIycF6zDG31Sqr02HhnSWKugvcCABLT/8gONoA2blg3XCkIPVKHNqcYA9C7qCXvKDW4jewmojqE58RfTztIdHwf9InEW3SSlXrbvHNhoD/xDjNnty+fWUbOY4iLlLaqh7/PDiFJfLfW5rxwlj33m5QvzyIk+24PjSiruTv4EdLRw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=TktiFjuu1K/f/0IVchAk0yvPcb7wzMAVWame4/lAKJA=;
+ b=g2BQufVWKaY1cz7sILmcHFYDsSnPrrLu2fMdFOrYf5zpiQFrvwfJ3aV4ZbT/Gs3jDGO+/VpuBUuhlumCsiT+SJnoXeHdutw0JMx9YZ5tF0aaMPrX8mdABsu3c82Yr8ZMAXQRmRydPyc2yXP+iQ6WlfeFmaozCDDtJjS5m70tQ2Cc1svTEKrmuwvvt/k9spcvzB7vNMo82Zz8dYQ5ECYzQ6Y/QNXLI9lEbrWKuazyTEd/AjS4DBZQIucMMKQE/vJ1ysv5ANq1iuCBdADH+MQsFT/uk8KmJ3tb166E7qASdaPEF/gDPP8D26nl/vHR0XWWXShjgC7eIqiguOx9pdB6HQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=TktiFjuu1K/f/0IVchAk0yvPcb7wzMAVWame4/lAKJA=;
+ b=Cwf6HcyNt1L1Z516XPrHjPFk5mhNWdMflKAG23Tl9iHJKZDZqGtOkrYZXAlDaS+4+2lSta9aHgtGyk2BEkW8uCQDOfaHdCyMFWhq5X9qC/snSUeHiI5goll6C1uj4CCtPLDuWDDDG+aw/pGOjQEPdNeO/1w18vLcXf5avHLZGU8=
+Received: from PH3PEPF00004098.namprd05.prod.outlook.com (2603:10b6:518:1::44)
+ by CH2PR12MB4101.namprd12.prod.outlook.com (2603:10b6:610:a8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7962.24; Mon, 16 Sep
+ 2024 09:55:37 +0000
+Received: from CY4PEPF0000EE3E.namprd03.prod.outlook.com
+ (2a01:111:f403:f910::2) by PH3PEPF00004098.outlook.office365.com
+ (2603:1036:903:49::3) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.7939.24 via Frontend
+ Transport; Mon, 16 Sep 2024 09:55:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EE3E.mail.protection.outlook.com (10.167.242.16) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.7918.13 via Frontend Transport; Mon, 16 Sep 2024 09:55:36 +0000
+Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 16 Sep
+ 2024 04:53:53 -0500
+From: Michal Simek <michal.simek@amd.com>
+To: <linux-kernel@vger.kernel.org>, <monstr@monstr.eu>,
+	<michal.simek@xilinx.com>, <git@xilinx.com>
+CC: <stable@vger.kernel.org>, Benjamin Gaignard <benjamin.gaignard@st.com>,
+	Conor Dooley <conor+dt@kernel.org>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, "open
+ list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+	<devicetree@vger.kernel.org>, "open list:TTY LAYER AND SERIAL DRIVERS"
+	<linux-serial@vger.kernel.org>
+Subject: [PATCH v3] dt-bindings: serial: rs485: Fix rs485-rts-delay property
+Date: Mon, 16 Sep 2024 11:53:06 +0200
+Message-ID: <820c639b9e22fe037730ed44d1b044cdb6d28b75.1726480384.git.michal.simek@amd.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 00/21] Adding support of ADI ARMv8 ADSP-SC598 SoC.
-To: arturs.artamonovs@analog.com, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Greg Malysa <greg.malysa@timesys.com>,
- Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Utsav Agarwal <Utsav.Agarwal@analog.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Thomas Gleixner <tglx@linutronix.de>,
- Andi Shyti <andi.shyti@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
- Olof Johansson <olof@lixom.net>, soc@kernel.org
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- devicetree@vger.kernel.org, linux-clk@vger.kernel.org,
- linux-gpio@vger.kernel.org, linux-i2c@vger.kernel.org,
- linux-serial@vger.kernel.org, adsp-linux@analog.com,
- Nathan Barrett-Morrison <nathan.morrison@timesys.com>
-References: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20240912-test-v1-0-458fa57c8ccf@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2095; i=michal.simek@amd.com; h=from:subject:message-id; bh=N1tm6HN4zEU2Hrcj6s0R6d6MUIeyLXPUfa67sqp0koQ=; b=owGbwMvMwCR4yjP1tKYXjyLjabUkhrQXDMwqk1fdXWiiXGkxKYw7JJNJ9lf3HYEW+8KITX8u+ 86+1Xa6I5aFQZCJQVZMkUXa5sqZvZUzpghfPCwHM4eVCWQIAxenAEykpYxhnumKu+Zbt8yfaXK/ 6fbDa90dm1NFfRjm8B77d5jhtLYM8+XY95NmC9c2rJt+EgA=
+X-Developer-Key: i=michal.simek@amd.com; a=openpgp; fpr=67350C9BF5CCEE9B5364356A377C7F21FE3D1F91
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EE3E:EE_|CH2PR12MB4101:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3a66ac1b-805a-48f0-a03d-08dcd635b6c8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|36860700013|82310400026|376014|1800799024|7416014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?YEQqtxm+c5E4QoP95o3KkiKyJauaNRvMJxi5mo6zSf2JBjAsG/Csyc1PNBvP?=
+ =?us-ascii?Q?nBF/J2liQ7eRAn1YGaHh5UEv5j6vfUVmLgyVjK6O6BYUSLr9iF3wVMdK+i8Q?=
+ =?us-ascii?Q?6bp7GzIRUliYAtE1G+JcYvSLxACUo+x3s1KUYAVrwWzlWPtU/Q7qsp+n57V/?=
+ =?us-ascii?Q?ofTawMsloVUsj7Yw6h0DPKk+p3VSxhYckaoujrM45v3OannRjuTNXChe6Nry?=
+ =?us-ascii?Q?mOgUujPZ5aFgqR4VA82i4nia+k9VwR0u/vQyZlLw8EdGB/uaWKlGOdwW3eCk?=
+ =?us-ascii?Q?8gcSo1glvrQrUccInnoQS1KL4gjrHhGWnSs9J/cH2kdVZ976TVwc6Op81ZTh?=
+ =?us-ascii?Q?XxL6ww28+3DombPLPG9aeSyCENFPapwuYENmvOgwlyEIjwEO6kK5UwhUbNIS?=
+ =?us-ascii?Q?jUvn7gT7XfXAy1WmkDsfpXMJTDgHs7IIwdHecYEjn6pbqnmZnS6cpcj+R/Db?=
+ =?us-ascii?Q?o+Kdb/RIOHx9U2Vs9G5P8eX2WrBJMt9AdMkn+mmc/jTADF1ZZcqKcixpE71g?=
+ =?us-ascii?Q?Wl6yv2JT0TPB7TgchqUzbdhhPSYEjRYXHBKll93Z9XI/eS3Ht0K/x/HMJItB?=
+ =?us-ascii?Q?5dB38AESDLMQ+aYGqqNsVPcFsvfu//y8e30W9w7kGocjv155caXSu4/nztv1?=
+ =?us-ascii?Q?J4SvWsX+0aMu4Vaeeh4SLmsmXtfmx9NMHiGeWKFfTUp/xxH5eoJFONzGk5op?=
+ =?us-ascii?Q?oqXr9kPlcBlLwMcLq+/QG/C7Q5k0DDSdHdg/Jv8rFdAgrmpWguEpObZLugs0?=
+ =?us-ascii?Q?78mw+EJssmD8yRsX38Vj09PNnHZHJysabDcNeq4kw8c2WfPTMPucgAwL36uM?=
+ =?us-ascii?Q?j7Aw2QNxCtNG0eYRuJr1wH6oVKRsE/Q18mFyRo+7bsBIS8pkNmj0lJW55HSF?=
+ =?us-ascii?Q?fO/6dYuhrhQOIXZDEKSHh4NVGKNyG4qxY3KQ/A1mtuT27P/HvgDd0rLOImkm?=
+ =?us-ascii?Q?gKFVcJIZ03Jeeh47MqzE3vmvOucqsn1Pa+Mu8WAKCslQwkmV3Pya9X4Nb4rH?=
+ =?us-ascii?Q?qCgoAhrgjv7BDNVZpWzw5uax6q5afDCDPwnzbPbVqLsuAJ/zO/Tcpm0yIHmi?=
+ =?us-ascii?Q?c5pMV39+B4fNd43fj0cuavRmYppYjBDPbC49Oo9SwKxV3hL7CRLzd71Qqqxc?=
+ =?us-ascii?Q?7JGAcGKgBr0Ws74JPvVNgPqihZStRYaAnyUwPXkFD2Tq+o3ANJkWx701a5I0?=
+ =?us-ascii?Q?i2LAjow3yMlpe1YFdTp7Ul2k7Lj890q0ZvRQyZSFyw0Ev+emLR5Paz3cJgDU?=
+ =?us-ascii?Q?vC4QbOiqfxl4iZ1Fw2UrR0TDnK/vQ/UtaRg/c6kpYKgmQLUoFhtnORpYAuBS?=
+ =?us-ascii?Q?0zE9h16vc8fHdXU5pkXvhidUnkVUMlLPL+mrLg5XcKYdBq6lVhU3ALPY2PJo?=
+ =?us-ascii?Q?0hTvTkObpiNqkH7SWIiYW3ZchtqdIuO2uDoxvE629FQy2yvFGqUdg6VLTtM3?=
+ =?us-ascii?Q?UBI6FZU2PCYEIMqS9oZEGGh2eY4edPHo?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(82310400026)(376014)(1800799024)(7416014);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 16 Sep 2024 09:55:36.5011
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3a66ac1b-805a-48f0-a03d-08dcd635b6c8
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EE3E.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR12MB4101
 
-On 12/09/2024 20:24, Arturs Artamonovs via B4 Relay wrote:
-> This set of patches based on ADI fork of Linux Kerenl that support family of ADSP-SC5xx
-> SoC's and used by customers for some time . Patch series contains minimal set
-> of changes to add ADSP-SC598 support to upstream kernel. This series include
-> UART,I2C,IRQCHIP,RCU drivers and device-tree to be able boot on EV-SC598-SOM
-> board into serial shell and able to reset the board. Current SOM board
-> requires I2C expander to enable UART output.
-> 
-> UART,I2C and PINCTRL drivers are based on old Blackfin drivers with
-> ADSP-SC5xx related bug fixes and improvments.
-> 
-> Signed-off-by: Arturs Artamonovs <arturs.artamonovs@analog.com>
-> ---
+Code expects array only with 2 items which should be checked.
+But also item checking is not working as it should likely because of
+incorrect items description.
 
-For new platform, be sure you have 0 warnings:
-1. Please run standard kernel tools for static analysis, like
-coccinelle, smatch and sparse, and fix reported warnings.
+Fixes: d50f974c4f7f ("dt-bindings: serial: Convert rs485 bindings to json-schema")
+Signed-off-by: Michal Simek <michal.simek@amd.com>
+Cc: <stable@vger.kernel.org>
+---
 
-2. Also check for warnings when building with W=1. Most of these
-commands (checks or W=1 build) can build specific targets, like some
-directory, to narrow the scope to only your code. The code here looks
-like it needs a fix. Feel free to get in touch if the warning is not clear.
+Changes in v3:
+- Remove incorrectly assigned value for the first item 50/100 because of
+  my testing
 
-3. Fix all compile test warning reported by LKP and check for common
-configs, regardless of reports.
+Changes in v2:
+- Remove maxItems properties which are not needed
+- Add stable ML to CC
 
-4. Please run `make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
+ .../devicetree/bindings/serial/rs485.yaml     | 19 +++++++++----------
+ 1 file changed, 9 insertions(+), 10 deletions(-)
 
-5. Please run scripts/checkpatch.pl and fix reported warnings. Then
-please run `scripts/checkpatch.pl --strict` and (probably) fix more
-warnings. Some warnings can be ignored, especially from --strict run.
-
-
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/serial/rs485.yaml b/Documentation/devicetree/bindings/serial/rs485.yaml
+index 9418fd66a8e9..b93254ad2a28 100644
+--- a/Documentation/devicetree/bindings/serial/rs485.yaml
++++ b/Documentation/devicetree/bindings/serial/rs485.yaml
+@@ -18,16 +18,15 @@ properties:
+     description: prop-encoded-array <a b>
+     $ref: /schemas/types.yaml#/definitions/uint32-array
+     items:
+-      items:
+-        - description: Delay between rts signal and beginning of data sent in
+-            milliseconds. It corresponds to the delay before sending data.
+-          default: 0
+-          maximum: 100
+-        - description: Delay between end of data sent and rts signal in milliseconds.
+-            It corresponds to the delay after sending data and actual release
+-            of the line.
+-          default: 0
+-          maximum: 100
++      - description: Delay between rts signal and beginning of data sent in
++          milliseconds. It corresponds to the delay before sending data.
++        default: 0
++        maximum: 100
++      - description: Delay between end of data sent and rts signal in milliseconds.
++          It corresponds to the delay after sending data and actual release
++          of the line.
++        default: 0
++        maximum: 100
+ 
+   rs485-rts-active-high:
+     description: drive RTS high when sending (this is the default).
+-- 
+2.43.0
 
 
