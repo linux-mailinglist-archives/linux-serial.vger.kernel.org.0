@@ -1,214 +1,100 @@
-Return-Path: <linux-serial+bounces-6234-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6237-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 959C197D691
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 16:04:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 895A697D6C0
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 16:19:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2485E1F2501F
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 14:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C57ED1C22582
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 14:19:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DF8917C220;
-	Fri, 20 Sep 2024 14:04:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E5817B4FE;
+	Fri, 20 Sep 2024 14:19:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="OrxjBtJa"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iAeLn8rK"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63EFA61FCF;
-	Fri, 20 Sep 2024 14:04:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD52D482CD;
+	Fri, 20 Sep 2024 14:18:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726841060; cv=none; b=nQmMMSgBUIBxyeeJlzfrPt9UrqbEMRV/0C/clH4T8TLdkpF9bc8RalSbEWOs5NNuLHwlSIirA9BlY0Ya24SLI/w+Hg9/K+9xkgKtvv0mkw53TOTaKfEx+NTLjc6r3kyW+IqrfsZwQjzFTYtBE0XNqTclPkPG8g6Lbx57qDPdT7A=
+	t=1726841941; cv=none; b=O4acuSTuzTDsXD3KYI/Zf0zRVRpUq8bHd+v8CbRs5AQ9lck4P7xY4d9SywGqcT3rMYlKYaULzPyLc0zUFdQrFrqu0Q+0vb6cAcygUMgCb/BwPfO1R/P8JRAZFEDduaMCQ64y8xFOtLb5lk1HYYv1cDrU+4T0ZzpW6o6P7cif1FQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726841060; c=relaxed/simple;
-	bh=ZNqCSDM1HQEjbF6HFOmsZ/LVqnwVg1FikcCEkoZppec=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=gawy5SHwH/U/qu9I4LEQxMdYxcq76aonzPszAHeJijs0AGXEBTUncI36Rxddd7oCERkPgIYrWpYiYdy+hlLnq50pYSJEiwlE5VPkBxwW9tNlk2jXu4tjj2MWwirQFcg96yj+BThFPcIlyDbuosg/S3IQ5doRMBBd1/rZ3ofxFbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=OrxjBtJa; arc=none smtp.client-ip=74.208.4.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
-	s=s1-ionos; t=1726841038; x=1727445838; i=parker@finest.io;
-	bh=HXD1LgVa7vJ6hdhMC83sJKrCbgCM2HfctXEdwMy4OaU=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=OrxjBtJaODg3Kdi9Hm8FQegGMBhCx8gJUyRctNjaI70mU8grgR0c4ssDFdXOGFdy
-	 RsXl0HwewDwGYmbabGQYpsFD+Mr0JW1ooVERfhGLW1xx1amYLg+OSXYb5PeVMY/6s
-	 ofYXKJS20TGsflbaMwiUPeySJqPUoCg0Np2oWovzQh+Njyt3ZVEIInAbPYfFlzHao
-	 pZIz7NViv2CAemjFcSRoeGZEi4MEPJKPzG+4xI3DpPGMZByDmE8OJi4vYtztrmwO8
-	 blDGX1kJOkEgxtMsa/+kkDCw9l9DGezLxd1/aU+PfWmxDCG1P87uyeZ32cMvZ17BC
-	 23Ekr6OVH2HCMPG9cw==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus002
- [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lj04u-1sFZrM1Ufm-00oAwf; Fri, 20 Sep
- 2024 16:03:58 +0200
-From: Parker Newman <parker@finest.io>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Parker Newman <pnewman@connecttech.com>
-Subject: [PATCH v2 4/4] serial: 8250_exar: Remove old exar_ee_read() and other unneeded code
-Date: Fri, 20 Sep 2024 10:03:24 -0400
-Message-ID: <3edee1e670cc214f73a13c0bf127f4ad8e6bce7f.1726838531.git.pnewman@connecttech.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1726838531.git.pnewman@connecttech.com>
-References: <cover.1726838531.git.pnewman@connecttech.com>
+	s=arc-20240116; t=1726841941; c=relaxed/simple;
+	bh=IXPUnzpp1w57YA1bQOgZXNfrvJ8JZ6uPN7NAZSoFc6Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MgyZFmS3O+oVw/fI8isVADA3k+oGFPy6lishM74mK5OfvUoJDuWeyhSqU448q8v2gSwP6VX2VLfmwHLVg7+VKWU43igDXiRIt5cfjVvQDhY2HiYrZucZOQVpBMfb7cR1umGgYvQAtRAwtLXyZ3gSoiiV9p3KR6B86JZ9T8UwKNk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iAeLn8rK; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1726841940; x=1758377940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=IXPUnzpp1w57YA1bQOgZXNfrvJ8JZ6uPN7NAZSoFc6Y=;
+  b=iAeLn8rKHdxIWhsaCyzA67Al8h/HHlv9D6hmowlJYQSMinuB4+ZAk7k7
+   6v1+eZYqJ9vAJ0NK00UTX+oVsk7Yvx5PDjQLhODwHSNY6pk5hQXHyQ3MV
+   3gmbUJo1+hlgaerikt24WDWSLxNc5TWdhV+NVklyn3d6pd/gRbVQp6y68
+   Sy9tTtpySjOwRQqu08anVdnl139ApQOKPsNPcEoYdMesQ//zBp+1/17YL
+   xsYmnHNv/B019w4AZKHn/yvLuHthZzT3UkVBS8d1gdyhV8XsptTOZWa9c
+   y5MupzoYqTfi3jtDawkvWKxJYXyIHtPZ9UJDXcuo9c78QgESC7cicNL9s
+   A==;
+X-CSE-ConnectionGUID: 3j1WGb7UQVOzdOiCHaq/dA==
+X-CSE-MsgGUID: Z4BY+kqbSma+NfLHwIyAuQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11200"; a="13609042"
+X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
+   d="scan'208";a="13609042"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 07:18:59 -0700
+X-CSE-ConnectionGUID: mQoxdzwdSn2iP3NaOtHc2A==
+X-CSE-MsgGUID: D6NvOD3NSvSIg7wqGvJOnA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.10,244,1719903600"; 
+   d="scan'208";a="101049845"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Sep 2024 07:18:55 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sreTE-0000000Aw3C-2O5A;
+	Fri, 20 Sep 2024 17:18:52 +0300
+Date: Fri, 20 Sep 2024 17:18:52 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Yanteng Si <siyanteng@cqsoftware.com.cn>
+Cc: linux@armlinux.org.uk, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	alan@linux.intel.com, bartosz.golaszewski@linaro.org, arnd@arndb.de,
+	u.kleine-koenig@pengutronix.de, mengdewei@cqsoftware.com.cn,
+	linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org, si.yanteng@linux.dev
+Subject: Re: [PATCH] serial: clean up uart_info
+Message-ID: <Zu2ETNl_IGcQGxqA@smile.fi.intel.com>
+References: <20240920053423.1373354-1-siyanteng@cqsoftware.com.cn>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:SkJqHJQLDsZ+n0F8cDzXKeIyax70ZUOKiZGtZRj3gT9hojm3Iey
- sXfOSIpXzWEUFOuFZ43cNfOnJrhhFg0yMpaagRo9xSXfgHdM/uU3Pq3O99RX0+4AO03xqmb
- QSXs1hA7QqQ0S5oXPa+DCbCfR/irXwbRxI5VYg/CBBJxBS4S5Mi8CIwN9edzMTZ9EFJ6UOW
- wQfRww2/OIUYSZPrbEz2w==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:NqPGd6OTug4=;RJQyuzIqFs4R4DRRLxaAOv4gsxj
- Gu4Il7/XKwfG4DuFikjFicsKgBmi7bYYKZNVAG9HbSqr5jfKtdEm6180bAxUCyr8C/xbWm1gj
- 22k/XGUBayCSabDKrnmth1IdcbFkQbA/Wrt2C2BEO5XpJ7tmdUWuz30TSwrVXPQv5hMcNZ5N+
- ug7ywkahGh7Oo1tvG66qQgQI2S755x1H9IsJkhRqwD6wgSg9DUZX0PNjcjSqSOTy2Tp4dV5Sv
- JApCjQ7N7XBmyw0a3XBmOQR3eZPTojA1pO9yJAtB4oZFhovc9iXuqq11ANyElSt7GmLitAcCq
- Y95eL3PAPYttWMYunurfKX8YlcC0l/B2K7spe7nYWi3pB2WZ70D6UhlWl3qj3XsN9a/smp0uH
- 5FOKmd0RUo/O3T86MBTmUHTLuzTHPrj07p5xlTe+QtenfuDiUMN62mec15eXusdp1siYzNYYx
- d9E9ZgsHjrwYz8av0I0eIFGSkUmfHUWCO37rNp54fp37bKm8xBz4v0s06G+7XaT5ybeU9lX7z
- SnABGQk8OisXtnC2XV3ZteoDFpi7ZUNMRHOn0c3+C85QG3Azpj5Ht1cj4foPFtTFKUHDRX/UA
- lSERa2l0B2BzwgduUcJ64THBTOtsKaJVebNUDMsLAA8JgP/y37/oid2qjUpqwBcEoY8uO+3po
- 0AFMjWrUGRVhmj5EuTUzuNNiw/WOLxQ8It2sUBZU6NYKR2uabSm4KydsNSm3OyeABNtypbgUf
- +63VqvXZG2USOwy1c1BIlYP1Llnok9eJw==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20240920053423.1373354-1-siyanteng@cqsoftware.com.cn>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-From: Parker Newman <pnewman@connecttech.com>
+On Fri, Sep 20, 2024 at 01:34:23PM +0800, Yanteng Si wrote:
+> Since commit ebd2c8f6d2ec ("serial: kill off uart_info") has
+> removed uart_info, the uart_info declaration looks lonely,
+> let it go.
 
-Remove the old exar_ee_read() and associated helper functions as well as
-some defines that are no longer needed after the switch to using the
-eeprom_93cx6 driver.
+Confirmed.
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Parker Newman <pnewman@connecttech.com>
-=2D--
- drivers/tty/serial/8250/8250_exar.c | 90 -----------------------------
- 1 file changed, 90 deletions(-)
+-- 
+With Best Regards,
+Andy Shevchenko
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250=
-/8250_exar.c
-index c40e86920110..659a44b52f8d 100644
-=2D-- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -136,8 +136,6 @@
- #define UART_EXAR_REGB_EECS		BIT(5)
- #define UART_EXAR_REGB_EEDI		BIT(6)
- #define UART_EXAR_REGB_EEDO		BIT(7)
--#define UART_EXAR_REGB_EE_ADDR_SIZE	6
--#define UART_EXAR_REGB_EE_DATA_SIZE	16
-
- #define UART_EXAR_XR17C15X_PORT_OFFSET	0x200
- #define UART_EXAR_XR17V25X_PORT_OFFSET	0x200
-@@ -269,94 +267,6 @@ static inline u8 exar_read_reg(struct exar8250 *priv,=
- unsigned int reg)
- 	return readb(priv->virt + reg);
- }
-
--static inline void exar_ee_select(struct exar8250 *priv)
--{
--	// Set chip select pin high to enable EEPROM reads/writes
--	exar_write_reg(priv, UART_EXAR_REGB, UART_EXAR_REGB_EECS);
--	// Min ~500ns delay needed between CS assert and EEPROM access
--	udelay(1);
--}
--
--static inline void exar_ee_deselect(struct exar8250 *priv)
--{
--	exar_write_reg(priv, UART_EXAR_REGB, 0x00);
--}
--
--static inline void exar_ee_write_bit(struct exar8250 *priv, u8 bit)
--{
--	u8 value =3D UART_EXAR_REGB_EECS;
--
--	if (bit)
--		value |=3D UART_EXAR_REGB_EEDI;
--
--	// Clock out the bit on the EEPROM interface
--	exar_write_reg(priv, UART_EXAR_REGB, value);
--	// 2us delay =3D ~500khz clock speed
--	udelay(2);
--
--	value |=3D UART_EXAR_REGB_EECK;
--
--	exar_write_reg(priv, UART_EXAR_REGB, value);
--	udelay(2);
--}
--
--static inline u8 exar_ee_read_bit(struct exar8250 *priv)
--{
--	u8 regb;
--	u8 value =3D UART_EXAR_REGB_EECS;
--
--	// Clock in the bit on the EEPROM interface
--	exar_write_reg(priv, UART_EXAR_REGB, value);
--	// 2us delay =3D ~500khz clock speed
--	udelay(2);
--
--	value |=3D UART_EXAR_REGB_EECK;
--
--	exar_write_reg(priv, UART_EXAR_REGB, value);
--	udelay(2);
--
--	regb =3D exar_read_reg(priv, UART_EXAR_REGB);
--
--	return (regb & UART_EXAR_REGB_EEDO ? 1 : 0);
--}
--
--/**
-- * exar_ee_read() - Read a word from the EEPROM
-- * @priv: Device's private structure
-- * @ee_addr: Offset of EEPROM to read word from
-- *
-- * Read a single 16bit word from an Exar UART's EEPROM.
-- * The type of the EEPROM is AT93C46D.
-- *
-- * Return: EEPROM word
-- */
--static u16 exar_ee_read(struct exar8250 *priv, u8 ee_addr)
--{
--	int i;
--	u16 data =3D 0;
--
--	exar_ee_select(priv);
--
--	// Send read command (opcode 110)
--	exar_ee_write_bit(priv, 1);
--	exar_ee_write_bit(priv, 1);
--	exar_ee_write_bit(priv, 0);
--
--	// Send address to read from
--	for (i =3D UART_EXAR_REGB_EE_ADDR_SIZE - 1; i >=3D 0; i--)
--		exar_ee_write_bit(priv, ee_addr & BIT(i));
--
--	// Read data 1 bit at a time starting with a dummy bit
--	for (i =3D UART_EXAR_REGB_EE_DATA_SIZE; i >=3D 0; i--) {
--		if (exar_ee_read_bit(priv))
--			data |=3D BIT(i);
--	}
--
--	exar_ee_deselect(priv);
--
--	return data;
--}
--
- static void exar_eeprom_93cx6_reg_read(struct eeprom_93cx6 *eeprom)
- {
- 	struct exar8250 *priv =3D eeprom->data;
-=2D-
-2.46.0
 
 
