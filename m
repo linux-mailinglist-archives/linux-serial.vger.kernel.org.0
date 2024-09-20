@@ -1,310 +1,100 @@
-Return-Path: <linux-serial+bounces-6230-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6255-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B29DD97CE10
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2024 21:12:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1E6197D99C
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 20:33:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0264B22758
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Sep 2024 19:12:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 720CA1F21D09
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Sep 2024 18:33:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492BB2135B;
-	Thu, 19 Sep 2024 19:12:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25AFE156F2B;
+	Fri, 20 Sep 2024 18:33:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="fzvLBANY"
+	dkim=pass (1024-bit key) header.d=cqsoftware.com.cn header.i=@cqsoftware.com.cn header.b="PUgVhxha"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from mail-m1285.netease.com (mail-m1285.netease.com [103.209.128.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F17D2208D0;
-	Thu, 19 Sep 2024 19:12:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0D1318641;
+	Fri, 20 Sep 2024 18:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.209.128.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1726773148; cv=none; b=L/dcH7/BJdZ23yKS2CHhhAcuGGNlQnPBIBqH9SUxt5cdNoyjdmojmXknBPEP+onrVn04RfGWmEKHkQxYClCwOVQYWIXdpGKMIj88DSF1uRDlKfWHB3vjKsnc2WXd79GeToz0OpE4ELCPe+u4xUcgt+KYyjN5Jcg4i0DGpNS1Nb4=
+	t=1726857216; cv=none; b=LGrArfTafX+yPmDSOwX+Y3h8/ZW5oF6gJcoa6MQGvy/0N6g7reXE3f9vKZy3AhzkEIjwKVJVCmY84yWL5LniFQOs1Rofgq6XHVHUtm+QrGDYTcqVNyamah2c3Y8utE08sNYyOzht7v1W5TT6f3xdNoJqdBU3kAj7mGf+QmVNR/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1726773148; c=relaxed/simple;
-	bh=zGHRtNH0HtiNux6L2M1nTJQ42ddSQcZjRws0nmEhOqk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:From:In-Reply-To:
-	 Content-Type:References; b=UhmPOrLv0G3ZzYzNbbEDA93qeZURnfIZUpy2KYxDNGevMiRyzao6KNPijLmf0E1a7OdFXb+3uFzoHiu0KqAJRIYRbxu+p4yCmwr91cJ13EVR/sJ3QPYPD9pQT1tsN1xwwXeIguEHog8Fu8Rzk2YCjP6N7mz2bZ0hCy+QCBW/dD0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=fzvLBANY; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20240919191221euoutp010ddd44cc9e7483f2de1362b72161a6e4~2uwYTi6ct2616526165euoutp01c;
-	Thu, 19 Sep 2024 19:12:21 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20240919191221euoutp010ddd44cc9e7483f2de1362b72161a6e4~2uwYTi6ct2616526165euoutp01c
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1726773141;
-	bh=5wMWZ+g85x3/VQ4fe0nCOsxCOPo6Ph9ygPWjlPbrfW0=;
-	h=Date:Subject:To:CC:From:In-Reply-To:References:From;
-	b=fzvLBANYeCN29tswLwUd47pXXc6AIHl4SdOotmBcpN7h4RgkQuES0RWvwTyB+1PqY
-	 l6fR+qZymcrJAUga1SRkwi8ZqVPiz8MlXoCeBIAsBlKEdUKM91n2A8+xvmdQxxaeiC
-	 HXq/LEs57wGuy/k0nXaH8BWMs//KbjyFOD+WNJ8w=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20240919191221eucas1p17631c52c12e9eac528029fc313e0de7c~2uwX8PxpR2404624046eucas1p1A;
-	Thu, 19 Sep 2024 19:12:21 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id 7C.44.09624.5977CE66; Thu, 19
-	Sep 2024 20:12:21 +0100 (BST)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20240919191220eucas1p23f207681d0268c632f46323fd5ac9107~2uwXFO6tm3227632276eucas1p2i;
-	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20240919191220eusmtrp2b6213760a633a6ab532f5875087dc3ab~2uwXCvxYJ2424224242eusmtrp2m;
-	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
-X-AuditID: cbfec7f2-c11ff70000002598-0c-66ec7795e51c
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 13.E4.14621.4977CE66; Thu, 19
-	Sep 2024 20:12:20 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20240919191220eusmtip26823cf362cdfc852c6290fd3d6148856~2uwWtZnoN2388723887eusmtip2S;
-	Thu, 19 Sep 2024 19:12:20 +0000 (GMT)
-Received: from [106.110.32.87] (106.110.32.87) by CAMSVWEXC02.scsc.local
-	(2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-	Thu, 19 Sep 2024 20:12:17 +0100
-Message-ID: <d2726a61-37fa-4c39-aad6-08bf99d8d14b@samsung.com>
-Date: Thu, 19 Sep 2024 21:12:15 +0200
+	s=arc-20240116; t=1726857216; c=relaxed/simple;
+	bh=yGZXUz2v1QNo2ub79hyWPTRmEYozPxbY2e/WfIQgOcM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=H5sEUM5MuT33xo2GcY/5cXv0lkK8Z6seIGtviZ4pMBv2ajDIi7zr3zHhG+Kfd920SPsBoKGjqnjlPROewd0ZmHyFFd2z/pTtG9vsVtD552gxGkxmA+/F98hK/bzxezdz5KngWixLHpZKix8K7lkzRAwLQQY2CD4WFi+pTJzkFWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cqsoftware.com.cn; spf=pass smtp.mailfrom=cqsoftware.com.cn; dkim=pass (1024-bit key) header.d=cqsoftware.com.cn header.i=@cqsoftware.com.cn header.b=PUgVhxha; arc=none smtp.client-ip=103.209.128.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=cqsoftware.com.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cqsoftware.com.cn
+DKIM-Signature: a=rsa-sha256;
+	b=PUgVhxha4zZAds+bsvN3i4C3Biw2MbXZSz/sfjOl7y7v1EcleUrSf/V3LIPxSqKj7qia+vHhx/f6Ea8Bc7gnm2siXEaV3MOg3BxeRM78WsYznfryOp2p0wtyy/oozZ9ZNc+5t4IER9oo1rfZrQTOnHtEnqVhWO//eiw0FdWTMIs=; c=relaxed/relaxed; s=default; d=cqsoftware.com.cn; v=1;
+	bh=qW5v6wPUIgQYUeAA1yQclbci/Ld3I4Wcubm7RccTIHw=;
+	h=date:mime-version:subject:message-id:from;
+Received: from localhost.localdomain (unknown [223.64.68.38])
+	by smtp.qiye.163.com (Hmail) with ESMTPA id F33B64C0635;
+	Fri, 20 Sep 2024 13:34:34 +0800 (CST)
+From: Yanteng Si <siyanteng@cqsoftware.com.cn>
+To: linux@armlinux.org.uk,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	alan@linux.intel.com
+Cc: bartosz.golaszewski@linaro.org,
+	andriy.shevchenko@linux.intel.com,
+	arnd@arndb.de,
+	u.kleine-koenig@pengutronix.de,
+	mengdewei@cqsoftware.com.cn,
+	linux-serial@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	si.yanteng@linux.dev,
+	Yanteng Si <siyanteng@cqsoftware.com.cn>
+Subject: [PATCH] serial: clean up uart_info
+Date: Fri, 20 Sep 2024 13:34:23 +0800
+Message-Id: <20240920053423.1373354-1-siyanteng@cqsoftware.com.cn>
+X-Mailer: git-send-email 2.31.4
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/8] drm/xe: xe_gen_wa_oob: fix
- program_invocation_short_name for macos
-Content-Language: en-GB
-To: Masahiro Yamada <masahiroy@kernel.org>
-CC: Nathan Chancellor <nathan@kernel.org>, Nicolas Schier
-	<nicolas@fjasle.eu>, Lucas De Marchi <lucas.demarchi@intel.com>,
-	=?UTF-8?Q?Thomas_Hellstr=C3=B6m?= <thomas.hellstrom@linux.intel.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>, Maarten Lankhorst
-	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
-	William Hubbs <w.d.hubbs@gmail.com>, Chris Brannon <chris@the-brannons.com>,
-	Kirk Reiser <kirk@reisers.ca>, Samuel Thibault
-	<samuel.thibault@ens-lyon.org>, Paul Moore <paul@paul-moore.com>, "Stephen
- Smalley" <stephen.smalley.work@gmail.com>, Ondrej Mosnacek
-	<omosnace@redhat.com>, Catalin Marinas <catalin.marinas@arm.com>, Will
-	Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>, Oliver Upton
-	<oliver.upton@linux.dev>, James Morse <james.morse@arm.com>, Suzuki K
-	Poulose <suzuki.poulose@arm.com>, Zenghui Yu <yuzenghui@huawei.com>, "Greg
- Kroah-Hartman" <gregkh@linuxfoundation.org>, Jiri Slaby
-	<jirislaby@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, "Bill
- Wendling" <morbo@google.com>, Justin Stitt <justinstitt@google.com>, "Simona
- Vetter" <simona.vetter@ffwll.ch>, <linux-kernel@vger.kernel.org>,
-	<linux-kbuild@vger.kernel.org>, <intel-xe@lists.freedesktop.org>,
-	<dri-devel@lists.freedesktop.org>, <speakup@linux-speakup.org>,
-	<selinux@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<kvmarm@lists.linux.dev>, <linux-serial@vger.kernel.org>,
-	<llvm@lists.linux.dev>, Finn Behrens <me@kloenk.dev>, "Daniel Gomez
- (Samsung)" <d+samsung@kruces.com>, <gost.dev@samsung.com>
-From: Daniel Gomez <da.gomez@samsung.com>
-In-Reply-To: <CAK7LNAQDxVGOa5g3f_dqZ5nD_u8_a++T+ussL+AWuOXs-XOsow@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format="flowed"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: CAMSVWEXC01.scsc.local (2002:6a01:e347::6a01:e347) To
-	CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Ta0yTVxjHPe+1INWXStejEIldumUQmCboziZBt/DhXYKJlw8ys0y68YJM
-	bmkpbm5GRO7gxkUodNAhlFtlQysgV3HAWjpAQBCRy2CRu1ynjovMjlLM+PZ/nvP7P8/5n+Tw
-	cMFrag8vIDiMkwVLA8WUNVGpX+lwSb8w47d/6qUQtTzOw9B8YRJAeu0kjmpNQzjqeTlPoav5
-	ZRRavjOJoeF7RRiay3FAGTfzKaTuMhJouryJQLqnvSRaq6nCUHdNNoXa8q/RaPR6A4XGnhZS
-	6MZiBYH+GukjUXW2kUT1Zd0U0nU/J1FMfCGJYkvGKLSQbMLQeH0LidJXZig0m/w7jQZSlQRq
-	UPXSqHhZCVCHQU8jU8NeVFnVDtBERxpAWQMDAD2rWh9cPpNCoryYD1DU4EH0pOAWfdSJLVWX
-	ArZO306x9f/kEmxN4x2KrVYN0WyuTsFGNc+SbH7dFMbqtPEUq45XY6zp2gjJNpvyaPZGRDrO
-	qo0n2IacUpodTjRgx+EZa3dfLjAgnJO97+FjfS6mNpMOnd77TcTN7RFgUpQArHiQcYPKSTVI
-	ANY8AVMMYFNsBW0pXgAYvZyHmykB8xzAfzMlbxxZtRGUBSoCcHC2ebNYh14tpW0W1QDqO1oI
-	s4XPeEDdgyVg1gQjgbdq50hL3xYas0Y3GCHjCIf7M2mz3sX4wIIE5QaPMyIY+aJkg7djnOBg
-	QRxpXoAzUzZwIrVzw0wx78F7Rt2G2Yo5AdVRf65r3jr0EVS2fGqZ4wivVvyEWyLsg5kpJYRF
-	X4J/lPdj5pmQqd0OC283kpYDTzg3ZtyEdsFpQzlt0Q7QVP0zZtH+UPOrapMJhXUDKtK8FzKH
-	4Q9tgZb2x7BszYBZ2jtg36yt5To7YGqlEk8GEtWWl1BtSaz6P4BqS4BcQGiBiFPIg/w5+YFg
-	7oKrXBokVwT7u34VEqQD61+k9bXh7yqQM73o2ggwHmgEkIeL7fiihSk/Ad9X+u1FThZyVqYI
-	5OSNwJ5HiEV8ia8jJ2D8pWHceY4L5WRvTjGe1Z4IjBdx+rvVw5rVDLfOZ6aetyQtXp2/ZPu8
-	i+mzT43f9r4c03vSTubYcX/V9vShhVFh/nzSqZNj9p454R9OdOFKr6b6ZEnrl5ELS2ekI3e1
-	ogRx0aL7F9ijT74XeOAZLp2XNCkhjo8Mv7Xv65OIAxTuV8Z3DmmOK1wOKdWSh86Ul+agzcP4
-	aFrS/06c/2fO2kjC/ZV18f36Rd+gNJFwjZdUW9fNVwjHghyWcx7HSJOqekabvS+mGBShsZrG
-	bd47n5iOxF05u63ncrhNtN+K9q7n1yFt9keDAj8vSuZnHdv99phDz/Wu+dYmbX54lPD8j4nO
-	6snoBjc2/kHskd1FiWGD5ftnmsSE/Jz0gBMuk0v/A5xW+OaRBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Te0yTVxjGPV+/S0GYHxXCgRHFJixCYqFA8WCAbQmZ3xYzZWK2wQAb+bhf
-	TEsFXYzNIHUUMSAqUKFiG1Aum65cLJTLYKzIGJLRwZgIuClyEUEGKjiwA8oS/vud8z7v87zn
-	5Bwuh3eXdObGp6SxkhRxEp+0xnvedo3uu5w+E+NlGnBA9/7QYGiu4gJAxqpJDjKYRzjo95dz
-	JMrU3ibRUu0khsZab2JottQFXa3Wkkj9WzeOput+wpHu8SCBVpr0GDI1lZDoV20uhZ5cbiPR
-	+OMKEt2Yr8fRX4+GCNRY0k2gltsmEulMCwRSZFcQ6HzlOIle5Jkx9LTlHoGuLM+Q6HnezxQa
-	vlSIozbVIIVuLRUC1NdlpJC5bRdq0PcCNNFXAFDx8DBAz/RrxnUz+QTSKPajrIci9Gf5HeoD
-	D6ZGXQOYZmMvybS8KsOZpo5akmlUjVBMmU7GZHU+Jxht8xTG6KqySUadrcYYc+4jguk0ayjm
-	hvwKh1F3hzBtpTUUM5bThR2BYYIASaosjXWNS5WmBfLDhchbIPRHAm9ff4HQZ3/EAW8R3zMo
-	IJpNij/FSjyDjgviFIYi6uT0rgx59XY5mHRUAisupH1hsUFOKoE1l0eXA9hfqsEsBRf4w+IA
-	YeGdcGVQuSmaB7BCn7O5aASwaDxzo8OWDoK6+6/BOuO0G7xjmCUs+3awu/gJvs4O9G449qCI
-	Wued9HFYrizc0HNoR/jNYuWG3p72gA/LvyXWAzj0hA08f0uHWdI0GOzXjm6kkbQ7bO3WbThZ
-	0SFQnTVKWZwQ1M60b/JumFl/jWM5wx5YlF+JW/gsXFh9CvKAg2rLgKotg6i2WKm2WJUBvArY
-	szJpcmyyVCiQipOlspRYwYnUZB1Ye8ENxuVaPVBPzws6AMYFHQByOXx7W8cXUzE822jx6TOs
-	JDVKIktipR1AtHZL+RxnhxOpa18gJS1K6OclEvr6+XuJ/P18+I62H5n6Ynh0rDiNTWTZk6zk
-	/z6Ma+Usx04lMZ9mlX14eDl0OXdHztRLyvcXm72dE831nzXyE2Nmffr1wW6ai1czMkcC4NeG
-	g4PtxRE20ZENipCDRVYXI123lZTWykP6icaZQNPNdCv3c70GP55LwqF/ek43/AgJuGB0c7Ie
-	0r/zSWhynsLp+6++e/8s7RmGuEcH4qvD/9W/MkGdKGT2820KLLp9X/r2yXEZqZrLiFsNi+ap
-	90TefYZlX3fvNKY05a944b0fc5WH/r7+4FigwT3qrS48tL4kaNU1ZuTI/OuFa+L77znWti6t
-	RPRgb84l2CgTqYL6gpwCWH3mSx/jgPldwZtFeztZwiWe3URZ3Y4+py8OD104EBx8lI9L48RC
-	D45EKv4P8XlwBEoEAAA=
-X-CMS-MailID: 20240919191220eucas1p23f207681d0268c632f46323fd5ac9107
-X-Msg-Generator: CA
-X-RootMTR: 20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783
-References: <20240906-macos-build-support-v2-0-06beff418848@samsung.com>
-	<20240906-macos-build-support-v2-3-06beff418848@samsung.com>
-	<CGME20240906144003eucas1p1b8c2be4807e04ced52c4902bfbfb9783@eucas1p1.samsung.com>
-	<CAK7LNAQDxVGOa5g3f_dqZ5nD_u8_a++T+ussL+AWuOXs-XOsow@mail.gmail.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkaTR4dVkgeQ01CQk9CSkseS1YVFAkWGhdVEwETFh
+	oSFyQUDg9ZV1kYEgtZQVlJSUhVTU9VTUNVSENZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVU
+	tZBg++
+X-HM-Tid: 0a920deccc1509d7kunmf33b64c0635
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6PD46SRw4DjI0IwEfFUIOTDwK
+	SBQwCw9VSlVKTElNQ0pLT0xNS0NPVTMWGhIXVQgSAhoVDx4VHDsYCggUHQ8MGgkeVRgUFlUYFUVZ
+	V1kSC1lBWUlJSFVNT1VNQ1VIQ1lXWQgBWUFJS0tKNwY+
 
-On 9/6/2024 4:39 PM, Masahiro Yamada wrote:
-> On Fri, Sep 6, 2024 at 8:01 PM Daniel Gomez via B4 Relay
-> <devnull+da.gomez.samsung.com@kernel.org> wrote:
->>
->> From: Daniel Gomez <da.gomez@samsung.com>
->>
->> Use getprogname() [1] instead of program_invocation_short_name() [2]
->> for macOS hosts.
->>
->> [1]:
->> https://www.gnu.org/software/gnulib/manual/html_node/
->> program_005finvocation_005fshort_005fname.html
->>
->> [2]:
->> https://developer.apple.com/library/archive/documentation/System/
->> Conceptual/ManPages_iPhoneOS/man3/getprogname.3.html
->>
->> Fixes build error for macOS hosts:
->>
->> drivers/gpu/drm/xe/xe_gen_wa_oob.c:34:3: error: use of
->> undeclared identifier 'program_invocation_short_name'    34 |
->> program_invocation_short_name);       |                 ^ 1 error
->> generated.
->>
->> Signed-off-by: Daniel Gomez <da.gomez@samsung.com>
->> Reviewed-by: Lucas De Marchi <lucas.demarchi@intel.com>
->> ---
->>   drivers/gpu/drm/xe/xe_gen_wa_oob.c | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> index 904cf47925aa..0d933644d8a0 100644
->> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
->> @@ -8,6 +8,7 @@
->>   #include <errno.h>
->>   #include <stdbool.h>
->>   #include <stdio.h>
->> +#include <stdlib.h>
->>   #include <string.h>
->>
->>   #define HEADER \
->> @@ -30,6 +31,9 @@
->>
->>   static void print_usage(FILE *f)
->>   {
->> +#ifdef __APPLE__
->> +       const char *program_invocation_short_name = getprogname();
->> +#endif
->>          fprintf(f, "usage: %s <input-rule-file> <generated-c-source-file> <generated-c-header-file>\n",
->>                  program_invocation_short_name);
->>   }
->>
->> --
->> 2.46.0
->>
->>
-> 
-> 
-> 
-> Before adding such #ifdef, you should check how other programs do.
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> Solution 1 : hard-code the program name
-> 
-> 
-> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> index 106ee2b027f0..9e9a29e2cecf 100644
-> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> @@ -30,8 +30,7 @@
-> 
->   static void print_usage(FILE *f)
->   {
-> -       fprintf(f, "usage: %s <input-rule-file>
-> <generated-c-source-file> <generated-c-header-file>\n",
-> -               program_invocation_short_name);
-> +       fprintf(f, "usage: xe_gen_wa_oob <input-rule-file>
-> <generated-c-source-file> <generated-c-header-file>\n");
->   }
-> 
->   static void print_parse_error(const char *err_msg, const char *line,
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> Solution 2: use argv[0]
-> 
-> 
-> diff --git a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> index 106ee2b027f0..600c63e88e46 100644
-> --- a/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> +++ b/drivers/gpu/drm/xe/xe_gen_wa_oob.c
-> @@ -28,10 +28,10 @@
->          "\n" \
->          "#endif\n"
-> 
-> -static void print_usage(FILE *f)
-> +static void print_usage(FILE *f, const char *progname)
->   {
->          fprintf(f, "usage: %s <input-rule-file>
-> <generated-c-source-file> <generated-c-header-file>\n",
-> -               program_invocation_short_name);
-> +               progname);
->   }
-> 
->   static void print_parse_error(const char *err_msg, const char *line,
-> @@ -136,7 +136,7 @@ int main(int argc, const char *argv[])
-> 
->          if (argc < 3) {
->                  fprintf(stderr, "ERROR: wrong arguments\n");
-> -               print_usage(stderr);
-> +               print_usage(stderr, argv[0]);
->                  return 1;
->          }
+Since commit ebd2c8f6d2ec ("serial: kill off uart_info") has
+removed uart_info, the uart_info declaration looks lonely,
+let it go.
 
+Signed-off-by: Yanteng Si <siyanteng@cqsoftware.com.cn>
+---
+ include/linux/platform_data/sa11x0-serial.h | 1 -
+ 1 file changed, 1 deletion(-)
 
-This approach looks good to me. I will drop Lucas' tag in favor to this. 
-Please, Lucas let me know if you disagree any of the proposals here or 
-if you have any preference. Otherwise, I'll resend this with solution 2.
-
-
-
-> 
-> 
-> 
-> 
-> 
-> 
-> 
-> 
+diff --git a/include/linux/platform_data/sa11x0-serial.h b/include/linux/platform_data/sa11x0-serial.h
+index 8b79ab08af45..a88096bc74e4 100644
+--- a/include/linux/platform_data/sa11x0-serial.h
++++ b/include/linux/platform_data/sa11x0-serial.h
+@@ -10,7 +10,6 @@
+ #define SA11X0_SERIAL_H
+ 
+ struct uart_port;
+-struct uart_info;
+ 
+ /*
+  * This is a temporary structure for registering these
+-- 
+2.31.4
 
 
