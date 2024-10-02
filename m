@@ -1,126 +1,136 @@
-Return-Path: <linux-serial+bounces-6332-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6337-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8592198DA42
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2024 16:19:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5B1898DB9C
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2024 16:33:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE3D91C2381B
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2024 14:18:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 876D628266B
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Oct 2024 14:33:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 841BD1D26FD;
-	Wed,  2 Oct 2024 14:14:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779DC1D1F69;
+	Wed,  2 Oct 2024 14:27:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b="KxJZEyZn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Gpjz4Wyi"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4E2D1D223F;
-	Wed,  2 Oct 2024 14:14:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.208.4.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC08D1D1E70;
+	Wed,  2 Oct 2024 14:27:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1727878491; cv=none; b=DyWnIi0X8yyk1M20nsX2HVL45xPlT3YRE1v36CxM0mDtKpa5OuMXczXfC/zanLE6l0PVMXa6cPgbcoHKZi6NR2gixvI58oybzOCgdKchZjEu/8Gor18dazOykdulU2Egigs2UK011CW3kjVr9LtuxjTSjBWw7zik0ywfIC1tcl4=
+	t=1727879258; cv=none; b=K3tZ9hAO3eqfsgbnBfXo2gAVGSmWgbMRsXLo1KBg9fnDzMobwwqgQ0+VhBBhXdfHnFBnkZPFZzovSNFMP5dcxj6KmBW009ZYRiX4fXP7XxifddnY69h9B+Ot+/WjqJXkgskRpvYi2vvA12YbeU9w1qge3vp/JvPMjiCOk8IBHB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1727878491; c=relaxed/simple;
-	bh=Ur+8GMaBc/m0BewN7ELCb9d98QduintxnzIpZkHlM6Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SN00bej7AdGduFUG6MLztMQug/1fRRyl57Gz7teG+15pjsLvBumyFaV1ijxqSjMdWHPzZrzO+ZRkNYyomvmmmMb4AnR2eQCCetmuU67Uz7G7OeFIFiVVSuaDeFWrOBi6nYfrhB4M002XWKkdCuu1FGtLGp6XtG+OD7NlfMA+XqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io; spf=pass smtp.mailfrom=finest.io; dkim=pass (2048-bit key) header.d=finest.io header.i=parker@finest.io header.b=KxJZEyZn; arc=none smtp.client-ip=74.208.4.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=finest.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=finest.io
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=finest.io;
-	s=s1-ionos; t=1727878480; x=1728483280; i=parker@finest.io;
-	bh=s6jCD22F4BqKArbBW8kPW52KEa/QcItcl8sp3x+bNI4=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:In-Reply-To:
-	 References:MIME-Version:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=KxJZEyZnKGpt30Ywuf+z3AWPcGE4myi+1vCSArzbAMj5IXa+XrQkeEheLrNhqs6Y
-	 cHR1zNwYqioFME1RqQSnY0EpuAeHt9vT96N+u/BGwWmYPY6jll4TlZi+/97EAx62H
-	 g6LwZQeSya+RrrIoFDx6g4/Ocsh58UX0+DOOQ7Pawx7ANcmbFt7+FWs6FOFIoMhM+
-	 wlvbFBUI2DXkEX52eeN5ar93Dk6BIG3tErUr2sWTs1P9MgXL8uiguZcl3SMOZVQo/
-	 tT6A+A/2QNNycvrjemQmqAxc3KQ/Bt2a7XsQTUV0y7+0d2lMUQslDtZwKX17hefXi
-	 XoehU8yx/Giwu2IW/w==
-X-UI-Sender-Class: 55c96926-9e95-11ee-ae09-1f7a4046a0f6
-Received: from finest.io ([98.159.241.229]) by mrelay.perfora.net (mreueus004
- [74.208.5.2]) with ESMTPSA (Nemesis) id 1MOAS5-1sXRtW4C5J-00VHUl; Wed, 02 Oct
- 2024 16:14:40 +0200
-From: Parker Newman <parker@finest.io>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Parker Newman <pnewman@connecttech.com>
-Subject: [PATCH v3 5/5] serial: 8250_exar: Group CTI EEPROM offsets by device
-Date: Wed,  2 Oct 2024 10:14:11 -0400
-Message-ID: <641122b5fa5c5fae58f45372574f3633ca505224.1727873292.git.pnewman@connecttech.com>
-X-Mailer: git-send-email 2.46.0
-In-Reply-To: <cover.1727873292.git.pnewman@connecttech.com>
+	s=arc-20240116; t=1727879258; c=relaxed/simple;
+	bh=MwDcBOPD9KXEudvZezMAvLuCevi7PAa5G4JUxpIWOwo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hj2vQr+snmpcHkS8+ZvkUCzPFG7FZu00nLTbDrU7myeDLWBhu5nexJasxPlUXP+eggi/4tjStNnkwb6kvsV+O8aMymGnK1BWvV+UfrrPwtJplBNCWY5vaLITn8xVcIfnK0cZR+3nJDJwohmUjJ9vD66CsvdoHiAx7g995ZJH2tY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Gpjz4Wyi; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1727879257; x=1759415257;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=MwDcBOPD9KXEudvZezMAvLuCevi7PAa5G4JUxpIWOwo=;
+  b=Gpjz4WyiNdD5FGMUWglt5YfzFtznf+wrGNfSMTC7k1so4a7njlk6pTIV
+   9X17ZONKLz9iZ1pjN6HlSN9UQrgW6zjjSbK8zbYWaY9AkgaCDHxuCCjS9
+   +0TqDU9BUDs9TfLmjoQngFwl3isbPLf9220iJQwPMeTObIDuTTsXMeaKR
+   5xYom8fG5u6x2+aIJSXpi8/zdYg2iFwSDvTKthYsRKaowT+0rLKWZ34TU
+   Iy3rk0EdS1Dwj//SUk6FFgduLINB6UdnueEZu1W81EGu6WV1W5HRsum24
+   /KV7ayb5lRbtokb1MciMzGfQ+Tcg9M9N/dpk7owbgmyVRiAkwCfUDhpAP
+   w==;
+X-CSE-ConnectionGUID: CsgcnPfuRbi+tRVqAKsFlw==
+X-CSE-MsgGUID: 2h/oLMNkRIWK7WWn+2/QZw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11213"; a="44508527"
+X-IronPort-AV: E=Sophos;i="6.11,171,1725346800"; 
+   d="scan'208";a="44508527"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 07:27:36 -0700
+X-CSE-ConnectionGUID: SKFxyeinTw+5/W3iTrZL+g==
+X-CSE-MsgGUID: I2pOoM+PTCCbkRhDwBq7Ig==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,171,1725346800"; 
+   d="scan'208";a="74040246"
+Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.154])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2024 07:27:35 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1sw0KB-0000000FhXo-44TX;
+	Wed, 02 Oct 2024 17:27:31 +0300
+Date: Wed, 2 Oct 2024 17:27:31 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Parker Newman <parker@finest.io>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	Parker Newman <pnewman@connecttech.com>
+Subject: Re: [PATCH v3 1/5] misc: eeprom: eeprom_93cx6: Add quirk for extra
+ read clock cycle
+Message-ID: <Zv1YUyzL41GTqsOA@smile.fi.intel.com>
 References: <cover.1727873292.git.pnewman@connecttech.com>
+ <62eca5d814da3734cfa984a78e0978efefbbc827.1727873292.git.pnewman@connecttech.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:OKRFvDjNCNrSpHu/58YvWUhPAiATePXnBEEeUqzrCMjrxi1yl0Y
- WphRcWqNbaVsjQ1s8GcdqSIAEUZznO5pmUusPxpNj4CYBl5eQX6NKVQEm8w1OSe2o8tZ368
- C/E9cbNvaw3KzVdEJqYmARrRepdjoSH00SqWBLlDgWk4HzISq+BoFnDcnqeWjPueiis5SvZ
- oyZt9MgSGF1aYlb7Rxsnw==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:o/ngSX8peq4=;zaTET7vCHpunyoVYj3txBbnIE9v
- 6ZEkmlyBEJErEUE+nds1OSVUr1ACHwD0NDp+o8GdICtAx2HULRinsZoGOgtBu2ulrG89Jo6Ru
- SA6Jjm/sW/fhZDXV9QK8MD8UF9HXlM2OZrHw4t+cFlBZphWZaE3tee4w7nmFCYezjJ28coeRU
- v3MROXqc5qLX5FzBrGJ9/Qaud2IILmYVQISLmQ36xKRJJHGj1PJwmRrhNF2OVAk02swkILKnJ
- 2mZq3rGoFQlUvEREmgN1iohbalKitLB5JcUtDWLji19twZxmG6z85kVfjSBfsGrSG5zIR1Glb
- LTqaVHRaZPFtain8kL51i4DfHEkeJ+SzFjFG+c+a6fB89T0stcASV2yYPxvceXoNoqDhFf2ik
- HBCLMeaCq7CXcnkSTsFhRI9OwWuQ2L0oAgvQdaNMjNSCXel5lCS+k4QIv+Tp6ygGX1yePqu9l
- NV9BTrIiNr3FyhvbgPtsKQh6GdxIgyzlJJ3lQGdRm/CVLRkHjYA22EcfZ/7bo5bwsiP4MC+St
- H67wtusZxYhk0ZCLYWe/Ki9C8oAWT8tYPzumEnMGxtiS5qeNjc4PfcgfKdNeZpf9fkVrXsAzS
- 9797NBfhlSpYJ9YPSUqDg8JjUSfZ5U6b3/EqFS9jR9AH0vbln98biNlUbDAGJKivxiVPu3dax
- JbL68tu42VwL+9dTAX2wQ3yTbi0kUrtWye5PlR1pRLXGDCmbUKTipj8wmDzcZxDloA0JciDHm
- w7O5Ohup5fEenly3Mq5Ct/Jq5l4tEhMCQ==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <62eca5d814da3734cfa984a78e0978efefbbc827.1727873292.git.pnewman@connecttech.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Wed, Oct 02, 2024 at 10:14:07AM -0400, Parker Newman wrote:
+> From: Parker Newman <pnewman@connecttech.com>
+> 
+> Add a quirk similar to eeprom_93xx46 to add an extra clock cycle before
+> reading data from the EEPROM.
+> 
+> The 93Cx6 family of EEPROMs output a "dummy 0 bit" between the writing
+> of the op-code/address from the host to the EEPROM and the reading of
+> the actual data from the EEPROM.
+> 
+> More info can be found on page 6 of the AT93C46 datasheet (linked below).
+> Similar notes are found in other 93xx6 datasheets.
+> 
+> In summary the read operation for a 93Cx6 EEPROM is:
+> Write to EEPROM:	110[A5-A0]	(9 bits)
+> Read from EEPROM:	0[D15-D0]	(17 bits)
+> 
+> Where:
+> 	110 is the start bit and READ OpCode
+> 	[A5-A0] is the address to read from
+> 	0 is a "dummy bit" preceding the actual data
+> 	[D15-D0] is the actual data.
+> 
+> Looking at the READ timing diagrams in the 93Cx6 datasheets the dummy
+> bit should be clocked out on the last address bit clock cycle meaning it
+> should be discarded naturally.
+> 
+> However, depending on the hardware configuration sometimes this dummy
+> bit is not discarded. This is the case with Exar PCI UARTs which require
+> an extra clock cycle between sending the address and reading the data.
 
-It's not obvious from the first glance that the list of the CTI EEPROM
-offsets covers three different models, let's group them accordingly for
-better readability.
+...
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: Parker Newman <pnewman@connecttech.com>
-=2D--
- drivers/tty/serial/8250/8250_exar.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+> +static inline bool has_quirk_extra_read_cycle(struct eeprom_93cx6 *eeprom)
+> +{
+> +	return eeprom->quirks & PCI_EEPROM_QUIRK_EXTRA_READ_CYCLE;
+> +}
 
-diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/8250=
-/8250_exar.c
-index 470e8128c79a..e37c10b60a7e 100644
-=2D-- a/drivers/tty/serial/8250/8250_exar.c
-+++ b/drivers/tty/serial/8250/8250_exar.c
-@@ -178,11 +178,13 @@
+> +
 
- /* CTI EEPROM offsets */
- #define CTI_EE_OFF_XR17C15X_OSC_FREQ	0x04  /* 2 words */
--#define CTI_EE_OFF_XR17V25X_OSC_FREQ	0x08  /* 2 words */
- #define CTI_EE_OFF_XR17C15X_PART_NUM	0x0A  /* 4 words */
--#define CTI_EE_OFF_XR17V25X_PART_NUM	0x0E  /* 4 words */
- #define CTI_EE_OFF_XR17C15X_SERIAL_NUM	0x0E  /* 1 word */
-+
-+#define CTI_EE_OFF_XR17V25X_OSC_FREQ	0x08  /* 2 words */
-+#define CTI_EE_OFF_XR17V25X_PART_NUM	0x0E  /* 4 words */
- #define CTI_EE_OFF_XR17V25X_SERIAL_NUM	0x12  /* 1 word */
-+
- #define CTI_EE_OFF_XR17V35X_SERIAL_NUM	0x11  /* 2 word */
- #define CTI_EE_OFF_XR17V35X_BRD_FLAGS	0x13  /* 1 word */
- #define CTI_EE_OFF_XR17V35X_PORT_FLAGS	0x14  /* 1 word */
-=2D-
-2.46.0
+Seems to me the redundant new line at the end of file.
+
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
