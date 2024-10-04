@@ -1,46 +1,46 @@
-Return-Path: <linux-serial+bounces-6373-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6374-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85C39990B91
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2024 20:31:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B464990C8B
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2024 20:51:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F9792813D5
-	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2024 18:31:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 507C51C2277E
+	for <lists+linux-serial@lfdr.de>; Fri,  4 Oct 2024 18:51:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CB51E0DC6;
-	Fri,  4 Oct 2024 18:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A0671F941A;
+	Fri,  4 Oct 2024 18:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l+GyUMTh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MUBOxwhZ"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1DF4D1E0DAF;
-	Fri,  4 Oct 2024 18:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CFB1F9414;
+	Fri,  4 Oct 2024 18:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728066003; cv=none; b=eB0kumfKhM9HHkbLgg1RAD8KURlUmTeTZzI+Fb8zHUURK66AkYKmUal7DNMVvYnI3Q0Iy3G5NXOra8MZx4L2Z6h/++xnR4mVP4vRxTDvAnOP6Fipp76enPUAfJ9GjTnW5wQuWG2HDV/0Xsp24aFn8wyrpzkbVgGRn3LoNJySKv8=
+	t=1728066210; cv=none; b=pr1dJFlX2+NqrtnDn1xaGc4FOQQlWHMkbtR1sWdIcKVgYKVjPnRV+kAb+UXAkFo1LZ6kWDlgj1dfoIjH4lkl+CbifMjz0ghh6IuUc4N0P2dBXShSGSx3vl8nF0mJqO0VbHczaYcJx/JGlpEoT1uL30qwaKFvbmF7y6hnDC28zQE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728066003; c=relaxed/simple;
-	bh=OIdMz7HONHnDTTdnBElA5S8YW2qimUiMR6+XE75vAow=;
+	s=arc-20240116; t=1728066210; c=relaxed/simple;
+	bh=oB/xfsbQWtP1t80oPNfDpypV217aBFCJCfzVqiYBLxM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ldnTzR7V31YaKHukzSCzh4vLYvPcv4S0EMTe3KEUIrYON6rQSimKYTPOshq0c3Kt7aHz56p617/OwfHM7tRgx4SXk1KRXqLklzSGDfRSaV/i0ElAMVb8/5p0AcyMAAY6yeKjrvA9VIYWLjenIPdRTdr2w7LOcx5vkVTz6RzwRV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l+GyUMTh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D220C4CECC;
-	Fri,  4 Oct 2024 18:20:01 +0000 (UTC)
+	 MIME-Version; b=hejt0clzE1ASjWHU+UtpRp3DfaV1JuuoqLnOTbFtRObr3jpKko7oRbXqsdHAtZMMei8RHGJQFbWQwoLCBUhfnjJQdmQJEAwVfraiq8ystpWGz4ZYcq2q/GMQ2q35BvZgQkNuctfYsLY81aQFvE1RgfJHK6fN9AK6EyHY+urxQJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MUBOxwhZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C87C4CEC6;
+	Fri,  4 Oct 2024 18:23:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1728066002;
-	bh=OIdMz7HONHnDTTdnBElA5S8YW2qimUiMR6+XE75vAow=;
+	s=k20201202; t=1728066210;
+	bh=oB/xfsbQWtP1t80oPNfDpypV217aBFCJCfzVqiYBLxM=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l+GyUMThBDPXcJ41NcQF1ItuB42QTxw5AJGU1IdZ7P4boRBXuNWJApL8dcHIjOKLI
-	 1njnR57ripS+xKaDQNOVTpJUAtH1sdDa1DVPrw44qfP38+rMqdoSFycHotYy+SyKqP
-	 x9KTNO04oBlkd1oIUYIc87uWLKOncfBcknOarXQhSvbKHjTg6gzEq3hQ2lv+a3xjE0
-	 asW8281h9VLEItrvTaVYqkHCg4jZ/fPYQ5F5FMznriwm+vGcj9HGlb7q3rDbrH89ui
-	 P8OYREudI5bNo3BT/20YEEYC//+HJv0EZr+ORR2r4sspkrrCuRSjxwcU/ybjIxImp1
-	 dKEak9GyDDc/Q==
+	b=MUBOxwhZGw9nIX6gmBKe6u6QTpqjV047W74Ox1YR/CAxHJBMC7pUlKk7djUWcTndS
+	 jXX4T/IJqtrSbIjq7VgNQSN8ARyDX3eoqjvppHBNL9rCaqSReqJcapgCkAKwYk/Jh6
+	 8TCffIrfRcMM8MPm0dsxydiz9LZBJWq27Z2RWlWBe4f5rdHSwkublSD9emLb8pGBoq
+	 wvJNZSmLywEyoDOAOw3irR+d3ImFQaGZQwxIfG0WmWS4ANttPiBL9pxcb4fPnjNSJu
+	 vC7OQuZYlaIIdzubN2ucLAcFrt3aZYSnrxD8xQ8p8Hs/6l5tOYchN+niFqlQyu4Dge
+	 a0uKQq31/uRBw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
 	l.sanfilippo@kunbus.com,
 	pcc@google.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.11 50/76] serial: protect uart_port_dtr_rts() in uart_shutdown() too
-Date: Fri,  4 Oct 2024 14:17:07 -0400
-Message-ID: <20241004181828.3669209-50-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.10 46/70] serial: protect uart_port_dtr_rts() in uart_shutdown() too
+Date: Fri,  4 Oct 2024 14:20:44 -0400
+Message-ID: <20241004182200.3670903-46-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241004181828.3669209-1-sashal@kernel.org>
-References: <20241004181828.3669209-1-sashal@kernel.org>
+In-Reply-To: <20241004182200.3670903-1-sashal@kernel.org>
+References: <20241004182200.3670903-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.11.2
+X-stable-base: Linux 6.10.13
 Content-Transfer-Encoding: 8bit
 
 From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
@@ -100,7 +100,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 9 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
-index 5bea3af46abce..9763fc5dcc80c 100644
+index 9967444eae10c..dcd04db0e3eee 100644
 --- a/drivers/tty/serial/serial_core.c
 +++ b/drivers/tty/serial/serial_core.c
 @@ -407,14 +407,16 @@ static void uart_shutdown(struct tty_struct *tty, struct uart_state *state)
