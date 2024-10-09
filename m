@@ -1,139 +1,204 @@
-Return-Path: <linux-serial+bounces-6425-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6427-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63D9E996A3D
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 14:40:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C3D0996B77
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 15:14:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E866D282C79
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 12:40:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8C7B1F227CD
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 13:14:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4E8F196D98;
-	Wed,  9 Oct 2024 12:40:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD92195381;
+	Wed,  9 Oct 2024 13:14:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="X1znPr9U"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="WI0sVayc"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1F11953BA
-	for <linux-serial@vger.kernel.org>; Wed,  9 Oct 2024 12:40:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56932291E;
+	Wed,  9 Oct 2024 13:14:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728477630; cv=none; b=HFADTGOg3R7FskwDi8FwCvPQxzi9RmAW862rq678HwtenUZ0HWUqJ09GiX4vm9zz4BXVXGQpMtnJjl00mon/ZoPdZXkSlP/YCekAmRYETpvPemivQB1OAHDL7KBcbZvhy2kyWzNT2ovJdNuuhJUBHQVGqKmUoQeg5M96LoSg3q0=
+	t=1728479673; cv=none; b=apr2C+vhmbZwswFjUiiLZjE6r5TkWlxQaGbN+gcqJRhGAi7dCb2w9Ynx//VKXBP0jrlAQS584jElRaj3xBtJoqfGxlM1BBQRBfUwFIgOkM27nL3oAuggrOBDP8yRNNGpmIOlVrV9NAzhqwtVGTuGukBtAsqbYeIwGLI3ufXe8LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728477630; c=relaxed/simple;
-	bh=NX34IxOgzpU/58lP/IC+KEU7eNMZKOWaom9j0SKbKLs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hZkMFXDLrXqfYJGqJ6HoQz5d0nm1vdk8R7QCPBtElDW5rSXn+TpdH8Uae6Fn7mSgv7EQKD8JqiG2cK9gy0dUZGArVvrvSnBAVTPtmRQb/3ATaPOvHeFUsQdFv83pfejgRTKmRP6mYnSEdKPICRDxp4Fvu9I8Fg+cHjDypCHb0Hc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=X1znPr9U; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e28fd8cdfb8so857741276.3
-        for <linux-serial@vger.kernel.org>; Wed, 09 Oct 2024 05:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1728477628; x=1729082428; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kPZfCYV/wy71ba4BSJvyuLIGj5SMt+aZjw2X+wMCyV4=;
-        b=X1znPr9Ub7yckj/3cefLuGg/zu0ps3DGSjPhGaqjS8Yyj/aDEuPfXXJQReCX1DOlle
-         qlbeEkEw3RI6gwQGWBzRqhVzdXkmH3K1LgKFu42871nuCrx0msDm394ZKvg8gmDKgUx3
-         uxGCVXb91C9n2cYRSHsQ28vv1SV/UHndLJSz6uE2HoMrPb09GAIpxKyfi2x9quJZG1nj
-         fXlhw42CqwdEOJCQFDgrIKUceLrb1dNsj/5h8kBnRm/aFBYImOMHm9n3AFqF3aKfHihx
-         JJFKXWS7+mdG4pO789nd12yLIIUD3BWqPqWo45dszzqlcPNKZjkH6oCvS0OShYK6RT8h
-         HCJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1728477628; x=1729082428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kPZfCYV/wy71ba4BSJvyuLIGj5SMt+aZjw2X+wMCyV4=;
-        b=pKdIp/gIozJbr1be1bQI/oE1tO//EzM8UhksfyR4WuSdnoX0yH3r/JEuf2/NlTEckH
-         ypM8FbO9ZvnQ0KZ4XOaoVGUftAUl2ae2JwALDiRJLSKwquxvqXkc7jA+S70pnvDzJJrx
-         AYKICJ6IplU78yqbmifNZrsBuzOru2G8/ArHfUuHs1vZ410ZLeI2Ks38Bt8GqVOGXuxo
-         Yh7hZDjnuXGRHIGCoYSmzGWfOkjArBwR9G21bsBSkekdbF8CAxZx5cxp+aqPhNDXtfrp
-         gBb7gWCyxrK+iiVG4mahR698BJJAWJYrFovOlcLjbB3cq4eDYtvdvuMkbrCvbW4p9M2n
-         j1GQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWhzBTBGvRzUuIiOom6gRvyMYjIgmVZJKGm/QHh+/gjCaR4Nk8kAzRuxK4tKCPt+O1BgHhqsexHK/yGFVU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRP7mLNigNsMHIIp34F7IwGypdhETE7xm/8YmMWDOEKMWAUUC/
-	adb3ntHIGGCRE30WINgTmi7WmO+LDEo9JKYb5owjhhcLw8XzZUaRAQCvWw4YPjqLI4SQO8IN8QJ
-	rknJ8w2odb/8Is7KuF6Mn4NzFJGS2M2U7IyHHjg==
-X-Google-Smtp-Source: AGHT+IFMhQJXg0E+KgtQQV2VTHLP9Hnj16lRLdW5+uaKNhSiRNc2pcvPFCL51GS0djemx0sYBfMwlHxGs+hepVq+tqM=
-X-Received: by 2002:a05:6902:15cd:b0:e25:cdc2:ed93 with SMTP id
- 3f1490d57ef6-e28fe43f401mr1818390276.30.1728477627975; Wed, 09 Oct 2024
- 05:40:27 -0700 (PDT)
+	s=arc-20240116; t=1728479673; c=relaxed/simple;
+	bh=YINrfZsek2PYwQzx5aXAqFR5N5hGjnKx66rviiTj1Yw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YS+pyLemzjnTE0fRNtxOYrvsSJrTgTwoEqEfmDpAs25sPM+Gw0CmKDxQSPZV1qOE0jbHEPigc8EWFjta6r0kKFRH5SkUQHJRpord6nveTPWGGNOIdpiTLN12Qvva2BTb25b/AKxInxhdxmzn5JsWFy0WdR3eejWUfkmKugUlOnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=WI0sVayc; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4994xc0x003245;
+	Wed, 9 Oct 2024 07:48:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	PODMain02222019; bh=b9CbWLDMZti2ojgRTihH3RA0WYLUzEcG7aX6pdihoQY=; b=
+	WI0sVaycTZYkwMgmtYcXXMdvigsiua8Ix4Qh02mNCGH2fBXcoCmYBNNsEO5BXVde
+	1Bz9WSIl3H9aytV4MjeLGq5iNgl4nMnifXKD7gZBG7Nh0M0RDNAmEax34ZlRrQpc
+	BqxwXp6rQsj7d8HBI3neZNecBDiZiUXrqk9SjO/XH7GSP3KBa0vc3lo3Nh2evgTs
+	vMpU/eouIhXwHQgJkPlVYadHgMk2W3tKDA7WeoPiKLk9i2DcqwNiAeCbgFtNS1E3
+	D/03y3ryRn8KcZ7U0bo3WMxdHCmB9tG9qfIm/V0gyX7oGE/Hh+fOgbX3EkFod4UH
+	WWLlkgIPTShr+Vylj7CyYA==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 4232uy5xfs-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 09 Oct 2024 07:48:17 -0500 (CDT)
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 9 Oct 2024
+ 13:48:15 +0100
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex01.ad.cirrus.com (198.61.84.80) with Microsoft SMTP Server id
+ 15.2.1544.9 via Frontend Transport; Wed, 9 Oct 2024 13:48:15 +0100
+Received: from [198.90.208.18] (ediswws06.ad.cirrus.com [198.90.208.18])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTP id 33C5E82024A;
+	Wed,  9 Oct 2024 12:48:15 +0000 (UTC)
+Message-ID: <41a0ad69-912b-4eb3-84f7-fb385433c056@opensource.cirrus.com>
+Date: Wed, 9 Oct 2024 13:48:15 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241008-8250-omap-no-console-suspend-v1-0-e7f0365c02f0@bootlin.com>
- <20241008-8250-omap-no-console-suspend-v1-2-e7f0365c02f0@bootlin.com>
- <CAPDyKFpnsV-c4F7SNPQmLBSM1sUknr-3sTyiXMDt9n43UBQkNg@mail.gmail.com> <d879d544-4b1d-4b4a-bfd4-efb35b6a57c1@bootlin.com>
-In-Reply-To: <d879d544-4b1d-4b4a-bfd4-efb35b6a57c1@bootlin.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 9 Oct 2024 14:39:51 +0200
-Message-ID: <CAPDyKFoOV00JzQ=+j7FJzVb0Zb4j-qjR5YPT020TzyJKngeFMg@mail.gmail.com>
-Subject: Re: [PATCH 2/2] serial: 8250_omap: mark the serial as on the wakeup
- path if no_console_suspend
-To: Thomas Richard <thomas.richard@bootlin.com>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
-	Santosh Shilimkar <ssantosh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, u-kumar1@ti.com, tony@atomide.com, 
-	khilman@kernel.org, gregory.clement@bootlin.com, thomas.petazzoni@bootlin.com, 
-	theo.lebrun@bootlin.com, richard.genoud@bootlin.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 00/51] treewide: Switch to __pm_runtime_put_autosuspend()
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+        Ulf Hansson
+	<ulf.hansson@linaro.org>,
+        Laurent Pinchart
+	<laurent.pinchart@ideasonboard.com>,
+        Sakari Ailus
+	<sakari.ailus@linux.intel.com>
+CC: <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-bluetooth@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+        <nouveau@lists.freedesktop.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-i2c@vger.kernel.org>,
+        <linux-i3c@lists.infradead.org>, <linux-iio@vger.kernel.org>,
+        <linux-input@vger.kernel.org>, <patches@opensource.cirrus.com>,
+        <iommu@lists.linux.dev>, <imx@lists.linux.dev>,
+        <linux-mediatek@lists.infradead.org>, <linux-media@vger.kernel.org>,
+        <linux-mmc@vger.kernel.org>, <linux-mtd@lists.infradead.org>,
+        <netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
+        <linux-pci@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+        <linux-pwm@vger.kernel.org>, <linux-remoteproc@vger.kernel.org>,
+        <linux-sound@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+        <linux-staging@lists.linux.dev>, <linux-usb@vger.kernel.org>,
+        <linux-serial@vger.kernel.org>, <greybus-dev@lists.linaro.org>,
+        <asahi@lists.linux.dev>, Andy Shevchenko <andy.shevchenko@gmail.com>
+References: <20241004094101.113349-1-sakari.ailus@linux.intel.com>
+ <CAPDyKFp0N6UJhnHS164Tdf=xkWB0jzq65L9TdvYazeBQ-6WjeQ@mail.gmail.com>
+ <20241007184924.GH14766@pendragon.ideasonboard.com>
+ <CAPDyKFpQVnF7eQv3dup8k-3EijnMjuveCG9sZ=Rpey1Y6MBJEg@mail.gmail.com>
+ <20241007222502.GG30699@pendragon.ideasonboard.com>
+ <CAPDyKFrGNwna6Y2pqSRaBbRYHKRaD2ayqQHLtoqLPOu9Et7qTg@mail.gmail.com>
+ <CAJZ5v0jvJyS7D5-wURi2kyWN-rmNa+YqupeQJ000pQRVd9VBcQ@mail.gmail.com>
+Content-Language: en-GB
+From: Richard Fitzgerald <rf@opensource.cirrus.com>
+In-Reply-To: <CAJZ5v0jvJyS7D5-wURi2kyWN-rmNa+YqupeQJ000pQRVd9VBcQ@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: ltWPFp1gnPUjzPmaRQ9EaXCq91PhMVjU
+X-Proofpoint-ORIG-GUID: ltWPFp1gnPUjzPmaRQ9EaXCq91PhMVjU
+X-Proofpoint-Spam-Reason: safe
 
-On Wed, 9 Oct 2024 at 14:17, Thomas Richard <thomas.richard@bootlin.com> wr=
-ote:
->
-> On 10/9/24 12:50, Ulf Hansson wrote:
-> > On Tue, 8 Oct 2024 at 11:34, Thomas Richard <thomas.richard@bootlin.com=
-> wrote:
-> >>
-> >> If the console suspend is disabled, mark the serial as on the wakeup p=
-ath
-> >> to keep its PM domain powered on.
-> >>
-> >> Suggested-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
-> >> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
-> >> ---
-> >>  drivers/tty/serial/8250/8250_omap.c | 8 ++++++--
-> >>  1 file changed, 6 insertions(+), 2 deletions(-)
-> >>
-> >> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/=
-8250/8250_omap.c
-> >> index 88b58f44e4e9..6764fe2f9cad 100644
-> >> --- a/drivers/tty/serial/8250/8250_omap.c
-> >> +++ b/drivers/tty/serial/8250/8250_omap.c
-> >> @@ -1660,8 +1660,12 @@ static int omap8250_suspend(struct device *dev)
-> >>         if (!device_may_wakeup(dev))
-> >>                 priv->wer =3D 0;
-> >>         serial_out(up, UART_OMAP_WER, priv->wer);
-> >> -       if (uart_console(&up->port) && console_suspend_enabled)
-> >> -               err =3D pm_runtime_force_suspend(dev);
-> >> +       if (uart_console(&up->port)) {
-> >> +               if (console_suspend_enabled)
-> >> +                       err =3D pm_runtime_force_suspend(dev);
-> >> +               else
-> >> +                       device_set_wakeup_path(dev);
-> >> +       }
-> >
-> > Isn't this already managed by the serial core? See commit a47cf07f60dc
-> > ("serial: core: Call device_set_awake_path() for console port")
->
-> Yes you're right.
-> So this patch is useless.
+On 08/10/2024 7:24 pm, Rafael J. Wysocki wrote:
+> On Tue, Oct 8, 2024 at 12:35 AM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+>>
+>> On Tue, 8 Oct 2024 at 00:25, Laurent Pinchart
+>> <laurent.pinchart@ideasonboard.com> wrote:
+>>>
+>>> Hi Ulf,
+>>>
+>>> On Tue, Oct 08, 2024 at 12:08:24AM +0200, Ulf Hansson wrote:
+>>>> On Mon, 7 Oct 2024 at 20:49, Laurent Pinchart wrote:
+>>>>> On Fri, Oct 04, 2024 at 04:38:36PM +0200, Ulf Hansson wrote:
+>>>>>> On Fri, 4 Oct 2024 at 11:41, Sakari Ailus wrote:
+>>>>>>>
+>>>>>>> Hello everyone,
+>>>>>>>
+>>>>>>> This set will switch the users of pm_runtime_put_autosuspend() to
+>>>>>>> __pm_runtime_put_autosuspend() while the former will soon be re-purposed
+>>>>>>> to include a call to pm_runtime_mark_last_busy(). The two are almost
+>>>>>>> always used together, apart from bugs which are likely common. Going
+>>>>>>> forward, most new users should be using pm_runtime_put_autosuspend().
+>>>>>>>
+>>>>>>> Once this conversion is done and pm_runtime_put_autosuspend() re-purposed,
+>>>>>>> I'll post another set to merge the calls to __pm_runtime_put_autosuspend()
+>>>>>>> and pm_runtime_mark_last_busy().
+>>>>>>
+>>>>>> That sounds like it could cause a lot of churns.
+>>>>>>
+>>>>>> Why not add a new helper function that does the
+>>>>>> pm_runtime_put_autosuspend() and the pm_runtime_mark_last_busy()
+>>>>>> things? Then we can start moving users over to this new interface,
+>>>>>> rather than having this intermediate step?
+>>>>>
+>>>>> I think the API would be nicer if we used the shortest and simplest
+>>>>> function names for the most common use cases. Following
+>>>>> pm_runtime_put_autosuspend() with pm_runtime_mark_last_busy() is that
+>>>>> most common use case. That's why I like Sakari's approach of repurposing
+>>>>> pm_runtime_put_autosuspend(), and introducing
+>>>>> __pm_runtime_put_autosuspend() for the odd cases where
+>>>>> pm_runtime_mark_last_busy() shouldn't be called.
+>>>>
+>>>> Okay, so the reason for this approach is because we couldn't find a
+>>>> short and descriptive name that could be used in favor of
+>>>> pm_runtime_put_autosuspend(). Let me throw some ideas at it and maybe
+>>>> you like it - or not. :-)
+>>>
+>>> I like the idea at least :-)
+>>>
+>>>> I don't know what options you guys discussed, but to me the entire
+>>>> "autosuspend"-suffix isn't really that necessary in my opinion. There
+>>>> are more ways than calling pm_runtime_put_autosuspend() that triggers
+>>>> us to use the RPM_AUTO flag for rpm_suspend(). For example, just
+>>>> calling pm_runtime_put() has the similar effect.
+>>>
+>>> To be honest, I'm lost there. pm_runtime_put() calls
+>>> __pm_runtime_idle(RPM_GET_PUT | RPM_ASYNC), while
+>>> pm_runtime_put_autosuspend() calls __pm_runtime_suspend(RPM_GET_PUT |
+>>> RPM_ASYNC | RPM_AUTO).
+>>
+>> __pm_runtime_idle() ends up calling rpm_idle(), which may call
+>> rpm_suspend() - if it succeeds to idle the device. In that case, it
+>> tags on the RPM_AUTO flag in the call to rpm_suspend(). Quite similar
+>> to what is happening when calling pm_runtime_put_autosuspend().
+> 
+> Right.
+> 
+> For almost everybody, except for a small bunch of drivers that
+> actually have a .runtime_idle() callback, pm_runtime_put() is
+> literally equivalent to pm_runtime_put_autosuspend().
+> 
+> So really the question is why anyone who doesn't provide a
+> .runtime_idle() callback bothers with using this special
+> pm_runtime_put_autosuspend() thing,
 
-So patch 1/2 is all you need to get things working?
+Because they are following the documentation? It says:
 
-Kind regards
-Uffe
+"Drivers should call pm_runtime_mark_last_busy() to update this field
+after carrying out I/O, typically just before calling
+pm_runtime_put_autosuspend()."
+
+and
+
+"In order to use autosuspend, subsystems or drivers must call
+pm_runtime_use_autosuspend() (...), and thereafter they should use the
+various `*_autosuspend()` helper functions instead of the non#
+autosuspend counterparts"
+
+So the documentation says I should be using pm_runtime_put_autosuspend()
+instead of pm_runtime_put().
+
+Seems unfair to criticise people for following the documentation.
+
 
