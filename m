@@ -1,126 +1,135 @@
-Return-Path: <linux-serial+bounces-6426-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6428-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3CDD2996B3F
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 15:03:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C00D996BA7
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 15:18:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1E202B2A229
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 13:02:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 84C0AB24BA4
+	for <lists+linux-serial@lfdr.de>; Wed,  9 Oct 2024 13:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8841C194091;
-	Wed,  9 Oct 2024 12:59:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA6F7195381;
+	Wed,  9 Oct 2024 13:18:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XecLw6eJ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mM1J/c1T"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2374A291E;
-	Wed,  9 Oct 2024 12:59:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86E5F188008
+	for <linux-serial@vger.kernel.org>; Wed,  9 Oct 2024 13:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1728478788; cv=none; b=IvDCv5Pnevdttkf4w3EB5BansI+5nhUmi8ZJAns5lTMgzPxY7+gKvAyia3YIdYBG2w1IFabnve/pDjWhXXW3/3PfEAgAABaoMnp757C+BkHM6Y5SXu7ewxi6B8K+8FlqCdL8Etr0n6gCNb/tDU0K3X8es+zBhbPzX0/laF+1C48=
+	t=1728479912; cv=none; b=a7rWzhOnLN13XabM7G35vYEtLSxQwSkE3S7OHdaxO7uBAIOoUtTh++HUdIk7MW3RoLMpkV9UHlFnJn6RamRkERrwVzM/evkgrFn54D91uSpUsVYEo7fN3Ihnd7b3WJvxoAHoQvfD0GLdx7jfjfsYO/1FZsPauL2QvTT3zwagDAw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1728478788; c=relaxed/simple;
-	bh=kIFgHgQ8YP8q/G9kmMv1+5aT1z6dyWRZHmjlmiJe4uM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Gtdg9LXEXKQNCDHXL4Lj9DK1Ljix1o14cV7l6ZEb9v4GH6Bb7uy6UVioeBYHZrJj6RKBAzd02AIbHKtvU2HGbrVDk2aS+QOBzQj+wmmD1a2EIfjZrMAyiNhS+6P3PvwspZJIKZRxpUxBIIKrpKp/uAILllCrarUmZDBNOJpsy8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XecLw6eJ; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 056DBFF806;
-	Wed,  9 Oct 2024 12:59:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1728478784;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3FBMJ9MfYVZ5+KZGpcbbHX+gTyoxYeYnRxdhFJ2lTaE=;
-	b=XecLw6eJai1TPshIzxSR+CGuBVc4+2N6poQNQVOYp1SoN47BygwgSgoqmaZSxyxyouhHKC
-	RFnVhAIPqeewIWjHUi5OfqfODW0qz6D74CvRenkJz/2AyXqfp/F4ogt1ocmwoAT1vXL15f
-	TwYpEZYdx1oOpo7aGGfn9L1eZ3u2exsnFut8NEto+wTHuYk7Md1OcNuejwg2CKMHlBNeKU
-	D5oDfx1HudjqnaqFXhsXKtgFIQ1TI76BQFtNwAvb5qnEov3tDEK7I5K8X6sRRE5/NhDSbW
-	lhOthQ6MLcCbER1H9QclvM+kG9Nu6WlvNOqA4/gfTJBQGHHBXQmQWzHheoE3gw==
-Message-ID: <ff50edb8-ec36-4cf4-b7d3-21ec01f6ff0a@bootlin.com>
-Date: Wed, 9 Oct 2024 14:59:42 +0200
+	s=arc-20240116; t=1728479912; c=relaxed/simple;
+	bh=DEs/d30A6OdgSded7yLq86hpsqBzL2gpxnYKoRS9vWg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YUm7xszj533zLv9ccoAeXzdMAPknIGPnTXbVDclMFdGNrSO3nmwt2wr75sTZ0/x73BkJoRp2utnlqgHtPFus9P0mrU8IZZBlxta5TmUe/nFpXPoy/1JiKJa0Ad7mU9Uh7YXi59UjqWdFQuTqEg8JaMMdH/tbovUPnvWJ4sml4Qs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mM1J/c1T; arc=none smtp.client-ip=209.85.219.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e28ff55468dso767930276.2
+        for <linux-serial@vger.kernel.org>; Wed, 09 Oct 2024 06:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1728479909; x=1729084709; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fahjuP5GSwT5SXM4x2ztwRN877oqyqnMQjfzefZnQm4=;
+        b=mM1J/c1TOedfqGlDpF0hjCdX9OAj4kbWxx/1tPRvUwuBGhrW2eUkuSiZQg153bzkhU
+         BHfoJyHgDBOSwoK72YQkDuYLe/Er+Yqn/9e3MBggW5vuWJJwx+C6k7dBaSLAIAZ56EoD
+         yntdjkpFgk85kXnZS8nnO5nBx8JDrT6eP9VlDp4swJ+jMAC7QaZXCnXw0vDU6lPUDkUs
+         IFQhPg66TUT2HTQfXB3fqYBt0ghDgC2hkfZwZxGV6CY/SL3wXd6hF55/HfSB47+AFUJG
+         WAcdiSylD4pXC3PsjOHXnr22d9GCrWKrvy/hssW16NbWI7l9VsCDPLUORqk0mFFGyQv9
+         sbAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1728479909; x=1729084709;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fahjuP5GSwT5SXM4x2ztwRN877oqyqnMQjfzefZnQm4=;
+        b=mZwAJdzO8wbP5Qfq2Nf4sJ6zoHQ1giCBzOqMrX506vHZ0SLoMvnSPp0sz1HlXp8YXz
+         OlY3QNrXsW2XqQfYPCs3SZcN9Y58086WE+zmXi0UIB7exBcFk1bylEuNNtDulWASw3xJ
+         vzi+9ILV4sO1nmmFQ3NFAjLlDJXgycsj27SMDWHBHcwPidUHAzQsD1upNbVLPX1T/E5P
+         SophAD2beTQ6JOqrq5DJuGVVvHHVCaF+WKRwCRBA0LRigKUPvEfyPOoiJ/PblbXf73TU
+         QuTv0z4s8pKbSuq49JWOCGbbGqJnJTqYjbE101waSxAixRhY+cQfQPu53zAHdKJFuWlx
+         fhnw==
+X-Forwarded-Encrypted: i=1; AJvYcCWi5+eIu5YDajsMdkEm9N09ficsKKSL3i5q341ZXNC2mLn+zImg1iKzlkMrin8d/bo6nNAgY7kD+k9TzxY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtOKLOFBXVuUOPgZrnr6wGonc9fGxHAFgxU0Qvd+O8Y1gVc07r
+	7Px4CZyouZRW4kKJYw/ZKdKP3p8HhX7dkoMwkRmFTEwZh4T6T5UGq/FCvY/i2AuNGSAYqWykNOX
+	HxK+iZf8/SaUO8sIUn7SZebSRMSZb8dIeAg6g8A==
+X-Google-Smtp-Source: AGHT+IGdMVfirN3r2XR9CcAsjc7P63ptNZgOVR3DTBZovGzj3+iT9kj28KuHzCMjhXPK3VMUIZsVtd+U5lqO0q997qI=
+X-Received: by 2002:a05:6902:124f:b0:e28:e605:2dd4 with SMTP id
+ 3f1490d57ef6-e2909c1b69bmr146400276.17.1728479909496; Wed, 09 Oct 2024
+ 06:18:29 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] serial: 8250_omap: mark the serial as on the wakeup
- path if no_console_suspend
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
- Santosh Shilimkar <ssantosh@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>, linux-arm-kernel@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, u-kumar1@ti.com, tony@atomide.com,
- khilman@kernel.org, gregory.clement@bootlin.com,
- thomas.petazzoni@bootlin.com, theo.lebrun@bootlin.com,
- richard.genoud@bootlin.com
 References: <20241008-8250-omap-no-console-suspend-v1-0-e7f0365c02f0@bootlin.com>
- <20241008-8250-omap-no-console-suspend-v1-2-e7f0365c02f0@bootlin.com>
- <CAPDyKFpnsV-c4F7SNPQmLBSM1sUknr-3sTyiXMDt9n43UBQkNg@mail.gmail.com>
- <d879d544-4b1d-4b4a-bfd4-efb35b6a57c1@bootlin.com>
- <CAPDyKFoOV00JzQ=+j7FJzVb0Zb4j-qjR5YPT020TzyJKngeFMg@mail.gmail.com>
-Content-Language: en-US
-From: Thomas Richard <thomas.richard@bootlin.com>
-In-Reply-To: <CAPDyKFoOV00JzQ=+j7FJzVb0Zb4j-qjR5YPT020TzyJKngeFMg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-Sasl: thomas.richard@bootlin.com
+ <20241008-8250-omap-no-console-suspend-v1-1-e7f0365c02f0@bootlin.com>
+In-Reply-To: <20241008-8250-omap-no-console-suspend-v1-1-e7f0365c02f0@bootlin.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 9 Oct 2024 15:17:53 +0200
+Message-ID: <CAPDyKFroumouYavhaHp=aSh=0WsDO=_4kbVgS-+Y7CADyO-Kmg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] pmdomain: ti-sci: set the GENPD_FLAG_ACTIVE_WAKEUP
+ flag for all PM domains
+To: Thomas Richard <thomas.richard@bootlin.com>
+Cc: Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>, 
+	Santosh Shilimkar <ssantosh@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-serial@vger.kernel.org, u-kumar1@ti.com, tony@atomide.com, 
+	khilman@kernel.org, gregory.clement@bootlin.com, thomas.petazzoni@bootlin.com, 
+	theo.lebrun@bootlin.com, richard.genoud@bootlin.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 10/9/24 14:39, Ulf Hansson wrote:
-> On Wed, 9 Oct 2024 at 14:17, Thomas Richard <thomas.richard@bootlin.com> wrote:
->>
->> On 10/9/24 12:50, Ulf Hansson wrote:
->>> On Tue, 8 Oct 2024 at 11:34, Thomas Richard <thomas.richard@bootlin.com> wrote:
->>>>
->>>> If the console suspend is disabled, mark the serial as on the wakeup path
->>>> to keep its PM domain powered on.
->>>>
->>>> Suggested-by: Théo Lebrun <theo.lebrun@bootlin.com>
->>>> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
->>>> ---
->>>>  drivers/tty/serial/8250/8250_omap.c | 8 ++++++--
->>>>  1 file changed, 6 insertions(+), 2 deletions(-)
->>>>
->>>> diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
->>>> index 88b58f44e4e9..6764fe2f9cad 100644
->>>> --- a/drivers/tty/serial/8250/8250_omap.c
->>>> +++ b/drivers/tty/serial/8250/8250_omap.c
->>>> @@ -1660,8 +1660,12 @@ static int omap8250_suspend(struct device *dev)
->>>>         if (!device_may_wakeup(dev))
->>>>                 priv->wer = 0;
->>>>         serial_out(up, UART_OMAP_WER, priv->wer);
->>>> -       if (uart_console(&up->port) && console_suspend_enabled)
->>>> -               err = pm_runtime_force_suspend(dev);
->>>> +       if (uart_console(&up->port)) {
->>>> +               if (console_suspend_enabled)
->>>> +                       err = pm_runtime_force_suspend(dev);
->>>> +               else
->>>> +                       device_set_wakeup_path(dev);
->>>> +       }
->>>
->>> Isn't this already managed by the serial core? See commit a47cf07f60dc
->>> ("serial: core: Call device_set_awake_path() for console port")
->>
->> Yes you're right.
->> So this patch is useless.
-> 
-> So patch 1/2 is all you need to get things working?
+On Tue, 8 Oct 2024 at 11:34, Thomas Richard <thomas.richard@bootlin.com> wr=
+ote:
+>
+> With this flag, if a device is marked on the wakeup path, the correspondi=
+ng
+> PM domain is kept powered on.
 
-Yes only patch 1/2 is needed.
+Perhaps extend this with some more information that it fixes a problem
+for the uart console too?
 
-Regards,
+>
+> Suggested-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> Signed-off-by: Thomas Richard <thomas.richard@bootlin.com>
 
-Thomas
+Should we add a stable/fixes tag?
+
+Kind regards
+Uffe
+
+> ---
+>  drivers/pmdomain/ti/ti_sci_pm_domains.c | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/drivers/pmdomain/ti/ti_sci_pm_domains.c b/drivers/pmdomain/t=
+i/ti_sci_pm_domains.c
+> index 1510d5ddae3d..38448b4a035a 100644
+> --- a/drivers/pmdomain/ti/ti_sci_pm_domains.c
+> +++ b/drivers/pmdomain/ti/ti_sci_pm_domains.c
+> @@ -186,6 +186,7 @@ static int ti_sci_pm_domain_probe(struct platform_dev=
+ice *pdev)
+>
+>                                 pd->pd.power_off =3D ti_sci_pd_power_off;
+>                                 pd->pd.power_on =3D ti_sci_pd_power_on;
+> +                               pd->pd.flags |=3D GENPD_FLAG_ACTIVE_WAKEU=
+P;
+>                                 pd->idx =3D args.args[0];
+>                                 pd->parent =3D pd_provider;
+>
+>
+> --
+> 2.39.5
+>
 
