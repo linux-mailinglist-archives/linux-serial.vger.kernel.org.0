@@ -1,143 +1,210 @@
-Return-Path: <linux-serial+bounces-6629-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6631-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC5629B05EC
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 16:35:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 003F29B06AE
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 17:01:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 196561C21134
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 14:35:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 85F701F22CB3
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 15:01:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E049206505;
-	Fri, 25 Oct 2024 14:34:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9834B188592;
+	Fri, 25 Oct 2024 15:00:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="H/Zj6D8o"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Qob7HIc4"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE9C2003DC;
-	Fri, 25 Oct 2024 14:34:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A940166F33
+	for <linux-serial@vger.kernel.org>; Fri, 25 Oct 2024 15:00:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729866887; cv=none; b=NPAwiwzuGGHSVEBIvNn7diiVO9560NSZoV0IUeGarHekljr8YSyk0RiEMDwX2MShm6rMdD18gceT2mMcR6ZoWX1NauSbsu0XQfyIaI0ju47THicsNpJZAR8/Xmr4IEi3ZCqSUWlkJhjyRxYWyDvvn6heecLWasBGONLpzg46sK4=
+	t=1729868445; cv=none; b=SOZtwBitVnRSXwZDArFmVZWikmnyzUOjrYRhi93vxMeRvNEQTDOcp0b/HzqER2s2INC11vkcf5/XdOy//rR5L1ZERc8cfNCmIb7+DrtLxJBxtLXJSG2X4Ca3xuLycuVIG9chYF3hH1mfb8tjVPJrN1YNNORm3vLy3Y1413mkv2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729866887; c=relaxed/simple;
-	bh=7viiuER8jbmujoSNmtJXcCtGTp3mpZ8PS5MMH/KdKno=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8tVuN11BAJfz7sjC/9wCTlFXM1Mvwy9fxhZt6YiGftKZByOpHc0U5ObPq5LAY3W7V8JdQhV5U0MvfPRXLcoCjUgUveCo0Xrie+hTa1GX9Of16qZDmebSQOTME9dFrlkWQD0EO87jbaJJX7lji/dkC5J3qcAekI9cTx7k0ev1Eg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=H/Zj6D8o; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1729866886; x=1761402886;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7viiuER8jbmujoSNmtJXcCtGTp3mpZ8PS5MMH/KdKno=;
-  b=H/Zj6D8o73gImFcVHF3QAVJinEB4jdVheu+zWqY0axs4ydvqm9rL5GvV
-   4lZpGVrG2IHL9DsZHl2TedQ6bONSuLtOu/UOETgJCJ0ifXaTmilNQ1TUv
-   ZwhNwvHIv2QTV2CZO7oRbNJCmitF9FNed6qiauLHr9Dv06OtQHgQQXV3b
-   pql0XPcRRO6d5sjNk5pShhzGiSE2tZpQr9BpJHkpDAcU6aRWZaSejLQTa
-   z21DuNbEelL60b7AUR47Jw/+YZG7Ktu+uNI5L+yQ1xA3oZjmjjfwBm1uK
-   wDlUJZyjNqHjbBTNuCi55HwcXv2Nl43vsD6LBw1eZ2M9VJg1qiT5fDRfK
-   w==;
-X-CSE-ConnectionGUID: 2emJ9bf/RUWJhb3K6spZlw==
-X-CSE-MsgGUID: cKQu1/hkTTu+xvv6peCn8w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="40642751"
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="40642751"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 07:34:45 -0700
-X-CSE-ConnectionGUID: byLy1efMTj6exO2UKV5Ynw==
-X-CSE-MsgGUID: 8C37kqSxTve1124j9dGQhg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,232,1725346800"; 
-   d="scan'208";a="84889931"
-Received: from smile.fi.intel.com ([10.237.72.154])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 07:34:38 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1t4LOc-00000006wVK-3qoB;
-	Fri, 25 Oct 2024 17:34:34 +0300
-Date: Fri, 25 Oct 2024 17:34:34 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: John Ogness <john.ogness@linutronix.de>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Petr Mladek <pmladek@suse.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Esben Haabendal <esben@geanix.com>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Stefan Wahren <wahrenst@gmx.net>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Markus Schneider-Pargmann <msp@baylibre.com>,
-	Ronald Wahl <ronald.wahl@raritan.com>, Udit Kumar <u-kumar1@ti.com>,
-	Griffin Kroah-Hartman <griffin@kroah.com>,
-	Rengarajan S <rengarajan.s@microchip.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
+	s=arc-20240116; t=1729868445; c=relaxed/simple;
+	bh=qn2zisIVAp1A3sOByjD0CKUjzgN/331GtrAdNv9H2Gs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=he7k/xVDDY1QBlOFX80ZgxRjFFzEfH/+pssyazWRYkarXjDrHtpG/sHG2B7Jk1kDt6Ih7/5Xc5mHjN9bk0R/DMT5mbFxARSG1jg2CPzwOEf4PXk/7ZaeetkoEvnfkNnKwNIl45EpESXmF6nYikCbiPnKrNU3AzGn6UnYGloSC/A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Qob7HIc4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1729868440;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=6mk7pVJi4FxC5YCmtGMcoceHkePQhE8sXwo0Yl4cl4Y=;
+	b=Qob7HIc4Wrm3dkeebT65QDRBQdpwoDIr50JdBVgorj40sDsV1WuiJcMLitmOc2WTxbIrIN
+	S1nPL4XT2eeE/DmmOobRZ2wf+wCnVEe3ePTwXu0bpOwqsHE/7Eo8NuN4Y1Bbpx7cy8XgLS
+	k0I1KyDjI9nPDwARkxi54pqE1icV5Ss=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-509-1RB2wHZ8NYmrua8qfXaZhg-1; Fri, 25 Oct 2024 11:00:37 -0400
+X-MC-Unique: 1RB2wHZ8NYmrua8qfXaZhg-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-37d52ccc50eso1013551f8f.3
+        for <linux-serial@vger.kernel.org>; Fri, 25 Oct 2024 08:00:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1729868436; x=1730473236;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6mk7pVJi4FxC5YCmtGMcoceHkePQhE8sXwo0Yl4cl4Y=;
+        b=l2wBNmWu32bq2dVTDoGHyxYDhCck27kzvVS3BRG0umNefELPBM3G2m6+hOYIZcMZAw
+         y3TP2GYJGZHq8jpGLPfF5OLhgiISSGqkkz5bLK8O2hc+0qZN8S2BbQRnTt5ugWx8gByZ
+         MmKCnJMySF/AaoEClcbyIZUJJMp4LDMdxLxQ5q1nVoQ18ey9YD7iwRKfl6RxBQtRnUM/
+         hKc615NTEcHs7q376xvtUSgsZGp4feTRoCUzhATaDHv8xeM89ZJ6t3Es3xtXqhnLvRrj
+         6V8GU4Nq0sZ14VnCOL9emygxSoLDP0UC3H6SJeT1q+eZpB3cvxoBd24aRnIp1W4gAPNn
+         8aeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVxNY6djCdq/INtoAotWUg9uezITRVA0KuMQUWVkYVZT3425YzTlnpUrAnTmgpWIZjqZ1tHDrImaKu1+zc=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx2+y+GPZAFq3cJOXg+5hIX6/8/by3zkok13KWnL9qMy6QwXTcQ
+	M67kZApLYQr2MmcP+w02ZD4/7V8bwoR7l4YyfD0Sm7Rm/ZK3HSTl3oCyv9E8BYa2r0D5sLQ4x+8
+	TKxrmb7941xYom26htECqXvksrpm0IhUXrxDMmLApBOE3t9QZKh42iJRmfZWnow==
+X-Received: by 2002:adf:eac4:0:b0:37c:d2f0:7331 with SMTP id ffacd0b85a97d-3803ab1a8bbmr4410331f8f.0.1729868435653;
+        Fri, 25 Oct 2024 08:00:35 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHDs+qGkPhYGAaZ+QRORXNw+V6iATQJifr1mVHJ8hw/ogKGV0BNUWn6+ubNlvP8p8bNny4MNA==
+X-Received: by 2002:adf:eac4:0:b0:37c:d2f0:7331 with SMTP id ffacd0b85a97d-3803ab1a8bbmr4410253f8f.0.1729868435070;
+        Fri, 25 Oct 2024 08:00:35 -0700 (PDT)
+Received: from eisenberg.fritz.box (200116b82de5ba00738ac8dadaac7543.dip.versatel-1u1.de. [2001:16b8:2de5:ba00:738a:c8da:daac:7543])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38058b9216fsm1727189f8f.100.2024.10.25.08.00.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 25 Oct 2024 08:00:34 -0700 (PDT)
+From: Philipp Stanner <pstanner@redhat.com>
+To: Jonathan Corbet <corbet@lwn.net>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Niklas Cassel <cassel@kernel.org>,
+	Giovanni Cabiddu <giovanni.cabiddu@intel.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"David S. Miller" <davem@davemloft.net>,
+	Boris Brezillon <bbrezillon@kernel.org>,
+	Arnaud Ebalard <arno@natisbad.org>,
+	Srujana Challa <schalla@marvell.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Miri Korenblit <miriam.rachel.korenblit@intel.com>,
+	Kalle Valo <kvalo@kernel.org>,
 	Serge Semin <fancer.lancer@gmail.com>,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH tty-next v3 4/6] serial: 8250: Specify console context
- for rs485_start/stop_tx
-Message-ID: <ZxusemBwE8t9cAZ5@smile.fi.intel.com>
-References: <20241025105728.602310-1-john.ogness@linutronix.de>
- <20241025105728.602310-5-john.ogness@linutronix.de>
- <ZxulYcgH1kTyx9Kr@smile.fi.intel.com>
- <84v7xg2rb2.fsf@jogness.linutronix.de>
+	Jon Mason <jdmason@kudzu.us>,
+	Dave Jiang <dave.jiang@intel.com>,
+	Allen Hubbe <allenbh@gmail.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Kevin Cernekee <cernekee@gmail.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Mark Brown <broonie@kernel.org>,
+	David Lechner <dlechner@baylibre.com>,
+	Philipp Stanner <pstanner@redhat.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+	Jie Wang <jie.wang@intel.com>,
+	Tero Kristo <tero.kristo@linux.intel.com>,
+	Adam Guerin <adam.guerin@intel.com>,
+	Shashank Gupta <shashank.gupta@intel.com>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	Bharat Bhushan <bbhushan2@marvell.com>,
+	Nithin Dabilpuram <ndabilpuram@marvell.com>,
+	Johannes Berg <johannes.berg@intel.com>,
+	Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+	Gregory Greenman <gregory.greenman@intel.com>,
+	Benjamin Berg <benjamin.berg@intel.com>,
+	Yedidya Benshimol <yedidya.ben.shimol@intel.com>,
+	Breno Leitao <leitao@debian.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	qat-linux@intel.com,
+	linux-crypto@vger.kernel.org,
+	linux-wireless@vger.kernel.org,
+	ntb@lists.linux.dev,
+	linux-pci@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-sound@vger.kernel.org
+Subject: [PATCH 00/10] Remove pcim_iomap_regions_request_all()
+Date: Fri, 25 Oct 2024 16:59:43 +0200
+Message-ID: <20241025145959.185373-1-pstanner@redhat.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <84v7xg2rb2.fsf@jogness.linutronix.de>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: redhat.com
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Oct 25, 2024 at 04:31:05PM +0206, John Ogness wrote:
-> On 2024-10-25, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> >> Add an argument @in_con to the rs485_start/stop_tx() callbacks
-> >> to specify if they are being called from console write. If so,
-> >> the callbacks will not handle interrupt disabling/enabling.
-> >
-> > toggling ?
-> >
-> >> For all call sites other than console write, there is no
-> >> functional change.
-> >
-> > So, why not call the parameter better to emphasize that it's about IRQ
-> > toggling? bool toggle_irq ?
-> 
-> Currently there are only 2 users:
-> 
-> serial8250_em485_stop_tx()
-> bcm2835aux_rs485_stop_tx()
-> 
-> The first one toggles the IER bits, the second one does not. I figured
-> it would make more sense to specify the context rather than what needs
-> to be done and let the 8250-variant decide what it should do.
-> 
-> But I have no problems renaming it to toggle_irq. It is an 8250-specific
-> callback with few users. And really the IER bits is the only reason that
-> the argument even needs to exist.
+All Acked-by's are in place now.
 
-Maybe toggle_ier will be better than? I haven't looked deeply into the
-implementations, so choose whichever describes better what's behind it.
+Changes in v5:
+  - Add Acked-by's from Alexander and Bharat (the latter sent off-list,
+    because of some issue with receiving the previous patch sets).
+
+Changes in v4:
+  - Add Acked-by's from Giovanni and Kalle.
+
+Changes in v3:
+  - Add missing full stops to commit messages (Andy).
+
+Changes in v2:
+  - Fix a bug in patch №4 ("crypto: marvell ...") where an error code
+    was not set before printing it. (Me)
+  - Apply Damien's Reviewed- / Acked-by to patches 1, 2 and 10. (Damien)
+  - Apply Serge's Acked-by to patch №7. (Serge)
+  - Apply Jiri's Reviewed-by to patch №8. (Jiri)
+  - Apply Takashi Iwai's Reviewed-by to patch №9. (Takashi)
+
+
+Hi all,
+
+the PCI subsystem is currently working on cleaning up its devres API. To
+do so, a few functions will be replaced with better alternatives.
+
+This series removes pcim_iomap_regions_request_all(), which has been
+deprecated already, and accordingly replaces the calls to
+pcim_iomap_table() (which were only necessary because of
+pcim_iomap_regions_request_all() in the first place) with calls to
+pcim_iomap().
+
+Would be great if you can take a look whether this behaves as you
+intended for your respective component.
+
+Cheers,
+Philipp
+
+Philipp Stanner (10):
+  PCI: Make pcim_request_all_regions() a public function
+  ata: ahci: Replace deprecated PCI functions
+  crypto: qat - replace deprecated PCI functions
+  crypto: marvell - replace deprecated PCI functions
+  intel_th: pci: Replace deprecated PCI functions
+  wifi: iwlwifi: replace deprecated PCI functions
+  ntb: idt: Replace deprecated PCI functions
+  serial: rp2: Replace deprecated PCI functions
+  ALSA: korg1212: Replace deprecated PCI functions
+  PCI: Remove pcim_iomap_regions_request_all()
+
+ .../driver-api/driver-model/devres.rst        |  1 -
+ drivers/ata/acard-ahci.c                      |  6 +-
+ drivers/ata/ahci.c                            |  6 +-
+ drivers/crypto/intel/qat/qat_420xx/adf_drv.c  | 11 +++-
+ drivers/crypto/intel/qat/qat_4xxx/adf_drv.c   | 11 +++-
+ .../marvell/octeontx2/otx2_cptpf_main.c       | 14 +++--
+ .../marvell/octeontx2/otx2_cptvf_main.c       | 13 ++--
+ drivers/hwtracing/intel_th/pci.c              |  9 ++-
+ .../net/wireless/intel/iwlwifi/pcie/trans.c   | 16 ++---
+ drivers/ntb/hw/idt/ntb_hw_idt.c               | 13 ++--
+ drivers/pci/devres.c                          | 59 +------------------
+ drivers/tty/serial/rp2.c                      | 12 ++--
+ include/linux/pci.h                           |  3 +-
+ sound/pci/korg1212/korg1212.c                 |  6 +-
+ 14 files changed, 76 insertions(+), 104 deletions(-)
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.47.0
 
 
