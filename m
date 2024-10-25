@@ -1,112 +1,138 @@
-Return-Path: <linux-serial+bounces-6614-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6616-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C379B00B3
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 12:58:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F8E9B0388
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 15:13:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA97A1F2476C
-	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 10:58:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0C62B21905
+	for <lists+linux-serial@lfdr.de>; Fri, 25 Oct 2024 13:13:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27BA202622;
-	Fri, 25 Oct 2024 10:57:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="0mo9aEbL";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="iSH4i65F"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA591F7568;
+	Fri, 25 Oct 2024 13:12:29 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB3691FDF89;
-	Fri, 25 Oct 2024 10:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 473291E7660;
+	Fri, 25 Oct 2024 13:12:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1729853857; cv=none; b=S7769Am51GNqZsKfNOMTHLe41ylXjF0i9dMaiB7lZF5TlvdZK+JHXRCo/98vYX35STgE8eZbFYp7SLlfDiqfp+rtBAXwhNnVm3JfzzqtrOeRN4kyp2W9skIU4U7MZnmqbUmiVW/sqnWJZdrMzjTCSGw1Wu41bWJqNwRTmjCLXdQ=
+	t=1729861949; cv=none; b=Ffk2EfF+aBWfD1t8jNRigw6xRLySGBFZobA4pB5fW9y3jtQmETZT94jzOKHmXDdFjMr/7J2K8+gfRtlZDJZhQGRs3dBdv5sqV2rbUFlsbGkaT/pR7qrO1RDi91goSPZgRF0ktJIaSjQrfwRUSP7kRtBROeeLrl1ugLZNoAeSSoI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1729853857; c=relaxed/simple;
-	bh=uCi25v7dZPwJgSMo0oWApVBb4GIOCxuUJNEt29mFJas=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=BM3A9VY87DStW/CwZ/D4MV68OL+vsIiCWpKH2Y5FJYhLC8KnDQpXFwxCgFl+goCchIiYIZztKKmuu+L49IQBniJRdd0arLUV26db3pgeuD/Nkvc2q1VvNGcyjcekPDGO95emt9ikqn0JlsGxhd8wxqwPRR+HoLaeOgP2b3wP26U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=0mo9aEbL; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=iSH4i65F; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1729853853;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ckN3By33osOOhRu/7ilSfmb+7G76g/geNYlu+/gEoU=;
-	b=0mo9aEbLzREU4cfbGF2y5izFQahu2ae32q4Ia6v82UAR9CwoIMaSwFz2jxfs68leoOGykG
-	ljg2fbSA4X9jElNoZNo9UlgpXC1gi+5LaBLREFq4WVbg38WBPv25NwZkFzjDHt2rMelQOe
-	HvVSUYOzbFTduUX2wzF2WD54yFV+MJfieR/TVzlqGs0orzp3FeAMgiyMQmO3qMzCJL+cEd
-	9gWdfABggE6reYDTQkcnDHg2vII1pbl3Pn7aNigY3lkq0Z+RvKF5qqR1Sl3wTBfLjU5LZQ
-	ene6hOVjPFreuStAO6cE5K5+IaK3ZA7yGBIe4yI61rmIzjS9+3RP7nTRU5Fkew==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1729853853;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=4ckN3By33osOOhRu/7ilSfmb+7G76g/geNYlu+/gEoU=;
-	b=iSH4i65FcFCuVT0n3G4AJF/yOrpOrN1FJILpJmGqTbok/MwMA5aGA1X8CtHEqlKb8PmAQr
-	z+/WaDVZX28OoLDw==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Petr Mladek <pmladek@suse.com>,
-	Sergey Senozhatsky <senozhatsky@chromium.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Esben Haabendal <esben@geanix.com>,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Rengarajan S <rengarajan.s@microchip.com>,
-	Peter Collingbourne <pcc@google.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Subject: [PATCH tty-next v3 6/6] serial: 8250: Revert "drop lockdep annotation from serial8250_clear_IER()"
-Date: Fri, 25 Oct 2024 13:03:28 +0206
-Message-Id: <20241025105728.602310-7-john.ogness@linutronix.de>
-In-Reply-To: <20241025105728.602310-1-john.ogness@linutronix.de>
-References: <20241025105728.602310-1-john.ogness@linutronix.de>
+	s=arc-20240116; t=1729861949; c=relaxed/simple;
+	bh=DyZekcekX3RtD9pX7NDF9lTJOHreJBPcOIWwl++T12A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pvf/bJ3wygRBqbWdvTMehUBMFoREG4pRNgX762FD/uylbyWIGk1XIVlOxuKXi0NOl8UkV1j5qj3H3YqF7ZhSWGcKhP7dSF531Dg9T3aVT2o99XIOPnQX3G4w8Y+Bqe1eyN1eqfIpNaUC0vWf/B4Wd89+hwegrUMUAbi5/S+Bvw8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=fail smtp.mailfrom=kernel.org; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=kernel.org
+X-CSE-ConnectionGUID: +MippmjcS7GiCHxfKD/FPQ==
+X-CSE-MsgGUID: YqiQFwgNQ2urN4bdSLfTEg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11222"; a="29474401"
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="29474401"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:12:27 -0700
+X-CSE-ConnectionGUID: YBODLHiKRmKI4N2x3UePrA==
+X-CSE-MsgGUID: ORNpoHttQRiMH14+J3yUxg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,231,1725346800"; 
+   d="scan'208";a="81073104"
+Received: from smile.fi.intel.com ([10.237.72.154])
+  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Oct 2024 06:12:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andy@kernel.org>)
+	id 1t4K6r-00000006v8Q-1Pfa;
+	Fri, 25 Oct 2024 16:12:09 +0300
+Date: Fri, 25 Oct 2024 16:12:09 +0300
+From: Andy Shevchenko <andy@kernel.org>
+To: Dragan =?utf-8?Q?Milivojevi=C4=87?= <d.milivojevic@gmail.com>
+Cc: Peter Cai <peter@typeblog.net>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Serge Semin <fancer.lancer@gmail.com>, Jon Mason <jdmason@kudzu.us>,
+	Dave Jiang <dave.jiang@intel.com>, Allen Hubbe <allenbh@gmail.com>,
+	ntb@lists.linux.dev, Kory Maincent <kory.maincent@bootlin.com>,
+	Cai Huoqing <cai.huoqing@linux.dev>, dmaengine@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+	Damien Le Moal <dlemoal@kernel.org>, linux-ide@vger.kernel.org,
+	Paul Burton <paulburton@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+	linux-pci@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Andrew Lunn <andrew@lunn.ch>, Russell King <linux@armlinux.org.uk>,
+	Vladimir Oltean <olteanv@gmail.com>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Yanteng Si <siyanteng@loongson.cn>, netdev@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>, linux-hwmon@vger.kernel.org,
+	Borislav Petkov <bp@alien8.de>, linux-edac@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-serial@vger.kernel.org, Andrew Halaney <ajhalaney@gmail.com>,
+	Nikita Travkin <nikita@trvn.ru>,
+	Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+	Alexander Shiyan <shc_work@mail.ru>, Dmitry Kozlov <xeb@mail.ru>,
+	Sergey Shtylyov <s.shtylyov@omp.ru>,
+	Evgeniy Dushistov <dushistov@mail.ru>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Nikita Shubin <nikita.shubin@maquefel.me>,
+	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Kexy Biscuit <kexybiscuit@aosc.io>, jeffbai@aosc.io,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: linux: Goodbye from a Linux community volunteer
+Message-ID: <ZxuZKcTafSVXLcIe@smile.fi.intel.com>
+References: <2m53bmuzemamzc4jzk2bj7tli22ruaaqqe34a2shtdtqrd52hp@alifh66en3rj>
+ <e7d548a7fc835f9f3c9cb2e5ed97dfdfa164813f.camel@HansenPartnership.com>
+ <6beb4070-1946-4387-bd0e-34608a76b19e@typeblog.net>
+ <CALtW_agj1rurb3DRrPd9o2mkfku5fq_M3CEKY5sW+Zz7shKYHA@mail.gmail.com>
+ <ZxqK75WdFBod0rZ9@smile.fi.intel.com>
+ <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CALtW_ajKAYYwYVGnEArPWz_XaCkEiMFwpoCtzeiO1OLbAk77Sw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-The 8250 driver no longer depends on @oops_in_progress and
-will no longer violate the port->lock locking constraints.
+On Thu, Oct 24, 2024 at 09:46:58PM +0200, Dragan Milivojević wrote:
+> > Yeah, with my hat of the person whose home town is under (Russian) attack for
+> > the 10+ years (don't be surprised, please, the war lasts more than a decade
+> > already) on I am fully understand Linus' arguments about history and being not
+> > very friendly about Russians.
+> 
+> How about your hat off to the people in the Donbas,
+> ~12K of them that had died from Ukrainian artillery fire,
+> that were under imminent threat of being overrun by
+> the Ukrainian forces in February 2022? Are you going
+> to scream about Russian propaganda when I link
+> the OSCE reports about a 10 fold increase in attacks
+> at that same time?
 
-This reverts commit 3d9e6f556e235ddcdc9f73600fdd46fe1736b090.
+Yeah, yeah, no point to discuss with you "Russian state-sponsored spam".
+Btw, are you from Serbia?
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
-Reviewed-by: Petr Mladek <pmladek@suse.com>
----
- drivers/tty/serial/8250/8250_port.c | 3 +++
- 1 file changed, 3 insertions(+)
+> BTW can I be racist towards Germans and Croats since
+> their ancestors exterminated my kin in their death camps?
 
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 0b3596fab061..5c8778ec30a3 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -706,6 +706,9 @@ static void __serial8250_clear_IER(struct uart_8250_port *up)
- 
- static inline void serial8250_clear_IER(struct uart_8250_port *up)
- {
-+	/* Port locked to synchronize UART_IER access against the console. */
-+	lockdep_assert_held_once(&up->port.lock);
-+
- 	__serial8250_clear_IER(up);
- }
- 
+You should answer your question yourself.
+
 -- 
-2.39.5
+With Best Regards,
+Andy Shevchenko
+
 
 
