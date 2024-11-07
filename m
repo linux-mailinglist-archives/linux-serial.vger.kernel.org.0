@@ -1,51 +1,58 @@
-Return-Path: <linux-serial+bounces-6720-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6721-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52C849BFCF7
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Nov 2024 04:29:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 198F19BFDD0
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Nov 2024 06:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21B3B283F4B
-	for <lists+linux-serial@lfdr.de>; Thu,  7 Nov 2024 03:29:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C66741F23BC0
+	for <lists+linux-serial@lfdr.de>; Thu,  7 Nov 2024 05:47:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0EEE839E4;
-	Thu,  7 Nov 2024 03:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC25F192B69;
+	Thu,  7 Nov 2024 05:47:19 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from cmccmta1.chinamobile.com (cmccmta6.chinamobile.com [111.22.67.139])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8852B36D;
-	Thu,  7 Nov 2024 03:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.139
+Received: from cmccmta1.chinamobile.com (cmccmta8.chinamobile.com [111.22.67.151])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A545DF59;
+	Thu,  7 Nov 2024 05:47:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=111.22.67.151
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1730950186; cv=none; b=dCqbF8cPWJoCLwMx2Q2vT06+VW8G3p9Bb4xQpKWgQlXnVio7eClIDIPPihpr8rfDUE9Tyz8HvILmRcIEhW/E6Ce73tgkeJlJmyB+tviV9rLuopg+7unfuXZCnLgfIqHTd3vEtdp8sWSXRqkKRhBObk2sE43G70OfARKmT14NVEs=
+	t=1730958439; cv=none; b=rIAFmBdq7cBe4mu2EhIfC6m+WsxCttyWZG0RkwFrcBaMdMehPixEZldPrzaIT6W2GGEvvYYCL1OepNctVNwYgW41Qqm1R2djSdK4HIZN+NgN1hlGEYK+qC5Gb3QYG07NKu7wJ7FYHi7pTuhYwTcky8FEmXw6iatr/Vdl062HFtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1730950186; c=relaxed/simple;
-	bh=jW20b5t6LEdHJemnBMkozGR5UN2Que//7oILX1O12lE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mtKXuB8PsvMDnKMBYLCIVBpD9HryFfX4oe86a3sVTRkTUMPVdvnq9gLOPk1m/dW39ejOoYzNySvUSgMdsiP32NG8cqbk4us7Cd30PJm5yhKMuEjCGUKhO5wl8o361c5IIfT8PjyNdu12Ygoe2OJc8/0okqAkJNcZnM1IoSoL8ww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.139
+	s=arc-20240116; t=1730958439; c=relaxed/simple;
+	bh=XZ08kTYT5WJhIcvpY6egVP4kGFjCs9K7ef/jWYSPP3g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Ic+ikZjoF9KBqvDJU2jDn9ewqKZtQH/GYxrfgyZqSkmhVWOzpuc0uXSWHkjQuX36mRQmvnkcBQGcn6DjabEANBlvbEXycoo2tfD15p0AUxRPhehJuSAodsUm2ovCr/gbsASejT+QzjaiDc/WsUp6EkbP8AJXse62FTpGuC6GTKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com; spf=pass smtp.mailfrom=cmss.chinamobile.com; arc=none smtp.client-ip=111.22.67.151
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=cmss.chinamobile.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=cmss.chinamobile.com
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from spf.mail.chinamobile.com (unknown[10.188.0.87])
-	by rmmx-syy-dmz-app01-12001 (RichMail) with SMTP id 2ee1672c341f039-b494b;
-	Thu, 07 Nov 2024 11:29:38 +0800 (CST)
-X-RM-TRANSID:2ee1672c341f039-b494b
+	by rmmx-syy-dmz-app02-12002 (RichMail) with SMTP id 2ee2672c545916d-1b185;
+	Thu, 07 Nov 2024 13:47:07 +0800 (CST)
+X-RM-TRANSID:2ee2672c545916d-1b185
 X-RM-TagInfo: emlType=0                                       
 X-RM-SPAM-FLAG:00000000
 Received:from localhost.localdomain (unknown[10.55.1.71])
-	by rmsmtp-syy-appsvr10-12010 (RichMail) with SMTP id 2eea672c34204f8-4f262;
-	Thu, 07 Nov 2024 11:29:38 +0800 (CST)
-X-RM-TRANSID:2eea672c34204f8-4f262
+	by rmsmtp-syy-appsvr08-12008 (RichMail) with SMTP id 2ee8672c5459fe5-52a9d;
+	Thu, 07 Nov 2024 13:47:07 +0800 (CST)
+X-RM-TRANSID:2ee8672c5459fe5-52a9d
 From: liujing <liujing@cmss.chinamobile.com>
-To: gregkh@linuxfoundation.org
-Cc: linux-kernel@vger.kernel.org,
+To: mpe@ellerman.id.au
+Cc: npiggin@gmail.com,
+	christophe.leroy@csgroup.eu,
+	naveen@kernel.org,
+	maddy@linux.ibm.com,
+	gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org,
 	liujing <liujing@cmss.chinamobile.com>
-Subject: [PATCH] tty: synclink_gt: Fix incorrect formatted output
-Date: Thu,  7 Nov 2024 11:29:36 +0800
-Message-Id: <20241107032936.2702-1-liujing@cmss.chinamobile.com>
+Subject: [PATCH] tty:hvc:Fix incorrect formatted output
+Date: Thu,  7 Nov 2024 13:47:04 +0800
+Message-Id: <20241107054704.3247-1-liujing@cmss.chinamobile.com>
 X-Mailer: git-send-email 2.27.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -55,24 +62,25 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-In the struct slgt_info structure, the type of info->tbuf_current
-is unsigned int, so the output format is %u.
+The termno parameter is defined as an unsigned int 
+in hvc_opal_probe function,So when it output should 
+be modified to %u format.
 
 Signed-off-by: liujing <liujing@cmss.chinamobile.com>
 
-diff --git a/drivers/tty/synclink_gt.c b/drivers/tty/synclink_gt.c
-index bd8d92ee7c53..0c51c6c28080 100644
---- a/drivers/tty/synclink_gt.c
-+++ b/drivers/tty/synclink_gt.c
-@@ -519,7 +519,7 @@ static void trace_block(struct slgt_info *info, const char *data, int count, con
- static void dump_tbufs(struct slgt_info *info)
- {
- 	int i;
--	printk("tbuf_current=%d\n", info->tbuf_current);
-+	printk("tbuf_current=%u\n", info->tbuf_current);
- 	for (i=0 ; i < info->tbuf_count ; i++) {
- 		printk("%d: count=%04X status=%04X\n",
- 			i, le16_to_cpu(info->tbufs[i].count), le16_to_cpu(info->tbufs[i].status));
+diff --git a/drivers/tty/hvc/hvc_opal.c b/drivers/tty/hvc/hvc_opal.c
+index 095c33ad10f8..1d2e7f2ce088 100644
+--- a/drivers/tty/hvc/hvc_opal.c
++++ b/drivers/tty/hvc/hvc_opal.c
+@@ -199,7 +199,7 @@ static int hvc_opal_probe(struct platform_device *dev)
+ 		/* Instanciate now to establish a mapping index==vtermno */
+ 		hvc_instantiate(termno, termno, ops);
+ 	} else {
+-		pr_err("hvc_opal: Device %pOF has duplicate terminal number #%d\n",
++		pr_err("hvc_opal: Device %pOF has duplicate terminal number #%u\n",
+ 		       dev->dev.of_node, termno);
+ 		return -ENXIO;
+ 	}
 -- 
 2.27.0
 
