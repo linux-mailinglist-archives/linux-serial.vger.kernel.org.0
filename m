@@ -1,131 +1,257 @@
-Return-Path: <linux-serial+bounces-6932-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6934-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6621C9DBEFE
-	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 05:26:25 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13F9B9DBF06
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 05:26:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B55D51649E6
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 04:26:55 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C930B154BE0;
+	Fri, 29 Nov 2024 04:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="fzMzxtSG"
+X-Original-To: linux-serial@vger.kernel.org
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A2AD5B20DD8
-	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 04:26:22 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF9AB1547F3;
-	Fri, 29 Nov 2024 04:26:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b="LLv8C/Ta"
-X-Original-To: linux-serial@vger.kernel.org
-Received: from sonic310-15.consmr.mail.bf2.yahoo.com (sonic310-15.consmr.mail.bf2.yahoo.com [74.6.135.125])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A2E6153828
-	for <linux-serial@vger.kernel.org>; Fri, 29 Nov 2024 04:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.6.135.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A0B2914;
+	Fri, 29 Nov 2024 04:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732854377; cv=none; b=DjlBt2IRpkCXXav4xJc8nxnQ/YlNWhQGRx1NubLve/xMi7NMQ7GQbzDV2IhTnZXw60PW8pDIU+uwWS9jRN9o7cDrbmwwsAS5+pVNkl82PVlbWUYXi3fyL+YkXRzonS/jRIMlA87lYBueAtlSMMz2d4KwOGrXbR7uulEx84LPajg=
+	t=1732854414; cv=none; b=VxHTF8PDTbXOG/E7tjgLPl2uWlCql4c6oE3+B9JoHuTqAT5ArzTI7jI1FUM3GybXew0vfnKVdH2KDjVs2OZ1wcPUOpWUVMxnpuZ0vVoh9Y2K1d25mezG+S6ammKaORg+EC3F9CjNzgsFK+1rLOKo+PjbuRWLLGEZyZN/0SJvu9w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732854377; c=relaxed/simple;
-	bh=At14nQ9bt4ZXGROW9mDC30YLZ5CMdzjPOgVAugksG4M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h9Dvuzgo2+iUI8lV+E1n0HmraMSA3HGoUJexiN4ppWueU3wLxGqkvh0/awIR5Xo3LoToHS4DPlnY2ARFzgY98gCEhBZ9J7rMVkjgcyGBgj5GGqC6BOoCr/S81A2bD6pV6h09uR2e52LAyhEthgPs/iq/FEPYKLaesdM7jnnNSe0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net; spf=pass smtp.mailfrom=verizon.net; dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b=LLv8C/Ta; arc=none smtp.client-ip=74.6.135.125
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verizon.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verizon.net; s=a2048; t=1732854369; bh=CcBr8CthFfnn4DMiOiwdM5Xy1AM8khizAvAFJ5en5HU=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=LLv8C/TaFU4cJlVsiP4dAKoc7U+eQU9Qbed/pe9MAQldDk/h/5pchjxXtUTM9OWf7zDeeUYAuO/XRU8RBrqEP0+6Z39SN5wupv6X3+uDuY2sbXXhJc0SUnJ3DvMqOONyb7fgbksSvb2NGqRm37NGqvNf+J2BqpXcl9l1qQXUzvtPdXefefVaYKmNhXGOOPGHOlyvHQc0n98tME5hthSdZdhoMnR+bINBkszblr+brlhfBdQsQyi50xRqWjGu2Az5LgUHTx/hFAmBEvNfHSDvdr7/OUAymX2tRcnXjJ7lcDC7r0p7SFS8VbwR+Ef/iblLgc+XzygopJlsdF5X5ybc+g==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1732854369; bh=yhUbPLRXFDaCayiA/Mjsho/asU5+jwUdlKZyiraicYF=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=UrCFtTZpWYS722XP7Ap7SxR3f6uL6e4EvjOj4oWFfFbTvbsmqyOWcd9WYUUudDffHVcXjBXdRtj8LkY5dMBCl9abB5e1Yot36ICoz27Foc9yg3Pim2Ysocor8RoepIKoYQ4vIRrJ3wZuFj09ZJRAIGEfIhgtZGpWfdtDBlckjOP5ExD9prAZ6nobxn4MiMzTE0EpleRSC230+zs5vEXVpoeEexWE6SADDOmcqmvnSPda7qNMPuazOYCk3Up07e0iCcYNjanQa/XshxuUjycbCN34YD/Hu6jEFiIfYxMwzJcClc8BVKXofzN5SuHOPSdfln/NVQ2bJxjS95MVn+3szQ==
-X-YMail-OSG: 06Tdy_8VM1mpRmzWtSYPXcumG9Hh9.79lzmDdh9F6sbP3uwxUNG2BVEykE8.tMI
- vRsjY0jSLaaJ8nlzYoUjG8P7NLNDZMTxrSBLSqpIlqgkIpZHzEkK8RYezOZoRQrPFc0f3VH0e97n
- lqtl2WDROBKuGfIjW26N.YwoE5ijW6RBQUXFHUmhyCeAlCtmNgn3H_bsxjySQohtnQKoFOjjjJG.
- aJdKLfLfE4Nqcwa8FrrsBxZVPNB_TsAhTUX97jDGHXrjWlU3SSNe5xXF95CviuLwREMUl5mteZU4
- oxzqTV85H_iRbzP.1xcKUUpS5eLrxAvnT0JwGNoR3AlE01u3u0ThdgzHK72cG4X_w4ITRw.YWwQg
- AZ6RfxZ7iPv_thjyeCxXsNrk7Esyr39E4dVnFnYaw1ITv9sNtYIK_v_OjL9FGAWS7y5EXkVOs9KI
- zM9anJIB2Azj5_Jw2ZtC9AmLiaXH9y4UKCRzU5XyjIu8C.PgmTlxNfenOq1QcMQF8ZQiqUEGzP1k
- iBT3D5Lop9FBapShFEtQCyKF_n.SsIIEQrqBziqwVZrbz8o1Cf45I0CZ4N0xaB78caCq6uuk43dV
- 6k_QHctk8J7ZlclCnyzwW_2tXs8rA_JjN_y3OWQMxWQyO8L5cfpXbtDuIEuGuCsW8hqEuDmy8Vis
- .LuCgf0C2Aduorgcq_OZiAsPluv1X.4KyZPo._q_w54jh7eTHz7BcK_A76dOHHcPRpAeAM.NCrTK
- DdGEgFUR6Wfsrj2o1c3Kp5lyqRv6QCkxFqDXKkUMQGuqjzMbkOBcg0MdJUDzP1GvG5qOIRWNzVuB
- Evx8ynFI2Jl0FkC8JukTf36lUNzHt0w3qaH4ZUlEWZxdvIeHhV2jLJZFJewACgsoVtoq6wgFjZfU
- nTwTDpXBu.7oVNtpLwWccen6P2138Y0MstPDDT9kWKXkR5FsF8eSl.trYuEg9_C2OP_WkhZihQF0
- C3uCHUIXWU6ZlCDYLQwjGNJaur_5wKnXxVn3aO8jhoIOydy9qcqzJ1xoLaVDWlM5a1bbyq3SL3Od
- fxIglL_YdueztVVE2Vt2c_ke8XZnXI8637XGpSlPGI2xLklgdor9.ugewexz1VTV0pnUOoWYs7tz
- N0Zjz4Qg3IINxJ237kg.XUGAxRDj72QIQRy9SUVLa8OS_EJI6jJr47KAHQTbDzAPT1n.NXKLBYiN
- vtgLll6X.I8TGush45bSWOngShRfKNkgdjycZBncku1InpNiBFuvpnrgFRl_W6fanh3JR0L8VwZU
- F6JpmiDipF3PaKgaHIBmhzEPAKKtA2NhHkfGz0bUAvmpH7AjFliCaxco7AJ2A49qUicHnU1DhO5.
- wpwbdA66FA8i3OmQxM_1OnL9N.KF4iod4AYZq6UrzqzbZy3V8_6blfPZXg8WpZL5OzoMuiGhgdQ8
- G5Vo8sNAjIfBlrQOez4jrKtRPEFlZY4TqhMrWQe32X.advsZXE4KIH_hf8e_entFen8VCe5jepoU
- 7u02v5GDB5BSVmtiwfL8V6yeqNtiQPBMiNvJzUg._IlpeQQAZeVPDrogqaebRXZ_VbaFL4DA7K.J
- Fp32SwSEylaoNhieCryNJRtaoprVkMXxfr4HonmhY72hSqgnG_bMCyTvlXAcFJLDmvpTXxlHWc4B
- N2V1N39qpRARAYN3K.41a_2YYmyWm3gmzk987cwgm4Ncg4okPyZZnCAmEqhXFIbYWTo9XaTHhiGE
- FSXUM39Vu6x5E3tCkq36YPZ7AIqONvUtZ9L0fGjvtl3EBaerwRSvu3oqO7yO7HltmG7bxz8Vrwyu
- _xX_5gkA_4LdsDya7QF8x91UmuDTMR0oyTMlTrLiegU9O.ok9JuL3H8VnJPV0Fqkrvq4zrlidJ5i
- JUEaXgAhTOJAgl3CpS.JmlqRcxMegPUvVECLYBcV0sZwuIfjGssj9X2PU0R.Id84Dew29OBZH3Mo
- W0N.0Icy43jRd4Gc8YIkIXr9WmiNigej.anzi8u11BLZRKbR1hn5V2bgpTHg68BTMj5A4TQQycwy
- cHmq5RzUTVX0zCgpuAzMOfBvhstJ_jdlP299Ya568gFo.NKwKc.n.PRmn3WrA7XGXfZ3aMUv4ILu
- 0eZN2k2PX_0F8Xqvtmhf10ZNbSCp2uiNXULW98K8gVU8c_LGYhZHCIIiOHf1nGQrQyVnH4EjZjgC
- ttY9y_hvFEOj6rpULXdLaVhmZyBocvUv.sAT.xJeMWBCSdhxyak.lSd05yaVrCzkgIjOsqo8e6cm
- l1p5roIgENs7JS3ek6kJ7iFziNG3UBJipfwPYT6SG7khCcQUuZGfv5xsTL.qIxOWlbMPJx.O1DAx
- 0jXwEEwfOCCQAYH37zLk-
-X-Sonic-MF: <bluescreen_avenger@verizon.net>
-X-Sonic-ID: 00e5bcf1-ff1e-4af2-ac3a-38d045cad805
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic310.consmr.mail.bf2.yahoo.com with HTTP; Fri, 29 Nov 2024 04:26:09 +0000
-Received: by hermes--production-bf1-66bb576cbb-h2pjb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID af1c0b40292d512b9d850181f2953147;
-          Fri, 29 Nov 2024 04:15:59 +0000 (UTC)
-From: n3rdopolis <bluescreen_avenger@verizon.net>
-To: linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: n3rdopolis <bluescreen_avenger@verizon.net>
-Subject: [PATCH 2/2] tty: Change order of ttynull to be loaded sooner.
-Date: Thu, 28 Nov 2024 23:15:49 -0500
-Message-ID: <20241129041549.778959-3-bluescreen_avenger@verizon.net>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241129041549.778959-1-bluescreen_avenger@verizon.net>
-References: <20241129041549.778959-1-bluescreen_avenger@verizon.net>
+	s=arc-20240116; t=1732854414; c=relaxed/simple;
+	bh=bviNBKgkJYePutF4Hc011Wxh+UECjeCdWR26Fs+vGWs=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=S83RW9xXxtsbJeI7YCeLzj6HCIFOCIh9l5GNPWSp/8bRJCvwKwT76STs9vdJbyB6rkgjuZpvhPX031NoqfYXoIybmRo0/3gXwCw86W3cgjtM2WYrXAON1ihPaSqjQ060XiTWgxmEk+wcuU6CBPg2khZhksAP6HrTMuuoksJELlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=fzMzxtSG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1097C4CECF;
+	Fri, 29 Nov 2024 04:26:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1732854414;
+	bh=bviNBKgkJYePutF4Hc011Wxh+UECjeCdWR26Fs+vGWs=;
+	h=Date:From:To:Cc:Subject:From;
+	b=fzMzxtSGsZih8v+8QUWowPT3PMwGmBPoQjW8Q47xG5w/m5eY8h+DfRuMA8YHfAUQs
+	 Poi4sohu1474UAy2hhzJn226jCiWRWY/ulPPmI3WoW9GTeY9smET0HY5sCc9dPjWsS
+	 qFZXtq4ahh+Y/LD3VHIWMr1SuRWRKMxpcrNemSMc=
+Date: Fri, 29 Nov 2024 05:26:50 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jiri Slaby <jslaby@suse.cz>, Stephen Rothwell <sfr@canb.auug.org.au>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [GIT PULL] TTY / Serial driver changes for 6.13-rc1
+Message-ID: <Z0lCihhE75lE9Zjd@kroah.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 
-If CONFIG_NULL_TTY_CONSOLE is enabled, and CONFIG_VT is disabled, ttynull
-will become the default primary console device, based on the load order.
-Users and distributions that are migrating away from CONFIG_VT will
-benefit from this as /dev/console would not suddenly become /dev/ttyS0
-which could otherwise cause some user space behavior changes, namely the
-TCGETS ioctl failing, which causes libc's isatty() to incorrectly return
-false when /dev/ttyS0 is disabled, and will prevent a device that is
-connected to a user's /dev/ttyS0 to suddenly start getting kernel log
-messages.
-Signed-off-by: n3rdopolis <bluescreen_avenger@verizon.net>
----
- drivers/tty/Makefile | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+The following changes since commit 42f7652d3eb527d03665b09edac47f85fb600924:
 
-diff --git a/drivers/tty/Makefile b/drivers/tty/Makefile
-index 07aca5184a55..03bb47e11e1c 100644
---- a/drivers/tty/Makefile
-+++ b/drivers/tty/Makefile
-@@ -11,6 +11,8 @@ obj-$(CONFIG_N_HDLC)		+= n_hdlc.o
- obj-$(CONFIG_N_GSM)		+= n_gsm.o
- 
- obj-y				+= vt/
-+obj-$(CONFIG_NULL_TTY)		+= ttynull.o
-+
- obj-$(CONFIG_HVC_DRIVER)	+= hvc/
- obj-y				+= serial/
- obj-$(CONFIG_SERIAL_DEV_BUS)	+= serdev/
-@@ -20,7 +22,6 @@ obj-$(CONFIG_AMIGA_BUILTIN_SERIAL) += amiserial.o
- obj-$(CONFIG_MOXA_INTELLIO)	+= moxa.o
- obj-$(CONFIG_MOXA_SMARTIO)	+= mxser.o
- obj-$(CONFIG_NOZOMI)		+= nozomi.o
--obj-$(CONFIG_NULL_TTY)	        += ttynull.o
- obj-$(CONFIG_SYNCLINK_GT)	+= synclink_gt.o
- obj-$(CONFIG_PPC_EPAPR_HV_BYTECHAN) += ehv_bytechan.o
- obj-$(CONFIG_GOLDFISH_TTY)	+= goldfish.o
--- 
-2.45.2
+  Linux 6.12-rc4 (2024-10-20 15:19:38 -0700)
 
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tags/tty-6.13-rc1
+
+for you to fetch changes up to b5a23a60e8ab5711f4952912424347bf3864ce8d:
+
+  serial: amba-pl011: fix build regression (2024-11-16 09:52:55 +0100)
+
+----------------------------------------------------------------
+TTY / Serial driver updates for 6.13-rc1
+
+Here is a small set of tty and serial driver updates for 6.13-rc1.
+Nothing major at all this time, only some small changes:
+  - few device tree binding updates
+  - 8250_exar serial driver updates
+  - imx serial driver updates
+  - sprd_serial driver updates
+  - other tiny serial driver updates, full details in the shortlog
+
+All of these have been in linux-next for a while with no reported
+issues.
+
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      serial: 8250_exar: Group CTI EEPROM offsets by device
+
+Arnd Bergmann (1):
+      serial: amba-pl011: fix build regression
+
+Bin Liu (1):
+      serial: 8250: omap: Move pm_runtime_get_sync
+
+Christoph Hellwig (1):
+      kfifo: don't include dma-mapping.h in kfifo.h
+
+Claudiu Beznea (1):
+      serial: sh-sci: Clean sci_ports[0] after at earlycon exit
+
+Detlev Casanova (1):
+      dt-bindings: serial: snps-dw-apb-uart: Add Rockchip RK3576
+
+Esben Haabendal (3):
+      serial: imx: Grab port lock in imx_uart_enable_wakeup()
+      serial: imx: Add more comments on port lock status
+      serial: imx: Switch to nbcon console
+
+Filip Brozovic (1):
+      serial: 8250_fintek: Add support for F81216E
+
+Greg Kroah-Hartman (1):
+      Merge 6.12-rc4 into tty-next
+
+Hugo Villeneuve (1):
+      serial: sc16is7xx: announce support for SER_RS485_RTS_ON_SEND
+
+Inochi Amaoto (3):
+      dt-bindings: serial: snps,dw-apb-uart: merge duplicate compatible entry.
+      dt-bindings: serial: snps-dw-apb-uart: Add Sophgo SG2044 uarts
+      serial: 8250_dw: Add Sophgo SG2044 quirk
+
+Ivaylo Ivanov (2):
+      dt-bindings: serial: samsung: Add samsung,exynos8895-uart compatible
+      tty: serial: samsung: Add Exynos8895 compatible
+
+Kartik Rajput (1):
+      serial: amba-pl011: Fix RX stall when DMA is used
+
+Luke Wang (1):
+      tty: serial: fsl_lpuart: add 7-bits format support on imx7ulp/imx8ulp/imx8qxp
+
+Michal Simek (1):
+      dt-bindings: serial: rs485: Fix rs485-rts-delay property
+
+Mihai Sain (1):
+      tty: atmel_serial: Use devm_platform_ioremap_resource()
+
+Nicolas Bouchinet (1):
+      tty: ldsic: fix tty_ldisc_autoload sysctl's proc_handler
+
+Parker Newman (4):
+      misc: eeprom: eeprom_93cx6: Add quirk for extra read clock cycle
+      misc: eeprom: eeprom_93cx6: Switch to BIT() macro
+      serial: 8250_exar: Replace custom EEPROM read with eeprom_93cx6
+      serial: 8250_exar: Remove old exar_ee_read() and other unneeded code
+
+Shivam Chaudhary (1):
+      tty: atmel_serial: Fix typo retreives to retrieves
+
+Tobias Klauser (4):
+      altera_uart: Use dev_err() to report error attaching IRQ handler
+      altera_jtaguart: Use dev_err() to report error attaching IRQ
+      tty/serial/altera_jtaguart: unwrap error log string
+      tty/serial/altera_uart: unwrap error log string
+
+Uwe Kleine-König (1):
+      serial: Switch back to struct platform_driver::remove()
+
+Wenhua Lin (2):
+      serial: sprd: Add support for sc9632
+      dt-bindings: serial: Add a new compatible string for ums9632
+
+Yanteng Si (1):
+      serial: clean up uart_info
+
+Yao Zi (1):
+      dt-bindings: serial: snps-dw-apb-uart: Document Rockchip RK3528
+
+Yu Jiaoliang (1):
+      serial: 8250: Fix typos in comments across various files
+
+ .../devicetree/bindings/serial/rs485.yaml          |  19 ++-
+ .../devicetree/bindings/serial/samsung_uart.yaml   |  14 +-
+ .../bindings/serial/snps-dw-apb-uart.yaml          |  13 +-
+ .../devicetree/bindings/serial/sprd-uart.yaml      |   1 +
+ drivers/mailbox/omap-mailbox.c                     |   1 +
+ drivers/misc/eeprom/eeprom_93cx6.c                 |  15 ++-
+ drivers/tty/serial/8250/8250_aspeed_vuart.c        |   2 +-
+ drivers/tty/serial/8250/8250_bcm2835aux.c          |   2 +-
+ drivers/tty/serial/8250/8250_bcm7271.c             |   4 +-
+ drivers/tty/serial/8250/8250_dw.c                  |   7 +-
+ drivers/tty/serial/8250/8250_em.c                  |   2 +-
+ drivers/tty/serial/8250/8250_exar.c                | 142 +++++++--------------
+ drivers/tty/serial/8250/8250_fintek.c              |  16 ++-
+ drivers/tty/serial/8250/8250_fsl.c                 |   2 +-
+ drivers/tty/serial/8250/8250_ingenic.c             |   2 +-
+ drivers/tty/serial/8250/8250_ioc3.c                |   2 +-
+ drivers/tty/serial/8250/8250_lpc18xx.c             |   2 +-
+ drivers/tty/serial/8250/8250_mtk.c                 |   6 +-
+ drivers/tty/serial/8250/8250_of.c                  |   2 +-
+ drivers/tty/serial/8250/8250_omap.c                |  10 +-
+ drivers/tty/serial/8250/8250_platform.c            |   2 +-
+ drivers/tty/serial/8250/8250_pxa.c                 |   2 +-
+ drivers/tty/serial/8250/8250_tegra.c               |   2 +-
+ drivers/tty/serial/8250/8250_uniphier.c            |   2 +-
+ drivers/tty/serial/8250/Kconfig                    |   1 +
+ drivers/tty/serial/altera_jtaguart.c               |   6 +-
+ drivers/tty/serial/altera_uart.c                   |   6 +-
+ drivers/tty/serial/amba-pl011.c                    |   9 +-
+ drivers/tty/serial/ar933x_uart.c                   |   2 +-
+ drivers/tty/serial/atmel_serial.c                  |  16 +--
+ drivers/tty/serial/bcm63xx_uart.c                  |   2 +-
+ drivers/tty/serial/clps711x.c                      |   2 +-
+ drivers/tty/serial/cpm_uart.c                      |   2 +-
+ drivers/tty/serial/digicolor-usart.c               |   2 +-
+ drivers/tty/serial/esp32_acm.c                     |   2 +-
+ drivers/tty/serial/esp32_uart.c                    |   2 +-
+ drivers/tty/serial/fsl_linflexuart.c               |   2 +-
+ drivers/tty/serial/fsl_lpuart.c                    |  23 +++-
+ drivers/tty/serial/imx.c                           | 137 +++++++++++++++++---
+ drivers/tty/serial/lantiq.c                        |   2 +-
+ drivers/tty/serial/liteuart.c                      |   2 +-
+ drivers/tty/serial/lpc32xx_hs.c                    |   2 +-
+ drivers/tty/serial/ma35d1_serial.c                 |   2 +-
+ drivers/tty/serial/mcf.c                           |   2 +-
+ drivers/tty/serial/meson_uart.c                    |   2 +-
+ drivers/tty/serial/milbeaut_usio.c                 |   2 +-
+ drivers/tty/serial/mpc52xx_uart.c                  |   2 +-
+ drivers/tty/serial/msm_serial.c                    |   2 +-
+ drivers/tty/serial/mxs-auart.c                     |   2 +-
+ drivers/tty/serial/omap-serial.c                   |   2 +-
+ drivers/tty/serial/owl-uart.c                      |   2 +-
+ drivers/tty/serial/pic32_uart.c                    |   2 +-
+ drivers/tty/serial/pmac_zilog.c                    |   2 +-
+ drivers/tty/serial/qcom_geni_serial.c              |   2 +-
+ drivers/tty/serial/rda-uart.c                      |   2 +-
+ drivers/tty/serial/sa1100.c                        |   2 +-
+ drivers/tty/serial/samsung_tty.c                   |  15 ++-
+ drivers/tty/serial/sc16is7xx.c                     |   2 +-
+ drivers/tty/serial/sccnxp.c                        |   2 +-
+ drivers/tty/serial/serial-tegra.c                  |   2 +-
+ drivers/tty/serial/serial_txx9.c                   |   2 +-
+ drivers/tty/serial/sh-sci.c                        |  30 ++++-
+ drivers/tty/serial/sifive.c                        |   2 +-
+ drivers/tty/serial/sprd_serial.c                   |  43 ++++++-
+ drivers/tty/serial/st-asc.c                        |   2 +-
+ drivers/tty/serial/stm32-usart.c                   |   2 +-
+ drivers/tty/serial/sunhv.c                         |   2 +-
+ drivers/tty/serial/sunplus-uart.c                  |   2 +-
+ drivers/tty/serial/sunsab.c                        |   2 +-
+ drivers/tty/serial/sunsu.c                         |   2 +-
+ drivers/tty/serial/sunzilog.c                      |   2 +-
+ drivers/tty/serial/tegra-tcu.c                     |   2 +-
+ drivers/tty/serial/timbuart.c                      |   2 +-
+ drivers/tty/serial/uartlite.c                      |   2 +-
+ drivers/tty/serial/ucc_uart.c                      |   2 +-
+ drivers/tty/serial/xilinx_uartps.c                 |   2 +-
+ drivers/tty/tty_io.c                               |   2 +-
+ include/linux/eeprom_93cx6.h                       |  11 ++
+ include/linux/kfifo.h                              |   1 -
+ include/linux/platform_data/sa11x0-serial.h        |   1 -
+ samples/kfifo/dma-example.c                        |   1 +
+ 81 files changed, 413 insertions(+), 245 deletions(-)
 
