@@ -1,242 +1,117 @@
-Return-Path: <linux-serial+bounces-6931-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6935-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56D059DAC87
-	for <lists+linux-serial@lfdr.de>; Wed, 27 Nov 2024 18:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 57AD89DBF11
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 05:36:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 878E7B21C88
-	for <lists+linux-serial@lfdr.de>; Wed, 27 Nov 2024 17:33:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50ADDB21B7A
+	for <lists+linux-serial@lfdr.de>; Fri, 29 Nov 2024 04:36:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CFBD201103;
-	Wed, 27 Nov 2024 17:33:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBC2615534B;
+	Fri, 29 Nov 2024 04:36:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="UfiPBUMI"
+	dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b="HH9997Nc"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+Received: from sonic305-1.consmr.mail.bf2.yahoo.com (sonic305-1.consmr.mail.bf2.yahoo.com [74.6.133.40])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94D301FF7C6
-	for <linux-serial@vger.kernel.org>; Wed, 27 Nov 2024 17:33:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AE8B14D428
+	for <linux-serial@vger.kernel.org>; Fri, 29 Nov 2024 04:36:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.6.133.40
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732728796; cv=none; b=eHxEoS37ujk8uDaFLs1xGpbAEvMNYaRzdOh/V3/uq0xL+dUSzz0qM1qzWVDmXS4Zg1KgFgriFRoKnBWz7LhCe6Tq8DgcYSKLuvtU8oE9pvpjwnEYkOROaTVDRD3O5KMfS3Ue5Q0i0LFXA3yvYTXuSjJMK2ESXUyxqgSO13y1cts=
+	t=1732854979; cv=none; b=FM259JkfLD/4VpRQRWpankDch53g8jvpuZkv3FrSLCKm1wwAMXfCmD+kkS6/cpGmeZQAnwoUbHOCtpWn78bMeHZeB+2f2cGOZTeu1YnDswd824XBJRoJXcBOTfeMhf9IYkOl+hx0A9l633DEfHujh0pAduPwm8kwUTPaZqH7plA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732728796; c=relaxed/simple;
-	bh=WHpE9eR5UhlUSBcB5vf5FzyYI2xQkCKts8Gpzp1P+K0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=toPGmWx1JP71GKG70iVV/+VxPDCbUaRBGOF/NUEgTDj5cMeYrvQRucQyMubvjaY0qmXN3tlsfLxwarDAD2f4oWkJkTOzOl07L/jNWY0rpDk4vMXNIMqM3zTB9+BrIziy6wGEsxwowzPTad31i59s+1LjFb+kTnCbtllhdwBz0P4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=UfiPBUMI; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43497839b80so33698295e9.2
-        for <linux-serial@vger.kernel.org>; Wed, 27 Nov 2024 09:33:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1732728792; x=1733333592; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=W2Dvzpd6/ofo2QAO5d3vYdwlkF2Kp83/EUc916PDQGo=;
-        b=UfiPBUMI+WGc2LvyveaWleEzRnGRqEtBSw67Vr2gQtsyOZtwdoP7rUYgxUgwX8F+fM
-         /iaFFi15EgWS5fo7lLxBbrUyDGgfIy1MzLj6KWmtpN36MVRH0Cc9wTrTZl7H3LDcQ9Al
-         MnmpV9eU/VHQd3otwAwAlZa+FSsWd75iqQIATcryMMsF6VwemiTJ9BZbcz7hmN/uioHo
-         CQP2oXuPWw3JSaDEFVO52Z7skiTN4xPLYpHxqgyyUBkMF2xMlK89CENTTLQhq5SedySk
-         aDJM7JH/XyZ/CRWU6oVL7Ji+sjF2RKsqsGEudQIF5Hr1cUfbG+EVtydJtQ63coo/3UeF
-         HG1A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732728792; x=1733333592;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=W2Dvzpd6/ofo2QAO5d3vYdwlkF2Kp83/EUc916PDQGo=;
-        b=pKkjAaj23Lzfh8qxIpfYEYzUFGmAXO7LtQdnWjg0bSTmZ9lhZIOqF+CDYwYLxweWDP
-         khLlM9W7WGoXgxNoOdM84Zis4fbvgS0oW/hA+KPY8VVLXJ2MQQDtdbKtIxP5RRsmRZda
-         Iw50B8FzPbDW8quI3qOF8MuhzRoESAC4aHxpojhq3YlgMuTCJaaLHc8rgrPP/UcOUuNT
-         83doMKig7nEZ3hJl9gp6YYviiG1o4PLv0jd5rswCTDh0dQ0Umu/iyIOMpdAdNg8vneAe
-         mSy2Q3Zei9Me1b0x/A6GEuTXaPjeLdjQ7a1elgYboOmw6laEIXdn4NjfnBGKBclA/hAN
-         Sg2A==
-X-Forwarded-Encrypted: i=1; AJvYcCU1RFVbSs7GbdXPVhnko0AAK+nTTOLTfZn84zKxtNWohMcqlUYN/+k/gAyM3H31SqtoOr3BtMiulfcAcdw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrfKADmb792FdOVJG5MO1SmW0XonSVVv8ThALu5FIkHAF0o6hK
-	xh7FiA8jK9iO3onr44vu4s8gwkWuLCqgDGVUewhkrVVpIyUDqnwxEjyLA7yoieA=
-X-Gm-Gg: ASbGncs8WJ72TsSZDtogXlC0+Wy7u5KDDyevKGnnFWEuEGej8XTor+nKOgJZ6AQhTeG
-	MkExp5zy80/VzaZ5AvY6/Wmq/UkNY3fi67kI8e/zgR7T+jVNy38DbxD5A7Yd316BLjeFNlL8BWC
-	+SCaYdN1/Y0j3aGPyet8w1Ao0BJ1Ej8VkWUKJ0Dd1+Xhkk8xxGcw/+4aieABEhlkCrb8uAEc1FQ
-	ZJyGphg+g0y06pdBa1QXe45MJviqPW7gmHcvGMTIjNHcJTx6QW/tb5p+g==
-X-Google-Smtp-Source: AGHT+IGtStnjKDVkWM4W4FfoiuUvanyDA4yxgbzn7BtijkP8yZgwoZcYmJJU95zF2wDM50TaHo+h3w==
-X-Received: by 2002:a05:6000:2704:b0:382:42c3:83e4 with SMTP id ffacd0b85a97d-385c6ec0a39mr2605026f8f.33.1732728791999;
-        Wed, 27 Nov 2024 09:33:11 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.46])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3825fafeceesm16864453f8f.37.2024.11.27.09.33.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Nov 2024 09:33:11 -0800 (PST)
-Message-ID: <29b0e509-69a5-4098-bccf-d53cc6593c49@tuxon.dev>
-Date: Wed, 27 Nov 2024 19:33:09 +0200
+	s=arc-20240116; t=1732854979; c=relaxed/simple;
+	bh=+/KmO3a3ZqPkpk88xYk2TASZx3w+zAIDLk4JhcnfO3A=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:References; b=DZoWcsG/02fEcxMYkZbS9qS2waDiwutxoCAuxEb7bdvQzSL1dK7W/W3t/3tm4NLWVzfK7hZgYGh82Mk6RUKHalVAodmz3kBJkkhSjGic7EM49V5/L4fJvfArJQ8i0TluumLDMl/OkpHZ/Q4l+71Z113Ucb7Tte25/Awchm+5qhY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net; spf=pass smtp.mailfrom=verizon.net; dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b=HH9997Nc; arc=none smtp.client-ip=74.6.133.40
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verizon.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verizon.net; s=a2048; t=1732854976; bh=GQSojATNMkj2XY8rz6LmsRqO9TSCVXvI4iHLwdFwzks=; h=From:To:Cc:Subject:Date:References:From:Subject:Reply-To; b=HH9997NcncJx8MzvDHZRRLL4ghvo45rRNcSrSFyKADaW4v0Ugh8b9/QBa5uX79FaMRDbS7MrKlMC34qLJNz2pYBg4fECWi2XZpDwQNXxjjXL+5YltB1bAHTGWs6tHS/tN/VuAfVh08F+9KtZ1B1sK6zbdug2++DSuYifB+0xQapgdO25NlYBY7Rzo9z3uKRkWHE3L3tWV/cJqyqieMWFr2HFLYsEKAGin7q+EL0VWbCQ8Ac7KDzpRsfl6fZEELbayW/b/FEZhC/oOgM3gILOI5kV7Jzq6QPPIp96Z8nPPtrNoSzDNhePuOn3+TbQ1UgYd4YHDIx3qsVjUusNTxyhSg==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1732854976; bh=7RzgHPwIy9OGQj/sXsANIsXF9ePijAbvmwU7JeUxUDE=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=SsST8VcpU79fBDWd7LJEVpp0JtnIjULj9BhI3o5ZUDCnZDbnAe8c33LDlcVddIHSZ2WE4/hVQaafterL2weB1Q2+N/4joqFLKGqmLM8Aipz3O2GeuKNebqv5JW9cSojEPogtzTCUUri5TBYU2UndkOmV7PJUrSo/CAZJjkT6Z4Ko5d3LMwxJfmDrMPv/9hQWoq6o3w129yC7abCa7CuooumtEojRLFnKyaD/w+2ZYeUqEXIoxCsXlssnxA/F3q5EkLgNi37hhSZjnMidPR89ASsCpwOcqQBP7tetL6GweeR0jMjcGvcpfEVRiI1rrsJuV4Za2tLt5bx9liNNT1ZvIw==
+X-YMail-OSG: AMSU.RMVM1mb6bKRvoYirGQKxOZVMJWCgdDqu5v7FdoEhWK8eIccml0v4EFSHY1
+ JU5RphcaVbkv10w0R5D_JTx67NbJFP1zgo1dZfssY34mnvwAY3xHGuPTTNoQ9xJC98XZp3N9Kf.e
+ 3hPJoJvewqy69HIMKGVFyVWcPmSjEyiPJRTKpmLjuMUJQP9tqfm2Z7QW18.ejM1ToJqldGwXSFf7
+ 9bfi3pVlBFKf_K.xAxM2TsWjc.UkFA6ozUeruAl4WaTcMaDoBq5ps3sb8LHHFYqxX1vDzZ3hUFrp
+ 0GuXSmPzrb6dRsRtpi29VrZGIaGt1_3ISPuPSgnxz_3hZACJSkwOagx0VntM4IECaqSeRSIOBqlo
+ ax.9y6YA3.qX3q7hGF7_KHji4nI6Om6Ae4TCaoshiOdfsdAlqlaigNl9HchkdZFkHA7eIFiDKLQI
+ jjSzlQmOJ6ptipPS4zWcM76JHAaP5FLJMZoCrcZcs9zedbhhT8mjtkoef0hrxZ2_6Ik83XePo7FC
+ vZMIrVGtaeHFyOR7iIgOpS_li_riOTfsQlDpqFFlfUolP6EvYqM485dEXFX3oqegD8jG7ogNWQEt
+ OfxR2kHYIDGgtzF4.12AEgjlQNkXr9TgvHwc3RXK3nRcCKzYypscGesYW.KgoeV74qxS_BPiQ_DH
+ 2F3Wa2UhHaKMAWIC9SxFfO2zXKTH7pDkaaf57wPzzWYb.T6qFpErafTrAWJ4cVPtEJbr4qczudDW
+ YevbO2pxFdbP479PElYGWPeAGOR5tR6iFYdKsltyA4d9qQPsR1fLci0cU7PsNyeIIAR1N_.HdHhQ
+ mZ7SXkqjZ7diL5T.pns1.cegBjDWOGJRcLcr8qyyNW7xFCLAvIn_2PAOyIKu.g6aEqRYP9G1v19p
+ uSytSUubfFr.fWw1wt0i0_HXR250QIVCC.AVBYD4nup20m4Jdu6WIrkPcfWkDD5_iBG7x5RlIWml
+ ceYzM6NBIwGoTi3xFHuL4on1adsmfifarkhOFZZz2wMfvk3YJ.MnynMMpHKfBMrZ5j8VqCHb13vr
+ NG7qZCuGnxytJrP837fsfaMBtvVSSIZ3IL1wqtgTtxA2G8i_sCZ2y8Ur4UfLnU_OWHj.fHKAVmRs
+ BWpIhPr0dvuXYYU5lqvywS.MfAi2FlaeTgOdlMKiGOCqZScGc7UdzA2gkd0dS7edzD22_tZ4qTFw
+ w6DOSJsZZEhjOtNRuOuth9dr3RyM2jiIjBXyjpJ.OQF38mjQTGgsMoreJSQr4ZvRdueQI9qQmd9p
+ XsqNPX1qxA5t1HDZbLGyPnlY3GK1M0O2kVXnBF4j4AZ8Gx3H6jxRf2OA01jl7wujvo2RraPvTina
+ by_qwjx6lswZiv2YWhuHGz5BBny_0GO7..FOHaD25QjYKZsWyTTyYEYCDXfcozo_QO06DLHcxsQG
+ Om9ovVPBlRVuYRpj9s5HKVGA2JMwgcGMJfXUmcvaMPEr32tCo06v8occKdJdn4wOEnPhqyjoYoL2
+ ODoHtfITzvkkrIMtO000OpcD.jRm.pYp1yrfdwuvUDyf3vAP_fKgaNeRYp09oTu6nAZvIyrRYraY
+ ktkPKVfItlPhAgnMz7j6_q6HSKKdBXf85eWknX7rvk8wuXGiTLIaNPr86yemciv5ud50yfK8nsF2
+ SwPFb4d38wTOIvd9UPgLaQ0Nsn_6lo04khs9O7DzmIe2G0Cft3M4lqob6JNiw2jNeiFgPehLQIX4
+ uySRzYDwO4wgkfYtxx5CWWFhmWwoeEaT0_1SQRbe.ru8erdwbkpa5ui5UeUeTtRQmbrArEXpQVPI
+ lLaN1Mn.xIakdySoWc8MyouSnoGOc0Nj578WY93CTPQtXFTL.gi7ttX9OQRmFdkITdRRXXev25Eg
+ viWaZWmCWq49JanPLS7FXm5TaP5WAuF1H1bhrYP3buNUS5J48rI8B0i22R3mhgM.16JLzTQwtX1p
+ kd9MV_xf6mhmKPp0InuFPZHDNhKaUq7qgSTm88HJ1W89W51OgF58aINB6EwPf33Hiwaqz_EXQI0o
+ BJWORXxAlcA4aoyBdoqqEwRMaN.Suk6ZBmVPojXEO4gQlOluGfWApxlOaPIKp7Di5E1Ee1IJXixr
+ ThkEFHCiKihwaxHCNfTKF8.u_6hpBc_iC9Yh1rCDxhIA.Gcz.27VfiVyS5_71NB.RVJCAIMfxsXe
+ _KT83YdXKEBPJ9Xl.yMFzjjpMPN5gaoZHcpNu43KnOjfASTGuRQHmALJU_TfeL0ezmLCqrtNZoOo
+ qSmaNopED3kkD4BbubDcJ4EJ0EbKnNnDrnhU74be8z9Lbq_JplX9JnqEpLbpVQxCPBViZnhlb3L1
+ WU_dbo9zh8IMi
+X-Sonic-MF: <bluescreen_avenger@verizon.net>
+X-Sonic-ID: b678fd99-ae38-49d4-b635-e51f217fb12e
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Fri, 29 Nov 2024 04:36:16 +0000
+Received: by hermes--production-bf1-66bb576cbb-h2pjb (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID af1c0b40292d512b9d850181f2953147;
+          Fri, 29 Nov 2024 04:15:58 +0000 (UTC)
+From: n3rdopolis <bluescreen_avenger@verizon.net>
+To: linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: n3rdopolis <bluescreen_avenger@verizon.net>
+Subject: [PATCH 0/2] Optionally allow ttynull to be selected as a default console
+Date: Thu, 28 Nov 2024 23:15:47 -0500
+Message-ID: <20241129041549.778959-1-bluescreen_avenger@verizon.net>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/9] serial: sh-sci: Clean sci_ports[0] after at earlycon
- exit
-Content-Language: en-US
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: magnus.damm@gmail.com, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, mturquette@baylibre.com, sboyd@kernel.org,
- gregkh@linuxfoundation.org, jirislaby@kernel.org, p.zabel@pengutronix.de,
- lethal@linux-sh.org, g.liakhovetski@gmx.de, ysato@users.sourceforge.jp,
- ulrich.hecht+renesas@gmail.com, linux-renesas-soc@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-serial@vger.kernel.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, stable@vger.kernel.org,
- Wolfram Sang <wsa+renesas@sang-engineering.com>
-References: <20241106120118.1719888-1-claudiu.beznea.uj@bp.renesas.com>
- <20241106120118.1719888-4-claudiu.beznea.uj@bp.renesas.com>
- <CAMuHMdX57_AEYC_6CbrJn-+B+ivU8oFiXR0FXF7Lrqv5dWZWYA@mail.gmail.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <CAMuHMdX57_AEYC_6CbrJn-+B+ivU8oFiXR0FXF7Lrqv5dWZWYA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+References: <20241129041549.778959-1-bluescreen_avenger.ref@verizon.net>
 
-Hi, Geert,
+When switching to a CONFIG_VT=n world, at least on x86 systems,
+/dev/console becomes /dev/ttyS0. This can cause some undesired effects.
+/dev/console's behavior is now tied to the physical /dev/ttyS0, which when
+disconnected can cause isatty() to fail when /dev/ttyS0 is disconnected,
+and users who upgrade to a theoretical vt-less kernel from their
+distribution who have a device such as a science instrument connected to
+their /dev/ttyS0 port will suddenly see it receive kernel log messages.
 
-On 27.11.2024 18:28, Geert Uytterhoeven wrote:
-> Hi Claudiu,
-> 
-> Thanks for your patch, which is now commit 3791ea69a4858b81 ("serial:
-> sh-sci: Clean sci_ports[0] after at earlycon exit") in tty/tty-next.
-> 
-> On Wed, Nov 6, 2024 at 1:02 PM Claudiu <claudiu.beznea@tuxon.dev> wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> The early_console_setup() function initializes the sci_ports[0].port with
->> an object of type struct uart_port obtained from the object of type
->> struct earlycon_device received as argument by the early_console_setup().
->>
->> It may happen that later, when the rest of the serial ports are probed,
->> the serial port that was used as earlycon (e.g., port A) to be mapped to a
->> different position in sci_ports[] and the slot 0 to be used by a different
->> serial port (e.g., port B), as follows:
->>
->> sci_ports[0] = port A
->> sci_ports[X] = port B
-> 
-> Haven't you mixed A and B?
-> 
->> In this case, the new port mapped at index zero will have associated data
->> that was used for earlycon.
-> 
-> Oops, do you have a simple reproducer for this?
+When the new CONFIG_NULL_TTY_CONSOLE option is turned on, this will allow
+the ttynull device to be leveraged as the default console. Distributions
+that had CONFIG_VT turned on before will be able to leverage this option
+to where /dev/console is still backed by a psuedo device, avoiding these
+issues, without needing to enable the entire VT subsystem.
 
-It is reproducible with patches:
-- [PATCH 6/9] arm64: dts: renesas: rzg3s-smarc: Fix the debug serial alias
-- [PATCH 9/9] arm64: dts: renesas: r9a08g045s33-smarc-pmod: Add overlay for
-SCIF1
+n3rdopolis (2):
+  ttynull: Add an option to allow ttynull to be used as a console device
+  tty: Change order of ttynull to be loaded sooner.
 
-After boot, cat /dev/ttySC0 will lead to the issue described.
+ drivers/tty/Kconfig   | 18 +++++++++++++++++-
+ drivers/tty/Makefile  |  3 ++-
+ drivers/tty/ttynull.c | 16 +++++++++++++++-
+ 3 files changed, 34 insertions(+), 3 deletions(-)
 
-> 
->> In case this happens, after Linux boot, any access to the serial port that
->> maps on sci_ports[0] (port A) will block the serial port that was used as
->> earlycon (port B).
-> 
-> Again, A <-> B?
-> 
->> To fix this, add early_console_exit() that clean the sci_ports[0] at
->> earlycon exit time.
->>
->> Fixes: 0b0cced19ab1 ("serial: sh-sci: Add CONFIG_SERIAL_EARLYCON support")
->> Cc: stable@vger.kernel.org
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-> 
-> This causes a crash (lock-up without any output) when
-> CONFIG_DEBUG_SPINLOCK=y (e.g. CONFIG_PROVE_LOCKING=y).
+-- 
+2.45.2
 
-I missed to check this. Thank you for testing it.
-
-> 
->> --- a/drivers/tty/serial/sh-sci.c
->> +++ b/drivers/tty/serial/sh-sci.c
->> @@ -3546,6 +3546,32 @@ sh_early_platform_init_buffer("earlyprintk", &sci_driver,
->>  #ifdef CONFIG_SERIAL_SH_SCI_EARLYCON
->>  static struct plat_sci_port port_cfg __initdata;
->>
->> +static int early_console_exit(struct console *co)
->> +{
->> +       struct sci_port *sci_port = &sci_ports[0];
->> +       struct uart_port *port = &sci_port->port;
->> +       unsigned long flags;
->> +       int locked = 1;
->> +
->> +       if (port->sysrq)
->> +               locked = 0;
->> +       else if (oops_in_progress)
->> +               locked = uart_port_trylock_irqsave(port, &flags);
->> +       else
->> +               uart_port_lock_irqsave(port, &flags);
->> +
->> +       /*
->> +        * Clean the slot used by earlycon. A new SCI device might
->> +        * map to this slot.
->> +        */
->> +       memset(sci_ports, 0, sizeof(*sci_port));
-> 
-> Nit: I'd rather use "*sci_port" instead of "sci_ports".
-
-That would be better, indeed.
-
-> 
->> +
->> +       if (locked)
->> +               uart_port_unlock_irqrestore(port, flags);
-> 
-> "BUG: spinlock bad magic", as you've just cleared the port, including
-> the spinlock.
-> 
-> I guess we can just remove all locking from this function to fix this?
-
-I'll look to it.
-
-> 
-> However, could it happen that the new device taking slot 0 is probed
-> before the early console is terminated?
-
-I don't know to answer this. In my testing I haven't encountered it.
-
-> In that case, its active
-> sci_ports[] entry would be cleared when early_console_exit() is called.
-> 
-> Also, what happens if "earlycon keep_bootcon" is passed on the kernel
-> command line, and the new device takes slot 0?
-
-I checked it with earlycon and the serial device being on slot 0. In this
-case it was OK.
-
-> 
-> Thanks!
-> 
->> +
->> +       return 0;
->> +}
->> +
->>  static int __init early_console_setup(struct earlycon_device *device,
->>                                       int type)
->>  {
->> @@ -3562,6 +3588,8 @@ static int __init early_console_setup(struct earlycon_device *device,
->>                        SCSCR_RE | SCSCR_TE | port_cfg.scscr);
->>
->>         device->con->write = serial_console_write;
->> +       device->con->exit = early_console_exit;
->> +
->>         return 0;
->>  }
->>  static int __init sci_early_console_setup(struct earlycon_device *device,
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-> 
 
