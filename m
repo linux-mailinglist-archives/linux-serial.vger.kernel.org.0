@@ -1,106 +1,186 @@
-Return-Path: <linux-serial+bounces-6972-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6974-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id E491F9E1B51
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 12:52:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1A169E1C14
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 13:24:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 97FA4B6563B
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 11:18:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6E00A280F5C
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 12:24:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9896A1E47A6;
-	Tue,  3 Dec 2024 11:17:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD161E5727;
+	Tue,  3 Dec 2024 12:24:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aBQGDoGF"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="PgY5nn9U"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-oo1-f49.google.com (mail-oo1-f49.google.com [209.85.161.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pv50p00im-hyfv10011601.me.com (pv50p00im-hyfv10011601.me.com [17.58.6.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C10021E3787
-	for <linux-serial@vger.kernel.org>; Tue,  3 Dec 2024 11:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B32E01E5005
+	for <linux-serial@vger.kernel.org>; Tue,  3 Dec 2024 12:24:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733224665; cv=none; b=sbVbw7pHNyvNGqfBsqqvdrrtCnIiSPOE3DLvAhMc1l3fHlBe2zB4gvJKMWfxjG1PnuZRMmlPVV/GZCOY9ocYileDknJgPVSDwtYQxn8ip0YV2QETCjTAF54CybxptFxaeLJknZzUlWyNybpyuqvF8ZtDftZuO1G/ko+8+lT7mek=
+	t=1733228657; cv=none; b=Ep3l9po4gL80rMZfiPDaaeer0BvnUiGvPsjJ0Iv1oZ+rkdRiYu8baMivpw7nujHNI5fpH1F2Ebo9Fh9P0gn5Z6inXqssAeWRqoxWS7q0dOeoSjIceG20MF7PYr4hn3pnHs3574eeii5lV5+bde+rUg53m1kquy0vcGfCuxA7TaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733224665; c=relaxed/simple;
-	bh=GL/bQ5r6c9bWsrmtuXgNYYRcGjeSMv6UWL57z9PNotc=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=IvBYUHI6wsEY0bD1ImAfrA+j+OmA2WySj1jQMM2MgnsbGesmNMau87uvJ2lcEBAF0UYz1p2UaTGgNxp/mQw2oth57Gzjo2xWlZMwhKKid0OogSyXFwvjAZLRC2ahVXRSbdd2Swi8N81BDBvNwN/ARMi1L47zwWCIkZiZl97o9Z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aBQGDoGF; arc=none smtp.client-ip=209.85.161.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-5ee8eaa1694so2333296eaf.0
-        for <linux-serial@vger.kernel.org>; Tue, 03 Dec 2024 03:17:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733224663; x=1733829463; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=sOHbFwHOJSjDxvHaRCi5M6vvE6Bu+ubhCYatqOP8Nfo=;
-        b=aBQGDoGFdF52rzSKdvvN5dE9udlRW5I7bxge3hG6eXzFjHtoWeD8+HhtYnq4yTuuU6
-         1Rt+wSTey+/QKfloc2zgiScydo+cYm6Kb5bIuDmKzBm1ZYTHBFlRPTrJNkg6Y1Ca0BHr
-         SsQGyPOg+l9jwf2mWvFahoCAx0XvftosrMuu1GokKS9dtSqS8gwYEw3yz7zxM4ilrZBy
-         YBeYjCr74ksS8xmkKv9EKmDg6MHWV3BvPsRt9ydvmEBoG2MQa39m94LwQFTlOvVyKKVv
-         gXFBvi6reaS5EpUBrGug6bzH/ugMSzmPZ/Jrol2G926wmZztw813KjBQc4+LX20AWi8z
-         a2Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733224663; x=1733829463;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sOHbFwHOJSjDxvHaRCi5M6vvE6Bu+ubhCYatqOP8Nfo=;
-        b=d6xPpTOTOZ6ZyqhtzVafi0f9PR8rV186LxDRevMbtdxQBtXdvKBdjdf2P24slEuO+E
-         wumXC3+kynAwYB440zsb0R18JJXbm25isnNm+lgEQgRkjVD590P17bkoiAsDR5xRSE0B
-         eBIHvhRWnZoKCM2T9kJg4kNimfI5emo7CeHZuLl68/3vmjCEmjoqNPAQPZqBsbr0WedF
-         1J0pQcSou5gA9+reugvU2bpQCm93wCHse6R1I9/s6mc/k4GmQFEF8zByYKhRRxSPLi3X
-         1JBGCqFvTkqKVcHyRapVh5BoFZ2YZ18jY8bL+3SxdCMPKQwuGswMiAo6uUDCEVzAzPQ9
-         L2CQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXLv7c/uFEibKIl9HD4UBUt4Hh92UZh9vTdC7nwRUVz5nq3tHHKkuI69ZiIV9LGj5CscS1/OLNtNlS8rTQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyPKNp1mXyni/NTjD1qR0IYTfLfI8nWcPjXlfNdS9wuVJhICY9N
-	fL/b/kWf6ndf+ITBxt/WI50wbucf06sIInjQeibK+rNeSsv1O642WdJJ1PzM3oBqGwNoZt0Egd9
-	qBtnmu2x9iViPTWlhALNsK0Io/NIHld6j
-X-Gm-Gg: ASbGncsKJodwqep+cwn+8BwY9+62v4tSmV0e1ERVFVczaiftefJoQQHuIksr7IvYdmQ
-	+8Pryp/ZGl+jIcitHc/imZDYx5N/qwOKwSQ==
-X-Google-Smtp-Source: AGHT+IElWcAa+7s/KWOEX3M6NEqSMZjVXetIBogY1FxjCwcQAPiylrbSx/A2sQjsTT5Xo4CHb9y1iXEmZUPWlry08aM=
-X-Received: by 2002:a05:6820:4c87:b0:5e1:ebf1:816d with SMTP id
- 006d021491bc7-5f25adf69c6mr1076836eaf.4.1733224662708; Tue, 03 Dec 2024
- 03:17:42 -0800 (PST)
+	s=arc-20240116; t=1733228657; c=relaxed/simple;
+	bh=mCIHbMTp8TXOIpl1+nubIptrAHWq3pU6doVeMEipNVc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=tevQA9ArlRT1+O9NrOf8zJqLVGPaq1sM83SqP0xlR2iQ1CiGjdoac6/k204JiQy6TSdCEQNahc/S5g3/RGng4PnwXoPxE6IIMc+Wr+RbhNuv3ZO6cF8qLjo70Qs90MXm8v1wMmT/8ViLx22RSYkSeRTJjoWoq0M10up3OzHRgkw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=PgY5nn9U; arc=none smtp.client-ip=17.58.6.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; t=1733228654;
+	bh=CgCScBX/+fgZ0roCuYsgonJhaxWB8rsl1yCC6V0WM+E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:
+	 x-icloud-hme;
+	b=PgY5nn9UjaNQNnW4ZpJ9WuRQx6im5psJe58NOrhuMYaP81TCjCoqg7OOKUTCf/GiQ
+	 U5NzWhh2P25K5ajpXMvRXYX0Q0QlkR8pgL3oTItbqVZutGKevLmlI66ZBGBcrDMdzZ
+	 tMmlV2WZ2o8x16WpoGlJ/JnV1zI3oqt06fGl4I8/qI7wYj0KQ1QQr5n3xLSgizk9fw
+	 TQ9xaKi2nZyOPqodk3YoZL2QcRqFeCLp3CsTqDDtllnMk1q4GHXKVq7SsECnBkg8jm
+	 H9mCDktUr1zn+c+7ek7cGPeMoLhQxufGfyCDPYAJQXskQd4pXIE2C7c2QiBSj9B4RB
+	 vRrMl0+rr+jVw==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-hyfv10011601.me.com (Postfix) with ESMTPSA id 675CEC8010E;
+	Tue,  3 Dec 2024 12:23:51 +0000 (UTC)
+Message-ID: <9d34bd6f-b120-428a-837b-5a5813e14618@icloud.com>
+Date: Tue, 3 Dec 2024 20:23:45 +0800
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: Muni Sekhar <munisekharrms@gmail.com>
-Date: Tue, 3 Dec 2024 16:47:31 +0530
-Message-ID: <CAHhAz+jqTxsMipLLnBvRAC8cyN=QhTe5sToh45FN=AyrZ9XnNQ@mail.gmail.com>
-Subject: Query Regarding UART Controller Device Driver in Linux Kernel
-To: kernelnewbies <kernelnewbies@kernelnewbies.org>, 
-	linux-serial <linux-serial@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 00/32] driver core: Constify API device_find_child()
+ and adapt for various existing usages
+To: =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>,
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Jean Delvare <jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>,
+ Martin Tuma <martin.tuma@digiteqautomotive.com>,
+ Mauro Carvalho Chehab <mchehab@kernel.org>,
+ Andreas Noever <andreas.noever@gmail.com>,
+ Michael Jamet <michael.jamet@intel.com>,
+ Mika Westerberg <mika.westerberg@linux.intel.com>,
+ Yehezkel Bernat <YehezkelShB@gmail.com>,
+ Linus Walleij <linus.walleij@linaro.org>, Bartosz Golaszewski
+ <brgl@bgdev.pl>, Andrew Lunn <andrew@lunn.ch>,
+ Vladimir Oltean <olteanv@gmail.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Dan Williams <dan.j.williams@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Ira Weiny <ira.weiny@intel.com>, Takashi Sakamoto <o-takashi@sakamocchi.jp>,
+ Jiri Slaby <jirislaby@kernel.org>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Lee Duncan <lduncan@suse.com>, Chris Leech <cleech@redhat.com>,
+ Mike Christie <michael.christie@oracle.com>,
+ "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nilesh Javali <njavali@marvell.com>,
+ Manish Rangankar <mrangankar@marvell.com>,
+ GR-QLogic-Storage-Upstream@marvell.com, Davidlohr Bueso <dave@stgolabs.net>,
+ Jonathan Cameron <jonathan.cameron@huawei.com>,
+ Alison Schofield <alison.schofield@intel.com>,
+ Andreas Larsson <andreas@gaisler.com>, Stuart Yoder <stuyoder@gmail.com>,
+ Laurentiu Tudor <laurentiu.tudor@nxp.com>, Jens Axboe <axboe@kernel.dk>,
+ Sudeep Holla <sudeep.holla@arm.com>,
+ Cristian Marussi <cristian.marussi@arm.com>, Ard Biesheuvel
+ <ardb@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Mathieu Poirier <mathieu.poirier@linaro.org>, linux-kernel@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, linux-mediatek@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-hwmon@vger.kernel.org,
+ linux-media@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-gpio@vger.kernel.org, netdev@vger.kernel.org,
+ linux-pwm@vger.kernel.org, nvdimm@lists.linux.dev,
+ linux1394-devel@lists.sourceforge.net, linux-serial@vger.kernel.org,
+ linux-sound@vger.kernel.org, open-iscsi@googlegroups.com,
+ linux-scsi@vger.kernel.org, linux-cxl@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-block@vger.kernel.org,
+ arm-scmi@vger.kernel.org, linux-efi@vger.kernel.org,
+ linux-remoteproc@vger.kernel.org, Zijun Hu <quic_zijuhu@quicinc.com>
+References: <20241203-const_dfc_done-v2-0-7436a98c497f@quicinc.com>
+ <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <g32cigmktmj4egkq2tof27el2yss4liccfxgebkgqvkil32mlb@e3ta4ezv7y4m>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: HfN3ugOwn0RD4lT0NgRrMbrQZDyUcr0J
+X-Proofpoint-ORIG-GUID: HfN3ugOwn0RD4lT0NgRrMbrQZDyUcr0J
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2024-12-03_01,2024-12-03_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 bulkscore=0 phishscore=0 suspectscore=0
+ clxscore=1015 adultscore=0 malwarescore=0 mlxlogscore=903 mlxscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2412030107
 
-Dear Linux Kernel Community,
+On 2024/12/3 20:00, Uwe Kleine-König wrote:
+> Hello,
+> 
+> On Tue, Dec 03, 2024 at 08:33:22AM +0800, Zijun Hu wrote:
+>> This patch series is to constify the following API:
+>> struct device *device_find_child(struct device *dev, void *data,
+>> 		int (*match)(struct device *dev, void *data));
+>> To :
+>> struct device *device_find_child(struct device *dev, const void *data,
+>> 				 device_match_t match);
+>> typedef int (*device_match_t)(struct device *dev, const void *data);
+> 
+> This series isn't bisectible. With only the first two patches applied I
+> hit:
 
-I hope this email finds you well. I need to work on the high speed
-UART controller driver in the Linux kernel, and I have a few questions
-that I would appreciate your guidance on:
+yes. such patch series needs to be merge as atomic way.
 
-I understand that the Linux kernel tree contains multiple source code
-files related to UART controller device drivers. Could you please
-point me to the relevant source code paths for these drivers?
+Hi Greg,
 
-What is the maximum supported UART baud rate in the current kernel
-driver's supports? For example, if the hardware supports high-speed
-baud rates (e.g., 12 Mbps), are there any specific design strategies
-or modifications needed in the driver to support such high speeds?
+is it possible to ONLY merge such patch series by atomic way into your
+driver-core tree?
 
-Are there any user-space utilities available for testing UART
-interfaces in Linux? If so, could you kindly share details on these
-utilities or provide any resources that would be useful for testing?
+or squash such patch series into a single patch ?
 
-Thank you for your time and support. I look forward to your response.
+various subsystem maintainers may not like squashing way.
 
+> 
+>   CC      drivers/pwm/core.o
+> drivers/pwm/core.c: In function ‘pwm_unexport_child’:
+> drivers/pwm/core.c:1292:55: error: passing argument 3 of ‘device_find_child’ from incompatible pointer type [-Wincompatible-pointer-types]
+>  1292 |         pwm_dev = device_find_child(pwmchip_dev, pwm, pwm_unexport_match);
+>       |                                                       ^~~~~~~~~~~~~~~~~~
+>       |                                                       |
+>       |                                                       int (*)(struct device *, void *)
+> In file included from include/linux/acpi.h:14,
+>                  from drivers/pwm/core.c:11:
+> include/linux/device.h:1085:49: note: expected ‘device_match_t’ {aka ‘int (*)(struct device *, const void *)’} but argument is of type ‘int (*)(struct device *, void *)’
+>  1085 |                                  device_match_t match);
+>       |                                  ~~~~~~~~~~~~~~~^~~~~
+> drivers/pwm/core.c: In function ‘pwm_class_get_state’:
+> drivers/pwm/core.c:1386:55: error: passing argument 3 of ‘device_find_child’ from incompatible pointer type [-Wincompatible-pointer-types]
+>  1386 |         pwm_dev = device_find_child(pwmchip_dev, pwm, pwm_unexport_match);
+>       |                                                       ^~~~~~~~~~~~~~~~~~
+>       |                                                       |
+>       |                                                       int (*)(struct device *, void *)
+> include/linux/device.h:1085:49: note: expected ‘device_match_t’ {aka ‘int (*)(struct device *, const void *)’} but argument is of type ‘int (*)(struct device *, void *)’
+>  1085 |                                  device_match_t match);
+>       |                                  ~~~~~~~~~~~~~~~^~~~~
+> make[5]: *** [scripts/Makefile.build:194: drivers/pwm/core.o] Error 1
+> make[4]: *** [scripts/Makefile.build:440: drivers/pwm] Error 2
+> make[3]: *** [scripts/Makefile.build:440: drivers] Error 2
+> make[2]: *** [Makefile:1989: .] Error 2
+> make[1]: *** [Makefile:372: __build_one_by_one] Error 2
+> make: *** [Makefile:251: __sub-make] Error 2
+> 
+> Best regards
+> Uwe
 
--- 
-Thanks,
-Sekhar
 
