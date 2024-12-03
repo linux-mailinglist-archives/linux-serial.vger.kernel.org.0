@@ -1,145 +1,174 @@
-Return-Path: <linux-serial+bounces-6991-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-6994-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 576A49E2808
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 17:49:46 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 362C89E2B7C
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 19:58:51 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D5A91673CC
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 16:49:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 05610B27714
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Dec 2024 17:26:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 511481F8ADB;
-	Tue,  3 Dec 2024 16:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492DE1FA251;
+	Tue,  3 Dec 2024 17:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Ach9vGgf"
+	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="Yzt3g+Ko";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IjnD02jP"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C6751F8927
-	for <linux-serial@vger.kernel.org>; Tue,  3 Dec 2024 16:49:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC8D1F4731
+	for <linux-serial@vger.kernel.org>; Tue,  3 Dec 2024 17:26:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733244583; cv=none; b=I/B7ydu20vkTzxIxKBLztU+vv4tj44H4W7+lZpMY/itvoIf8pDWs5hC17GsK9X6ZIOT7fOt4qqh4XcLo3JOKeYv4gfSLPMZK6KuvwROwK7XFjymQmBFAJULccyut+ifxoQEFZp2uCl1uUHOJO3hu7iNuoeoDr9xXqy5LvuTzOJM=
+	t=1733246769; cv=none; b=QEKTzSkM8R7yOWWj4X8dQza5F1RgP8EKyRNJS/bwYNumuYOT02Yp/CVuqtI/pvt86X+wfFhwF0XGXM/Hy+ObWSsKp0U6qNOxqkcGCYmE+kLbeKFL7w1F3yVrYhTq4neSnr+PMjL7s5DMeKRtfd2GaF9nMK6JbFhv2GHJ+klziH0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733244583; c=relaxed/simple;
-	bh=rP8WCl9KXwWdYzRKyzkCki01UNdVN/Fpb3/lyUZgLZI=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=VAhsnen8/bynINOOrCNm5HFY5f3vrAAFnhcvAF00y4viABIlGqToXugEUdJRXgkyvRY0fmfxFNfkqBLv9b8SXKEgDgH1DzBjUBm97keW5gH+0g416pVUugDUeN6vqevhR6ZIY4ppt0Zoh/dUoEyaWgwQzuRoWkrrIZjYRqs+Lac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Ach9vGgf; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-434a90fed23so48706495e9.1
-        for <linux-serial@vger.kernel.org>; Tue, 03 Dec 2024 08:49:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1733244578; x=1733849378; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q4VmWrSSj/7zXUbh+NYZqbK4S1QOexkNE0xeEkErR8w=;
-        b=Ach9vGgf/u6uxfR6dU2XDHlUC8GI+QM96hayjxlKOTD7SJvuzQgGp6zfP0Cf1gO1Dt
-         gny5FfOITvm9sd1j1RN60Vn/mmvQcgboLXJXp/C8hGYrn63mT1eDsdwVLAVLpsCF9i2Q
-         56hcK00o6/AX4JdwnrzZ3p9Pzw5lIl18ByuOyyA+h+yO7Cbm3OX325V3ZN1euVa429xu
-         vZmCrx7oClF9yZ/Hd1878GBCOFvRZ/8Wuz4Di+/iwObHAXwj11mZ8sUvRofr86kdO+kV
-         uKIhVMCCsY+OF4/TeETKT1ZY0OZx7KfqadALAPwkagEtSUPBnSZs5nOPK4f+1RoBZadB
-         uQxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733244578; x=1733849378;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q4VmWrSSj/7zXUbh+NYZqbK4S1QOexkNE0xeEkErR8w=;
-        b=pwfXL9kCnQd4GMO+Mp7dnIBvN1LTqn+6uRi0hbRJhQFvluUlyPi/k8Z6u5aMH8zmxh
-         SkB2gB+N1jpzASoj6ySCbaFwbZiP685HxsTs5mj1zvt0mgVhaPVQ9KPQx5t/X6c6NASt
-         2GwnE/VoZ+k48yJACh9ROxH8PtPy6ry8siKuf8gW0IzVHeuBus2LDw2uwKrjQvzPlCq3
-         dCPoAWZLfBtM/PWHPquVqbUQoX95T7xdgRfmw1JR9pvQlnO8GJuqFhWdyMhYpCdCsLg1
-         bhT4xemkbX4KwKC4hy+yjvEd5JAd1pfd0g3rwPXKdSypknloOzzd6HtY6sq3TUxtqzON
-         C8Kw==
-X-Gm-Message-State: AOJu0YzFpyfKukdwPZCiAn/QImllFigUYByIr/MX5cG90qShT8u54X4S
-	ZDXZzbyEor2ITU56ayCLC+cZ7MAIj2ozLBpfZgFTdWlYgjDsYYWccHDT73uQ6GQ=
-X-Gm-Gg: ASbGncs63HFZ/fp2bQYUUhX8/Fi3vlozH/ieyw9EthnVtMvK81lgOIgE5nVocBSMDvL
-	WNQBE+7loexEjkmTuyBXsN6IFCojfTJf6ANj0TobtdoEzf5r14KLWxySu4ZtW+vegO/UC+/gotN
-	z+CovDET419KbjtV9bXWjtv5/LuZamIl13pBd9MYvXigTdxBJOuhAVKTe5HcB2Kfrw7NxPZd+No
-	jxpNQcrvGllEQY9cf06zw6WAqjjNekFnqC44sQ+5JatL41j5Iqy4EBq7gw=
-X-Google-Smtp-Source: AGHT+IF8xk5YUKpQ2WS30TSsE/BDo+SYDlLam0pZbOL1ZMMuaAzGwoSuG1kxkRYwJbZKPJNXTkGqJg==
-X-Received: by 2002:a05:600c:3108:b0:434:a27c:b864 with SMTP id 5b1f17b1804b1-434d0a1cf53mr25519705e9.33.1733244578277;
-        Tue, 03 Dec 2024 08:49:38 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.161])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-434b0f70d91sm192897255e9.39.2024.12.03.08.49.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 03 Dec 2024 08:49:37 -0800 (PST)
-Message-ID: <1eebe854-9e33-43d8-b3be-abaa5b71cd18@tuxon.dev>
-Date: Tue, 3 Dec 2024 18:49:36 +0200
+	s=arc-20240116; t=1733246769; c=relaxed/simple;
+	bh=5cqMnt5tSlPEbv4ZRo2BggJ3NHur1JeeNTqPcOMC0bY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=r3okVqqFpqb1APW02ghWXqbd/Io7gou9ClgxdcKewtA8qBgbrOJm0mNtEPnxgOZ0Qd/W2C8UkJGUayXQNFgWM3r6lejlUKE7Be5cDLDFrrRObjdTcRbTmPnDXJTjtx9VLV2Bk6XeSRSVbxQqYmfSEUe+SRAlrV7+mlOoO69f7ao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=Yzt3g+Ko; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IjnD02jP; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 779EC11401A3;
+	Tue,  3 Dec 2024 12:26:03 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Tue, 03 Dec 2024 12:26:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1733246763;
+	 x=1733333163; bh=ROJTox0B7eQaiLR3bYiP8xk3zoH7S9KkMLPWuAF/gP4=; b=
+	Yzt3g+KopJX0wkffGOGn9Ft+TKaxtBPXqocx6tSXJSk3mxNwNsXKjZi3/0I0BxcH
+	x99rtFlKnqCHbKKckgsHDkMdnECKPfEQiXOOPNcsa9u3S+M19RbZPvEfYf93/wUh
+	oO8ic4zdR5Lw56U4uVlX8MJ/X0B9/BqPYQEgMiM9eZJkcXhDqdKSfwBrkqkVSHIx
+	7vDioAsG1m5YiPb/XptIR0v9n5Q5XQDV06iazRzOAgEwoLzhmQfSwM9mgYgTdqq2
+	pBn/KH5VlIcL41he9FJ9a6saJa90zmjEBsyQzoeb8bRQW5qFcCaZOvvqFJYEcG3x
+	hFZgDTp6G46O4a5FR9Varg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1733246763; x=
+	1733333163; bh=ROJTox0B7eQaiLR3bYiP8xk3zoH7S9KkMLPWuAF/gP4=; b=I
+	jnD02jPsecjkqdhVYDn+zc9MKQgDkh72WzNC3yQ6Dlh2jIlgEfiajJ5rIXyQ9iZp
+	TAAFNG0Uz+nfXN+H3CULgpJQfcBoZfifek1kO2IgeqXcNlkz8B73zHu1rGF9bKwF
+	hXsf5MDN2WDMeR8OejtaC2/qVIEOBUC4pFyNjYXGPKXefXb/f7GIXUSVbP/IVPEC
+	i6MssYUgzkWmlZ7EAmr/+VxmBxDKQ6+GEGJ9JUVHnnVSIuDRPQELvwmRWZMJ1km7
+	WI/5S0PQNq9wlS0uhcygjMYK0OHQKIGfsh08JvHby49kCvWACPY+o3hHhdrMDylH
+	s69yz0N5b4tcqmRr7wbdg==
+X-ME-Sender: <xms:Kz9PZ4ADpQiiDkoH2WZxQeSm1P8hcge8Hnb4Iw6iGH8T4o-bBM2MuA>
+    <xme:Kz9PZ6iZXXEdnk_Diq1OWzYzR9b83zI0chgfxcuZo_u6EORrI2uRnjmX3ITBrSeug
+    ivMQLDeOGkQEA>
+X-ME-Received: <xmr:Kz9PZ7m0J6sCvk1uGZh1vpPbZa-qlYDutQNN7zcSePvbIf7a5IJ6M2qTDXsJrkbIRLArL4xvLyV2R7uUYHY8jpv7K3ExI4qkxY6OHQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrieefgdejvdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuf
+    fkfhggtggugfgjsehtkeertddttdejnecuhfhrohhmpefirhgvghcumffjuceoghhrvghg
+    sehkrhhorghhrdgtohhmqeenucggtffrrghtthgvrhhnpedugeeuhfdvjeetlefhkeejue
+    ekleehieeuhfefieefieefvedvgfdugeekfeefueenucffohhmrghinhepghhithhhuhgs
+    rdgtohhmnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeeipdhmohguvgepshhm
+    thhpohhuthdprhgtphhtthhopehmuhhnihhsvghkhhgrrhhrmhhssehgmhgrihhlrdgtoh
+    hmpdhrtghpthhtohepkhgvrhhnvghlnhgvfigsihgvsheskhgvrhhnvghlnhgvfigsihgv
+    shdrohhrghdprhgtphhtthhopehlihhnuhigqdhsvghrihgrlhesvhhgvghrrdhkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:Kz9PZ-yUtdndigc94U6z7B3KZtysXA7EUONP7pTPI0mS-_g-bxnjMg>
+    <xmx:Kz9PZ9Q08APUpaYWrHodVrFv_TTDH7sTGm_NUkpH4kX3mhIM5pnkHg>
+    <xmx:Kz9PZ5aSE4mayqBe4K0x5ejPOYRgBA5Zze30EzDkS81SeowFUWs7pg>
+    <xmx:Kz9PZ2S_7ZvPhCNS9mh_K6MA6eUrREKRuKgkkRbeXfjGxOsvpo2rMg>
+    <xmx:Kz9PZ8FIWr3y7o5-UMCcojw0PylgaK4nAxZdYc-bRuI1dMQMZuthWX5b>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 3 Dec 2024 12:26:02 -0500 (EST)
+Date: Tue, 3 Dec 2024 18:26:00 +0100
+From: Greg KH <greg@kroah.com>
+To: Muni Sekhar <munisekharrms@gmail.com>
+Cc: kernelnewbies <kernelnewbies@kernelnewbies.org>,
+	linux-serial <linux-serial@vger.kernel.org>
+Subject: Re: Query Regarding UART Controller Device Driver in Linux Kernel
+Message-ID: <2024120311-omit-camcorder-e8c0@gregkh>
+References: <CAHhAz+jqTxsMipLLnBvRAC8cyN=QhTe5sToh45FN=AyrZ9XnNQ@mail.gmail.com>
+ <2024120338-atrocious-policy-1ce0@gregkh>
+ <CAHhAz+jk5dzBJfEoWYWAf=UKE-43s=qARFX3MkqmMgEAD8zcXg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] serial: sh-sci: Use plain struct copy in
- early_console_setup()
-Content-Language: en-US
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Jiri Slaby <jirislaby@kernel.org>,
- Wolfram Sang <wsa+renesas@sang-engineering.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Cc: linux-serial@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-sh@vger.kernel.org
-References: <e097e5c11afe5bd4c01135779c9a40e707ef6374.1733243287.git.geert+renesas@glider.be>
- <b71bb27e-003f-4b5d-8654-c7639b105e29@tuxon.dev>
-In-Reply-To: <b71bb27e-003f-4b5d-8654-c7639b105e29@tuxon.dev>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHhAz+jk5dzBJfEoWYWAf=UKE-43s=qARFX3MkqmMgEAD8zcXg@mail.gmail.com>
 
+On Tue, Dec 03, 2024 at 10:38:30PM +0530, Muni Sekhar wrote:
+> On Tue, Dec 3, 2024 at 7:26 PM Greg KH <greg@kroah.com> wrote:
+> >
+> > On Tue, Dec 03, 2024 at 04:47:31PM +0530, Muni Sekhar wrote:
+> > > Dear Linux Kernel Community,
+> > >
+> > > I hope this email finds you well. I need to work on the high speed
+> > > UART controller driver in the Linux kernel, and I have a few questions
+> > > that I would appreciate your guidance on:
+> > >
+> > > I understand that the Linux kernel tree contains multiple source code
+> > > files related to UART controller device drivers. Could you please
+> > > point me to the relevant source code paths for these drivers?
+> >
+> > Where have you looked that you did not find them?  (hint,
+> > drivers/tty/serial is where they are located...)
+> >
+> > > What is the maximum supported UART baud rate in the current kernel
+> > > driver's supports? For example, if the hardware supports high-speed
+> > > baud rates (e.g., 12 Mbps), are there any specific design strategies
+> > > or modifications needed in the driver to support such high speeds?
+> >
+> > Many different uarts support different high-speed rates, it depends on
+> > the hardware.  And yes, there are different ways of going that fast, but
+> > again, it depends on the hardware.
+> >
+> > What exact hardware type are you working with?  Does it not already work
+> > properly with Linux?
+> The hardware I am working with is Xilinx based UART controller with
+> DMA capability.
+> Can you provide examples of hardware platforms or available UART
+> controller drivers that support speeds up to 12 Mbps or higher? What
+> specific modifications or configurations are required in the driver to
+> enable such high baud rates?
 
+I would suggest reading some UART datasheets for this type of
+information.  Start with the one that you have now, that's the best way
+to test things.
 
-On 03.12.2024 18:45, Claudiu Beznea wrote:
-> Hi, Geert,
-> 
-> On 03.12.2024 18:30, Geert Uytterhoeven wrote:
->> Using memcpy() prevents the compiler from doing any checking on the
->> types of the passed pointer parameters.  Copy the structure using struct
->> assignment instead, to increase type-safety.
->>
->> No change in generated code on all relevant architectures
->> (arm/arm64/riscv/sh).
->>
->> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> 
-> Not sure, do you think it should carry a fixes tag?
-> 
->> ---
->>  drivers/tty/serial/sh-sci.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
->> index df523c7444230836..1ed13ce2c2952547 100644
->> --- a/drivers/tty/serial/sh-sci.c
->> +++ b/drivers/tty/serial/sh-sci.c
->> @@ -3542,7 +3542,7 @@ static int __init early_console_setup(struct earlycon_device *device,
->>  		return -ENODEV;
->>  
->>  	device->port.type = type;
->> -	memcpy(&sci_ports[0].port, &device->port, sizeof(struct uart_port));
->> +	sci_ports[0].port = device->port;
-> 
-> I'm currently preparing my fixes around this code. I think I should rebase
+> > > Are there any user-space utilities available for testing UART
+> > > interfaces in Linux? If so, could you kindly share details on these
+> > > utilities or provide any resources that would be useful for testing?
+> >
+> > There are loads of them, but it depends on what you want to test.  What
+> > exactly are you wishing to test/validate?
+> I am looking for test utilities to stress-test high-speed data
+> transfers between two systems over UART, checking for correct
+> reception of a large data payload. It includes,  transferring data at
+> a high baud rate, and verifying its integrity at the receiving end.
+> Could you clarify which utilities are commonly used for testing UART
+> interfaces at different levels (e.g., performance, stability, data
+> integrity, error checking)? Are there any specific utilities or
+> resources you would recommend for testing high-speed UARTs?
 
-s/I think/I'm not sure if/g
+You can search as well as I can, but here's something that came up
+pretty easily:
+	https://github.com/cbrake/linux-serial-test
 
-> on top of your patch :)
-> 
-> 
-> Thank you,
-> Claudiu
-> 
->>  	port_cfg.type = type;
->>  	sci_ports[0].cfg = &port_cfg;
->>  	sci_ports[0].params = sci_probe_regmap(&port_cfg);
+There are many many many other serial port programs, ideally you would
+test the hardware with what you expect to use that hardware for, so why
+not just use that software instead of something else?
+
+good luck!
+
+greg k-h
 
