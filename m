@@ -1,46 +1,46 @@
-Return-Path: <linux-serial+bounces-7045-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7046-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC58B9E49E2
-	for <lists+linux-serial@lfdr.de>; Thu,  5 Dec 2024 00:47:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A18DA9E49EE
+	for <lists+linux-serial@lfdr.de>; Thu,  5 Dec 2024 00:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F312188242F
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 23:45:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2AF1165E5B
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 23:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B64120C474;
-	Wed,  4 Dec 2024 23:34:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58E2D212B2E;
+	Wed,  4 Dec 2024 23:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NvgoqObL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RbsB5HLg"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7D97206F1E;
-	Wed,  4 Dec 2024 23:34:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CDC3212B1A;
+	Wed,  4 Dec 2024 23:35:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355298; cv=none; b=KZk1bqd6dYpN5JyO8MtbarKs9/wv9omSrYFSa2meNPlcxkqW/Kq0ZmjLHv2pgg4tckyi7vXwaAE8O6UBHqpjWeoTEXrXLokie6yv0qqCpBs8sARkJsNjlk1uwX1NAXt/LCa9+fcXKeBves+2CT5fNn1qN4Uut8iw0KaBfCbrPxw=
+	t=1733355329; cv=none; b=dIjEZopfUEGcFB7lB3eUiCr7E5R9JZk7Uq9IMiG7CRP22UckETyu5vonwrwmODW/7a2taBbpTedvowieYcC0ifgfrsBWbSbYDFeki1f6q0L8WhcAFOVe/2nyUpApLB0S7clgIWROMFlzIYbgrd1+cncpP8/9WQXj6cvw301IJTM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355298; c=relaxed/simple;
+	s=arc-20240116; t=1733355329; c=relaxed/simple;
 	bh=nXLeo5Lvnrbx7/XuHNCN/7+mLimUxnLn37cF4/DCK+w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=in6raeRMuPh/gXGICpy40U7P34P+RpwIyKUNF64T4izptxFdEK7tnzwWGd/vOwyHLhDgNXDROWyrCww0vVWK8vm6l1rGx1c4O/rbaWYDZrE/TXF2C4edQtJo2JEZ1+3+AtTcRGsqB7IvF4tUZuZcPD1mFgojxak3f6UjMAXo6j4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NvgoqObL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EEDFC2BCB9;
-	Wed,  4 Dec 2024 23:34:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=lISbSy6+uvUz4HGYVWSJ2n9dWRqjZ/2dE4x4Ycq2xysPf2d8BorLG5jQCuAmZcYAiNOjF8jYJ6ccPqcwpvKBXF8dBY/T865oGj2C07czRYWi4PXFOHw0DE6DY7UpFIdKVR/y0TxmfbSrHNvE+38Y3mCS8JBjahhE2yRWwMoCKFQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RbsB5HLg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AA2CC4CED6;
+	Wed,  4 Dec 2024 23:35:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355297;
+	s=k20201202; t=1733355325;
 	bh=nXLeo5Lvnrbx7/XuHNCN/7+mLimUxnLn37cF4/DCK+w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NvgoqObLuo9O8cc6G0fbvmUKaoMyTAEbNA4R0BXBMI91LTm7oyMU14u1luC7OubLz
-	 lvaKl9dmJwgBKxfhLjWGO3NMYrqwAduK4fW5B2wgh1Cv8gaTocpg83V9qTTGA6YQht
-	 N4NBGtRMeukhf9RKVSuX2YwsEhffz0aZGgSXfE77kQt4cC6WqrlSXjfr3Dm6teR/c4
-	 lJ0hVLtAn3ERQGpGTYcv0asdFo+RoaZMoj51FLRUPnR3NKFFzsOkl5J1pjMTruEUuc
-	 cBB3P9LjuiA450yzI+EBy8ms1u+hH3npcvZMWQYty1iKtHQ1J+cQQx3I4nuKEY/OWZ
-	 8S6wgVgfdKeEA==
+	b=RbsB5HLgEGQG7gxSo+AyRbgY9PEvgVNMo9qYhNnGdHPsHcz6ajWwmFcp0PSeLwttA
+	 wJxS02SNKCbj7on0MLgQjic/VKC0gcR01qYCwKCn+j+fZQ+LU1EoALvwYrnOGac1Q8
+	 9oa1p8l13ubHV4TDL/RHGS5bHiFUQqV5emUHtWsqzjQbzONINRgazj496HZy5m8I15
+	 DmISXK4EvwFXuEk1cjjGA4BCXdzLDu4SdVwk2zyU/IpxNQSrZET1qnGPiPDz817bkz
+	 edwoesKyBp+D0S/9BpK6wa/ju0XDjL6oqhCz/tBZCq92wk0T2ztGCLTGAPt/eULXQW
+	 rUhBVYRRs4jbw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -53,12 +53,12 @@ Cc: Inochi Amaoto <inochiama@gmail.com>,
 	unicorn_wang@outlook.com,
 	inochiama@outlook.com,
 	linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 3/8] serial: 8250_dw: Add Sophgo SG2044 quirk
-Date: Wed,  4 Dec 2024 17:23:19 -0500
-Message-ID: <20241204222334.2249307-3-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 3/7] serial: 8250_dw: Add Sophgo SG2044 quirk
+Date: Wed,  4 Dec 2024 17:23:45 -0500
+Message-ID: <20241204222402.2249702-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204222334.2249307-1-sashal@kernel.org>
-References: <20241204222334.2249307-1-sashal@kernel.org>
+In-Reply-To: <20241204222402.2249702-1-sashal@kernel.org>
+References: <20241204222402.2249702-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -68,7 +68,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Inochi Amaoto <inochiama@gmail.com>
