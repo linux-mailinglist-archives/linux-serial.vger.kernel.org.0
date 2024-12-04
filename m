@@ -1,170 +1,129 @@
-Return-Path: <linux-serial+bounces-7037-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7035-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 947159E4647
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 22:09:40 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 918849E4664
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 22:14:58 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 61BC11653FC
-	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 21:09:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCC17B3EF2A
+	for <lists+linux-serial@lfdr.de>; Wed,  4 Dec 2024 19:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 458A118FDCE;
-	Wed,  4 Dec 2024 21:09:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27E521F03E1;
+	Wed,  4 Dec 2024 19:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nDA6qxJK"
+	dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b="pAAJrZ1N"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from sonic305-2.consmr.mail.bf2.yahoo.com (sonic305-2.consmr.mail.bf2.yahoo.com [74.6.133.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E97239186;
-	Wed,  4 Dec 2024 21:09:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A8681C3C04
+	for <linux-serial@vger.kernel.org>; Wed,  4 Dec 2024 19:48:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.6.133.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733346576; cv=none; b=YzV6rkf6wDpHH4bWe5WxyQuoy04Bkqvem2VeBH6pDBEsYoYWudQN7fsyncQRCvUbr5DcTPHHw4tFHkxNSn3Uc1Ey9PBUc+eTVgRutug8o6hoB119SPPqJojs+1zkxmHnjHqACml6n0kiXJN6rk8b0ORN4dlZsSWGVFEo0wRQ++0=
+	t=1733341692; cv=none; b=r7g3ZQX2Mz9SdKPeO6zxP9gNT2j/Y21qdkpLZjnmAinEBCWC8ETIq670f9qV4jzOCn72KSUYlDS+iFlZEZbX9XsYHt1OlHCjdAHwa1cg/nCcD24iY+nBW6P+gVVY91fLaxrz8i8ITRG8yQ2xXFDH5aQPuKL83KqusJrjmK1tZL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733346576; c=relaxed/simple;
-	bh=HHI/wqRTU9L/rEvPeavJZItBrYALNq95bjy91XNqUeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oglgZhHFnLVsVN+eWEu0gCujOt7VRlcy7pMrva21u+pbi3tDmMWCjNQLYF0jGRV4llU23WFRX0Flk2RM3nXEZXJ+lq3VY3kbXPCuVkxUxwJ2jViKgZQ7yXZTduVFczWuqksBh4YgKB1mcpE45xAr1pHGXwbTf6aSBAb3HhWuQDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nDA6qxJK; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-215b13e9ccbso1880255ad.0;
-        Wed, 04 Dec 2024 13:09:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1733346574; x=1733951374; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tsf1B3K8ObjY/a5OP+Q/g6OuaEcUeJnWqbbG4D5IXIk=;
-        b=nDA6qxJK1BvrXGTSqNffZEdcW6hn01Z1Ebznaz7GjFScVPv0ngdmR/h+JssIs8/ZMG
-         H2PkgryJ/L96HV8K5VPOI+NcvGaXK4kJXM0qFdHO6M5cSoe2vrqmX+dXGzYXDkhqOjnt
-         bDDFiDJGn+5tTvxE0naDDarFlQkQ77Yq5wsYBWsuvj47G6sScAAMTdm/8jXMJQbl37l7
-         cPMeX17EwArzhC/37ywgJTNe+h6RZ6EqsN1mVosEwFzKarPEyWWGztD0e0xp3gFpfQMU
-         XXSC0igICXH9tpkzqGVgAQIF8MjGR+9sfEs95uvOSsignuhrDlPzVmMYtz5McGXKoI7J
-         RW9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733346574; x=1733951374;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Tsf1B3K8ObjY/a5OP+Q/g6OuaEcUeJnWqbbG4D5IXIk=;
-        b=NbwSK3Y7VvgmD4bknpxoX4QqFTZ+jdYDYbcF3JIYy5jcSozGHtRXBYB0558ATQvXVn
-         4BRc0BTiPEwjos07SjUHx9yBRzRWxRDdzK5tlqzHdFmldTg0dn/B2ha4mbcIF2nOO88S
-         4S8SWg2HvIJaHeET4pz2A+9okVFrMR70XRqlwjj5MVPhsBp2woiC4xo0vIpR4UaKxyKN
-         BBB7pI5lxsmCgSFsFe7JZUCIwA5v2QtWdnuqQAEr+ZZWjX8byBSIq1Wwzth0Ox/IQP3D
-         YgPKkg+qfsAeyHRCvFPcTEVy5DMMSgrjNsHKYdLFwAgQkDNTf4ntpRQSm8gooOK7WJP7
-         CEBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWZ84z8S7OnhBGpQ4vZaLU6jstRZ6o59GIKE/rQP1XtzQoF2yUPZnIbfamhvWtJFWTMD+VdhSP5KQ4d6rXn@vger.kernel.org, AJvYcCWzAIub2b7VFsytOgQ7HJHipVSpGLT3tgYqqlOnWeIh9+lFY6R/j1PrFDtGKZ50Wi1eEJQADLdlebgmYKQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3urysWXblajGWpKDW3Cw197ozq2ajWiEWrQhl+ycGXMhwx5BY
-	PbWToAiNXieioipg5atvdw5nnMXlYcisBsdFDD54W2LT+8NgETTW
-X-Gm-Gg: ASbGncvsnBfzlJThIL7iIUqTas9ywyE1QQ6r14rJoER4mIf87nCHZHdBewoKfLDxx3b
-	x1wQ1pYPvetCHQf0h/VG5nExUAc9mmO2ISm+CrwsziQbS4w8+H+tKfKeovh5bUsKruRu9XTt/aN
-	tPQN5HeFO9lSOYsfNI73mRWLXNK0owB79CZae2ekwSpLge/BpsDBFX3t9vkfLAPMI5IxsoSQPw5
-	DMshFPjOtSU+N4ACcRj3kZBvLwF6nxj+HjLx94uhvUHkGapNFvra7sx7FeXYjU=
-X-Google-Smtp-Source: AGHT+IFHRgetdKevJTYyy/QsuL15/GmOobjg42+ncAiF25wWk/D6c0K0tdZrVedyWkkiLHUVvD/5nw==
-X-Received: by 2002:a17:902:e5ca:b0:215:9f5a:a236 with SMTP id d9443c01a7336-215bcfbcebbmr108086945ad.6.1733346573729;
-        Wed, 04 Dec 2024 13:09:33 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2152191ba31sm116833625ad.110.2024.12.04.13.09.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 04 Dec 2024 13:09:32 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 4 Dec 2024 13:09:31 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	linux-serial@vger.kernel.org, Heiko Carstens <hca@linux.ibm.com>,
-	linux-kernel@vger.kernel.org,
-	Yang Yingliang <yangyingliang@huawei.com>
-Subject: Re: [PATCH 1/1] tty: serial: handle HAS_IOPORT dependencies
-Message-ID: <4446d7dc-efb0-4395-8fcb-7177d9e07b5c@roeck-us.net>
-References: <38bf3b8b-81c4-42c9-902d-b5719f3881c5@roeck-us.net>
- <3b75b92805648577ed05ff221d0c56e381aa1c7c.camel@linux.ibm.com>
- <472eb22a-dcb1-4fbb-bf2c-a4173706bc7a@app.fastmail.com>
- <27685942-fb62-44c5-86ed-98beb547ffed@roeck-us.net>
- <744920ba-551c-466b-ac5c-2607b81261a0@app.fastmail.com>
- <Z0QtZky8Sr7qUW7v@smile.fi.intel.com>
- <00f5e842-3ee9-4d83-8836-0ff4f703fa3c@app.fastmail.com>
- <Z0RSZ-YD_BozMs1n@smile.fi.intel.com>
- <be43108e-4135-4927-ba58-141836fde6af@app.fastmail.com>
- <30a38025-afae-4bdf-a468-21ae2cd5a7b3@app.fastmail.com>
+	s=arc-20240116; t=1733341692; c=relaxed/simple;
+	bh=K0wcnXLcZ/RtqU+ivOA6ood/1YWbzuCuZIIkq/uqnlk=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Er2nmA6/0ByZ2VPcUmpguNOdgQTufgJrWefv+WiHHkbvGk7YoJZitsH11qFkhkMCNuBRUxDJ10Bmw6Jio5fCRJP3Obiy7RxKU1/q3oQyAsbB8H8j3QJ11o6iWKIkygpvp35BQxUhiRAEbz2DZ+6KNy2iVvNUhq8HLrW596SfmMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net; spf=pass smtp.mailfrom=verizon.net; dkim=pass (2048-bit key) header.d=verizon.net header.i=@verizon.net header.b=pAAJrZ1N; arc=none smtp.client-ip=74.6.133.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=verizon.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=verizon.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=verizon.net; s=a2048; t=1733341686; bh=mYbA5vc0s8RXvK4HptomEuPbET34RtMCpXkIm36hcVA=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=pAAJrZ1ND1pNRiAXMERonizcRRE15cSim2jOeErf9hm0GTsbchckuqROL2HPnSVOykPi+IvxVxHWlDLToHS2hIePlumnS0DegbcF77YUFUvUoCjIdlDtawvp87nvud42WVBraG50EJLBlDahV5FDTxXie7da3tahnLl6toimjs+wo11JqtgmSsxx493ypmsf1xOLqkhiC1lFrhDtl2nJiPpWURIXNiy+wpfLvQZDSjsbIwQF9UNTyD8YkIWHSt5kjDD2YZ7Arc44hPb37btKtZ/FDPgUwTFDb7b6ccryl9kNduxXbWgpC+LOEj4UmZw55TagxbAM9Bsq0rCj1SIRnw==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1733341686; bh=MdszAzdl/nbpC7Wm81EL5h0FpAdQQI1UYHYCwYS6X6N=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=kJ1/EFGDTd/Vy4FOrj6XxhdpDq/jmGxRdF1HZxdNDZs+CKLQqbweoVL8tRGJeNoSXIllG4O/sBzL8zp4FbL0FNmVDoa/f2KgYDaan3mAdv9KmB8XePcNUqPEAKQ4efWoDTgT64fxgRvp3MeAMok2bqBPRF+6BJxrzRXsecT7dNvBBDAZ/Ik6SB3XvxALGfi1Gfp4+/ZRJTFy9RgUKQsn1mXpASked93ScyuPu0ILNpJG7oky6kAWB+kZGmzEh5LFX6zfo7in6fTm5U3I5miep2s4MyKCO6amhVJHZxwl9Q4GjpFOqp0ARRS3WHRpXWROzGf2bFXeukB3DUOT5tg0Ow==
+X-YMail-OSG: fvlMYtAVM1lIxQN4lY5k_6afP1vDxCLoa6W4oReg2WvVjjiGK7SXqF.B1JeI7c5
+ VSH49IfJG0SY5xThI4BZ_AEoz8BXraouHLe7VhWN2zl66nC3LlnnY6QG9yBtvzVUT5kyHGka9_FB
+ wdXjvjunlopf1JeYiGWShXTssCZGgHD2czVbx8pvPz_M3j7Vf34HZf4eX2z7Vt7isSoJc_HKMEui
+ DhcoIFYT938b_ftkoFryMgqdygAzhijIm4Xk3WoaytzXhRFEADJjP5s8v.T0ko_KjVXDLbhYV3K_
+ t42tDqEorpDIF20hLind0y7lelJAAyyAdzhygplj2DHiuuGWc9Q2BfWmh4QKIgg0KQ06OGCnBzm9
+ aC9Ld4qtTXOpb3IpZZgA7Vkgph4VdlriXN8r3ikCrs0L5NcclWaRiyzS6EuXjW3F_i_NAqgYD8b7
+ tYM25eN60kz_hHVMkjUMcB5KCZzot7OAl4ijjcNv0iybzrU8s0J5urqAoSBZ30yF738oMQRPpGl1
+ M96s5QlChYAxJDlEGjEHZ3EKhk1OHEIWhcM7xtB0EEVvdqEHCwRTw.R62oOtS8Qj7f_7msOHPD33
+ dVI6t0IcUINH_W7FU0vgN1pJbz1XNBsWyzo0WuFEg92i4iy3wyXGIZEAyuSDISYQIl8VlUoGyOFO
+ Ks1QeuWr1st3MDzDC0msHNLwlxMVIddW4GtecmpGzajFpTUT_YV6y0aCN6zPnY1Q5SFPaScFKKiQ
+ zGn1mbGRIZXjyCQwQJwVG0E9BPU6muumM9yZIPr3yZS_oPBf4k.9RcOZ5Av_k0A67RBqCJZjeRGJ
+ IfwFIAAYVKhVrTK37ugASZ4.Khpu7aXd7iduYxz5FqBRKYqP6..w.g1jROqXF5VXjwiwlajv05B4
+ hTMNhkG2_MBDt3NBWmV.Esidf_knJ4t27zL_1crFmE1O.o.VJgBdhXa9smap7uVHDlFi.sz7oz..
+ MRfvMsi824dWI4kR6oyfUB6QMiaGMi2gdeQOm8KWdHrRJ.IZ5_rU1PH5C4BJm4f.F.Plb.172OBt
+ zGCyMkQ0uCtpdKP5rOZ8Aw2bmbTUT0GfAUkOwP.PY59bHSKAPjW5dnBfwkhdvEva.rEl2PTAqcXL
+ p6rlwFWO1r2Rz8bdzNXL2KYnGkSqWYf_nr40tZ.pb0OTUBl9xnEjw9JddMj5NR26j7A8t9tHZvdo
+ FCCP2zMuL.0IzINHB1M9_P7O9anxo0m1ZcChwlzeQET.toIxVL5iIDJQ5PrD6zZmQNu0p2aoUYEP
+ lxaQx9MaRT0lqaalAFjWkARU2CSWt1VkUYi0uWX64SUquiiPjOC6kqF3yzWf7pqPWYJlCFiphBRJ
+ BgJxhdKxtKwEmW_HPTiM9gG1aHwW2YIVe1ZsmqJfGaTZhbFa5qiP9PDSo7H8nhrGZrAQ2_NO5aCW
+ 5i0ULLIGebZoJPMlIDhRrLwlDn_wObePAOR.flEkIFNwwL00FmoroZnUCXZPAKspcAJcWhNuU_GS
+ TodrV7vXS0NxpxtQxoFQboMniOzHiRBFR78mC66ZIAFV6q48E4pXfp8.B8v772nsyRssGZRuuJUM
+ 4AyoY9Jvm1oZJ8LZeKb12uB1Asz64a1d88piKLJgoCqneOQClOMRvOlw24n7s8Fpwk5X7q6tvfNz
+ _3w9n_Dk1ooo0cQuAR_L0BRU485lyDhqCmLG14U9w7BZw_onUipKmQVU.qY66LkfX29Kj8YkbcJB
+ DU0F4HQLnxxhE95nHvpUJQJK3MiaTR_g6EDbqBpwE2WyDesF.DtG10XgeXcdPfkwLaPmJTkaTL6B
+ aDQxsmnzbdsW8x7Z1PTOl800bjM35mimGNtc3.VSguakCFcr6AQUXUMyvVQnGA8qkp1NZZyKwUyj
+ l6Gc7w0RmrqjetzErm3FleWc4Bo6me_3JAMWIZpYQBzOrRTwrj6hmpDdkGs1.tRQqqSMaX3Mg0uo
+ QbHnmBDyPc3pzld_8chi9e744prFrrSXVWngWrrXpYepxwUXrovF.0A9I9F2M8BILWO0V_NiOq4x
+ qQ.BX7PjUmJOZG624JSJDa0I_BAgnGtZ9YteJM933bWITw9mWfmtNvtYeqTJxyhZU9ds2CEbl1mA
+ BXfZg6ujjAfPEW6fa5wiIdS3bFKTLys6ytqChdc6XtqQ447ejNVKvcLl7sAWfZK7N1emHFJaEWSG
+ 6m7Ch01_aWjEUIzOyPFbDGx9RK30yTbWdVLK013g4BfIHr4fEPrC9py2q3.7S_jW3w.t0B8yaF0I
+ poGTGrWHyZcHO2PGjt0sJBu5aSvW5rI23OCGMs_MViV4EZop2OXGNmLFRkFRfMqY-
+X-Sonic-MF: <bluescreen_avenger@verizon.net>
+X-Sonic-ID: b98b651c-f1cd-48ec-860b-add473fb1d46
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic305.consmr.mail.bf2.yahoo.com with HTTP; Wed, 4 Dec 2024 19:48:06 +0000
+Received: by hermes--production-bf1-66bb576cbb-q5j52 (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 5adf508ed2686e3ad514bc3ba5d7462d;
+          Wed, 04 Dec 2024 19:37:56 +0000 (UTC)
+From: n3rdopolis <bluescreen_avenger@verizon.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH 1/2] ttynull: Add an option to allow ttynull to be used as a
+ console device
+Date: Wed, 04 Dec 2024 14:37:55 -0500
+Message-ID: <6622246.K2JlShyGXD@nerdopolis2>
+In-Reply-To: <2024120408-moneyless-stood-cda2@gregkh>
+References: <20241129041549.778959-1-bluescreen_avenger@verizon.net>
+ <1791540.X513TT2pbd@nerdopolis2> <2024120408-moneyless-stood-cda2@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <30a38025-afae-4bdf-a468-21ae2cd5a7b3@app.fastmail.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Mailer: WebService/1.1.22941 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.aol
 
-On Mon, Nov 25, 2024 at 04:59:00PM +0100, Arnd Bergmann wrote:
-> On Mon, Nov 25, 2024, at 12:06, Arnd Bergmann wrote:
-> > +unsigned int nr_uarts = ARRAY_SIZE(old_serial_port);;
-> > +
+On Wednesday, December 4, 2024 1:06:50 PM EST Greg Kroah-Hartman wrote:
+> On Wed, Dec 04, 2024 at 12:06:56PM -0500, n3rdopolis wrote:
+> > On Wednesday, December 4, 2024 10:41:44 AM EST Greg Kroah-Hartman wrote:
+> > > On Thu, Nov 28, 2024 at 11:15:48PM -0500, n3rdopolis wrote:
+> > > > Add a config option CONFIG_NULL_TTY_CONSOLE that will have ttynull be
+> > > > initialized by console_initcall() and selected as a possible console
+> > > > device.
+> > > > Signed-off-by: n3rdopolis <bluescreen_avenger@verizon.net>
+> > > 
+> > > Meta-comments, we need a blank line before the s-o-b line, AND we need a
+> > > real name here, sorry.  I can't do anything with these (including
+> > > reviewing them), until that happens.
+> > > 
+> > Oh, I thought that I didn't need a real name
+> > 
+> > I found a recent thread that seems like it suggests that I thought
+> > https://lore.kernel.org/all/20241121165806.476008-40-alex.bennee@linaro.org/[1]
+> > https://drewdevault.com/2023/10/31/On-real-names.html[2]
+> > Or do I need to wait for that change to the guideline be merged?
 > 
-> Unfortunately, this breaks on non-x86 because of the check
-> added in 59cfc45f17d6 ("serial: 8250: Do nothing if nr_uarts=0").
+> That change has been merged a long time ago, but as far as I can tell,
+> this signed-off-by you used here does not meet this category.
 > 
-> I still think it's the right idea, but need to unwind further
-> to make this possible, and find a different fix for the bug
-> from that commit.
+Oh, what would it take to meet that category? I've been using this nick to
+contribute to other projects, and it matches my GitHub name, and FreeDesktop
+GitLab name
+
+Thanks
+> thanks,
+> 
+> greg k-h
 > 
 
-I decided to apply the patch below to my fixes branch. It doesn't change
-the code, it just gets rid of the warning backtrace.
 
-Guenter
 
----
-From 96c4d1ab237f4a418d17a66c114493273b87468a Mon Sep 17 00:00:00 2001
-From: Guenter Roeck <linux@roeck-us.net>
-Date: Wed, 4 Dec 2024 10:58:41 -0800
-Subject: [PATCH] tty: serial: Work around warning backtrace in
- serial8250_set_defaults
-
-Commit 7c7e6c8924e7 ("tty: serial: handle HAS_IOPORT dependencies")
-triggers warning backtraces on a number of platforms which don't support
-IO ports.
-
-WARNING: CPU: 0 PID: 0 at drivers/tty/serial/8250/8250_port.c:470 serial8250_set_defaults+0x148/0x1d8
-Unsupported UART type 0
-
-The problem is seen because serial8250_set_defaults() is called for
-all members of the serial8250_ports[] array even if that array is
-not initialized.
-
-Work around the problem by only displaying the warning if the port
-type is not 0 (UPIO_PORT) or if iobase is set for the port.
-
-Fixes: 7c7e6c8924e7 ("tty: serial: handle HAS_IOPORT dependencies")
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
----
- drivers/tty/serial/8250/8250_port.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 4d63d80e78a9..649e74e9b52f 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -467,7 +467,8 @@ static void set_io_from_upio(struct uart_port *p)
- 		break;
- #endif
- 	default:
--		WARN(1, "Unsupported UART type %x\n", p->iotype);
-+		WARN(p->iotype != UPIO_PORT || p->iobase,
-+		     "Unsupported UART type %x\n", p->iotype);
- 		p->serial_in = no_serial_in;
- 		p->serial_out = no_serial_out;
- 	}
--- 
-2.45.2
 
 
