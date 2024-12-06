@@ -1,348 +1,168 @@
-Return-Path: <linux-serial+bounces-7103-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7108-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EFA19E78F4
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Dec 2024 20:30:09 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1622E18829C2
-	for <lists+linux-serial@lfdr.de>; Fri,  6 Dec 2024 19:30:09 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 387EB20456E;
-	Fri,  6 Dec 2024 19:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VPd6gFcj"
-X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01CF79E797E
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Dec 2024 21:02:14 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ADC2203D51;
-	Fri,  6 Dec 2024 19:30:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1DD4287421
+	for <lists+linux-serial@lfdr.de>; Fri,  6 Dec 2024 20:02:12 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76B812135CE;
+	Fri,  6 Dec 2024 20:01:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="tmFKyt9/"
+X-Original-To: linux-serial@vger.kernel.org
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 913C61D6DBC;
+	Fri,  6 Dec 2024 20:01:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733513406; cv=none; b=TKzRBBeXN1rDOWMtRmv+izOIxt0yZApghbUR3BVClbnKecP9SNyCOramzEhgPxoDNLsCOjwSgPXTWrb0UgHPn5J5l+yl3AmgzTZiqINTxpRpIoYSwjGECVnphzQsblp3PSW4x3RmATQicB4/0Pkcp9EYGFCrb2cDP24lFKNrKKY=
+	t=1733515284; cv=none; b=CpNeeGa1lQswWj8E3XUHIJ2a/Ci1ZD/lX/nxD0xQ8biDJopZajqSNOVVxWNOSFPesbf1lXo730epaLUDZKt0AETqKD5RlyAq1ILLTMD01oPeDxLaWYNzfdHMAkVbW7e53AQOckAs0q4J9m/HpEItGmHdxIaI7fD1RebZeX0iigQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733513406; c=relaxed/simple;
-	bh=9VtPqJ3ixJqBOlJgjri8TnxU58OVb+Ya1hK3sseea/I=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=nQ+syJUGedKELbpgpjfCXXpPKSY5eQeviFN6NREsf7kYyugkwx+MVBK5EzyKL5Lyrse3ihP3YMDMRN+YKWj141Y4B4T2Ut4SBvyXKj46oR4erGuOJ2UqoxOG+cMo39/eieIx/Ex0O/Wt14KWXkKWxAyWBpkXlj11QfFvJwgJ+o0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VPd6gFcj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6AB31C4CED1;
-	Fri,  6 Dec 2024 19:30:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733513405;
-	bh=9VtPqJ3ixJqBOlJgjri8TnxU58OVb+Ya1hK3sseea/I=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=VPd6gFcjWDctDZIM4DDC3sjXGgpCeEp2SGu6iRX4MEiRRuy27vziTVI/YR2ZMO45f
-	 JHhh4Q1uJGXNC5muw4NwLJg7MbZetr7WwgvKUwHpiZrTFU6EQNMtBbjF1UM8DAEuoF
-	 fTBOszLRQ7RNqUGCjwpN+BSIeAAs11tNHmPStxyC/E1ieHih+Mf5/JugNXWPXeKV8X
-	 GO2kihnST2hVgIlmKTym8mAgzpKkRHaZLVVVEr2BzZAkURoVe6a6imS9k2q43UBQFT
-	 fVgRBnu5AXFpj2l7BbPmk2A0GIzGEh+VmSJi87hnb9pb7yxc5XJLEqvXrVGcz2rfwC
-	 RKGv3lE5BUuDg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5ED7CE7717B;
-	Fri,  6 Dec 2024 19:30:05 +0000 (UTC)
-From: Miroslav Ondra via B4 Relay <devnull+ondra.faster.cz@kernel.org>
-Date: Fri, 06 Dec 2024 20:30:03 +0100
-Subject: [PATCH v2] serial: amba-pl011: Fix RTS handling in RS485 mode
+	s=arc-20240116; t=1733515284; c=relaxed/simple;
+	bh=Nbyfn+1oYpcw+P1XPkh6jD6oqLO72wK92m4lABnV+GU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=qWK2WG0qJYeng5WdBFwr18xkra3iqeg+6lLMjlN9TApv/+OS5hXnJ3hYL8Ml3Z65FDj13ewbAab0YVJjDbBeJcT5WZ97Qp/7IApcYH4z1fkfY6JI7NEbVazkYBrZG6aWKTkKZX2eHPbTdkjYoE6hZiwoad6g9dHgUUcc3XkXa3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=tmFKyt9/; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1733515282; x=1765051282;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Nbyfn+1oYpcw+P1XPkh6jD6oqLO72wK92m4lABnV+GU=;
+  b=tmFKyt9/JRnsgbcF2LoA3rZYz4FS+YtOFfmYBRTgd8HvZAzgscHnIlBG
+   K13ICcN4ORBmvCH/DhfbHlpkoTqKndlZg1UzgGT0KPckB2UpJL3hk/Xnr
+   uq6lZqlQELIVujR3AjPSC6GsPe9ji+82o3i5P29FJfU4oiU0PlNZP1Q0a
+   dLDxpjbZH7GnwOyyRbo0OxbIlCVP/IDDqrUm+foh5vHVbFFNPqiV11M/r
+   bc8/nhsNh7pOl+5AsEa8XzRnxOHna5xKoM3rFz4w7JNbhL1Wn/U3yYpiN
+   E4WKQ7BMCDPp16KBRCy3/xfoBlU94BSv8MI0fnlJo6M5yrrWYhGhxYXAb
+   g==;
+X-CSE-ConnectionGUID: wHv5dacKTzaP3KMzdbJ8Aw==
+X-CSE-MsgGUID: 1NUJjekURzSRYGbtL23iQg==
+X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
+   d="scan'208";a="202686982"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 06 Dec 2024 13:01:21 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Fri, 6 Dec 2024 13:01:09 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Fri, 6 Dec 2024 13:01:09 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
+	<arnd@arndb.de>
+CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
+	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+	<linux-gpio@vger.kernel.org>, <linux-spi@vger.kernel.org>,
+	<linux-serial@vger.kernel.org>, Ryan Wanner <Ryan.Wanner@microchip.com>
+Subject: [PATCH v3 00/13] Add support for SAMA7D65
+Date: Fri, 6 Dec 2024 12:59:45 -0700
+Message-ID: <cover.1733505542.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241206-master-v2-1-02628dc036c9@faster.cz>
-X-B4-Tracking: v=1; b=H4sIALpQU2cC/zXMwQ6CMAzG8VchPTuzlgaDJ9/DcFigkx4Es5FFJ
- Xt356LHf/vlt0OUoBLh3OwQJGnUdSlBhwbG2S03MTqVBrLEiHgydxc3CaafvOWWPYplKONHEK/
- PCl2H0rPGbQ2v6ib8Xn8EtX8ioUFDncWemTpx7cXXx3F8w5Bz/gA1BKgNnAAAAA==
-X-Change-ID: 20241117-master-9df0434f1e04
-To: Russell King <linux@armlinux.org.uk>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, 
- Lino Sanfilippo <l.sanfilippo@kunbus.com>
-Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
- Miroslav Ondra <ondra@faster.cz>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1733513404; l=8545;
- i=ondra@faster.cz; s=20241119; h=from:subject:message-id;
- bh=zUbG+524WMk+txIM0uzH00Uwjez0DoZnVYi123HLrvU=;
- b=BHjqF6XuAROw2mv2gxdnGAtJVe0B6QcnYn9MoeTgA+XA43omni+6cfzeax87pnn7nqFDaA9j3
- K2RYEtgaACwCPGmOMmheJtk/EquEdtFmf9/V1+wPdlA5FUqGN8tcPVP
-X-Developer-Key: i=ondra@faster.cz; a=ed25519;
- pk=OgmjYvFJ0npSTnp6LOgY/siJeZ/6t3nOEs4jE9vm0Oc=
-X-Endpoint-Received: by B4 Relay for ondra@faster.cz/20241119 with
- auth_id=282
-X-Original-From: Miroslav Ondra <ondra@faster.cz>
-Reply-To: ondra@faster.cz
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Miroslav Ondra <ondra@faster.cz>
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Data loss on serial line was observed during communication through
-serial ports ttyAMA1 and ttyAMA2 interconnected via RS485 transcievers.
-Both ports are in one BCM2711 (Compute Module CM40) and they share
-the same interrupt line.
+This series adds support for the SAMA7D65 SoC.
 
-The problem is caused by long waiting for tx queue flush in the function
-pl011_rs485_tx_stop. Udelay or mdelay are used to wait.
-The function is called from the interrupt handler. If multiple devices
-share a single interrupt line, late processing of pending interrupts
-and data loss may occur. When operation of both devices are synchronous,
-collisions are quite often.
+V2 of this series [1].
 
-This rework is based on the method used in tty/serial/imx.c
-Use hrtimer instead of udelay and mdelay calls.
-Replace simple bool variable rs485_tx_started by 4-state variable
-rs485_tx_state.
+For the pinctrl and pit64 timers those will have DTB warnings due to
+those bindings not being in the .yaml format.
 
-Signed-off-by: Miroslav Ondra <ondra@faster.cz>
----
-Thanks Greg for the advice.
- 
----
-Changes in v2:
-- Reword commit message to explain the problem.
-- Link to v1: https://lore.kernel.org/r/20241123-master-v1-1-260194426ea3@faster.cz
----
- drivers/tty/serial/amba-pl011.c | 126 ++++++++++++++++++++++++++++++----------
- 1 file changed, 96 insertions(+), 30 deletions(-)
+Changes v1->v2:
+- V1 set was sent incorrectly as multiple seprate patches v2 took all
+  those patches and put them in 1 thread.
 
-diff --git a/drivers/tty/serial/amba-pl011.c b/drivers/tty/serial/amba-pl011.c
-index 69b7a3e1e418e200944b0b0429b6341d71ecff26..04212c823a91d5a343327292d8ffd95be1465473 100644
---- a/drivers/tty/serial/amba-pl011.c
-+++ b/drivers/tty/serial/amba-pl011.c
-@@ -248,6 +248,13 @@ struct pl011_dmatx_data {
- 	bool			queued;
- };
- 
-+enum pl011_rs485_tx_state {
-+	OFF,
-+	WAIT_AFTER_RTS,
-+	SEND,
-+	WAIT_AFTER_SEND,
-+};
-+
- /*
-  * We wrap our port structure around the generic uart_port.
-  */
-@@ -261,8 +268,10 @@ struct uart_amba_port {
- 	unsigned int		fifosize;	/* vendor-specific */
- 	unsigned int		fixed_baud;	/* vendor-set fixed baud rate */
- 	char			type[12];
--	bool			rs485_tx_started;
--	unsigned int		rs485_tx_drain_interval; /* usecs */
-+	ktime_t			rs485_tx_drain_interval; /* nano */
-+	enum pl011_rs485_tx_state	rs485_tx_state;
-+	struct hrtimer		trigger_start_tx;
-+	struct hrtimer		trigger_stop_tx;
- #ifdef CONFIG_DMA_ENGINE
- 	/* DMA stuff */
- 	unsigned int		dmacr;		/* dma control reg */
-@@ -1260,30 +1269,31 @@ static inline bool pl011_dma_rx_running(struct uart_amba_port *uap)
- 
- static void pl011_rs485_tx_stop(struct uart_amba_port *uap)
- {
--	/*
--	 * To be on the safe side only time out after twice as many iterations
--	 * as fifo size.
--	 */
--	const int MAX_TX_DRAIN_ITERS = uap->port.fifosize * 2;
- 	struct uart_port *port = &uap->port;
--	int i = 0;
- 	u32 cr;
- 
--	/* Wait until hardware tx queue is empty */
--	while (!pl011_tx_empty(port)) {
--		if (i > MAX_TX_DRAIN_ITERS) {
--			dev_warn(port->dev,
--				 "timeout while draining hardware tx queue\n");
--			break;
--		}
-+	if (uap->rs485_tx_state == SEND)
-+		uap->rs485_tx_state = WAIT_AFTER_SEND;
- 
--		udelay(uap->rs485_tx_drain_interval);
--		i++;
-+	if (uap->rs485_tx_state == WAIT_AFTER_SEND) {
-+		/* Schedule hrtimer if tx queue not empty */
-+		if (!pl011_tx_empty(port)) {
-+			hrtimer_start(&uap->trigger_stop_tx,
-+				      uap->rs485_tx_drain_interval,
-+				      HRTIMER_MODE_REL);
-+			return;
-+		}
-+		if (port->rs485.delay_rts_after_send > 0) {
-+			hrtimer_start(&uap->trigger_stop_tx,
-+				      ms_to_ktime(port->rs485.delay_rts_after_send),
-+				      HRTIMER_MODE_REL);
-+			return;
-+		}
-+		/* Continue without any delay */
-+	} else if (uap->rs485_tx_state == WAIT_AFTER_RTS) {
-+		hrtimer_try_to_cancel(&uap->trigger_start_tx);
- 	}
- 
--	if (port->rs485.delay_rts_after_send)
--		mdelay(port->rs485.delay_rts_after_send);
--
- 	cr = pl011_read(uap, REG_CR);
- 
- 	if (port->rs485.flags & SER_RS485_RTS_AFTER_SEND)
-@@ -1296,7 +1306,7 @@ static void pl011_rs485_tx_stop(struct uart_amba_port *uap)
- 	cr |= UART011_CR_RXE;
- 	pl011_write(cr, uap, REG_CR);
- 
--	uap->rs485_tx_started = false;
-+	uap->rs485_tx_state = OFF;
- }
- 
- static void pl011_stop_tx(struct uart_port *port)
-@@ -1304,11 +1314,18 @@ static void pl011_stop_tx(struct uart_port *port)
- 	struct uart_amba_port *uap =
- 	    container_of(port, struct uart_amba_port, port);
- 
-+	if (port->rs485.flags & SER_RS485_ENABLED &&
-+	    uap->rs485_tx_state == WAIT_AFTER_RTS) {
-+		pl011_rs485_tx_stop(uap);
-+		return;
-+	}
-+
- 	uap->im &= ~UART011_TXIM;
- 	pl011_write(uap->im, uap, REG_IMSC);
- 	pl011_dma_tx_stop(uap);
- 
--	if ((port->rs485.flags & SER_RS485_ENABLED) && uap->rs485_tx_started)
-+	if (port->rs485.flags & SER_RS485_ENABLED &&
-+	    uap->rs485_tx_state != OFF)
- 		pl011_rs485_tx_stop(uap);
- }
- 
-@@ -1328,10 +1345,19 @@ static void pl011_rs485_tx_start(struct uart_amba_port *uap)
- 	struct uart_port *port = &uap->port;
- 	u32 cr;
- 
-+	if (uap->rs485_tx_state == WAIT_AFTER_RTS) {
-+		uap->rs485_tx_state = SEND;
-+		return;
-+	}
-+	if (uap->rs485_tx_state == WAIT_AFTER_SEND) {
-+		hrtimer_try_to_cancel(&uap->trigger_stop_tx);
-+		uap->rs485_tx_state = SEND;
-+		return;
-+	}
-+	/* uap->rs485_tx_state == OFF */
- 	/* Enable transmitter */
- 	cr = pl011_read(uap, REG_CR);
- 	cr |= UART011_CR_TXE;
--
- 	/* Disable receiver if half-duplex */
- 	if (!(port->rs485.flags & SER_RS485_RX_DURING_TX))
- 		cr &= ~UART011_CR_RXE;
-@@ -1343,10 +1369,14 @@ static void pl011_rs485_tx_start(struct uart_amba_port *uap)
- 
- 	pl011_write(cr, uap, REG_CR);
- 
--	if (port->rs485.delay_rts_before_send)
--		mdelay(port->rs485.delay_rts_before_send);
--
--	uap->rs485_tx_started = true;
-+	if (port->rs485.delay_rts_before_send > 0) {
-+		uap->rs485_tx_state = WAIT_AFTER_RTS;
-+		hrtimer_start(&uap->trigger_start_tx,
-+			      ms_to_ktime(port->rs485.delay_rts_before_send),
-+			      HRTIMER_MODE_REL);
-+	} else {
-+		uap->rs485_tx_state = SEND;
-+	}
- }
- 
- static void pl011_start_tx(struct uart_port *port)
-@@ -1355,13 +1385,44 @@ static void pl011_start_tx(struct uart_port *port)
- 	    container_of(port, struct uart_amba_port, port);
- 
- 	if ((uap->port.rs485.flags & SER_RS485_ENABLED) &&
--	    !uap->rs485_tx_started)
-+	    uap->rs485_tx_state != SEND) {
- 		pl011_rs485_tx_start(uap);
-+		if (uap->rs485_tx_state == WAIT_AFTER_RTS)
-+			return;
-+	}
- 
- 	if (!pl011_dma_tx_start(uap))
- 		pl011_start_tx_pio(uap);
- }
- 
-+static enum hrtimer_restart pl011_trigger_start_tx(struct hrtimer *t)
-+{
-+	struct uart_amba_port *uap =
-+	    container_of(t, struct uart_amba_port, trigger_start_tx);
-+	unsigned long flags;
-+
-+	uart_port_lock_irqsave(&uap->port, &flags);
-+	if (uap->rs485_tx_state == WAIT_AFTER_RTS)
-+		pl011_start_tx(&uap->port);
-+	uart_port_unlock_irqrestore(&uap->port, flags);
-+
-+	return HRTIMER_NORESTART;
-+}
-+
-+static enum hrtimer_restart pl011_trigger_stop_tx(struct hrtimer *t)
-+{
-+	struct uart_amba_port *uap =
-+	    container_of(t, struct uart_amba_port, trigger_stop_tx);
-+	unsigned long flags;
-+
-+	uart_port_lock_irqsave(&uap->port, &flags);
-+	if (uap->rs485_tx_state == WAIT_AFTER_SEND)
-+		pl011_rs485_tx_stop(uap);
-+	uart_port_unlock_irqrestore(&uap->port, flags);
-+
-+	return HRTIMER_NORESTART;
-+}
-+
- static void pl011_stop_rx(struct uart_port *port)
- {
- 	struct uart_amba_port *uap =
-@@ -1953,7 +2014,7 @@ static void pl011_shutdown(struct uart_port *port)
- 
- 	pl011_dma_shutdown(uap);
- 
--	if ((port->rs485.flags & SER_RS485_ENABLED) && uap->rs485_tx_started)
-+	if ((port->rs485.flags & SER_RS485_ENABLED && uap->rs485_tx_state != OFF))
- 		pl011_rs485_tx_stop(uap);
- 
- 	free_irq(uap->port.irq, uap);
-@@ -2098,7 +2159,7 @@ pl011_set_termios(struct uart_port *port, struct ktermios *termios,
- 	 * with the given baud rate. We use this as the poll interval when we
- 	 * wait for the tx queue to empty.
- 	 */
--	uap->rs485_tx_drain_interval = DIV_ROUND_UP(bits * 1000 * 1000, baud);
-+	uap->rs485_tx_drain_interval = ns_to_ktime(DIV_ROUND_UP(bits * NSEC_PER_SEC, baud));
- 
- 	pl011_setup_status_masks(port, termios);
- 
-@@ -2807,6 +2868,11 @@ static int pl011_probe(struct amba_device *dev, const struct amba_id *id)
- 		}
- 	}
- 
-+	hrtimer_init(&uap->trigger_start_tx, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	hrtimer_init(&uap->trigger_stop_tx, CLOCK_MONOTONIC, HRTIMER_MODE_REL);
-+	uap->trigger_start_tx.function = pl011_trigger_start_tx;
-+	uap->trigger_stop_tx.function = pl011_trigger_stop_tx;
-+
- 	ret = pl011_setup_port(&dev->dev, uap, &dev->res, portnr);
- 	if (ret)
- 		return ret;
+Changes v2->v3:
+- Correct the patch order to follow correct practice.
+- Correct flexcom dt-binding commit messge to reflect the changes in the
+  coding style.
+- Add missing SoB tags to patches.
+- Moved export clocks to DT patch to be included with the clock binding
+  patch.
+- Separate Kconfig changes and defconfig changes into different patches
+  and removed unused Kconfig params.
+- Correct confusing SoB and Co-developed chain.
+- Removed unsued nodes in DTSI file and sorted includes
+  alphanumerically.
+- Fix incorrect dts formatting.
+- Separate dts and pinmux changes into two patches.
+- Combine PLL and MCK changes into core clock driver patch.
+- Correct formatting in main clock driver.
+- MMC dt-binding changes are applied for next so have been removed from
+  the set [2].
 
----
-base-commit: cfba9f07a1d6aeca38f47f1f472cfb0ba133d341
-change-id: 20241117-master-9df0434f1e04
+1) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#m9691b4d58b62f36f6cbac1d06883c985766c2c0d
+2) https://lore.kernel.org/linux-arm-kernel/cover.1732030972.git.Ryan.Wanner@microchip.com/T/#mccf6521c07e74e1c7dc61b09ae0ebdbbdde73a28
 
-Best regards,
+Dharma Balasubiramani (6):
+  dt-bindings: mfd: atmel,sama5d2-flexcom: add
+    microchip,sama7d65-flexcom
+  dt-bindings: atmel-sysreg: add sama7d65 RAM and PIT
+  dt-bindings: serial: atmel,at91-usart: add microchip,sama7d65-usart
+  dt-bindings: pinctrl: at91-pio4: add microchip,sama7d65-pinctrl
+  dt-bindings: clocks: atmel,at91sam9x5-sckc: add sama7d65
+  dt-bindings: clock: Add SAMA7D65 PMC compatible string
+
+Romain Sioen (2):
+  dt-bindings: ARM: at91: Document Microchip SAMA7D65 Curiosity
+  ARM: dts: microchip: add support for sama7d65_curiosity board
+
+Ryan Wanner (5):
+  clk: at91: sama7d65: add sama7d65 pmc driver
+  ARM: dts: microchip: add sama7d65 SoC DT
+  ARM: dts: at91: Add sama7d65 pinmux
+  ARM: configs: at91: sama7: add new SoC config
+  ARM: at91: add new SoC sama7d65
+
+ .../devicetree/bindings/arm/atmel-at91.yaml   |    7 +
+ .../devicetree/bindings/arm/atmel-sysregs.txt |   14 +-
+ .../bindings/clock/atmel,at91rm9200-pmc.yaml  |    2 +
+ .../bindings/clock/atmel,at91sam9x5-sckc.yaml |    1 +
+ .../bindings/mfd/atmel,sama5d2-flexcom.yaml   |    9 +-
+ .../pinctrl/atmel,at91-pio4-pinctrl.txt       |    1 +
+ .../bindings/serial/atmel,at91-usart.yaml     |    1 +
+ arch/arm/boot/dts/microchip/Makefile          |    3 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts |   89 ++
+ .../arm/boot/dts/microchip/sama7d65-pinfunc.h |  947 ++++++++++++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     |  145 ++
+ arch/arm/configs/multi_v7_defconfig           |    1 +
+ arch/arm/configs/sama7_defconfig              |    1 +
+ arch/arm/mach-at91/Kconfig                    |    9 +
+ drivers/clk/at91/Makefile                     |    1 +
+ drivers/clk/at91/clk-master.c                 |    2 +-
+ drivers/clk/at91/clk-sam9x60-pll.c            |    2 +-
+ drivers/clk/at91/pmc.c                        |    1 +
+ drivers/clk/at91/sama7d65.c                   | 1373 +++++++++++++++++
+ include/dt-bindings/clock/at91.h              |    4 +
+ 20 files changed, 2600 insertions(+), 13 deletions(-)
+ create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+ create mode 100644 arch/arm/boot/dts/microchip/sama7d65-pinfunc.h
+ create mode 100644 arch/arm/boot/dts/microchip/sama7d65.dtsi
+ create mode 100644 drivers/clk/at91/sama7d65.c
+
 -- 
-Miroslav Ondra <ondra@faster.cz>
-
+2.43.0
 
 
