@@ -1,136 +1,111 @@
-Return-Path: <linux-serial+bounces-7236-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7239-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF5B79F371A
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Dec 2024 18:13:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44A5A9F399D
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Dec 2024 20:19:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C83D1881968
-	for <lists+linux-serial@lfdr.de>; Mon, 16 Dec 2024 17:13:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F0D1188EFB2
+	for <lists+linux-serial@lfdr.de>; Mon, 16 Dec 2024 19:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E382063E0;
-	Mon, 16 Dec 2024 17:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50317208960;
+	Mon, 16 Dec 2024 19:18:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="UAKnRJGO";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NKyg8KQc"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="BW5fkgWH"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D358520457E;
-	Mon, 16 Dec 2024 17:12:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5024B2080F3;
+	Mon, 16 Dec 2024 19:18:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734369170; cv=none; b=g4RNAH8sgsMSYow6TJ2ZpmtnWHOo1tPp1Vls4JJzCWSB4xvkKWqa4GBSv4cQRVyiMFD8sDPlIg6nbYB3X3nzj9tPwZ4+1OibSfPDBo9fOrYPTvpKpqDLLzzR144+1Ye7qz08QJtcel0bRPhMqPKQsopDjY6Zj5x179C7tmyMrnw=
+	t=1734376733; cv=none; b=OK651kfwBJPU+QBptPE1UUCjbIosCDCtr34xoGFGN5LkpADCLcUO49y5LrFt+5u7EpYzkQn13CyJgFOSPw44mn4JOpmTNsj1tV21bE5z1MbvpM1quGiBPVGjiNz2oeFh+50NNxdkXfCSq0QhT6QFLdDYg9TqQzhDul7idKGjkrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734369170; c=relaxed/simple;
-	bh=j6/QL3gdZfERetxbMI/0rk9rf92p20Yw3Wr+IsPrr6w=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=P6tiuyn2monopMXO07gAyY7T+n7xvyid/7QEuqQ68pzBZNFi1+bzEfVMvjtPkLaofD5U95DLmVlT0YPBzIHWnaIICI5B2HUhssmYmQ0WCpBQ9P68p2jorZkyU90mhUIC0xcr4qEJ3lkcbzjuWG+7R/IQVOQ7288UEraOlF8T8WM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=UAKnRJGO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NKyg8KQc; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1734369167;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pR/sHqHxQXpD31p3g1/0O7LvU9aHX60Ye5Sne1phnAo=;
-	b=UAKnRJGOs4Z/oTlCMOW2xarcaNaOSY9PNcZhuA24YTVuMtKm2avq0jfbfpXh9N21Kyi392
-	ZG2sG1LDqZ77RjRpJBB/sACEkB+uLILrnuVs4UfauyMxuCjaN2t1ZrB4Oyy5eTY3yylJ+6
-	bKDIYHoz6MseJ4ahfcUB97v8iTLfzy0y8dp8x9FWhpXBr23f/VpvcsKYtVyBj/dLbhx+jd
-	gFG5wqwW1HWBdoX13H3zKwOsU3pUe3sbk/36WS3sxDHcucGvnTlibdqJgQiiv1FeI+fguJ
-	KMqxQ2D6uIBi1tF+CCMFz4FDc1yhUho8pQbRW3PtPrY31J1uPMaOam9t56afuQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1734369167;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=pR/sHqHxQXpD31p3g1/0O7LvU9aHX60Ye5Sne1phnAo=;
-	b=NKyg8KQcahkoUwXURAyuEcC6z42AkS/jfd7ylZKnRCJalZTvAIuWmF8KjzhZboMdpQtENa
-	3m/xqnAo4AvYB9Ag==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>,
-	Esben Haabendal <esben@geanix.com>,
+	s=arc-20240116; t=1734376733; c=relaxed/simple;
+	bh=hl0pGQEB7/82kKxzA62tg8G5O7Jqdqf1ZVY7lOSt/EE=;
+	h=From:To:Cc:Date:Message-Id:In-Reply-To:References:MIME-Version:
+	 Content-Type:Subject; b=Q6ZKtguEjs48vEZxm6TrZvEgJAkqfKNMEaO84wQSWnubgpNiT1k8S1p5V7sD4YObZR0p2TRvrxhGU3fReJ0ZnPzQvlYb0jrvlA917ZPQhPgQcaQlcTFpAM4Dw4hpeuriuKb23oMiQCzCUKmbuaW3UqlnuljPCpZdZUxq636ksQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=BW5fkgWH; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Cc:To
+	:From:subject:date:message-id:reply-to;
+	bh=O/i0topftM8ipSFp4ROmDf2I1pusEubFlDlXJTK2PAk=; b=BW5fkgWHfImXkhWpHmIWTmmivJ
+	LbPQ+BKOTLTPmDC3VWOnGwzWUi/h+f2KLNyNUew7RbLZfv732yTpF1Of3uce3mobhm81JaT14065m
+	OT/cT+Wx7+KeYC5BOtYAa/dp2CuH/3JL+OV+ooQ/Cy8ZEggcgBTzA+vuC5VpWZk8Cam4=;
+Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:42958 helo=pettiford.lan)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1tNGc5-0002CS-Uj; Mon, 16 Dec 2024 14:18:42 -0500
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: stable@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: hugo@hugovil.com,
+	hui.wang@canonical.com,
+	Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Lech Perczak <lech.perczak@camlingroup.com>,
 	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Kevin Hilman <khilman@baylibre.com>,
-	Markus Schneider-Pargmann <msp@baylibre.com>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Udit Kumar <u-kumar1@ti.com>,
-	Griffin Kroah-Hartman <griffin@kroah.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Rengarajan S <rengarajan.s@microchip.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	Niklas Schnelle <schnelle@linux.ibm.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Lino Sanfilippo <l.sanfilippo@kunbus.com>,
-	Peter Collingbourne <pcc@google.com>
-Subject: [PATCH tty-next v1 4/4] serial: 8250: Explain the role of @read_status_mask
-Date: Mon, 16 Dec 2024 18:18:44 +0106
-Message-Id: <20241216171244.12783-5-john.ogness@linutronix.de>
-In-Reply-To: <20241216171244.12783-1-john.ogness@linutronix.de>
-References: <20241216171244.12783-1-john.ogness@linutronix.de>
+	linux-kernel@vger.kernel.org
+Date: Mon, 16 Dec 2024 14:18:15 -0500
+Message-Id: <20241216191818.1553557-2-hugo@hugovil.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20241216191818.1553557-1-hugo@hugovil.com>
+References: <20241216191818.1553557-1-hugo@hugovil.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 70.80.174.168
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+Subject: [PATCH 1/4] serial: sc16is7xx: add missing support for rs485 devicetree properties
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-The role of @read_status_mask has changed over time and seems
-to still cause confusion. This can be expected since there is
-zero documentation about this driver-specific variable.
+From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
 
-Add comments to the initialization of @read_status_mask to
-clarify its role.
+Retrieve rs485 devicetree properties on registration of sc16is7xx ports in
+case they are attached to an rs485 transceiver.
 
-Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reworked to fix conflicts when backporting to linux-5.15.y.
+
+Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Reviewed-by: Lech Perczak <lech.perczak@camlingroup.com>
+Tested-by: Lech Perczak <lech.perczak@camlingroup.com>
+Link: https://lore.kernel.org/r/20230807214556.540627-7-hugo@hugovil.com
+Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/tty/serial/8250/8250_omap.c | 6 ++++++
- drivers/tty/serial/8250/8250_port.c | 6 ++++++
- 2 files changed, 12 insertions(+)
+ drivers/tty/serial/sc16is7xx.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
-index 10144fcc0363..42b4aa56b902 100644
---- a/drivers/tty/serial/8250/8250_omap.c
-+++ b/drivers/tty/serial/8250/8250_omap.c
-@@ -412,6 +412,12 @@ static void omap_8250_set_termios(struct uart_port *port,
- 	 */
- 	uart_update_timeout(port, termios->c_cflag, baud);
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+index 692c14d7f7d1a..3d3f66563b73b 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -1307,6 +1307,10 @@ static int sc16is7xx_probe(struct device *dev,
  
-+	/*
-+	 * Specify which conditions may be considered for error
-+	 * handling and the ignoring of characters. The actual
-+	 * ignoring of characters only occurs if the bit is set
-+	 * in @ignore_status_mask as well.
-+	 */
- 	up->port.read_status_mask = UART_LSR_OE | UART_LSR_DR;
- 	if (termios->c_iflag & INPCK)
- 		up->port.read_status_mask |= UART_LSR_FE | UART_LSR_PE;
-diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
-index 3b9dc2bb06eb..1a65d3e5f3c0 100644
---- a/drivers/tty/serial/8250/8250_port.c
-+++ b/drivers/tty/serial/8250/8250_port.c
-@@ -2785,6 +2785,12 @@ serial8250_do_set_termios(struct uart_port *port, struct ktermios *termios,
- 	 */
- 	uart_update_timeout(port, termios->c_cflag, baud);
+ 		mutex_init(&s->p[i].efr_lock);
  
-+	/*
-+	 * Specify which conditions may be considered for error
-+	 * handling and the ignoring of characters. The actual
-+	 * ignoring of characters only occurs if the bit is set
-+	 * in @ignore_status_mask as well.
-+	 */
- 	port->read_status_mask = UART_LSR_OE | UART_LSR_DR;
- 	if (termios->c_iflag & INPCK)
- 		port->read_status_mask |= UART_LSR_FE | UART_LSR_PE;
++		ret = uart_get_rs485_mode(&s->p[i].port);
++		if (ret)
++			goto out_ports;
++
+ 		/* Disable all interrupts */
+ 		sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_IER_REG, 0);
+ 		/* Disable TX/RX */
 -- 
 2.39.5
 
