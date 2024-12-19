@@ -1,158 +1,214 @@
-Return-Path: <linux-serial+bounces-7256-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7258-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0C959F769D
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Dec 2024 09:02:59 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3259F77CC
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Dec 2024 09:56:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6BF3160CFE
-	for <lists+linux-serial@lfdr.de>; Thu, 19 Dec 2024 08:02:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 283637A405E
+	for <lists+linux-serial@lfdr.de>; Thu, 19 Dec 2024 08:56:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73C97217F24;
-	Thu, 19 Dec 2024 08:02:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B8AB221447;
+	Thu, 19 Dec 2024 08:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c+O14fEP"
+	dkim=pass (2048-bit key) header.d=systec-electronic.com header.i=@systec-electronic.com header.b="BJc802cZ"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.systec-electronic.com (mail.systec-electronic.com [77.220.239.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A137B216E1B;
-	Thu, 19 Dec 2024 08:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B62D2206B1;
+	Thu, 19 Dec 2024 08:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=77.220.239.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734595350; cv=none; b=phX96N5gMumVcSWiPtFhX3Xa8xqEFW6Zz77yn1wosXqDx1PdXKEf2BpWsaY3+gnexQT/JHCqK8cRzjjTyw4KOxt6IgsSQH0F6eL0frAR5BhDKtNsmp+8Sz+asJiepFyt9MdfXAO4VwdDRj1hhpQYZqiB4XBKE3YTZ5sudYZc27M=
+	t=1734598609; cv=none; b=AMX33rjG++JlT8aJujsY+jkn9hjsj4DxdhPuhQUKiA7dJVdocOQi7VOVFjr6x9LUko8T1yDuK+RYSFREH0SjHhRKCbXeomF6e0heVtFzBN619s15+w3c6kukhwkOMTEeMsU2eBp07eSpWHdg50kd094F9y7DniLS4luy+a4TiYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734595350; c=relaxed/simple;
-	bh=ZTYdD4pv/FrP86RpFg0OdRmXKCaHeIGE7m8tYfbW6Mw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cP9OYHB9nRRz9duI2fgPe1BP/0PGfAJGQqFkDomDaPFKACLZbx9ReoQATzSqnsgoSZsHKhYnEseOGPC3uyGnqvddsBhpuE+z7N65NmTj/cZK8VBNJ3nfO7srkT4bu9j82IkBYCpogm05NmR+5A+VYfgShyY04Bty69dKCstLZRc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c+O14fEP; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-4363ae65100so5052485e9.0;
-        Thu, 19 Dec 2024 00:02:28 -0800 (PST)
+	s=arc-20240116; t=1734598609; c=relaxed/simple;
+	bh=3qX0PlxX/Bi6B6oCIzUVZwanJqmbkPARfeib8DqmQoo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SdCdBD6s7C23oWllCk3+GI8nwy7GKt2hRtDZcNo4Qa9JV8QK9cmv/FK+Wb9j0UlVNckL4GiFUcV9qlg60e4VHRdSD7Gkz8d57WxbWSGFYFO6IaVzuNGEGdB/wFQPmiXnaBHAgG8fPIEpLBCvCQkcq5hIoTNNqbtIpWtNWX/yk1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=systec-electronic.com; spf=pass smtp.mailfrom=systec-electronic.com; dkim=pass (2048-bit key) header.d=systec-electronic.com header.i=@systec-electronic.com header.b=BJc802cZ; arc=none smtp.client-ip=77.220.239.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=systec-electronic.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=systec-electronic.com
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.systec-electronic.com (Postfix) with ESMTP id 8566994016B2;
+	Thu, 19 Dec 2024 09:46:40 +0100 (CET)
+Received: from mail.systec-electronic.com ([127.0.0.1])
+ by localhost (mail.systec-electronic.com [127.0.0.1]) (amavis, port 10032)
+ with ESMTP id LpPeq9G4SJgi; Thu, 19 Dec 2024 09:46:40 +0100 (CET)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.systec-electronic.com (Postfix) with ESMTP id 5FED994016B3;
+	Thu, 19 Dec 2024 09:46:40 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.10.3 mail.systec-electronic.com 5FED994016B3
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734595347; x=1735200147; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pr0j3GNPYR2KJiDjiXq/FM0zHvlq9uUGD9iJKB2tA00=;
-        b=c+O14fEPAV2ssUp/CGcC16hEB0LjUQaORdh+E+d3FiuGJELYX5nTZBa9l4xn1E0XL8
-         5/o8IfZbT1Pn+vgZCGQCFaO7AdvZSqa4M844RvPB7PE1+2Y9bWPA7dWWfmoGZmy+YzLx
-         2MqxOTzQzhj63IyeTiJHGB8DpX1nQQHWd1jWB4jO/yXyDw49dcbMTjvRl+IsM8moiQBL
-         ZpeZSbQ+fia54InGY0ZojlkxvmcDDQY0oyQMqhpFzlhRwIY84sdBen7nl5mTj4KnFEd7
-         Ov+/ikRk2K2jCRoSnayVW5OTUPXJGiy92DBzdnhcW3PaWb3S/kwQV+/KXqISm3GrOR8I
-         mq7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734595347; x=1735200147;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pr0j3GNPYR2KJiDjiXq/FM0zHvlq9uUGD9iJKB2tA00=;
-        b=sKF0kxtMkzx0kXwEIcFWdM6J4MAyhlZ8k3rEfaaKfIJm3tkb+IyBRUUCfhltPRVyoY
-         mqLRPz6GsRKgA01VCEGEomYPFdFyUddQWIfd0hoWZeDNcHkoivsBZFmcwhrZRe+CBjyU
-         6FL3+6Zm49Oyz4YGx2HyZP9BPMrbCU1Qz/a+QWg8Gc4T2ZXJmZSjphmHg+5AJxft1mD5
-         LJTrzZwaHkG7vfjySuEHbzrToEMmbgCIwKbFhJZdnyvwQV3evJcC9VYAQLtnl/kwLyby
-         btY/00ieqk43Z09WoSDiFtpdCRIYPS96FtA7Yw/8iDTmMSQIRfjr3BcvI3BJzTzOwbZu
-         3Rrw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1+6fa7O+4YVrjSSb1+VinmRFXveWT4EGcCnpC0cN6vGFzFy8z+LSIP8ONeReBESbV5otkY9/QEiqBCJ1z@vger.kernel.org, AJvYcCUsD9n4r2o0MzFigWFPGqpp0AX5E95KyvgRhKPvT3z5p/kLxnrnLfxhxya7hsLfFmfYQwgxY4dSuK+r@vger.kernel.org, AJvYcCW4pHmbRss//jTBXcCENbu2e1ZjITq7oxt+c6ma/eUz0zj2gV3t962UKl5tMtxiXB0ntnDzpfOuh794Qw==@vger.kernel.org, AJvYcCW6E3PHzN85Dy1laKttc9U3Sz1OTXdZGf4l5ywfZBoRvoMDZWmh2Wfko2/bX+RIqOYzoCjG/dfCQnCcNQ1y@vger.kernel.org, AJvYcCWftJbgnRDissmJd2wNVn11NjWT7c4l1csubSaCueceDxvUnX0ztKxodHWiC6seTSolhHbsMzxD6Xl06eI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwrV2aRZ2F7odfk5X1psyUMP3VGe8GPoz5mkRqhJDlKu80KLUnL
-	usbhzXo+KewtapBhrGt6p+Nu/D59y+SPDXfod6mEIFI7uopRHvP1
-X-Gm-Gg: ASbGncvA9RT6edn2fxxqeWkIYBI1m6onC2EaGx3W5+yty3xpNfpOAWu787w3xImd7hq
-	mSx3nTFG+6HvGAB2I1ix4b5cTXNCrQQnzIfxeVMZoQKbf4R9bPtNAXuvd5SZXxdHdqckU2ot3xw
-	CWqOlGgYV2F+gdvI+xQZK2XD7NoqMxnbT9VuX1wvhZAvYg+jWL2JwGkzXti4Dj5FZJ0Q/CevXnY
-	MTNudth08ckcRM7zI54DhCRXmid69bE2how+/SZNOBQGHUJDeAlfeXkpN1NUUF92lZ65w==
-X-Google-Smtp-Source: AGHT+IGmr4JM56+pjYIF/O4nGDJXOmCH3LeqOACcg7/BE8S+TR/RL97oz85ju9X97ong6RFgVQqvZQ==
-X-Received: by 2002:a05:600c:364b:b0:436:18d0:aa6e with SMTP id 5b1f17b1804b1-4365c77dcdcmr17501225e9.5.1734595346504;
-        Thu, 19 Dec 2024 00:02:26 -0800 (PST)
-Received: from [192.168.1.10] ([95.43.220.235])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4366127c639sm10096975e9.31.2024.12.19.00.02.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 19 Dec 2024 00:02:26 -0800 (PST)
-Message-ID: <fa10cf03-ce8d-4fc4-a4fe-ea14c035825d@gmail.com>
-Date: Thu, 19 Dec 2024 10:02:24 +0200
+	d=systec-electronic.com; s=B34D3B04-5DC7-11EE-83E3-4D8CAB78E8CD;
+	t=1734598000; bh=vPL1a3op5VuHLSMViZIQN5Wr4BRq/ziCyRM7m1dbrPU=;
+	h=From:To:Date:Message-ID:MIME-Version;
+	b=BJc802cZMsKPSvBchrGGwe5gpylvYX9TgVjX3/90UlCe64vGprK1XsZtUzewrjOg9
+	 P5tqsK10VDZsoXqNMHxVNf3u9pm52DVKaaktms1mODRa50PmElujUMbSxawyAia9F8
+	 TVz5lvDo9rOVGALm0j8qmaESgbSI2BXWqDHF9pgaH7/nnounNlq1IinVjfX8LQ6+B8
+	 DKlmKZLmVqsgGqLWzU2phir1Q0BmdCVXnR33hNuWgHipAmxWIvczGgDAIoqqUktTFE
+	 /N8qAEmbD27vB0PFv+ICd68/Lq1JYPpDH0lQ+kKg79gOO7rzwcKjO7ErhISGMaQSMX
+	 qyau6sgZ+RTFA==
+X-Virus-Scanned: amavis at systec-electronic.com
+Received: from mail.systec-electronic.com ([127.0.0.1])
+ by localhost (mail.systec-electronic.com [127.0.0.1]) (amavis, port 10026)
+ with ESMTP id 4ovNyPgVEC8X; Thu, 19 Dec 2024 09:46:40 +0100 (CET)
+Received: from ws565760.. (unknown [212.185.67.148])
+	by mail.systec-electronic.com (Postfix) with ESMTPSA id 1897C94016B2;
+	Thu, 19 Dec 2024 09:46:40 +0100 (CET)
+From: Andre Werner <andre.werner@systec-electronic.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org,
+	hvilleneuve@dimonoff.com,
+	andy@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	lech.perczak@camlingroup.com,
+	Andre Werner <andre.werner@systec-electronic.com>
+Subject: [PATCH] serial: sc16is7xx: Add polling feature if no IRQ usage possible
+Date: Thu, 19 Dec 2024 09:46:38 +0100
+Message-ID: <20241219084638.960253-1-andre.werner@systec-electronic.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/6] tty: n_gsm: Add support for serdev drivers
-To: Jiri Slaby <jslaby@suse.cz>, Pavel Machek <pavel@ucw.cz>,
- Johan Hovold <johan@kernel.org>
-Cc: Tony Lindgren <tony@atomide.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Rob Herring <robh@kernel.org>, Alan Cox <gnomes@lxorguk.ukuu.org.uk>,
- Lee Jones <lee.jones@linaro.org>, Merlijn Wajer <merlijn@wizzup.org>,
- Peter Hurley <peter@hurleysoftware.com>, Sebastian Reichel <sre@kernel.org>,
- linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
- phone-devel@vger.kernel.org
-References: <20200512214713.40501-1-tony@atomide.com>
- <20200512214713.40501-2-tony@atomide.com> <20200528093102.GC10358@localhost>
- <20201129205144.GA15038@duo.ucw.cz>
- <b9220ab2-0992-41d0-abef-f9ec6e306af1@gmail.com>
- <dcdc22f2-587e-4879-a987-71c92c0149e9@suse.cz>
-Content-Language: en-GB
-From: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-In-Reply-To: <dcdc22f2-587e-4879-a987-71c92c0149e9@suse.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
 
+Fall back to polling mode if no interrupt is configured because not
+possible. If "interrupts" property is missing in devicetree the driver
+uses a delayed worker to pull state of interrupt status registers.
 
+Signed-off-by: Andre Werner <andre.werner@systec-electronic.com>
+---
+This driver was tested on Linux 5.10. We had a custom board that was not
+able to connect the interrupt port. Only I2C was available.
+---
+---
+ drivers/tty/serial/sc16is7xx.c | 40 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 40 insertions(+)
 
-On 19.12.24 г. 9:53 ч., Jiri Slaby wrote:
-> On 19. 12. 24, 8:45, Ivaylo Dimitrov wrote:
->> Hi,
->>
->> ...
->>
->> On 29.11.20 г. 22:51 ч., Pavel Machek wrote:
->>>>
->>>> It looks like you may also have a problem with tty hangups, which 
->>>> serdev
->>>> does not support currently. There are multiple paths in n_gsm which can
->>>> trigger a hangup (e.g. based on remote input) and would likely lead 
->>>> to a
->>>> crash
->>>
->>> I don't believe we need to support hangups for the Droid 4, but
->>> obviously it would be good not to crash. But I don't know where to
->>> start looking, do you have any hints?
->>>
->>
->> I changed the patch so it calls tty_port_register_device_serdev, 
->> ported gnss driver to use serdev_device, got it working:
->>
->> root@devuan-droid4:~# cat /dev/gnss0
->> $GPGGA,,,,,,0,,,,,,,,*66
->> $GNGNS,,,,,,NN,,,,,,*53
->> $GNGNS,,,,,,NN,,,,,,*53
->> $GNGNS,,,,,,NN,,,,,,*53
->> $GPVTG,,T,,M,,N,,K,N*2C
->> $GPRMC,,V,,,,,,,,,,N*53
->> $GPGSA,A,1,,,,,,,,,,,,,,,*1E
->> $GLGSV,1,1,01,255,,,37*52
->> $GPGGA,,,,,,0,,,,,,,,*66
->> $GNGNS,,,,,,NN,,,,,,*53
->> $GNGNS,,,,,,NN,,,,,,*53
->> $GNGNS,,,,,,NN,,,,,,*53
->>
->> However, I get:
->>
->> gsmtty gsmtty4: tty_hangup: tty->count(1) != (#fd's(0) + #kopen's(0))
->>
->> when closing /dev/gnss0
->>
->> Any hint what shall be implemented in serdev to properly handle hangups? 
-> 
-> Without code, no.
+diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7x=
+x.c
+index a3093e09309f..31962fdca178 100644
+--- a/drivers/tty/serial/sc16is7xx.c
++++ b/drivers/tty/serial/sc16is7xx.c
+@@ -314,6 +314,7 @@
+ #define SC16IS7XX_FIFO_SIZE		(64)
+ #define SC16IS7XX_GPIOS_PER_BANK	4
+=20
++#define SC16IS7XX_POLL_PERIOD 10 /*ms*/
+ #define SC16IS7XX_RECONF_MD		BIT(0)
+ #define SC16IS7XX_RECONF_IER		BIT(1)
+ #define SC16IS7XX_RECONF_RS485		BIT(2)
+@@ -348,6 +349,9 @@ struct sc16is7xx_port {
+ 	u8				mctrl_mask;
+ 	struct kthread_worker		kworker;
+ 	struct task_struct		*kworker_task;
++	struct kthread_delayed_work	poll_work;
++	bool polling;
++	bool shutdown;
+ 	struct sc16is7xx_one		p[];
+ };
+=20
+@@ -861,6 +865,19 @@ static irqreturn_t sc16is7xx_irq(int irq, void *dev_=
+id)
+ 	return IRQ_HANDLED;
+ }
+=20
++static void sc16is7xx_transmission_poll(struct kthread_work *work)
++{
++	struct sc16is7xx_port *s =3D container_of(work, struct sc16is7xx_port, =
+poll_work.work);
++
++	/* Resuse standard IRQ handler. Interrupt ID is unused in this context.=
+ */
++	sc16is7xx_irq(0, s);
++
++	/* setup delay based on SC16IS7XX_POLL_PERIOD */
++	if (!s->shutdown)
++		kthread_queue_delayed_work(&s->kworker, &s->poll_work,
++					   msecs_to_jiffies(SC16IS7XX_POLL_PERIOD));
++}
++
+ static void sc16is7xx_tx_proc(struct kthread_work *ws)
+ {
+ 	struct uart_port *port =3D &(to_sc16is7xx_one(ws, tx_work)->port);
+@@ -1149,6 +1166,7 @@ static int sc16is7xx_config_rs485(struct uart_port =
+*port, struct ktermios *termi
+ static int sc16is7xx_startup(struct uart_port *port)
+ {
+ 	struct sc16is7xx_one *one =3D to_sc16is7xx_one(port, port);
++	struct sc16is7xx_port *s =3D dev_get_drvdata(port->dev);
+ 	unsigned int val;
+ 	unsigned long flags;
+=20
+@@ -1210,6 +1228,11 @@ static int sc16is7xx_startup(struct uart_port *por=
+t)
+ 	uart_port_lock_irqsave(port, &flags);
+ 	sc16is7xx_enable_ms(port);
+ 	uart_port_unlock_irqrestore(port, flags);
++	if (s->polling) {
++		s->shutdown =3D false;
++		kthread_queue_delayed_work(&s->kworker, &s->poll_work,
++					   msecs_to_jiffies(SC16IS7XX_POLL_PERIOD));
++	}
+=20
+ 	return 0;
+ }
+@@ -1232,6 +1255,10 @@ static void sc16is7xx_shutdown(struct uart_port *p=
+ort)
+=20
+ 	sc16is7xx_power(port, 0);
+=20
++	if (s->polling) {
++		s->shutdown =3D true;
++		kthread_cancel_delayed_work_sync(&s->poll_work);
++	}
+ 	kthread_flush_worker(&s->kworker);
+ }
+=20
+@@ -1537,7 +1564,13 @@ int sc16is7xx_probe(struct device *dev, const stru=
+ct sc16is7xx_devtype *devtype,
+=20
+ 	/* Always ask for fixed clock rate from a property. */
+ 	device_property_read_u32(dev, "clock-frequency", &uartclk);
++	s->polling =3D !device_property_present(dev, "interrupts");
+=20
++	if (s->polling) {
++		dev_warn(dev,
++			 "No interrupt definition found. Falling back to polling mode.\n");
++		irq =3D 0;
++	}
+ 	s->clk =3D devm_clk_get_optional(dev, NULL);
+ 	if (IS_ERR(s->clk))
+ 		return PTR_ERR(s->clk);
+@@ -1664,6 +1697,11 @@ int sc16is7xx_probe(struct device *dev, const stru=
+ct sc16is7xx_devtype *devtype,
+ 	if (ret)
+ 		goto out_ports;
+ #endif
++	if (s->polling) {
++		/* Initialize Kernel timer for polling */
++		kthread_init_delayed_work(&s->poll_work, sc16is7xx_transmission_poll);
++		return 0;
++	}
+=20
+ 	/*
+ 	 * Setup interrupt. We first try to acquire the IRQ line as level IRQ.
+@@ -1724,6 +1762,8 @@ void sc16is7xx_remove(struct device *dev)
+ 		sc16is7xx_power(&s->p[i].port, 0);
+ 	}
+=20
++	if (s->polling)
++		kthread_cancel_delayed_work_sync(&s->poll_work);
+ 	kthread_flush_worker(&s->kworker);
+ 	kthread_stop(s->kworker_task);
+=20
+--=20
+2.47.1
 
-Which code? The $subject patch with changes I made? or gnss driver? both?
-
-Thanks,
-Ivo
 
