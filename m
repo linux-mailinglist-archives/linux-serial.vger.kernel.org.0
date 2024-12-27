@@ -1,34 +1,35 @@
-Return-Path: <linux-serial+bounces-7345-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7347-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 046D59FD7FE
-	for <lists+linux-serial@lfdr.de>; Fri, 27 Dec 2024 23:45:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0CE3D9FD802
+	for <lists+linux-serial@lfdr.de>; Fri, 27 Dec 2024 23:45:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0989B7A02E7
-	for <lists+linux-serial@lfdr.de>; Fri, 27 Dec 2024 22:45:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A28A71642F2
+	for <lists+linux-serial@lfdr.de>; Fri, 27 Dec 2024 22:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC582154456;
-	Fri, 27 Dec 2024 22:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EF5A157472;
+	Fri, 27 Dec 2024 22:45:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="yxy+X+LQ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="coYk0RSi"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qA5wjkWg";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uQjK0vpt"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 614D580BFF;
-	Fri, 27 Dec 2024 22:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD9313D518;
+	Fri, 27 Dec 2024 22:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735339532; cv=none; b=sZUQ7uqkpVHYywRbDYgMAUQ9X3fWRNVEqlCYYhxLusJNScHepQe5k2mg9P2wT8eBCPNyeA5G/fPc9EWYwZZteR70urvxa8eBdj9P1pqbg6pZ5dbft7eLX29nGo4bRQ4Ben+0gymnXu3H/JfzSf5Co2yHS581UMIIqH/1vUyq3ec=
+	t=1735339534; cv=none; b=YeiZmFESzjcati2hIGE8hLZ6rfDLvx4sD8btNkUnfRMuv8fRQfMO9jKxdhtgtjJL+4d9jBXbyMUZEw2U0MYmzAieMn2nj69hsMkkgedbebrCy/YKktoC0YRFFzW8L6LnV168rmwXszs7YGNVue0r6o2n5RjatOP+WzyuF9y+8QQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735339532; c=relaxed/simple;
-	bh=O33YSYtXgqXc0GtVduPaec6FhwXtK8kS8uZrc/TVatc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pUB46EPRvlTaQSumywnSYbG+BOmANlXy2FCv9Yx08asS4H86V1UEEv489aKqiZCwXTd0a+IYXKFuCbHNqr0tO8JXAkSTvGpqtgdh+NVf1MkdwtlaLc7nQCPa7drsr0BBRMnOH7EwutZV+EP1fDdDl/gd3vel5WldUXFWVQYBVUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=yxy+X+LQ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=coYk0RSi; arc=none smtp.client-ip=193.142.43.55
+	s=arc-20240116; t=1735339534; c=relaxed/simple;
+	bh=2BzpnH0P0efFtE1Tbnr5i3eNkIVGDAWc3r18CJcfwIc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=YwZ8Qwi+ibHZ3zDwgIbT61OdGVQskTM+gAhUBY5ojYxbU2ghiwX65vOJxdujcUOwo11TBW+z+B6ksEOgIC6iK+WWP8fDA4IKCmBR5toLwi28YbwwHLgANCZu76dhdxJ+rRzZdYjHTJCspj4u//i95eBXs+eDV5ifGSsuiNu3NuE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qA5wjkWg; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uQjK0vpt; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: John Ogness <john.ogness@linutronix.de>
@@ -36,21 +37,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020; t=1735339524;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AU+OvOmPVS0Qfj6w2emgT2IVnoV9nyph0SjDWXQfu+k=;
-	b=yxy+X+LQNTzces/KTsZ8rjBKxhO8UIC08KJByrPEqIIEVFjXbulBBvloejidTWtd7OYtzr
-	lLsxGQNwADm2B5TlR0GOsiqLqcSC2/ymIt2wyNpY00mLgDt1u6RmHjcXSKJfAz7RuDA24L
-	Z20ysMbPGpDGMgD28u43MJlLAWWdOW3AKBHd2+whubtlx4eGt9CoMOSR46So6qU9qZOm+l
-	M6C16a2dxvi39tQT8agmzkygEmJXzRxyCFxwusd8xiELbwodG3LQjy76BpDN61FKDZ4e7i
-	codwrS/t4oR8qiRvav97ioX+nV8l3XSzfMn901qOVcw+jJ4qVNphsUkEfTLB4Q==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uASmd5u/xWtAyaeV0vxHBkcxGYrtczlQqrX77S+KG1c=;
+	b=qA5wjkWgOJuHMIXH34o12zQeK+ZeyEsTjboLIjjVEBtxj4UimdyR5xVba4MVcVBUiD7oVN
+	DLyPFnVZkIxg6uSQ6mWZHrvAkbRSFrJocs08KXewD6wmOmHh3mxN9wfFCJ+ZaQV994Ssh8
+	hEVaOKU8JCj/HUgLN7ImouyykgxZbrcUYCwsJ2SFS9pDHR4ezT+VcXBTSKjhU7KQrA+0pP
+	Y0+sbflknmSjfN5GIXW5q668hv+bfQ4N4LQW62WKh7jpKehFfRDFd3r9i0Vt5pKydwZSKV
+	bc+vLqrNK6233a+uCq8XSEf/5cg1bD7dSDvNpcabe3JM8cazZYJBeYxinL6xXw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1735339524;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=AU+OvOmPVS0Qfj6w2emgT2IVnoV9nyph0SjDWXQfu+k=;
-	b=coYk0RSiNWl0CeOAXg0GxU63IELeK5oCDPQCfYG0iVFCYoluNCDxHPydMexRLPZv7b441l
-	exTiXqRZK7P1y5AA==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=uASmd5u/xWtAyaeV0vxHBkcxGYrtczlQqrX77S+KG1c=;
+	b=uQjK0vptV2fE3FlpE/zF+iPl8BrHVUktiMNexK34QZwM1QRvdDhikKbNBbFHakP/LmVrtM
+	YvMA27RctXuoq1CA==
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>,
 	Petr Mladek <pmladek@suse.com>,
@@ -65,25 +68,12 @@ Cc: Jiri Slaby <jirislaby@kernel.org>,
 	Rengarajan S <rengarajan.s@microchip.com>,
 	Niklas Schnelle <schnelle@linux.ibm.com>,
 	Serge Semin <fancer.lancer@gmail.com>,
-	Wander Lairson Costa <wander@redhat.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>,
-	Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Sunil V L <sunilvl@ventanamicro.com>,
-	Matt Turner <mattst88@gmail.com>,
-	Stefan Wahren <wahrenst@gmx.net>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Markus Schneider-Pargmann <msp@baylibre.com>,
-	Udit Kumar <u-kumar1@ti.com>,
-	Griffin Kroah-Hartman <griffin@kroah.com>,
-	linux-rpi-kernel@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	Tony Lindgren <tony@atomide.com>
-Subject: [PATCH tty-next v4 0/6] convert 8250 to nbcon
-Date: Fri, 27 Dec 2024 23:51:16 +0106
-Message-Id: <20241227224523.28131-1-john.ogness@linutronix.de>
+	Wander Lairson Costa <wander@redhat.com>
+Subject: [PATCH tty-next v4 1/6] serial: 8250: Adjust the timeout for FIFO mode
+Date: Fri, 27 Dec 2024 23:51:17 +0106
+Message-Id: <20241227224523.28131-2-john.ogness@linutronix.de>
+In-Reply-To: <20241227224523.28131-1-john.ogness@linutronix.de>
+References: <20241227224523.28131-1-john.ogness@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -92,68 +82,112 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is v4 of a series to convert the 8250 driver to an NBCON
-console, providing both threaded and atomic printing
-implementations. v3 of this series is here [0]. Additional
-background information about NBCON consoles in general is
-available in the cover letter of v2 [1].
+After a console has written a record into UART_TX, it uses
+wait_for_xmitr() to wait until the data has been sent out before
+returning. However, wait_for_xmitr() will timeout after 10ms,
+regardless if the data has been transmitted or not.
 
-The changes since v3:
+For single bytes, this timeout is sufficient even at very slow
+baud rates, such as 1200bps. However, when FIFO mode is used,
+there may be 64 bytes pushed into the FIFO at once. At a baud
+rate of 115200bps, the 10ms timeout is still sufficient. But
+when using lower baud rates (such as 57600bps), the timeout
+is _not_ sufficient. This causes longer lines to be cut off,
+resulting in lost and horribly misformatted output on the
+console.
 
-- For callbacks ->rs485_stop_tx() and ->rs485_start_tx(),
-  rename argument @in_con to @toggle_ier (inverts meaning).
+When using FIFO mode, take the number of bytes into account to
+determine an appropriate maximum timeout. Increasing the timeout
+does not affect performance since ideally the timeout never
+occurs.
 
-- For univ8250_console_device_lock() and
-  univ8250_console_device_unlock(), rename argument @con to @co.
+Fixes: 8f3631f0f6eb ("serial/8250: Use fifo in 8250 console driver")
+Signed-off-by: John Ogness <john.ogness@linutronix.de>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Wander Lairson Costa <wander@redhat.com>
+---
+ drivers/tty/serial/8250/8250_port.c | 32 +++++++++++++++++++++++------
+ 1 file changed, 26 insertions(+), 6 deletions(-)
 
-- Do not introduce helpers __serial8250_stop_rx_mask_dr(),
-  __serial8250_stop_rx_int(), __serial8250_start_rx_int().
-
-- Use @frame_time to determine per-character timeout, fallback
-  to 10ms if @frame_time not available.
-
-- Use shorter code syntax when setting @console_line_ended.
-
-- Introduce helper function fifo_wait_for_lsr() to wait for
-  multiple characters.
-
-- For serial8250_console_fifo_write() and
-  serial8250_console_byte_write(), remove unnecessary
-  READ_ONCE() usage.
-
-- For serial8250_console_fifo_write() and
-  serial8250_console_byte_write(), use nbcon_can_proceed()
-  rather than repeatedly enter/exit unsafe regions.
-
-- Initialize @modem_status_work using init_irq_work() rather
-  than IRQ_WORK_INIT().
-
-- Commit message and comment style cleanups as requested.
-
-John Ogness
-
-[0] https://lore.kernel.org/lkml/20241025105728.602310-1-john.ogness@linutronix.de
-[1] https://lore.kernel.org/lkml/20240913140538.221708-1-john.ogness@linutronix.de
-
-John Ogness (6):
-  serial: 8250: Adjust the timeout for FIFO mode
-  serial: 8250: Use frame rate to determine timeout
-  serial: 8250: Use high-level writing function for FIFO
-  serial: 8250: Provide flag for IER toggling for RS485
-  serial: 8250: Switch to nbcon console
-  serial: 8250: Revert "drop lockdep annotation from
-    serial8250_clear_IER()"
-
- drivers/tty/serial/8250/8250.h            |   4 +-
- drivers/tty/serial/8250/8250_bcm2835aux.c |   4 +-
- drivers/tty/serial/8250/8250_core.c       |  35 +++-
- drivers/tty/serial/8250/8250_omap.c       |   2 +-
- drivers/tty/serial/8250/8250_port.c       | 223 +++++++++++++++++-----
- include/linux/serial_8250.h               |  12 +-
- 6 files changed, 214 insertions(+), 66 deletions(-)
-
-
-base-commit: 2c1fd53af21b8cb13878b054894d33d3383eb1f3
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 1a65d3e5f3c0..3a946ebe9139 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -2078,7 +2078,8 @@ static void serial8250_break_ctl(struct uart_port *port, int break_state)
+ 	serial8250_rpm_put(up);
+ }
+ 
+-static void wait_for_lsr(struct uart_8250_port *up, int bits)
++/* Returns true if @bits were set, false on timeout */
++static bool wait_for_lsr(struct uart_8250_port *up, int bits)
+ {
+ 	unsigned int status, tmout = 10000;
+ 
+@@ -2093,11 +2094,11 @@ static void wait_for_lsr(struct uart_8250_port *up, int bits)
+ 		udelay(1);
+ 		touch_nmi_watchdog();
+ 	}
++
++	return (tmout != 0);
+ }
+ 
+-/*
+- *	Wait for transmitter & holding register to empty
+- */
++/* Wait for transmitter and holding register to empty with timeout */
+ static void wait_for_xmitr(struct uart_8250_port *up, int bits)
+ {
+ 	unsigned int tmout;
+@@ -3322,6 +3323,16 @@ static void serial8250_console_restore(struct uart_8250_port *up)
+ 	serial8250_out_MCR(up, up->mcr | UART_MCR_DTR | UART_MCR_RTS);
+ }
+ 
++static void fifo_wait_for_lsr(struct uart_8250_port *up, unsigned int count)
++{
++	unsigned int i;
++
++	for (i = 0; i < count; i++) {
++		if (wait_for_lsr(up, UART_LSR_THRE))
++			return;
++	}
++}
++
+ /*
+  * Print a string to the serial port using the device FIFO
+  *
+@@ -3331,13 +3342,15 @@ static void serial8250_console_restore(struct uart_8250_port *up)
+ static void serial8250_console_fifo_write(struct uart_8250_port *up,
+ 					  const char *s, unsigned int count)
+ {
+-	int i;
+ 	const char *end = s + count;
+ 	unsigned int fifosize = up->tx_loadsz;
++	unsigned int tx_count = 0;
+ 	bool cr_sent = false;
++	unsigned int i;
+ 
+ 	while (s != end) {
+-		wait_for_lsr(up, UART_LSR_THRE);
++		/* Allow timeout for each byte of a possibly full FIFO */
++		fifo_wait_for_lsr(up, fifosize);
+ 
+ 		for (i = 0; i < fifosize && s != end; ++i) {
+ 			if (*s == '\n' && !cr_sent) {
+@@ -3348,7 +3361,14 @@ static void serial8250_console_fifo_write(struct uart_8250_port *up,
+ 				cr_sent = false;
+ 			}
+ 		}
++		tx_count = i;
+ 	}
++
++	/*
++	 * Allow timeout for each byte written since the caller will only wait
++	 * for UART_LSR_BOTH_EMPTY using the timeout of a single character
++	 */
++	fifo_wait_for_lsr(up, tx_count);
+ }
+ 
+ /*
 -- 
 2.39.5
 
