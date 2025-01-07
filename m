@@ -1,222 +1,102 @@
-Return-Path: <linux-serial+bounces-7414-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7416-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26A12A04585
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2025 17:09:36 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0438A048E7
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2025 19:08:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06E4D7A2A6B
-	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2025 16:09:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4067B3A535A
+	for <lists+linux-serial@lfdr.de>; Tue,  7 Jan 2025 18:07:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB97F1F5401;
-	Tue,  7 Jan 2025 16:08:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D1C749652;
+	Tue,  7 Jan 2025 18:07:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="rkBYUO8r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Rx/uXFvR"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FEA11F4712;
-	Tue,  7 Jan 2025 16:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CCAC53AC
+	for <linux-serial@vger.kernel.org>; Tue,  7 Jan 2025 18:07:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736266123; cv=none; b=a16GeEr1x7Y1Wncrv0cIXC5G5htppqEJfeZcwnc49vR7TC8mxjNFbHkJmVlzhOT+JK90gTPZcISpSKTG24nLa9ZPBoqnGr3sunVMIrG2Q4Pl0tOm8bvHg8ubcfU2tcprekQ6VEAvcDXTVAwetKvdw99SeuqDsHthCExmuBPXzpM=
+	t=1736273278; cv=none; b=Du0Uvd88y013Hkx+wLnZodZJ7FGd4wNybrBpcMigTQ6lIv325vV27gcnVnlTQBjv8ilyuhwV5X26CsKDWWBrrrdn2uLHSsmwJP4fz1Te9ttrS4sEj1IN8lVBnogl6LhmI5eRnn6l1WlBYuE+zR3flIW9hIe7K7CTXZxYu5rn2L4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736266123; c=relaxed/simple;
-	bh=PvMZTBsd/zyFDw280jKFb87067d4CpMhzJa4SZI+9ds=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YANvBZ0oq/n2aIa8HhVX3IOovGYyPs+AA9zm45eoFOJvRpKH5TCU2xgn81/vAe5eLaPuTQBZKRe+0QwgWcknX2PepP29zyjD/rm0SR+TkXn0rzlWAmrLw0Vi4bIiFrVnUA1YR71wRbIMsMiUoA4H/YLYPFNJiTJI3+hkuT+epK8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=rkBYUO8r; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1736266120; x=1767802120;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=PvMZTBsd/zyFDw280jKFb87067d4CpMhzJa4SZI+9ds=;
-  b=rkBYUO8rQh5bCExjn0gw3wRoyA2bqGF5wLI9nhokLRkXW8i9t4deGE9A
-   c7xuVAAuyAGaDDGMTocXNtt3XT+1MFRhljRV7fhxA0lHgec4+RFgz4fnQ
-   cv6c6HANJPoW1tiOvE+Du42iKhGN9ZkiesVom5T0DMkdRs7omg3jBD9xK
-   ZNMSjCK74VMipqyKzAuLcc/0C1W9ERatVp8o79CwoTsb2SrzETHKQBEt5
-   4R1PGCZEN91oiLQHJp/obg1hZ7IK1tnmy/F8D1bG/spHiBrJkkXJCyXOy
-   iSXvOUWaunpKBdCsodJpA5gpuninBnevSl+Vi850MiEKoTYQLJc34Pbpz
-   A==;
-X-CSE-ConnectionGUID: lqpfnJzJQpCXzb9QKpQeRA==
-X-CSE-MsgGUID: lkEXHdiKQIKQ2alr2emajQ==
-X-IronPort-AV: E=Sophos;i="6.12,296,1728975600"; 
-   d="scan'208";a="40091256"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 07 Jan 2025 09:08:27 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Tue, 7 Jan 2025 09:08:18 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Tue, 7 Jan 2025 09:08:18 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-	<arnd@arndb.de>
-CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
-	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>
-Subject: [PATCH v5 5/5] ARM: dts: microchip: add support for sama7d65_curiosity board
-Date: Tue, 7 Jan 2025 09:07:27 -0700
-Message-ID: <20250107160850.120537-6-Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250107160850.120537-1-Ryan.Wanner@microchip.com>
-References: <20250107160850.120537-1-Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1736273278; c=relaxed/simple;
+	bh=0u9MgW16bgC2dEV6Ukdtx0nFJzGnOVOiP4ZURlBVu80=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=b14QAQDOxH4WnS5E1plzt4xAV8XPrAKius1G8VRsrljBNFn4RX6r9xRWLMSOWUFMa7H9ERSOWK0a4qvjlnxHPmHghV+MrfFYQOiQZCK40ws/U+NA+gaC+ecjDqyKBMVJM1D4iYMs4CZJ9VEkipTnJpunEZbQQ2bdW1z/yzwoOO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Rx/uXFvR; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-aa684b6d9c7so2614719366b.2
+        for <linux-serial@vger.kernel.org>; Tue, 07 Jan 2025 10:07:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736273274; x=1736878074; darn=vger.kernel.org;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=vzx+HdaxCDWyGf62BmuKh1ikMoaa5bQ6XS9Y+e2EN1c=;
+        b=Rx/uXFvRekfY+CyfIWJZwDz5S9CnlxBN7o5qNBGDMlnrq+4LApIK2oEPbH7Fgma4Ul
+         Ud3ylguE+3uwGyxtpSCQuQ4Mpq8wMNKWon2FSOo/lD/IC3H8N3KwvOqUNShc29weoRem
+         ugfJFSdts8NzvaCRxdU3lHQYK8OfwPZPOIVewmJ/UiOYXVCeS7BnPOH1ubNoSmk0PsBy
+         hmDaTfiYcYdwEicTqAQHpCqD4JmBJlp9Y1GnOkiZz0KY5p3vCcBHCxq5qegNItujEzoi
+         tXhhOJ1DdVgJoIs9yIx0HZwUwuwMsse34DZQ46Fgczf9zHMbs6ydG9vuMcN4HXHC6/2k
+         Evow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736273274; x=1736878074;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vzx+HdaxCDWyGf62BmuKh1ikMoaa5bQ6XS9Y+e2EN1c=;
+        b=aJZs14pUcVln52qvgF5bdhx/DeLuV9km0dMO0XY+ChyoIpPgHWIZ2JyVNBj+3CTolL
+         7BU8FGU79TG/Hz6fn+Uu3JBjtq2HgU/ymQTJfKzStt+H2Nq2wzy4oRwFslxa+KSd47Ft
+         9leIrjdzUH1c8cQeuB2KvC/1YxK8DSqvXB3EUoU6GJdELMAIFkzpz4r7Kj6ZHhtIxT4a
+         ZzkM0VrDEa03aeVhfgQFS4Id4dBI7ZtcNYCzu4uWQFNE79g6f4NgnOw4B+qML1irRCno
+         nC9IO7Uei3A8beCSfBegayQL4FvKVDzSwokhEg/5XxJUJLXFzcLMVHb02tV6z7JrMI45
+         KXJQ==
+X-Gm-Message-State: AOJu0Yz2EC6cqXHpzLCd5bIUpKDwwQe55Z46iLaWsOGJ5TfApkknhYYC
+	B7hfYL4fNaM7HddXUIs9uxk8I8xftQ0jTl7MQ67mXPgVwQ30RijBAurzM1tC/yYGQLutcEblwAW
+	k0K59LA9Ll2D1gGNfMrhDAxhhwHVbv5U=
+X-Gm-Gg: ASbGncsnWj74MMbPchEkDkNuJvT0yM9vjSjSmMx+8DKS2jyJiaYG6Zd0dV+cwbYnuOB
+	5fvtRdj2XHoaZINdT72WEVWb5nKHiVQSDduw=
+X-Google-Smtp-Source: AGHT+IHe8euZESlyTAkAKQVyPhpv2BpHqHEtbGr22QZF0PGjupQFrBULLm8Brr7wSy02khMUojm/ln0RgZZRU6OH+KY=
+X-Received: by 2002:a17:907:1c9e:b0:aa6:6276:fe5a with SMTP id
+ a640c23a62f3a-aac3465010fmr4947861866b.43.1736273274353; Tue, 07 Jan 2025
+ 10:07:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+From: =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
+Date: Tue, 7 Jan 2025 19:07:42 +0100
+X-Gm-Features: AbW1kvYVdNXR7o-9S2TPvtwQQEAuUG_yc543Vp1yz9MmL3qoni7ut5vq31pObD4
+Message-ID: <CAH2-hcJVhxubEsRciMSrp2x4WyDrmmYNe0Db9-LzXkiRpBQ0iQ@mail.gmail.com>
+Subject: Precise timing in ldisc? tty_put_char() in hrtimer context?
+To: linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-From: Romain Sioen <romain.sioen@microchip.com>
+Hello,
+i am implementing niche rs485-based serial protocol as a tty line
+discipline linux module. Requirement is to hit transmission window
+with precision in low hundreds of microseconds (eg. +-200 uS).
+Transmit window starts 500 uS after message is received.
 
-Add device tree support for the SAMA7D65 Curiosity board.
-Update the Makefile to include the new device tree file.
+It seems that hardware driver calls tty_receive_buf2() with sufficient
+latency, so my idea was to start hrtimer using hrtimer_start() inside
+of tty_receive_buf2(). And then in hrtimer handler call
+for(...){tty_put_char(tty,...)} or tty->ops->write(), but it seems not
+to be a good practice according to my online research. They say it's
+recommended to call tty_put_char() from workqueue, but documentation
+also says that calling a workqueue might introduce latency of couple
+milliseconds, since it's scheduled thread context.
 
-uart6 is related to flexcom6, hence not sorted in alphabetical order.
+What would you suggest to handle such a strict timing requirements
+between RX and TX data?
 
-Signed-off-by: Romain Sioen <romain.sioen@microchip.com>
-Signed-off-by: Varshini Rajendran <varshini.rajendran@microchip.com>
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- arch/arm/boot/dts/microchip/Makefile          |  3 +
- .../dts/microchip/at91-sama7d65_curiosity.dts | 89 +++++++++++++++++++
- 2 files changed, 92 insertions(+)
- create mode 100644 arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
+Thank you
 
-diff --git a/arch/arm/boot/dts/microchip/Makefile b/arch/arm/boot/dts/microchip/Makefile
-index 470fe46433a9..79cd38fdc7da 100644
---- a/arch/arm/boot/dts/microchip/Makefile
-+++ b/arch/arm/boot/dts/microchip/Makefile
-@@ -12,6 +12,7 @@ DTC_FLAGS_at91-sama5d2_xplained := -@
- DTC_FLAGS_at91-sama5d3_eds := -@
- DTC_FLAGS_at91-sama5d3_xplained := -@
- DTC_FLAGS_at91-sama5d4_xplained := -@
-+DTC_FLAGS_at91-sama7d65_curiosity := -@
- DTC_FLAGS_at91-sama7g54_curiosity := -@
- DTC_FLAGS_at91-sama7g5ek := -@
- dtb-$(CONFIG_SOC_AT91RM9200) += \
-@@ -90,6 +91,8 @@ dtb-$(CONFIG_SOC_SAM_V7) += \
- 	at91-sama5d4_xplained.dtb \
- 	at91-sama5d4ek.dtb \
- 	at91-vinco.dtb
-+dtb-$(CONFIG_SOC_SAMA7D65) += \
-+	at91-sama7d65_curiosity.dtb
- dtb-$(CONFIG_SOC_SAMA7G5) += \
- 	at91-sama7g54_curiosity.dtb \
- 	at91-sama7g5ek.dtb
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-new file mode 100644
-index 000000000000..ef6a56db8acb
---- /dev/null
-+++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -0,0 +1,89 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ *  at91-sama7d65_curiosity.dts - Device Tree file for SAMA7D65 Curiosity board
-+ *
-+ *  Copyright (c) 2024 Microchip Technology Inc. and its subsidiaries
-+ *
-+ *  Author: Romain Sioen <romain.sioen@microchip.com>
-+ *
-+ */
-+/dts-v1/;
-+#include "sama7d65-pinfunc.h"
-+#include "sama7d65.dtsi"
-+#include <dt-bindings/mfd/atmel-flexcom.h>
-+#include <dt-bindings/pinctrl/at91.h>
-+
-+/ {
-+	model = "Microchip SAMA7D65 Curiosity";
-+	compatible = "microchip,sama7d65-curiosity", "microchip,sama7d65",
-+		     "microchip,sama7d6", "microchip,sama7";
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	aliases {
-+		serial0 = &uart6;
-+	};
-+
-+	memory@60000000 {
-+		device_type = "memory";
-+		reg = <0x60000000 0x40000000>;
-+	};
-+};
-+
-+&flx6 {
-+	atmel,flexcom-mode = <ATMEL_FLEXCOM_MODE_USART>;
-+	status = "okay";
-+};
-+
-+&uart6 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart6_default>;
-+	status = "okay";
-+};
-+
-+&main_xtal {
-+	clock-frequency = <24000000>;
-+};
-+
-+&pioa {
-+	pinctrl_sdmmc1_default: sdmmc1-default {
-+		cmd-data {
-+			pinmux = <PIN_PB22__SDMMC1_CMD>,
-+				 <PIN_PB24__SDMMC1_DAT0>,
-+				 <PIN_PB25__SDMMC1_DAT1>,
-+				 <PIN_PB26__SDMMC1_DAT2>,
-+				 <PIN_PB27__SDMMC1_DAT3>;
-+			slew-rate = <0>;
-+			bias-disable;
-+		};
-+
-+		ck-cd-rstn-vddsel {
-+			pinmux = <PIN_PB23__SDMMC1_CK>,
-+				 <PIN_PB21__SDMMC1_RSTN>,
-+				 <PIN_PB30__SDMMC1_1V8SEL>,
-+				 <PIN_PB29__SDMMC1_CD>,
-+				 <PIN_PB28__SDMMC1_WP>;
-+			slew-rate = <0>;
-+			bias-disable;
-+		};
-+	};
-+
-+	pinctrl_uart6_default: uart6-default {
-+		pinmux = <PIN_PD18__FLEXCOM6_IO0>,
-+			<PIN_PD19__FLEXCOM6_IO1>;
-+		bias-disable;
-+	};
-+};
-+
-+&sdmmc1 {
-+	bus-width = <4>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_sdmmc1_default>;
-+	status = "okay";
-+};
-+
-+&slow_xtal {
-+	clock-frequency = <32768>;
-+};
--- 
-2.43.0
-
+Best regards
+      Tomas Mudrunka
 
