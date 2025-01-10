@@ -1,125 +1,128 @@
-Return-Path: <linux-serial+bounces-7475-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7477-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FCA9A095A3
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Jan 2025 16:29:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBDE0A0983D
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Jan 2025 18:14:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4428169ECA
-	for <lists+linux-serial@lfdr.de>; Fri, 10 Jan 2025 15:29:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFD27188E690
+	for <lists+linux-serial@lfdr.de>; Fri, 10 Jan 2025 17:14:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BE53213223;
-	Fri, 10 Jan 2025 15:26:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6CB2139BC;
+	Fri, 10 Jan 2025 17:14:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="svEuzy5T"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hWvPm9S9"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C541F212F9E;
-	Fri, 10 Jan 2025 15:26:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 998202135CD;
+	Fri, 10 Jan 2025 17:13:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736522803; cv=none; b=FZkwDFBTYbOx8oVgHv/Qre0sV1lMHZOv1bfwD8OXxnjfFZUet79oSs/NTlRDUxneP3OSe0g/p7qC7aRmbmcT004z5ufXS+XaJJAfkL1l14fal72ZSX9Q+xmRrvqcl45E0dZ+lPKAIelozpG4BszoXLMDP3tLFflgx8BrLYuHYs4=
+	t=1736529242; cv=none; b=YHA6WPjai2AXfv8OxCgDNDW8FylN1NKdGUqRSC6O90OLumH01NHdj+tExkim4UrVuEpaBrxeWW0ai5/asBXa+KLeTLSlafDwEeWsl0l1YfvFTA4OtmWaTR8GkMDHj6MlmRNRch3FGSU6NMqpvnx9EzlQs2pxJYVBC7vEqR5Jwe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736522803; c=relaxed/simple;
-	bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fTokwJhAhpsQxBpoSUb4MwPHGQy5AMNOzHmqeSzWrky1wRorTpoxzVzOZrIZTyWUXIipYR7JEecHsbXetgpaRopZazo2hJAR/DtB4sdanU9qI2fFs7+RqxQu8mNClh/VbibmNdUptuxXpNAkC7rth+yIV+oj3qt66ijilo81HjQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=svEuzy5T; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+	s=arc-20240116; t=1736529242; c=relaxed/simple;
+	bh=zCD9wMt7oj+kJBhlIcsVVTGT43QE2wPIyfO0mHZuo3E=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=AAjN4aD1+LG9tm4CDTT98hANfLwZOwpT1esfVG5PUP6rD7p7JWcTczqfDiExaoNz3ll+vgd7jPhqO5SOXaqsiL0jBTIJg7zQs17Fy/X+gzZ7qpj2jCYmpz0HK+OUtxEG5+vAlk3BL/j4o23sXW2dz9yvHfZw2tUEfPpwytLLdGU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hWvPm9S9; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1736522801; x=1768058801;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=So/Nxhxmf5OjkDlEr9qmVGJaHBrSosIJeOjBNusjAwQ=;
-  b=svEuzy5T2lUhfT3Y/zm92P1WlGEShMmJlO3ot6nCg428I+c9W3FaM7lz
-   cnOgka3RbolguGXZ15NkvRVCXqxfmTsp3NzfSR4f66BOtXzrPb/3/l54X
-   rYLWScsQT888OL3OmrcX/CIMP+MoshWA6vmXNkEMlNH2OyCbgQsCgl2V3
-   wcp8ConEXKyVRZKZUoqPi8zjQ8wxO5Gy7g5oD9MgZnzLKMkFb4FCSx1Bw
-   vFEjWrZy8B/EoSrCHd0G30Agot/vh+ypgcxwaB/McdqM9fHzzgWVlPY+4
-   j6+27UxeopGisdCIuIevhlzeoGgW/0MKeVSgP2Qou/2cgLxMeSFQ7EZti
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736529240; x=1768065240;
+  h=date:message-id:from:to:cc:subject:in-reply-to:
+   references:mime-version;
+  bh=zCD9wMt7oj+kJBhlIcsVVTGT43QE2wPIyfO0mHZuo3E=;
+  b=hWvPm9S9gyyWflhxezAJQ0/Zw5EZKsCuAkNL9pt9ibrxvKhfx8igBLau
+   BqAxt/w+4WkhB7JJeGhd2XKu7BTEUI/u+ZCjJZLax3klENzioM0Ogu8lV
+   PfZO/Ur9FgiISKQAktuwXDv+fKDWBBLhsHE3nTEvd7HEfk5ILPMEy+C+i
+   v7E/Bn3dcZExGuv+WXwcKSpdB8KGwD5qn3eKJp4zYHR+m82wlFlpFSVej
+   Zj+F+2HJbkF1YqnKygWuQDJ/VUu15h2UnCLWYzcjwzwNjZ/0bri7MxpqP
+   ws6x4YtpsaSIYSiiMKXJNlfXHbNtrSTP7okJPY7QFGY+mFzAY/yI1B5Pm
    Q==;
-X-CSE-ConnectionGUID: 8P7/xEcLSzCWvc1kzBnXOg==
-X-CSE-MsgGUID: NBZadZqVRLuYWsu+mBbcUg==
+X-CSE-ConnectionGUID: eETlnapHTZaJYZoWsWncOQ==
+X-CSE-MsgGUID: kcx024AdTVSnnR8CHTt/pw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11311"; a="36712482"
 X-IronPort-AV: E=Sophos;i="6.12,303,1728975600"; 
-   d="scan'208";a="40252499"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Jan 2025 08:26:33 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Fri, 10 Jan 2025 08:25:52 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Fri, 10 Jan 2025 08:25:52 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<claudiu.beznea@tuxon.dev>, <mturquette@baylibre.com>, <sboyd@kernel.org>,
-	<arnd@arndb.de>
-CC: <dharma.b@microchip.com>, <mihai.sain@microchip.com>,
-	<romain.sioen@microchip.com>, <varshini.rajendran@microchip.com>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>,
-	<linux-mmc@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-	<linux-spi@vger.kernel.org>, <linux-serial@vger.kernel.org>, "Krzysztof
- Kozlowski" <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v6 3/3] dt-bindings: mfd: atmel,sama5d2-flexcom: add microchip,sama7d65-flexcom
-Date: Fri, 10 Jan 2025 08:25:42 -0700
-Message-ID: <9656d46ee0255b9aba404d77d2d204376a9cb248.1736522006.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1736522006.git.Ryan.Wanner@microchip.com>
-References: <cover.1736522006.git.Ryan.Wanner@microchip.com>
+   d="scan'208";a="36712482"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 09:13:58 -0800
+X-CSE-ConnectionGUID: d+N1H3FPQryemumCSoERgQ==
+X-CSE-MsgGUID: skCK+1HISZSgobnkHZdoJg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="127073384"
+Received: from orsosgc001.jf.intel.com (HELO orsosgc001.intel.com) ([10.165.21.142])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Jan 2025 09:13:57 -0800
+Date: Fri, 10 Jan 2025 09:13:56 -0800
+Message-ID: <8534hqvbfv.wl-ashutosh.dixit@intel.com>
+From: "Dixit, Ashutosh" <ashutosh.dixit@intel.com>
+To: Joel Granados <joel.granados@kernel.org>
+Cc: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,	Kees Cook
+ <kees@kernel.org>,	Luis Chamberlain <mcgrof@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,	linux-crypto@vger.kernel.org,
+	openipmi-developer@lists.sourceforge.net,	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,	intel-xe@lists.freedesktop.org,
+	linux-hyperv@vger.kernel.org,	linux-rdma@vger.kernel.org,
+	linux-raid@vger.kernel.org,	linux-scsi@vger.kernel.org,
+	linux-serial@vger.kernel.org,	xen-devel@lists.xenproject.org,
+	linux-aio@kvack.org,	linux-fsdevel@vger.kernel.org,	netfs@lists.linux.dev,
+	codalist@coda.cs.cmu.edu,	linux-mm@kvack.org,	linux-nfs@vger.kernel.org,
+	ocfs2-devel@lists.linux.dev,	fsverity@lists.linux.dev,
+	linux-xfs@vger.kernel.org,	io-uring@vger.kernel.org,	bpf@vger.kernel.org,
+	kexec@lists.infradead.org,	linux-trace-kernel@vger.kernel.org,
+	linux-hardening@vger.kernel.org,	apparmor@lists.ubuntu.com,
+	linux-security-module@vger.kernel.org,	keyrings@vger.kernel.org
+Subject: Re: [PATCH] treewide: const qualify ctl_tables where applicable
+In-Reply-To: <20250109-jag-ctl_table_const-v1-1-622aea7230cf@kernel.org>
+References: <20250109-jag-ctl_table_const-v1-1-622aea7230cf@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?ISO-8859-4?Q?Goj=F2?=) APEL-LB/10.8 EasyPG/1.0.0
+ Emacs/28.2 (x86_64-redhat-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
 
-From: Dharma Balasubiramani <dharma.b@microchip.com>
+On Thu, 09 Jan 2025 05:16:39 -0800, Joel Granados wrote:
+>
+> diff --git a/drivers/gpu/drm/i915/i915_perf.c b/drivers/gpu/drm/i915/i915_perf.c
+> index 2406cda75b7b..5384d1bb4923 100644
+> --- a/drivers/gpu/drm/i915/i915_perf.c
+> +++ b/drivers/gpu/drm/i915/i915_perf.c
+> @@ -4802,7 +4802,7 @@ int i915_perf_remove_config_ioctl(struct drm_device *dev, void *data,
+>	return ret;
+>  }
+>
+> -static struct ctl_table oa_table[] = {
+> +static const struct ctl_table oa_table[] = {
+>	{
+>	 .procname = "perf_stream_paranoid",
+>	 .data = &i915_perf_stream_paranoid,
+> diff --git a/drivers/gpu/drm/xe/xe_observation.c b/drivers/gpu/drm/xe/xe_observation.c
+> index 8ec1b84cbb9e..57cf01efc07f 100644
+> --- a/drivers/gpu/drm/xe/xe_observation.c
+> +++ b/drivers/gpu/drm/xe/xe_observation.c
+> @@ -56,7 +56,7 @@ int xe_observation_ioctl(struct drm_device *dev, void *data, struct drm_file *fi
+>	}
+>  }
+>
+> -static struct ctl_table observation_ctl_table[] = {
+> +static const struct ctl_table observation_ctl_table[] = {
+>	{
+>	 .procname = "observation_paranoid",
+>	 .data = &xe_observation_paranoid,
 
-Add flexcom binding documentation for sama7d65.
+For i915 and xe:
 
-Consolidated entries into one enum to match proper coding style.
-
-Signed-off-by: Dharma Balasubiramani <dharma.b@microchip.com>
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml   | 9 ++++-----
- 1 file changed, 4 insertions(+), 5 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-index 0dc6a40b63f4..c7d6cf96796c 100644
---- a/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-+++ b/Documentation/devicetree/bindings/mfd/atmel,sama5d2-flexcom.yaml
-@@ -19,12 +19,11 @@ properties:
-     oneOf:
-       - const: atmel,sama5d2-flexcom
-       - items:
--          - const: microchip,sam9x7-flexcom
-+          - enum:
-+              - microchip,sam9x7-flexcom
-+              - microchip,sama7d65-flexcom
-+              - microchip,sama7g5-flexcom
-           - const: atmel,sama5d2-flexcom
--      - items:
--          - const: microchip,sama7g5-flexcom
--          - const: atmel,sama5d2-flexcom
--
- 
-   reg:
-     maxItems: 1
--- 
-2.43.0
-
+Acked-by: Ashutosh Dixit <ashutosh.dixit@intel.com>
 
