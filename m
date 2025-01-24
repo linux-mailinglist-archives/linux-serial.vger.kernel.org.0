@@ -1,75 +1,81 @@
-Return-Path: <linux-serial+bounces-7659-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7661-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 814B3A1AEF2
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 04:18:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44E18A1B3F9
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 11:53:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9FD33A6501
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 03:18:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16D061884E81
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 10:53:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A2C1D514E;
-	Fri, 24 Jan 2025 03:18:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 770C821A945;
+	Fri, 24 Jan 2025 10:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="lj5869yk"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="SwdFc4Yy"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C082AD0C;
-	Fri, 24 Jan 2025 03:18:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A50461CDFC1;
+	Fri, 24 Jan 2025 10:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737688730; cv=none; b=jBlOzYQ02Nutp44ynYRUzh7akEEJgUvry6qxyIJcZ3MDHgr4LK+ncr12D+wEMBQcQ3RWigfYlo4En4UJWwBZSTGHznkMkVa+bZu1shKMwpCvrT5J/kwboHeq13jqv5ZtNer3kbCUFVuwfvopNgEHs1jgPGaVhC2hfrqz0laikz0=
+	t=1737716010; cv=none; b=UJyO9OESnVod0nVxFePpa6F2sNgeeo0h2w0i6e1EG6i4/uT3VUIyiHR+EfeWCoZHaG0mK5MI/WQwIKl4VRAsXDh0UgESPOqWSVXLbG4ns9p9Tcj6q5qwflGqajDZnbkbyxLiY4bjod/7X+QtZiaPm3t+xhjlpDupBVsD5AOLsnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737688730; c=relaxed/simple;
-	bh=c1Is96VXlIrdgec/wQwqmSbzvrrq4p5FN+nF/yTu4O4=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VUNQVdsdDlPEOWFYCfeEZVjpoNqKBGSXhGVXqq4xEbLjhWODsVeYbcIKsS7rLYErc1Z1SmKp/mPdDDcS80YiA+Oav5ogmY03OIe3AIa7b3Awu84RjSJbHchVrm7fUuo7WR4q0JnLNOoCOnLhBu7VOw4tokeoQwJUn3Cjnm6zBEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=lj5869yk; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: e91920bada0111ef99858b75a2457dd9-20250124
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=hr2q/zEtH+pKoNV7Cfvrk2hAQt7KerJaGg3/YZVmNBc=;
-	b=lj5869yk+EjoNmLbvS3O66wRPTd8/36VP1Aw6QgzDe4wN6MDNT73R2OoGxMlTB1e7AwQjj3XyyvvG5hqqKCQGGO4ebbHnpkpWlGNbsxO52ARt/nfiusZGzFNmah0KJT8lDOQBs+33TCVGL6Ogn4H72eJv5djvLU82h3tyt1JyDY=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:444482b5-9148-4b87-b67c-d525d18af00f,IP:0,U
-	RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-	N:release,TS:-25
-X-CID-META: VersionHash:60aa074,CLOUDID:7189a47e-427a-4311-9df4-bfaeeacd8532,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0|50,EDM:-3,IP:ni
-	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
-	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0
-X-CID-BAS: 0,_,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: e91920bada0111ef99858b75a2457dd9-20250124
-Received: from mtkmbs14n2.mediatek.inc [(172.21.101.76)] by mailgw01.mediatek.com
-	(envelope-from <yenchia.chen@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 866849983; Fri, 24 Jan 2025 11:18:41 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 24 Jan 2025 11:18:39 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Fri, 24 Jan 2025 11:18:39 +0800
-From: Yenchia Chen <yenchia.chen@mediatek.com>
-To: <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
-	<matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>
-CC: <yenchia.chen@mediatek.com>, <yj.chiang@mediatek.com>,
-	<tbergstrom@nvidia.com>, <treapking@chromium.org>,
-	<andriy.shevchenko@linux.intel.com>, <u.kleine-koenig@baylibre.com>,
-	<yujiaoliang@vivo.com>, <linux-kernel@vger.kernel.org>,
-	<linux-serial@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-mediatek@lists.infradead.org>
-Subject: [PATCH v2] serial: 8250_mtk: Add ACPI support
-Date: Fri, 24 Jan 2025 11:18:32 +0800
-Message-ID: <20250124031835.1788995-1-yenchia.chen@mediatek.com>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1737716010; c=relaxed/simple;
+	bh=WVWjUCSc47y6PnPs/G9SHhPVzgiZqsqiHnmHFtGJgIY=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=oR2zI71y7GGTj/9/EOueWuGBtcubnfre7QtAreO1/hO5kKLiEaTxA9abv8PrkneWuF0jDXgYY89pigLEZKi3Wq7v91Pp18rYPOUPFoU7usm7DydzrtPqq4XbRy5uC/MM0YKF842Ego8LmN7/Ds/YKTM6zDb18H31L9sMWP1w7GA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=SwdFc4Yy; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50O8bhZN031191;
+	Fri, 24 Jan 2025 10:53:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=Jy4Hvt7jmQzw8aWfAybkyE5v/OpYevXOZNg
+	4OTxJEoI=; b=SwdFc4YyK8ZI5AXoGETOzgzR0Wh0WGDdIi+FLepxZFgtlvdg4P8
+	Z/fCLLc4LDpDP3etEamRU+9VFlV4ICN5A3QwJwgtoTtZNjyxkqEzBc6jaLfHs4Ku
+	gyUVbmpK81tmFiBjcPm/4cJgbj2YMrz5Jin195nuy1LBP0SY9MvlsXnrtKZ5HLeT
+	qzmWqrAwQh1l/fAzQkrhdV2I+4DW2zl7hTZa4xL9gxTC8ZZ+v3qqDGlwuZ8AQmdD
+	xbBsR0ISAPV4q5Zm8xI/3TAbxE8W9MAIpzEP2mkoXBQ+xcx5O+SSQXA1q/x46Jph
+	xMD3a2Ny8/fjaLzjGX1/MlXguy6tNIPooVQ==
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44c7h50d8g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Jan 2025 10:53:24 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 50OAnGJ5013012;
+	Fri, 24 Jan 2025 10:53:19 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 4485cm9h01-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Jan 2025 10:53:19 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 50OArItJ016260;
+	Fri, 24 Jan 2025 10:53:18 GMT
+Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
+	by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 50OArITk016259
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 24 Jan 2025 10:53:18 +0000
+Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
+	id B379C55C; Fri, 24 Jan 2025 16:23:17 +0530 (+0530)
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
+        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [PATCH v2 0/8] Add support to load QUP SE firmware from
+Date: Fri, 24 Jan 2025 16:23:01 +0530
+Message-Id: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -77,96 +83,86 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: Aw1mGwVMO12_ZGrgCsC6a4o1gNHkDmi0
+X-Proofpoint-GUID: Aw1mGwVMO12_ZGrgCsC6a4o1gNHkDmi0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-24_04,2025-01-23_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 malwarescore=0 impostorscore=0 clxscore=1015 adultscore=0
+ suspectscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999 phishscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501240078
 
-Add ACPI support to 8250_mtk driver. This makes it possible to
-use UART on ARM-based desktops with EDK2 UEFI firmware.
-
-Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
+In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+hardware has traditionally been managed by TrustZone (TZ). This setup
+handled Serial Engines(SE) assignments and access control permissions,
+ensuring a high level of security but limiting flexibility and
+accessibility.
+ 
+This limitation poses a significant challenge for developers who need more
+flexibility to enable any protocol on any of the SEs within the QUP
+hardware.
+ 
+To address this, we are introducing a change that opens the firmware
+loading mechanism to the Linux environment. This enhancement increases
+flexibility and allows for more streamlined and efficient management. We
+can now handle SE assignments and access control permissions directly
+within Linux, eliminating the dependency on TZ.
+ 
+We propose an alternative method for firmware loading and SE
+ownership/transfer mode configuration based on device tree configuration.
+This method does not rely on other execution environments, making it
+accessible to all developers.
+ 
+For SEs used prior to the kernel, their firmware will be loaded by the
+respective image drivers (e.g., Debug UART, Secure or trusted SE).
+Additionally, the GSI firmware, which is common to all SEs per QUPV3 core,
+will not be loaded by Linux driver but TZ only. At the kernel level, only
+the SE protocol driver should load the respective protocol firmware.
 ---
- drivers/tty/serial/8250/8250_mtk.c | 21 ++++++++++++++++++---
- 1 file changed, 18 insertions(+), 3 deletions(-)
+v1 -> v2:
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index b44de2ed7413..d06952081191 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -5,6 +5,7 @@
-  * Copyright (c) 2014 MundoReader S.L.
-  * Author: Matthias Brugger <matthias.bgg@gmail.com>
-  */
-+#include <linux/acpi.h>
- #include <linux/clk.h>
- #include <linux/io.h>
- #include <linux/module.h>
-@@ -15,6 +16,7 @@
- #include <linux/pm_runtime.h>
- #include <linux/serial_8250.h>
- #include <linux/serial_reg.h>
-+#include <linux/units.h>
- #include <linux/console.h>
- #include <linux/dma-mapping.h>
- #include <linux/tty.h>
-@@ -519,6 +521,7 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	struct mtk8250_data *data;
- 	struct resource *regs;
- 	int irq, err;
-+	acpi_handle acpi_dev_handle = ACPI_HANDLE(&pdev->dev);
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-@@ -545,8 +548,9 @@ static int mtk8250_probe(struct platform_device *pdev)
- 		err = mtk8250_probe_of(pdev, &uart.port, data);
- 		if (err)
- 			return err;
--	} else
-+	} else if (!acpi_dev_handle) {
- 		return -ENODEV;
-+	}
- 
- 	spin_lock_init(&uart.port.lock);
- 	uart.port.mapbase = regs->start;
-@@ -562,14 +566,18 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	uart.port.startup = mtk8250_startup;
- 	uart.port.set_termios = mtk8250_set_termios;
- 	uart.port.uartclk = clk_get_rate(data->uart_clk);
-+	if (!uart.port.uartclk)
-+		uart.port.uartclk = 26 * HZ_PER_MHZ;
- #ifdef CONFIG_SERIAL_8250_DMA
- 	if (data->dma)
- 		uart.dma = data->dma;
- #endif
- 
--	/* Disable Rate Fix function */
--	writel(0x0, uart.port.membase +
-+	if (!acpi_dev_handle) {
-+		/* Disable Rate Fix function */
-+		writel(0x0, uart.port.membase +
- 			(MTK_UART_RATE_FIX << uart.port.regshift));
-+	}
- 
- 	platform_set_drvdata(pdev, data);
- 
-@@ -647,11 +655,18 @@ static const struct of_device_id mtk8250_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, mtk8250_of_match);
- 
-+static const struct acpi_device_id mtk8250_acpi_match[] = {
-+	{ "MTKI0511", 0 },
-+	{},
-+};
-+MODULE_DEVICE_TABLE(acpi, mtk8250_acpi_match);
-+
- static struct platform_driver mtk8250_platform_driver = {
- 	.driver = {
- 		.name		= "mt6577-uart",
- 		.pm		= &mtk8250_pm_ops,
- 		.of_match_table	= mtk8250_of_match,
-+		.acpi_match_table = mtk8250_acpi_match,
- 	},
- 	.probe			= mtk8250_probe,
- 	.remove			= mtk8250_remove,
+- Drop the qcom,load-firmware property.
+- Remove the fixed firmware path.
+- Add the 'firmware-name' property in the QUP common driver.
+- Add logic to read the firmware path from the device tree.
+- Resolve kernel test robot warnings.
+- Update the 'qcom,xfer-mode' property description.
+
+v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-1-quic_vdadhani@quicinc.com/ 
+---
+Viken Dadhaniya (8):
+  dt-bindings: qcom: geni-se: Add 'firmware-name' property for firmware
+    loading
+  dt-bindings: i2c: qcom,i2c-geni: Add support for selecting data
+    transfer mode
+  spi: dt-bindings: Add support for selecting data transfer mode
+  dt-bindings: serial: Add support for selecting data transfer mode
+  soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux
+    subsystem
+  i2c: qcom-geni: Load i2c qup Firmware from linux side
+  spi: geni-qcom: Load spi qup Firmware from linux side
+  serial: qcom-geni: Load UART qup Firmware from linux side
+
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   7 +
+ .../serial/qcom,serial-geni-qcom.yaml         |   8 +
+ .../bindings/soc/qcom/qcom,geni-se.yaml       |   5 +
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |   7 +
+ drivers/i2c/busses/i2c-qcom-geni.c            |   7 +-
+ drivers/soc/qcom/qcom-geni-se.c               | 444 ++++++++++++++++++
+ drivers/spi/spi-geni-qcom.c                   |   7 +-
+ drivers/tty/serial/qcom_geni_serial.c         |   7 +-
+ include/linux/soc/qcom/geni-se.h              |  17 +
+ include/linux/soc/qcom/qup-fw-load.h          | 179 +++++++
+ 10 files changed, 682 insertions(+), 6 deletions(-)
+ create mode 100644 include/linux/soc/qcom/qup-fw-load.h
+
 -- 
-2.45.2
+2.34.1
 
 
