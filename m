@@ -1,65 +1,65 @@
-Return-Path: <linux-serial+bounces-7688-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7690-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1742DA1BA1F
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 17:16:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2161AA1BA25
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 17:16:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B762716BA53
-	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 16:15:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0ED716752E
+	for <lists+linux-serial@lfdr.de>; Fri, 24 Jan 2025 16:16:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A538419DF5B;
-	Fri, 24 Jan 2025 16:15:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1401E1C5D54;
+	Fri, 24 Jan 2025 16:15:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iDmNEkb8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QtUeMR4W"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2458418E02D;
-	Fri, 24 Jan 2025 16:15:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CBB196D9D;
+	Fri, 24 Jan 2025 16:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737735344; cv=none; b=s8zNuUKB9vMD4sh2Vhf92QnZR7uNqyT2aWs0UVuMpY7cOxuzckju8Hsiflh/Qz+OxocMzoVW3BbebDXUboB+B7lznidYa5lZ0d4lLhn4CHIUen5vfBTfzkwWsxCVhSZ1pBA/mx1KbrCklnWtyWV2VVnKhth3ZW4PzqgQRX+JSsw=
+	t=1737735346; cv=none; b=tDRuAHQ14lHUPDz/YYiGKP8Q2MzvWtMtXgfhjmfxJsZHIIkRGUVLpzxiBhKhi+5BtD8dcQmxr7ijpsJTMRMyCnl++3D1+skOBxKZaTwMnakKSEQgqc2vnmkq298MrIE1gFgmSi6EnY/dIovJftlnQFc6UzBgmmdi1hxALl5UJ+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737735344; c=relaxed/simple;
-	bh=tOipyK38zy8+DW8odwZ5XKf70Zyy2VhOJybOTIJ89gM=;
+	s=arc-20240116; t=1737735346; c=relaxed/simple;
+	bh=lfGMuTjEl1E5ktlY5BVqbetwgkValpruAzZQWjEGGW8=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jcreP7kIEsSSdSTkEF0osYAH++RfmDR5SYEXC59KJD3/iah7vHHESmkTsH3eUab/GVn6GwIeWhaQtBT8XmZAIhvmcahQkM+reridmzTOXzDGcAZfbQnkOjbIdDIqoi2EACzA2YqFC9N75jbKu6MjUxlXdtfuz/lX7ijep1I6xR0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iDmNEkb8; arc=none smtp.client-ip=198.175.65.19
+	 MIME-Version; b=dgTI62RHuONMBdV+ld6S29KQJs0Xc8+uitnB+Y9SAldcIiALBvPrIjESQwknwbSooAdsrGLCJACPg92Dn6ezaM4mETURpzyPQoziDu85B0VOtyx5joH+C7CqVESUD7rVsKs/RwPy80w0FdEWJubEmoPb96mL0kOKkFkWCa4pfi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QtUeMR4W; arc=none smtp.client-ip=198.175.65.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737735344; x=1769271344;
+  t=1737735345; x=1769271345;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=tOipyK38zy8+DW8odwZ5XKf70Zyy2VhOJybOTIJ89gM=;
-  b=iDmNEkb8we9l0EFJF6lcN2KyC2BprE39CYJua4CvlzJEUv8ASiOLhUrE
-   WhoC/+Jd9SPGEOEk8Z5ALh/DNzadIWEYDeIlJwpGM/vl0x21kUyDG4uqw
-   FIgiUeAnpOHyrvvkmLnB4+f5kMmuTnV610xLdVqgfczu1AhZtfDzBHaT0
-   KZA8mlez4OPL3r8X9XG+wKqF10aHto0Sw05cEBLFj2jGxyJs1+lu3nyD+
-   lKcL0B4zYYgXEV8ZFtTZXfuxU7ZTbnbOJI80X+R83KYXbo6h4RCo5qPVA
-   liKopDi7qVQBosJklsbGeQM5fZ2655VM0XuCOaf8oOq/+zVKC3s6XwwPK
-   Q==;
-X-CSE-ConnectionGUID: dcvs2z0PRpGwrV8bkdnl+A==
-X-CSE-MsgGUID: WENnViO4Rm2UyGHrM7wkPA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="38152892"
+  bh=lfGMuTjEl1E5ktlY5BVqbetwgkValpruAzZQWjEGGW8=;
+  b=QtUeMR4WWoSEhDxgnYJbKeAnjwLgjaBtfrWgGvhFymDdI5P8dh9gawbJ
+   VwmHD9/eSKDkCqXobV/Q04tzCw56Gw1/BzehUkyOq8D9pC4gAxyoN24Ck
+   dkDeusa5iyao++nMK7SIJB6pj+mM10+oPbVuL8ZTDhVPQAKTcOiAka3uE
+   f7PDagfFkDs3KrnXL6/fpLzqkX+2qNDHAP8QHBmzY2DlSSd9boo3Y/Vv9
+   i80QKPdOBwk0ZmTIO+k4ggY3Zeix9fqj0UnQu++7h8VKwqwF/IBjiBsAs
+   LZtzg7SEP6trgMTIcPd3zvY6qU8uAUVAX44ZIynBnZEEfmVPYjp7kFRdb
+   A==;
+X-CSE-ConnectionGUID: ceKDKv+dT/24+msMeZkjOw==
+X-CSE-MsgGUID: KXjBkkJnRXi2knPH94bLeg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="38152896"
 X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
-   d="scan'208";a="38152892"
+   d="scan'208";a="38152896"
 Received: from fmviesa006.fm.intel.com ([10.60.135.146])
   by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 08:15:41 -0800
-X-CSE-ConnectionGUID: G88RWLyvRbOb9sGatkdhVA==
-X-CSE-MsgGUID: yyytXDjKT1KF33164kZDxQ==
+X-CSE-ConnectionGUID: YyawNv1DTWaDfH6ExY/SYg==
+X-CSE-MsgGUID: YW03/YX+Q3mhZdhaGp10tA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
-   d="scan'208";a="107612356"
+   d="scan'208";a="107612357"
 Received: from black.fi.intel.com ([10.237.72.28])
   by fmviesa006.fm.intel.com with ESMTP; 24 Jan 2025 08:15:39 -0800
 Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id B109529D; Fri, 24 Jan 2025 18:15:37 +0200 (EET)
+	id BBA4F2AC; Fri, 24 Jan 2025 18:15:37 +0200 (EET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
@@ -67,9 +67,9 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
 Cc: Jiri Slaby <jirislaby@kernel.org>
-Subject: [PATCH v1 2/6] serial: port: Always update ->iotype in __uart_read_properties()
-Date: Fri, 24 Jan 2025 18:10:47 +0200
-Message-ID: <20250124161530.398361-3-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 3/6] serial: port: Make ->iotype validation global in __uart_read_properties()
+Date: Fri, 24 Jan 2025 18:10:48 +0200
+Message-ID: <20250124161530.398361-4-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.43.0.rc1.1336.g36b5255a03ac
 In-Reply-To: <20250124161530.398361-1-andriy.shevchenko@linux.intel.com>
 References: <20250124161530.398361-1-andriy.shevchenko@linux.intel.com>
@@ -81,40 +81,40 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The documentation of the __uart_read_properties() states that
-->iotype member is always altered after the function call, but
-the code doesn't do that in the case when use_defaults == false
-and the value of reg-io-width is unsupported. Make sure the code
-follows the documentation.
+In order to make code robust against potential changes in the future
+move ->iotype validation outside of switch in __uart_read_properties().
+If any code will be added in between that might leave the ->iotype value
+unknown the validation catches this up.
 
-Note, the current users of the uart_read_and_validate_port_properties()
-will fail and the change doesn't affect their behaviour, neither
-users of uart_read_port_properties() will be affected since the
-alteration happens there even in the current code flow.
-
-Fixes: e894b6005dce ("serial: port: Introduce a common helper to read properties")
 Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- drivers/tty/serial/serial_port.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/tty/serial/serial_port.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/tty/serial/serial_port.c b/drivers/tty/serial/serial_port.c
-index f28d0633fe6b..85285c56fabf 100644
+index 85285c56fabf..2fc48cd63f6c 100644
 --- a/drivers/tty/serial/serial_port.c
 +++ b/drivers/tty/serial/serial_port.c
-@@ -228,11 +228,11 @@ static int __uart_read_properties(struct uart_port *port, bool use_defaults)
- 			port->iotype = device_is_big_endian(dev) ? UPIO_MEM32BE : UPIO_MEM32;
+@@ -229,14 +229,15 @@ static int __uart_read_properties(struct uart_port *port, bool use_defaults)
  			break;
  		default:
-+			port->iotype = UPIO_UNKNOWN;
- 			if (!use_defaults) {
- 				dev_err(dev, "Unsupported reg-io-width (%u)\n", value);
- 				return -EINVAL;
- 			}
--			port->iotype = UPIO_UNKNOWN;
+ 			port->iotype = UPIO_UNKNOWN;
+-			if (!use_defaults) {
+-				dev_err(dev, "Unsupported reg-io-width (%u)\n", value);
+-				return -EINVAL;
+-			}
  			break;
  		}
  	}
+ 
++	if (!use_defaults && port->iotype == UPIO_UNKNOWN) {
++		dev_err(dev, "Unsupported reg-io-width (%u)\n", value);
++		return -EINVAL;
++	}
++
+ 	/* Read the address mapping base offset (default: no offset) */
+ 	ret = device_property_read_u32(dev, "reg-offset", &value);
+ 	if (ret)
 -- 
 2.43.0.rc1.1336.g36b5255a03ac
 
