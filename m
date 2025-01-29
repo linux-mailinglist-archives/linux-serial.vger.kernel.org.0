@@ -1,92 +1,58 @@
-Return-Path: <linux-serial+bounces-7755-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-7757-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DC89A221C0
-	for <lists+linux-serial@lfdr.de>; Wed, 29 Jan 2025 17:28:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 86302A2222F
+	for <lists+linux-serial@lfdr.de>; Wed, 29 Jan 2025 17:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E216D1886AC4
-	for <lists+linux-serial@lfdr.de>; Wed, 29 Jan 2025 16:28:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 65D741883BAE
+	for <lists+linux-serial@lfdr.de>; Wed, 29 Jan 2025 16:52:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 368A91DEFEA;
-	Wed, 29 Jan 2025 16:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="nHznBXQK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723DD1E0DCA;
+	Wed, 29 Jan 2025 16:52:01 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A37181DF992
-	for <linux-serial@vger.kernel.org>; Wed, 29 Jan 2025 16:27:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+Received: from relmlie5.idc.renesas.com (relmlor1.renesas.com [210.160.252.171])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF5C51E0DB5;
+	Wed, 29 Jan 2025 16:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738168059; cv=none; b=hpCRzoLK6WchwjWDjNUqsPHPgSuQ2phUaU1tJWg5XNKOplOta28FaTYG0kf4aBA1rG3YQXAFQp/nUBqTwHnDrsNaKANgxRKNHfRQ3AWkRaAerbEwK3IdFiUZcAOG8zz+S82jIB5vRPJnUWipzSPwB84EMKrnDp9Oo8onSBx7FCA=
+	t=1738169521; cv=none; b=F7rvXZkCrZ2+/nNDEYAaOY1yWl7rVMSntRdNE2ycv41yt8svL5s+1zEBd5woFTGCGXzVT1q9cy4q34e8yxYtgog3Kktf3J2KR0v5Nan2lyJMAjlp0o9gyZ7swRB09aDqu9J7q7YsB5p31h+BXWa8QTUZDJsHo76rbLLgUx0RfIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738168059; c=relaxed/simple;
-	bh=95ti/EtNpoooFEon5wbA1jBQ2db4r1XuLvR1Tv/exrQ=;
+	s=arc-20240116; t=1738169521; c=relaxed/simple;
+	bh=CUH9n+oPHOWyM3u6BZlgaSX/u3UOlrz9vO5jpb8oU30=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=RGD4LBiR2w9IIrGv2jxH/tCj8rcLPQaLOXEL9XqzA90Sco3xkgrEvSTETzgMb8AF6mPfnff48R+75LjJy1jhDndPei8r3gYeckHePrYQ+TK/uyL3g6AFUFlfYwRRJunm9LTK5VkIoJjbtf/AlFfuQQ2abT/qxUrPGet21aXisI8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=nHznBXQK; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21628b3fe7dso128291685ad.3
-        for <linux-serial@vger.kernel.org>; Wed, 29 Jan 2025 08:27:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1738168057; x=1738772857; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GHZ2KPsF4COFgm+b5LCKQGhzh/Bu/7L9BM3q7wjetag=;
-        b=nHznBXQKy71iPu3Z+/xGr7pw/XOVnc9TC0065py3OcxI/B9AwAVYkSYzKCFm8w1vzV
-         bDiLVZ7kkBP+Qj8bZ+1HY/x9vHE59RFGpqR7urnZqn6kgL0lqfD9gWsIeIpvWjEbj48H
-         IFbxCqKnJSgYxLSbBT+hurugvvyDOgd4p97SI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738168057; x=1738772857;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GHZ2KPsF4COFgm+b5LCKQGhzh/Bu/7L9BM3q7wjetag=;
-        b=PlwT4HHqGhwo0hxUsU+CRJsa05XlC95ID/0XW8Uj41WLHpbRWwyiPhB33k/X228YM+
-         pJsp0BQI8r8nmwoxS56nSJxG27+e2lRFCPa52rWoetVfvw+7pRyt+CZFMpysTanA3ts7
-         gLI3+M8JP69erhtfd62+ZR+/wV6BQ0hNy9+bZqR5ibA5bSeFlMlN5Gt/jzouOxy+0nsQ
-         mCfVN2hcnUE9MVVl2cKyFiCEVIkEe6wH3SUpG44p1yVJAoJzZxLJQbaoEqipZHC2ZQWv
-         wL5wi4mjVPa25Rg4VnGTMDV/uji4o6aOS9mB8hvv9HcUba69mEj//Ev7pCGQR/sJMgxK
-         hEyw==
-X-Forwarded-Encrypted: i=1; AJvYcCWd8uWFU5SUZEKMLXSTQ4ONK/xPG8t4gCWnV4TNWWZHExztdwMmQVm0DB8Lj9pj5QwcuPetrJ8kvK/F1uE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzmw7q1+XxHfFOpPx0IAfzUbZIRqkrZ2YtYNCxRf+WTMC8FtfFl
-	tc0tz3lqgJoZPID+NKnvG13R9zObxRvhdSaX4XfWNI7gtMHCTwZ2709JctKu6w==
-X-Gm-Gg: ASbGncuvdwRp8BRTq/ejiE3Gv4k4cRLbpLMTAsKxUXEZns3eho+fmfxGjWOsqfVwuWn
-	OhSkkuPaoApmQBwq2d7eRpFOftxNGw0/gNx8ZTYWi7cPfaqBoYaisnL4jv+QFJvwqtMFwUHzj9h
-	hjFhSKyNDcCcZgUOAYyEAoSO7icmKYhjWH6HdcVrWlwZ/pgj2nEy9t2iSzs9y9AGxsUow1YslRd
-	Hj9uVBjlNr/egM6YQK99pRumYLq11KDbDU7B1i4WkoQ4eudpUJd1iI4zgdXQCNKeHlBtZ+i6qB2
-	xhU8/Tdvyc4C/FCRT56bIZJIZ0TacVNSHXQ=
-X-Google-Smtp-Source: AGHT+IEk/aQhe7EQCRd7H4ZWjZQuegTa1eAwg8ILNMsYIINEo4OJU9VMXs6WW1rI8GzMVr3E6kOBgg==
-X-Received: by 2002:a05:6a21:b8a:b0:1ea:e7be:ff27 with SMTP id adf61e73a8af0-1ed7a5b6781mr6359250637.7.1738168056947;
-        Wed, 29 Jan 2025 08:27:36 -0800 (PST)
-Received: from dianders.sjc.corp.google.com ([2620:15c:9d:2:fa8a:f68a:6cb9:40b2])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ac496cb4810sm10577009a12.66.2025.01.29.08.27.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Jan 2025 08:27:36 -0800 (PST)
-From: Douglas Anderson <dianders@chromium.org>
+	 MIME-Version; b=D7jJFxRtnb6oohp8GwwpERhAFXnS6lGIGLqRXltqf5qTX4SgFoPVAbgxZmLn3F/1WwdH8rSNW7cSVqWqgPxjUUfxVepefvhZBslx0sQC3LCAMnpr0LJVe08jHXHP3kUXXdlYCPKaSVzSJR4sQYAfvYCYvjhdEzaZyNy0ZTS4nR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: hShsvux3TAmY5SDmWSSOGA==
+X-CSE-MsgGUID: CJI+EUM4RICmJ+c+MDvTyQ==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie5.idc.renesas.com with ESMTP; 30 Jan 2025 01:51:58 +0900
+Received: from wvbox.administration.lan (unknown [10.226.92.145])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 9567F402EEE6;
+	Thu, 30 Jan 2025 01:51:46 +0900 (JST)
+From: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	Daniel Thompson <danielt@kernel.org>
-Cc: "Dr . David Alan Gilbert" <linux@treblig.org>,
-	kgdb-bugreport@lists.sourceforge.net,
-	Anton Vorontsov <anton.vorontsov@linaro.org>,
-	Sumit Garg <sumit.garg@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
+Cc: linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org,
-	Douglas Anderson <dianders@chromium.org>,
-	Jason Wessel <jason.wessel@windriver.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] Revert "kernel/debug: Mask KGDB NMI upon entry"
-Date: Wed, 29 Jan 2025 08:25:52 -0800
-Message-ID: <20250129082535.3.I2254953cd852f31f354456689d68b2d910de3fbe@changeid>
-X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
-In-Reply-To: <20250129162700.848018-1-dianders@chromium.org>
-References: <20250129162700.848018-1-dianders@chromium.org>
+	devicetree@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org
+Subject: [PATCH 02/14] dt-bindings: serial: Document sci bindings for the Renesas RZ/T2H (a.k.a r9a09g077) SoC
+Date: Wed, 29 Jan 2025 16:37:38 +0000
+Message-ID: <20250129165122.2980-3-thierry.bultel.yh@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250129165122.2980-1-thierry.bultel.yh@bp.renesas.com>
+References: <20250129165122.2980-1-thierry.bultel.yh@bp.renesas.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -95,77 +61,121 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This reverts commit 5a14fead07bcf4e0acc877a8d9e1d1f40a441153.
+Document RZ/T2H (a.k.a r9a09g077) in SCI binding.
 
-No architectures ever implemented `enable_nmi` since the later patches
-in the series adding it never landed. It's been a long time. Drop it.
-
-NOTE: this is not a clean revert due to changes in the file in the
-meantime.
-
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
+Signed-off-by: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
 ---
+ .../bindings/serial/renesas,rzsci.yaml        | 100 ++++++++++++++++++
+ 1 file changed, 100 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/serial/renesas,rzsci.yaml
 
- include/linux/kgdb.h      |  3 ---
- kernel/debug/debug_core.c | 14 +++-----------
- 2 files changed, 3 insertions(+), 14 deletions(-)
-
-diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
-index 14739952698b..5eebbe7a3545 100644
---- a/include/linux/kgdb.h
-+++ b/include/linux/kgdb.h
-@@ -257,7 +257,6 @@ extern void kgdb_arch_late(void);
-  * hardware breakpoints.
-  * @correct_hw_break: Allow an architecture to specify how to correct the
-  * hardware debug registers.
-- * @enable_nmi: Manage NMI-triggered entry to KGDB
-  */
- struct kgdb_arch {
- 	unsigned char		gdb_bpt_instr[BREAK_INSTR_SIZE];
-@@ -270,8 +269,6 @@ struct kgdb_arch {
- 	void	(*disable_hw_break)(struct pt_regs *regs);
- 	void	(*remove_all_hw_break)(void);
- 	void	(*correct_hw_break)(void);
--
--	void	(*enable_nmi)(bool on);
- };
- 
- /**
-diff --git a/kernel/debug/debug_core.c b/kernel/debug/debug_core.c
-index ce1bb2301c06..0b9495187fba 100644
---- a/kernel/debug/debug_core.c
-+++ b/kernel/debug/debug_core.c
-@@ -837,10 +837,6 @@ kgdb_handle_exception(int evector, int signo, int ecode, struct pt_regs *regs)
- {
- 	struct kgdb_state kgdb_var;
- 	struct kgdb_state *ks = &kgdb_var;
--	int ret = 0;
--
--	if (arch_kgdb_ops.enable_nmi)
--		arch_kgdb_ops.enable_nmi(0);
- 	/*
- 	 * Avoid entering the debugger if we were triggered due to an oops
- 	 * but panic_timeout indicates the system should automatically
-@@ -858,15 +854,11 @@ kgdb_handle_exception(int evector, int signo, int ecode, struct pt_regs *regs)
- 	ks->linux_regs		= regs;
- 
- 	if (kgdb_reenter_check(ks))
--		goto out; /* Ouch, double exception ! */
-+		return 0; /* Ouch, double exception ! */
- 	if (kgdb_info[ks->cpu].enter_kgdb != 0)
--		goto out;
-+		return 0;
- 
--	ret = kgdb_cpu_enter(ks, regs, DCPU_WANT_MASTER);
--out:
--	if (arch_kgdb_ops.enable_nmi)
--		arch_kgdb_ops.enable_nmi(1);
--	return ret;
-+	return kgdb_cpu_enter(ks, regs, DCPU_WANT_MASTER);
- }
- NOKPROBE_SYMBOL(kgdb_handle_exception);
- 
+diff --git a/Documentation/devicetree/bindings/serial/renesas,rzsci.yaml b/Documentation/devicetree/bindings/serial/renesas,rzsci.yaml
+new file mode 100644
+index 000000000000..70e83bbcc79d
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/renesas,rzsci.yaml
+@@ -0,0 +1,100 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/serial/renesas,rzsci.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Renesas Serial Communication Interface
++
++maintainers:
++  - Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
++  - Geert Uytterhoeven <geert+renesas@glider.be>
++
++allOf:
++  - $ref: serial.yaml#
++
++description: |
++  The SCI is configurable to asynchronous and synchronous serial
++  interfaces:
++  - Asynchronous interfaces (UART and Asynchronous Communications Interface
++    Adapter (ACIA))
++  - 8-bit clock synchronous interface
++  - Simple I2C (master-only)
++  - Simple SPI
++  - Smart card interface
++  - Manchester mode
++  - Asynchronous interfaces (UART, RS485 and Asynchronous Communications
++    Interface Adapter (ACIA))
++  The smart card interface complies with the ISO/IEC 7816-3 standard for
++  electronic signals and transmission protocol. Each SCI has FIFO buffers to
++  enable continuous and full-duplex communication, and the data transfer speed
++  can be configured independently using a baud rate generator.
++
++properties:
++  compatible:
++    const: renesas,r9a09g077-sci     # RZ/T2H
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    items:
++      - description: Error interrupt
++      - description: Receive buffer full interrupt
++      - description: Transmit buffer empty interrupt
++      - description: Transmit end interrupt
++
++  interrupt-names:
++    items:
++      - const: eri
++      - const: rxi
++      - const: txi
++      - const: tei
++
++  clocks:
++    minItems: 1
++    maxItems: 2
++
++  clock-names:
++    minItems: 1
++    maxItems: 2
++    items:
++      enum:
++        - fck # UART functional clock
++        - sck # optional external clock input
++
++  power-domains:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - interrupt-names
++  - clocks
++  - clock-names
++  - power-domains
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/r9a09g077-cpg.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    aliases {
++        serial0 = &sci0;
++    };
++
++    sci0: serial@80005000 {
++        compatible = "renesas,r9a09g077-sci";
++        reg = <0x80005000 0x400>;
++        interrupts = <GIC_SPI 590 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 591 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 592 IRQ_TYPE_LEVEL_HIGH>,
++                     <GIC_SPI 593 IRQ_TYPE_LEVEL_HIGH>;
++        interrupt-names = "eri", "rxi", "txi", "tei";
++        clocks = <&cpg CPG_MOD R9A09G077_SCI0_CLK>;
++        clock-names = "fck";
++        power-domains = <&cpg>;
++    };
 -- 
-2.48.1.262.g85cc9f2d1e-goog
+2.43.0
 
 
