@@ -1,147 +1,248 @@
-Return-Path: <linux-serial+bounces-8242-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8246-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AE5AA4DE77
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 13:55:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5F6A4E21D
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 16:00:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA56716A0D8
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 12:55:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D224719C17F1
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 14:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9E7E202F8F;
-	Tue,  4 Mar 2025 12:55:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EE84209686;
+	Tue,  4 Mar 2025 14:52:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="NRcGU9tD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="bIi1zgf0"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29478202960;
-	Tue,  4 Mar 2025 12:55:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC37250BFB
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 14:52:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741099951; cv=fail; b=vFX+Z4O1d0F3cLhRVy2UVq4ryFMx7zX5Dm5JR3uO8GXj3NnfEPKi/ek6JN//8a9j8fat+/8G4YB6xjJyruluqunpOg3aI2QK3lqqUCVQQfLCm0mmCOzcUBsx4czZUIW77l8JMYnhdNJPu4axUtjqeNf5wJlDr93miP766djQpXw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741099951; c=relaxed/simple;
+	bh=1wWLqFg+ZyNjFPCGyIlupF+qKBORmMv346TSXZEK9lM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=AnQCj/uYlFpBVGyaq5xfLLXdtZAJtW6Cz2T/+s2bEKv7Y1ov9P3AVxHUHYXODQtFwYoeKXFwgstP9C4zLc/Amu9oNH87JXTF2DMHcuXI0dCmHYFZgH57bKAyC0iPgGwxiY/RC9pdRb7szcq6c6g1+HTBJoovShaQzPQfwIMiCuQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bIi1zgf0 reason="signature verification failed"; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; arc=fail smtp.client-ip=160.75.25.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
+Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
+	(No client certificate requested)
+	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id 6BFA140CFEE4
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:52:27 +0300 (+03)
+X-Envelope-From: <root@cc.itu.edu.tr>
+Authentication-Results: lesvatest1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=quicinc.com header.i=@quicinc.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=bIi1zgf0
+Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dsJ3pNtzFxnQ
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:50:44 +0300 (+03)
+Received: by le1 (Postfix, from userid 0)
+	id 9345442726; Tue,  4 Mar 2025 17:50:27 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bIi1zgf0
+X-Envelope-From: <linux-kernel+bounces-541719-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bIi1zgf0
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id 3808341F6A
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:44:25 +0300 (+03)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id C3CA9305F789
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:44:24 +0300 (+03)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BCC203AC499
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:44:09 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD4A520F09F;
+	Mon,  3 Mar 2025 12:44:05 +0000 (UTC)
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE4520370D;
+	Mon,  3 Mar 2025 12:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741092939; cv=none; b=iDQJzYu13zyWJ9oyNOulFTPptnhmOHKgNGTw6SnD6r2XoJSbVvhCNLx6a7XRWG4nGC/yXe8lfW8LH/2peI9STugjtt9hUQkDCq/GNgiqCYZ2MvaPTi1egXboqHFh05fY4XYyUoo77OeQy7A5BKLfi7qNMsx7Lmv3GSqtvb59N2s=
+	t=1741005842; cv=none; b=BfeV5lXJOkPebDbyCfbVwp58NAumw2u32k7Gdp49aXMPQvnjc8vk3YoA3RW4IM08+3hHRQABjNpuDSx2+UHx0Amxeq2Nkx9JD7SHHHa8fwxx6DXZueatMzdzu9ynrjj2IORBkFRyuYjHiZmkeF+k3058/3LZencVuxGENjAFFm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741092939; c=relaxed/simple;
-	bh=DmjwCKwsD93HO73VrBgBAQWDy8GDmDWgK3GfYhS4AJ8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HDAxWGlruGLvIlbsZt8yLCF9LgpopZVCjjPLcMv2kTTFNfkl5E4ls3ou1fTIHfQHIpRQlHIms80MTGl1qnsgOqaLE9YLErGZV/8Ur3K4as6VMCR3ZOHikVnoptMUrAUOcAb7rkA9vak3a/aWol5e8FkkOVhVpLutJgzMg/JsZhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=NRcGU9tD; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=ZOOYa20v84BFJHD1ayfwn3RBGuxwB4d68Xr0Wae/NAo=; b=NRcGU9tDBhoqGCIPbQGfFWXxKw
-	RWjX7cPHBFk715BfPa7+c4U0pkvE2rlQvhrS5bwrgs6nXifwyYdsAyGI7UZ6kyLR9Ljx68sBkonBF
-	dKdqrkAFi9nGHT5oQDFToz1VDbU5JNvHXZZ6Kzj8q6oy91t+BUKIvBbsXwVBmIlfc63kXhiOlYN0V
-	4L4Px2wPqvym2Icjfet6mKLyn3t8Buzxg825uarwxAg2f27pqaQJpHSRifnuT6BIZtLDrAXCQvlX0
-	4fXl8ITe0RdCSeDq3ofNrMlIGpeo1g5vpp6QVAJhsBjf7N9aSjC4Ez69+RHslFlbri5YYzDKwx1Rv
-	GILKGJug==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tpRnp-000000002P6-1xXA;
-	Tue, 04 Mar 2025 12:55:17 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B29BB30057E; Tue,  4 Mar 2025 13:55:16 +0100 (CET)
-Date: Tue, 4 Mar 2025 13:55:16 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Marco Elver <elver@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 06/34] cleanup: Basic compatibility with capability
- analysis
-Message-ID: <20250304125516.GF11590@noisy.programming.kicks-ass.net>
-References: <20250304092417.2873893-1-elver@google.com>
- <20250304092417.2873893-7-elver@google.com>
+	s=arc-20240116; t=1741005842; c=relaxed/simple;
+	bh=z0vKUUCdNa2rmQq2Z2iFgz2YDU2r+7vSZIUk6XA/E9s=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rMsK9+BH4r1iLWsIZ4nAPLNE6Q1DZRpzcpAUupzc9OZsoIVjyC31KNCZDwuvIsttRyEaekwoV4Ki+wfSy7CGTDBW6m6yHVWWp55vWGeZyvIeLek6JFX6tuw6G/Mc857BgEtDzP3tDcHv167SR3PcSwmd+XxYLjkxIpZeAcv0yzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=bIi1zgf0; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523AWrUY032012;
+	Mon, 3 Mar 2025 12:43:56 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=MK0vw10NOYxKduj5K3PP71gYo/6Fn4XUgQa
+	fNDnU340=; b=bIi1zgf0IKHuDffXqJe+BTNnjIpMa/oXpmZ6UFYmpbpCdVTQO6N
+	0/7UuYEf48fTK5ILMVA6eYUgufadlKKzsSME2xSdNJVi57rPkxg8AQZQETI0cW/t
+	tBoXYru+qcdKZenh41FWmA+Dau0mdm+qttww5hXG6Gdm1uk2KtRp0Qn3eEV08a2C
+	NrgEqaV6e08w2+AIVPivVhgtcxRd2bMYwEdebTK3gsLU+46uVhHg/L9mvcttFjpI
+	SPzh+ad2p/MtmYRRz6PUMNNCs0gZ168VfEBs+PmHHeIDlybywP9iWNSTmIEr9GOo
+	Zr0gATLBJFAFrLNwQj2EYw/HZB238oQqA6w==
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t95vxvt-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:43:55 +0000 (GMT)
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523Chqat015065;
+	Mon, 3 Mar 2025 12:43:52 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx542-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:43:52 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523Chqgu015058;
+	Mon, 3 Mar 2025 12:43:52 GMT
+Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
+	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523ChpGF015057
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:43:52 +0000
+Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
+	id 368F653B; Mon,  3 Mar 2025 18:13:51 +0530 (+0530)
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
+        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
+Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Subject: [PATCH v3 0/9] Add support to load QUP SE firmware from
+Date: Mon,  3 Mar 2025 18:13:40 +0530
+Message-Id: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
+X-Mailer: git-send-email 2.34.1
+Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250304092417.2873893-7-elver@google.com>
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: syYd2GGAT3Kb_houxUQJ1SvMwz4CEISA
+X-Proofpoint-GUID: syYd2GGAT3Kb_houxUQJ1SvMwz4CEISA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=999 clxscore=1015 priorityscore=1501
+ lowpriorityscore=0 spamscore=0 malwarescore=0 suspectscore=0 adultscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030098
+Content-Transfer-Encoding: quoted-printable
+X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
+X-ITU-Libra-ESVA-ID: 4Z6dsJ3pNtzFxnQ
+X-ITU-Libra-ESVA: No virus found
+X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
+X-ITU-Libra-ESVA-Watermark: 1741704659.30905@SnMWbgLXka8o2R2bl5lGKQ
+X-ITU-MailScanner-SpamCheck: not spam
 
-On Tue, Mar 04, 2025 at 10:21:05AM +0100, Marco Elver wrote:
-> Due to the scoped cleanup helpers used for lock guards wrapping
-> acquire/release around their own constructors/destructors that store
-> pointers to the passed locks in a separate struct, we currently cannot
-> accurately annotate *destructors* which lock was released. While it's
-> possible to annotate the constructor to say which lock was acquired,
-> that alone would result in false positives claiming the lock was not
-> released on function return.
-> 
-> Instead, to avoid false positives, we can claim that the constructor
-> "asserts" that the taken lock is held. This will ensure we can still
-> benefit from the analysis where scoped guards are used to protect access
-> to guarded variables, while avoiding false positives. The only downside
-> are false negatives where we might accidentally lock the same lock
-> again:
-> 
-> 	raw_spin_lock(&my_lock);
-> 	...
-> 	guard(raw_spinlock)(&my_lock);  // no warning
-> 
-> Arguably, lockdep will immediately catch issues like this.
-> 
-> While Clang's analysis supports scoped guards in C++ [1], there's no way
-> to apply this to C right now. Better support for Linux's scoped guard
-> design could be added in future if deemed critical.
+In Qualcomm SoCs, firmware loading for Serial Engines (SE) in the QUP
+hardware has traditionally been managed by TrustZone (TZ). This setup
+handled Serial Engines(SE) assignments and access control permissions,
+ensuring a high level of security but limiting flexibility and
+accessibility.
+=20
+This limitation poses a significant challenge for developers who need mor=
+e
+flexibility to enable any protocol on any of the SEs within the QUP
+hardware.
+=20
+To address this, we are introducing a change that opens the firmware
+loading mechanism to the Linux environment. This enhancement increases
+flexibility and allows for more streamlined and efficient management. We
+can now handle SE assignments and access control permissions directly
+within Linux, eliminating the dependency on TZ.
+=20
+We propose an alternative method for firmware loading and SE
+ownership/transfer mode configuration based on device tree configuration.
+This method does not rely on other execution environments, making it
+accessible to all developers.
+=20
+For SEs used prior to the kernel, their firmware will be loaded by the
+respective image drivers (e.g., Debug UART, Secure or trusted SE).
+Additionally, the GSI firmware, which is common to all SEs per QUPV3 core=
+,
+will not be loaded by Linux driver but TZ only. At the kernel level, only
+the SE protocol driver should load the respective protocol firmware.
+---
+v2 -> v3:
 
-Would definitely be nice to have.
+- Add a new YAML file for QUP peripheral-specific properties for I2C, SPI=
+, and SERIAL buses.
+- Drop the 'qcom,xfer-mode' property and add the 'qcom,gsi-dma-allowed' p=
+roperty in protocol-specific YAML.
+- Add a reference for the QUP peripheral shared YAML to protocol-specific=
+ YAML.
+- Enhance error handling and remove redundant if conditions in the qcom-g=
+eni-se.c driver.
+- Remove the ternary operator in the qup_fw_load function.
+- Update function descriptions and use imperative mood in qcom-geni-se.c
+- Load firmware during probe only if the protocol is invalid.
 
+v2 Link: https://lore.kernel.org/linux-kernel/20250124105309.295769-1-qui=
+c_vdadhani@quicinc.com/=20
+=20
+v1 -> v2:
 
-> @@ -383,6 +387,7 @@ static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)	\
->  
->  #define __DEFINE_LOCK_GUARD_1(_name, _type, _lock)			\
->  static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
-> +	__no_capability_analysis __asserts_cap(l)			\
->  {									\
->  	class_##_name##_t _t = { .lock = l }, *_T = &_t;		\
->  	_lock;								\
-> @@ -391,6 +396,7 @@ static inline class_##_name##_t class_##_name##_constructor(_type *l)	\
->  
->  #define __DEFINE_LOCK_GUARD_0(_name, _lock)				\
->  static inline class_##_name##_t class_##_name##_constructor(void)	\
-> +	__no_capability_analysis					\
+- Drop the qcom,load-firmware property.
+- Remove the fixed firmware path.
+- Add the 'firmware-name' property in the QUP common driver.
+- Add logic to read the firmware path from the device tree.
+- Resolve kernel test robot warnings.
+- Update the 'qcom,xfer-mode' property description.
 
-Does this not need __asserts_cal(_lock) or somesuch?
+v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-1-qu=
+ic_vdadhani@quicinc.com/=20
+---
+Viken Dadhaniya (9):
+  dt-bindings: qcom: geni-se: Add 'firmware-name' property for firmware
+    loading
+  dt-bindings: qcom: se-common: Add QUP Peripheral-specific properties
+    for I2C, SPI, and SERIAL bus
+  dt-bindings: i2c: qcom,i2c-geni: document qcom,gsi-dma-allowed
+  spi: dt-bindings: document qcom,gsi-dma-allowed
+  dt-bindings: serial: document qcom,gsi-dma-allowed
+  soc: qcom: geni-se: Add support to load QUP SE Firmware via Linux
+    subsystem
+  i2c: qcom-geni: Load i2c qup Firmware from linux side
+  spi: geni-qcom: Load spi qup Firmware from linux side
+  serial: qcom-geni: Load UART qup Firmware from linux side
 
-GUARD_0 is the one used for RCU and preempt, rather sad if it doesn't
-have annotations at all.
+ .../bindings/i2c/qcom,i2c-geni-qcom.yaml      |   3 +
+ .../serial/qcom,serial-geni-qcom.yaml         |   3 +
+ .../bindings/soc/qcom/qcom,geni-se.yaml       |   5 +
+ .../soc/qcom/qcom,se-common-props.yaml        |  26 ++
+ .../bindings/spi/qcom,spi-geni-qcom.yaml      |   3 +
+ drivers/i2c/busses/i2c-qcom-geni.c            |   8 +-
+ drivers/soc/qcom/qcom-geni-se.c               | 423 ++++++++++++++++++
+ drivers/spi/spi-geni-qcom.c                   |   6 +
+ drivers/tty/serial/qcom_geni_serial.c         |   8 +-
+ include/linux/soc/qcom/geni-se.h              |  18 +
+ include/linux/soc/qcom/qup-fw-load.h          | 179 ++++++++
+ 11 files changed, 680 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/soc/qcom/qcom,se-co=
+mmon-props.yaml
+ create mode 100644 include/linux/soc/qcom/qup-fw-load.h
+
+--=20
+2.34.1
+
 
 
