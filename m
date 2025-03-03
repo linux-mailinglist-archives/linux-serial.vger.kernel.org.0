@@ -1,104 +1,110 @@
-Return-Path: <linux-serial+bounces-8247-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8248-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A606A4E326
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 16:27:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E0A9A4E304
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 16:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC15C884F09
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 15:05:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3D22D3BFE68
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 15:15:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E46B527C14A;
-	Tue,  4 Mar 2025 15:00:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBDB27EC6B;
+	Tue,  4 Mar 2025 15:09:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Qy4Y32JG"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70C7620A5E8
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 15:00:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0598127E1C4
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 15:09:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741100431; cv=pass; b=uQsk8kXdPe8//dkWEvrLLfilZpF6uW2HHVGAfpm+SQhk+7g/TGT5EYb30gT9H/GhDfEETabMglc20rGl33evEqJpH0s39jmB1DcsTVUbs3Z3Dfvz++qQOyFYdT8TdGvqweVK3TAAFSVQy9IHNqXRshZY9I1LlgRMi94fhY9YAjI=
+	t=1741100944; cv=pass; b=dG06cuNdoe60nc/FHUJM7aDReinvHLh3lCST+jvG4Y5N1kF9mG0hlrVxNNW2TZVYx+aLq3N/E0XVuqPgl614gTQnhyEZxLkLG/2Ygf/kCevB4iNEU0vOs1IAlkwiD9touSYofOvNKdSq4XpY48zpvjLjYQlRT6zApCLbzU0c/z4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741100431; c=relaxed/simple;
-	bh=3+YMU5QVO8O5inRiM0lXe5oV4sm6tHhKvfipqFyuCeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oRKqcdJJu477NPtrB/Y/q0sJkCRW5E3Uc3NHu45UcCs5DqNWLIY0TJ9b6+6y0WDwvXrdJwbq4BfRQ5PO3pgwKdLr4sT2Ocsw8Ff1OF1eM6Gm+Y8ksiBynjM9q7wza0598uQ+Y6FRHgWHnqZHl552aTJBcwvmTAml6gVHQnJIqaM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=none smtp.mailfrom=cc.itu.edu.tr; arc=none smtp.client-ip=185.203.201.7; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=pass smtp.client-ip=160.75.25.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+	s=arc-20240116; t=1741100944; c=relaxed/simple;
+	bh=oqjzi/zAhOsterMeAfvhd2Lrly5BuIHrXEyDJXM1IIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=c0veB8UKlOTBEAWtI4sv+lVfkcgKt603tmfzYyR0nljAxqZ1S4uOH5bCEILIuXHVkgsnhdJmkzv5PdpJM9/NkBqgnoewBLdPfPFrmOQw8TZ2PC8jCYhaGvB39NliVp4g+Y+8n1hWbd3R1CBPHDVHD0HioiXlw2w3So5DhL4OyCA=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qy4Y32JG; arc=none smtp.client-ip=205.220.168.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id 7B26740D0479
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 18:00:28 +0300 (+03)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 5346140D5719
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 18:09:01 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6f2c46cvzFy7f
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:58:48 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fDZ2b7hzFyHd
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 18:07:26 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 2EF9342723; Tue,  4 Mar 2025 17:58:46 +0300 (+03)
-X-Envelope-From: <linux-kernel+bounces-541576-bozkiru=itu.edu.tr@vger.kernel.org>
+	id B68DD4272F; Tue,  4 Mar 2025 18:07:04 +0300 (+03)
+Authentication-Results: lesva1.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qy4Y32JG
+X-Envelope-From: <linux-kernel+bounces-541733-bozkiru=itu.edu.tr@vger.kernel.org>
+Authentication-Results: lesva2.cc.itu.edu.tr;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qy4Y32JG
 Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 4507941B4A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:28:28 +0300 (+03)
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 1CBD7305F789
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:28:28 +0300 (+03)
+	by le2 (Postfix) with ESMTP id 52FE041AC2
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:48:13 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id 9954E3063EFC
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:48:12 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BDF82188FF0A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:26:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D07D87A6F1B
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:47:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CACEA1F462A;
-	Mon,  3 Mar 2025 11:25:42 +0000 (UTC)
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8BD44211468;
+	Mon,  3 Mar 2025 12:47:30 +0000 (UTC)
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FCE51F4180
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 11:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16C137D07D;
+	Mon,  3 Mar 2025 12:47:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741001141; cv=none; b=C+mKUZMxNqeAqEOpvy8/VnqvLXzuw2PCOnhWFgwEvvbGh0opJ6QlrcfUa9EPlE1vcuSSUX5w+ZRgb8DHbGM9Ckd8XuVkgDGRfM7U1C9DLXKw/Y7YT9X06nRaaDDXh4oEqZrthBJMUeou8wxtw4PwXPRDoDiTPNbiad1Mbr0GmKQ=
+	t=1741006046; cv=none; b=WKuB/fsPZwBN1FofX6EtmsLNjiiMu+2/BVH3T9txQGlsafNeUR3vYlqadnW63NkeKdidWzYR6RwGiEYbpyu7I2QAL3ynMijJ3ktFNG4Bboo+gOBOoE/FpI48GwlIB/8jMuaheCcy+szRSLwwjsNZsFuH3wiRofBAbPn6SQyISpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741001141; c=relaxed/simple;
-	bh=3+YMU5QVO8O5inRiM0lXe5oV4sm6tHhKvfipqFyuCeE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E/CE+eKUNBu0p1crL2IMj7bK6wl8vRF40pedbovHwiRTbO7vtXeAIYaHG1UQ7hL/NoqOV1ydmNSB2lnRnWCqgohWvLCI5zaZXfwdKTI3McC1Lg6WwCeNdNmfrhT/A93pqIO27wBZ+EA2Bg8qCJ2chyq82nKpDEBzm5cjgugdoj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1tp3vO-0005VN-TN; Mon, 03 Mar 2025 12:25:30 +0100
-Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1tp3vO-003mo5-22;
-	Mon, 03 Mar 2025 12:25:30 +0100
-Received: from mfe by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
-	(envelope-from <mfe@pengutronix.de>)
-	id 1tp3vO-00AihB-1j;
-	Mon, 03 Mar 2025 12:25:30 +0100
-Date: Mon, 3 Mar 2025 12:25:30 +0100
-From: Marco Felsch <m.felsch@pengutronix.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Rob Herring <robh@kernel.org>, Jiri Slaby <jirislaby@kernel.org>,
-	Johan Hovold <johan@kernel.org>, linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 0/3] USB-Serial serdev support
-Message-ID: <20250303112530.igosjo3s5uocndxj@pengutronix.de>
-References: <20240807-v6-10-topic-usb-serial-serdev-v1-0-ed2cc5da591f@pengutronix.de>
- <20241001072453.3xv5sqxaj4zjprnz@pengutronix.de>
- <2024100109-maker-ravine-7c65@gregkh>
- <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
+	s=arc-20240116; t=1741006046; c=relaxed/simple;
+	bh=oqjzi/zAhOsterMeAfvhd2Lrly5BuIHrXEyDJXM1IIY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=NkO2DKa2XDcVRkNUMTHBOHrbW5b03u5VVXDOMwSJeoUiiPf3q9H8RGdI4dBf2+kP/z4s2la5ACAkNmsljcsPoTJ8ptBeUapn3eS3ZqXVItkT7qpNWJheIUg4DC4tWvAEls5vIa4dv2t74UlhKlJBFZBqC9CleL2LTzVMFud0jFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Qy4Y32JG; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523B8kNN025661;
+	Mon, 3 Mar 2025 12:47:20 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	rN2bGVg8ZzYNF7l4VQygrAQDDlBNhEOeiHkgxlotQ7E=; b=Qy4Y32JGSiSmCU/w
+	RE3acnnO3HQsFwnkJGjzGvjL7RFItt6du1G+NBV0npjsxGKsXPVTL9Tre8fApAx2
+	r3WB+xgmZIGaYkFOFymYCW5bu6o+/s74NAqo4WSLD41CAtBdSK7C/lekbDPd5SsD
+	+zsIfx7d/q66yF/ncMI3yX+Rzq0nN4bW6tfhbJKvxZnoNB3gS7KwSDXp8a5FT2YZ
+	66nrFf/b6T3q8HK7CJoBniL/H4wbCy1OcRGIMyoTrkF8EUkLI+Iy4ddXMQVaz1pH
+	6yY8HKb3i9po4eU9IUVBesSvsuv0Ip4SX09ev/kbJLrWttHkH3T7Gs9cp5P0UaDu
+	feAdyg==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t6k4rft-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 12:47:19 +0000 (GMT)
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 523ClI1M030976
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 3 Mar 2025 12:47:18 GMT
+Received: from [10.216.31.193] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 3 Mar 2025
+ 04:47:12 -0800
+Message-ID: <f20b98fb-1cbc-4211-b616-5421bf43301f@quicinc.com>
+Date: Mon, 3 Mar 2025 18:17:09 +0530
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -106,69 +112,244 @@ List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241028225702.tdtfqzhm335vvuv5@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: mfe@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 5/8] soc: qcom: geni-se: Add support to load QUP SE
+ Firmware via Linux subsystem
+To: Krzysztof Kozlowski <krzk@kernel.org>, <andi.shyti@kernel.org>,
+        <robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>,
+        <broonie@kernel.or>, <andersson@kernel.org>, <konradybcio@kernel.org>,
+        <johan+linaro@kernel.org>, <dianders@chromium.org>,
+        <agross@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>
+CC: <quic_msavaliy@quicinc.com>, <quic_anupkulk@quicinc.com>
+References: <20250124105309.295769-1-quic_vdadhani@quicinc.com>
+ <20250124105309.295769-6-quic_vdadhani@quicinc.com>
+ <af27ae90-99d7-497f-b8f5-b8ca0b039753@kernel.org>
+Content-Language: en-US
+From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+In-Reply-To: <af27ae90-99d7-497f-b8f5-b8ca0b039753@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: M1Rln0lZesj2TR50AXa1YgGCXMKjmv9Q
+X-Proofpoint-ORIG-GUID: M1Rln0lZesj2TR50AXa1YgGCXMKjmv9Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
+ impostorscore=0 priorityscore=1501 bulkscore=0 mlxlogscore=999 mlxscore=0
+ lowpriorityscore=0 clxscore=1015 spamscore=0 malwarescore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030098
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6f2c46cvzFy7f
+X-ITU-Libra-ESVA-ID: 4Z6fDZ2b7hzFyHd
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741705134.95851@otnbXnGAgySzfj2hiAaWUw
+X-ITU-Libra-ESVA-Watermark: 1741705652.7462@RNdKjE9mIbWFA+4zGAmAvw
 X-ITU-MailScanner-SpamCheck: not spam
 
-Hi,
 
-On 24-10-28, Marco Felsch wrote:
-> Hi Greg,
-> 
-> On 24-10-01, Greg Kroah-Hartman wrote:
-> > On Tue, Oct 01, 2024 at 09:24:53AM +0200, Marco Felsch wrote:
-> > > Hi,
-> > > 
-> > > gentle ping as this is series is two months old now.
-> > 
-> > And it was rejected as serdev does not support hotplug which of course,
-> > usb-serial does.
-> 
-> I hoped to get some feedback on my answer [1]. Regarding hotplug
-> support: serdev _requires_ some sort of firmware like OF (not sure if it
-> does work with ACPI too). That said, if serdev finds no firmware a
-> fallback is provided to the standard serial handling.
-> 
-> The firmware could either be added directly by the platform OF file or
-> via OF-overlays. By making use of overlays we could gain some kind of
-> hotplug: Once a usb devices was detected and the driver has an
-> overlay, the overlay gets applied and the probe continues, like we do it
-> for PCIe devices now [2]. For devices which don't have a registered
-> overlay the standard usb-serial setup is done by exposing the serial
-> interface to the userspace.
 
-is this idea worth to give it a try for a v2 or do you have something
-different in mind?
-
-I'm happy for any input.
-
-Regards,
-  Marco
-
-> > So until serdev is fixed up to handle that correctly, this is not going
-> > anywhere, nor should you want it to as then you would be in charge of
-> > code that does not work properly :)
+On 1/27/2025 12:36 PM, Krzysztof Kozlowski wrote:
+> On 24/01/2025 11:53, Viken Dadhaniya wrote:
+>>   /* Common SE registers */
+>> @@ -891,6 +896,445 @@ int geni_icc_disable(struct geni_se *se)
+>>   }
+>>   EXPORT_SYMBOL_GPL(geni_icc_disable);
+>>   
+>> +/**
+>> + * elf_phdr_valid: Function to validate elf header.
+>> + * @phdr: A pointer to a elf header.
+>> + *
+>> + * This function validates elf header by comparing fields
 > 
-> Regards,
->   Marco
+> Drop "This function" and use imperative. It's redundant and you keep
+> using it everywherre here
+>  
+
+Updated in V3.
+
+> ...
 > 
-> [1] https://lore.kernel.org/all/20240917044948.i2eog4ondf7vna7q@pengutronix.de/
-> [2] https://lore.kernel.org/all/7512cbb7911b8395d926e9e9e390fbb55ce3aea9.camel@pengutronix.de/
+>> +static int qup_fw_load(struct qup_se_rsc *rsc, const char *fw_name)
+>> +{
+>> +	int ret;
+>> +	const struct firmware *fw;
+>> +	struct device *dev = rsc->se->dev;
+>> +
+>> +	ret = request_firmware(&fw, fw_name, dev);
+>> +	if (ret) {
+>> +		dev_err(dev, "request_firmware failed for %d: %d\n", rsc->protocol, ret);
+>> +		return ret;
+>> +	}
+>> +
+>> +	ret = (rsc->protocol != GENI_SE_NONE) ? geni_load_se_fw(rsc, fw) : -EINVAL;
 > 
-> > 
-> > thanks,
-> > 
-> > greg k-h
-> > 
+> Drop ternary operator. Not easy to read
+Updated in V3.
+
+> 
+>> +
+>> +	release_firmware(fw);
+>> +
+>> +	return ret;
+>> +}
+> 
+>> +
+>> +/**
+>> + * geni_load_se_firmware: Function to initiate firmware loading.
+>> + * @se: Serial engine details.
+>> + * @protocol: protocol from spi, i2c or uart for which firmware to
+>> + * be loaded
+>> + *
+>> + * This function is called from the probe function of protocol driver.
+>> + * if dtsi properties are configured to load QUP firmware and firmware
+>> + * is already not loaded, it will start firmware loading. if dtsi
+>> + * properties are not defined,it will skip loading firmware assuming
+>> + * it is already loaded by TZ.
+>> + *
+>> + * return: Return 0 if no error, else return error value.
+>> + */
+>> +int geni_load_se_firmware(struct geni_se *se,
+>> +			  enum geni_se_protocol_type protocol)
+>> +{
+>> +	struct qup_se_rsc rsc;
+>> +	const char *fw_name;
+>> +	int ret;
+>> +
+>> +	ret = device_property_read_string(se->wrapper->dev, "firmware-name", &fw_name);
+>> +	if (ret)
+>> +		return  -EINVAL;
+>> +
+>> +	rsc.se = se;
+>> +	rsc.protocol = protocol;
+>> +
+>> +	/* Set default xfer mode to FIFO*/
+>> +	rsc.mode = GENI_SE_FIFO;
+>> +	of_property_read_u32(se->dev->of_node, "qcom,xfer-mode", &rsc.mode);
+>> +	switch (rsc.mode) {
+>> +	case GENI_SE_FIFO:
+>> +	case GENI_SE_DMA:
+> 
+> How value of 2 is acceptable? Your bindings said it is not.
+
+Corrected in V3.
+
+> 
+> 
+>> +	case GENI_GPI_DMA:
+>> +		break;
+>> +	default:
+>> +		dev_err(se->dev, "Invalid xfer mode specified: %d\n", rsc.mode);
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	ret = qup_fw_load(&rsc, fw_name);
+>> +	if (ret) {
+>> +		dev_err(se->dev,  "Firmware Loading failed for proto: %s Error: %d\n",
+>> +			protocol_name[rsc.protocol], ret);
+> 
+> Aren't you printing same error multiple times?
+
+Removed in V3.
+
+> 
+>> +		return ret;
+>> +	}
+>> +
+>> +	dev_dbg(se->dev, "Firmware load for %s protocol is Success for xfer mode %d\n",
+>> +		protocol_name[rsc.protocol], rsc.mode);
+>> +	return ret;
+>> +}
+>> +EXPORT_SYMBOL_GPL(geni_load_se_firmware);
+>> +
+>>   static int geni_se_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device *dev = &pdev->dev;
+>> diff --git a/include/linux/soc/qcom/geni-se.h b/include/linux/soc/qcom/geni-se.h
+>> index 2996a3c28ef3..289fa6675d2b 100644
+>> --- a/include/linux/soc/qcom/geni-se.h
+>> +++ b/include/linux/soc/qcom/geni-se.h
+>> @@ -1,6 +1,7 @@
+>>   /* SPDX-License-Identifier: GPL-2.0 */
+>>   /*
+>>    * Copyright (c) 2017-2018, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2023-2025 Qualcomm Innovation Center, Inc. All rights reserved.
+>>    */
+>>   
+>>   #ifndef _LINUX_QCOM_GENI_SE
+>> @@ -72,6 +73,19 @@ struct geni_se {
+>>   	struct geni_icc_path icc_paths[3];
+>>   };
+>>   
+>> +/**
+>> + * struct qup_se_rsc - Structure containing se details protocol and xfer mode
+>> + *
+>> + * @mode: transfer mode se fifo, dma or gsi.
+>> + * @protocol: Protocol spi or i2c or serial.
+>> + * @se: Pointer to the concerned serial engine.
+>> + */
+>> +struct qup_se_rsc {
+>> +	struct geni_se *se;
+>> +	enum geni_se_xfer_mode mode;
+>> +	enum geni_se_protocol_type protocol;
+>> +};
+>> +
+>>   /* Common SE registers */
+>>   #define GENI_FORCE_DEFAULT_REG		0x20
+>>   #define GENI_OUTPUT_CTRL		0x24
+>> @@ -531,5 +545,8 @@ void geni_icc_set_tag(struct geni_se *se, u32 tag);
+>>   int geni_icc_enable(struct geni_se *se);
+>>   
+>>   int geni_icc_disable(struct geni_se *se);
+>> +
+>> +int geni_load_se_firmware(struct geni_se *se,
+>> +			  enum geni_se_protocol_type protocol);
+>>   #endif
+>>   #endif
+>> diff --git a/include/linux/soc/qcom/qup-fw-load.h b/include/linux/soc/qcom/qup-fw-load.h
+>> new file mode 100644
+>> index 000000000000..b9b58e81f5cb
+>> --- /dev/null
+>> +++ b/include/linux/soc/qcom/qup-fw-load.h
+>> @@ -0,0 +1,179 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+>> + */
+>> +#ifndef _LINUX_QCOM_QUP_FW_LOAD
+>> +#define _LINUX_QCOM_QUP_FW_LOAD
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/elf.h>
+>> +#include <linux/firmware.h>
+>> +#include <linux/kernel.h>
+>> +
+>> +/*Magic numbers*/
+>> +#define MAGIC_NUM_SE			0x57464553
+>> +
+>> +/* Common SE registers*/
+>> +#define GENI_INIT_CFG_REVISION		0x0
+>> +#define GENI_S_INIT_CFG_REVISION	0x4
+>> +#define GENI_FORCE_DEFAULT_REG		0x20
+>> +#define GENI_CGC_CTRL			0x28
+>> +#define GENI_CFG_REG0			0x100
+>> +
+>> +#define	QUPV3_SE_HW_PARAM_1		0xE28
+> 
+> Drop indentation after 'define'
+
+Updated in V3.
+
+> 
+> 
+> Best regards,
+> Krzysztof
 
 
