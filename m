@@ -1,220 +1,174 @@
-Return-Path: <linux-serial+bounces-8252-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8253-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2F5F1A4EAA2
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 19:08:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 324F2A4EABE
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 19:11:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C9F6419C3A3A
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 18:03:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8520118836F1
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 18:06:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4F0277817;
-	Tue,  4 Mar 2025 17:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51F11283CBE;
+	Tue,  4 Mar 2025 17:45:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="QQbVVHDu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZVMooXPe"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65B7D21D00D
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:42:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.116
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741110155; cv=fail; b=QiftNOkYjn/IAnDMWAnDHjSyOpL2eWlrHlaFKwPjhMFjL/zeuknYSCB2+U0UXG4tSDLt8OG5k4izuLC084zPttQ0Q7UToTGxZv1ES0AYh5lc4f7H65HSlmOqCA7AvgGhnYx/oFcMgzsvoRYcIwTMW5nK7dIB/sDAUx7/DzUjatE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741110155; c=relaxed/simple;
-	bh=1DarwwdcHSgo8NBv1NWEBooWSWcuDdO8/nohsDYSTd8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VscUbUrvKLzRZPfi6tZjdUH0gBC0ouxLgbK2UMySxZGvzoAZdleSqmYcpXkckj4hMiJJb5waSfmrYCTxWbI2ufSLF+xfiCFv/8vtrvM5C3qIh7HjcLbj2mE6SGK8r+kZsqxkalLh3MkBiIUd71gbNMqNCNLwJ3z13+swdqLSjJw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu reason="signature verification failed"; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; arc=fail smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (unknown [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id AB82E40D2868
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 20:42:31 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=quicinc.com header.i=@quicinc.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=QQbVVHDu
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fpF3NVbzG0kQ
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 18:33:09 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 5608E400C6; Tue,  4 Mar 2025 18:32:57 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu
-X-Envelope-From: <linux-kernel+bounces-541723-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 7BF904221D
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:45:41 +0300 (+03)
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id BC5C42DCE0
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:45:40 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 36C1F7A3E55
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:44:40 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0834A212FA1;
-	Mon,  3 Mar 2025 12:44:18 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4957220FABB;
-	Mon,  3 Mar 2025 12:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2837B259C8E;
+	Tue,  4 Mar 2025 17:45:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741005854; cv=none; b=iAZuhgvSiZYj1tvHIuLMq4CE6VHIr7AMWpk9EHp71i+/4NfHxUigNXucQGXZWLPhBvn1+rjFsYfU3oWCtBL3Fo4DtfdJk9qqj22vJuQS7cJpzjEjGbqEZ9Gf1jZAtzkb3Sq6dIhnGU599tfnbvY3wIWncGhPA7aUAhO9Ia4UfD4=
+	t=1741110356; cv=none; b=OxLOtseK7W/y6Cl44mR+0RpvBzDSUwNVsXppCJfSwejKR3ppY43FQKnbspWCLF59e8toiJQyFsBpQy/AuMD5qd5ZTweGkwJuLJWJL8p5Bb+elJo0BV+4kJY+RUOjHfrpRHDKSAEau/l8bVlqRhTVCzSn0ceQ0EybQEiM5irU5q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741005854; c=relaxed/simple;
-	bh=5Pz3E1OrB0yL84X+0ShTfpEPaw1Jt/X9ouBXYxIxOFc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KcaaQdLKf3xrldVK0Yd9O6ehRGoo+e1NUalCvFwSqovm242HH2u0BOB0DI1qOFW+4TKN5KmRUJFAhCJn3Tolh8sSaz9phSryckAITH3Nht4dgFad4l0YdE0SyV+tJzk8ReEqkBtO81g+IWKnQ+MAl7FOEm6u0ehVjCnh7rONV8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=QQbVVHDu; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523APJ4i000940;
-	Mon, 3 Mar 2025 12:44:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=ap+Is/pFfik
-	mdzgl/IVzBjkMnJpe+CGzhQU6WoEkJiM=; b=QQbVVHDuxVxfMJRO39yDOHtn23T
-	+6Q9gCrKGC0ASurjdovwdoqcJynDRsFvr/fJf6ieQg/SaAgYY/cX4Zmnyz7nuoNN
-	d+2p9iEO4Y7tAMtOIB2ng53nkcVDghPa1Sx1I0Gi5uvGKuu1Xii2Jv9n2pHMDN5J
-	thWdv5n31TJFNFj+tIDlHoRjQDaCMvwztj3sNMPKZjvPa/4PLXt/+U/KVNr47Q3y
-	k9wyEVnZuuASgX0vHdZG2ucCkNAx7H6pJuZkHZ/ZPWhuUj8p7REYsPMTdOD+bg0t
-	WDH2eSArWuRXwFvX4LLEhAWjdKKi6VeNyy42A5ndsct3liOnFXic01KCasg==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453tascy3h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:09 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523Ci5iB015256;
-	Mon, 3 Mar 2025 12:44:05 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx56x-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:05 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523Ci5wt015251;
-	Mon, 3 Mar 2025 12:44:05 GMT
-Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523Ci5v3015250
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:05 +0000
-Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
-	id 83A5253B; Mon,  3 Mar 2025 18:14:04 +0530 (+0530)
-From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
-        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
-        Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Subject: [PATCH v3 4/9] spi: dt-bindings: document qcom,gsi-dma-allowed
-Date: Mon,  3 Mar 2025 18:13:44 +0530
-Message-Id: <20250303124349.3474185-5-quic_vdadhani@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
-References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
-Precedence: bulk
+	s=arc-20240116; t=1741110356; c=relaxed/simple;
+	bh=dMmbRSw5Wygxzqtk7yBIvmykz+bSqg8Tu3586uZGrOQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oKF+hc0djwqCg1gCBiDBTLxu/HQrrrIUdKBdgCvUpWycxogo2UjLmCxg+bKhkRp5HoVO3qUPTbH7rvrl3onhutevdrxaIIbiWF4v9grJUgC3zrqiETs1vD5+M1bTcABqmqi7Gzi8hhYN2Chpj4CBFfE0ooW++pVAaM4TPPzqAqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZVMooXPe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B78E5C4CEE5;
+	Tue,  4 Mar 2025 17:45:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741110355;
+	bh=dMmbRSw5Wygxzqtk7yBIvmykz+bSqg8Tu3586uZGrOQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ZVMooXPefi4t97hpLHFZ9BqCzhlFsGejQJ8vuBGwLmnbj3WDSqs/hao5H4qxtIr5v
+	 YQ+13QUGc6uyyK7BXaHQRUmtlFgJtUc75VY0hNt9f3vJ6ynhTPk787G7SnKGcL5+Lk
+	 LR/9k4lGu0QXs798Pq+RsYCMmtN80BZWba33noIfbc2ls1FwWebU7r4ha8NMG24ZOb
+	 kdQfMpaHzRVbF2u3JASSNHz1h8WuqCV8mPnogVjP1cuWcbccPgexA2fDEd7iJXPuCS
+	 9JBKj1P9vFKfyEPnCevx/MXGCAvLFNLSPEAElatTnjPHdMSwHmZTmQcv8a/n8plNOF
+	 8pSGwEgkfUCyg==
+Date: Tue, 4 Mar 2025 11:45:53 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	johan+linaro@kernel.org, dianders@chromium.org, konradybcio@kernel.org, 
+	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com
+Subject: Re: [PATCH v1] serial: qcom-geni: Remove alias dependency from qcom
+ serial driver
+Message-ID: <tn6czifetdf2mg5gl3mhfpwcb6q7dkn5r4kgqln6evm4qdsjvi@ehpl3qj3axvw>
+References: <20250304071423.4033565-1-quic_vdadhani@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: aiwDP_jtpYWrqfwNxMPcl13ED4_nc1Zk
-X-Proofpoint-ORIG-GUID: aiwDP_jtpYWrqfwNxMPcl13ED4_nc1Zk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=999 spamscore=0 phishscore=0 mlxscore=0 priorityscore=1501
- bulkscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0 adultscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2503030098
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fpF3NVbzG0kQ
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741714844.28414@3vw7yzB4kD0BaOIxnefL2w
-X-ITU-MailScanner-SpamCheck: not spam
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250304071423.4033565-1-quic_vdadhani@quicinc.com>
 
-Data transfer mode is fixed by TrustZone (TZ), which currently restricts
-developers from modifying the transfer mode from the APPS side.
+On Tue, Mar 04, 2025 at 12:44:23PM +0530, Viken Dadhaniya wrote:
+> Remove the dependency on aliases in the device tree configuration for the
+> qcom serial driver. Currently, the absence of an alias results in an
+> invalid line number, causing the driver probe to fail for geni serial.
+> 
+> To prevent probe failures, implement logic to dynamically assign line
+> numbers if an alias is not present in the device tree for non-console
+> ports.
+> 
 
-Document the 'qcom,gsi-dma-allowed' property to select the data transfer
-mode to GPI DMA (Generic Packet Interface). If not set, FIFO mode
-(PIO/CPU DMA) will be selected by default.
+Please read and follow https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
 
-Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
----
-v2 -> v3:
+Start with your problem description, then a description of your proposed
+solution.
 
-- Drop the 'qcom,xfer-mode' property and add the 'qcom,gsi-dma-allowed' p=
-roperty.
-- Add a reference for the QUP peripheral shared YAML.
-- Update commit log.
+> Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 26 +++++++++++++++++++++++---
+>  1 file changed, 23 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index a80ce7aaf309..2457f39dfc84 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -98,6 +98,8 @@
+>  
+>  #define DMA_RX_BUF_SIZE		2048
+>  
+> +static DEFINE_IDR(port_idr);
 
-v2 Link: https://lore.kernel.org/linux-arm-msm/20250124105309.295769-4-qu=
-ic_vdadhani@quicinc.com/
-
-v1 -> v2:
-
-- Drop 'qcom,load-firmware' property and add 'firmware-name' property in
-  qup common driver.
-- Update commit log.
-
-v1 Link: https://lore.kernel.org/linux-kernel/20241204150326.1470749-3-qu=
-ic_vdadhani@quicinc.com/
----
----
- Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yam=
-l b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-index 2e20ca313ec1..012cb7aecb3d 100644
---- a/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-+++ b/Documentation/devicetree/bindings/spi/qcom,spi-geni-qcom.yaml
-@@ -25,6 +25,7 @@ description:
-=20
- allOf:
-   - $ref: /schemas/spi/spi-controller.yaml#
-+  - $ref: /schemas/soc/qcom/qcom,se-common-props.yaml#
-=20
- properties:
-   compatible:
-@@ -63,6 +64,8 @@ properties:
-   power-domains:
-     maxItems: 1
-=20
-+  qcom,gsi-dma-allowed: true
-+
-   reg:
-     maxItems: 1
-=20
---=20
-2.34.1
+You're just looking for a index allocator, so DEFINE_IDA() is probably
+what you want to use.
 
 
+That said, theoretically I think we could get 24 GENI serial instances
+in a system. Making this a huge waste of memory and CPU cycles.
+
+An empty idr takes 88 bytes, if you then allocate 1 entry it grows with
+at least one xa_array node which is 576 bytes.
+
+> +
+>  struct qcom_geni_device_data {
+>  	bool console;
+>  	enum geni_se_xfer_mode mode;
+> @@ -253,10 +255,25 @@ static struct qcom_geni_serial_port *get_port_from_line(int line, bool console)
+>  	struct qcom_geni_serial_port *port;
+>  	int nr_ports = console ? GENI_UART_CONS_PORTS : GENI_UART_PORTS;
+>  
+> -	if (line < 0 || line >= nr_ports)
+> -		return ERR_PTR(-ENXIO);
+> +	if (console) {
+> +		if (line < 0 || line >= nr_ports)
+> +			return ERR_PTR(-ENXIO);
+> +
+> +		port = &qcom_geni_console_port;
+> +	} else {
+> +		int max_alias_num = of_alias_get_highest_id("serial");
+> +
+> +		if (line < 0 || line >= nr_ports)
+> +			line = idr_alloc(&port_idr, (void *)port, max_alias_num + 1, nr_ports,
+> +					 GFP_KERNEL);
+> +		else
+> +			line = idr_alloc(&port_idr, (void *)port, line, nr_ports, GFP_KERNEL);
+> +
+> +		if (line < 0)
+> +			return ERR_PTR(-ENXIO);
+>  
+> -	port = console ? &qcom_geni_console_port : &qcom_geni_uart_ports[line];
+> +		port = &qcom_geni_uart_ports[line];
+
+Plus qcom_geni_uart_ports[] is GENI_UART_PORTS long. So you will
+actually only have a maximum of 3 ports.
+
+
+I like the change, but please replace port_idr with a u32 and use
+linux/bitmap.h to implement the port allocation scheme.
+
+Regards,
+Bjorn
+
+> +	}
+>  	return port;
+>  }
+>  
+> @@ -1761,6 +1778,7 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  						port->wakeup_irq);
+>  		if (ret) {
+>  			device_init_wakeup(&pdev->dev, false);
+> +			idr_remove(&port_idr, uport->line);
+>  			uart_remove_one_port(drv, uport);
+>  			return ret;
+>  		}
+> @@ -1772,10 +1790,12 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
+>  static void qcom_geni_serial_remove(struct platform_device *pdev)
+>  {
+>  	struct qcom_geni_serial_port *port = platform_get_drvdata(pdev);
+> +	struct uart_port *uport = &port->uport;
+>  	struct uart_driver *drv = port->private_data.drv;
+>  
+>  	dev_pm_clear_wake_irq(&pdev->dev);
+>  	device_init_wakeup(&pdev->dev, false);
+> +	idr_remove(&port_idr, uport->line);
+>  	uart_remove_one_port(drv, &port->uport);
+>  }
+>  
+> -- 
+> 2.34.1
+> 
+> 
 
