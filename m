@@ -1,210 +1,164 @@
-Return-Path: <linux-serial+bounces-8245-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8243-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A529EA4E13E
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 15:40:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C7F3A4DEEB
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 14:12:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5843516D07D
-	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 14:35:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F14DE7AAD6F
+	for <lists+linux-serial@lfdr.de>; Tue,  4 Mar 2025 13:09:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4050253B4F;
-	Tue,  4 Mar 2025 14:32:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38A2E2040BC;
+	Tue,  4 Mar 2025 13:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="DSdzmB7i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lgAjNSH8"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E025277001
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 14:32:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.115
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741098772; cv=fail; b=Xg/NRmlScAmW/lhETDFRW/koc4FhR+/+131vv+uzTJszsf3hu74gRPS/0bGShFbhsLpQ2vpS+nTX3su4K/M3tNpr29ciNEMuL4nlh6tbr0G9VMLs3dH1CsHukZ+U3U/E+PKWiG3X1qYBJZisUd9Czr21sGumzRO+PtnI9F1jHh8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741098772; c=relaxed/simple;
-	bh=yzxmUO2iYVE91XM7YOkj8eJa75TVeACij6Uo0cwzIMY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=q1kGNLtKVQwQ1JnT9Oyd3Vdk5eNpp9Q5Go9OaV3mzcoT/OQIPYrUfqlPtZ4kHMagXzV8umXiBBacycBJwZtPhz53sXYeFzKbfTaEmTdNHx3WTXk3QIpMRmyMNa1G2CVf14CgjmGos3LxLWoShYEZv4sE/tPiXSYCb/5YuTQk6Q8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSdzmB7i reason="signature verification failed"; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; arc=fail smtp.client-ip=160.75.25.115
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
-Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
-	(No client certificate requested)
-	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 9D6CC40D4DD1
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:32:49 +0300 (+03)
-X-Envelope-From: <root@cc.itu.edu.tr>
-Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=quicinc.com header.i=@quicinc.com header.a=rsa-sha256 header.s=qcppdkim1 header.b=DSdzmB7i
-Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6dQC3SxyzFwnP
-	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 17:30:43 +0300 (+03)
-Received: by le1 (Postfix, from userid 0)
-	id 9035A4271F; Tue,  4 Mar 2025 17:30:36 +0300 (+03)
-Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSdzmB7i
-X-Envelope-From: <linux-kernel+bounces-541725-bozkiru=itu.edu.tr@vger.kernel.org>
-Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSdzmB7i
-Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
-	by le2 (Postfix) with ESMTP id 18C8142244
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:46:13 +0300 (+03)
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by fgw1.itu.edu.tr (Postfix) with SMTP id 5BD2F3063EFC
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 15:46:12 +0300 (+03)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4A5507A4072
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 12:45:12 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31619214227;
-	Mon,  3 Mar 2025 12:44:23 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C412D2139C6;
-	Mon,  3 Mar 2025 12:44:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D30203714
+	for <linux-serial@vger.kernel.org>; Tue,  4 Mar 2025 13:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741005860; cv=none; b=cAx3LKD5EGoQ+8Vdzphad7LvtHGWd2vREbuJdyNCP72jcSbp8zinynxynBI9ayO30e9EMwi8e/S2XA5wBnZj/MIlZ9fv8eduMZcNwcCMVQvvSZgYx+heZkMEIr1awuKJStaPjtHPsbVoIkXlFDb8e3r1yOwiHcmSrq+Y3qwbXCk=
+	t=1741093801; cv=none; b=GMOuM2Jq2kMkzTTrtkbw/XnzuVDlJ/HKnzAeScpRkO/fvgTHSxcbe3/ZL+W8l+w7xTXARqWz/cl+JpBazD0CdjEAQAEqzlkqFjFDJHiYsXu7gUw3CqVe9A7v6CRgk0XCsEX7vkpm7qgvOCJIw8SYi03V+FBI/ePTg4QfjDOAl3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741005860; c=relaxed/simple;
-	bh=3N0J+nLmdrUPNG88pWP93xptqh3l36lndwmwFMOO2l8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=KW85Y3QtJYNHx1WLnoFOWejtjryh3AbASErL3b+eeCkTwggrTKI+qJtI9KUWOe2t9kgMZl3pPW1F5Ns2srxvxBWYFQ0O5rCFqlGnNV7NU1uDa0tzyGZvgq3J1MVHAANdQfu1wvp4FjZOfc4LRGRFN2VyGds8H/peugOXlhQsCho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=qualcomm.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=DSdzmB7i; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523An2vx021677;
-	Mon, 3 Mar 2025 12:44:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=WqACNOFQHxR
-	nQGfjZbipebloyLYP8fDxvj8dZwe3OQ4=; b=DSdzmB7inxgPN1bxoVjBCo1+Zz3
-	fKNU+gIwdHXPoJBH4ldP/H3V8Buevjl6SM0uMq+B4RvbvBukeTsVd3aO886qP25o
-	lIo9yp8Z89aFffgNPlbSiX+kJqLm+vOE8TXbp/ipQokBewvth1orGtLaiF0cW3t5
-	3P4gV3PGqs4yOV8N/DXnpyYNgmXcJ9CNSS4/FYuSe+1A+4cMyHNj7563RC5auQz5
-	4BVd06PLKexp7P6F69fidBCVf/kVcadpX629iJN3Jz93B+jlrpFcoZZYpcNqRO/9
-	6S536NeVwM+MvswRVuriRecyTzSHxCBwFX2wHnljOhZDIuXPzVn9nElAYIw==
-Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t88vxw3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:13 +0000 (GMT)
-Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTP id 523CiAab015302;
-	Mon, 3 Mar 2025 12:44:10 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 453uakx57j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:10 +0000
-Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
-	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 523CiA45015296;
-	Mon, 3 Mar 2025 12:44:10 GMT
-Received: from hu-devc-hyd-u22-c.qualcomm.com ([10.213.97.252])
-	by APBLRPPMTA01.qualcomm.com (PPS) with ESMTPS id 523Ci9rc015295
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 03 Mar 2025 12:44:10 +0000
-Received: by hu-devc-hyd-u22-c.qualcomm.com (Postfix, from userid 4047106)
-	id 6821553B; Mon,  3 Mar 2025 18:14:09 +0530 (+0530)
-From: Viken Dadhaniya <quic_vdadhani@quicinc.com>
-To: andi.shyti@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-        conor+dt@kernel.org, gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        broonie@kernel.or, andersson@kernel.org, konradybcio@kernel.org,
-        johan+linaro@kernel.org, dianders@chromium.org, agross@kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org, linux-spi@vger.kernel.org
-Cc: quic_msavaliy@quicinc.com, quic_anupkulk@quicinc.com,
-        Viken Dadhaniya <quic_vdadhani@quicinc.com>
-Subject: [PATCH v3 7/9] i2c: qcom-geni: Load i2c qup Firmware from linux side
-Date: Mon,  3 Mar 2025 18:13:47 +0530
-Message-Id: <20250303124349.3474185-8-quic_vdadhani@quicinc.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
-References: <20250303124349.3474185-1-quic_vdadhani@quicinc.com>
-Precedence: bulk
+	s=arc-20240116; t=1741093801; c=relaxed/simple;
+	bh=NcEqiAia7PtxdRC2CO01i7tbbhPiGij2sr/fLY4ZFuo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ueP0rbMBJJyUp1gdnKFqUkHIAyE5tUcOwPSa8hQmAFF/KJwfq924ukTJNFhCeslqUJ6einMFWQj7G88Udzg3Yxwjw7nU/RikvvMo5h9j7fgto9y/2J+dwDPVEMWTqbTwVBv3uhq/v57IT1gH5XmMbNWmVj0P4M8EJw5tntETHnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lgAjNSH8; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2235c5818a3so70851735ad.1
+        for <linux-serial@vger.kernel.org>; Tue, 04 Mar 2025 05:09:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741093798; x=1741698598; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=x117HPWY7hfxCsyRoomSLqnsp6TkG/IZ7mxFwBfWDy4=;
+        b=lgAjNSH82Xe0CP1ujbQj7vPkQrbO8ZclVJWv90V5wBvqUXjqSghCtyJRvjhHIr8M0M
+         /OuZ4QHZQQcC65o62tiWI9yXaGXaihz74p0q1M61rW7DhwwcOWkY+OH6eWqC8+tu4jeB
+         gEPiv6zkAHwYBMbLsuplq0EamVVXdhbDLdQGy8c/4sSkij5yOdAiUBW8wucJUbUWkez6
+         4MTzAblno9u3tr+lOa3zW/i0MubBIC+Q7FOFgvnMrJAS5fPu8mzyQ4XySxRkuIvs5U24
+         NY8dqCuTDoey43LQG0iIUoYJWNvGXCPHBqNNZpQ44+X9R29pTR131iCB9XKXPt0H0JVN
+         9GiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741093798; x=1741698598;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x117HPWY7hfxCsyRoomSLqnsp6TkG/IZ7mxFwBfWDy4=;
+        b=psJh5bGfRvXIZRxNRtgyGCHBQz/zN22HSrwkrB7dgmmLSYyYqZfJBkLo0ndwKI94un
+         8Olgq+GBFecpEIiJUbXla5dGSLAYXeS/BIVBu5d+j100jTdImWxRA3uF1I79rKCD+oC4
+         zILUexG1uFOOl0T1n4T472D+ewDmhslsvGFJg856imo6NI7tW5cEHw+LCRTzU8SCEusu
+         WrvOn8PE+Fq+dIUm5hXYzrPlBeW1Z9/JuMLKOnTy8VFKdIwawFFWc+pzq2WdA2acy8I0
+         DFQuPjM+l+Grw7FS8YyJZ0/8xR2TMBJzAU0Wj7eEO2IyGfDxoVCmftd9Hvjqp8MnF6Iz
+         YSDg==
+X-Forwarded-Encrypted: i=1; AJvYcCXj31MPLJOXrNgH0twTevulVPtATSYqAL5EyCJVK22NHMAUU3eNclD2DaTdlmu8B8fH3G0lS91VPBwmAv8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwJB989XRPsTXhC1KVZz8Lr3NgN9YW6//N3mFtqn8+WNmvVlr5P
+	4k1lHKqw9p87EYL4SX0WV2NpKD6eb2vpamssecH5zQF9zNSeNKavcPD6sfvdDCVB6F6H9l37xxF
+	hG6d/iUK79AJnfTjYdJkOES8cNw6XlXU9uKFF
+X-Gm-Gg: ASbGncty0XSKycX0kQ9fWtHDIZ7odRlYNalswBi95kdf98AT9X8IkreKrcqlJAfXN6j
+	qX9h/mtOMNo//+xbe0lZ/z2ZVyPxcppr877AXPAiDdL9jlvPg2kv25CueSyfgtjlLhy1TCuHLr6
+	zmSp9eHzY2swa/XrnxThREAWjaPf/KxU8z0TpYr7Xo3C01hX2/Vgz0UYrl
+X-Google-Smtp-Source: AGHT+IFiWcYRRwZhjH3eoEETTKHMFeBTK3Bvk1Dikxat7wutRisU34tzNCYhuoO1ktV/UerXXSrorJjwJzvEu41/niQ=
+X-Received: by 2002:a17:902:ec91:b0:223:5ada:2484 with SMTP id
+ d9443c01a7336-2236926e8bemr319887595ad.44.1741093798418; Tue, 04 Mar 2025
+ 05:09:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 86Q3HZot8HleYGLqSVVJNgcw_TTtxdKM
-X-Proofpoint-GUID: 86Q3HZot8HleYGLqSVVJNgcw_TTtxdKM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- impostorscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=999 mlxscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503030098
-Content-Transfer-Encoding: quoted-printable
-X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6dQC3SxyzFwnP
-X-ITU-Libra-ESVA: No virus found
-X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741703467.81552@0V1PRkQsIBZ60/cp/VEbBQ
-X-ITU-MailScanner-SpamCheck: not spam
+References: <20250304092417.2873893-1-elver@google.com> <20250304092417.2873893-7-elver@google.com>
+ <20250304125516.GF11590@noisy.programming.kicks-ass.net>
+In-Reply-To: <20250304125516.GF11590@noisy.programming.kicks-ass.net>
+From: Marco Elver <elver@google.com>
+Date: Tue, 4 Mar 2025 14:09:21 +0100
+X-Gm-Features: AQ5f1JpRduzHYdRlbPZG29NFbDiaHAHst1RMQPMNTm3NjpUDRIeFlhtOLA45DL8
+Message-ID: <CANpmjNNNB8zQJKZaby8KNu8PdAJDufcia+sa2RajWm6Bd2TC4A@mail.gmail.com>
+Subject: Re: [PATCH v2 06/34] cleanup: Basic compatibility with capability analysis
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: "David S. Miller" <davem@davemloft.net>, Luc Van Oostenryck <luc.vanoostenryck@gmail.com>, 
+	"Paul E. McKenney" <paulmck@kernel.org>, Alexander Potapenko <glider@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Bart Van Assche <bvanassche@acm.org>, Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Eric Dumazet <edumazet@google.com>, 
+	Frederic Weisbecker <frederic@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Herbert Xu <herbert@gondor.apana.org.au>, Ingo Molnar <mingo@kernel.org>, 
+	Jann Horn <jannh@google.com>, Jiri Slaby <jirislaby@kernel.org>, 
+	Joel Fernandes <joel@joelfernandes.org>, Jonathan Corbet <corbet@lwn.net>, 
+	Josh Triplett <josh@joshtriplett.org>, Justin Stitt <justinstitt@google.com>, 
+	Kees Cook <kees@kernel.org>, Kentaro Takeda <takedakn@nttdata.co.jp>, 
+	Mark Rutland <mark.rutland@arm.com>, Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>, Steven Rostedt <rostedt@goodmis.org>, 
+	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, Thomas Gleixner <tglx@linutronix.de>, 
+	Uladzislau Rezki <urezki@gmail.com>, Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>, 
+	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org, 
+	llvm@lists.linux.dev, rcu@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-serial@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Add provision to load firmware of Serial engine for I2C protocol from
-Linux Execution Environment on running on APPS processor.
+On Tue, 4 Mar 2025 at 13:55, Peter Zijlstra <peterz@infradead.org> wrote:
+>
+> On Tue, Mar 04, 2025 at 10:21:05AM +0100, Marco Elver wrote:
+> > Due to the scoped cleanup helpers used for lock guards wrapping
+> > acquire/release around their own constructors/destructors that store
+> > pointers to the passed locks in a separate struct, we currently cannot
+> > accurately annotate *destructors* which lock was released. While it's
+> > possible to annotate the constructor to say which lock was acquired,
+> > that alone would result in false positives claiming the lock was not
+> > released on function return.
+> >
+> > Instead, to avoid false positives, we can claim that the constructor
+> > "asserts" that the taken lock is held. This will ensure we can still
+> > benefit from the analysis where scoped guards are used to protect access
+> > to guarded variables, while avoiding false positives. The only downside
+> > are false negatives where we might accidentally lock the same lock
+> > again:
+> >
+> >       raw_spin_lock(&my_lock);
+> >       ...
+> >       guard(raw_spinlock)(&my_lock);  // no warning
+> >
+> > Arguably, lockdep will immediately catch issues like this.
+> >
+> > While Clang's analysis supports scoped guards in C++ [1], there's no way
+> > to apply this to C right now. Better support for Linux's scoped guard
+> > design could be added in future if deemed critical.
+>
+> Would definitely be nice to have.
 
-Co-developed-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Signed-off-by: Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>
-Signed-off-by: Viken Dadhaniya <quic_vdadhani@quicinc.com>
----
-v2 -> v3:
+Once we have the basic infra here, I think it'll be easier to push for
+these improvements. It's not entirely up to me, and we have to
+coordinate with the Clang maintainers. Definitely is on the list.
 
-- Load firmware only if the protocol is invalid.
+> > @@ -383,6 +387,7 @@ static inline void *class_##_name##_lock_ptr(class_##_name##_t *_T)       \
+> >
+> >  #define __DEFINE_LOCK_GUARD_1(_name, _type, _lock)                   \
+> >  static inline class_##_name##_t class_##_name##_constructor(_type *l)        \
+> > +     __no_capability_analysis __asserts_cap(l)                       \
+> >  {                                                                    \
+> >       class_##_name##_t _t = { .lock = l }, *_T = &_t;                \
+> >       _lock;                                                          \
+> > @@ -391,6 +396,7 @@ static inline class_##_name##_t class_##_name##_constructor(_type *l)     \
+> >
+> >  #define __DEFINE_LOCK_GUARD_0(_name, _lock)                          \
+> >  static inline class_##_name##_t class_##_name##_constructor(void)    \
+> > +     __no_capability_analysis                                        \
+>
+> Does this not need __asserts_cal(_lock) or somesuch?
+>
+> GUARD_0 is the one used for RCU and preempt, rather sad if it doesn't
+> have annotations at all.
 
-v2 Link: https://lore.kernel.org/linux-arm-msm/20250124105309.295769-7-qu=
-ic_vdadhani@quicinc.com/
+This is solved later in the series where we need it for RCU:
+https://lore.kernel.org/all/20250304092417.2873893-15-elver@google.com/
 
-v1 -> v2:
-
-- No change.
-
-v1 Link: https://lore.kernel.org/linux-arm-msm/20241204150326.1470749-6-q=
-uic_vdadhani@quicinc.com/
----
----
- drivers/i2c/busses/i2c-qcom-geni.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-qcom-geni.c b/drivers/i2c/busses/i2c-=
-qcom-geni.c
-index 7bbd478171e0..b6cf85fbe521 100644
---- a/drivers/i2c/busses/i2c-qcom-geni.c
-+++ b/drivers/i2c/busses/i2c-qcom-geni.c
-@@ -871,7 +871,13 @@ static int geni_i2c_probe(struct platform_device *pd=
-ev)
- 		goto err_clk;
- 	}
- 	proto =3D geni_se_read_proto(&gi2c->se);
--	if (proto !=3D GENI_SE_I2C) {
-+	if (proto =3D=3D GENI_SE_INVALID_PROTO) {
-+		ret =3D geni_load_se_firmware(&gi2c->se, GENI_SE_I2C);
-+		if (ret) {
-+			dev_err_probe(dev, ret, "i2c firmware load failed ret: %d\n", ret);
-+			goto err_resources;
-+		}
-+	} else if (proto !=3D GENI_SE_I2C) {
- 		ret =3D dev_err_probe(dev, -ENXIO, "Invalid proto %d\n", proto);
- 		goto err_resources;
- 	}
---=20
-2.34.1
-
-
+We can't add this to all GUARD_0, because not all will be for
+capability-enabled structs. Instead I added a helper to add the
+necessary annotations where needed (see DECLARE_LOCK_GUARD_0_ATTRS).
 
