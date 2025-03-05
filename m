@@ -1,165 +1,97 @@
-Return-Path: <linux-serial+bounces-8273-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8275-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D72D5A4F9F7
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Mar 2025 10:27:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D9A5A4FAA0
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Mar 2025 10:51:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D3907A2599
-	for <lists+linux-serial@lfdr.de>; Wed,  5 Mar 2025 09:26:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC471892D48
+	for <lists+linux-serial@lfdr.de>; Wed,  5 Mar 2025 09:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF84F204C35;
-	Wed,  5 Mar 2025 09:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="awQ2WJus"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F173F204F82;
+	Wed,  5 Mar 2025 09:51:34 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from unicom145.biz-email.net (unicom145.biz-email.net [210.51.26.145])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8CD02045AC
-	for <linux-serial@vger.kernel.org>; Wed,  5 Mar 2025 09:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A4311FFC56;
+	Wed,  5 Mar 2025 09:51:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.26.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741166834; cv=none; b=HyRI+jiZWWykiLpOPjez7WCcgh+MHiAhLAiO12CBEr38sGzcmTz+gdq4aXcw3wx19WCAAux4VAWWSi8HYYKp+qoRQNg384HseVy4z+zcwVspX6Htn6TzvHhpdrk+w1Y9Bg9HjIVaz2/ifxul3VnqDYVQayB489YSHbrVGJ3wceU=
+	t=1741168294; cv=none; b=n0XkazxEn2+P23LLx4cLi8eO1bjOaPPCjy1oDQaas4a5nSdHFPnnKY1cNj/1C4Go57TWDpjGWRfma6xqwxyb+xfseMT8cUV+aAijeT8E/NQn0BxvfO7bFs57luvQyG8zVE6Yr0kgczYxKevcclPh9BP3ZvslMSQjbN1Axx2RgSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741166834; c=relaxed/simple;
-	bh=3mDFeB3Bpj3IOfRwlQRf3Grj75HR3nrndwXyWmM3Ob4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=owz2NcIo5T9/lQxzN53apIWESTSeyHf87QPFwhb/WarrRRldbqXw+5bS/HbabHNoGTkoykvtIhM/wrtCzpfaT0ok21BM70DRbHAFUhrab0TO/T88o9mUoLFa9IybRoeHRSj/qoM+wQtbhZPEs+A+QAKoJfy4xGfyGzzg6AyRe4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=awQ2WJus; arc=none smtp.client-ip=209.85.128.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43bc4b1603fso19208345e9.0
-        for <linux-serial@vger.kernel.org>; Wed, 05 Mar 2025 01:27:10 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741166829; x=1741771629; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VaMa3tOr/8WS8V6AnlLw/eUNgZqrJVmxSDme9KtSQnA=;
-        b=awQ2WJusxW6Ge0kv9C7Zju2JITr5EXSeephgcSpgRUB67uiBC2wUReZa/SrihqlmBV
-         zMms2er4oICT6Quz/tBnkW/bMaNIjXMdxymm2mdhR9xfSuxVKM9ONClD/eluuDgTAG9Z
-         cSTRS5qBoAatCwOyBW6idxIRVSxCnO+pKzcmP7MQ0TPj3qdmkaBJ8Q/LWpx+Y/szwxxZ
-         LJpMWsH3PAH+QZGkJAJa1GPJ2b+1Y75T/DTdOUHiHu9jDRkjLhakyxdJWPiRbV2Wn6jw
-         PqJzVJnpSRn6f7FKJcb4MvkK/ygd88eqJXzL8DmZTvV5KzE9q14qcQvpm1uWSxpYfF86
-         iw7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741166829; x=1741771629;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VaMa3tOr/8WS8V6AnlLw/eUNgZqrJVmxSDme9KtSQnA=;
-        b=elvFJmMRPaxE8kq8DRtSHgO87NNs9EW/lS3L0fUY1fW6BvbZ5Ngn6/+EhFtlFVeEIe
-         82qgyCycojpJlAJiJE4smESELBwhfYPsdfg3PIPWz1yDRyDMlMp+fbFoIt9PdhBA5Nt4
-         TVibOqhhvcfYyJw3VZ+Wd01On4YiRhSHDFEIdy1i7jvS+iq9/cLqeS/DXVUsLZZNXYx6
-         l5PvPneyu0SeXGISEoBuZq7jcnfOKotIkidi9h0Sk2n3gBwKTdMmDUHTCvQg8p3xhX6x
-         ZC2h3urHHlouwQlleMZqgBDJ63ghbHMzKJBSm4l3D/qIf1NKWJh1rG0OffVJbMix6e/Q
-         Dhiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAoiNCbQzAHHGox1hF909cL0imPVD+I7LhjcuqKYGIocvC/XhCP8JCF/dY8+dKUVjhzJdi37Yi4txXoK4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDu56u84vkxh55ftggrcfT3YB8UrgKjevBnM+74w9sdWJeiO4J
-	2oK+Ddp3+UczKhE3wP8Y/p00FwMeYW7I3jlb629+66jmwTcGPySlB1jZ/32l/qo=
-X-Gm-Gg: ASbGncuwCWeAaFLAf0//9Xpu5RHN0Rma0cLrmhFeEEA2q/GS0lx/027j/HmjkSfDTiz
-	96SkZUkLXFfZwKl8YMmixHef9LJAG/VXBK9B+f1VbZwRWSMBGFE8CxjgiLW9geQARZmVnhLxbm3
-	+fHgl2UpdwmHMyQWxx/Nukzgr7R2WOgBXEmpPQR8NwK5oxgpunLgwKQPankKaqq7wTTO7lVAqS9
-	nV36ilHnyD20urvlfPhFRWTwpXHCFeHyafKDZzTQMEAV7Oiq/99fof0nIYhNAqND5mrel/xuy0Y
-	qvHtpuXBtEFMGxRVYQOP3VnDu/S7d9dZ8WLlRhOeARGpyDXwDw==
-X-Google-Smtp-Source: AGHT+IE3mizAOsnSuTtcbkO82OvTIYaM5IjOsyfCaEaBUlwqBcpm21mf2Z2/NNT65xir9k5CCr442Q==
-X-Received: by 2002:a05:600c:4750:b0:439:9e8b:228e with SMTP id 5b1f17b1804b1-43bd29c42c8mr13412085e9.20.1741166829098;
-        Wed, 05 Mar 2025 01:27:09 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-43bd426d069sm11942015e9.3.2025.03.05.01.27.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Mar 2025 01:27:08 -0800 (PST)
-Date: Wed, 5 Mar 2025 12:27:04 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: Marco Elver <elver@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>,
-	Luc Van Oostenryck <luc.vanoostenryck@gmail.com>,
-	"Paul E. McKenney" <paulmck@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Arnd Bergmann <arnd@arndb.de>, Bart Van Assche <bvanassche@acm.org>,
-	Bill Wendling <morbo@google.com>, Boqun Feng <boqun.feng@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Eric Dumazet <edumazet@google.com>,
-	Frederic Weisbecker <frederic@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Ingo Molnar <mingo@kernel.org>, Jann Horn <jannh@google.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Joel Fernandes <joel@joelfernandes.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Josh Triplett <josh@joshtriplett.org>,
-	Justin Stitt <justinstitt@google.com>, Kees Cook <kees@kernel.org>,
-	Kentaro Takeda <takedakn@nttdata.co.jp>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Neeraj Upadhyay <neeraj.upadhyay@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>,
-	kasan-dev@googlegroups.com, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, rcu@vger.kernel.org,
-	linux-crypto@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2 01/34] compiler_types: Move lock checking attributes
- to compiler-capability-analysis.h
-Message-ID: <b6af185f-0109-4f98-a2d7-ab8f716e21a5@stanley.mountain>
-References: <20250304092417.2873893-1-elver@google.com>
- <20250304092417.2873893-2-elver@google.com>
- <f76a48fe-09da-41e0-be2e-e7f1b939b7e3@stanley.mountain>
- <Z8gVyLIU71Fg1QWK@elver.google.com>
+	s=arc-20240116; t=1741168294; c=relaxed/simple;
+	bh=wjPSc8nhYA182GOXzh/ESW1weUphliOkkBMIuZmr8yM=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=d8bLqmUO/UYBdJ0tWTI4uTZDBG9PHYDmfk+cgNfzyeKCEKgp2LhpYddoI/IRyb390tIsv20YcS1A+K7SwwPyau3MyHaZAH2aq8bQBZ4bO4uAeXo60eb5wEw8a0g4Y+Ohdt0/G3YBfcV1vS1skpRjJ/SyRDeCs2gYbCtJNRc81No=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.26.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from jtjnmail201601.home.langchao.com
+        by unicom145.biz-email.net ((D)) with ASMTP (SSL) id 202503051751237924;
+        Wed, 05 Mar 2025 17:51:23 +0800
+Received: from locahost.localdomain (10.94.19.225) by
+ jtjnmail201601.home.langchao.com (10.100.2.1) with Microsoft SMTP Server id
+ 15.1.2507.39; Wed, 5 Mar 2025 17:51:22 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>
+CC: <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>, Charles
+ Han <hanchunchao@inspur.com>
+Subject: [PATCH v2] serial: icom: fix code format problems
+Date: Wed, 5 Mar 2025 17:51:20 +0800
+Message-ID: <20250305095120.7518-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250305083729.6090-1-hanchunchao@inspur.com>
+References: <20250305083729.6090-1-hanchunchao@inspur.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z8gVyLIU71Fg1QWK@elver.google.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+tUid: 2025305175123414863d4b862e0e5c1e81e8dd76cf7e6
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-On Wed, Mar 05, 2025 at 10:13:44AM +0100, Marco Elver wrote:
-> On Wed, Mar 05, 2025 at 11:36AM +0300, Dan Carpenter wrote:
-> > On Tue, Mar 04, 2025 at 10:21:00AM +0100, Marco Elver wrote:
-> > > +#ifndef _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
-> > > +#define _LINUX_COMPILER_CAPABILITY_ANALYSIS_H
-> > > +
-> > > +#ifdef __CHECKER__
-> > > +
-> > > +/* Sparse context/lock checking support. */
-> > > +# define __must_hold(x)		__attribute__((context(x,1,1)))
-> > > +# define __acquires(x)		__attribute__((context(x,0,1)))
-> > > +# define __cond_acquires(x)	__attribute__((context(x,0,-1)))
-> > > +# define __releases(x)		__attribute__((context(x,1,0)))
-> > > +# define __acquire(x)		__context__(x,1)
-> > > +# define __release(x)		__context__(x,-1)
-> > > +# define __cond_lock(x, c)	((c) ? ({ __acquire(x); 1; }) : 0)
-> > > +
-> > 
-> > The other thing you might want to annotate is ww_mutex_destroy().
-> 
-> We can add an annotation to check the lock is not held:
-> 
+Fix below inconsistent indenting smatch warning.
+smatch warnings:
+drivers/tty/serial/icom.c:1768 icom_probe() warn: inconsistent indenting
 
-Sorry, my email was bad.
+Removed that useless (void *), the code would fit on a single 100c line
+Removed  '{' and '}'.
 
-I haven't actually tried your patch at all.  I have locking check in
-Smatch so I'm just basing this on the things that I did...
-https://github.com/error27/smatch/blob/master/smatch_locking.c
-This isn't a mandatory thing.  Whatever happens we're going to end up
-doing dozens of patches all over the kernel later.
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/tty/serial/icom.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
 
-I thought you could destroy a mutex regardless or whether it was held
-or not.  I was getting false positives which said that we should drop
-the lock on error but actually the mutex is destroyed on that path so it
-doesn't matter.
-
-regards,
-dan carpenter
+diff --git a/drivers/tty/serial/icom.c b/drivers/tty/serial/icom.c
+index 29e42831df39..7fb995a8490e 100644
+--- a/drivers/tty/serial/icom.c
++++ b/drivers/tty/serial/icom.c
+@@ -1764,11 +1764,10 @@ static int icom_probe(struct pci_dev *dev,
+ 		goto probe_exit1;
+ 	}
+ 
+-	 /* save off irq and request irq line */
+-	 retval = request_irq(dev->irq, icom_interrupt, IRQF_SHARED, ICOM_DRIVER_NAME, (void *)icom_adapter);
+-	 if (retval) {
+-		  goto probe_exit2;
+-	 }
++	/* save off irq and request irq line */
++	retval = request_irq(dev->irq, icom_interrupt, IRQF_SHARED, ICOM_DRIVER_NAME, icom_adapter);
++	if (retval)
++		goto probe_exit2;
+ 
+ 	retval = icom_load_ports(icom_adapter);
+ 
+-- 
+2.43.0
 
 
