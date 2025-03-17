@@ -1,102 +1,141 @@
-Return-Path: <linux-serial+bounces-8459-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8439-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6792AA64294
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Mar 2025 08:04:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACE26A64266
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Mar 2025 08:00:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF50316A2D6
-	for <lists+linux-serial@lfdr.de>; Mon, 17 Mar 2025 07:04:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6589C16F280
+	for <lists+linux-serial@lfdr.de>; Mon, 17 Mar 2025 07:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D79A2236FC;
-	Mon, 17 Mar 2025 07:01:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4565F219EAD;
+	Mon, 17 Mar 2025 07:00:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="F5VBEoTF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ruVum5IF"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17A7A222589;
-	Mon, 17 Mar 2025 07:01:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3F915E5C2;
+	Mon, 17 Mar 2025 07:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742194881; cv=none; b=N9PcXRzMcFUkjD0exx4QUxj+j1+SIBsE0qYbmhlt5ceQdOIG5Tzivlu0gEp26eNvkFKPKRlxy7zLlMGf9+Z2/vBg/9qbGQAjAHksyf/fU5PzzkMl2BFJr/b2YKn0moJZSzF0mgJcbV/ZdDprohFs1l4GtTqn9zQglELAQcWv7Qs=
+	t=1742194850; cv=none; b=LK6o8XFY7g2l6YelOVEXRXj4fcXxRXuN0Jh2CAk6n963cQ4a6nuXDMeR4c1KnWJ4GHYQJA0J4rwHBB2xu1M0jNtMPum4za1YdX+jnYH4+B1uz3Xud8XSXmKSNoFSQBDJTMacE/+YdhSMfYqxBgts6SlTLqtchdg2Ur0GRwQZhks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742194881; c=relaxed/simple;
-	bh=aBPpmUcGDUxtVqNYBJ0y1S8mhJ2vEs38pfC3bkBgSxs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MoqIyjcGrz9F5j1VhDDWJnlTMxMb4bcugRbEWhRNyYsQi35MZgMkU0syXmGyfOAs4IYxheAv5Ca/B6d9JtqQo302O0HIWWj5lAGu5mNe+mT69H4Eiqcc7PrK4gaGJ4aXnDpXi32CqVAu+Rm0ji352qq8wPI26Dt5oUI9aqmAlTE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=F5VBEoTF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0E96FC4CEEC;
-	Mon, 17 Mar 2025 07:01:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1742194880;
-	bh=aBPpmUcGDUxtVqNYBJ0y1S8mhJ2vEs38pfC3bkBgSxs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F5VBEoTF11phoho4ypFGxNctozFRv+i9J46Vxp2mq479IyHBO7fyElGFis6V1TKlh
-	 5JWjBPsa8D3NCl3F5KnUxekvFFMtb2rKKywyaJAAPgjfrNAeCSeTawyk4V7Xo4vqmT
-	 EpbLzb1LWK1bJ6Hq1yoKYAGJNdO1bGYOPi0Q/fa8=
-Date: Mon, 17 Mar 2025 08:00:01 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jiri Slaby <jirislaby@kernel.org>
-Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Alex Elder <elder@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	David Lin <dtwlin@gmail.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, greybus-dev@lists.linaro.org,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Jakub Kicinski <kuba@kernel.org>, Johan Hovold <johan@kernel.org>,
-	linux-alpha@vger.kernel.org, linux-staging@lists.linux.dev,
-	Matt Turner <mattst88@gmail.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Rob Herring <robh@kernel.org>, sparclinux@vger.kernel.org
-Subject: Re: [PATCH 00/29] tty: cleanup no. 99
-Message-ID: <2025031738-variable-desecrate-ec2f@gregkh>
-References: <20250220111606.138045-1-jirislaby@kernel.org>
- <2025031738-fabric-alright-6a32@gregkh>
- <e8fb71ea-84cb-427a-9dc9-9c44ec0db08f@kernel.org>
+	s=arc-20240116; t=1742194850; c=relaxed/simple;
+	bh=3xlgiwnCx9ACqoF762hkPvtcJJShUF6Q9QE5Xiop/BA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=HgIFmzydZvLRmQJBfoRMDzZqQJUCDoD/OrFSgOBLk6HXpKX4JSN4G3ygM5u3tJkrxQHj0S6MmnVdWeb+q16lhQY4h9nP6vRZhtjmcbQiwUbRYeL13lnJApGbj3cjSkgBRv63gnXoB9b1WHT1wAx1ew2RYHDEATuQswT9tGeF1N0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ruVum5IF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE0FC4CEE3;
+	Mon, 17 Mar 2025 07:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742194849;
+	bh=3xlgiwnCx9ACqoF762hkPvtcJJShUF6Q9QE5Xiop/BA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ruVum5IFQsLcoPcsC+Tf2/lLCMEwjDxCzLvalVqmJ29KImQKd9VQcT+DUPhylQtG8
+	 bIlBaEWUi8digtTuWRyNLRC1cMSQ+mm0Nsm++O0eMdJfsmidlt2931CrCtbF6/gyL5
+	 1Y0UEj6VL91gzW184aODCmCWqJtpfPhtQwgd2jQXwhKJXDLeXIPVWn7oSdzF+RL4AI
+	 fj5+rEkZkI07H7eELkOaDje3VWiELHpwJtuo+6jMYAF573GkI/lKfRloKz77zykeVg
+	 28MGg8SyhLx5xIpvrh3sMxhyyBLRj5M0JJnzU0OF8Mq5AO2JxIA5cC+96cVURiKCpU
+	 IG+h2o4eF8yFQ==
+From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Subject: [PATCH v2 00/31] tty: cleanup no. 99
+Date: Mon, 17 Mar 2025 08:00:15 +0100
+Message-ID: <20250317070046.24386-1-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e8fb71ea-84cb-427a-9dc9-9c44ec0db08f@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 17, 2025 at 05:59:01AM +0100, Jiri Slaby wrote:
-> On 17. 03. 25, 5:28, Greg KH wrote:
-> > On Thu, Feb 20, 2025 at 12:15:37PM +0100, Jiri Slaby (SUSE) wrote:
-> > > Hi,
-> > > 
-> > > this is (again) a series of cleanup in tty. I am trying to rework
-> > > tty+serial to avoid limitations of devices (so called NR_UART or
-> > > tty_alloc_driver()'s first parameter). And the below popped up while
-> > > crawling through the code. So this is only a prep cleanup.
-> > > 
-> > > * many tty flags are now enums
-> > > * many functions were improved for readability
-> > > * quite a few unused or old code dropped
-> > > 
-> > > In particular, the runtime behaviour of the kernel before and after the
-> > > changes is supposed to be bug to bug compatible (except moxa's ioctl
-> > > and ISA evils dropped). That is, noone should notice.
-> > 
-> > Were you going to do a new respin of this, or do you want me to take
-> > this as-is and you will send a follow-up ones for the commented-on
-> > changes?
-> 
-> I planned to send a v2 on Fri, but did not make it. I will today.
+Hi,
 
-Not a problem, just wanted to make sure I didn't drop these on my side
-accidentally.
+this is (again) a series of cleanup in tty. I am trying to rework
+tty+serial to avoid limitations of devices (so called NR_UART or
+tty_alloc_driver()'s first parameter). And the below popped up while
+crawling through the code. So this is only a prep cleanup.
 
-thanks,
+* many tty flags are now enums
+* many functions were improved for readability
+* quite a few unused or old code dropped
 
-greg k-h
+In particular, the runtime behaviour of the kernel before and after the
+changes is supposed to be bug to bug compatible (except moxa's ioctl
+and ISA evils dropped). That is, noone should notice.
+
+[v2]
+ * use serial_port_in/out() helpers in 26/30 (and not use serial_in/out())
+ * the last patch is new
+
+Jiri Slaby (SUSE) (31):
+  tty: convert "TTY Struct Flags" to an enum
+  tty: audit: do not use N_TTY_BUF_SIZE
+  tty: caif: do not use N_TTY_BUF_SIZE
+  tty: move N_TTY_BUF_SIZE to n_tty
+  tty: n_tty: use uint for space returned by tty_write_room()
+  tty: n_tty: simplify process_output()
+  tty: n_tty: clean up process_output_block()
+  tty: n_tty: drop n_tty_trace()
+  tty: n_tty: extract n_tty_continue_cookie() from n_tty_read()
+  tty: n_tty: extract n_tty_wait_for_input()
+  tty: n_tty: move more_to_be_read to the end of n_tty_read()
+  tty: tty_driver: move TTY macros to the top
+  tty: tty_driver: convert "TTY Driver Flags" to an enum
+  tty: tty_driver: document both {,__}tty_alloc_driver() properly
+  tty: tty_driver: introduce TTY driver sub/types enums
+  tty: serdev: drop serdev_controller_ops::write_room()
+  tty: mmc: sdio: use bool for cts and remove parentheses
+  tty: moxa: drop version dump to logs
+  tty: moxa: drop ISA support
+  tty: moxa: carve out special ioctls and extra tty_port
+  tty: srmcons: fix retval from srmcons_init()
+  tty: staging/greybus: pass tty_driver flags to tty_alloc_driver()
+  tty: sunsu: drop serial_{in,out}p()
+  tty: sunsu: remove unused serial_icr_read()
+  serial: remove redundant tty_port_link_device()
+  serial: pass struct uart_state to uart_line_info()
+  serial: 8250: use serial_port_in/out() helpers
+  serial: 8250_rsa: simplify rsa8250_{request/release}_resource()
+  serial: 8250_port: do not use goto for UPQ_NO_TXEN_TEST code flow
+  serial: 8250_port: simplify serial8250_request_std_resource()
+  serial: switch change_irq and change_port to bool in uart_set_info()
+
+ Documentation/driver-api/tty/tty_driver.rst |   4 +-
+ Documentation/driver-api/tty/tty_struct.rst |   2 +-
+ arch/alpha/kernel/srmcons.c                 |  62 ++---
+ drivers/mmc/core/sdio_uart.c                |   2 +-
+ drivers/net/caif/caif_serial.c              |   2 +-
+ drivers/staging/greybus/uart.c              |   4 +-
+ drivers/tty/Kconfig                         |   2 +-
+ drivers/tty/moxa.c                          | 251 +-------------------
+ drivers/tty/n_tty.c                         | 212 ++++++++---------
+ drivers/tty/serdev/core.c                   |  11 -
+ drivers/tty/serdev/serdev-ttyport.c         |   9 -
+ drivers/tty/serial/8250/8250_dw.c           |  16 +-
+ drivers/tty/serial/8250/8250_fsl.c          |   8 +-
+ drivers/tty/serial/8250/8250_omap.c         |   2 +-
+ drivers/tty/serial/8250/8250_port.c         |  59 ++---
+ drivers/tty/serial/8250/8250_rsa.c          |  21 +-
+ drivers/tty/serial/serial_core.c            |  10 +-
+ drivers/tty/serial/sunsu.c                  | 178 ++++++--------
+ drivers/tty/tty_audit.c                     |  10 +-
+ drivers/tty/tty_io.c                        |   8 +-
+ include/linux/serdev.h                      |   6 -
+ include/linux/tty.h                         |  53 +++--
+ include/linux/tty_driver.h                  | 180 +++++++-------
+ 23 files changed, 412 insertions(+), 700 deletions(-)
+
+-- 
+2.49.0
+
 
