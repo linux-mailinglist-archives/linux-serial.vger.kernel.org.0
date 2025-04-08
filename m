@@ -1,44 +1,44 @@
-Return-Path: <linux-serial+bounces-8783-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8784-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8D21A7F4EB
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Apr 2025 08:25:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E6D3AA7F4EC
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Apr 2025 08:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08D173AEBFF
-	for <lists+linux-serial@lfdr.de>; Tue,  8 Apr 2025 06:24:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1675D3B5D9C
+	for <lists+linux-serial@lfdr.de>; Tue,  8 Apr 2025 06:25:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C25CC21A431;
-	Tue,  8 Apr 2025 06:25:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AC6B22A4DB;
+	Tue,  8 Apr 2025 06:25:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="c/ein4Vu"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hNi67FXk"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8387D218587;
-	Tue,  8 Apr 2025 06:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17148218EBA;
+	Tue,  8 Apr 2025 06:25:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744093502; cv=none; b=h7BJN9B25Q4zTDdEzfsn1NF5FbuIlauBc/0TwX/aRcJi4QXJrn7CO6gWyiiPB/rFl8Mc9cuCwE7ym194J33VSp0q6/5/59F4w1TXiw2UpLhzyGsU7KqIbJ7ZWMUUdrVzqQ7j/mzJFLEacM4xsyRp7lyALi3olZc5mnVGD5KNYu8=
+	t=1744093515; cv=none; b=JyBvueGqZo5oDHd/F8WBgicNofknHGc+mhkiVZ/CUPct2aNB2S2tBT1N0DAmbcft7Z91NMWOD5N/ZV+AGPyMJ6F5dTZ1pYjy7rzSofQbcLfyeg9Z4s7s0FL2tgb9atimtxT2Q7tBsLkuvvqX3qK2uPmEP27J4aIUSWUmTYPvcfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744093502; c=relaxed/simple;
-	bh=1ghIqGTVzMSL0QD6IHFM3pf2OL0QNAhUteNjrsYKOuw=;
+	s=arc-20240116; t=1744093515; c=relaxed/simple;
+	bh=a9Lg5QDjqsLiLPYW/4TEhvPBVkPwhSHoX7DJny3JBTI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=G4s+SNkAbf3tzt4ba3lwyI8RFAncef2cdkOPAf99mmLNz4utyKqO8ManKO/EbW5YBNdp/3uH/z3XzCMg/NMS+N2pCGBL+qCjNtmFRZKvwque/VHmdtSC1UrMgViOO6RF8XbwUiTvu8w9wdpBFZx+VfMMo+8ZiNf7pQX0/N52d8A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=c/ein4Vu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5779CC4CEE5;
-	Tue,  8 Apr 2025 06:25:01 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=LhyXYpvEGno7bu6i54fzoZ+Z5qU8Hct8kJDiAvhly3LHH0ZZ1CDrNIR6QLW7+Gxx7hXs6/qo+bGsGDswIClJAXZVCOkZACCssar1yyNWklkDjryf2S6wP32mS1XVrXNAcgNJwopbmJ1u5Xco1KoeI3gNwhVjVqoZjdRqxw+RiN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hNi67FXk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42BFFC4CEE5;
+	Tue,  8 Apr 2025 06:25:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744093501;
-	bh=1ghIqGTVzMSL0QD6IHFM3pf2OL0QNAhUteNjrsYKOuw=;
+	s=korg; t=1744093514;
+	bh=a9Lg5QDjqsLiLPYW/4TEhvPBVkPwhSHoX7DJny3JBTI=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=c/ein4VuRJ3NKN1HY+5Jk07AkVqJkKPL/89xzWX+nx1cAYKVAh2KPf65w1yMb/M8P
-	 uLn61uhyaww0TwptaP3eRzQpbN2EuwxAQf/dtnCmFt3E6LQFQtXEkrhSeLHvgAwgvF
-	 oeFwh6GxeI4BB1nypK8suKtfuYjw8B5nyPgcSBQo=
-Date: Tue, 8 Apr 2025 08:23:29 +0200
+	b=hNi67FXkOcClHuW0kK1RpJUL9fnUwjIXdEtv+w4AaEL+FWVAtZ0+HXcNbQw9QRWLY
+	 iEsQTsoCLz0fCwubFOuoP+zRazzWs9mjPdOmi7xW6HtCIDJ+FoB9cMvJdUFbwkmCz7
+	 B/n70iwV9hLyJQbWi60gSjwXCRYWr3sCwqZl80cA=
+Date: Tue, 8 Apr 2025 08:23:42 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: Yunhui Cui <cuiyunhui@bytedance.com>
 Cc: jirislaby@kernel.org, john.ogness@linutronix.de, pmladek@suse.com,
@@ -49,7 +49,7 @@ Cc: jirislaby@kernel.org, john.ogness@linutronix.de, pmladek@suse.com,
 	heikki.krogerus@linux.intel.com, linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org
 Subject: Re: [PATCH v2] serial: 8250: fix panic due to PSLVERR
-Message-ID: <2025040814-dagger-referee-7b61@gregkh>
+Message-ID: <2025040834-saga-viselike-3aaf@gregkh>
 References: <20250408061200.76148-1-cuiyunhui@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -181,11 +181,13 @@ kernel tree.
 You are receiving this message because of the following common error(s)
 as indicated below:
 
-- This looks like a new version of a previously submitted patch, but you
-  did not list below the --- line any changes from the previous version.
-  Please read the section entitled "The canonical patch format" in the
-  kernel file, Documentation/process/submitting-patches.rst for what
-  needs to be done here to properly describe this.
+- You have marked a patch with a "Fixes:" tag for a commit that is in an
+  older released kernel, yet you do not have a cc: stable line in the
+  signed-off-by area at all, which means that the patch will not be
+  applied to any older kernel releases.  To properly fix this, please
+  follow the documented rules in the
+  Documentation/process/stable-kernel-rules.rst file for how to resolve
+  this.
 
 If you wish to discuss this problem further, or you have questions about
 how to resolve this issue, please feel free to respond to this email and
