@@ -1,164 +1,254 @@
-Return-Path: <linux-serial+bounces-8857-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8859-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E7ACCA835A1
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 03:19:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D46BAA83643
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 04:14:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 26719460019
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 01:19:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E2B87A7E2E
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 02:12:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46C9C1C8609;
-	Thu, 10 Apr 2025 01:19:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ADAC1C6FFB;
+	Thu, 10 Apr 2025 02:13:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="isrpxXJe";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="t+K8wkck"
+	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="oGXzMqPn"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fhigh-a1-smtp.messagingengine.com (fhigh-a1-smtp.messagingengine.com [103.168.172.152])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE0B1A2C3A;
-	Thu, 10 Apr 2025 01:19:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FED918A6A9;
+	Thu, 10 Apr 2025 02:13:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744247948; cv=none; b=HSepUIVr+rZHs9HshCOTnPMOpv2k/l/KBtLQopbH8gCKJu9Onou0rywN9UkzgT/TcfD/0kiRVl+LMmEwGqUW7jjG8uh/T1KY5FxC+m+FXLYOk00naZkaALfIZ3RqJ40EdmBqdRahfJkhIFS+FqRS+LX/YwMqDGoTDCUoky4GhMc=
+	t=1744251237; cv=none; b=a/pEaPkaba+nukECgiKUCZY32D5OhIy/l1P8ArZyevcKgHeSkDcFWC2yapcaFRWClSzf0sUJyA7df3bo9USZdDUgLmLb7VKC99OxYUW/OtpE3SG1iQau2UtkHOGYKvU9n2CMUODyBcMG+MKMNjDkz5a0RLV/Bm63yS23Uy7JhiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744247948; c=relaxed/simple;
-	bh=/Y85mHkgYi5NV6tiAamTtPpChyrVUnAlTn58mog05iI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=S5rT32rdDtiq45hterQWds91uYftr+eAQxwezeVQpBqltgj+CpXRD2WsJ35uUPPvMKsO6coo8qJgCjzmU+s0db6YQk62uhYIxvO+3aUzLHuMksXh6V4hAY1d2/7QDqUdsK/u5/e9H4HICKuD9qhtdNfp5XYFbjfrD6fyz4pAOW4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=isrpxXJe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=t+K8wkck; arc=none smtp.client-ip=103.168.172.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 1307F1140299;
-	Wed,  9 Apr 2025 21:19:04 -0400 (EDT)
-Received: from phl-frontend-01 ([10.202.2.160])
-  by phl-compute-01.internal (MEProxy); Wed, 09 Apr 2025 21:19:04 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm2; t=1744247944; x=
-	1744334344; bh=ixNtqElVlHFv8vJYBrN2UgLQXSpShh/TyAFUVWLQKrw=; b=i
-	srpxXJeV0XTV2yZAIl6BQ8CbVo+q4ZaHsVIffubTk2Vm4NFGMDnA4eM41YH0FUFK
-	vYDZGL4zNLyKknMEIb+4RkC6zYJf5MgBd389pXyZVUjgDa/6S5rThlvl4rgwTDoE
-	O99gM8MPLI6apv3JQwXLkPq0iITJFhTbtEV3qR6rC45Tt+W8YbWd9jk5g+VHsbKb
-	PZpLZjBeJYVE/+/xH38Ao2DGPE54yMUWbEdBcV7j8NiVn8nke9GzDzmimDYa98BV
-	dmJsj20Lo0+q2jSp9hGeLqi3aymRl7o5WjE2cFYzsTiNVbFMy2rIZOC2s5z724YV
-	0aiQruBKlG8sgvKcXx6vQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm2; t=1744247944; x=1744334344; bh=i
-	xNtqElVlHFv8vJYBrN2UgLQXSpShh/TyAFUVWLQKrw=; b=t+K8wkck8CZTT2Tz0
-	ie6UYfCqx5khSerUPe1CDF8pLZ/3+exgFTFWq0O7Gsx9jv961v2JslPv3KfMLWgW
-	PAgBOm5AQgrDofZ5KgbyPyf3A2MWcFMxSYosDIxheEotRhFxgP+ypewtpBIcQnkA
-	EXEsuLNClQ1zjXspZOuljG/FkbD9XBHCSFDeAlxZnwAYYi+WG/hjgQCO0L3QZWtR
-	zQa1IXOQTC6amFPGjeUW+1A1soT028OkO27JKijbaqRW6U/J4kK5bUfa84T3/Hz9
-	pRwsB8IpeMlHVdiF2BPuhrKYL9ZBeNWh1gBxvf8DAC7lCEEIyouxaiSCGivXlX2I
-	n3Cag==
-X-ME-Sender: <xms:hxz3ZwwyAvCXL0_JkDrHwuCqldQqLI8hc3b2DwqlnoxA4uXlowbGdQ>
-    <xme:hxz3Z0Qz7PzcAwewLurlNgJ0OVLS82QGop9PIH_vC2unwN650FXW9bT14mIzlVfi7
-    L9hiHRmbY5xhn1ljiA>
-X-ME-Received: <xmr:hxz3ZyVEsRhyE5FVgO6Z0EvozrcP9lKuMZrhz3J8Ox6Ts1uEmtNo70OOVJ07uwd5J99p47eTSZa1_c7L2FiUnlpwF2qqhTMFgVuLrH6KYcw7hkzlEw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdejheehucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
-    tdenucfhrhhomheppfhitgholhgrshcurfhithhrvgcuoehnihgtohesfhhluhignhhitg
-    drnhgvtheqnecuggftrfgrthhtvghrnheptdejueeiieehieeuffduvdffleehkeelgeek
-    udekfeffhfduffdugedvteeihfetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepnhhitghosehflhhugihnihgtrdhnvghtpdhnsggprhgtphht
-    thhopeeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnphhithhrvgessggrhi
-    hlihgsrhgvrdgtohhmpdhrtghpthhtohepjhhirhhishhlrggshieskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorh
-    hgpdhrtghpthhtohepuggrvhgvsehmihgvlhhkvgdrtggtpdhrtghpthhtoheplhhinhhu
-    gidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
-    hugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:hxz3Z-itsvOUzlMtLFAwnWfFcONhr8C8q9-EBulwulZiTxHK3eOiOA>
-    <xmx:hxz3ZyBAdgm7GqXrhN-EMTopHrkdTrOng-k3Z_k7PSDE3AvDRRvzRg>
-    <xmx:hxz3Z_KpXKMePjIOH6q9Q6X7odVfDsxtJ45V7cHHz8wxeBTaNS6PYg>
-    <xmx:hxz3Z5BZ2cgkP91KPheWhyJ6kJuh1K7VmduVbP5cnAedSgTBx1v0CA>
-    <xmx:iBz3ZwD2l6WU60nlLdwLq9Q1PKFjPF4vxshyPD8OcQLcKyWJZpbTrj8b>
-Feedback-ID: i58514971:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 9 Apr 2025 21:19:03 -0400 (EDT)
-Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id 1A60410D8B80;
-	Wed,  9 Apr 2025 21:19:03 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Cc: Nicolas Pitre <npitre@baylibre.com>,
-	Dave Mielke <Dave@mielke.cc>,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 11/11] vt: pad double-width code points with a zero-white-space
-Date: Wed,  9 Apr 2025 21:14:03 -0400
-Message-ID: <20250410011839.64418-12-nico@fluxnic.net>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250410011839.64418-1-nico@fluxnic.net>
-References: <20250410011839.64418-1-nico@fluxnic.net>
+	s=arc-20240116; t=1744251237; c=relaxed/simple;
+	bh=9u60sO7OOT1oWOmjPwikFu4rY64oDd58zik3I0OmYfo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jyrx9vcKh3bQBwlFUn5MCd03clO2cOnKXN0/VHVawSfJhx3OrL+vuYxCQixECWJov5lKBt9rI+r8GLFYxoRz9760wpu7sDj1ao+nLg7LgGmSn6bqt7pXWP/0AL3taPtxaXDAeo+2/qUhQxoOHG/dBa4OQKDjm6r/E2KJKIRCd1U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=oGXzMqPn; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from [IPV6:2601:646:8081:1f94:9d5:a0c2:3619:62ac] ([IPv6:2601:646:8081:1f94:9d5:a0c2:3619:62ac])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 53A29YJd3849252
+	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+	Wed, 9 Apr 2025 19:09:34 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 53A29YJd3849252
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025032001; t=1744250985;
+	bh=sYPb2HJP4fVpfYUaFUUZ0pgxUHfO2I9/b7H7IqJmj3c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=oGXzMqPnDihlvH8csOG6X1vYEL5+OkVYip8jhTPp6IM9qVTa+TE2DQN/NL7CCufbI
+	 W70VoP5+eXYAecjlqh+Tn7MRcWyYYPY6ri9KgXYwsAfXP39A5RG5P/1U2MrIrPxIl4
+	 LgNJ7p5qe7PlXd1brGtIHKI9TjgO8NyN/0p80ooXB7kFpxcUb3DSe2qpaXbL6MYH5Y
+	 jkbPJIJLpQn1W597tFm89pO6yOJzSzHl/UbpTIyOav94ZVlYeTk/+v6ZOvSDveTwGk
+	 3WaanUXTgaBtSBGsUrLEl+lM6ukmEGPsrkHUnC15nBvJNz4rVyDO7jHqYWigKmp0ks
+	 M5Uu5VvWQnEFA==
+Message-ID: <e97a83a2-dabd-4dc3-b69a-840ca17d70b5@zytor.com>
+Date: Wed, 9 Apr 2025 19:09:28 -0700
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 00/13] Introduce parity_odd() and refactor redundant
+ parity code
+To: Yury Norov <yury.norov@gmail.com>, Kuan-Wei Chiu <visitorckw@gmail.com>
+Cc: tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, jk@ozlabs.org,
+        joel@jms.id.au, eajames@linux.ibm.com, andrzej.hajda@intel.com,
+        neil.armstrong@linaro.org, rfoss@kernel.org,
+        maarten.lankhorst@linux.intel.com, mripard@kernel.org,
+        tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+        dmitry.torokhov@gmail.com, mchehab@kernel.org, awalls@md.metrocast.net,
+        hverkuil@xs4all.nl, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, louis.peens@corigine.com, andrew+netdev@lunn.ch,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        parthiban.veerasooran@microchip.com, arend.vanspriel@broadcom.com,
+        johannes@sipsolutions.net, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, akpm@linux-foundation.org, jdelvare@suse.com,
+        linux@roeck-us.net, alexandre.belloni@bootlin.com, pgaj@cadence.com,
+        alistair@popple.id.au, linux@rasmusvillemoes.dk,
+        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
+        jernej.skrabec@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsi@lists.ozlabs.org,
+        dri-devel@lists.freedesktop.org, linux-input@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mtd@lists.infradead.org,
+        oss-drivers@corigine.com, netdev@vger.kernel.org,
+        linux-wireless@vger.kernel.org, brcm80211@lists.linux.dev,
+        brcm80211-dev-list.pdl@broadcom.com, linux-serial@vger.kernel.org,
+        bpf@vger.kernel.org, jserv@ccns.ncku.edu.tw, Frank.Li@nxp.com,
+        linux-hwmon@vger.kernel.org, linux-i3c@lists.infradead.org,
+        david.laight.linux@gmail.com, andrew.cooper3@citrix.com,
+        Yu-Chun Lin <eleanor15x@gmail.com>
+References: <20250409154356.423512-1-visitorckw@gmail.com>
+ <Z_amQp3gK5Dm8Qz3@yury> <Z/a5Qh/OeLT8JBS4@visitorckw-System-Product-Name>
+ <Z_a9YpE46Xf8581l@yury>
+Content-Language: en-US
+From: "H. Peter Anvin" <hpa@zytor.com>
+In-Reply-To: <Z_a9YpE46Xf8581l@yury>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Nicolas Pitre <npitre@baylibre.com>
+On 4/9/25 11:33, Yury Norov wrote:
+>>>
+>> I don't have a strong preference for the name, but if I had to guess
+>> the return value from the function prototype, I would intuitively
+>> expect an int to return "0 for even and 1 for odd," and a bool to
+>> return "true for even, false for odd." I recall Jiri and Jacob shared
+>> similar thoughts, which is why I felt adding _odd could provide better
+>> clarity.
+> 
+> I think they said they are convinced that parity should return 1 for
+> odd because of folding and __builtin_parity() arguments.
+> 
 
-In the Unicode screen buffer, we follow double-width code points with a
-space to maintain proper column alignment. This, however, creates
-semantic problems when e.g. using cut and paste or selection.
+And for bool, 0 == false, and 1 == true. In fact, the *definitions* for 
+false and true in C (but not C++) is:
 
-Let's use a better code point for the column padding's purpose i.e. a
-zero-white-space rather than a full space.
+<stdbool.h>:
+typedef _Bool bool;
+#define false	0
+#define true	1
 
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
----
- drivers/tty/vt/vt.c | 11 ++++++++---
- 1 file changed, 8 insertions(+), 3 deletions(-)
+If someone wants to make more clear, it would be better to put "typedef 
+bool bit_t" in a common header, but that personally seems ridiculous to me.
+   >>>> type from u8 to u64 for broader applicability, and updates its 
+return
+>>>> type from int to bool to make its usage and return semantics more
+>>>> intuitive-returning true for odd parity and false for even parity. It
+>>>> also adds __attribute_const__ to enable compiler optimizations.
+>>>
+>>> That's correct and nice, but can you support it with a bloat-o-meter's
+>>> before/after and/or asm snippets? I also think it worth to be a separate
+>>> patch, preferably the last patch in the series.
+>>>
+>> I quickly tested it with the x86 defconfig, and it appears that the
+>> generated code doesn't change. I forgot who requested the addition
+>> during the review process, but I initially thought it would either
+>> improve the generated code or leave it unchanged without significantly
+>> increasing the source code size.
+> 
+> That's what I actually expected, but was shy to guess openly. :). It's
+> hard to imagine how compiler may improve code generation in this case...
+> 
+> This attribute is used when there's an asm block, or some non-trivial
+> function call. In this case, the function is self-consistent and makes
+> no calls. And you see, const annotation raises more questions than
+> solves problems. Let's drop it.
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index e3d35c4f92..dc84f9c6b7 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -2937,12 +2937,13 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
- 			width = 2;
- 		} else if (ucs_is_zero_width(c)) {
- 			prev_c = vc_uniscr_getc(vc, -1);
--			if (prev_c == ' ' &&
-+			if (prev_c == 0x200B &&
- 			    ucs_is_double_width(vc_uniscr_getc(vc, -2))) {
- 				/*
- 				 * Let's merge this zero-width code point with
- 				 * the preceding double-width code point by
--				 * replacing the existing whitespace padding.
-+				 * replacing the existing zero-white-space
-+				 * padding.
- 				 */
- 				vc_con_rewind(vc);
- 			} else if (c == 0xfe0f && prev_c != 0) {
-@@ -3040,7 +3041,11 @@ static int vc_con_write_normal(struct vc_data *vc, int tc, int c,
- 		tc = conv_uni_to_pc(vc, ' ');
- 		if (tc < 0)
- 			tc = ' ';
--		next_c = ' ';
-+		/*
-+		 * Store a zero-white-space in the Unicode screen given that
-+		 * the previous code point is semantically double-width.
-+		 */
-+		next_c = 0x200B;
- 	}
- 
- out:
--- 
-2.49.0
+Ah yes; one of the quirks about gcc asm is that an asm is implicitly 
+assumed "const" (with no memory operands) or "pure" (with memory 
+operands) unless declared volatile or given an explicit "memory" clobber.
+
+So yes, the compiler can most definitely derive the constness from the 
+form of the function even in the variable case.
+
+I would still like to see __builtin_parity() being used as an 
+architecture opt-in; it can, of course, also be unconditionally used in 
+the constant case.
+
+So in the end one of these two become my preferred implementation, and I 
+really don't think it is very complicated:
+
+#ifndef use_builtin_parity
+#define use_builtin_parity(x) __builtin_constant_p(x)
+#endif
+
+static inline bool parity8(u8 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	val ^= val >> 4;
+	return (0x6996 >> (val & 0xf)) & 1;
+}
+
+static inline bool parity16(u16 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	return parity8(val ^ (val >> 8));
+}
+
+static inline bool parity32(u32 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parity(val);
+	return parity16(val ^ (val >> 16));
+}
+
+static inline bool parity64(u64 val)
+{
+	if (use_builtin_parity(val))
+		return __builtin_parityll(val);
+	return parity32(val ^ (val >> 32));
+}
+
+This means that an architecture -- in particular, x86 -- can still ask 
+to use __builtin_parity*() directly. It means that architectures on 
+which __builtin_parity*() produces bad code should either complain to 
+the gcc/clang team and have it fixed, or we can add additional mechanism 
+for them to override the implementation at that time.
+
+The alternative is to stop worrying about overengineering, and just do 
+it once and for all:
+
+#ifndef parity8
+static inline bool parity8(u8 val)
+{
+	val ^= val >> 4;
+	return (0x6996 >> (val & 0xf)) & 1;
+}
+#endif
+
+#ifndef parity16
+static inline bool parity16(u16 val)
+{
+	return parity8(val ^ (val >> 8));
+}
+#endif
+
+#ifndef parity32
+static inline bool parity32(u32 val)
+{
+	return parity16(val ^ (val >> 16));
+}
+#endif
+
+#ifndef parity64
+static inline bool parity64(u64 val)
+{
+	return parity32(val ^ (val >> 32));
+}
+#endif
+
+In either case, instead of packing the cascade into one function, make 
+good use of it.
+
+In the latter case, __builtin_constant_p() isn't necessary as it puts 
+the onus on the architecture to separate out const and non-const cases, 
+if it matters -- which it doesn't if the architecture simply wants to 
+use __builtin_parity:
+
+#define parity8(x)  ((bool) __builtin_parity((u8)(x)))
+#define parity16(x) ((bool) __builtin_parity((u16)(x)))
+#define parity32(x) ((bool) __builtin_parity((u32)(x)))
+#define parity64(x) ((bool) __builtin_parityll((u64)(x)))
+
+As stated before, I don't really see that the parity function itself 
+would be very suitable for a generic helper, but if it were to, then 
+using the "standard" macro construct for it would seem to be the better 
+option.
+
+(And I would be very much in favor of not open-coding the helper 
+everywhere but to macroize it; effectively creating a C++ template 
+equivalent. It is out of scope for this project, though.)
+
+	-hpa
 
 
