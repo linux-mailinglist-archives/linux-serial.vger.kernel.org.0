@@ -1,141 +1,182 @@
-Return-Path: <linux-serial+bounces-8846-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8848-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90AD2A834E1
-	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 01:59:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32846A83595
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 03:19:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2CB6B4613D3
-	for <lists+linux-serial@lfdr.de>; Wed,  9 Apr 2025 23:59:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F11474460A2
+	for <lists+linux-serial@lfdr.de>; Thu, 10 Apr 2025 01:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5143D21D018;
-	Wed,  9 Apr 2025 23:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A334718FDBD;
+	Thu, 10 Apr 2025 01:19:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="fNdJtiY/";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="a+vSR9FS"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 082232144C4;
-	Wed,  9 Apr 2025 23:59:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8089A1DA4E;
+	Thu, 10 Apr 2025 01:19:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744243157; cv=none; b=oIEz8yCm41AGfodNpnDF63F34Iaghd5oGlfEktDrt5hW6mejfkjhDeU2sr0N5DifzWqNnxvpNMg6siJwtjLdMVSf8LffYvATCO2BgwYgQ773MbxU8HI0mOVQeAFQYIxEnSTwxY2rXjnOrOjxlZmYG4Zh8YEC6UwkENOxrXo88Kk=
+	t=1744247945; cv=none; b=YPNlBDKfl3nZGXpHtgCm68EeZCVceqdGAab8vYpPTL4XWp4cX1Kcrrt93VHHtuzMbwvKKh7wTSCKs9C+00ZB/01/4UYfFpJJUAxT60POZRXLLkEfQTVHViIuyljjfjYpBkDMzGTkDtfTSQKZJC0FuHDf12HL4KkE7NUS8KyaHeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744243157; c=relaxed/simple;
-	bh=fbizQkJURv/VI4ti6Z1JNgUGnYq1ZQ73QlfCFSh6YFs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RawUuz+QRiy0SxngPhLbjfZFq7574DotMyTm2efu0PI37gIYOKot/YAnpSSjYxSY5GWXrzW/5RmgEfZJtLeiJr+dh5KXnx5zl8gSR8DjAOBTBn8cFnU5iU2ALLQHaWfBolNEy9kIwg/UcmZezg/Lku/qhVbn4Tt/xu/PBgKdyXQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [116.232.27.72])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id C5016343371;
-	Wed, 09 Apr 2025 23:59:13 +0000 (UTC)
-Date: Wed, 9 Apr 2025 23:59:09 +0000
-From: Yixun Lan <dlan@gentoo.org>
-To: Alex Elder <elder@riscstar.com>
-Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org,
-	benjamin.larsson@genexis.eu, bastien.curutchet@bootlin.com,
-	andriy.shevchenko@linux.intel.com, u.kleine-koenig@baylibre.com,
-	lkundrak@v3.sk, devicetree@vger.kernel.org,
-	linux-serial@vger.kernel.org, spacemit@lists.linux.dev,
+	s=arc-20240116; t=1744247945; c=relaxed/simple;
+	bh=mnwhLxpOvHXvwrgs3pyGeI3bimuo3E6qCdsQZYTDtho=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uRYUjVwEt/nj0Sxvv2wQ1cN2IuMvpaSA6oYo2nnpKeYpoiDHNli2yaUk/t29lgTsUnNFKEps8GkL7WudjSaIx3iGe8W1mAgjxPz9PgLz25mU+xwV+v9KhuEesje4KtVNC9vI6/WrHREDANa/6rycssNcU/IKxmVPRuxISiE4ZRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=fNdJtiY/; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=a+vSR9FS; arc=none smtp.client-ip=103.168.172.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfout.phl.internal (Postfix) with ESMTP id 8834213801DF;
+	Wed,  9 Apr 2025 21:19:02 -0400 (EDT)
+Received: from phl-frontend-02 ([10.202.2.161])
+  by phl-compute-06.internal (MEProxy); Wed, 09 Apr 2025 21:19:02 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm2; t=1744247942; x=1744334342; bh=TWsek6y38leRX5NWrNotZ
+	MTzW5XdgDKrPyKDEkOGR4A=; b=fNdJtiY/nnASFxTGhnSXCB38nudqFtKDQXSt/
+	oLXDYnHDHW+wTdsflCIhGEukBPxtNFKzKthRCGeuqYl83M+lfNrUzC/d5t5Kx3zb
+	kJRh0weKDzIRqHjnmraqXFF2Ny7TWMTYn99BfAkjAF/gU4qvldWhkXGd7Q9c7d09
+	O0VkKI72z6owJkEgeHm+7WYauH/+uygNLOMHMLIKKAQI9sw84J7tZIKzqWb3vKpB
+	ZnWHC0U7TJJobN8jGbBdUw9Y/YfHjJvzGT4IHUGLxd9ujMfBrWYOjurcqnougxX1
+	UTTnXOseVOIYCDjyBDamWFXAecVx3eaMPPRLvemDtHCYrm53A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+	1744247942; x=1744334342; bh=TWsek6y38leRX5NWrNotZMTzW5XdgDKrPyK
+	DEkOGR4A=; b=a+vSR9FSEh3BfZFl2u9wMM1u97bZrbAB2CqScaDbH3geNPalbZX
+	H3lIMFoEz69iIdvyI0w76oZ+3qxoizww3PdHoRwMgNu+11zBPolOVRfbttbocfzv
+	TdNmDxTSxI+b/NDBAhNdrxRPzy7UPLb/JcGcqhd30fXD0V5KmGCYe4BKTH2mQZfM
+	J1G6rYTiMe5UNu/nabwOinWDJys2Wi4YLcAZ4v7P1EvkUENZZeMJIj+a1zElNG3r
+	pjTGUvv1BJqAXPf08XmAjVX5w6xKQMxO3B4Ge/Egp+G2dHiIGweDxX1b8gGFhWY0
+	kQ5o53RRTGzFVTn8yEkEv8KHwiSA4HkD1Sg==
+X-ME-Sender: <xms:hhz3Z6RTS4IkQbZjId5XhFvdBWYtnJQypKV91FoxWkvyz3f0FjYI9w>
+    <xme:hhz3Z_wQXsIETqyvT9XGf1URpRJ9LOfzG73OK3aTKpzf3h-m-iIYFdP3PVXnlQhUT
+    EzepfW1AuqBYCD74kc>
+X-ME-Received: <xmr:hhz3Z337_2y7ANOiWgFHvZYTaPUcx0ZWU9Ck6rBdGozWj-rjNAjt1OwdZ5tRaUWHhdAQ5jPDgWDo0JNVymfS3Ovz3xTEbbdNt9pEliHGceopGmowxQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvtdejheehucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttden
+    ucfhrhhomheppfhitgholhgrshcurfhithhrvgcuoehnihgtohesfhhluhignhhitgdrnh
+    gvtheqnecuggftrfgrthhtvghrnhephefhfeetueeiteeigfffieelveethfduleegheel
+    teehudetuedvjeffffdvhfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepnhhitghosehflhhugihnihgtrdhnvghtpdhnsggprhgtphhtthho
+    peeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnphhithhrvgessggrhihlih
+    gsrhgvrdgtohhmpdhrtghpthhtohepjhhirhhishhlrggshieskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpd
+    hrtghpthhtohepuggrvhgvsehmihgvlhhkvgdrtggtpdhrtghpthhtoheplhhinhhugidq
+    khgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugi
+    dqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:hhz3Z2DOD-cheAvZn-3cj9KP6ZGAyRYcdQqvrnmYUifG4qbLsMa3SA>
+    <xmx:hhz3Zzjj6FENQLAF8Alp5dLJT0fNkEpVEvd6ek833VlD7Cy8uh_K1Q>
+    <xmx:hhz3Zyqr06RNADx-DljFJONSefT6Q3Vz9-6mj6zZekRw5-6niJWuuw>
+    <xmx:hhz3Z2guPQNIwSwszEav_yNuBz1d-d3bQJTdF_1lwUlVO58nK0_-6g>
+    <xmx:hhz3Z1jXqReAaql2cv6TWd-0Ae8FZwuKBAJ7rJLr_H4ndFcwhIaEyrQ0>
+Feedback-ID: i58514971:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 9 Apr 2025 21:19:02 -0400 (EDT)
+Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 5243510D8B6D;
+	Wed,  9 Apr 2025 21:19:01 -0400 (EDT)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+	Dave Mielke <Dave@mielke.cc>,
+	linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] serial: 8250_of: add support for an optional bus
- clock
-Message-ID: <20250409235909-GYB19066@gentoo>
-References: <20250409192213.1130181-1-elder@riscstar.com>
- <20250409192213.1130181-3-elder@riscstar.com>
- <20250409214345-GYA19066@gentoo>
- <04facbe3-cd40-4d79-a204-2b91880da331@riscstar.com>
+Subject: [PATCH 00/11] vt: implement proper Unicode handling
+Date: Wed,  9 Apr 2025 21:13:52 -0400
+Message-ID: <20250410011839.64418-1-nico@fluxnic.net>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <04facbe3-cd40-4d79-a204-2b91880da331@riscstar.com>
+Content-Transfer-Encoding: 8bit
 
-Hi Alex,
+The Linux VT console has many problems with regards to proper Unicode
+handling:
 
-On 17:47 Wed 09 Apr     , Alex Elder wrote:
-> On 4/9/25 4:43 PM, Yixun Lan wrote:
-> > Hi Alex,
-> > 
-> > On 14:22 Wed 09 Apr     , Alex Elder wrote:
-> >> The SpacemiT UART requires a bus clock to be enabled, in addition to
-> >> it's "normal" core clock.  Look up the optional bus clock by name,
-> >> and if that's found, look up the core clock using the name "core".
-> >>
-> >> Supplying a bus clock is optional.  If no bus clock is needed, the
-> >> the first/only clock is used for the core clock.
-> >>
-> >> Signed-off-by: Alex Elder <elder@riscstar.com>
-> >> ---
-> >> v2: Update logic to more check for the optional bus clock first
-> >>
-> >>   drivers/tty/serial/8250/8250_of.c | 11 ++++++++++-
-> >>   1 file changed, 10 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/drivers/tty/serial/8250/8250_of.c b/drivers/tty/serial/8250/8250_of.c
-> >> index 11c860ea80f60..a90a5462aa72a 100644
-> >> --- a/drivers/tty/serial/8250/8250_of.c
-> >> +++ b/drivers/tty/serial/8250/8250_of.c
-> >> @@ -123,7 +123,16 @@ static int of_platform_serial_setup(struct platform_device *ofdev,
-> >>   
-> >>   	/* Get clk rate through clk driver if present */
-> >>   	if (!port->uartclk) {
-> >> -		info->clk = devm_clk_get_enabled(dev, NULL);
-> >> +		struct clk *bus_clk;
-> > we also need to handle clk in suspend/resume procedure, so
-> > I think you need to put bus_clk inside struct of_serial_info..
-> 
-> OK, I didn't do anything for that in previous versions of the
-> series.
-> 
-> I think that means we'd call clk_disable_unprepare() on
-> the bus clock after doing so for the function clock.  And
-> clk_prepare_enable() on the bus clock before doing that for
-> the function clock in of_serial_resume().  That's easy.
-> 
-right, pretty much similar to info->clk
+- All new double-width Unicode code points which have been introduced since
+  Unicode 5.0 are not recognized as such (we're at Unicode 16.0 now).
 
-> Is there anything further you think is required?  There is
-> no clock rate associated with the bus clock that I know of,
-> so even if the function clock rate changes, the bus clock
-> can remain as-is.
-> 
-no further info I know of, my best guess, the rate doesn't
-really matter, a wide clk range should just work fine.
+- Zero-width code points are not recognized at all. If you try to edit files
+  containing a lot of emojis, you will see the rendering issues. When there
+  are a lot of zero-width characters (like "variation selectors"), long
+  lines get wrapped, but any Unicode-aware editor thinks that the content
+  was rendered properly and its rendering logic starts to work in very bad
+  ways. Combine this with tmux or screen, and there is a huge mess going on
+  in the terminal.
 
-> > 
-> >> +
-> >> +		bus_clk = devm_clk_get_optional_enabled(dev, "bus");
-> > for the 'optional', we can interpret it's optional for other vendor
-> > UART, but a must required clk for SpacemiT's k1 UART controller
-> > 
-> > would it better to guard this inside a compatible test or even introduce
-> > a flag in compatible data?
-> 
-> I don't personally think so. We could, but the DT binding is going
-> out of its way to define when the bus clock is required.  This is
-> simpler, and generic.
-> 
-I would personally choose the way of introducing a flag of compatible data,
-but it's a lot change of the code (may not worth the effort)..
+- Also, text which uses combining diacritics has the same effect as text
+  with zero-width characters as programs expect the characters to take fewer
+  columns than what they actually do.
 
-anyway, I'm fine with your current version, and yes, it's generic
-thanks for doing this..
+Some may argue that the Linux VT console is unmaintained and/or not used
+much any longer and that one should consider a user space terminal
+alternative instead. But every such alternative that is not less maintained
+than the Linux VT console does require a full heavy graphical environment
+and that is the exact antithesis of what the Linux console is meant to be.
 
--- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+Furthermore, there is a significant Linux console user base represented by
+blind users (which I'm a member of) for whom the alternatives are way more
+cumbersome to use reducing our productivity. So it has to stay and
+be maintained to the best of our abilities.
+
+That being said...
+
+This patch series is about fixing all the above issues. This is accomplished
+with some Python scripts leveraging Python's unicodedata module to generate
+C code with lookup tables that is suitable for the kernel. In summary:
+
+- The double-width code point table is updated to the latest Unicode version
+  and the table itself is optimized to reduce its size.
+
+- A zero-width code point table is created and the console code is modified
+  to properly use it.
+
+- A table with base character + combining mark pairs is created to convert
+  them into their precomposed equivalents when they're encountered.
+  By default the generated table contains most commonly used Latin, Greek,
+  and Cyrillic recomposition pairs only, but one can execute the provided
+  script with the --full argument to create a table that covers all
+  possibilities. Combining marks that are not listed in the table are simply
+  treated like zero-width code points and properly ignored.
+
+- All those tables plus related lookup code require about 3500 additional
+  bytes of text which is not very significant these days. Yet, one
+  can still set CONFIG_CONSOLE_TRANSLATIONS=n to configure this all out
+  if need be.
+
+Note: The generated C code makes scripts/checkpatch.pl complain about
+      "... exceeds 100 columns" because the inserted comments with code
+      point names, well, make some inlines exceed 100 columns. Please make
+      an exception for those files and disregard those warnings. When
+      checkpatch.pl is used on those files directly with -f then it doesn't
+      complain.
+
+This series was tested on top of v6.15-rc1.
+
+diffstat:
+
+ drivers/tty/vt/Makefile             |   3 +-
+ drivers/tty/vt/gen_ucs_recompose.py | 321 ++++++++++++++++++
+ drivers/tty/vt/gen_ucs_width.py     | 336 +++++++++++++++++++
+ drivers/tty/vt/ucs_recompose.c      | 170 ++++++++++
+ drivers/tty/vt/ucs_width.c          | 536 ++++++++++++++++++++++++++++++
+ drivers/tty/vt/vt.c                 | 111 ++++---
+ include/linux/consolemap.h          |  18 +
+ 7 files changed, 1448 insertions(+), 47 deletions(-)
 
