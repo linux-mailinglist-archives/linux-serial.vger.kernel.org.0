@@ -1,168 +1,128 @@
-Return-Path: <linux-serial+bounces-8934-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8936-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6701FA865A7
-	for <lists+linux-serial@lfdr.de>; Fri, 11 Apr 2025 20:41:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 066CCA865F1
+	for <lists+linux-serial@lfdr.de>; Fri, 11 Apr 2025 21:12:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FF8E4A7275
-	for <lists+linux-serial@lfdr.de>; Fri, 11 Apr 2025 18:41:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 031BF18876A8
+	for <lists+linux-serial@lfdr.de>; Fri, 11 Apr 2025 19:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8B7269882;
-	Fri, 11 Apr 2025 18:41:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12EA3270EBE;
+	Fri, 11 Apr 2025 19:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b3gmgPBj"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="mC36692/"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2218A2690F0;
-	Fri, 11 Apr 2025 18:41:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F184202C50
+	for <linux-serial@vger.kernel.org>; Fri, 11 Apr 2025 19:12:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744396911; cv=none; b=FpydZ459t7Ahbn4DxnpctBVLM/KQbAPbe7A0fxwXB8I7pTaenX1qfbeQpAROsTf9pwupuEGhc57/sJjXREjCj9g0NFuMNYh/4Bp90Nv8I6rqp2J596BVq7KKIvPCsHZ3SrlNwGVK1z0+k4zerzFMeXV31V6Hp3tLpwhzMy3p2lM=
+	t=1744398728; cv=none; b=PjLQPlRrEFQf4KB25uVzY340AuPcEdltagmEPXtgRIuDZ0m7o5ykf1REvyuqZ7Iab4bBWt5VtjOf4zWYt+6/HHF8uVXNNRNIFHxslRWlHL6FHVL58Huur9a6BFRm63EanhoTz0xrm7RmGPLabLSxsz20cRKueP9dD9TKU496rTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744396911; c=relaxed/simple;
-	bh=1iI4AfPrlPKUrGY6yeu/1zp9gMl5LZUj8I/yLIFJQZk=;
+	s=arc-20240116; t=1744398728; c=relaxed/simple;
+	bh=x5328n9Po4MAp4s+nhheKJVWEt9qvIrfr+K17nPBjxM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MLOILKuppf+8tHReN3PiaMIAjy0rmOk4lCvg9mmMn1XM78A/G+weWQdASdYfsArESngheodF53fecVVY794+FuOL0tfdLVX2NKx3RAwHGl/ED3dngHimKA6gvJ6mj8d+1UoYQUICu6TavrL/6hBMg0ZFies9xF3TNCGZgBprP90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b3gmgPBj; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1744396909; x=1775932909;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=1iI4AfPrlPKUrGY6yeu/1zp9gMl5LZUj8I/yLIFJQZk=;
-  b=b3gmgPBjzm7JSGgp//U02k+WH6FpxneP4+wnlHuzYcjJLEm1L3Hb5S7b
-   B57d77Lwlxrj4tOcQ9CC98cZzFsHJXRtIGrr/A1fnzatEExasdwfdtZD6
-   3n8BUoEV+Q2mccfw0WcMqzjzn5oZ46U+cMQq3t+Cte2mXa9diJ4m9vguc
-   LeCBmeJCXnYEIqJNSiJzBkZTG04afDbZsL9jMnysUpd+uhZP+9q0moGdN
-   6mFT/aRW2eGmr/rUjDBQoVyod4mFvXNKVa4eAEaAGDTgB3S3GDnGqn/hs
-   lAFzVJUa8rqe2q3XRC5/064MtuZPAjEuYEmFiPs9al5knaMO5Bc1k8NkD
-   A==;
-X-CSE-ConnectionGUID: MJO0Ehl1RHuT70iYESW5YQ==
-X-CSE-MsgGUID: m2V9Yo7jQQW4PFH8xLRoDA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11401"; a="63500548"
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="63500548"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Apr 2025 11:41:48 -0700
-X-CSE-ConnectionGUID: pJSGaWLJTF2fqMRCROz6IQ==
-X-CSE-MsgGUID: nmZqz5r4RXGz8z9j0H9ajw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,205,1739865600"; 
-   d="scan'208";a="129124557"
-Received: from lkp-server01.sh.intel.com (HELO b207828170a5) ([10.239.97.150])
-  by fmviesa006.fm.intel.com with ESMTP; 11 Apr 2025 11:41:43 -0700
-Received: from kbuild by b207828170a5 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1u3JJt-000BJc-0s;
-	Fri, 11 Apr 2025 18:41:41 +0000
-Date: Sat, 12 Apr 2025 02:40:52 +0800
-From: kernel test robot <lkp@intel.com>
-To: Praveen Talari <quic_ptalari@quicinc.com>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=EZB+Gt2wO+pbkEM8yzQEFOisZtqYgjnyalLNIlkgg/1VIksR+TCiIFeA48WzioDG6bIxH6ifMQQHvCHFvKASVsSFkSgEuYWuehMpsOSWJcdAvS4Qos08qfaOf6UZ9/v+G7dxhClce56OJBgooEz3dP3L8aCZ+pmqe1t69ZQHCFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=mC36692/; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=x532
+	8n9Po4MAp4s+nhheKJVWEt9qvIrfr+K17nPBjxM=; b=mC36692/iEOT3fodsSEj
+	uFQb9ftoh+KvrdVp0UW976rY6qr/6Zfs8eFr9eRSLqO/EYPnsJBeEjbU2tqVYGLW
+	3tNz2VDHKN4LZFpKSlUQeIrIIfOvfM9PN4+wYhjLWu+Y3w93KDW4QfI/JmjnAtzE
+	NYi49qcARB0npirHJjWnLer6i+FMSKPM2vViW+LKhIpdRgd7DiI8gw7QLCgT8kKb
+	egI7MUIjbZkCUNwCxeKGeGm9fJEq3sbxA/Yoa4boAwaiQxErZObPAKU+yKslW/gj
+	lz7JwDDS1GMDvsAHlfsCzO5YF5ApTeJrqU7Zx/LfJRrVW6zY2q8Ks8uuyZHli+Sb
+	Zg==
+Received: (qmail 1399403 invoked from network); 11 Apr 2025 21:12:01 +0200
+Received: by mail.zeus03.de with UTF8SMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 Apr 2025 21:12:01 +0200
+X-UD-Smtp-Session: l3s3148p1@AyIeeoUyQJ8ujnsS
+Date: Fri, 11 Apr 2025 21:12:00 +0200
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Geert Uytterhoeven <geert+renesas@glider.be>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, psodagud@quicinc.com, djaggi@quicinc.com,
-	quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com,
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com,
-	quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p
- Qualcomm platforms
-Message-ID: <202504120240.SMbLkgHv-lkp@intel.com>
-References: <20250410174010.31588-5-quic_ptalari@quicinc.com>
+	Jiri Slaby <jirislaby@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-serial@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: serial: snps-dw-apb-uart: Simplify DMA-less
+ RZ/N1 rule
+Message-ID: <Z_lpgMgeIvwVgx6r@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Rob Herring <robh@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-serial@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-renesas-soc@vger.kernel.org
+References: <90c7aa143beb6a28255b24e8ef8c96180d869cbb.1744271974.git.geert+renesas@glider.be>
+ <CAL_Jsq+sCDEO_n_TLmyNBfhc71NNWWe2UQ21jh8+AdHH=G+KAw@mail.gmail.com>
+ <Z_k3JV1dEexJurdc@shikoro>
+ <20250411161620.GA3329787-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="UVDKZ3tj4v23nX18"
+Content-Disposition: inline
+In-Reply-To: <20250411161620.GA3329787-robh@kernel.org>
+
+
+--UVDKZ3tj4v23nX18
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250410174010.31588-5-quic_ptalari@quicinc.com>
-
-Hi Praveen,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on tty/tty-testing]
-[also build test WARNING on tty/tty-next tty/tty-linus robh/for-next driver-core/driver-core-testing driver-core/driver-core-next driver-core/driver-core-linus usb/usb-testing usb/usb-next usb/usb-linus linus/master v6.15-rc1 next-20250411]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Praveen-Talari/opp-add-new-helper-API-dev_pm_opp_set_level/20250411-015310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-patch link:    https://lore.kernel.org/r/20250410174010.31588-5-quic_ptalari%40quicinc.com
-patch subject: [PATCH v1 4/9] soc: qcom: geni-se: Enable QUPs on SA8255p Qualcomm platforms
-config: arc-randconfig-001-20250412 (https://download.01.org/0day-ci/archive/20250412/202504120240.SMbLkgHv-lkp@intel.com/config)
-compiler: arc-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250412/202504120240.SMbLkgHv-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202504120240.SMbLkgHv-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/soc/qcom/qcom-geni-se.c: In function 'geni_se_probe':
->> drivers/soc/qcom/qcom-geni-se.c:953:1: warning: label 'out' defined but not used [-Wunused-label]
-     953 | out:
-         | ^~~
---
->> drivers/soc/qcom/qcom-geni-se.c:110: warning: Function parameter or struct member 'geni_se_rsc_init' not described in 'geni_se_desc'
+Content-Transfer-Encoding: quoted-printable
 
 
-vim +/out +953 drivers/soc/qcom/qcom-geni-se.c
+> IMO, whether you drop the platform is orthogonal to this patch.=20
 
-   928	
-   929	static int geni_se_probe(struct platform_device *pdev)
-   930	{
-   931		struct device *dev = &pdev->dev;
-   932		struct geni_wrapper *wrapper;
-   933		const struct geni_se_desc *desc;
-   934		int ret;
-   935	
-   936		wrapper = devm_kzalloc(dev, sizeof(*wrapper), GFP_KERNEL);
-   937		if (!wrapper)
-   938			return -ENOMEM;
-   939	
-   940		wrapper->dev = dev;
-   941		wrapper->base = devm_platform_ioremap_resource(pdev, 0);
-   942		if (IS_ERR(wrapper->base))
-   943			return PTR_ERR(wrapper->base);
-   944	
-   945		desc = device_get_match_data(&pdev->dev);
-   946	
-   947		if (!has_acpi_companion(&pdev->dev) && desc->geni_se_rsc_init) {
-   948			ret = desc->geni_se_rsc_init(wrapper, desc);
-   949			if (ret)
-   950				return -EINVAL;
-   951		}
-   952	
- > 953	out:
-   954		dev_set_drvdata(dev, wrapper);
-   955		dev_dbg(dev, "GENI SE Driver probed\n");
-   956		return devm_of_platform_populate(dev);
-   957	}
-   958	
+Ok.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> Whether or not the platform can run Linux is irrelevant to whether there=
+=20
+
+Yes and no. I know what you mean with "irrelevant" and I agree to that.
+But...
+
+> are bindings. Can it run u-boot? Now, if no one is going to make the=20
+> bindings complete and upstream a .dts for it, then remove it.
+
+=2E.. also this. If the SoC can hardly run Linux (if at all) it is a lot
+less likely in practice that someone will complete the upstream support,
+no?
+
+
+--UVDKZ3tj4v23nX18
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmf5aXwACgkQFA3kzBSg
+KbbUvA//eg0OOqgCn9QEbFxWpMpiomFIaiLL/hN+32z9/07MpFunNjoqhGKiCzoF
+nVxmiI7GdoV0nG90pfYnkTk9g7jpOcNTL5Xzrod0mZZGQrHUzo2eRT3tHv6qu22e
+LaY3lZTcXghv4Us7iK3K8ysAqu/HxYsBTjNzubFwWm2g1VdCkqRyWU8/VNxxs5en
+9Lbqoyc1FTLWTYnTmgrL8uAmvZlaXQhC8YjRiBaK0ouMgE5m8L4uKl4qYossu6N7
+FpjDiAlKGbg0jGwIs6uDrBLWRjdzqV7dqXAW5o9p0q2gvM+UBZK7Hat5KD+O3Kjp
+vQ8BRGuzkCvzliBMkAz7QJvhE6kijV7jD1fhlY9f4IbYgce83Od+bVFfmHGXSI4E
+WXh0LSNo1FiqdZYXkYua6BDJ9BtAUHMn8yAgnf/lRuXH45Rii0OH5ROFvpKOGymS
+5iGnJsbAczynt0YvLtEm+ChqJZEHYwaFpCAELSLTE3uU7QViPf6oyzqHGqEKXtrC
+S0McEFmRbvGH7yz3mf6b1bExzT0BEMJRCFMcPv4Xjh/ZQ6UHdpNFK1BFKlQLoypA
+0QI06K479tiWE9wvDo91f17mEjB2DGDHNTfITFda+KpbeWt8T3Fyh8qQqcZRaSy8
+h4aJcOvM+sdRjpMkIUklLFIULApSg6ek4Te4tl7JUhobZ6cCN7U=
+=mOpZ
+-----END PGP SIGNATURE-----
+
+--UVDKZ3tj4v23nX18--
 
