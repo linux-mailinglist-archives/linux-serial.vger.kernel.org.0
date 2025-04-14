@@ -1,104 +1,131 @@
-Return-Path: <linux-serial+bounces-8979-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-8981-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E989A87B2B
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Apr 2025 10:58:50 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61B42A87D12
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Apr 2025 12:10:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7EC613B20A9
-	for <lists+linux-serial@lfdr.de>; Mon, 14 Apr 2025 08:58:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA563168EC5
+	for <lists+linux-serial@lfdr.de>; Mon, 14 Apr 2025 10:09:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2BCD825DAF4;
-	Mon, 14 Apr 2025 08:58:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB95E268FCF;
+	Mon, 14 Apr 2025 10:08:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="WW2mgQtK"
+	dkim=pass (2048-bit key) header.d=linatsea.fr header.i=@linatsea.fr header.b="RO5VAnnx"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4A1029D19;
-	Mon, 14 Apr 2025 08:58:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFA6F25E471;
+	Mon, 14 Apr 2025 10:08:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744621114; cv=none; b=KaMWNJ0uCQ44dARcoVV6Wjc/pn+VroIKTy3wvwL7LIGgswVGeDT0KVDEYh/OTdeYz6/Usp7ri2ELUixGTHMNuz6llkI/XBqKm9GzKge8rxXsFsy4oIVkI3fg9VXFGO2FIqKOkFZqLSM5cFRvQG1gM2iFbqnFWJU70aps3TIGLTo=
+	t=1744625333; cv=none; b=RwohT2ZuZdsk++l8s6JGm40Io8rFuX1MXJ+cR44LW7NQ7YhnAhoqKeL7CK6k6ofNa/ZNrTM187g5lYsdA3yYCLqU1JzbhJ8BkGFBLL975ukVRorJ6NXw547jfMK4hImm9++0ygW6qLGb3lcg3M39oH/gVFxMHnsh7ijOcGn6IWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744621114; c=relaxed/simple;
-	bh=cDCg7kZe9XYJRnj5EtD58kfDWWU0IFD44ydOOCFeVBI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=W4qZ3h+DJuI5Rn4cMLnYTVWXc7w75c+2lP1/MgRukeyobuOupx+VJYrxTSeJTeQjS/ZzrAG9f0BXAq3DhazLlTwoqGYPk8dGbGAly+z0XKDY/h23SkLMWsoKAheI7p1aWx7d+/aqdoEPdhJfbDi7VE7vAgGeiVK0cK8zJKnZRWs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=WW2mgQtK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DACEFC4CEE2;
-	Mon, 14 Apr 2025 08:58:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1744621113;
-	bh=cDCg7kZe9XYJRnj5EtD58kfDWWU0IFD44ydOOCFeVBI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WW2mgQtKJFst6/rbJhHuohhNDCSEOuBE4hUAGyMLos4Qm2f12/6ovmU9ScQdvO8hP
-	 tKZY6w0qaLg/xNO3LWuT9YYRq81e4CsQbA7ZEAj6JOpCZ4C/eqyan7ux46OLCu+OR7
-	 sA6nhYjBHDJo2UGYpHw2PtOgxwmoGbdkEcctrViY=
-Date: Mon, 14 Apr 2025 10:58:29 +0200
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
-Cc: "thierry.bultel@linatsea.fr" <thierry.bultel@linatsea.fr>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"geert@linux-m68k.org" <geert@linux-m68k.org>,
-	Paul Barker <paul.barker.ct@bp.renesas.com>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: Re: [PATCH v7 10/13] serial: sh-sci: Add support for RZ/T2H SCI
-Message-ID: <2025041456-legacy-craftwork-2d8b@gregkh>
-References: <20250403212919.1137670-1-thierry.bultel.yh@bp.renesas.com>
- <20250403212919.1137670-11-thierry.bultel.yh@bp.renesas.com>
- <2025041152-puzzling-clinking-e573@gregkh>
- <TYCPR01MB11492DDF2728C9D3B3F14DCA38AB32@TYCPR01MB11492.jpnprd01.prod.outlook.com>
+	s=arc-20240116; t=1744625333; c=relaxed/simple;
+	bh=ikcFIKiUa4XCXRzxwCujAZL//L2GImleFBpghLCAdbU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=a1QNizTsv5vgjUpI+dFeIWC3Y79yzhROXs1bfTL19IDi2a3oDbY/JZXG5RQG7PIK5SIRDfpg1Vpyy9gh8CPWwWdEADOKZN5GPU0wgwwCE6CXqHnmKzNQmqQ7tIkvisfgrnpFrgWPfI75OK7qVjYqoyO0Hdp3Wn9IFkiP08n82Bk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linatsea.fr; spf=pass smtp.mailfrom=linatsea.fr; dkim=pass (2048-bit key) header.d=linatsea.fr header.i=@linatsea.fr header.b=RO5VAnnx; arc=none smtp.client-ip=217.70.178.249
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linatsea.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linatsea.fr
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id 38015584AE7;
+	Mon, 14 Apr 2025 09:23:45 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 108D4433F6;
+	Mon, 14 Apr 2025 09:23:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linatsea.fr; s=gm1;
+	t=1744622617;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=2xX1JnrLD/Xmneb1rgW8av3OLo09hQ4pZGDbeGR+qj8=;
+	b=RO5VAnnxDB8lpFxKu641LS0B9QLtjt9TUl9rTMYFBCSXgRg5jmtbsItblG8jlNiXcDHr9P
+	ZTiHksLdTyzu2/OAqJ+hurpuJitXUf4TB5aAHq7zEwh+V96wXLpyweU7W05QpDXdV9wZqz
+	iQfDu2WvOGFyNTQWdW3mf5nTGeH2sCyw59gw4S0jzlLsTRg7itiTvSNu0fcQQYBHV0Tryc
+	7v6hp5vT5D50D2T9UkuXgi8JjeojuaSRJdk6aabHHnEby2e7ieLDeqKSOvdXmcVcCNkT7g
+	uKgkyl/7vl/dZnqrL1UTjo09G7NOVaTP/lgmzAVVxHPfs8S4fqg4CYoDNA1uMg==
+Message-ID: <eba16d9a-9e07-498f-a7ab-0bb36076de40@linatsea.fr>
+Date: Mon, 14 Apr 2025 11:23:34 +0200
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYCPR01MB11492DDF2728C9D3B3F14DCA38AB32@TYCPR01MB11492.jpnprd01.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 10/13] serial: sh-sci: Add support for RZ/T2H SCI
+To: Greg KH <gregkh@linuxfoundation.org>,
+ Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
+Cc: "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
+ "geert@linux-m68k.org" <geert@linux-m68k.org>,
+ Paul Barker <paul.barker.ct@bp.renesas.com>,
+ Wolfram Sang <wsa+renesas@sang-engineering.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
+References: <20250403212919.1137670-1-thierry.bultel.yh@bp.renesas.com>
+ <20250403212919.1137670-11-thierry.bultel.yh@bp.renesas.com>
+ <2025041152-puzzling-clinking-e573@gregkh>
+ <TYCPR01MB11492DDF2728C9D3B3F14DCA38AB32@TYCPR01MB11492.jpnprd01.prod.outlook.com>
+ <2025041456-legacy-craftwork-2d8b@gregkh>
+Content-Language: fr
+From: Thierry Bultel <thierry.bultel@linatsea.fr>
+In-Reply-To: <2025041456-legacy-craftwork-2d8b@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvvddtudekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefkffggfgfuvfevfhfhjggtgfesthekredttddvjeenucfhrhhomhepvfhhihgvrhhrhicuuehulhhtvghluceothhhihgvrhhrhidrsghulhhtvghlsehlihhnrghtshgvrgdrfhhrqeenucggtffrrghtthgvrhhnpeffleefheeutdeuhfehteehkeduieeltdejffetkeekuedtveeivedvudelkefgteenucfkphepkeelrddvgeekrdejiedrjedtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepkeelrddvgeekrdejiedrjedtpdhhvghloheplgduledvrdduieekrdehjedrleejngdpmhgrihhlfhhrohhmpehthhhivghrrhihrdgsuhhlthgvlheslhhinhgrthhsvggrrdhfrhdpnhgspghrtghpthhtohepkedprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehthhhivghrrhihrdgsuhhlthgvlhdrhihhsegsphdrrhgvnhgvshgrshdrtghomhdprhgtphhtthhopehlihhnuhigqdhrvghnvghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepghgvvghrtheslhhinhhugidqmheikehkrdhorhhgp
+ dhrtghpthhtohepphgruhhlrdgsrghrkhgvrhdrtghtsegsphdrrhgvnhgvshgrshdrtghomhdprhgtphhtthhopeifshgrodhrvghnvghsrghssehsrghnghdqvghnghhinhgvvghrihhnghdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsvghrihgrlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Sasl: thierry.bultel@linatsea.fr
 
-On Mon, Apr 14, 2025 at 07:54:12AM +0000, Thierry Bultel wrote:
-> Hi Greg,
-> 
-> > -----Original Message-----
-> > From: Greg KH <gregkh@linuxfoundation.org>
-> > Sent: vendredi 11 avril 2025 16:57
-> > To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
-> > Cc: thierry.bultel@linatsea.fr; linux-renesas-soc@vger.kernel.org;
-> > geert@linux-m68k.org; Paul Barker <paul.barker.ct@bp.renesas.com>; Wolfram
-> > Sang <wsa+renesas@sang-engineering.com>; linux-kernel@vger.kernel.org;
-> > linux-serial@vger.kernel.org
-> > Subject: Re: [PATCH v7 10/13] serial: sh-sci: Add support for RZ/T2H SCI
-> > 
-> > On Thu, Apr 03, 2025 at 11:29:12PM +0200, Thierry Bultel wrote:
-> > > --- a/include/uapi/linux/serial_core.h
-> > > +++ b/include/uapi/linux/serial_core.h
-> > > @@ -231,6 +231,9 @@
-> > >  /* Sunplus UART */
-> > >  #define PORT_SUNPLUS	123
-> > >
-> > > +/* SH-SCI */
-> > > +#define PORT_RSCI	124
-> > 
-> > Why do you need to tell userspace about this specific port?  Is that a
-> > hard requirement that your userspace tools require?  If not, please don't
-> > export this here.
-> 
-> This point has been discussed with Geert and Wolfram.
-> We cannot use PORT_GENERIC for this IP, and adding the new type
-> is just keeping consistent with the sh-sci driver.
 
-But, why does userspace need to know this number?  And why doesn't
-PORT_GENERIC work?
 
-thanks,
+Le 14/04/2025 à 10:58, Greg KH a écrit :
+> On Mon, Apr 14, 2025 at 07:54:12AM +0000, Thierry Bultel wrote:
+>> Hi Greg,
+>>
+>>> -----Original Message-----
+>>> From: Greg KH <gregkh@linuxfoundation.org>
+>>> Sent: vendredi 11 avril 2025 16:57
+>>> To: Thierry Bultel <thierry.bultel.yh@bp.renesas.com>
+>>> Cc: thierry.bultel@linatsea.fr; linux-renesas-soc@vger.kernel.org;
+>>> geert@linux-m68k.org; Paul Barker <paul.barker.ct@bp.renesas.com>; Wolfram
+>>> Sang <wsa+renesas@sang-engineering.com>; linux-kernel@vger.kernel.org;
+>>> linux-serial@vger.kernel.org
+>>> Subject: Re: [PATCH v7 10/13] serial: sh-sci: Add support for RZ/T2H SCI
+>>>
+>>> On Thu, Apr 03, 2025 at 11:29:12PM +0200, Thierry Bultel wrote:
+>>>> --- a/include/uapi/linux/serial_core.h
+>>>> +++ b/include/uapi/linux/serial_core.h
+>>>> @@ -231,6 +231,9 @@
+>>>>   /* Sunplus UART */
+>>>>   #define PORT_SUNPLUS	123
+>>>>
+>>>> +/* SH-SCI */
+>>>> +#define PORT_RSCI	124
+>>> Why do you need to tell userspace about this specific port?  Is that a
+>>> hard requirement that your userspace tools require?  If not, please don't
+>>> export this here.
+>> This point has been discussed with Geert and Wolfram.
+>> We cannot use PORT_GENERIC for this IP, and adding the new type
+>> is just keeping consistent with the sh-sci driver.
+> But, why does userspace need to know this number?  And why doesn't
+> PORT_GENERIC work?
 
-greg k-h
+The reason is that the sh-sci driver discriminates internally between 
+port types.
+There are number of locations when it checks for PORT_SCI, PORT_SCIF, 
+PORT_SCIFA...
+T2H SCI needs special handling, too, that is the reason why PORT_GENERIC 
+cannot work. I just therefore added this new type.
+
+>
+> thanks,
+>
+> greg k-h
+
 
