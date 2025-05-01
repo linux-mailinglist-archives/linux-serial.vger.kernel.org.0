@@ -1,78 +1,94 @@
-Return-Path: <linux-serial+bounces-9188-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9190-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8371AA590F
-	for <lists+linux-serial@lfdr.de>; Thu,  1 May 2025 02:31:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4422FAA5A28
+	for <lists+linux-serial@lfdr.de>; Thu,  1 May 2025 06:11:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2073D1888AC1
-	for <lists+linux-serial@lfdr.de>; Thu,  1 May 2025 00:31:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DD4E53A4F76
+	for <lists+linux-serial@lfdr.de>; Thu,  1 May 2025 04:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0834419F42C;
-	Thu,  1 May 2025 00:31:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D34A22D7BF;
+	Thu,  1 May 2025 04:11:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="VRxfAR7R"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EGVQoAER"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f181.google.com (mail-pg1-f181.google.com [209.85.215.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF56619D06B;
-	Thu,  1 May 2025 00:31:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A911E5718
+	for <linux-serial@vger.kernel.org>; Thu,  1 May 2025 04:11:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746059483; cv=none; b=lijnZKfI2Pv4Dq9MmoF4QmOUC9KTu3bcJiE3f7u78eELnn11zBkglrmnST44YCKw3XT6L2OFN7/h3URHdehgpd2piieN0Xcf6KR7eUhwyC3erkotxyxlHlUpiDGUb1YmV2+asUTL4kcJvvbZXHKHOjOgfRbX8VuXnogje1j3HGM=
+	t=1746072664; cv=none; b=ZgpIM4Hq1GBGBWy579a0hRtB7q+rztOmvsXkbN+Isz9WrPiruJLOMYFPJ++f1WBSJxkO0+ULURYCbthxwHfipptmbKOh0A5z+BFmpe5uVwZlr+jSAFVahgRtyUnxjfSf4s6xRCPEOdjVOYJTecUWH8qA2q6w8VdMNoKDXr5ycD8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746059483; c=relaxed/simple;
-	bh=LvanHOPyM2JN7bhHF59iVdTrLY3ZOqVzlIGEaj8SM4s=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JaW/R2NB0Q3lz56+kVGiozn0K7e0y7xoUBBOQjnkdqC3+LDeUn6eivFxpwizJAsS9u35hY2h3rtu0NTXLIX0iKBxdSkvdqChPpkn0zmZtgSZgJ4SyJLDsOss5d8ic7KI8W+0qnzXYEssZtspZKhCZukGf1CqeSLo9/RAY7+mYyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=VRxfAR7R; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5410VDOd4105596
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 30 Apr 2025 19:31:14 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1746059474;
-	bh=OBSTd4za5cq8I9nRIjd/m7xslvR8Qwnvh95KzZ9t7vA=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=VRxfAR7RygfuJT2AVVi+pcXnzOKskG+YmM7y+N9BgFyVVc40pqBf6tu3x7DGEP7A8
-	 PiwAkv0YL7LpOaRNwOQ6pIQldKwgcRo4C3k3Ek9IMKOBFcLBPwv446qxlKT6cskj5q
-	 fyp7s5v4BFy9csEpU6CzJRuzfkGIPup6v0BMnTQ0=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 5410VDAE109460
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Wed, 30 Apr 2025 19:31:13 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 30
- Apr 2025 19:31:13 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 30 Apr 2025 19:31:13 -0500
-Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5410VDaE044266;
-	Wed, 30 Apr 2025 19:31:13 -0500
-From: Judith Mendez <jm@ti.com>
-To: Judith Mendez <jm@ti.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Kevin Hilman <khilman@baylibre.com>
-CC: Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>,
-        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-        Hari Nagalla <hnagalla@ti.com>
-Subject: [PATCH RFC 2/2] serial: 8250: Add PRUSS UART driver
-Date: Wed, 30 Apr 2025 19:31:13 -0500
-Message-ID: <20250501003113.1609342-3-jm@ti.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250501003113.1609342-1-jm@ti.com>
-References: <20250501003113.1609342-1-jm@ti.com>
+	s=arc-20240116; t=1746072664; c=relaxed/simple;
+	bh=cglhck3ZVlSAKkENCvkXY5/2fG1tC16s4xQjru2vpAw=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=KB1y9J5aiwQ4c4JjrsdY2tj1adISw0LQBAsVfwSNXEjJvKjq12niBcqiBX7jaCkGQqXqbF/ASR5Ov1eKOrSWvxH6fEYRIP04FMDCUc9tetRkw0gNq2N0MC7e8e4qvcEXXdmi8nfXNZGvgFC9xVOnZt0hxGFIxgkshhmkt+7Luzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EGVQoAER; arc=none smtp.client-ip=209.85.215.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f181.google.com with SMTP id 41be03b00d2f7-b07d607dc83so435901a12.1
+        for <linux-serial@vger.kernel.org>; Wed, 30 Apr 2025 21:11:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1746072662; x=1746677462; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cglhck3ZVlSAKkENCvkXY5/2fG1tC16s4xQjru2vpAw=;
+        b=EGVQoAER4sBQT5vQoNRRKsctIOH5qdiJlL4UNCwSKZwrp5VOBpfwIqkFe5IqRISCmy
+         z921e2QY2QG4QuFTDHCDKNysUakFFiVNu20Q3kIesG8d0QhjBSjqOERbXIFkz2K613pP
+         I0+os0xNdQSqFjn26HRAsLSwbUeLMwWk9+rYYXBL2I6o9Vzw43E1INFXSbDzLPx7dgmF
+         0Q1WZKc8FUt2lN66H8YwzTIz+1GU4sV5B/ibtRDT3Te5KSjIFC/LQ/6e+xEYfdtYpnWX
+         hFIc6HV952pAylwu/qnB98M/uLZaVJo2imzslk1QzmWir0tNfjHZToXnehNdYvZmWcal
+         cUcw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746072662; x=1746677462;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cglhck3ZVlSAKkENCvkXY5/2fG1tC16s4xQjru2vpAw=;
+        b=ODBt978jENBHM4NCMwS1eKSFPhAruWqRlyPCXlZ/MvIDkeBFgOJi9quE5hd2d4m/vU
+         WBZhQDdNegs5aUNpRunDsycHLQxsvMY/pgd9qIIU9y8BWkA2xKp/cyO1XRXixj797rSA
+         JcId2pvWP+q+/RrbXP46lhI0OJAiCNXyqK3tiMRboO91/lBktz4aeEvhSWcKQVnljoFo
+         our5U6303vW2LmMD6JeX/XvxEy7K8judYUH/Ogwe73KYx0NUTADwS00XjcuZbnru64Br
+         6KYH3zPMXVdN5z34SczeP2YkGx3tKqOY42G3dLoC5QP/UPw4jIpPtfr9UFMBHXMAhYwI
+         hZQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUNE3hrsK89793B5UQqpkskKS4+QbSFUx1PGuvT5Gb6+fha7I2Fxel2z/3zlb/+3OkcSuLhFMRKd+l2Ss8=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwKZ0NaOPvip2uZVF3UsEJIwG6Ukc4iMgkSmP4jd6WLVa6xsEIs
+	x5s4NbmSDGkigHvjVH7vuFmGxC0c2h6EcLpxsgQKNqpnFgs9r2iI
+X-Gm-Gg: ASbGncuWO9CPmNvdu8fIQadjHJm43qfA57TcA+p8MZ/zbr3cqw8toWCn6Yxk3csbV+a
+	z/1uUq4kn9Yt4t+eV3EttmJQITaCO3Rf3BeTethhDPHPBfdcSpOadnEj8rey1TbebqE36beaup9
+	GexCF/ywV9Lhie1dUPn34Z09V7l1UVXANbQCx4/dd2eBszSz+o7fB5nLRnTrsvhQTGAhYkIykEr
+	KAybIYE0Kz6rMGw1l0xi2vdoGjVNk5fVqX0MaT9SYo2rumMIDRLdV8yd/ezDI3iDftAgHEKxZmN
+	sY16bTl26fkx9iNsFY0oqeVlswgdlK/sslKhPbLm55qMb8+gCYhJov+xzQe4wGFvfAXHpS0uAsm
+	FJqKRWWtQnog=
+X-Google-Smtp-Source: AGHT+IEy/jmpGgpIyizyxFYlKl0htHFpZ7soOfbtZASR7k6jSxVTqIU2w/1i4rQkzFMZ/p1as5YCOQ==
+X-Received: by 2002:a17:90b:2750:b0:2f2:ab09:c256 with SMTP id 98e67ed59e1d1-30a41eb505amr2272046a91.33.1746072662145;
+        Wed, 30 Apr 2025 21:11:02 -0700 (PDT)
+Received: from DESKTOP-NBGHJ1C.local.valinux.co.jp (vagw.valinux.co.jp. [210.128.90.14])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-30a34a5f86esm2563115a91.44.2025.04.30.21.11.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 30 Apr 2025 21:11:01 -0700 (PDT)
+From: Ryo Takakura <ryotkkr98@gmail.com>
+To: john.ogness@linutronix.de,
+	pmladek@suse.com
+Cc: Jason@zx2c4.com,
+	gregkh@linuxfoundation.org,
+	linux-serial@vger.kernel.org,
+	lkp@intel.com,
+	oe-lkp@lists.linux.dev,
+	oliver.sang@intel.com,
+	ryotkkr98@gmail.com
+Subject: Re: [linux-next:master] [serial]  b63e6f60ea: BUG:soft_lockup-CPU##stuck_for#s![modprobe:#]
+Date: Thu,  1 May 2025 13:10:55 +0900
+Message-Id: <20250501041055.6504-1-ryotkkr98@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <84y0vhodwy.fsf@jogness.linutronix.de>
+References: <84y0vhodwy.fsf@jogness.linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -80,280 +96,71 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-From: Bin Liu <b-liu@ti.com>
+On Wed, 30 Apr 2025 17:47:01 +0206, John Ogness wrote:
+>On 2025-04-30, Ryo Takakura <ryotkkr98@gmail.com> wrote:
+>>>> The touch_nmi_watchdog() resets the softlockup watchdog. It might
+>>>> hide that the CPU did not schedule for a long time.
+>>
+>> To test the above, I run the rslib test using legacy console(without
+>> the John's series) with the touch_nmi_watchdog()s removed as
+>> following.
+>>
+>> The result is that it triggered the softlockup as expected. So I guess
+>> we can say that the legacy console was indeed hiding the softlockup
+>> scenario as suggested by Petr.
+>
+>Excellent.
+>
+>>> With the John's series appied, I guess the kthread were running on a
+>>> cpu other than the one running the rslib test as John said[0], and
+>>> neither of touch_nmi_watchdog() nor cond_resched() were called that
+>>> could prevent the softlockup.
+>>
+>> To test the above, I removed the touch_nmi_watchdog() mentioned by John[0]
+>> on top of the John's series with the printing forced to be done on the same
+>> cpu running the rslib test by marking emergency section(below change applied).
+>>
+>> The result is that it triggered the softlockup as expected. Similar to
+>> the first test, the touch_nmi_watchdog() was preventing the softlockup
+>> when its marked with emergency section.
+>
+>Excellent.
+>
+>> And I believe this implies that the kthread was running on some other cpu
+>> as stated above as it should also be calling the touch_nmi_watchdog()
+>> when it does printing.
+>
+>Agreed.
+>
+>> If sounds good, I will prepare a fix adding cond_resched() to the
+>> rslib test later on.
+>
+>Yes, please add a cond_resched() to the rslib test.
 
-This adds a new serial 8250 driver that supports the UART in PRUSS
-module.
+Thank you for checking the results, Got it!
 
-The PRUSS has a UART sub-module which is based on the industry standard
-TL16C550 UART controller, which has 16-bytes FIFO and supports 16x and
-13x over samplings.
+>> I tested with Linus' master on x86 qemu. I was able to see the rslib
+>> tests prone to softlockup and the John's series exaggerating it, same
+>> as raspberry pi.
+>>
+>> But I couldn't see the softlockup go away by marking the emergency
+>> section around the printk call within the rslib test. Looks like it
+>> never calls the touch_nmi_watchdog() in wait_for_lsr(). Maybe because
+>> trasmission gets immediatly completed on qemu board?
+>
+>qemu does not emulate a baudrate, so indeed transmission completes
+>immediately. It would need to be tested on real hardware. But I am
 
-Signed-off-by: Bin Liu <b-liu@ti.com>
-Signed-off-by: Judith Mendez <jm@ti.com>
----
- drivers/tty/serial/8250/8250_pruss.c | 213 +++++++++++++++++++++++++++
- drivers/tty/serial/8250/Kconfig      |  10 ++
- drivers/tty/serial/8250/Makefile     |   1 +
- 3 files changed, 224 insertions(+)
- create mode 100644 drivers/tty/serial/8250/8250_pruss.c
+Oh I see, that makes sense.
 
-diff --git a/drivers/tty/serial/8250/8250_pruss.c b/drivers/tty/serial/8250/8250_pruss.c
-new file mode 100644
-index 000000000000..2943bf7d6645
---- /dev/null
-+++ b/drivers/tty/serial/8250/8250_pruss.c
-@@ -0,0 +1,213 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ *  Serial Port driver for PRUSS UART on TI platforms
-+ *
-+ *  Copyright (C) 2020-2021 by Texas Instruments Incorporated - http://www.ti.com/
-+ *  Author: Bin Liu <b-liu@ti.com>
-+ */
-+#include <linux/clk.h>
-+#include <linux/module.h>
-+#include <linux/serial_reg.h>
-+#include <linux/serial_core.h>
-+#include <linux/of_irq.h>
-+#include <linux/of_address.h>
-+#include <linux/of_platform.h>
-+#include <linux/remoteproc.h>
-+#include "8250.h"
-+
-+#define DEFAULT_CLK_SPEED	192000000
-+
-+/* extra registers */
-+#define PRUSS_UART_PEREMU_MGMT	12
-+#define PRUSS_UART_TX_EN	BIT(14)
-+#define PRUSS_UART_RX_EN	BIT(13)
-+#define PRUSS_UART_FREE_RUN	BIT(0)
-+
-+#define PRUSS_UART_MDR			13
-+#define PRUSS_UART_MDR_OSM_SEL_MASK	BIT(0)
-+#define PRUSS_UART_MDR_16X_MODE		0
-+#define PRUSS_UART_MDR_13X_MODE		1
-+
-+struct pruss8250_info {
-+	int type;
-+	int line;
-+};
-+
-+static inline void uart_writel(struct uart_port *p, u32 offset, int value)
-+{
-+	writel(value, p->membase + (offset << p->regshift));
-+}
-+
-+static int pruss8250_startup(struct uart_port *port)
-+{
-+	int ret;
-+
-+	uart_writel(port, PRUSS_UART_PEREMU_MGMT, 0);
-+
-+	ret = serial8250_do_startup(port);
-+	if (!ret)
-+		uart_writel(port, PRUSS_UART_PEREMU_MGMT, PRUSS_UART_TX_EN |
-+							  PRUSS_UART_RX_EN |
-+							  PRUSS_UART_FREE_RUN);
-+	return ret;
-+}
-+
-+static unsigned int pruss8250_get_divisor(struct uart_port *port,
-+					  unsigned int baud,
-+					  unsigned int *frac)
-+{
-+	unsigned int uartclk = port->uartclk;
-+	unsigned int div_13, div_16;
-+	unsigned int abs_d13, abs_d16;
-+	u16 quot;
-+
-+	/* Old custom speed handling */
-+	if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
-+		quot = port->custom_divisor & UART_DIV_MAX;
-+		if (port->custom_divisor & (1 << 16))
-+			*frac = PRUSS_UART_MDR_13X_MODE;
-+		else
-+			*frac = PRUSS_UART_MDR_16X_MODE;
-+
-+		return quot;
-+	}
-+
-+	div_13 = DIV_ROUND_CLOSEST(uartclk, 13 * baud);
-+	div_16 = DIV_ROUND_CLOSEST(uartclk, 16 * baud);
-+	div_13 = div_13 ? : 1;
-+	div_16 = div_16 ? : 1;
-+
-+	abs_d13 = abs(baud - uartclk / 13 / div_13);
-+	abs_d16 = abs(baud - uartclk / 16 / div_16);
-+
-+	if (abs_d13 >= abs_d16) {
-+		*frac = PRUSS_UART_MDR_16X_MODE;
-+		quot = div_16;
-+	} else {
-+		*frac = PRUSS_UART_MDR_13X_MODE;
-+		quot = div_13;
-+	}
-+
-+	return quot;
-+}
-+
-+static void pruss8250_set_divisor(struct uart_port *port, unsigned int baud,
-+				  unsigned int quot, unsigned int quot_frac)
-+{
-+	serial8250_do_set_divisor(port, baud, quot);
-+	/*
-+	 * quot_frac holds the MDR over-sampling mode
-+	 * which is set in pruss8250_get_divisor()
-+	 */
-+	quot_frac &= PRUSS_UART_MDR_OSM_SEL_MASK;
-+	serial_port_out(port, PRUSS_UART_MDR, quot_frac);
-+}
-+
-+static int pruss8250_probe(struct platform_device *pdev)
-+{
-+	struct device_node *np = pdev->dev.of_node;
-+	struct uart_8250_port port8250;
-+	struct uart_port *up = &port8250.port;
-+	struct pruss8250_info *info;
-+	struct resource resource;
-+	unsigned int port_type;
-+	struct clk *clk;
-+	int ret;
-+
-+	port_type = (unsigned long)of_device_get_match_data(&pdev->dev);
-+	if (port_type == PORT_UNKNOWN)
-+		return -EINVAL;
-+
-+	info = devm_kzalloc(&pdev->dev, sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return -ENOMEM;
-+
-+	memset(&port8250, 0, sizeof(port8250));
-+
-+	ret = of_address_to_resource(np, 0, &resource);
-+	if (ret) {
-+		dev_err(&pdev->dev, "invalid address\n");
-+		return ret;
-+	}
-+
-+	ret = of_alias_get_id(np, "serial");
-+	if (ret > 0)
-+		up->line = ret;
-+
-+	clk = devm_clk_get(&pdev->dev, NULL);
-+	if (IS_ERR(clk)) {
-+		if (PTR_ERR(clk) == -EPROBE_DEFER)
-+			return -EPROBE_DEFER;
-+		up->uartclk = DEFAULT_CLK_SPEED;
-+	} else {
-+		up->uartclk = clk_get_rate(clk);
-+		devm_clk_put(&pdev->dev, clk);
-+	}
-+
-+	up->dev = &pdev->dev;
-+	up->mapbase = resource.start;
-+	up->mapsize = resource_size(&resource);
-+	up->type = port_type;
-+	up->iotype = UPIO_MEM;
-+	up->regshift = 2;
-+	up->flags = UPF_SHARE_IRQ | UPF_BOOT_AUTOCONF | UPF_FIXED_PORT |
-+		    UPF_FIXED_TYPE | UPF_IOREMAP;
-+	up->irqflags |= IRQF_SHARED;
-+	up->startup = pruss8250_startup;
-+	up->rs485_config = serial8250_em485_config;
-+	up->get_divisor = pruss8250_get_divisor;
-+	up->set_divisor = pruss8250_set_divisor;
-+
-+	ret = of_irq_get(np, 0);
-+	if (ret < 0) {
-+		if (ret != -EPROBE_DEFER)
-+			dev_err(&pdev->dev, "missing irq\n");
-+		return ret;
-+	}
-+
-+	up->irq = ret;
-+	spin_lock_init(&port8250.port.lock);
-+	port8250.capabilities = UART_CAP_FIFO | UART_CAP_AFE;
-+
-+	ret = serial8250_register_8250_port(&port8250);
-+	if (ret < 0)
-+		goto err_dispose;
-+
-+	info->type = port_type;
-+	info->line = ret;
-+	platform_set_drvdata(pdev, info);
-+
-+	return 0;
-+
-+err_dispose:
-+	irq_dispose_mapping(port8250.port.irq);
-+	return ret;
-+}
-+
-+static void pruss8250_remove(struct platform_device *pdev)
-+{
-+	struct pruss8250_info *info = platform_get_drvdata(pdev);
-+
-+	serial8250_unregister_port(info->line);
-+}
-+
-+static const struct of_device_id pruss8250_table[] = {
-+	{ .compatible = "ti,pruss-uart", .data = (void *)PORT_16550A, },
-+	{ /* end of list */ },
-+};
-+MODULE_DEVICE_TABLE(of, pruss8250_table);
-+
-+static struct platform_driver pruss8250_driver = {
-+	.driver = {
-+		.name = "pruss8250",
-+		.of_match_table = pruss8250_table,
-+	},
-+	.probe = pruss8250_probe,
-+	.remove = pruss8250_remove,
-+};
-+
-+module_platform_driver(pruss8250_driver);
-+
-+MODULE_AUTHOR("Bin Liu <b-liu@ti.com");
-+MODULE_LICENSE("GPL v2");
-+MODULE_DESCRIPTION("Serial Port driver for PRUSS UART on TI platforms");
-diff --git a/drivers/tty/serial/8250/Kconfig b/drivers/tty/serial/8250/Kconfig
-index f64ef0819cd4..cd4346609c55 100644
---- a/drivers/tty/serial/8250/Kconfig
-+++ b/drivers/tty/serial/8250/Kconfig
-@@ -582,6 +582,16 @@ config SERIAL_8250_NI
- 	  To compile this driver as a module, choose M here: the module
- 	  will be called 8250_ni.
- 
-+config SERIAL_8250_PRUSS
-+	tristate "TI PRU-ICSS UART support"
-+	depends on SERIAL_8250
-+	depends on PRU_REMOTEPROC && TI_PRUSS_INTC
-+	help
-+	  This driver is to support the UART module in PRU-ICSS which is
-+	  available in some TI platforms.
-+	  Say 'Y' here if you wish to use PRU-ICSS UART.
-+	  Otherwise, say 'N'.
-+
- config SERIAL_OF_PLATFORM
- 	tristate "Devicetree based probing for 8250 ports"
- 	depends on SERIAL_8250 && OF
-diff --git a/drivers/tty/serial/8250/Makefile b/drivers/tty/serial/8250/Makefile
-index b04eeda03b23..3132b4f40a34 100644
---- a/drivers/tty/serial/8250/Makefile
-+++ b/drivers/tty/serial/8250/Makefile
-@@ -47,6 +47,7 @@ obj-$(CONFIG_SERIAL_8250_PARISC)	+= 8250_parisc.o
- obj-$(CONFIG_SERIAL_8250_PCI)		+= 8250_pci.o
- obj-$(CONFIG_SERIAL_8250_PCI1XXXX)	+= 8250_pci1xxxx.o
- obj-$(CONFIG_SERIAL_8250_PERICOM)	+= 8250_pericom.o
-+obj-$(CONFIG_SERIAL_8250_PRUSS)		+= 8250_pruss.o
- obj-$(CONFIG_SERIAL_8250_PXA)		+= 8250_pxa.o
- obj-$(CONFIG_SERIAL_8250_RT288X)	+= 8250_rt288x.o
- obj-$(CONFIG_SERIAL_8250_CS)		+= serial_cs.o
--- 
-2.49.0
+>certain we found the cause and explanation. Thank you for digging into
+>this!
 
+Great, my pleasure!
+
+Sincerely,
+Ryo Takakura
+
+>John
 
