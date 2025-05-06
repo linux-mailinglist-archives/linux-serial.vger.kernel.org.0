@@ -1,188 +1,152 @@
-Return-Path: <linux-serial+bounces-9302-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9304-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9E6CAAC4A3
-	for <lists+linux-serial@lfdr.de>; Tue,  6 May 2025 14:53:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4857AAC918
+	for <lists+linux-serial@lfdr.de>; Tue,  6 May 2025 17:08:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A7DD91B6168B
-	for <lists+linux-serial@lfdr.de>; Tue,  6 May 2025 12:52:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC02B1C2136D
+	for <lists+linux-serial@lfdr.de>; Tue,  6 May 2025 15:08:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DE5228002C;
-	Tue,  6 May 2025 12:51:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b="Kf3Te0Yh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7C2628313B;
+	Tue,  6 May 2025 15:08:04 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-24416.protonmail.ch (mail-24416.protonmail.ch [109.224.244.16])
+Received: from unicorn.mansr.com (unicorn.mansr.com [81.2.72.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F73A27FD5B
-	for <linux-serial@vger.kernel.org>; Tue,  6 May 2025 12:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=109.224.244.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B4E427B4F8;
+	Tue,  6 May 2025 15:08:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.2.72.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746535916; cv=none; b=AnHQBQv639E6OMELqDsfvXoV3gPIXOVy+sWl6FIfqzoFHhWLAvTRqLDJXQHUnTxqIlrhld39ZYY/CMRzO8MGp8x09G1PtAOnHxQNyMoD153k6rHfaWEOAZXqd30ZNmjtHYFLHWmT41jDe3WVdFyINMvmvwxvRndZOW+gpFzdQC4=
+	t=1746544084; cv=none; b=EmZ2PCaHTZ7/ip8oCIWsvro7CZaMRs66q9T/RA/I5TNKm3UtbB/m1aaXs33USmnRVNVd27c5mnkBTwvvcA2vshRmXHcDa0+5pFbR6hkPzSA2zslyz4ZglMut60tPQaTdH/MOhdhPixPgGC+rK8vba74SRkKjybP9o7vIoBceHEI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746535916; c=relaxed/simple;
-	bh=zK9w9rIJY/9mYRo0HXp9qe6o+/wCX4Pdi5dv42T1IzQ=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=e0+XUuqF03S8Q5xWKj2YanpZYNiwZK88E+cyFhqtzfJ1w61n6+nbhh2FTkriYL2WLiOp0X0NvCCzvU2peKcRF6EFfaBoa9PDKT9JJ8k4cnRBSj9UinnIgCY4596Mo8WoLIP1V5g2JGwPZYSo2OqAHHSiJT57d99Mko7Yz/maDUE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com; spf=pass smtp.mailfrom=protonmail.com; dkim=pass (2048-bit key) header.d=protonmail.com header.i=@protonmail.com header.b=Kf3Te0Yh; arc=none smtp.client-ip=109.224.244.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=protonmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=protonmail.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-	s=protonmail3; t=1746535912; x=1746795112;
-	bh=zzBJeXUf0V8P3H7TLaYvoaJ0zwNJmLoh71eDPNoDAJo=;
-	h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
-	 Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
-	 Message-ID:BIMI-Selector:List-Unsubscribe:List-Unsubscribe-Post;
-	b=Kf3Te0YhCqJrqtUsS5gb51nXR8axsPP1nqL+iDY8TkMgQdzoCkx6O2c0UQU+0a+Jr
-	 BHDQXEHA5FizNcgY8qlaulNEZ2XnQYRJSf4y6zfCu2/xeV2cjbT6eOg5+t+ww8NQ70
-	 6ARuZu6ks9LXXszW5NUPrrnwa8AtbI4UxNoQDGj/UmWnq9ueKMvr6rHpD6RsgpvmCM
-	 csM0jyxT3JMaWjMCYM6yXRrDR14iijkd8rQ8w+Bwi3gGvX6sBe6Nxpw+58KOxgz6Pz
-	 +f3+32rXAd3cbOI9scolGovSLPCP93xmhxKq6FyjZM10Tx+Y8hPn3GkvRAqzrVKq6q
-	 xLijbJzpPLOFw==
-Date: Tue, 06 May 2025 12:51:48 +0000
-To: gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org, jason.wessel@windriver.com, danielt@kernel.org, dianders@chromium.org, jirislaby@kernel.org
-From: Roxana Nicolescu <nicolescu.roxana@protonmail.com>
-Cc: kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, skhan@linuxfoundation.org, linux-kernel-mentees@lists.linux.dev
-Subject: [RFC PATCH 2/2] serial: kgdboc: convert to use faux_device
-Message-ID: <20250506125133.108786-3-nicolescu.roxana@protonmail.com>
-In-Reply-To: <20250506125133.108786-1-nicolescu.roxana@protonmail.com>
-References: <20250506125133.108786-1-nicolescu.roxana@protonmail.com>
-Feedback-ID: 136600343:user:proton
-X-Pm-Message-ID: fd5abac4492e3841c902f5b9b7f60d650c2de90c
+	s=arc-20240116; t=1746544084; c=relaxed/simple;
+	bh=V0Qnd7XGUYL4VJVx/NNGZxOFnfryDun38SvbJqd1K94=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=hpiGaqOFBDs+ZeOWPUPhlBoXHDXb70UXCqorDjf2WbPjEOvh/HFJw+JTTSygQWUpBfq/LurdU+Bva/MalnNGLV3uKvkpp7acx2L7KYp2HkarodMV7b9TBf8ubHz37V6MfsvXLI9MDPgQPY/vG4utzak3zdTr2oLI6vZZT7/G+PA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com; spf=pass smtp.mailfrom=mansr.com; arc=none smtp.client-ip=81.2.72.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mansr.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mansr.com
+Received: from raven.mansr.com (raven.mansr.com [IPv6:2001:8b0:ca0d:1::3])
+	by unicorn.mansr.com (Postfix) with ESMTPS id 6213715380;
+	Tue, 06 May 2025 16:07:55 +0100 (BST)
+Received: by raven.mansr.com (Postfix, from userid 51770)
+	id 4BAE821A3DA; Tue, 06 May 2025 16:07:55 +0100 (BST)
+From: Mans Rullgard <mans@mansr.com>
+To: jirislaby@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: [PATCH v2 1/2] tty: serial: 8250_omap: fix tx with dma
+Date: Tue,  6 May 2025 16:07:29 +0100
+Message-ID: <20250506150748.3162-1-mans@mansr.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-The kgdboc uses a "fake" platform device to handle tty drivers showing
-up late. In case the tty device is not detected during probe, it will
-return EPROBE_DEFER which means the probe will be called later when the
-tty device might be there. Before this, the kgdboc driver
-would be initialized early in the process (useful for early boot
-debugging) but then the tty device wouldn't be there, and retry wouldn't be
-done later. For a better explanation, see commit
-'68e55f61c138: ("kgdboc: Use a platform device to handle tty drivers
-showing up late")'.
+Commit 1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
+introduced an error in the TX DMA handling for 8250_omap.
 
-This replaces the platform_device usage with faux_device which was
-introduced recently for scenarios like this, where there is not real
-platform device needed. Moreover, it makes the code cleaner than before.
+When the OMAP_DMA_TX_KICK flag is set, one byte is pulled from the
+kfifo and emitted directly in order to start the DMA.  This is done
+without updating DMA tx_size which leads to uart_xmit_advance() called
+in the DMA complete callback advancing the kfifo by one too much.
 
-Signed-off-by: Roxana Nicolescu <nicolescu.roxana@protonmail.com>
+In practice, transmitting N bytes has been seen to result in the last
+N-1 bytes being sent repeatedly.
+
+This change fixes the problem by moving all of the dma setup after
+the OMAP_DMA_TX_KICK handling and using kfifo_len() instead of the
+dma size for the 4-byte cutoff check. This slightly changes the
+behaviour at buffer wraparound, but it still transmits the correct
+bytes somehow. At the point kfifo_dma_out_prepare_mapped is called,
+at least one byte is guaranteed to be in the fifo, so checking the
+return value is not necessary.
+
+Fixes: 1788cf6a91d9 ("tty: serial: switch from circ_buf to kfifo")
+Cc: stable@vger.kernel.org
+Signed-off-by: Mans Rullgard <mans@mansr.com>
 ---
- drivers/tty/serial/kgdboc.c | 50 +++++++++++--------------------------
- 1 file changed, 14 insertions(+), 36 deletions(-)
+v2: split patch in two
+---
+ drivers/tty/serial/8250/8250_omap.c | 24 +++++++++---------------
+ 1 file changed, 9 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/tty/serial/kgdboc.c b/drivers/tty/serial/kgdboc.c
-index 85f6c5a76e0f..d1ffe6186685 100644
---- a/drivers/tty/serial/kgdboc.c
-+++ b/drivers/tty/serial/kgdboc.c
-@@ -21,7 +21,7 @@
- #include <linux/input.h>
- #include <linux/irq_work.h>
- #include <linux/module.h>
--#include <linux/platform_device.h>
-+#include <linux/device/faux.h>
- #include <linux/serial_core.h>
-=20
- #define MAX_CONFIG_LEN=09=0940
-@@ -42,7 +42,7 @@ static int kgdboc_use_kms;  /* 1 if we use kernel mode sw=
-itching */
- static struct tty_driver=09*kgdb_tty_driver;
- static int=09=09=09kgdb_tty_line;
-=20
--static struct platform_device *kgdboc_pdev;
-+static struct faux_device *kgdboc_fdev;
-=20
- #if IS_BUILTIN(CONFIG_KGDB_SERIAL_CONSOLE)
- static struct kgdb_io=09=09kgdboc_earlycon_io_ops;
-@@ -259,7 +259,7 @@ static int configure_kgdboc(void)
- =09return err;
- }
-=20
--static int kgdboc_probe(struct platform_device *pdev)
-+static int kgdboc_probe(struct faux_device *fdev)
- {
- =09int ret =3D 0;
-=20
-@@ -276,47 +276,26 @@ static int kgdboc_probe(struct platform_device *pdev)
- =09return ret;
- }
-=20
--static struct platform_driver kgdboc_platform_driver =3D {
-+struct faux_device_ops kgdboc_driver =3D {
- =09.probe =3D kgdboc_probe,
--=09.driver =3D {
--=09=09.name =3D "kgdboc",
--=09=09.suppress_bind_attrs =3D true,
--=09},
- };
-=20
- static int __init init_kgdboc(void)
- {
--=09int ret;
-=20
- =09/*
--=09 * kgdboc is a little bit of an odd "platform_driver".  It can be
--=09 * up and running long before the platform_driver object is
--=09 * created and thus doesn't actually store anything in it.  There's
--=09 * only one instance of kgdb so anything is stored as global state.
--=09 * The platform_driver is only created so that we can leverage the
-+=09 * There's only one instance of kgdb so anything is stored as global
-+=09 * state.
-+=09 * The faux_device is only created so that we can leverage the
- =09 * kernel's mechanisms (like -EPROBE_DEFER) to call us when our
--=09 * underlying tty is ready.  Here we init our platform driver and
--=09 * then create the single kgdboc instance.
-+=09 * underlying tty is ready. Here we init our faux device kgdboc
-+=09 * instance.
- =09 */
--=09ret =3D platform_driver_register(&kgdboc_platform_driver);
--=09if (ret)
--=09=09return ret;
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index f1aee915bc02..180466e09605 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -1173,16 +1173,6 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 		return 0;
+ 	}
+ 
+-	sg_init_table(&sg, 1);
+-	ret = kfifo_dma_out_prepare_mapped(&tport->xmit_fifo, &sg, 1,
+-					   UART_XMIT_SIZE, dma->tx_addr);
+-	if (ret != 1) {
+-		serial8250_clear_THRI(p);
+-		return 0;
+-	}
 -
--=09kgdboc_pdev =3D platform_device_alloc("kgdboc", PLATFORM_DEVID_NONE);
--=09if (!kgdboc_pdev) {
--=09=09ret =3D -ENOMEM;
--=09=09goto err_did_register;
--=09}
-+=09kgdboc_fdev =3D faux_device_create("kgdboc", NULL, &kgdboc_driver);
-+=09if (!kgdboc_fdev)
-+=09=09return -ENOMEM;
-=20
--=09ret =3D platform_device_add(kgdboc_pdev);
--=09if (!ret)
--=09=09return 0;
+-	dma->tx_size = sg_dma_len(&sg);
 -
--=09platform_device_put(kgdboc_pdev);
--
--err_did_register:
--=09platform_driver_unregister(&kgdboc_platform_driver);
--=09return ret;
-+=09return 0;
+ 	if (priv->habit & OMAP_DMA_TX_KICK) {
+ 		unsigned char c;
+ 		u8 tx_lvl;
+@@ -1207,7 +1197,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 			ret = -EBUSY;
+ 			goto err;
+ 		}
+-		if (dma->tx_size < 4) {
++		if (kfifo_len(&tport->xmit_fifo) < 4) {
+ 			ret = -EINVAL;
+ 			goto err;
+ 		}
+@@ -1216,11 +1206,12 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 			goto err;
+ 		}
+ 		skip_byte = c;
+-		/* now we need to recompute due to kfifo_get */
+-		kfifo_dma_out_prepare_mapped(&tport->xmit_fifo, &sg, 1,
+-				UART_XMIT_SIZE, dma->tx_addr);
+ 	}
+ 
++	sg_init_table(&sg, 1);
++	kfifo_dma_out_prepare_mapped(&tport->xmit_fifo, &sg, 1,
++				     UART_XMIT_SIZE, dma->tx_addr);
++
+ 	desc = dmaengine_prep_slave_sg(dma->txchan, &sg, 1, DMA_MEM_TO_DEV,
+ 			DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+ 	if (!desc) {
+@@ -1228,6 +1219,7 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ 		goto err;
+ 	}
+ 
++	dma->tx_size = sg_dma_len(&sg);
+ 	dma->tx_running = 1;
+ 
+ 	desc->callback = omap_8250_dma_tx_complete;
+@@ -1248,8 +1240,10 @@ static int omap_8250_tx_dma(struct uart_8250_port *p)
+ err:
+ 	dma->tx_err = 1;
+ out_skip:
+-	if (skip_byte >= 0)
++	if (skip_byte >= 0) {
+ 		serial_out(p, UART_TX, skip_byte);
++		p->port.icount.tx++;
++	}
+ 	return ret;
  }
-=20
- static void exit_kgdboc(void)
-@@ -325,8 +304,7 @@ static void exit_kgdboc(void)
- =09cleanup_kgdboc();
- =09mutex_unlock(&config_mutex);
-=20
--=09platform_device_unregister(kgdboc_pdev);
--=09platform_driver_unregister(&kgdboc_platform_driver);
-+=09faux_device_destroy(kgdboc_fdev);
- }
-=20
- static int kgdboc_get_char(void)
---=20
-2.34.1
-
+ 
+-- 
+2.49.0
 
 
