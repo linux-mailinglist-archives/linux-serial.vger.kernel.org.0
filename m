@@ -1,58 +1,60 @@
-Return-Path: <linux-serial+bounces-9366-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9367-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12608AAE56D
-	for <lists+linux-serial@lfdr.de>; Wed,  7 May 2025 17:51:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47FC2AAE57C
+	for <lists+linux-serial@lfdr.de>; Wed,  7 May 2025 17:52:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60BDD1C44835
-	for <lists+linux-serial@lfdr.de>; Wed,  7 May 2025 15:50:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02EE33A6F1B
+	for <lists+linux-serial@lfdr.de>; Wed,  7 May 2025 15:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 145A728C2D8;
-	Wed,  7 May 2025 15:49:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EDBA28C853;
+	Wed,  7 May 2025 15:49:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tQOwPYQP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iJMFQ5xX"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDFCC28C2BE;
-	Wed,  7 May 2025 15:49:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 727B028BAA5;
+	Wed,  7 May 2025 15:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746632961; cv=none; b=ZWYNJTzYzw9NScYKtwAoy2J54P3npd/x0TABMxOyqOBYAc/9hPBmqcBXOP37qoPXJrwSYmFBEs4jcNWxYq5VAn6t58cIKH5IHSLAVkla/gIQdja0vimtLL+UdVSRhQJA3S3oRDixe7ZP/+jaVhpR70v3o+xIdGRKEggvIZ8UTM0=
+	t=1746632973; cv=none; b=K0+butVhiuST8jALlhdN62vk56MOghNXgNUJqp1UNNc3OQXucs6Mh+L7hQUNjRA4Dw8+Jhq8OdCfnnWxCKqI6WkVdRKOA0aw9+DeXnYbNxrz1YmrXEdo7jQDMbOHWlkVgUlq0Bq+vuV+sfVTigRiqup5jkzr/8GxQyMGypwBrus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746632961; c=relaxed/simple;
-	bh=Qz2S8MvbXorS/O9W3+q+a20k0SMmkwl6OV3DS1CxKVA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u/IbX3YNUO+ujBiBqsEyPcJYefKr2uLe1FAqp2ZcIYBNEyxXR3U9W7dU5NSRT3PTmiCO+aGnMxI8zx/UgHZs9h9sdgBF1x3r2na/JUk9NgyxizuPEWRC7W84LrKTmIfBOcTYYZZN10A0J4izGDEcOeEMPBA4qfcrBPmBp+s5yqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tQOwPYQP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23F86C4CEE2;
-	Wed,  7 May 2025 15:49:20 +0000 (UTC)
+	s=arc-20240116; t=1746632973; c=relaxed/simple;
+	bh=Tp8NdrkzlSlV2qbKcvvrIUR3zgxxR1AAJTORcyzUazM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=na9BHRce8cGCDDEfaPKDv46x3vEELXeMsPRhsbLuvD9ZfGzOCyKfogKSn8+QRbAt9tamPzLr77R7BMI2Hr0e1Q1mhnyxqEDNxMdVMDaU56wmlCOM7v/2IDCyhJLf0FtAVea+FpRXAanrMe/kfplV28Q9SpWRAp1wZbzPX79pvoU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iJMFQ5xX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0111C4CEE2;
+	Wed,  7 May 2025 15:49:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746632960;
-	bh=Qz2S8MvbXorS/O9W3+q+a20k0SMmkwl6OV3DS1CxKVA=;
+	s=k20201202; t=1746632972;
+	bh=Tp8NdrkzlSlV2qbKcvvrIUR3zgxxR1AAJTORcyzUazM=;
 	h=From:To:Cc:Subject:Date:From;
-	b=tQOwPYQPWO8QO6iseBgX7DZEX9/efEiZcN9Badmeq7zIDV4oJiTMhlfRiNzAzvhN5
-	 GjKBccWxwAkL01vzj0TbjpESdKKkgLkG3NW9nMHs6w2PPz1TRm7XKx3iujk3p6MbrX
-	 5Y34I2CCmURnXjTtQy952lpMlAwzfx53Fk5zYyzI0y7GiNyU1GuW5gb4ZxXJs/C67Z
-	 6xiBpx/VBoSBW+o81Fl3m9eVXKRmQM4X88CdrqgyP88HJ7/fNq6MajH7JqE9PCIk4M
-	 1p7pZBMyjYNfgOmRjQKyj0Wqs3aw0p0yWAZXybMNeq1mdhkYEBu8tRAf60BF7ZMTwP
-	 bLF2a4SgBLFnw==
+	b=iJMFQ5xXd5/NPJU1rTDYfFCPEXo9wEQPkrPTbD76lclEZlppbkn8LW+J2UZLwGtRB
+	 HnRFjosuyiQoZH2YPjDxE/eazD5CMNqOyUc3aX/CNVggCIpWduzs6qcqGsFGqn6OQb
+	 Rz7iwLo0rDqh5jW5FTWCtwmlIGrz0rThaYDr0IrpcQj7v58J8mBQB+r53XQiHn+vht
+	 FZm6SNDwh/nSFAGFPUySzVTFPX2ZPb8M/1Z+nLfa+//QIkw0+c6KJDhi5SZ1Ey4o4p
+	 jTd+aPeLd/M1Z/vy1SDvJVTgFzo5E3qYYlsh0JCCcv7UNG7/tQX9a8bCt8pXXXl0O6
+	 9SkASNlXi02Bg==
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
-	Vineet Gupta <vgupta@kernel.org>
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>
 Cc: Thierry Reding <treding@nvidia.com>,
 	linux-kernel@vger.kernel.org,
 	linux-serial@vger.kernel.org,
-	devicetree@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: serial: Convert snps,arc-uart to DT schema
-Date: Wed,  7 May 2025 10:49:08 -0500
-Message-ID: <20250507154909.1602497-1-robh@kernel.org>
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH v2] dt-bindings: serial: Convert socionext,milbeaut-usio-uart to DT schema
+Date: Wed,  7 May 2025 10:49:22 -0500
+Message-ID: <20250507154924.1602842-1-robh@kernel.org>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
@@ -62,8 +64,8 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the Synopsys ARC UART binding to DT schema. Drop the "aliases"
-portion which is not relevant to this schema.
+Convert the Socionext Milbeaut UART binding to DT schema. It is a
+straight-forward conversion.
 
 Reviewed-by: Thierry Reding <treding@nvidia.com>
 Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
@@ -71,99 +73,100 @@ Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
 v2:
  - Fix $id path
 ---
- .../devicetree/bindings/serial/arc-uart.txt   | 25 ---------
- .../bindings/serial/snps,arc-uart.yaml        | 51 +++++++++++++++++++
- 2 files changed, 51 insertions(+), 25 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/serial/arc-uart.txt
- create mode 100644 Documentation/devicetree/bindings/serial/snps,arc-uart.yaml
+ .../bindings/serial/milbeaut-uart.txt         | 21 -------
+ .../serial/socionext,milbeaut-usio-uart.yaml  | 56 +++++++++++++++++++
+ 2 files changed, 56 insertions(+), 21 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/serial/milbeaut-uart.txt
+ create mode 100644 Documentation/devicetree/bindings/serial/socionext,milbeaut-usio-uart.yaml
 
-diff --git a/Documentation/devicetree/bindings/serial/arc-uart.txt b/Documentation/devicetree/bindings/serial/arc-uart.txt
+diff --git a/Documentation/devicetree/bindings/serial/milbeaut-uart.txt b/Documentation/devicetree/bindings/serial/milbeaut-uart.txt
 deleted file mode 100644
-index 256cc150ca7e..000000000000
---- a/Documentation/devicetree/bindings/serial/arc-uart.txt
+index 3d2fb1a7ba94..000000000000
+--- a/Documentation/devicetree/bindings/serial/milbeaut-uart.txt
 +++ /dev/null
-@@ -1,25 +0,0 @@
--* Synopsys ARC UART : Non standard UART used in some of the ARC FPGA boards
+@@ -1,21 +0,0 @@
+-Socionext Milbeaut UART controller
 -
 -Required properties:
--- compatible		: "snps,arc-uart"
--- reg			: offset and length of the register set for the device.
--- interrupts		: device interrupt
--- clock-frequency	: the input clock frequency for the UART
--- current-speed		: baud rate for UART
+-- compatible: should be "socionext,milbeaut-usio-uart".
+-- reg: offset and length of the register set for the device.
+-- interrupts: two interrupts specifier.
+-- interrupt-names: should be "rx", "tx".
+-- clocks: phandle to the input clock.
 -
--e.g.
+-Optional properties:
+-- auto-flow-control: flow control enable.
 -
--arcuart0: serial@c0fc1000 {
--	compatible = "snps,arc-uart";
--	reg = <0xc0fc1000 0x100>;
--	interrupts = <5>;
--	clock-frequency = <80000000>;
--	current-speed = <115200>;
--};
--
--Note: Each port should have an alias correctly numbered in "aliases" node.
--
--e.g.
--aliases {
--	serial0 = &arcuart0;
--};
-diff --git a/Documentation/devicetree/bindings/serial/snps,arc-uart.yaml b/Documentation/devicetree/bindings/serial/snps,arc-uart.yaml
+-Example:
+-	usio1: usio_uart@1e700010 {
+-		compatible = "socionext,milbeaut-usio-uart";
+-		reg = <0x1e700010 0x10>;
+-		interrupts = <0 141 0x4>, <0 149 0x4>;
+-		interrupt-names = "rx", "tx";
+-		clocks = <&clk 2>;
+-		auto-flow-control;
+-	};
+diff --git a/Documentation/devicetree/bindings/serial/socionext,milbeaut-usio-uart.yaml b/Documentation/devicetree/bindings/serial/socionext,milbeaut-usio-uart.yaml
 new file mode 100644
-index 000000000000..dd3096fbfb6a
+index 000000000000..34a997ca2e11
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/serial/snps,arc-uart.yaml
-@@ -0,0 +1,51 @@
++++ b/Documentation/devicetree/bindings/serial/socionext,milbeaut-usio-uart.yaml
+@@ -0,0 +1,56 @@
 +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/serial/snps,arc-uart.yaml#
++$id: http://devicetree.org/schemas/serial/socionext,milbeaut-usio-uart.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Synopsys ARC UART
++title: Socionext Milbeaut UART controller
 +
 +maintainers:
-+  - Vineet Gupta <vgupta@kernel.org>
-+
-+description:
-+  Synopsys ARC UART is a non-standard UART used in some of the ARC FPGA boards.
++  - Sugaya Taichi <sugaya.taichi@socionext.com>
 +
 +allOf:
 +  - $ref: /schemas/serial/serial.yaml#
 +
 +properties:
 +  compatible:
-+    const: snps,arc-uart
++    const: socionext,milbeaut-usio-uart
 +
 +  reg:
 +    maxItems: 1
 +
 +  interrupts:
++    items:
++      - description: RX interrupt specifier
++      - description: TX interrupt specifier
++
++  interrupt-names:
++    items:
++      - const: rx
++      - const: tx
++
++  clocks:
 +    maxItems: 1
 +
-+  clock-frequency:
-+    description: the input clock frequency for the UART
-+
-+  current-speed:
-+    description: baud rate for UART
++  auto-flow-control:
++    description: Enable automatic flow control.
++    type: boolean
 +
 +required:
 +  - compatible
 +  - reg
 +  - interrupts
-+  - clock-frequency
-+  - current-speed
++  - interrupt-names
 +
 +unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    serial@c0fc1000 {
-+        compatible = "snps,arc-uart";
-+        reg = <0xc0fc1000 0x100>;
-+        interrupts = <5>;
-+        clock-frequency = <80000000>;
-+        current-speed = <115200>;
++    serial@1e700010 {
++        compatible = "socionext,milbeaut-usio-uart";
++        reg = <0x1e700010 0x10>;
++        interrupts = <0 141 0x4>, <0 149 0x4>;
++        interrupt-names = "rx", "tx";
++        clocks = <&clk 2>;
++        auto-flow-control;
 +    };
 -- 
 2.47.2
