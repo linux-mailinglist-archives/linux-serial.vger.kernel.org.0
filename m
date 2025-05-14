@@ -1,84 +1,102 @@
-Return-Path: <linux-serial+bounces-9474-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9478-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 113B2AB5EF1
-	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 00:01:02 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA675AB609A
+	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 03:56:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 313FA1B47759
-	for <lists+linux-serial@lfdr.de>; Tue, 13 May 2025 22:01:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 762F43A8A31
+	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 01:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB3C321B909;
-	Tue, 13 May 2025 22:00:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A35B1DE8AF;
+	Wed, 14 May 2025 01:56:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="xtoa2PHH"
+	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="VcUKUKuE";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oaog5whK"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8FEB217659;
-	Tue, 13 May 2025 22:00:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804C61DAC92;
+	Wed, 14 May 2025 01:56:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747173602; cv=none; b=tZiSIM1U9QLXMojF0XwX+vDSJ8E/lCY7bBk8JSPestBJPcHCNT0x+gVJNXPlcuMzWBzQsft9tZj4AcxOPpFpjELpHyiiJjUgTQme9bClVjkv87hHnu7n6PsDpuJ8hK5AWFRw53e7dEBNwTpK6eI6etwPNsj7HiBPfyB7HX28J8w=
+	t=1747187778; cv=none; b=FwOiLoamH2ba6HQIsFdZZ5Bt9dw+sXbSfUFTwTuiKEsnQdrFmAnA4Ldm9MfCVUAVBNHXA160/moCGKnxLZfgyHcVHJV/xfyVSY5+CRGUhv3MSUgyFTaFHhp2zcpj4pOJQZZQHAYZRuryvI9+n3TVViRYMiOU64jfFiDqY193FLI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747173602; c=relaxed/simple;
-	bh=5EjVsjxBlzfUERFXjaKmvuV82xLSUkfyC7+UBqTb/04=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=pwGZL0mPn6JxSeD86bcdx+S86EIFHHXLqIKwPa6ccbd7a3O5ghT35Y6U6bXjMSk35qT3awDmaJkcTctQxpy4/zfEXJ0Xl5sl9FtYdGokeW8QPV16e0ZsBcFJb7s2nhB2YrAaDS25Wi0L/2vPslLtfLmYXefWSe3OvZAs1esB8vg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=xtoa2PHH; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelvem-sh02.itg.ti.com ([10.180.78.226])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTP id 54DLxaCl2431444;
-	Tue, 13 May 2025 16:59:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1747173576;
-	bh=PaXp3+Nc4om8rc2bk8qplk5oP4MocCsaSbkZb3DsCtw=;
-	h=From:To:CC:Subject:Date:In-Reply-To:References;
-	b=xtoa2PHH8NNnlNIvxtJ0iTBfsGyJcMXfl8yIJK0einXWti5e0cubP7ZTzilM75ENp
-	 g2WwLiyouRLtfK6UkaueaGGSk1b3AZHHBwQM7Y+rMuzNGRq96l+5K/YBaqE/6HsIIO
-	 LVIxl45889/QWNR6mwFp38foUMwOC5bTRXUmKrHA=
-Received: from DFLE108.ent.ti.com (dfle108.ent.ti.com [10.64.6.29])
-	by lelvem-sh02.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 54DLxZON1005889
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
-	Tue, 13 May 2025 16:59:35 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 13
- May 2025 16:59:35 -0500
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 13 May 2025 16:59:35 -0500
-Received: from judy-hp.dhcp.ti.com (judy-hp.dhcp.ti.com [128.247.81.105])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 54DLxYdI111031;
-	Tue, 13 May 2025 16:59:35 -0500
-From: Judith Mendez <jm@ti.com>
-To: Judith Mendez <jm@ti.com>,
-        Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>
-CC: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Santosh
- Shilimkar <ssantosh@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero
- Kristo <kristo@kernel.org>, Bin Liu <b-liu@ti.com>,
-        Andy Shevchenko
-	<andriy.shevchenko@linux.intel.com>,
-        Andrew Davis <afd@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-serial@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: [PATCH 7/7] DONOTMERGE: arm64: dts: ti: k3-am62x-sk: Enable PRU UART
-Date: Tue, 13 May 2025 16:59:34 -0500
-Message-ID: <20250513215934.933807-8-jm@ti.com>
+	s=arc-20240116; t=1747187778; c=relaxed/simple;
+	bh=kprDUzz3HORek4jgXz1YTQRAJVW8oMV2aHsige+efKo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=csDKNfKknn556l0c48/2jO02NwMe6RF4n35pqVMhRvWUEhMiV2VYnQ5xu7PTjQDJSIp5Y1n2M/bCUqfBc+jIKMY+mUnKXut881dhX0L55mexfP3ip7TzhXO1z4kIjltUj78W67cqqW+SvdCZyqfb1a+EHDlxTfw0eLPY7SEidlE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=VcUKUKuE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oaog5whK; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
+Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 514661140095;
+	Tue, 13 May 2025 21:56:13 -0400 (EDT)
+Received: from phl-frontend-02 ([10.202.2.161])
+  by phl-compute-02.internal (MEProxy); Tue, 13 May 2025 21:56:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
+	cc:cc:content-transfer-encoding:content-type:date:date:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=fm3; t=1747187773; x=1747274173; bh=vhpfVrpjQAxMVNP9kRsPQ
+	04hdep/8LVopp9unopJ7zA=; b=VcUKUKuEQVusCUhfap+PNpTtEgjLc/Tmz2cKd
+	sKWVXGQJ5DZShfBk3Rp5mWVjm4qZQ2M8bPe8355A4av3IPBAD2By4kW0gKDahbQW
+	hk6UpVdOHlqDig8Ca8x7u+ZGyY0DpN4ISEEZHCrtT+6G224nkaRqjeIisrAGm/Gb
+	Wt6qtwG4LzeGGRE1dNVJ88E7x0L2fJNC4M+PrA7tMTyuANdEyElrnzcvKOcif75I
+	2pKsF+8kZqRgKtxXXKtu0TlCZcKHwWMudp3xXi9ZTuWnlv8UfDBi+LZFi1cxSVtz
+	9bEr4v8nC0ABkEIky2gz4hwQ8i2MH9KN0AVxfBFKbjwmAA6Ew==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
+	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+	1747187773; x=1747274173; bh=vhpfVrpjQAxMVNP9kRsPQ04hdep/8LVopp9
+	unopJ7zA=; b=oaog5whKPAL1rE3RNNcoK25wafkrf4DEOXmYFYDgM1JOvAZsSyj
+	iFHlVI9bhutFDCfPU/AgQ/ABLRpHE3OuXsyHtKeZJZtxjIVueFKVZXo62Nalrtka
+	i/sJAWHNIXppXu7l/bt6nfPQmn/ws1FuDaysi+gvYBePdaTt9cQ2hV9CHm/mNJgB
+	hod8Rg4KeNZIgn4yaA6lNTh/KdXalMdLpO3U5kvZcB3CU0db4iqCwSy+zA+POilu
+	e/amhM9IKGNyttIR1bR2jpk/u15F7x+vUMegTJEDFtTtOXbEFoTsXmIxN03ZV3ZE
+	Pbd7fnWxTCSLI8nvClyPB4M6AGxTPrMTriw==
+X-ME-Sender: <xms:PPgjaIKhCp1oqs_qrEo5dD70_HPzP4M0WEFNTUMUgl4dGrbkkrIhkA>
+    <xme:PPgjaIKsb1JjUj100s8cn0y6-t0-NGrnfnmD4DoMdnhttty1xqkD28JpWRFIr_lGt
+    DLaT6RDXiLyCYEWn_U>
+X-ME-Received: <xmr:PPgjaIuXwSkJ7SnwmjYsShouzYJZtHCUdGlLicJUOEfXSQ-Tsexvka2sV-zqOy2pbHKJfINjvxXFduLwBmmAMTNuutShPX-B1XJfgrXP6jF5quoS_A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdehjedvucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttden
+    ucfhrhhomheppfhitgholhgrshcurfhithhrvgcuoehnihgtohesfhhluhignhhitgdrnh
+    gvtheqnecuggftrfgrthhtvghrnhephefhfeetueeiteeigfffieelveethfduleegheel
+    teehudetuedvjeffffdvhfevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
+    hmrghilhhfrhhomhepnhhitghosehflhhugihnihgtrdhnvghtpdhnsggprhgtphhtthho
+    peehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnphhithhrvgessggrhihlih
+    gsrhgvrdgtohhmpdhrtghpthhtohepjhhirhhishhlrggshieskhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpd
+    hrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+    pdhrtghpthhtoheplhhinhhugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrdhorh
+    hg
+X-ME-Proxy: <xmx:PPgjaFbUmzgqPBlNvr3MN8QkeY3SSZ1gpwwYnmu8TquVla9zyS0vbA>
+    <xmx:PPgjaPZwqqpyVwsa3dwkTPvwqD3sGF6PbvqF6KX2n_goI67TtlA1oA>
+    <xmx:PPgjaBC5vcOjbqMnhyeAw7u10GKOvBLDXdw7Sht5g91RmECPHz6Icg>
+    <xmx:PPgjaFa9ablJ_8YPhXR0KxGP-Gk3S3JUagoTk4k_OyCivCRGTnUMQg>
+    <xmx:PfgjaFqIhDBKTBzVe_BY9x2gIoJeqSa1cjFdFJ8alCx7Vb-WG5Z29dTb>
+Feedback-ID: i58514971:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 13 May 2025 21:56:12 -0400 (EDT)
+Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id 119C011A0BC6;
+	Tue, 13 May 2025 21:56:12 -0400 (EDT)
+From: Nicolas Pitre <nico@fluxnic.net>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>
+Cc: Nicolas Pitre <npitre@baylibre.com>,
+	linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] vt: bracketed paste and cursor position
+Date: Tue, 13 May 2025 21:52:56 -0400
+Message-ID: <20250514015554.19978-1-nico@fluxnic.net>
 X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250513215934.933807-1-jm@ti.com>
-References: <20250513215934.933807-1-jm@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -86,60 +104,22 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-There is one PRU UART module in the PRU subsystem for am62 SoC.
+A different kind of VT console update this time. These patches:
 
-UART RX/TX signals for PRU UART in PRU subsystem can be routed from/to
-the user expansion header J3 (pins 10/8) on am62x SK, so enable
-pruss_uart by default and add pinmux node.
+- add bracketed paste support to the VT console
 
-Signed-off-by: Judith Mendez <jm@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+- overcome a /dev/vcsa limitation with cursor position retrieval
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-index ee8337bfbbfd..c474e1d1a74d 100644
---- a/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62x-sk-common.dtsi
-@@ -15,6 +15,7 @@ aliases {
- 		serial0 = &wkup_uart0;
- 		serial1 = &mcu_uart0;
- 		serial2 = &main_uart0;
-+		serial3 = &pruss_uart;
- 		mmc0 = &sdhci0;
- 		mmc1 = &sdhci1;
- 		mmc2 = &sdhci2;
-@@ -181,6 +182,13 @@ AM62X_IOPAD(0x1b0, PIN_OUTPUT, 2) /* (A20/D16) MCASP0_ACLKR.UART1_TXD */
- 		>;
- 	};
- 
-+	pruss_uart_pins: pruss-uart-pins {
-+		pinctrl-single,pins = <
-+			AM62X_IOPAD(0x01d8, PIN_INPUT, 6) /* (C15) MCAN0_TX.PR0_UART0_RXD */
-+			AM62X_IOPAD(0x01dc, PIN_OUTPUT, 6) /* (E15) MCAN0_RX.PR0_UART0_TXD */
-+		>;
-+	};
-+
- 	main_i2c0_pins_default: main-i2c0-default-pins {
- 		pinctrl-single,pins = <
- 			AM62X_IOPAD(0x1e0, PIN_INPUT_PULLUP, 0) /* (B16/E12) I2C0_SCL */
-@@ -370,6 +378,12 @@ &main_uart1 {
- 	pinctrl-0 = <&main_uart1_pins_default>;
- };
- 
-+&pruss_uart {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pruss_uart_pins>;
-+	status = "okay";
-+};
-+
- &main_i2c0 {
- 	status = "okay";
- 	pinctrl-names = "default";
--- 
-2.49.0
+They are submitted together to avoid merge conflicts as they touch some
+common code.
 
+Tested on top of linux v6.15.0-rc4.
+
+diffstat:
+ drivers/tty/vt/selection.c     | 35 ++++++++++++++++++++++++++++++----
+ drivers/tty/vt/vt.c            | 37 ++++++++++++++++++++++++++++++++++++
+ include/linux/console_struct.h |  1 +
+ include/uapi/linux/tiocl.h     |  5 +++++
+ 4 files changed, 74 insertions(+), 4 deletions(-)
 
