@@ -1,205 +1,235 @@
-Return-Path: <linux-serial+bounces-9476-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9479-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2EBDAB6096
-	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 03:56:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00CDAAB6281
+	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 07:43:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2ED8A1B60800
-	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 01:56:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7B4CC17C5DC
+	for <lists+linux-serial@lfdr.de>; Wed, 14 May 2025 05:43:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BB9D1DA31F;
-	Wed, 14 May 2025 01:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62A4B1F461A;
+	Wed, 14 May 2025 05:43:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="COXUm77a";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="hAXcUazi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hi489zuy"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F71A8F6E;
-	Wed, 14 May 2025 01:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 373DC1F3FED;
+	Wed, 14 May 2025 05:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747187776; cv=none; b=Tuo0lTCQZlGteENwRerAXk5VrOm1CTf2Qx1r3EzkkOrgurLkcLHQuf6fok8JOwIDzvkpL3swhGpsU1ZubeSs48ClvzOnaofT0r+gSGSyS/ho7ld9KXzpgds+gLAwqItkI9BkgUOsJR67EW5d+nEa9vud5VKuwu+f9P7iNydLj68=
+	t=1747201419; cv=none; b=a8KpznJJ5S1Fnm519/xWciCfV88eUORyZnDTTOoCLRXNZfGvsWGkqyaw4Gcc7sd/6ORVmCgSyfsUCV3QD0w5IPEMuZ3b/D0T5ZTIWZFhM2USmzZpFJH+t94fFEBv8OB0Edy6nV1u6vN57wwHiiLT+6E63h3Av6SU+pzHGzDbVl4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747187776; c=relaxed/simple;
-	bh=pwpGJLCxMvblR/fqWSrrpSyMXEgz4M3Z2/0HbbZRwtY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=cxi5HZ8peSu5KQQumn23i1cPMhzOyofKcXP6NK/2L1qqWatn7P8FzcJuv4ztpMklMW/+7dMuX4IiRXXtFZIFk4xp5oJabhn8IBeQkMwzjGGPe1Ay6HYHJpf9/4++3mV7u+Kf9Fbkmp84otZyXYmP+alf5d4dvqspuMOaEVFzz8U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=COXUm77a; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=hAXcUazi; arc=none smtp.client-ip=103.168.172.151
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 71A24138013E;
-	Tue, 13 May 2025 21:56:13 -0400 (EDT)
-Received: from phl-frontend-02 ([10.202.2.161])
-  by phl-compute-06.internal (MEProxy); Tue, 13 May 2025 21:56:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
-	cc:cc:content-transfer-encoding:content-type:date:date:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=fm3; t=1747187773; x=
-	1747274173; bh=JCnByk9tATHpA5kwfqJBxsplUrnKcd6kfo6AeIj+I1c=; b=C
-	OXUm77aAwETmmDQrSRqP3FtcRIaBlJ/JlKshg3Gq6EmbPJgPYBmgVA5vAoGbRglK
-	0Hfwk9ptRjywBMJ6I230VucfTimZ4SM8r+lcBdy3lQXJLLMuLdFpVggCCFIPlz9R
-	a0YFs9I2DPqDIsDPg6ZwxDDMpAxaLln0KNjvfI1Lct3V/vRkfpvMc89/jp4PBtI/
-	U9Y3KrFtDdCkwd4UF8mGTDAsm/vYzugq+45vtYP+pOZpzMGxgSkfwoWz+RqgFEgU
-	vklIhIJt1mBF72/yDKrFI0qqHH7QNyIcs2vK58YqhYIw0mZPBKPpkRxHnKJDQ24A
-	asXlRaY0VckKDnYAHKscQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1747187773; x=1747274173; bh=J
-	CnByk9tATHpA5kwfqJBxsplUrnKcd6kfo6AeIj+I1c=; b=hAXcUaziWHjTlTB85
-	Z8BWqcmX53TWim6AL5XtzuCTYRXm6SCzfLtkhZiKmxORfYj0VXD6zqj2hDeDK0qG
-	ABdEJlyYJCEv9vzbaPvOwcO0BWk2Wy9FUsaEltGz4KznWJnkFalbFMqgR9ZRN5e6
-	U+hDkgGR2bj9jkxMI50oLoGX1funxpGeCqcQJ2nbj9BtzkjsHHka6+8oQ/4L/qs8
-	aN97PmW1I7j3BfearJ7Qji+O0mJroPf0jXUqydoj4+7rZMeJyW40wLr3fstt0I8u
-	OIS+qh26RRS2K57k1H0V7UYJWMBxNAGtQDN8hHEQkKxWiRxWTsCeo0lQoIz/2QFV
-	lM7Ww==
-X-ME-Sender: <xms:PfgjaMEJagP6pQH2RPK3bw6ik1yyXfcTnMDVA8jrLr_YFGTKSSuwgw>
-    <xme:PfgjaFWpy1wdL3fSFEOBIxOUUoOSbmAa39f2pJ60pa192GKVZmX0HxHFbQHmaKKBG
-    s_hhK-kcCxKvxJXL8o>
-X-ME-Received: <xmr:PfgjaGLPlUSRqMXcUj3UQ4pzDGJzKEnI83bpvyCfzGpQp5CCe1d2uW1lOr9syjm8awGScstGvfPwdgyuv-zWMpmXZJsiOqnOUxfHpb7bKuBV6hlJ5A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeftdehjedvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofgjfhgggfestdekredtredt
-    tdenucfhrhhomheppfhitgholhgrshcurfhithhrvgcuoehnihgtohesfhhluhignhhitg
-    drnhgvtheqnecuggftrfgrthhtvghrnheptdejueeiieehieeuffduvdffleehkeelgeek
-    udekfeffhfduffdugedvteeihfetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepnhhitghosehflhhugihnihgtrdhnvghtpdhnsggprhgtphht
-    thhopeehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehnphhithhrvgessggrhi
-    hlihgsrhgvrdgtohhmpdhrtghpthhtohepjhhirhhishhlrggshieskhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorh
-    hgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdho
-    rhhgpdhrtghpthhtoheplhhinhhugidqshgvrhhirghlsehvghgvrhdrkhgvrhhnvghlrd
-    horhhg
-X-ME-Proxy: <xmx:PfgjaOHEVjv1-L16Aways5Pa5mYYHOJi8zDZ5T6m7AHyHeRZ3aRBpg>
-    <xmx:PfgjaCW-gxJXT_MDOPifZT1IeEA17FDfFxiLDK7MUxu-AWGAzmPQ9w>
-    <xmx:PfgjaBPQ7x8M5jECN_QVgPkMDfD6EAPZ_bjWWWSqRmgx8M-kC49Cxw>
-    <xmx:PfgjaJ07LsxuF-EPs7bKajum3WTMypLRD8Cz-Fi7S9eK598C8eGXcw>
-    <xmx:PfgjaN0X-R6ac2ABq7B_VpIAGVh0mDvNp8bTviy09lFHaei-Vb_9WTqP>
-Feedback-ID: i58514971:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 13 May 2025 21:56:12 -0400 (EDT)
-Received: from xanadu.lan (OpenWrt.lan [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id 4988F11A0BC9;
-	Tue, 13 May 2025 21:56:12 -0400 (EDT)
-From: Nicolas Pitre <nico@fluxnic.net>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>
-Cc: Nicolas Pitre <npitre@baylibre.com>,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] vt: add TIOCL_GETCURSORPOS to retrieve the screen cursor position
-Date: Tue, 13 May 2025 21:52:58 -0400
-Message-ID: <20250514015554.19978-3-nico@fluxnic.net>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250514015554.19978-1-nico@fluxnic.net>
-References: <20250514015554.19978-1-nico@fluxnic.net>
+	s=arc-20240116; t=1747201419; c=relaxed/simple;
+	bh=ToBGjHXrPQqmhHhPi2h5AhEO0dYh0gr5acZEkolmOZk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i/Sq4aBhmWUy57rQnWHLcUbdPPb/KYvoitzkttnA3VBEH9YgxGBX6dOOZTYgIEzLxZPHXmZzFpXuO086m8BtL1E/++USVgWxKLe6+ZTKks69cvXADxBe28sQycZy4fGmb5qwqr1LFoP+QNk4OaHTAeUkuSURl3HkpvuVt7B0AbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hi489zuy; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4FB5C4CEEB;
+	Wed, 14 May 2025 05:43:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747201418;
+	bh=ToBGjHXrPQqmhHhPi2h5AhEO0dYh0gr5acZEkolmOZk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=hi489zuy7UUyWUDRDFNgiBeo9dJtPEb/Q16yZoOqRWv/Rmv87uNOSRoS+5PxRZNUF
+	 IXLqALij7GK9UoeXGx/A9Oswwb27cjHkRElsQ41AmN92Eu+NV0qPqFoTEEZEt2KdSU
+	 yyrPIMa7rCz6nX24UB0XXkTOtH5dBRd1Wz9q2CDJw3858qRmiGGiR6CtXGVhh16g7R
+	 TzxDNSHvzmKthF/rpsMLEhZKj08KOVeE+XqIguLq4Qj0DpuBFWWoOvVSA0aJgWGKkE
+	 B2O/3wk+UNY3sCM4NKzkAFHyN4Jjy4h/enG9UdXn8IUuNAy0D6i5curbkgP2cI1URh
+	 vp94dAUdg4mIg==
+Message-ID: <8d38bf57-ad99-4889-8e5a-9ae7e5c5b39e@kernel.org>
+Date: Wed, 14 May 2025 07:43:35 +0200
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] vt: bracketed paste support
+To: Nicolas Pitre <nico@fluxnic.net>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Nicolas Pitre <npitre@baylibre.com>, linux-serial@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250514015554.19978-1-nico@fluxnic.net>
+ <20250514015554.19978-2-nico@fluxnic.net>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
+ rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
+ rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
+ i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
+ wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
+ ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
+ cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
+ 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
+ w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
+ YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
+ IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
+ BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
+ eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
+ 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
+ XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
+ l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
+ UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
+ gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
+ oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
+ o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
+ Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
+ wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
+ t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
+ YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
+ DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
+ f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
+ 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
+ 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
+ /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
+ 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
+ 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
+ 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
+ wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
+ 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
+ jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
+ wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
+ wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
+ W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
+ f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
+ DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
+ S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
+In-Reply-To: <20250514015554.19978-2-nico@fluxnic.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Nicolas Pitre <npitre@baylibre.com>
+On 14. 05. 25, 3:52, Nicolas Pitre wrote:
+> From: Nicolas Pitre <npitre@baylibre.com>
+> 
+> This is comprised of 3 aspects:
+> 
+> - Take note of when applications advertise bracketed paste support via
+>    "\e[?2004h" and "\e[?2004l".
+> 
+> - Insert bracketed paste markers ("\e[200~" and "\e[201~") around pasted
+>    content in paste_selection() when bracketed paste is active.
+> 
+> - Add TIOCL_GETBRACKETEDPASTE to return bracketed paste status so user
+>    space daemons implementing cut-and-paste functionality (e.g. gpm,
+>    BRLTTY) may know when to insert bracketed paste markers.
+> 
+> Link: https://en.wikipedia.org/wiki/Bracketed-paste
 
-The screen cursor position (as well as the screen dimension) is
-available through the /dev/vcsa interface already. However the vcsa
-header format uses single-byte fields therefore those values are
-clamped to 255.
+LGTM.
 
-As surprizing as this may seem, some people do use 240-column 67-row
-screens (a 1920x1080 monitor with 8x16 pixel fonts) which is getting
-close to the limit. Monitors with higher resolution are not uncommon
-these days (3840x2160 producing a 480x135 character display) and it is
-just a matter of time before someone with, say, a braille display using
-the Linux VT console and BRLTTY on such a screen reports a bug about
-missing and oddly misaligned screen content.
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
 
-The screen dimension may already be obtained using TIOCGWINSZ but there
-is no such alternatives for obtaining the cursor position. Querying it by
-writing "\033[6n" to a tty and reading back the result by anything else
-than the actual application using that tty is not possible.
+In case (and only then) you resend for some reason, I have some nits below.
 
-So let's work around this limitation by adding TIOCL_GETCURSORPOS as a
-fallback method to get the cursor position when /dev/vcsa reports 255.
+(And a question at the bottom.)
 
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
----
- drivers/tty/vt/vt.c        | 22 ++++++++++++++++++++++
- include/uapi/linux/tiocl.h |  4 ++++
- 2 files changed, 26 insertions(+)
+> Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+> ---
+>   drivers/tty/vt/selection.c     | 35 ++++++++++++++++++++++++++++++----
+>   drivers/tty/vt/vt.c            | 15 +++++++++++++++
+>   include/linux/console_struct.h |  1 +
+>   include/uapi/linux/tiocl.h     |  1 +
+>   4 files changed, 48 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
+> index 791e2f1f7c0b..ac86b82411a8 100644
+> --- a/drivers/tty/vt/selection.c
+> +++ b/drivers/tty/vt/selection.c
+...
+> @@ -427,10 +433,31 @@ int paste_selection(struct tty_struct *tty)
+>   			continue;
+>   		}
+>   		__set_current_state(TASK_RUNNING);
+> +
+> +		if (bps) {
+> +			count = tty_ldisc_receive_buf(ld, bps, NULL, strlen(bps));
+> +			bps += count;
+> +			if (*bps == '\0')
+> +				bps = NULL;
+> +			else
+> +				continue;
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index ed39d9cb4432..60a1fee17198 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -152,6 +152,7 @@ static void con_driver_unregister_callback(struct work_struct *ignored);
- static void blank_screen_t(struct timer_list *unused);
- static void set_palette(struct vc_data *vc);
- static void unblank_screen(void);
-+static int get_cursor_pos(struct tty_struct *tty);
- 
- #define vt_get_kmsg_redirect() vt_kmsg_redirect(-1)
- 
-@@ -3498,6 +3499,8 @@ int tioclinux(struct tty_struct *tty, unsigned long arg)
- 		return console_blanked;
- 	case TIOCL_GETBRACKETEDPASTE:
- 		return get_bracketed_paste(tty);
-+	case TIOCL_GETCURSORPOS:
-+		return get_cursor_pos(tty);
- 	default:
- 		return -EINVAL;
- 	}
-@@ -4991,6 +4994,25 @@ void putconsxy(struct vc_data *vc, unsigned char xy[static const 2])
- 	set_cursor(vc);
- }
- 
-+/* invoked via ioctl(TIOCLINUX) */
-+static int get_cursor_pos(struct tty_struct *tty)
-+{
-+	struct vc_data *vc = tty->driver_data;
-+	unsigned int x, y;
-+
-+	console_lock();
-+	x = vc->state.x;
-+	y = vc->state.y;
-+	console_unlock();
-+
-+	/*
-+	 * Clamp x to 16 bits, y to 15 bits. A display larger than 65535x32767
-+	 * characters won't be a concern for the foreseeable future.
-+	 * Bit 31 is reserved to represent negative error codes elsewhere.
-+	 */
-+	return min(x, 0xFFFFu) | (min(y, 0x7FFFu) << 16);
-+}
-+
- u16 vcs_scr_readw(const struct vc_data *vc, const u16 *org)
- {
- 	if ((unsigned long)org == vc->vc_pos && softcursor_original != -1)
-diff --git a/include/uapi/linux/tiocl.h b/include/uapi/linux/tiocl.h
-index 88faba506c3d..51d33d55abf5 100644
---- a/include/uapi/linux/tiocl.h
-+++ b/include/uapi/linux/tiocl.h
-@@ -38,4 +38,8 @@ struct tiocl_selection {
- #define TIOCL_GETKMSGREDIRECT	17	/* get the vt the kernel messages are restricted to */
- #define TIOCL_GETBRACKETEDPASTE	18	/* get whether paste may be bracketed */
- 
-+#define TIOCL_GETCURSORPOS	20	/* Get screen cursor position */
-+	/* If return value >= 0: x = lower 16 bits, y = upper 16 bits. */
-+	/* Negative error code otherwise. */
-+
- #endif /* _LINUX_TIOCL_H */
+This could have been simpler:
+
+bps += tty_ldisc_receive_buf(ld, bps, NULL, strlen(bps));
+if (*bps != '\0')
+   continue;
+
+bps = NULL;
+
+> +		}
+> +
+>   		count = vc_sel.buf_len - pasted;
+> -		count = tty_ldisc_receive_buf(ld, vc_sel.buffer + pasted, NULL,
+> -					      count);
+> -		pasted += count;
+> +		if (count) {
+> +			count = tty_ldisc_receive_buf(ld, vc_sel.buffer + pasted,
+> +						      NULL, count);
+> +			pasted += count;
+
+Same here for pasted.
+
+> +			if (vc_sel.buf_len > pasted)
+> +				continue;
+> +		}
+> +
+> +		if (bpe) {
+> +			count = tty_ldisc_receive_buf(ld, bpe, NULL, strlen(bpe));
+> +			bpe += count;
+
+And bpe.
+
+> +			if (*bpe == '\0')
+> +				bpe = NULL;
+> +		}
+>   	}
+>   	mutex_unlock(&vc_sel.lock);
+>   	remove_wait_queue(&vc->paste_wait, &wait);
+> diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
+> index efb761454166..ed39d9cb4432 100644
+> --- a/drivers/tty/vt/vt.c
+> +++ b/drivers/tty/vt/vt.c
+> @@ -1870,6 +1870,14 @@ int mouse_reporting(void)
+>   	return vc_cons[fg_console].d->vc_report_mouse;
+>   }
+>   
+> +/* invoked via ioctl(TIOCLINUX) */
+> +static int get_bracketed_paste(struct tty_struct *tty)
+
+vc_bracketed_paste is unsigned. (I understand tioclinux() returns an int.)
+
+> +{
+> +	struct vc_data *vc = tty->driver_data;
+> +
+> +	return vc->vc_bracketed_paste;
+> +}
+> +
+>   enum {
+>   	CSI_DEC_hl_CURSOR_KEYS	= 1,	/* CKM: cursor keys send ^[Ox/^[[x */
+>   	CSI_DEC_hl_132_COLUMNS	= 3,	/* COLM: 80/132 mode switch */
+...
+> --- a/include/uapi/linux/tiocl.h
+> +++ b/include/uapi/linux/tiocl.h
+> @@ -36,5 +36,6 @@ struct tiocl_selection {
+>   #define TIOCL_BLANKSCREEN	14	/* keep screen blank even if a key is pressed */
+>   #define TIOCL_BLANKEDSCREEN	15	/* return which vt was blanked */
+>   #define TIOCL_GETKMSGREDIRECT	17	/* get the vt the kernel messages are restricted to */
+> +#define TIOCL_GETBRACKETEDPASTE	18	/* get whether paste may be bracketed */
+
+Do you plan on updating man-pages too?
+
+https://git.kernel.org/pub/scm/docs/man-pages/man-pages.git/tree/man/man2const/TIOCLINUX.2const
+
+thanks,
 -- 
-2.49.0
-
+js
+suse labs
 
