@@ -1,318 +1,161 @@
-Return-Path: <linux-serial+bounces-9686-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9684-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C136AAD1F68
-	for <lists+linux-serial@lfdr.de>; Mon,  9 Jun 2025 15:46:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C71CAD1F35
+	for <lists+linux-serial@lfdr.de>; Mon,  9 Jun 2025 15:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF9B33AE9AB
-	for <lists+linux-serial@lfdr.de>; Mon,  9 Jun 2025 13:44:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 477B516B314
+	for <lists+linux-serial@lfdr.de>; Mon,  9 Jun 2025 13:44:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCFF625A341;
-	Mon,  9 Jun 2025 13:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B20225A2A4;
+	Mon,  9 Jun 2025 13:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gI+HFnTM"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Zf1/luDr"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A32A2257427;
-	Mon,  9 Jun 2025 13:44:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26A1613B788;
+	Mon,  9 Jun 2025 13:44:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749476692; cv=none; b=X1jjxZQP21Za/C1lWu8SSaIoxWMQVJHayMaVv+wnynE4hgyiT6rTdH2wsLCSalUntcfdgcd4VkqcWo56clmugJgxKd6OykTkaRTu4+XuVVm/IDIOU+cVmtvEGf27KcPnCD6ujNq8u+7P5YO8smJsw/esGZ/FfOB0YKJ4cLUSH9I=
+	t=1749476670; cv=none; b=nZflIgvxg21xMtZFB8sXLFYDviMF3XJ0gHGhiN4fYhkQepYCucbJqSFczaOmqE4kCB5hWhvREfJhnxtWksaYib9+9mhUaktIbZYF0xrAqEhLfzuJ/6lzDqkWjRl/P8P5LhjfbrRvwM8RcJE8xbKoCgxKfUrgpScBiZwTDQRLcoQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749476692; c=relaxed/simple;
-	bh=ycRb6XJylwLxKKuiMO0mmhKuPjDXZUnaEJfow+uOIJk=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SpmCmuwry36S/dqtw6eb7KkINWwV3TLINDeEMPvBzDXJtGA2cV63+vSjT+wqeNwWysJWzxr9jvnBppLNKLfnpdtxY4g1+T2mlbMLUZr/AySfDibPopjFkLbjM9sPwwOW64hHp90t4gg/XYihw5zVKHzi0LjWqgeSXtXgpsr7Xs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gI+HFnTM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37572C4CEF0;
-	Mon,  9 Jun 2025 13:44:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749476692;
-	bh=ycRb6XJylwLxKKuiMO0mmhKuPjDXZUnaEJfow+uOIJk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=gI+HFnTMWWH3fOXctkbymvmRowaMm6fCT5/iJ2a26ebOV4LZYzoX63RULGuUXfGlN
-	 zKLLw1IlL+P9OP80rUUCPgxhC+/Hwsw+iZSeDD5XmNSQmMh+t18P2cYc5A1m/3JTNd
-	 3atKer26fezhr5Hh3kPhIBewcJ1IkBrlmE/ZMasxKmqausGY/TAmFwEestA9H/8Dlv
-	 PJtXFBRuPQdF0vnssGaQtdB7XfYO091Q4rvPlen6ILE3QrzWqWI79PWLh3krPqv40/
-	 djfEzZjAVckDZIew+ketLedQkweGGy/9MzOTXru1iweZLv1pKGj873LYWbDYa7V7rF
-	 Z1BOeZ9DyeEOg==
-From: Sasha Levin <sashal@kernel.org>
-To: patches@lists.linux.dev,
-	stable@vger.kernel.org
-Cc: Jakub Lewalski <jakub.lewalski@nokia.com>,
-	Elodie Decerle <elodie.decerle@nokia.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sasha Levin <sashal@kernel.org>,
-	jacmet@sunsite.dk,
-	linux-serial@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.15 27/35] tty: serial: uartlite: register uart driver in init
-Date: Mon,  9 Jun 2025 09:43:43 -0400
-Message-Id: <20250609134355.1341953-27-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250609134355.1341953-1-sashal@kernel.org>
-References: <20250609134355.1341953-1-sashal@kernel.org>
+	s=arc-20240116; t=1749476670; c=relaxed/simple;
+	bh=5BuPaG5TR3ib8h0lahXBVyhI0uc/Ra4ZLBsfgLQLIkQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6lBaCZxnkECwoC9p0CfSH4Vw8wM4dVZ7uk2tTQuXUmr3mc7uno0CbDsWq6MhjA5LoFkUjjWrwMPIFV2VjbZwC5ZPFKTXa53ho8RtMkQgDP9YZ+/L3uaJZQIchySBKJ98EGRKovFmOeth0wv3YdOAcmKcQ0W+sPreaqCm9n3psY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Zf1/luDr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06A99C4CEF2;
+	Mon,  9 Jun 2025 13:44:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1749476669;
+	bh=5BuPaG5TR3ib8h0lahXBVyhI0uc/Ra4ZLBsfgLQLIkQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Zf1/luDrz2L0Gyf0p39lf0hyPc98ionSghj2F7/wzJRtJA/lP9+VeIx/AtSLbnpuP
+	 u+ccMeJumCkrFDcuSLIGwNk8PP/wgmL123ity58fns9iLPbNw28rdNsoOakmpiT+9k
+	 QaHHuNQye61PTjp/00Tmk1mVAGN0wvB8tIujW2sg=
+Date: Mon, 9 Jun 2025 15:44:19 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: yunhui cui <cuiyunhui@bytedance.com>
+Cc: arnd@arndb.de, andriy.shevchenko@linux.intel.com,
+	benjamin.larsson@genexis.eu, heikki.krogerus@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com, jirislaby@kernel.org,
+	jkeeping@inmusicbrands.com, john.ogness@linutronix.de,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	markus.mayer@linaro.org, matt.porter@linaro.org,
+	namcao@linutronix.de, paulmck@kernel.org, pmladek@suse.com,
+	schnelle@linux.ibm.com, sunilvl@ventanamicro.com,
+	tim.kryger@linaro.org, stable@vger.kernel.org
+Subject: Re: [External] Re: [PATCH v8 1/4] serial: 8250: fix panic due to
+ PSLVERR
+Message-ID: <2025060925-curator-stubbed-bfb4@gregkh>
+References: <20250609074348.54899-1-cuiyunhui@bytedance.com>
+ <2025060913-suave-riveter-66d0@gregkh>
+ <CAEEQ3wmaiwd4TZfTa0YrLcKui9fSNJT0fR3j1=H1EK0T3npfyw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.15.1
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEEQ3wmaiwd4TZfTa0YrLcKui9fSNJT0fR3j1=H1EK0T3npfyw@mail.gmail.com>
 
-From: Jakub Lewalski <jakub.lewalski@nokia.com>
+On Mon, Jun 09, 2025 at 09:18:02PM +0800, yunhui cui wrote:
+> Hi Greg,
+> 
+> On Mon, Jun 9, 2025 at 6:10 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Mon, Jun 09, 2025 at 03:43:45PM +0800, Yunhui Cui wrote:
+> > > When the PSLVERR_RESP_EN parameter is set to 1, the device generates
+> > > an error response if an attempt is made to read an empty RBR (Receive
+> > > Buffer Register) while the FIFO is enabled.
+> > >
+> > > In serial8250_do_startup(), calling serial_port_out(port, UART_LCR,
+> > > UART_LCR_WLEN8) triggers dw8250_check_lcr(), which invokes
+> > > dw8250_force_idle() and serial8250_clear_and_reinit_fifos(). The latter
+> > > function enables the FIFO via serial_out(p, UART_FCR, p->fcr).
+> > > Execution proceeds to the serial_port_in(port, UART_RX).
+> > > This satisfies the PSLVERR trigger condition.
+> > >
+> > > When another CPU (e.g., using printk()) is accessing the UART (UART
+> > > is busy), the current CPU fails the check (value & ~UART_LCR_SPAR) ==
+> > > (lcr & ~UART_LCR_SPAR) in dw8250_check_lcr(), causing it to enter
+> > > dw8250_force_idle().
+> > >
+> > > Put serial_port_out(port, UART_LCR, UART_LCR_WLEN8) under the port->lock
+> > > to fix this issue.
+> > >
+> > > Panic backtrace:
+> > > [    0.442336] Oops - unknown exception [#1]
+> > > [    0.442343] epc : dw8250_serial_in32+0x1e/0x4a
+> > > [    0.442351]  ra : serial8250_do_startup+0x2c8/0x88e
+> > > ...
+> > > [    0.442416] console_on_rootfs+0x26/0x70
+> > >
+> > > Fixes: c49436b657d0 ("serial: 8250_dw: Improve unwritable LCR workaround")
+> > > Link: https://lore.kernel.org/all/84cydt5peu.fsf@jogness.linutronix.de/T/
+> > > Signed-off-by: Yunhui Cui <cuiyunhui@bytedance.com>
+> > > Cc: stable@vger.kernel.org
+> > > ---
+> > >  drivers/tty/serial/8250/8250_port.c | 3 ++-
+> > >  1 file changed, 2 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+> > > index 6d7b8c4667c9c..07fe818dffa34 100644
+> > > --- a/drivers/tty/serial/8250/8250_port.c
+> > > +++ b/drivers/tty/serial/8250/8250_port.c
+> > > @@ -2376,9 +2376,10 @@ int serial8250_do_startup(struct uart_port *port)
+> > >       /*
+> > >        * Now, initialize the UART
+> > >        */
+> > > -     serial_port_out(port, UART_LCR, UART_LCR_WLEN8);
+> > >
+> > >       uart_port_lock_irqsave(port, &flags);
+> > > +     serial_port_out(port, UART_LCR, UART_LCR_WLEN8);
+> > > +
+> > >       if (up->port.flags & UPF_FOURPORT) {
+> > >               if (!up->port.irq)
+> > >                       up->port.mctrl |= TIOCM_OUT1;
+> > > --
+> > > 2.39.5
+> > >
+> > >
+> >
+> > Hi,
+> >
+> > This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+> > a patch that has triggered this response.  He used to manually respond
+> > to these common problems, but in order to save his sanity (he kept
+> > writing the same thing over and over, yet to different people), I was
+> > created.  Hopefully you will not take offence and will fix the problem
+> > in your patch and resubmit it so that it can be accepted into the Linux
+> > kernel tree.
+> >
+> > You are receiving this message because of the following common error(s)
+> > as indicated below:
+> >
+> > - This looks like a new version of a previously submitted patch, but you
+> >   did not list below the --- line any changes from the previous version.
+> >   Please read the section entitled "The canonical patch format" in the
+> >   kernel file, Documentation/process/submitting-patches.rst for what
+> >   needs to be done here to properly describe this.
+> 
+> Can this issue reported by the bot be ignored?
 
-[ Upstream commit 6bd697b5fc39fd24e2aa418c7b7d14469f550a93 ]
+No, why?  How do we know what changed from previous versions?  Otherwise
+we assume you just ignored previous review comments?
 
-When two instances of uart devices are probing, a concurrency race can
-occur. If one thread calls uart_register_driver function, which first
-allocates and assigns memory to 'uart_state' member of uart_driver
-structure, the other instance can bypass uart driver registration and
-call ulite_assign. This calls uart_add_one_port, which expects the uart
-driver to be fully initialized. This leads to a kernel panic due to a
-null pointer dereference:
+This series took at least 8 tries for some reason, might as well
+document it, right?  :)
 
-[    8.143581] BUG: kernel NULL pointer dereference, address: 00000000000002b8
-[    8.156982] #PF: supervisor write access in kernel mode
-[    8.156984] #PF: error_code(0x0002) - not-present page
-[    8.156986] PGD 0 P4D 0
-...
-[    8.180668] RIP: 0010:mutex_lock+0x19/0x30
-[    8.188624] Call Trace:
-[    8.188629]  ? __die_body.cold+0x1a/0x1f
-[    8.195260]  ? page_fault_oops+0x15c/0x290
-[    8.209183]  ? __irq_resolve_mapping+0x47/0x80
-[    8.209187]  ? exc_page_fault+0x64/0x140
-[    8.209190]  ? asm_exc_page_fault+0x22/0x30
-[    8.209196]  ? mutex_lock+0x19/0x30
-[    8.223116]  uart_add_one_port+0x60/0x440
-[    8.223122]  ? proc_tty_register_driver+0x43/0x50
-[    8.223126]  ? tty_register_driver+0x1ca/0x1e0
-[    8.246250]  ulite_probe+0x357/0x4b0 [uartlite]
+thanks,
 
-To prevent it, move uart driver registration in to init function. This
-will ensure that uart_driver is always registered when probe function
-is called.
-
-Signed-off-by: Jakub Lewalski <jakub.lewalski@nokia.com>
-Signed-off-by: Elodie Decerle <elodie.decerle@nokia.com>
-Link: https://lore.kernel.org/r/20250331160732.2042-1-elodie.decerle@nokia.com
-Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
-
-Based on my comprehensive analysis, I can now provide a definitive
-assessment:
-
-**YES**
-
-## Extensive Analysis
-
-This commit **should be backported** to stable kernel trees. Here's my
-detailed analysis:
-
-### **1. Critical Bug Fix Nature**
-
-The commit fixes a **serious race condition** that causes kernel panics
-with NULL pointer dereferences. The stack trace in the commit message
-shows:
-
-```
-[    8.143581] BUG: kernel NULL pointer dereference, address:
-00000000000002b8
-[    8.180668] RIP: 0010:mutex_lock+0x19/0x30
-[    8.223116]  uart_add_one_port+0x60/0x440
-```
-
-This is a **critical system stability issue** that can crash the kernel
-during device initialization.
-
-### **2. Race Condition Analysis**
-
-**The Problem:**
-- **Before the fix:** `uart_register_driver()` was called in
-  `ulite_probe()` (lines 883-891 in current code)
-- **Race scenario:** When two UART devices probe simultaneously:
-  1. Thread 1 calls `uart_register_driver()` and starts allocating
-     `uart_driver.state`
-  2. Thread 2 sees `!ulite_uart_driver.state` as false, bypasses
-     registration, and calls `ulite_assign()`
-  3. Thread 2's `ulite_assign()` calls `uart_add_one_port()` (line 678)
-     expecting a fully initialized driver
-  4. Thread 1's registration hasn't completed, causing NULL pointer
-     dereference in `uart_add_one_port()`
-
-**The Fix:**
-- **After the fix:** `uart_register_driver()` is moved to `ulite_init()`
-  ensuring:
-  1. Driver registration completes **before** any platform driver
-     registration
-  2. **No race window** exists between driver registration and device
-     probing
-  3. All probe calls find a **fully initialized** uart driver
-
-### **3. Code Changes Analysis**
-
-**Changes in `ulite_init()`:**
-```c
-static int __init ulite_init(void)
-{
-+   int ret;
-+
-+   pr_debug("uartlite: calling uart_register_driver()\n");
-+   ret = uart_register_driver(&ulite_uart_driver);
-+   if (ret)
-+       return ret;
-
-    pr_debug("uartlite: calling platform_driver_register()\n");
-- return platform_driver_register(&ulite_platform_driver);
-+   ret = platform_driver_register(&ulite_platform_driver);
-+   if (ret)
-+       uart_unregister_driver(&ulite_uart_driver);
-+
-+   return ret;
-}
-```
-
-**Changes in `ulite_probe()`:**
-```c
-// REMOVED the problematic race-prone code:
-- if (!ulite_uart_driver.state) {
-- dev_dbg(&pdev->dev, "uartlite: calling uart_register_driver()\n");
-- ret = uart_register_driver(&ulite_uart_driver);
-- if (ret < 0) {
-- dev_err(&pdev->dev, "Failed to register driver\n");
-- clk_disable_unprepare(pdata->clk);
-- return ret;
-- }
-- }
-```
-
-**Changes in `ulite_exit()`:**
-```c
-static void __exit ulite_exit(void)
-{
-    platform_driver_unregister(&ulite_platform_driver);
-- if (ulite_uart_driver.state)
-- uart_unregister_driver(&ulite_uart_driver);
-+   uart_unregister_driver(&ulite_uart_driver);
-}
-```
-
-### **4. Follows Kernel Best Practices**
-
-The fix aligns with **established kernel patterns**. My analysis of
-other UART drivers shows that well-architected drivers like 8250,
-altera, atmel, and liteuart all register their uart drivers in `__init`
-functions, not probe functions. This architectural pattern:
-
-- **Separates concerns:** Driver registration (what) vs device binding
-  (when)
-- **Eliminates races:** Driver available before any device probing
-- **Improves reliability:** Predictable initialization order
-
-### **5. Stable Tree Suitability Criteria**
-
-✅ **Fixes important bug:** Kernel panic with NULL pointer dereference
-✅ **Small and contained:** Moves existing code, no new functionality
-✅ **Minimal risk:** Follows established kernel patterns
-✅ **Clear side effects:** Better initialization order, no regressions
-expected
-✅ **Confined to subsystem:** Only affects uartlite driver
-✅ **Important for users:** Prevents boot crashes on Xilinx platforms
-
-### **6. Similar Historical Pattern**
-
-This fix is very similar to **Similar Commit #5** (Status: YES) which
-also fixed race conditions in TTY/serial code by ensuring proper
-initialization order. Both commits:
-- Fix race conditions in serial/TTY subsystem
-- Make architectural improvements to initialization order
-- Prevent NULL pointer dereferences
-- Have clear stable tree value
-
-### **7. Low Regression Risk**
-
-The change is **architecturally sound** because:
-- It ensures `uart_register_driver()` completes before any
-  `uart_add_one_port()` calls
-- Proper error handling ensures cleanup if platform driver registration
-  fails
-- The exit sequence properly reverses the initialization sequence
-- No functional behavior changes, only timing/ordering improvements
-
-### **Conclusion**
-
-This commit fixes a **critical kernel panic** caused by a race condition
-in the uartlite driver. The fix is **small, contained, and follows
-established kernel patterns**. It has **minimal regression risk** and
-provides **significant stability improvements** for users of Xilinx UART
-devices. The architectural change from probe-time to init-time driver
-registration is a **best practice** that eliminates the race condition
-entirely.
-
- drivers/tty/serial/uartlite.c | 25 ++++++++++++-------------
- 1 file changed, 12 insertions(+), 13 deletions(-)
-
-diff --git a/drivers/tty/serial/uartlite.c b/drivers/tty/serial/uartlite.c
-index a41e7fc373b7c..39c1fd1ff9ced 100644
---- a/drivers/tty/serial/uartlite.c
-+++ b/drivers/tty/serial/uartlite.c
-@@ -880,16 +880,6 @@ static int ulite_probe(struct platform_device *pdev)
- 	pm_runtime_set_active(&pdev->dev);
- 	pm_runtime_enable(&pdev->dev);
- 
--	if (!ulite_uart_driver.state) {
--		dev_dbg(&pdev->dev, "uartlite: calling uart_register_driver()\n");
--		ret = uart_register_driver(&ulite_uart_driver);
--		if (ret < 0) {
--			dev_err(&pdev->dev, "Failed to register driver\n");
--			clk_disable_unprepare(pdata->clk);
--			return ret;
--		}
--	}
--
- 	ret = ulite_assign(&pdev->dev, id, res->start, irq, pdata);
- 
- 	pm_runtime_mark_last_busy(&pdev->dev);
-@@ -929,16 +919,25 @@ static struct platform_driver ulite_platform_driver = {
- 
- static int __init ulite_init(void)
- {
-+	int ret;
-+
-+	pr_debug("uartlite: calling uart_register_driver()\n");
-+	ret = uart_register_driver(&ulite_uart_driver);
-+	if (ret)
-+		return ret;
- 
- 	pr_debug("uartlite: calling platform_driver_register()\n");
--	return platform_driver_register(&ulite_platform_driver);
-+	ret = platform_driver_register(&ulite_platform_driver);
-+	if (ret)
-+		uart_unregister_driver(&ulite_uart_driver);
-+
-+	return ret;
- }
- 
- static void __exit ulite_exit(void)
- {
- 	platform_driver_unregister(&ulite_platform_driver);
--	if (ulite_uart_driver.state)
--		uart_unregister_driver(&ulite_uart_driver);
-+	uart_unregister_driver(&ulite_uart_driver);
- }
- 
- module_init(ulite_init);
--- 
-2.39.5
-
+greg k-h
 
