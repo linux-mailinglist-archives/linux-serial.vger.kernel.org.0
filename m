@@ -1,195 +1,90 @@
-Return-Path: <linux-serial+bounces-9852-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9855-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C54AADD42D
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 18:07:24 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9145BADDA61
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 19:17:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D369B1942032
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 15:57:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A4245A780D
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 16:59:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B87A2EF29B;
-	Tue, 17 Jun 2025 15:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FA62FA656;
+	Tue, 17 Jun 2025 16:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KJnjQyZs"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Fo0EChMa"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 134D92EE60C;
-	Tue, 17 Jun 2025 15:53:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA01F2FA624;
+	Tue, 17 Jun 2025 16:59:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750175638; cv=none; b=Wua6ofzH2ItXrnB5h5eYAxlNlOiZ7YI2o1Ssqo5SYBxJkRTo54zi2zN0rEIIFqj3yS1OQXzVyrhc/Go/sVIwNMtlcMkJELUvoFrHXLA2dg8dOrzJtzgPQKIMdwsABZKU5inn8LErA5Ox1uEQS1VNQblYoFSFGlO8RNpNEwKBsII=
+	t=1750179595; cv=none; b=lTqTAs+YM8XvlhLoRLQQ0mYqJU/xrbBv6DzwFuVa3wJ+YjImDhf9CjbSArdQE8otikj4LLm6vVxnyetxy9ZtgL71KuQsjiubI1C6oY0+egwcHqntCLNh940Hv2HNTVdf9DE2z7N5AFGlpkrQrZK0juvtBARRVCVZd2fvJTmGucM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750175638; c=relaxed/simple;
-	bh=Xmi1segpA11UP+V+o5ts0ddLZv32iD3xxVOdV/BoX0k=;
+	s=arc-20240116; t=1750179595; c=relaxed/simple;
+	bh=uEOMgL0enjAcnngHzRz3sXuDxKITAnkXRV1o9HPvaIE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hJ9k2GMKUfdwBNqxj/AV3GCgWG4LUZ3OC0IOjTXN2qHGYzoDy0SPhySE2bZFpt61S4JGyif4S/dNgOHv3NzGu3lM2wer+C0zaeD2nHAI0HorgrlGHnr2lpOt8g+TNlB5ueNuC/prnorvxHFEehJEEsrRkJOqyfYi2cSwrgImw+A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KJnjQyZs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E2CCC4CEE3;
-	Tue, 17 Jun 2025 15:53:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750175637;
-	bh=Xmi1segpA11UP+V+o5ts0ddLZv32iD3xxVOdV/BoX0k=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=m6i7NtmBSPqv7B7I3hDbF7otmGujDTmQXSKYyXkjq5RMNAY11ptyoKzNqbW5s/ablKQCs1pyDF9Y1jBnaz+gyFYLZPsZg7F4x8hJfKwxDz1jNiWc20n/eFREiWkEJTGz4kWM/UVOfyzSvKNV05Mu85arxPDB5xEDma01CHHA+6I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Fo0EChMa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26D13C4CEF0;
+	Tue, 17 Jun 2025 16:59:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1750179595;
+	bh=uEOMgL0enjAcnngHzRz3sXuDxKITAnkXRV1o9HPvaIE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KJnjQyZs2WukgTIGrOZ4NLTHG4aQxtoWKt+MijZ79h2DNRRGnnK40lZLezVngpq9x
-	 xjXq9icUhycIdkZp9Aouq6wkzVoRcvPO6CBuNlrnYWcldqYEGoBtv1WqUnyqP3ojrD
-	 MOTD6sw+tMAjkCI2RLOE/O3G+lahwO6HJCwRZgeBZt/15w7goIiUgj1HOeauKt/atF
-	 BEYBWLp9fyPgxHajrXkAOPePV1oLXV7MgIrEnny+LSDvntDjc3ilNaOdVCsdCg8YbM
-	 UUx/PFfJuqM5x2fc/LKuum1o8V8Kz0yyoAvmrfT8jxbqVV+Ngu1N3Wkloqx48Qq8Y0
-	 HAWJHSVg12lYw==
-Date: Tue, 17 Jun 2025 10:53:54 -0500
-From: Bjorn Andersson <andersson@kernel.org>
-To: Praveen Talari <quic_ptalari@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, devicetree@vger.kernel.org, psodagud@quicinc.com, 
-	djaggi@quicinc.com, quic_msavaliy@quicinc.com, quic_vtanuku@quicinc.com, 
-	quic_arandive@quicinc.com, quic_mnaresh@quicinc.com, quic_shazhuss@quicinc.com
-Subject: Re: [PATCH v6 7/8] serial: qcom-geni: Enable PM runtime for serial
- driver
-Message-ID: <d6cr4elhrbh27lmlcv5xzuel75uvsgi7klxjkevm7vg4jcbawe@5ojgetrxkag5>
-References: <20250606172114.6618-1-quic_ptalari@quicinc.com>
- <20250606172114.6618-8-quic_ptalari@quicinc.com>
+	b=Fo0EChMa7s6vQniwm+xb0uKPr5MvPVjqgu2ivI/SpK3Rvof5c0D/40E9AGjA8WDmy
+	 9jE2igMgBxD3NJCCiUDZlGAdmpIcz8ZkXLEtJEuXzdivjH/vBnhOWZ0l9YHyv8+ojp
+	 3/McfGdtgmSajg4anTY9MfdwOhN5ysAxheAxoPKs=
+Date: Tue, 17 Jun 2025 17:56:03 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Aidan Stewart <astewart@tektelic.com>
+Cc: "jirislaby@kernel.org" <jirislaby@kernel.org>,
+	"tony@atomide.com" <tony@atomide.com>,
+	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH] serial: core: restore of_node information in sysfs
+Message-ID: <2025061740-sustained-linked-a845@gregkh>
+References: <20250616162154.9057-1-astewart@tektelic.com>
+ <2025061746-raking-gusto-d1f3@gregkh>
+ <915d0631ac123bbbb5d3fac1248b97d9de3295c6.camel@tektelic.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250606172114.6618-8-quic_ptalari@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <915d0631ac123bbbb5d3fac1248b97d9de3295c6.camel@tektelic.com>
 
-On Fri, Jun 06, 2025 at 10:51:13PM +0530, Praveen Talari wrote:
-> Add Power Management (PM) runtime support to Qualcomm GENI
-> serial driver.
-> 
+On Tue, Jun 17, 2025 at 03:46:37PM +0000, Aidan Stewart wrote:
+> On Tue, 2025-06-17 at 06:44 +0200, Greg KH wrote:
+> > 
+> > On Mon, Jun 16, 2025 at 10:21:54AM -0600, Aidan Stewart wrote:
+> > > 
+> > > 
+> > > +     if (IS_ENABLED(CONFIG_OF)) {
+> > > +             device_set_of_node_from_dev(dev, parent_dev);
+> > > +     }
+> > 
+> > Did this pass checkpatch.pl?
+> I ran checkpatch.pl with the --strict option and I didn't get any warnings
+> or errors. Is there a style issue you would like me to fix?
 
-Doesn't this have impact on the behavior outside of your
-project? Or is the transition from qcom_geni_serial_pm() to explicit
-RPM merely moving code around?
+You should not need {} for a one line if statement.
 
-Seems like this deserves to not be hidden in a middle of a patch series.
+> > And why is the if statement needed?
+> I guess it's not really needed. I was trying to avoid the call for non-DT
+> systems, but it should still be safe to do. I will remove it in v2.
 
-> Introduce necessary callbacks and updates to ensure seamless
-> transitions between power states, enhancing overall power
-> efficiency.
-> 
+Please do!
 
-This commit message fails to state why we need runtime PM support in the
-driver.
+thanks,
 
-Also, start your commit message with a problem description, per
-https://docs.kernel.org/process/submitting-patches.html#describe-your-changes
-
-> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-> Signed-off-by: Praveen Talari <quic_ptalari@quicinc.com>
-> ---
-> v5 -> v6
-> - added reviewed-by tag in commit
-> - added __maybe_unused to PM callback functions to avoid
->   warnings of defined but not used
-> ---
->  drivers/tty/serial/qcom_geni_serial.c | 33 +++++++++++++++++++++++----
->  1 file changed, 29 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
-> index b6fa7dc9b1fb..3691340ce7e8 100644
-> --- a/drivers/tty/serial/qcom_geni_serial.c
-> +++ b/drivers/tty/serial/qcom_geni_serial.c
-> @@ -1686,10 +1686,10 @@ static void qcom_geni_serial_pm(struct uart_port *uport,
->  		old_state = UART_PM_STATE_OFF;
->  
->  	if (new_state == UART_PM_STATE_ON && old_state == UART_PM_STATE_OFF)
-> -		geni_serial_resources_on(uport);
-> +		pm_runtime_resume_and_get(uport->dev);
->  	else if (new_state == UART_PM_STATE_OFF &&
->  		 old_state == UART_PM_STATE_ON)
-> -		geni_serial_resources_off(uport);
-> +		pm_runtime_put_sync(uport->dev);
->  
->  }
->  
-> @@ -1827,9 +1827,11 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->  		return ret;
->  	}
->  
-> +	pm_runtime_enable(port->se.dev);
-
-Any reason not to use devm_pm_runtime_enable() and avoid the
-two pm_runtime_disable() below?
-
-Regards,
-Bjorn
-
-> +
->  	ret = uart_add_one_port(drv, uport);
->  	if (ret)
-> -		return ret;
-> +		goto error;
->  
->  	if (port->wakeup_irq > 0) {
->  		device_init_wakeup(&pdev->dev, true);
-> @@ -1839,11 +1841,15 @@ static int qcom_geni_serial_probe(struct platform_device *pdev)
->  			device_init_wakeup(&pdev->dev, false);
->  			ida_free(&port_ida, uport->line);
->  			uart_remove_one_port(drv, uport);
-> -			return ret;
-> +			goto error;
->  		}
->  	}
->  
->  	return 0;
-> +
-> +error:
-> +	pm_runtime_disable(port->se.dev);
-> +	return ret;
->  }
->  
->  static void qcom_geni_serial_remove(struct platform_device *pdev)
-> @@ -1855,9 +1861,26 @@ static void qcom_geni_serial_remove(struct platform_device *pdev)
->  	dev_pm_clear_wake_irq(&pdev->dev);
->  	device_init_wakeup(&pdev->dev, false);
->  	ida_free(&port_ida, uport->line);
-> +	pm_runtime_disable(port->se.dev);
->  	uart_remove_one_port(drv, &port->uport);
->  }
->  
-> +static int __maybe_unused qcom_geni_serial_runtime_suspend(struct device *dev)
-> +{
-> +	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
-> +	struct uart_port *uport = &port->uport;
-> +
-> +	return geni_serial_resources_off(uport);
-> +}
-> +
-> +static int __maybe_unused qcom_geni_serial_runtime_resume(struct device *dev)
-> +{
-> +	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
-> +	struct uart_port *uport = &port->uport;
-> +
-> +	return geni_serial_resources_on(uport);
-> +}
-> +
->  static int qcom_geni_serial_suspend(struct device *dev)
->  {
->  	struct qcom_geni_serial_port *port = dev_get_drvdata(dev);
-> @@ -1901,6 +1924,8 @@ static const struct qcom_geni_device_data qcom_geni_uart_data = {
->  };
->  
->  static const struct dev_pm_ops qcom_geni_serial_pm_ops = {
-> +	SET_RUNTIME_PM_OPS(qcom_geni_serial_runtime_suspend,
-> +			   qcom_geni_serial_runtime_resume, NULL)
->  	SYSTEM_SLEEP_PM_OPS(qcom_geni_serial_suspend, qcom_geni_serial_resume)
->  };
->  
-> -- 
-> 2.17.1
-> 
+greg k-h
 
