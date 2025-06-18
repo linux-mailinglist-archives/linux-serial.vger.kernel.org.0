@@ -1,192 +1,103 @@
-Return-Path: <linux-serial+bounces-9854-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9856-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A4AADD8DE
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 19:00:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4467EADE2AA
+	for <lists+linux-serial@lfdr.de>; Wed, 18 Jun 2025 06:42:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCDE4163E3A
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Jun 2025 16:50:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E250417786A
+	for <lists+linux-serial@lfdr.de>; Wed, 18 Jun 2025 04:42:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36CAE2FA654;
-	Tue, 17 Jun 2025 16:48:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 220F01E3DDB;
+	Wed, 18 Jun 2025 04:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=Tektelic.onmicrosoft.com header.i=@Tektelic.onmicrosoft.com header.b="gzzFt/4N"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="O/pli8+6";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="jHhLwp2N"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from SN4PR2101CU001.outbound.protection.outlook.com (mail-southcentralusazon11022127.outbound.protection.outlook.com [40.93.195.127])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 675B62FA650;
-	Tue, 17 Jun 2025 16:48:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.195.127
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750178931; cv=fail; b=ZB32Fe9RnxnIVp+1uqQBQ+NkS/RJQRjFSeDBu8vmnZXowL+bBKvMr0s9vLzYaK46/8y67l7gjhl2lQXfrY7jV7sP65hnEIGrYNy465Agr+EP7dKXvCIG94CkWYORLBqB+u5HzRyXDPNr1PjiNvRFgzi5wDj63IxxywPjNsuQc+U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750178931; c=relaxed/simple;
-	bh=qSq1Rw86G6OKgk92QBYq9VmCVK4ej+wcqqbvv8OKZvY=;
-	h=From:To:Cc:Subject:Date:Message-ID:Content-Type:MIME-Version; b=T7tFiG7QtHI4EA2hiryDJG4viwriKtFsMjvIHf3q8qsPVDmSgjFciRzbPOjIEzSEcqKdpH+4EHIXBKBqIFmPkNiCokAJJjR5bEJ1AI4khDTCIu3JvwuBnRM2vnTvvcOfuxvtpDigA8dRnh3+sDPpX/nmq2wYUbHReVUYkmaU4g8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tektelic.com; spf=pass smtp.mailfrom=tektelic.com; dkim=pass (1024-bit key) header.d=Tektelic.onmicrosoft.com header.i=@Tektelic.onmicrosoft.com header.b=gzzFt/4N; arc=fail smtp.client-ip=40.93.195.127
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=tektelic.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tektelic.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=Pi9hSeSDkcSve47qvwEy1h2jjznB4V1r2blubPQAJsdQ8a2g+L4XJpcCYbenLTR2WXpdlIbYscvBHJIvagQyh3jLeCPxKbxANojp8OOKO6tcvgMnXxm4//mn48d4C36YICvfBk0vPRVPdYFlXdbJVscemQR29NyboiSiGASY3DnnnMXjx+YQ+xr4GNiOB1/ozXEJTdzajqC/9mQeUPAQ9mYazxNfknVnP4ziO+CS64Wonc6Or/MIUVPYUq2dad5s4i3HjwnTaLvTVEEkz9DkPAaSp3Pfow7OKT7x7l0oawSFCpXsINsw6wcrF1H0x6hMncAUleauZ7oDXkRkUjKJCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dnREvnrzRa1a71IJj6tQF2kH0MBcSEDuVcWeDWY0xfs=;
- b=EoUku5yMNqhQqg85EpEiJdAZ5ErZo/yqUVPZfK/XUdG2H6ktMYkqLzuP5qHPQFAONa90UXaJY/JowpCcd8xLrGHS3KC/82TAGBP3a7OKSNjWdSgaKnDCSwc6NXb6ZJ55vYjal0yidlr3Hp3Rpv0F9sn3rzk9+pETx4y3iZc1oUbaQ1kf7o6n5Tim7t+rk/mSsgryT3H8VcLK1bp2/kz3ft4sIQ94dEPPfF9J5yWcrzq/FyTKNSIRUpPWT5mFhK6pqfF7AheWiq7PISjt9xpiJFUj2b58dpzvm0jk/ctWZpZDsS5oTFQQ9g28hlp+A598OAjMzOkNpN4RBK10wAN9RQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=tektelic.com; dmarc=pass action=none header.from=tektelic.com;
- dkim=pass header.d=tektelic.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=Tektelic.onmicrosoft.com; s=selector2-Tektelic-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=dnREvnrzRa1a71IJj6tQF2kH0MBcSEDuVcWeDWY0xfs=;
- b=gzzFt/4NNxHnmVcchKilt/ngwPbA3MzCWDiPLtxbaycVUe6XSQxYepYfsC0VjSCaJFvaqTyVm7U9xjh1neM/X9M7z+w91gW3LEydJgIspcySseBEfuqe1w0et0aOoNiIx+p3lb+3w4Z6pGvEl6U7vtxfCgBQ4Y141HKhV1+lhhs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=tektelic.com;
-Received: from DM6PR05MB4923.namprd05.prod.outlook.com (2603:10b6:5:f9::28) by
- MW4PR05MB8747.namprd05.prod.outlook.com (2603:10b6:303:12a::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8857.18; Tue, 17 Jun
- 2025 16:48:45 +0000
-Received: from DM6PR05MB4923.namprd05.prod.outlook.com
- ([fe80::27b8:b7d6:e940:74bc]) by DM6PR05MB4923.namprd05.prod.outlook.com
- ([fe80::27b8:b7d6:e940:74bc%4]) with mapi id 15.20.8835.027; Tue, 17 Jun 2025
- 16:48:45 +0000
-From: Aidan Stewart <astewart@tektelic.com>
-To: gregkh@linuxfoundation.org,
-	jirislaby@kernel.org
-Cc: tony@atomide.com,
-	linux-serial@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Aidan Stewart <astewart@tektelic.com>,
-	stable@vger.kernel.org
-Subject: [PATCH v2] serial: core: restore of_node information in sysfs
-Date: Tue, 17 Jun 2025 10:48:19 -0600
-Message-ID: <20250617164819.13912-1-astewart@tektelic.com>
-X-Mailer: git-send-email 2.49.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: MW4PR03CA0019.namprd03.prod.outlook.com
- (2603:10b6:303:8f::24) To DM6PR05MB4923.namprd05.prod.outlook.com
- (2603:10b6:5:f9::28)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FE721E0DFE
+	for <linux-serial@vger.kernel.org>; Wed, 18 Jun 2025 04:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750221745; cv=none; b=YezJeLUSLIjtGa8WLwSWwl6sU2aQIyetW0vqz4pI6pcEEfNXca7q+Zco9OAPLzcDpReWkeOFf9Cs5S0Q4g91E1Xk/3gEKAoIVPuNNTK8Mw5hyIySmdCWov+8pG5pFZrcQjHQ1uJdN7OCK7lBvgjCWcI4flEma2T2b2UdSzdgC2M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750221745; c=relaxed/simple;
+	bh=/V+tYyEXAT2YSm154FNcH3MZXFw1XT+XX5Gv6Ey5gNY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WqiDzehoOk36Ts5m1kR9EH4YjkxmOaYS2BHFJsQGnV+iC9XI4Wb0kfSCrbm7gEvRfXKrd3EtsC/CW4urfHdWa7Dh5VF8syoOuDh82cAnyzlBe4ynaQt0MG71akewWydP31jz+EiIKjZDVS1M3tmDxd1g6AODAdKVsaljfXjpj+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=O/pli8+6; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=jHhLwp2N; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: John Ogness <john.ogness@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1750221741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gCkN1UaeGSgMvS52kXxBzHCLhstjH4vMb9KGD7dp2JI=;
+	b=O/pli8+6rQ+r/rk73LpotBMFbSHNDFZsSjceRn0jgkRBPdOBRAeoTIkH0sdPP4xJ0Ih6dZ
+	uzv4mbBYJ/o1FLK0zQeqB1U52Z6zy1hWsOA3CT0YZ5NUb6+TaFUU3tO/OHTxdXLDT96Tr7
+	hiXWJMO5Sap8IsQXrzx+9Oz0ZxWhzdg84QCq+69wjqpl0OMQ5usAff9r4ZHfLP5sshf/6s
+	9C/mfrvOvGHGdl0gVqNO/ZHuSp8+JE17GCOuMTvCMrvwtinAb3gJbZnmIX/e3YOoSQ4qD0
+	mehivAHz6YEUOjVLjHVbDZe69iYYJNGDPbX1mkyZqhYRZk/qJ6pPPBg7AJdURQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1750221741;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=gCkN1UaeGSgMvS52kXxBzHCLhstjH4vMb9KGD7dp2JI=;
+	b=jHhLwp2NkczZH3wlj0H29ddiTa5duZeCqb2xrC8Wf1hfLyL/BfTNwE6N8ZLMm6QjoT21SK
+	+BuCRz6s6c70FuAA==
+To: Florian Bezdeka <florian.bezdeka@siemens.com>, Ryo Takakura
+ <ryotkkr98@gmail.com>, pmladek@suse.com
+Cc: Jason@zx2c4.com, gregkh@linuxfoundation.org,
+ linux-serial@vger.kernel.org, lkp@intel.com, oe-lkp@lists.linux.dev,
+ oliver.sang@intel.com, Jan Kiszka <jan.kiszka@siemens.com>
+Subject: Re: [linux-next:master] [serial]  b63e6f60ea:
+ BUG:soft_lockup-CPU##stuck_for#s![modprobe:#]
+In-Reply-To: <030bfa50783bc9f40ce3afd4e1f65da2a48322c1.camel@siemens.com>
+References: <84y0vhodwy.fsf@jogness.linutronix.de>
+ <20250501041055.6504-1-ryotkkr98@gmail.com>
+ <030bfa50783bc9f40ce3afd4e1f65da2a48322c1.camel@siemens.com>
+Date: Wed, 18 Jun 2025 06:48:20 +0206
+Message-ID: <84cyb1vexf.fsf@jogness.linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR05MB4923:EE_|MW4PR05MB8747:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09548a00-0cbf-49a5-cd6f-08ddadbed2de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|52116014|376014|1800799024|366016|38350700014;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?tBjOjFU4yM9fvFPOOKMctqJujjdNFgEinOS16+49Os9aL7YMJexgsX4iAM71?=
- =?us-ascii?Q?yL48DKEdIfmj9lde04G5Ch+bJwww7BZSE7Ks4JtwFYaC3YCQ8Rqbn2pVAFjV?=
- =?us-ascii?Q?u0+KFTwRC/5cg7p4PeJvyqnSZA6uwuBZxlebE19HFxe+jbpfu1vl/uD/7bb9?=
- =?us-ascii?Q?/N8Spc+YI5d52mjhswujPYmfIze1blZaq7oNk/BsaLofsdOu0r2NGSA/rVwa?=
- =?us-ascii?Q?tCnqYl4U4ECkLTjE8Lm6oG2jqwX1dxR4ECpVL75fK1UIm/loOtfvslPt59Ra?=
- =?us-ascii?Q?+Jh2DsWLOMjp1GwP4WqHcmzWddi3X1gm0miXzwGUeTNZ3edyeHwv0apZLqZw?=
- =?us-ascii?Q?BrMFOPWTckeKNvEV1mPkMUqSnCMHUvDDkMcf2a4ZZFmFZD3T8P7YovsWfcD8?=
- =?us-ascii?Q?DV957NauzOPDN4/vkR6YuzYWGXytPn3zJ/dXiZKZpBeAkte13uaJB+Sy+9mY?=
- =?us-ascii?Q?7QqxkV+a4eOhXqjIdeouTMs05wfz779vEski9YjsmgfRPn4XUpadTrQDh2ga?=
- =?us-ascii?Q?7bf2gu+3vRjDx4iZmd+UVlN36ZKzFwbgRegVFU7gF4HCeRecB3RPN06h0/e1?=
- =?us-ascii?Q?3l1+y+DLMdqhFyL7wOyrqOGXUnxZry1GmGtTNi8S8VlQO97D/YXxDS4BV4Qy?=
- =?us-ascii?Q?2/MVDZmpljzEUKNsIWAygh5T6RrEJWXoZbM9UfoeJXVNwFsnUkeo7yrigHax?=
- =?us-ascii?Q?T2UX4Llgji8CKEOsvkjA6Y5nlcrK1hzHFMQQAkZjCLoR57ezqVGp+S6fMAUL?=
- =?us-ascii?Q?IovgbVRA7hneZSySO9bm5wachDLVaKIaDXzjgbgnlT0mye6/VFM7P/+et0sR?=
- =?us-ascii?Q?A9VjDWS14ZqbxshVLa/GRZZFMegJ+R9Gj1utV8vAj1pGshxzsJfoINFQvT1O?=
- =?us-ascii?Q?Y2cD9+RAyVL9LJfGiAAxZdRblMQON7UIBF6DBHRhMTGIibxwt2EBq5iI5R6m?=
- =?us-ascii?Q?SXeariNiisVqPAWUgAOjMt6+t0r1/FUozKH3ho7fhNFDDcM61+fHNCN1azqI?=
- =?us-ascii?Q?95Ais8hRIQwyKUH9Ij71RkZ/A0LBb6FrL3pMpjDZK09hV5pla5Nd97aomPcf?=
- =?us-ascii?Q?ED0zOXFygI00LCPiVT9DAD76yZ3YsCUKqLsp2OIYt0sJ3F7Xsym4qWM8Fd6o?=
- =?us-ascii?Q?BUKHEOmckSbA3hvUre/GOx1i9gZmkaR62G4bA5aBkS4r6UBWqNkpZmP67jGS?=
- =?us-ascii?Q?rZIajXnVTLrf8KOR3MVVAIV01snVv/wB7pvWipK6EaEUFZ++S9AZ+iKFfOfb?=
- =?us-ascii?Q?/VLWdmMofefGneLK4P0RDlNxwBsU0/WGt+cVQwBj3nL3n8aq2tQRFJLh3G2K?=
- =?us-ascii?Q?EbFZZivdf/Nr1YspKXxxPmw9YC/f1I/k8lxaZfr++PCc5q1m9eA5b+Tf6MkL?=
- =?us-ascii?Q?9rFCtZRL71qR+Iyb32QGAgTlVtMyrPIJdMcbTyXhTJPeksbZjrn9Y/HhbJQc?=
- =?us-ascii?Q?7t7wFhFfUQ9XbE90RltaY5KRtkoNtPuQdV0Ua6CVOMUaeCc+MRdcfdRsruDU?=
- =?us-ascii?Q?v29TZd4jS5O3kIE=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR05MB4923.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(52116014)(376014)(1800799024)(366016)(38350700014);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ddMDX8ddpKh+sWU1aLvJmbmZ87NVePgLcooXanSHfjQIShMEfh/WQW29k7+7?=
- =?us-ascii?Q?CqFX1BcVlozDYnXjVO7l5B0hZTZmu57aECsQYRp05GAjHjp/FC+i/BMMEzZQ?=
- =?us-ascii?Q?p+cu4rnizKOVXI4NbVuFK+rMTUk4RY0f59Rns4rDGtazt6FI7u58o4A6HMXH?=
- =?us-ascii?Q?RZ0KLSQqqE+t4uZEB3vwtil1SeTubTsYmpIJoOqr+X79q4/hAL6Gr+a5z5YX?=
- =?us-ascii?Q?80UD2OMfZWB6JtvxUAp2CFD9glXWK0bzHqFHgmHqmQm3nlKNJZiVkNTEQsLm?=
- =?us-ascii?Q?p+h90eFlpXy87UfkBkbhPeOvnpzwn07fLVI6JeGemlHT1OmlEIvH4XiscQov?=
- =?us-ascii?Q?nWp9nhEJDCDPIw4XePD8CCXCiyv/tIQd4RWvhy9h756pEqJ7V0gwqtX2mNNY?=
- =?us-ascii?Q?eic1K0EB3n5wOlGG/2xww3+HURWsbcecId4sBoYYRKb8k0lHYn3jGN6WEfnv?=
- =?us-ascii?Q?3LdosvR8xsElno4NFKqPHvSUaxN0oC5G1Dlm+zrXRW5JvkiUhRiF3cF+ZjD3?=
- =?us-ascii?Q?HUkvZTs5Ya4QyZcTQdKhRZGzOsHd59p1OYEi9E9Ffqz6OrgbAhruklEHKHPD?=
- =?us-ascii?Q?jQRsIUC2HjoxLlsoZsq+pJTs1OeEnziFXjA32vZdnxBqNmHWcTPvmx+72yQz?=
- =?us-ascii?Q?AmNwX49S0M2L2qu5vTBLhbSBazPVD5V5WeL0MQP9rUTeeejONz5F3qHmtfPo?=
- =?us-ascii?Q?2BYsacNGy/AEAJyb183/OgiKjjYoYiD7SvGuAkvgnxgQ5tX1pmSaDAJfVm1F?=
- =?us-ascii?Q?zBbpI4s52ELWzoosqaLpwWkJXvgaqj1ojIh4A5pHsaVL+Lk11SG19IEsXqRv?=
- =?us-ascii?Q?e+wRuBxtAn3pA6OyOgllLjzzXnYTFV2F5BvN5USs8l/nkmVLIadrjZ53GRkK?=
- =?us-ascii?Q?ePIFct0Lh0kRojf+dcGrS3wPFVpxB7+jKbRJHFfh27J6YvLWXt671LoLAy2N?=
- =?us-ascii?Q?bmcl8jJiuj+x8DXoXsFspXUZQ2uY/FJkckou9210PblJxAr1GYc05GvWOgY3?=
- =?us-ascii?Q?AGvaVxAyX0W78Ho3owzNcurE5vD7iCJf2WYSK7KMSUZE+DaFLfy5ik12gtWC?=
- =?us-ascii?Q?Pi0TdiMy0QWRDy40hNY0GiVAWEtBC8x9arFfDz9/WabbFDz7N/p7vNfQsH1w?=
- =?us-ascii?Q?2dfX2fkhGpmT3M4RJncrd6u2OIMhPt9AaDp6OVj5QYr/z3eZWqy0DB3zLBiA?=
- =?us-ascii?Q?obzsOTEIXkOuCdrCg7OqvS5dLWE064sFz9vRLjbwwm88Emxd0bjJzSYOcD/n?=
- =?us-ascii?Q?IqgRou6AUMWFKlkz9Oq+DOp416lesEkf1Z3/TpR41b3ZrPMxwkWeIq2hu3XP?=
- =?us-ascii?Q?wAr9iMUWlLLa0niVXciJmF6kuow/+85ifCalcHXJWvkBmeCNa29CjvZVqfgq?=
- =?us-ascii?Q?epsbv7NytoIRuN446HLdA322j9nh5pyArhW4CKFri1vZheBdSeYEd6Th55qk?=
- =?us-ascii?Q?2I9lfBk4WqXoRHuywpCVbvqcUM6rxm5S2WEa0U8D26GuNZv0hMDiF3c/hlCF?=
- =?us-ascii?Q?rEUQD/IQAPst2LlPsa3ZsA7u/qfI8vYC03DoRpoD0D2FRSl5Z9oR0VO4Kodo?=
- =?us-ascii?Q?TU34BDkCFyVpCJqG35rhiXKfSPeNTEGW1vZk5aRG?=
-X-OriginatorOrg: tektelic.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09548a00-0cbf-49a5-cd6f-08ddadbed2de
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR05MB4923.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Jun 2025 16:48:45.1933
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 852583a0-3638-4a6d-8abc-0bf61d273218
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: VPqguBsA2TWrCp90g3GpCEHw8r2r5xrCqLwTYAgZ9U8bhZxPNiRjCDDyV288T2ZEt2sl084K6+sCJ1YXIF/EiQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR05MB8747
+Content-Type: text/plain
 
-Since in v6.8-rc1, the of_node symlink under tty devices is
-missing. This breaks any udev rules relying on this information.
+Hi Florian,
 
-Link the of_node information in the serial controller device with the
-parent defined in the device tree. This will also apply to the serial
-device which takes the serial controller as a parent device.
+On 2025-06-16, Florian Bezdeka <florian.bezdeka@siemens.com> wrote:
+> With that it has been confirmed that the original test report [1] was
+> wrong. It reported the trigger, not the root cause.
+>
+> b63e6f60eab4 ("serial: 8250: Switch to nbcon console")
+>
+> was / is correct but got reverted by Greg in mainline with 
+>
+> f79b163c4231 ("Revert "serial: 8250: Switch to nbcon console"")
+>
+> This leads to the situation that stable-rt branches still ship this
+> patch while mainline and stable do not. John, is that intended or was
+> mainline / stable never informed about that?
 
-Fixes: b286f4e87e32 ("serial: core: Move tty and serdev to be children of serial core port device")
-Cc: stable@vger.kernel.org
-Signed-off-by: Aidan Stewart <astewart@tektelic.com>
----
-v1 -> v2:
- - v1: https://lore.kernel.org/linux-serial/20250616162154.9057-1-astewart@tektelic.com
- - Remove IS_ENABLED(CONFIG_OF) check.
----
- drivers/tty/serial/serial_base_bus.c | 1 +
- 1 file changed, 1 insertion(+)
+stable-rt carries the 8250-nbcon patches because we intend for them to
+go mainline. Greg reverted them from mainline at my request because of 2
+power management regression reports (related to suspending on arm32). I
+do not believe 8250-nbcon is the real problem, but I need to determine
+the root issue and offer a solution before sending the 8250-nbcon
+patches to mainline again.
 
-diff --git a/drivers/tty/serial/serial_base_bus.c b/drivers/tty/serial/serial_base_bus.c
-index 5d1677f1b651..cb3b127b06b6 100644
---- a/drivers/tty/serial/serial_base_bus.c
-+++ b/drivers/tty/serial/serial_base_bus.c
-@@ -72,6 +72,7 @@ static int serial_base_device_init(struct uart_port *port,
- 	dev->parent = parent_dev;
- 	dev->bus = &serial_base_bus_type;
- 	dev->release = release;
-+	device_set_of_node_from_dev(dev, parent_dev);
- 
- 	if (!serial_base_initialized) {
- 		dev_dbg(port->dev, "uart_add_one_port() called before arch_initcall()?\n");
--- 
-2.49.0
+Regardless, the fix in this thread is still relevant for mainline now
+because there are now other nbcon serial drivers mainline.
 
+John
 
