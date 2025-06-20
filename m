@@ -1,261 +1,131 @@
-Return-Path: <linux-serial+bounces-9872-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-9873-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABB2DAE1DA9
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jun 2025 16:43:17 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C5F3AE1F43
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jun 2025 17:47:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1DA681C20E69
-	for <lists+linux-serial@lfdr.de>; Fri, 20 Jun 2025 14:43:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C3FC3B3F09
+	for <lists+linux-serial@lfdr.de>; Fri, 20 Jun 2025 15:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B8B22A7F1;
-	Fri, 20 Jun 2025 14:43:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3199A2D5427;
+	Fri, 20 Jun 2025 15:43:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="hb5o0dc5";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GK+xBRhv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xnep2/Mv"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65AF828DF1F;
-	Fri, 20 Jun 2025 14:43:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 043B319A297;
+	Fri, 20 Jun 2025 15:43:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750430592; cv=none; b=dQd6+/0qshCHIhHlA1DUe+7lwCJQGV2W1OmfDAbicCXvphiw7QCjG/9zDppHuR8R5p0JQcBTKzSjUYOIVk4LXuQeWyApoVzC2QaCzr3C1lRz27keaj5PJVG6EsC9OcAWQrmdRRcv67vSSpT20pqIZEHhnsO6Nj76uPkMm1Gmet4=
+	t=1750434234; cv=none; b=dhyI/Ldd+scYEUSD8waaFxe19dPnj+fOkCp3P6BEbHXUmaihDqE/Y1ej3/PE0RXg87CogsdBIo54Kc1PL24OZeEdjR68NQa6YgXc1NtDIDyfbFR+E45lcayQYIRtpvVF0YebFxNBkr3UsylOmEIZOTK2hsNPemFbU2/quAGis5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750430592; c=relaxed/simple;
-	bh=XA2XtaQFY5JwiKn9pbwDxeF/R6eSdkFkct68OHPhRvI=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=psv6iu0zkdzhkGiQ1abcoyyAa3uB56Bh6lIMgS8u6LeTpsSKUfbXqaTinYmtBDMUOVG7L71/W3nbOsFC8CiMqI95ddR62V0UMSgF9BzBRoJlAf77Yi2bAD1iFXKA96g/Z41UTOonfJuCXKDOm5wnW06SYBX3AmI5ehCvOafiq/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=hb5o0dc5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GK+xBRhv; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750430588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zf9eZNGS/J7cqsYhd+Ez8QubB3SKjLSoDlWDiWnAjOA=;
-	b=hb5o0dc5GvKPdYV2/5l5iL+pdghzJ2cRGQIbp7KrHSBtdO/MvYQA9hh0euy5xWrNs0MPpg
-	RJU0iL6518QlFrA1pAP7KYd/L+m8HX1RZQSqEWaVhhxDWnphvEtVas/jU/v33PqkNo4p/w
-	40jWxyWIXW6IBniJKMlSY3cetMBiJcGrOnGX2Xs2vHEHEUTXEVlDpZytucx+jIxnwveFTq
-	BZJA1eQMDblJv1+5SDfDNEMJchkbmNGr27nSwY6VaSoVmE9guI6vTlXJWRplUxCfPC/7ww
-	RlS3OC5noZq6jer3COwBLhR0eLTaieuys/mBmz0Ws3fNPoPKuu/Is+R12ktaFQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750430588;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Zf9eZNGS/J7cqsYhd+Ez8QubB3SKjLSoDlWDiWnAjOA=;
-	b=GK+xBRhvIL3VuhN/qjyFnX59zi7Ek/5vSo7O6W52qAcr05hqeOrgmxcBFIwe5uMC0oARw/
-	vIV++n1IzWc76PCQ==
-To: Petr Mladek <pmladek@suse.com>, Marcos Paulo de Souza <mpdesouza@suse.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>, Sergey Senozhatsky
- <senozhatsky@chromium.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, Jason
- Wessel <jason.wessel@windriver.com>, Daniel Thompson <danielt@kernel.org>,
- Douglas Anderson <dianders@chromium.org>, Richard Weinberger
- <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes
- Berg <johannes@sipsolutions.net>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org, kgdb-bugreport@lists.sourceforge.net,
- linux-um@lists.infradead.org
-Subject: Re: [PATCH 2/7] printk: Use consoles_suspended flag when
- suspending/resuming all consoles
-In-Reply-To: <aExBo-8cVOy6GegR@pathway.suse.cz>
-References: <20250606-printk-cleanup-part2-v1-0-f427c743dda0@suse.com>
- <20250606-printk-cleanup-part2-v1-2-f427c743dda0@suse.com>
- <aExBo-8cVOy6GegR@pathway.suse.cz>
-Date: Fri, 20 Jun 2025 16:49:07 +0206
-Message-ID: <84y0tmiidg.fsf@jogness.linutronix.de>
+	s=arc-20240116; t=1750434234; c=relaxed/simple;
+	bh=1gkbm0Ahe3s4IB6dtM7/gc/Nr6esMFpIeX5/yPsyc1Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=XwYlYDg7Cz1o/0aJwsDSfR2GbhMcomSrWmd6yMSgAoum+vIYRwU9foV2biSbGD4Y3tklKs7kYx2zDS1PRODU8agkAIsOuHuTdaMVzfXgmJ6ZfRJyMX2/+2Yo51q3O4ZzgxjcfdKxM0dqlvfxssRr+p7nLQZHGGzSpvjBS+lSKoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xnep2/Mv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B5A1C4CEE3;
+	Fri, 20 Jun 2025 15:43:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750434233;
+	bh=1gkbm0Ahe3s4IB6dtM7/gc/Nr6esMFpIeX5/yPsyc1Y=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Xnep2/MvdKDz/fdHmq2XY10w5uvObo11RdsEiCdlf+obnwW/860uuf3r37MAGFKxQ
+	 28faH4Z2e2Ptr2+nKQdmpSEtkpqcc73fjncWeDQU8mjP9JxE17VvVAXfcvU87ZHFi/
+	 EDVN5fOOCcaEIvW2Vmk+8RmJUj9eoPxOpjW694/0xfsyxyfkqyMfzw1Kp6lyWofRIr
+	 Mamo+p+0rRaXS9YrZT9VoTEQtpYPab2mTrORYIw9PD16sjtR9Ti7K0RUfhKVD0qwpN
+	 jTTa04qD7Z3YxDhGTguvgckMT6RewnkFOlBmbb83DYyNFKBJxs/hC+2jHTI/BuN1Mu
+	 KMVbaFFySn9oQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 76497C7115B;
+	Fri, 20 Jun 2025 15:43:53 +0000 (UTC)
+From: Max Shevchenko via B4 Relay <devnull+wctrl.proton.me@kernel.org>
+Subject: [PATCH 00/11] ASoC: mediatek: Add support for MT6572 SoC
+Date: Fri, 20 Jun 2025 18:40:39 +0300
+Message-Id: <20250620-mt6572-v1-0-e2d47820f042@proton.me>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPeAVWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDM0NL3dwSM1NzI93UNHOLROMUE1NDMwsloOKCotS0zAqwQdGxtbUASpa
+ sVlgAAAA=
+X-Change-ID: 20250619-mt6572-ef78a3d45168
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Wim Van Sebroeck <wim@linux-watchdog.org>, 
+ Guenter Roeck <linux@roeck-us.net>, Sean Wang <sean.wang@mediatek.com>, 
+ Russell King <linux@armlinux.org.uk>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, linux-watchdog@vger.kernel.org, 
+ Max Shevchenko <wctrl@proton.me>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1750434231; l=1888;
+ i=wctrl@proton.me; s=20250603; h=from:subject:message-id;
+ bh=1gkbm0Ahe3s4IB6dtM7/gc/Nr6esMFpIeX5/yPsyc1Y=;
+ b=3AEld+8wk5+1U1fLhIXFcIWHi3wiF54pBxW8LeyFpiSwe5e/VCsRfBazfxNwxh67svgValpwe
+ WLwLty6rQADAqyZaM7c8c8wsEzl+0990wJFZUTgodCzBj5BoVIqNY1r
+X-Developer-Key: i=wctrl@proton.me; a=ed25519;
+ pk=JXUx3mL/OrnRvbK57HXgugBjEBKq4QgDKJqp7BALm74=
+X-Endpoint-Received: by B4 Relay for wctrl@proton.me/20250603 with
+ auth_id=421
+X-Original-From: Max Shevchenko <wctrl@proton.me>
+Reply-To: wctrl@proton.me
 
-On 2025-06-13, Petr Mladek <pmladek@suse.com> wrote:
->> diff --git a/kernel/printk/nbcon.c b/kernel/printk/nbcon.c
->> index fd12efcc4aeda8883773d9807bc215f6e5cdf71a..72de12396e6f1bc5234acfdf=
-6dcc393acf88d216 100644
->> --- a/kernel/printk/nbcon.c
->> +++ b/kernel/printk/nbcon.c
->> @@ -1147,7 +1147,7 @@ static bool nbcon_kthread_should_wakeup(struct con=
-sole *con, struct nbcon_contex
->>  	cookie =3D console_srcu_read_lock();
->>=20=20
->>  	flags =3D console_srcu_read_flags(con);
->> -	if (console_is_usable(con, flags, false)) {
->> +	if (console_is_usable(con, flags, false, consoles_suspended)) {
->
-> The new global console_suspended value has the be synchronized the
-> same way as the current CON_SUSPENDED per-console flag.
-> It means that the value must be:
->
->   + updated only under console_list_lock together with
->     synchronize_rcu().
->
->   + read using READ_ONCE() under console_srcu_read_lock()
+This series of patches adds support for the MT6572 SoC and
+the JTY D101 tablet and Lenovo A369i smartphone based on it.
 
-Yes.
+Signed-off-by: Max Shevchenko <wctrl@proton.me>
+---
+Max Shevchenko (11):
+      dt-bindings: serial: mediatek,uart: add MT6572
+      dt-bindings: interrupt-controller: mediatek,mt6577-sysirq: add MT6572
+      dt-bindings: timer: mediatek: add MT6572
+      dt-bindings: watchdog: mediatek,mtk-wdt: add MT6572
+      dt-bindings: vendor-prefixes: add JTY
+      dt-bindings: arm: mediatek: add boards based on the MT6572 SoC
+      ARM: mediatek: show the hardware name for the MT6572
+      ARM: mediatek: add MT6572 smp bring up code
+      ARM: dts: mediatek: add basic support for MT6572 SoC
+      ARM: dts: mediatek: add basic support for JTY D101 board
+      ARM: dts: mediatek: add basic support for Lenovo A369i board
 
-> I am going to propose more solutions because no one is obviously
-> the best one.
+ .../devicetree/bindings/arm/mediatek.yaml          |   5 +
+ .../mediatek,mt6577-sysirq.yaml                    |   1 +
+ .../devicetree/bindings/serial/mediatek,uart.yaml  |   1 +
+ .../devicetree/bindings/timer/mediatek,timer.yaml  |   1 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |   2 +
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml        |   1 +
+ arch/arm/boot/dts/mediatek/Makefile                |   2 +
+ arch/arm/boot/dts/mediatek/mt6572-jty-d101.dts     |  62 ++++++++++++
+ arch/arm/boot/dts/mediatek/mt6572-lenovo-a369i.dts |  57 +++++++++++
+ arch/arm/boot/dts/mediatek/mt6572.dtsi             | 105 +++++++++++++++++++++
+ arch/arm/mach-mediatek/Kconfig                     |   4 +
+ arch/arm/mach-mediatek/mediatek.c                  |   1 +
+ arch/arm/mach-mediatek/platsmp.c                   |   7 ++
+ 13 files changed, 249 insertions(+)
+---
+base-commit: 0ff41df1cb268fc69e703a08a57ee14ae967d0ca
+change-id: 20250619-mt6572-ef78a3d45168
 
-[...]
+Best regards,
+-- 
+Max Shevchenko <wctrl@proton.me>
 
-> Variant C:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> Remove even @flags parameter from console_is_usable() and read both
-> values there directly.
->
-> Many callers read @flags only because they call console_is_usable().
-> The change would simplify the code.
->
-> But there are few exceptions:
->
->   1. __nbcon_atomic_flush_pending(), console_flush_all(),
->      and legacy_kthread_should_wakeup() pass @flags to
->      console_is_usable() and also check CON_NBCON flag.
->
->      But CON_NBCON flag is special. It is statically initialized
->      and never set/cleared at runtime. It can be checked without
->      READ_ONCE(). Well, we still might want to be sure that
->      the struct console can't disappear.
->
->      IMHO, this can be solved by a helper function:
->
-> 	/**
-> 	 * console_srcu_is_nbcon - Locklessly check whether the console is nbcon
-> 	 * @con:	struct console pointer of console to check
-> 	 *
-> 	 * Requires console_srcu_read_lock to be held, which implies that @con m=
-ight
-> 	 * be a registered console. The purpose of holding console_srcu_read_loc=
-k is
-> 	 * to guarantee that no exit/cleanup routines will run if the console
-> 	 * is currently undergoing unregistration.
-> 	 *
-> 	 * If the caller is holding the console_list_lock or it is _certain_ that
-> 	 * @con is not and will not become registered, the caller may read
-> 	 * @con->flags directly instead.
-> 	 *
-> 	 * Context: Any context.
-> 	 * Return: True when CON_NBCON flag is set.
-> 	 */
-> 	static inline bool console_is_nbcon(const struct console *con)
-> 	{
-> 		WARN_ON_ONCE(!console_srcu_read_lock_is_held());
->
-> 		/*
-> 		 * The CON_NBCON flag is statically initialized and is never
-> 		 * set or cleared at runtime.
-> 		return data_race(con->flags & CON_NBCON);
-> 	}
 
-Agreed.
-
->    2. Another exception is __pr_flush() where console_is_usable() is
->       called twice with @use_atomic set "true" and "false".
->
->       We would want to read "con->flags" only once here. A solution
->       would be to add a parameter to check both con->write_atomic
->       and con->write_thread in a single call.
-
-Or it could become a bitmask of printing types to check:
-
-#define ATOMIC_PRINTING 0x1
-#define NONATOMIC_PRINTING 0x2
-
-and then __pr_flush() looks like:
-
-if (!console_is_usable(c, flags, ATOMIC_PRINTING|NONATOMIC_PRINTING)
-
->       But it might actually be enough to check is with the "false"
->       value because "con->write_thread()" is mandatory for nbcon
->       consoles. And legacy consoles do not distinguish atomic mode.
-
-A bit tricky, but you are right.
-
->
->
-> Variant D:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> We need to distinguish the global and per-console "suspended" flag
-> because they might be nested. But we could use a separate flag
-> for the global setting.
->
-> I mean that:
->
->     + console_suspend() would set CON_SUSPENDED flag
->     + console_suspend_all() would set CON_SUSPENDED_ALL flag
->
-> They both will be in con->flags.
->
-> Pros:
->
->     + It is easy to implement.
->
-> Cons:
->
->     + It feels a bit ugly.
->
->
-> My opinion:
-> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
->
-> I personally prefer the variant C because:
->
->   + Removes one parameter from console_is_usable().
->
->   + The lockless synchronization of both global and per-console
->     flags is hidden in console_is_usable().
->
->   + The global console_suspended flag will be stored in global
->     variable (in compare with variant D).
->
-> What do you think, please?
->
-> Best Regards,
-> Petr
->
->
-> PS: The commit message and the cover letter should better explain
->     the background of this change.
->
->     It would be great if the cover letter described the bigger
->     picture, especially the history of the console_suspended,
->     CON_SUSPENDED, and CON_ENABLED flags. It might use info
->     from
->     https://lore.kernel.org/lkml/ZyoNZfLT6tlVAWjO@pathway.suse.cz/
->     and maybe even this link.
->
->     Also this commit message should mention that it partly reverts
->     the commit 9e70a5e109a4a233678 ("printk: Add per-console
->     suspended state"). But it is not simple revert because
->     we need to preserve the synchronization using
->     the console_list_lock for writing and SRCU for reading.
-
---=20
-John Ogness
-Linutronix GmbH | Bahnhofstra=C3=9Fe 3 | D-88690 Uhldingen-M=C3=BChlhofen
-Phone: +49 7556 25 999 20; Fax.: +49 7556 25 999 99
-
-Hinweise zum Datenschutz finden Sie hier (Information on data privacy
-can be found here): https://linutronix.de/legal/data-protection.php
-
-Linutronix GmbH | Firmensitz (Registered Office): Uhldingen-M=C3=BChlhofen |
-Registergericht (Registration Court): Amtsgericht Freiburg i.Br., HRB700
-806 | Gesch=C3=A4ftsf=C3=BChrer (Managing Directors): Harry Demas, Heinz Eg=
-ger,
-Thomas Gleixner, Yin Sorrell, Jeffrey Schneiderman
 
