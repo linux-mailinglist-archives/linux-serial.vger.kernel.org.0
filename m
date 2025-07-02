@@ -1,257 +1,145 @@
-Return-Path: <linux-serial+bounces-10079-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10082-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AC49AF5AEB
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Jul 2025 16:18:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 620ACAF5F87
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Jul 2025 19:10:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04EC73AB17D
-	for <lists+linux-serial@lfdr.de>; Wed,  2 Jul 2025 14:17:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B0CC4A540C
+	for <lists+linux-serial@lfdr.de>; Wed,  2 Jul 2025 17:10:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272282F4335;
-	Wed,  2 Jul 2025 14:18:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b="IKBhXOGG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6CDC2FC3A3;
+	Wed,  2 Jul 2025 17:10:28 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from s1.g1.infrastructure.qtmlabs.xyz (s1.g1.infrastructure.qtmlabs.xyz [107.172.1.117])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E077E27E045;
-	Wed,  2 Jul 2025 14:18:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=107.172.1.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 058BE1A2622;
+	Wed,  2 Jul 2025 17:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751465899; cv=none; b=Gv3hQDlmNoh9tNWMqYCZK5a/B1pt6P/lZO/jfsDF0cZNRP7MYI80L+8WKusfeqei5x+R2MWvEn0Pu4E5AwNqjBvq+gZwsMCeQIJYnipf1ZBaVeRvZqxikNF5yVWudYmFFRTr5IqyzJG4f8X2HmP2ZBxK1DeA3bWgMNxPSoUmKS0=
+	t=1751476228; cv=none; b=MY5UoxWEsIjyFYfIRBrigRfS7DAa6nInjBeQdGyY1HaqSIQj7DPWB8ZxLU8tPX3O4X/jHLphypVCKYl1MGoqjrOo/f7mKNocEIzE+0LTfCDREzW0TWx3L0F93PikoR7lAJHII5MM1gdjMeFTVXUdMf+0e500wRXXQo2fgXpZY6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751465899; c=relaxed/simple;
-	bh=wIKE1020V0qv2Fmt9yYrtkgZMCevG4AYvjudvzYfK/g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=d8KnSWRJRDBh7d13+44PSV/hwiPv4VdCA7dcoFIGZ9OTxUyLBXUQp3LcfLAqyK9ltr8CnTvYc7I8za+kfkS42346i4lwk+FFCzX6rVHagnhRfXnmXN25jjc3FFVKmotNIFUrZnoJYoxykfXGlsF+0G65NPg82LTyabE1JWPBdBI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz; spf=pass smtp.mailfrom=qtmlabs.xyz; dkim=pass (2048-bit key) header.d=qtmlabs.xyz header.i=@qtmlabs.xyz header.b=IKBhXOGG; arc=none smtp.client-ip=107.172.1.117
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=qtmlabs.xyz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=qtmlabs.xyz
-From: Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qtmlabs.xyz; s=dkim;
-	t=1751465895;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=khygtNqcYP/9iuQRn1zO8R3qSotuUVJXwVa8X3vt3VE=;
-	b=IKBhXOGGXjI5htxl23TKl2X5BgoZjPy0mc1VkIsoVADwFNshnFt4IdRKsKEg352/rUW50p
-	gJvPbfQWt3JFa56LKH1C94sXPelj9TppBbTL6dB4opGXA2yk2J/bI4yl5byI9OvEYMvvHG
-	ot7lRCV78xfFx4qygvLopnYvoOtCgPS751Yx08iN4q1xlLPDn8rSjW8quFHtAMRGeGY0sM
-	gXwA2Ny8Cotvoyq0Lrx4HlOblzcRBQT5YcKt6KgyMHz/P+pQqmcRucAJFEb5/4AJxbGlfS
-	fUWrUh/pAkETppRk8Lm2N9XD96xY8fsHrx1ciKYjXi01NrHq7Zmpg+SOycf4Ew==
-Authentication-Results: s1.g1.infrastructure.qtmlabs.xyz;
-	auth=pass smtp.mailfrom=myrrhperiwinkle@qtmlabs.xyz
-Date: Wed, 02 Jul 2025 21:17:58 +0700
-Subject: [PATCH 2/2] vt: defkeymap: Map keycodes above 127 to K_HOLE
+	s=arc-20240116; t=1751476228; c=relaxed/simple;
+	bh=YeWJQeemG7u/ZingmAESBMvieSjH5GEUCp5yLIhOv1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=nniJos13CAR70auAMEbbdAKpFYs6aLj2GES6S5LF6keNrHV5Vqn+oedO5g2g3tbkLoU/DiLCdXIUmhKiYW0gfzxlBM4zuBpDpvnJryUwaSjDliH/FsOSfQlZvui9+w8MH0QNpmvsQpLIZUEXe6ejrM2hjDMKE4wuWKdKlX9T4yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=debian.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-604bff84741so13070414a12.2;
+        Wed, 02 Jul 2025 10:10:26 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751476225; x=1752081025;
+        h=content-transfer-encoding:content-disposition:mime-version
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=L63cfSvnDXH9DB4EgrgFoF//uYH+DmeGPIriamKHA+0=;
+        b=PDH5I7S4U/HhtKt6FGdOP8ONOnm4bQXxEqY/q+BV17HCTTF/Pa1dfEcZIuHh8Etdwx
+         +h1ruz341h20TTdDdjh7qpYOI1Fxrk6RSTpJIhKThAqcDEMrUXTYZtAHpbcGvWB1SyHg
+         4HUtA9ITyW2hyPcNB5Ue3DvnjWkPMUjMW3ypT774Bm9l57G+8R5REQP2XKhj09MqOifl
+         fS336z1dXVtRmj9c1gNQRCczs/U72lvgUoRE4bOtZz0jgJq16zkqdmK3+8gPI2EixwyS
+         YyvTOm3bsXwz+XHEZ0LScGIkgIS2y1hepMqJ14zxrgR2UpW/NJ1pzL35HCpg/QwO2TgF
+         rLbw==
+X-Forwarded-Encrypted: i=1; AJvYcCUJX1sRh7Wcgi9iiXHQOCcNo/dYUygwMV8s2lQrliLqRl9J1fROrucSrKYtQhpescx/6/CfSQfvkq1osge4@vger.kernel.org, AJvYcCVP9cST68OvJQYX/2hSm5vLLZrDGSibnOjU2+avOK/Tt7v1vsipF3+XQforftiZkfQOCOQA3ztbkBgjHnE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YylgyLOPQvMkp328M6XTsowRzc+DwLXhcHNY7hFlVrb4cxsh4iu
+	ZeXnhaHGGd6medENhwkXlcymdZLJV3vy4tP0iO6LNpq9pHRY/JtdvDqID3/gYQ==
+X-Gm-Gg: ASbGncvMFtnsAtJZvD8tvQwIEZIcc16GiiCObcFd3SaetSybI4vuzt0XOWzxhmgQYJi
+	OAYkHClh6fIMPHzsJLUE7Ks0D5DrXx93NBKgihacI7ZRalPUealKnuAEfPuHQugrZdmS3fb7PAy
+	2+h3EtGdhN5q0E2E/gODh8lXashQ9+lHBv5+NXUZqfxSHywI9U1qsqEXlw2U/yMDKjXDrleaySD
+	RS8W2o0OYcSYxyLl7sjZnDrw2UErLuYNCkPP67ApFe776SO8UeB5Cw6n8sB8yqvgq4nqz6EXA1i
+	/d/UbhKAlb7M/h/sU/gsazM7SkaeCLP66FTjzEJQqcvZTbRLMWs4Di2Gba1BnaQ=
+X-Google-Smtp-Source: AGHT+IGnC3lQFbafqaLA6sanJmrlJcYjRCas5njjZkxtyABSR4KndYWH+LDFo8yq2ojKT8y+ZX4gmw==
+X-Received: by 2002:a17:907:e895:b0:ad8:9257:5727 with SMTP id a640c23a62f3a-ae3c2dca4efmr400653366b.51.1751476225007;
+        Wed, 02 Jul 2025 10:10:25 -0700 (PDT)
+Received: from gmail.com ([2a03:2880:30ff:1::])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ae35365a75fsm1112854566b.67.2025.07.02.10.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Jul 2025 10:10:24 -0700 (PDT)
+Date: Wed, 2 Jul 2025 10:10:21 -0700
+From: Breno Leitao <leitao@debian.org>
+To: cov@codeaurora.org, rmk+kernel@armlinux.org.uk, mark.rutland@arm.com,
+	catalin.marinas@arm.com, linux-serial@vger.kernel.org
+Cc: rmikey@meta.com, linux-arm-kernel@lists.infradead.org,
+	usamaarif642@gmail.com, leo.yan@arm.com,
+	linux-kernel@vger.kernel.org, paulmck@kernel.org
+Subject: arm64: csdlock at early boot due to slow serial (?)
+Message-ID: <aGVn/SnOvwWewkOW@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250702-vt-misc-unicode-fixes-v1-2-c27e143cc2eb@qtmlabs.xyz>
-References: <20250702-vt-misc-unicode-fixes-v1-0-c27e143cc2eb@qtmlabs.xyz>
-In-Reply-To: <20250702-vt-misc-unicode-fixes-v1-0-c27e143cc2eb@qtmlabs.xyz>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Arthur Taylor <art@ified.ca>
-Cc: Greg Kroah-Hartman <gregkh@suse.de>, linux-kernel@vger.kernel.org, 
- linux-serial@vger.kernel.org, 
- Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>, stable@vger.kernel.org
-X-Spamd-Bar: -------
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-The maximum number of keycodes got bumped to 256 a very long time ago,
-but the default keymaps were never adjusted to match. This is causing
-the kernel to interpret keycodes above 127 as U+0000 if the shipped
-generated keymap is used.
+Hello,
 
-Fix this by mapping all keycodes above 127 to K_HOLE so the kernel
-ignores them.
+I'm observing two unusual behaviors during the boot process on my SBSA
+ARM machine, with upstream kernel (6.16-rc4):
 
-The contents of this patche were generated by rerunning `loadkeys
---mktable --unicode` and only including the changes to map keycodes
-above 127 to K_HOLE.
+1) A 9-second pause during early boot:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Myrrh Periwinkle <myrrhperiwinkle@qtmlabs.xyz>
-Cc: stable@vger.kernel.org
----
- drivers/tty/vt/defkeymap.c_shipped | 112 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 112 insertions(+)
+	[    0.000000] ACPI: SPCR: console: pl011,mmio32,0xc280000,115200
+	[    0.420120] Serial: AMBA PL011 UART driver
+	[    0.875263] printk: console [ttyAMA0] enabled
+	[    9.848263] ACPI: PCI Root Bridge [PCI2] (domain 0002 [bus 00-ff])
 
-diff --git a/drivers/tty/vt/defkeymap.c_shipped b/drivers/tty/vt/defkeymap.c_shipped
-index 0c043e4f292e8ac50c7b3cd75afd8c8b84d5bd09..6af7bf8d5460c52aadd9b62cdc8048418fbdba08 100644
---- a/drivers/tty/vt/defkeymap.c_shipped
-+++ b/drivers/tty/vt/defkeymap.c_shipped
-@@ -23,6 +23,22 @@ unsigned short plain_map[NR_KEYS] = {
- 	0xf118,	0xf601,	0xf602,	0xf117,	0xf600,	0xf119,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short shift_map[NR_KEYS] = {
-@@ -42,6 +58,22 @@ static unsigned short shift_map[NR_KEYS] = {
- 	0xf20b,	0xf601,	0xf602,	0xf117,	0xf600,	0xf20a,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short altgr_map[NR_KEYS] = {
-@@ -61,6 +93,22 @@ static unsigned short altgr_map[NR_KEYS] = {
- 	0xf118,	0xf601,	0xf602,	0xf117,	0xf600,	0xf119,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short ctrl_map[NR_KEYS] = {
-@@ -80,6 +128,22 @@ static unsigned short ctrl_map[NR_KEYS] = {
- 	0xf118,	0xf601,	0xf602,	0xf117,	0xf600,	0xf119,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short shift_ctrl_map[NR_KEYS] = {
-@@ -99,6 +163,22 @@ static unsigned short shift_ctrl_map[NR_KEYS] = {
- 	0xf118,	0xf601,	0xf602,	0xf117,	0xf600,	0xf119,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short alt_map[NR_KEYS] = {
-@@ -118,6 +198,22 @@ static unsigned short alt_map[NR_KEYS] = {
- 	0xf118,	0xf210,	0xf211,	0xf117,	0xf600,	0xf119,	0xf115,	0xf116,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- static unsigned short ctrl_alt_map[NR_KEYS] = {
-@@ -137,6 +233,22 @@ static unsigned short ctrl_alt_map[NR_KEYS] = {
- 	0xf118,	0xf601,	0xf602,	0xf117,	0xf600,	0xf119,	0xf115,	0xf20c,
- 	0xf11a,	0xf10c,	0xf10d,	0xf11b,	0xf11c,	0xf110,	0xf311,	0xf11d,
- 	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
-+	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,	0xf200,
- };
- 
- unsigned short *key_maps[MAX_NR_KEYMAPS] = {
+2) Occasional CSD lock during early boot:
 
--- 
-2.50.0
+Intermittently, I encounter a CSD lock. Diagnosing this was challenging, but
+after enabling PSEUDO NMI, I was able to capture the stack trace:
+
+	printk: console [ttyAMA0] enabled
+	smp: csd: Detected non-responsive CSD lock (#1) on CPU#0, waiting 5001000000 ns for CPU#02 do_nothing (kernel/smp.c:1058)
+	smp:     csd: CSD lock (#1) unresponsive.
+	Sending NMI from CPU 0 to CPUs 2:
+	....
+	pl011_console_write_atomic (./arch/arm64/include/asm/vdso/processor.h:12 drivers/tty/serial/amba-pl011.c:2540) (P)
+	nbcon_emit_next_record (kernel/printk/nbcon.c:1030)
+	__nbcon_atomic_flush_pending_con (kernel/printk/nbcon.c:1498)
+	__nbcon_atomic_flush_pending (kernel/printk/nbcon.c:1541 kernel/printk/nbcon.c:1593)
+	nbcon_atomic_flush_pending (kernel/printk/nbcon.c:1610)
+	vprintk_emit (kernel/printk/printk.c:2429)
+
+On reviewing the amba-pl011.c code, I noticed that each message being flushed
+causes the following loop to iterate roughly 20,000 times:
+
+          while ((pl011_read(uap, REG_FR) ^ uap->vendor->inv_fr) & uap->vendor->fr_busy)
+                  cpu_relax();
+
+Tracing this, I found that flushing early boot messages is taking a significant
+amount of time. For example, trace_printk() output from that function shows:
+
+       swapper/0-1       [000] dN...     9.695941: pl011_console_write_atomic: "[    0.928995] printk: console [ttyAMA0] enabled"
+											|
+       											-> This is trace_printk of wctxt->outbuf
+
+At timestamp 9.69 seconds, the serial console is still flushing messages from
+0.92 seconds, indicating that the initial 9-second gap is spent looping in
+cpu_relax()—about 20,000 times per message, which is clearly suboptimal.
+
+Further debugging revealed the following sequence with the pl011 registers:
+
+	1) uart_console_write()
+	2) REG_FR has BUSY | RXFE | TXFF for a while (~1k cpu_relax())
+	3) RXFE and TXFF are cleaned, and BUSY stay on for another 17k-19k cpu_relax()
+
+Michael has reported a hardware issue where the BUSY bit could get
+stuck (see commit d8a4995bcea1: "tty: pl011: Work around QDF2400 E44 stuck BUSY
+bit"), which is very similar. TXFE goes down, but BUSY is(?) still stuck for long.
+
+If I am having the same hardware issue, I suppose I need to change that logic
+to exist the cpu_relax() loop by checking when Transmit FIFO Empty (TXFE) is 0
+instead of BUSY.
+
+Anyway, any one familar with this weird behaviour?
+
+Thanks
+--breno
 
 
