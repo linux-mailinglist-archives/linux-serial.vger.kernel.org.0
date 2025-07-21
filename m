@@ -1,169 +1,158 @@
-Return-Path: <linux-serial+bounces-10268-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10270-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C76C7B0C666
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Jul 2025 16:32:23 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 640B0B0C80C
+	for <lists+linux-serial@lfdr.de>; Mon, 21 Jul 2025 17:51:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0C5937B0253
-	for <lists+linux-serial@lfdr.de>; Mon, 21 Jul 2025 14:30:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17FAE7A6093
+	for <lists+linux-serial@lfdr.de>; Mon, 21 Jul 2025 15:49:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321361BD9D0;
-	Mon, 21 Jul 2025 14:32:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C217F2DFA59;
+	Mon, 21 Jul 2025 15:51:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="D8gMn+Uk";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="dqpzkqFJ"
+	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="HXoLZVTA"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D24A7176ADE;
-	Mon, 21 Jul 2025 14:32:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753108332; cv=none; b=lebVywO4grqesaHB/lMqp9qutBXkE2OP0/+Yy52ppLSvrp+pl+/VcX/sC2Ew13mA7uM3pbRcffTh9ymu77B4Z7dHTlNNoDVQwK64ulU6JyVzWsabbSp2UJHvSnDcCNRCLCkm68jnXb1Ue+wNjybv4OUIvjCR4ckJddJTNI5vARk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753108332; c=relaxed/simple;
-	bh=pE4d2LeBSURR3ZsVuztA3qO4aVwxujLn3qVhRl01dLE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=iUZoQK+gFt/qLzW6xVl5GnT7JH6yQQx2dhny9EsTA+S7YTOjYwhGnvn3+nmf/zvcOrVlEYTdmH1tGJH/DctFQybo0stKYaUIKgIqBNJBJzZrNJGb1RY/OHDuguD+TCL7kUrl0idDikfuQuFrQg+xqP63MjGedGcm1kdLWDee104=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=D8gMn+Uk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=dqpzkqFJ; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.phl.internal [10.202.2.45])
-	by mailfout.stl.internal (Postfix) with ESMTP id 4693F1D001C8;
-	Mon, 21 Jul 2025 10:32:08 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 21 Jul 2025 10:32:08 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1753108328;
-	 x=1753194728; bh=gMKNAupfMStz/V14NuXYIcF11MwYemPMaLcl28atUqQ=; b=
-	D8gMn+UkuxGqmrnLQ8bKSYVeDWgcBIbWu6AQ3cAH8vk5ZZeoHYrQ2Pcez4NqUHyW
-	keGowtEEmy/h+fGLJZB7U6oVrgjYq4j1f90Hdeg58Wiv6yS2D6kfWQR3hbjNyW9/
-	SOWX53LBxhRhVUKVg3WsWwIOLj1L88dvT1nEN9eL+P+V4MYg8716mIUz4JjH6Zj2
-	6zJtMfcWOd7afHBeYULRaqT0HZXAfe77NiqSKoFcrUffoGAgHuMXY4J5EOxDzrl+
-	powGW0OTCDyRnzj4F20Rrq6QwrfkMFeYb35nwSMM/TVEBfXUXBSdu+/TbJCUnZvb
-	duE8X8xA/x1gs6j7xq/5bg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1753108328; x=
-	1753194728; bh=gMKNAupfMStz/V14NuXYIcF11MwYemPMaLcl28atUqQ=; b=d
-	qpzkqFJ4nN223b4dzhJW/uWLduEPQJOVtqauWsi6LMG3z18YOFf8da+Thgqs6hpP
-	H4TwLWJ1qt8hspX7c7MG/Nq9CK5v9ST1pElq2fjgAiXEWCoyWaF9u475yxVKcam5
-	EtK9YvcUBVRKpYtVeojHMWOM/5kpxMRqq5kGAhyzc/+1A3Farq5qOE1Atz1uwEmW
-	WOcKHUuf1AweS5eB/w7QDllMGUa3GnhG+rmsqYMZLT/eoR65aPpKzCdATaQxJ/6n
-	lUkyXAG8tF4ePsMx+rDOVS7JzlMd0AYtoM7UBxt+fuWLiAHNl3HjSQ1eJQOe8mqY
-	1UkTPfUY9le4me4oRoNog==
-X-ME-Sender: <xms:Z09-aDjoAtbt4oz_hquLOelYW_hgx3M6__B8GSSDGjYt5jVrjjJLtw>
-    <xme:Z09-aABMdafwrWxno0W-vFk2Iet2VVNakLnH87WDZ27kI6n0GCygNLSskDXRMwCj3
-    q43b51q_U9LmU6re-c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejvdeffecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpeekvdeuhfeitdeuieejvedtieeijeefleevffefleekieetjeffvdekgfetuefhgfen
-    ucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenuc
-    frrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghp
-    thhtohepvdegpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehmihgthhgrlhdrsh
-    himhgvkhesrghmugdrtghomhdprhgtphhtthhopegtrghtrghlihhnrdhmrghrihhnrghs
-    segrrhhmrdgtohhmpdhrtghpthhtohephhhshhgrhhesrgigihgrughordgtohhmpdhrtg
-    hpthhtohepsghrghhlsegsghguvghvrdhplhdprhgtphhtthhopegrlhgvgigrnhgurhgv
-    rdgsvghllhhonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepjhgrnhhksegtrg
-    guvghntggvrdgtohhmpdhrtghpthhtohepphhgrghjsegtrgguvghntggvrdgtohhmpdhr
-    tghpthhtohepsggsrhgviihilhhlohhnsehkvghrnhgvlhdrohhrghdprhgtphhtthhope
-    gtohhnohhrodgutheskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:Z09-aCOaJXULvBvv--IOW8a2yzp5R56DSAKQvyjkEmnC22NyLjA_wg>
-    <xmx:Z09-aKAIMXXASTcUjjEauq50E7V1A-C-J-4qyc57zycYXV4qJifdZg>
-    <xmx:Z09-aCXJjKsNb0OiDfTt1jzNPILfa04Qfx5G5aQCs8B2TMvOSZ7IiA>
-    <xmx:Z09-aOdhpyzR93WWZFbPrLM4vIdzDHha7ZGCG6DUIfqgNQ5XWWh9KA>
-    <xmx:aE9-aO3UqGV5yUTEmzfniPMEzUG6vhDrmrVmbYvdXHAs_euJ3YD_4gDq>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 598F7700068; Mon, 21 Jul 2025 10:32:07 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 847E62D5C9B;
+	Mon, 21 Jul 2025 15:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1753113061; cv=pass; b=u4Ki5nb+OghTpEa9xkSsAH6b+5f2RquAreaRZ9uxQZotWjm9zV2xJ3XVt2WG70i5yAGu8mwHQ27pAvlDqnlpiZKibc96jNn/CUtG9TysI8Ya08un2dftywbKOtu1g8SZOfnYZlESft+qcTgJ9iiMcrWQw0IeAq++IMCCNvQXopw=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1753113061; c=relaxed/simple;
+	bh=r3dWtS0DfR1Rn/ACuj4nW8IHgBNJ1oWA5UeVc8umEeA=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=odumRqzm+M23TovrM4Pg4i5WMvmv9R/hLyB1O2/KMcVspbCU6wlQM4tdElHnLRdovTdvRvarZz6+e7IKLv4q/+cK/yMAY30sgCYXHsHhCWKW66IfGEPzSKE2a7q4nLGvFhtvxPzSwPnvMN8CmYUcg0LJodcUq+lanTwYfXDsIWg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=HXoLZVTA; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
+ARC-Seal: i=1; a=rsa-sha256; t=1753113014; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=KqKKAmYf2zvkxQUXdERjNM5NdmxSKj95ZivuIYjAQSr9NcnUbjeqH05Ig811ifwullI+anb8sSV9MzaD4ZzYbtUlY7h0A+5LSBs1y3UH+iUTGZJGCKcwlCFM7nrNq/P0tX+2z+69DCiPklNMMiNBST/CIVayapHKDCiGs8Fiffs=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1753113014; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=87b0yZUM9BV8txVqBiMLUvYqikzqvjOolhiCh3LlqBM=; 
+	b=Q2H3/9gfOTJOJcdaxLmqepir5VYQnWH47L0hqzKP3O1TJkIBbSeneNHAlRpDxCcSQRLXrGRuEdoe8VnbsMEzFszq9d+cfhzRhp1vWIMKAf6YEgiIfri5ugTRsqdI4St0Jf1QdlVNl49WMPPxK5daPg5Bk10NRdX5NNnLAccKFE4=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=pigmoral.tech;
+	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
+	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1753113014;
+	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=87b0yZUM9BV8txVqBiMLUvYqikzqvjOolhiCh3LlqBM=;
+	b=HXoLZVTA9EydJ2ytaU4mDZd8N9ii1xhoRs5KNTQjSmjytAxdI1ETtiEXGLy34/Te
+	/FXA2xSkH/LxMDbqrMp3hKyGhRvpmeyHeGqEvh0Je//HFuesGoYN5xo5TC+JXrUszIt
+	QXOEY78Nwl/Jw8yN5rFK1HiEbPD8Rzxw9BeJnLNY=
+Received: by mx.zohomail.com with SMTPS id 1753113011689418.4639332270798;
+	Mon, 21 Jul 2025 08:50:11 -0700 (PDT)
+From: Junhui Liu <junhui.liu@pigmoral.tech>
+Subject: [PATCH RFC 00/10] riscv: Add initial support for Anlogic DR1V90
+Date: Mon, 21 Jul 2025 23:46:06 +0800
+Message-Id: <20250721-dr1v90-basic-dt-v1-0-5740c5199c47@pigmoral.tech>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T10195641ff6473d7
-Date: Mon, 21 Jul 2025 16:31:37 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
- "Harshit Shah" <hshah@axiado.com>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
- "Jan Kotas" <jank@cadence.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Jiri Slaby" <jirislaby@kernel.org>, "Michal Simek" <michal.simek@amd.com>,
- =?UTF-8?Q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>,
- "Frank Li" <Frank.Li@nxp.com>,
- "'bbrezillon@kernel.org'" <bbrezillon@kernel.org>
-Cc: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- "soc@lists.linux.dev" <soc@lists.linux.dev>,
- "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
- "linux-i3c@lists.infradead.org" <linux-i3c@lists.infradead.org>
-Message-Id: <4f836d88-80a7-402b-9af0-f0d002e2145d@app.fastmail.com>
-In-Reply-To: <7ddb77bf-173a-4117-80ac-d0f32bf067ee@linaro.org>
-References: 
- <20250703-axiado-ax3000-soc-and-evaluation-board-support-v6-0-cebd810e7e26@axiado.com>
- <b7322d03-2ff9-48a3-bdc6-0e95382ed83f@axiado.com>
- <e461e5ed-f512-4d3b-9903-8092dab7f81d@linaro.org>
- <06f00d05-b8ca-41fa-9e5e-9cee3cfcfae1@axiado.com>
- <7ddb77bf-173a-4117-80ac-d0f32bf067ee@linaro.org>
-Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAL5gfmgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDc0MD3ZQiwzJLA92kxOLMZN2UEl1jU6NUy8RU08TkJAsloK6CotS0zAq
+ widFKQW7OSrG1tQD4JAXsZgAAAA==
+X-Change-ID: 20250710-dr1v90-basic-dt-352e9ae5acb8
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Anup Patel <anup@brainfault.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Palmer Dabbelt <palmer@sifive.com>, Conor Dooley <conor@kernel.org>, 
+ linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org, 
+ Junhui Liu <junhui.liu@pigmoral.tech>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1753112991; l=3155;
+ i=junhui.liu@pigmoral.tech; s=20250507; h=from:subject:message-id;
+ bh=r3dWtS0DfR1Rn/ACuj4nW8IHgBNJ1oWA5UeVc8umEeA=;
+ b=ZdozYEXri0BuBkNJKSKCxzXLS6f3dOB74CXec9evRvaicTz9MbnHLk/ezbFEqrk406Ll2ISPJ
+ oAAp5VoBPn8DYB4v1eAYsr83a2u9Y0GmkwWFbCUeg4y4+BfiRA10/T0
+X-Developer-Key: i=junhui.liu@pigmoral.tech; a=ed25519;
+ pk=d3i4H2mg9LUn4SQemoLAjLRQy0nTcyknIv6zgKMwiBA=
+X-ZohoMailClient: External
 
-On Sun, Jul 20, 2025, at 14:09, Krzysztof Kozlowski wrote:
-> On 19/07/2025 03:09, Harshit Shah wrote:
->> On 7/17/2025 11:14 PM, Krzysztof Kozlowski wrote:
->>=20
->> It mentions about the special case where "Introducing a completely ne=
-w=20
->> SoC platform." we can submit patches to=C2=A0soc@kernel.org directly.
->>=20
->> However I see two different points in the doc.
->>=20
->> 1. Submitting patches directly to soc@kernel.org with email
->>=20
->> 2. There is also mention about the "Branches and Pull requests"
->>=20
->> (https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/t=
-ree/Documentation/process/maintainer-soc.rst?h=3Dv6.16-rc1#n186).=20
->>=20
->>=20
->> I think if we need to use this approach then we need to create a new=20
->> branch on soc and create a pull request based on the same. (with the =
-soc=20
->> tree[1])
->
-> You do not create branches on other poeple's trees (like soc). You
-> create branch on your own tree.
+This patch series introduces initial support for the Anlogic DR1V90 SoC
+[1] and the Milianke MLKPAI-FS01 [2] board.
 
-Yes, ideally the base should be -rc1, as for any other pull request.
+The DR1V90 is a RISC-V based FPSoC from Anlogic, featuring a Nuclei
+UX900 [3] core as its processing system (PS) and 94,464 LUTs in the
+programmable logic (PL) part. The Milianke MLKPAI-FS01 board is one of
+the first platforms based on this SoC, with UART1 routed to a Type-C
+interface for console access.
 
-> You can go with 1 or 2, up to you, I don't know which one is preferred
-> by Arnd for new boards.
+Tested upon Milianke MLKPAI-FS01 board based on vendor's OpenSBI and
+U-Boot with log [4]. The log indicates that OpenSBI is running at
+0x3fe00000. Since the region 0x20000000-0x3fffffff is a mirror of
+0x00000000-0x1fffffff, the actual physical base address for OpenSBI is
+0x1fe00000.
 
-Separate patches (1) tend to work better for the first contribution
-from a new maintainer, since there is less to know in advance.
+Notice: A "no4lvl" bootarg is currently required for successful boot on
+the DR1V90 platform, since the SoC hangs if the kernel attempts to use
+unsupported 4-level or 5-level paging modes. I plan to submit a
+follow-up patch to allow the kernel to query the supported MMU mode
+directly from the "mmu-type" property in the device tree, to avoid
+probing unsupported SATP modes.
 
-      Arnd
+This patch series is marked as RFC because basic drivers such as clock,
+reset and pinctrl are not yet supported. These essential drivers will be
+submitted in later patch series.
+
+Link: https://www.anlogic.com/product/fpga/saldragon/dr1 [1]
+Link: https://www.milianke.com/product-item-104.html [2]
+Link: https://nucleisys.com/product/900.php [3]
+Link: https://gist.github.com/pigmoral/7a61297593386dadbf357837d93adc95 [4]
+Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
+---
+Junhui Liu (10):
+      dt-bindings: vendor-prefixes: Add Anlogic, Milianke and Nuclei
+      dt-bindings: riscv: Add Nuclei UX900 compatibles
+      dt-bindings: riscv: Add Anlogic DR1V90
+      dt-bindings: timer: Add Anlogic DR1V90 CLINT
+      dt-bindings: interrupt-controller: Add Anlogic DR1V90 PLIC
+      dt-bindings: serial: snps-dw-apb-uart: Add Anlogic DR1V90 uart
+      riscv: Add Anlogic SoC famly Kconfig support
+      riscv: dts: Add initial Anlogic DR1V90 SoC device tree
+      riscv: dts: anlogic: Add Milianke MLKPAI FS01 board
+      riscv: defconfig: Enable Anlogic SoC
+
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |  1 +
+ .../devicetree/bindings/riscv/anlogic.yaml         | 27 +++++++
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |  1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml          |  1 +
+ .../devicetree/bindings/timer/sifive,clint.yaml    |  1 +
+ .../devicetree/bindings/vendor-prefixes.yaml       |  6 ++
+ arch/riscv/Kconfig.socs                            |  5 ++
+ arch/riscv/boot/dts/Makefile                       |  1 +
+ arch/riscv/boot/dts/anlogic/Makefile               |  2 +
+ arch/riscv/boot/dts/anlogic/dr1v90-mlkpai-fs01.dts | 28 +++++++
+ arch/riscv/boot/dts/anlogic/dr1v90.dtsi            | 86 ++++++++++++++++++++++
+ arch/riscv/configs/defconfig                       |  1 +
+ 12 files changed, 160 insertions(+)
+---
+base-commit: 89be9a83ccf1f88522317ce02f854f30d6115c41
+change-id: 20250710-dr1v90-basic-dt-352e9ae5acb8
+
+Best regards,
+-- 
+Junhui Liu <junhui.liu@pigmoral.tech>
+
 
