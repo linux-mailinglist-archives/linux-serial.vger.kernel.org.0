@@ -1,127 +1,88 @@
-Return-Path: <linux-serial+bounces-10337-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10338-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4C00B0ED23
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Jul 2025 10:26:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2FBEB0ED6E
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Jul 2025 10:39:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 261975645F3
-	for <lists+linux-serial@lfdr.de>; Wed, 23 Jul 2025 08:26:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE8081889DD8
+	for <lists+linux-serial@lfdr.de>; Wed, 23 Jul 2025 08:39:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD5A6279DDB;
-	Wed, 23 Jul 2025 08:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25DFB280317;
+	Wed, 23 Jul 2025 08:39:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="btXF0PQU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jx7G0ZLc"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 098BE19C540
-	for <linux-serial@vger.kernel.org>; Wed, 23 Jul 2025 08:26:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A8727FB1F;
+	Wed, 23 Jul 2025 08:39:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753259178; cv=none; b=FnyhXOXh+GIy1XeR+z6igm/mkjLlvX86bvzDt9dikvzrWiUCFnefNa+0PJ1hIfsh2o0brcxoYZ1QPIwvMKZ+dQ2s6CibvA00rwHesfGCZsSH9Zt33bTLndU67BTp5xcRWyWCp6jTKI8l+LrBk61CH/q818X4pyTuvOg7uTQ2SAg=
+	t=1753259965; cv=none; b=u7LGnjBm+nEu7xlIWeUW5oG3VdMoYY0D0ba40wG0j03+JNFcmfmET4OaRnp5byt7ztqI2vh7AyAuireegXiM267ro4IOkYPR/3xXoaepUC5n4YSXF5rsE9isGiNYMuj4D3dr/gbNszmAOJ3ZTgh7hRs6T0XM16yxkGKHLOUjtGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753259178; c=relaxed/simple;
-	bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jCloYtLoFCDiKSEau2dxTJ/M00O13aVkLW08ITUgivv7mrp/ug1drL+YnU/i+iiZF7SNfbZbVsAJaHZt8F3IdwcRlyyUjJ9Y+W3WsYWbYs8epAMdRw3ulCZfSU8Pbn0WS/WH3BXpZB+wzytNFXBzW54xnsvEWevsYMota1PyFuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=btXF0PQU; arc=none smtp.client-ip=209.85.208.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-32f1df58f21so65659661fa.3
-        for <linux-serial@vger.kernel.org>; Wed, 23 Jul 2025 01:26:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753259175; x=1753863975; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-        b=btXF0PQUQ8CBpakLU/b+/syt2ohH8XXatko/qeordcnK6q0sp+WLur1MUN1z4mbzn3
-         5x0AQmp4ByjJRP3W/8K4Yq45qiC2sBjbrgasbPtO3DSUIeBdllLifcHvoe5Hd1Kp8lJ7
-         1vY7W/zT1K6gkmX/iEHVwkA+wR82S0FPxLJm7kGQJooRaRTZOTpWtxgAAar++/sFO4tF
-         DOkLoR9Ksu6pZGpL88L/9in2yYvtBtEfJM9Cf+Gx239xo4vnobEE/5oNeOq3vFjwmUmb
-         5gxt1OfSA4kKhPwCv3mYxkMYOgf0+Z8/ZgYFjfyeyV2YVbNCMnm0VsI7mBksLEKo8QvA
-         yAeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753259175; x=1753863975;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vLCNSJ4DxVZDJPQ7cVNRDySeLw0NidDKviv2DX8YsFo=;
-        b=Z+p40jiAd4URaw9EZnT1KsTMwaRn5shexdBZSuaDCu0ccEn8AxZTc7IvGP60Nb/aFk
-         k2VxrgmNrqC7MfT/HGaZ95ccdBE7Xh9NY4nrvk9hq6NXVjiIbRNiHqobt0NHfwC7o8LT
-         xVwJj238f931bPsR/gg3730aNS3FDNtQyZl3DcuiEfzqUlLgLv5ro9WS3y4LPFtyzHyi
-         G06DIWDgPLA+A8dfL8KlMxosUY/XhEc6H80zz5VJN6mvT8VeO7obtV8YYdPHcrpoQvgy
-         /Js+X18P4dnDKSsh/EUXTgycoE9hH5miY1ripXojzeCw5YfrI4QVYmvU/ohP6LDVlo9G
-         L4lA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0U8sFPszfoy7JyirQ4jkF12jjuWP31F0Hxkhk8MIXpuROXC+5eA8dnCPJfMmvQzxBM0Cz6XuwGOO+Yjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2fOhsgK9+X4GIFPkR/9yl+sOM9VfuOqqwNwpCiuYFYfIHXTM1
-	yra3IFvQf68U8oX8/gIs8jIGGhv2gCLtAIkC+kKscrncneEAGTn1KZ2oFqRefVkAz1VaW0/dC5n
-	MfyQbVO/0zRXMjNvB8dLk6uPhWMo/Zz8w1EkxwFrd+w==
-X-Gm-Gg: ASbGnctocCMw+FpEmJohsxIJJpB8qVQYQurEXlPD6lgKYAnw3sAccOo8uKkGIJPhVDh
-	5K5WINZC5PnM+wmiNuqCOQkrBJ6UH56DPzZdQbKooeOT4ZcXkIOlgIbuzmE/3jdOID+KAjuqzwZ
-	KKc5kSvFZLV9wBYA7zhqzYxv5tpxN4XeiRdiAOoW1HTSMdwanPa2Y52QdD1NMHsJnDyxywYlM8h
-	CHzP1aKynteqW5ZrYg1lGrj3ibDexSyp32SyA==
-X-Google-Smtp-Source: AGHT+IH0oYbKSpWkVuBf003dbzVvfTBOHHrX9RRO2dg/IC8uEicDJYJ1DtzJrb75NvYCBb14KVroc6/DdzqY00r5HKs=
-X-Received: by 2002:a05:651c:40d1:b0:32b:82bf:cc55 with SMTP id
- 38308e7fff4ca-330dfd3ffe2mr3251421fa.31.1753259174959; Wed, 23 Jul 2025
- 01:26:14 -0700 (PDT)
+	s=arc-20240116; t=1753259965; c=relaxed/simple;
+	bh=40/39jNWpR02zi+1YCzS0Yt7kRfWfNcrgO/p13pf4oQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=aRNx+De7s5/eh1B1yBqxApoecZF05hOYIZDQGqmHnDDYshelNVQfqVi3a558Cfn9AONn5umwjVu7iPBk9d9Z2jwp8b/VY4hK0KB494OjjI4Ji8EYYkeQcz/lkNo7pEQk5GQnsSEBgBNzmoGAWk4fbjHm7cPKD0arXqbD4tGwt/Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jx7G0ZLc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0EDC4CEE7;
+	Wed, 23 Jul 2025 08:39:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753259964;
+	bh=40/39jNWpR02zi+1YCzS0Yt7kRfWfNcrgO/p13pf4oQ=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jx7G0ZLcQgFNF3ID5+WoRfdJ0/VnqdgixU/vOpXWSzkDr38afhwveEi50Wk/V7rzB
+	 G0zYV/kzhZvALf2nCNkagjKmk7uCJKcGBP/SvFQYFtelQORT/JqBz8wkBzp6TOdtDX
+	 0eJ9QFaouvAU7gIQxPxaZAo0QwaFD0WhaG4doWSMnnWHBFov1JtWHCopKZUI9XVvTh
+	 lCzqAoYty74Q8N8StWcgqy/geXz/uyUQSxcJ75Wj7Iw0Z01dcITZnEjotZ+h1hGMlx
+	 QUS+C+3ojwVVeAWIkVnkyYlNwKqkE68pfnIC1EExylfsEqVOaQvAznfgb3f1LDQFXe
+	 Zk3ca9zWN9eBw==
+From: Lee Jones <lee@kernel.org>
+To: linux@armlinux.org.uk, nicolas.ferre@microchip.com, 
+ alexandre.belloni@bootlin.com, claudiu.beznea@tuxon.dev, 
+ catalin.marinas@arm.com, will@kernel.org, olivia@selenic.com, 
+ herbert@gondor.apana.org.au, davem@davemloft.net, vkoul@kernel.org, 
+ andi.shyti@kernel.org, lee@kernel.org, broonie@kernel.org, 
+ gregkh@linuxfoundation.org, jirislaby@kernel.org, arnd@kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org, 
+ linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org, 
+ linux-serial@vger.kernel.org, o.rempel@pengutronix.de, 
+ daniel.machon@microchip.com, Robert Marko <robert.marko@sartura.hr>
+Cc: luka.perkov@sartura.hr
+In-Reply-To: <20250702183856.1727275-5-robert.marko@sartura.hr>
+References: <20250702183856.1727275-5-robert.marko@sartura.hr>
+Subject: Re: (subset) [PATCH v8 04/10] mfd: at91-usart: Make it selectable
+ for ARCH_MICROCHIP
+Message-Id: <175325995961.1695705.8338983998485530536.b4-ty@kernel.org>
+Date: Wed, 23 Jul 2025 09:39:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
-In-Reply-To: <20250722-axiado-ax3000-soc-and-evaluation-board-support-v6-0-543979a60ccf@axiado.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 23 Jul 2025 10:25:43 +0200
-X-Gm-Features: Ac12FXyMa773Yh6jS77vJV_hBM8tHIZDeqZfz8q32XqMPZtq2HvjPMqFGcKYSRQ
-Message-ID: <CAMRc=MdFoAa2omJgL__4mRqX5CYyhZ3VU_Uy-Tf1oPSuZdV93g@mail.gmail.com>
-Subject: Re: [PATCH v6 00/10] Axiado AX3000 SoC and Evaluation Board Support
-To: Harshit Shah <hshah@axiado.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby <jirislaby@kernel.org>, 
-	Michal Simek <michal.simek@amd.com>, =?UTF-8?Q?Przemys=C5=82aw_Gaj?= <pgaj@cadence.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Frank Li <Frank.Li@nxp.com>, 
-	Boris Brezillon <bbrezillon@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Linus Walleij <linus.walleij@linaro.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, soc@lists.linux.dev, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org, 
-	Jan Kotas <jank@cadence.com>, linux-serial@vger.kernel.org, 
-	linux-i3c@lists.infradead.org, 
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-c81fc
 
-On Tue, Jul 22, 2025 at 10:16=E2=80=AFPM Harshit Shah <hshah@axiado.com> wr=
-ote:
->
-> -------------------------------
-> Hello SoC maintainers,
->
-> This patch series adds initial support for the Axiado AX3000 SoC and its
-> evaluation board.
->
-> Change from v6
-> - Ran "b4 trailer -u" and add reviewed by Krzysztof
->
-> Add soc@lists.linux.dev in the to list and send this series again as per
-> suggestion by Krzysztof and Arnd. Thank you.
->
-> Checked locally and able to apply these patchset to soc git.
-> (git/soc/soc.git, for-next, checked commit: 7dfbf3176d886ff9a0c7786942d3a=
-89809d0641e)
->
-> Sorry for late request, please consider this series for the 6.17.
->
+On Wed, 02 Jul 2025 20:36:02 +0200, Robert Marko wrote:
+> LAN969x uses the Atmel USART, so make it selectable for ARCH_MICROCHIP to
+> avoid needing to update depends in future if other Microchip SoC-s use it
+> as well.
+> 
+> 
 
-I can't speak for the rest but do you want me to take the GPIO
-dt-bindings patches through the GPIO tree for v6.17 separately?
+Applied, thanks!
 
-Bartosz
+[04/10] mfd: at91-usart: Make it selectable for ARCH_MICROCHIP
+        commit: ef37a1e2485724f5287db1584d8aba48e8ba3f41
+
+--
+Lee Jones [李琼斯]
+
 
