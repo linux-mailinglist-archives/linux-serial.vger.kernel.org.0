@@ -1,52 +1,53 @@
-Return-Path: <linux-serial+bounces-10507-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10508-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BED1BB2D3D5
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Aug 2025 08:00:22 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C1221B2D3E2
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Aug 2025 08:10:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB4B75831F4
-	for <lists+linux-serial@lfdr.de>; Wed, 20 Aug 2025 06:00:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA2A97A6F33
+	for <lists+linux-serial@lfdr.de>; Wed, 20 Aug 2025 06:08:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57CB31FBCB2;
-	Wed, 20 Aug 2025 06:00:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD9F627B347;
+	Wed, 20 Aug 2025 06:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hxANGoCw"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="hiefKpW8"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 293891B3925
-	for <linux-serial@vger.kernel.org>; Wed, 20 Aug 2025 06:00:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5D8127587E
+	for <linux-serial@vger.kernel.org>; Wed, 20 Aug 2025 06:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755669619; cv=none; b=hCcEQirqIuH6uK7DsMKwkn1LO0QFx5ye9onLBfJ9e8M3t4/0EagA3zwevqszCQRUeb9D+AHKY4HA02obhbN0VMl+jiDHU32mQ20w2SUvnz3wAR2ETNGl0AgPIXE5GYlMK07oqeKyrbqt5al0540iqio+3JXNXHG1mW30AGfgrk0=
+	t=1755670216; cv=none; b=LCBmr2vK3fkchySkrAzO8tn7ft5JxcgGA8a0GwdmenG0+VgW9HElI9tRHQKZ3+GeytbYbqZ8ExE4MbnM6W2/ATAIu2IXVfh9nkNY1+GvJF+VTNrotx2BSzrn6XLQKCwWmTtJB6ETCcQBuIBsHsuFokNM1/HWfg374qhx1jChrLw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755669619; c=relaxed/simple;
-	bh=sgWFxSDCHgEqBkePeKxi8tjahuCCir9c1Kr+yHuo0/0=;
+	s=arc-20240116; t=1755670216; c=relaxed/simple;
+	bh=EMzPtBBJPsXJB9o5RLBIYvB5UGWZmsknLVSvH8VStZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uwBcs597k+4r2e8CwUWf2MmxA/MUFb8Mlfqnf/kNf8vpHWYWhjIo8psWByat9oKBfuWq7faEYXwQ+dfmvZB3CdyltZkugHJ053lPYgBmBSlqRwGu+TAzHqFmDXgl6R3tg6RQiUwD2gck/kcUyF8k1o/6MSc2ID+xs4E88+GimpM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hxANGoCw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16AC4C4CEEB;
-	Wed, 20 Aug 2025 06:00:17 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CFAxPbAJXVa2GFmX6kbI2dCAObkpO3Hqw0UplTqmdtLAMwvWXZIOXGsREmNocYEmK5zl61wfAC5aUxjgIWZHtkffeW8Lg1oFeHIVHdjyG2IHUEOFiU63+iAV7Ax1Kr9DfrUNvfESf7SEZpNRMJZMAThHCjeCoFKCkF/OxXrY6BU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=hiefKpW8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE885C4CEEB;
+	Wed, 20 Aug 2025 06:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1755669618;
-	bh=sgWFxSDCHgEqBkePeKxi8tjahuCCir9c1Kr+yHuo0/0=;
+	s=korg; t=1755670216;
+	bh=EMzPtBBJPsXJB9o5RLBIYvB5UGWZmsknLVSvH8VStZc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hxANGoCwVHdXiXfIfAEKMW2LtwryGQC02XQ6ueJs049XGsrHGmYVDM728drPn0t/M
-	 sMkkQLiUvhUusH8yAaziWRkk3MgkhQIU6JnzFhAAyS6JuXjsfS/ykg14ncdMKp9r5V
-	 2X6nvvSJc9WHIomQNQwp8a3XKfkAoisCTEZSofeY=
-Date: Wed, 20 Aug 2025 08:00:15 +0200
+	b=hiefKpW8jbv+OCda4tndzWNjGNRZC6ZWrwlGJVynoAeIbkTjRWahqLzkawaNgBaLz
+	 uRPp9AmioO5PKhjZH/vpUrJunHMdHuyBsdc2CR0EFAD8uK5D3c2cwlyAvS+YxVs79Z
+	 oQqpaSX6pV91Wur8Pyuh72zFAaOSxpfXTnIrxm7E=
+Date: Wed, 20 Aug 2025 08:10:13 +0200
 From: Greg KH <gregkh@linuxfoundation.org>
 To: adriana@arista.com
 Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.rg,
 	ilpo.jarvinnen@lininux.intel.com, andriy.shevchenko@linux.intel.com,
 	jirislaby@kernel.org, john.ogness@linutronix.de
 Subject: Re: [PATCH v2] serial: 8250 dw: clear FIFO before writting LCR
-Message-ID: <2025082055-daytime-lubricant-c017@gregkh>
+Message-ID: <2025082056-mango-unengaged-516a@gregkh>
 References: <20250819190621.3452231-1-adriana@arista.com>
+ <2025082055-daytime-lubricant-c017@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -55,18 +56,21 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250819190621.3452231-1-adriana@arista.com>
+In-Reply-To: <2025082055-daytime-lubricant-c017@gregkh>
 
-On Tue, Aug 19, 2025 at 12:06:21PM -0700, adriana@arista.com wrote:
-> This patch is proposing a custom configuration for Synopsys DesignWare
-> serial to be used by products with associated compatible string in the
-> device tree.
+On Wed, Aug 20, 2025 at 08:00:15AM +0200, Greg KH wrote:
+> On Tue, Aug 19, 2025 at 12:06:21PM -0700, adriana@arista.com wrote:
+> > This patch is proposing a custom configuration for Synopsys DesignWare
+> > serial to be used by products with associated compatible string in the
+> > device tree.
+> 
+> <snip>
+> 
+> you sent 2 v2 patches?  Which one is which?
 
-<snip>
+Oops, no, I got 3 different ones?
 
-you sent 2 v2 patches?  Which one is which?
-
-confused,
+Still confused,
 
 greg k-h
 
