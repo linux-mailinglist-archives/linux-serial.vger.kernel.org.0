@@ -1,136 +1,187 @@
-Return-Path: <linux-serial+bounces-10629-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10631-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 30CEAB422FA
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Sep 2025 16:04:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45199B4269E
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Sep 2025 18:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 893617C4C42
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Sep 2025 14:03:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFA3A3B4BF8
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Sep 2025 16:19:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B94311586;
-	Wed,  3 Sep 2025 14:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37FF52C0285;
+	Wed,  3 Sep 2025 16:19:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="kuddoeeB"
+	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="eS31jYrk"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26102F7441;
-	Wed,  3 Sep 2025 14:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFE0B2BD015;
+	Wed,  3 Sep 2025 16:19:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756908177; cv=none; b=GhvhDcUwulzJqXbV3X54YusDQZYCKq976Z8B2p0MNfKb2w5uscWW3WKkgtfbLbfqoXM6kAjSq7H8RVjoCKjU0Sla++Y6f4rCpPDtDwnueqpABI4afBuIBzWr6bfJMsznxPUskDG7DT7BkMouHAMc6CTbMTRVykrTFLOPYX0Wz6c=
+	t=1756916365; cv=none; b=oKW8geNGv+AADKSMnwds0zV4s4WPswqavGefgdog0AGeuymY7QXFxX3wcQOOX9ar0HMKMnsJQfDWm1SGvH6bHBP19XUFpLis5Ap8dGBDze5fltJ7RvumDf0la3FfkdkDS5bAn3a5n2sjVylePrWbIVBquw3g51ZKHntBSrmGj0U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756908177; c=relaxed/simple;
-	bh=+Ou7/TJXaHnviKBEr5ILfWD+oVZwfeeOf3QKT9caAkE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=MEM9EDYXLAK0MnHSXz1I/pArB1ui+oN1N8UXJBSnZIr89BDUHpugwpc8pY7+JDK+qWnUUULCwyFeeL3w4xbSNRDqhBCGGsiK5GBOU7x4mmesIxFLMxyh+QW9A1sMk8l22V4XFcuvVLoktPmafLH1FQjntlP5dgJ6pgdg9UIcTHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=kuddoeeB; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1756908175; x=1788444175;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=+Ou7/TJXaHnviKBEr5ILfWD+oVZwfeeOf3QKT9caAkE=;
-  b=kuddoeeB7GToGKL1LyvBq/d4T/ZZAafpK8vfzgitgpd5zSsvaDnqWlNC
-   /oYEQuLQwVqp6pMkko5Fc7XMJiDBWwijHcljKRowRNe+w4RJ/gyD3GOCV
-   veXb6sgqF3gSAgl5NTS7QC/sFdh7vBgzuxkw7ZQGj4NlQKmpq1tlIHHa1
-   PcFgQq4fLz+WkeMJkJoTG6L01uIwFwkZj7K4FojdaDeYgMG49yZlneMGI
-   rZrCLf4BmswAFtxUH/WMj4dkbcrTXjgL7lbLg9wHKTwrUW0zMpoSAZyfa
-   Ln+K5zuvEUllL9KkUPvV1B1/UjrCTE116DpdFcld6y5xFa0s725N8DkRI
-   w==;
-X-CSE-ConnectionGUID: v8Jh6wOIR5q2UVBlaHd94g==
-X-CSE-MsgGUID: Ky7Vg2BiRuyQ5qmJAKasTw==
-X-IronPort-AV: E=Sophos;i="6.18,235,1751266800"; 
-   d="scan'208";a="46572767"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Sep 2025 07:01:44 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Wed, 3 Sep 2025 07:01:14 -0700
-Received: from [10.150.206.75] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.44 via Frontend
- Transport; Wed, 3 Sep 2025 07:01:09 -0700
-Message-ID: <50ca5062-5bbd-4c72-83c6-1d9abc6bde2e@microchip.com>
-Date: Wed, 3 Sep 2025 16:01:08 +0200
+	s=arc-20240116; t=1756916365; c=relaxed/simple;
+	bh=nJLUtoBhFMwhPe7EM+OsdriyrpDoWVFsUNUD8cBC0Ec=;
+	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
+	 Content-Type:Subject; b=Bv3bMZPQbwBtfStdN3v0Oah+R7jsBtqyqzClSRTojOaD2Wd+sJIT4SwNjspAWsqwVUhGhYu840zMMWs1Yjr5hDBhgvXzup6TbXz4EDRESMMHTxz+wHUCdqx8nBJkPYmhFJs9SO8zh5Lj7oPoCzarEnQyq1pynoq/FONnhWv/99Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=eS31jYrk; arc=none smtp.client-ip=162.243.120.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
+	:Date:subject:date:message-id:reply-to;
+	bh=AjeNXlDXHIZuFoDWq8mczdVnxoiHEn6n2ReMUKbxEmI=; b=eS31jYrkCqgk2rvfzA+7Zspq5o
+	JWlDn286LoZzyCNB+IMD8OnV/QvCcTiYaItQOfsBKqnTA4Fheo0RaiP496aNPZ6/GFVgn1xr5NP5p
+	YE0CaULC6D81mTRV3jxEyUkqRcANHw3z5BXV45Fm4jDQUVTQqLwTLWIc+gZoYZGhycrI=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:57240 helo=pettiford)
+	by mail.hugovil.com with esmtpa (Exim 4.92)
+	(envelope-from <hugo@hugovil.com>)
+	id 1utpYC-0008U6-JZ; Wed, 03 Sep 2025 11:37:33 -0400
+Date: Wed, 3 Sep 2025 11:37:31 -0400
+From: Hugo Villeneuve <hugo@hugovil.com>
+To: Tapio Reijonen <tapio.reijonen@vaisala.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
+ <jirislaby@kernel.org>, Alexander Shiyan <shc_work@mail.ru>, Hugo
+ Villeneuve <hvilleneuve@dimonoff.com>, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org
+Message-Id: <20250903113731.24f5ac2499e92246bc0c93eb@hugovil.com>
+In-Reply-To: <20250903-master-max310x-improve-interrupt-handling-v1-1-bfb44829e760@vaisala.com>
+References: <20250903-master-max310x-improve-interrupt-handling-v1-1-bfb44829e760@vaisala.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: (subset) [PATCH v8 00/10] arm64: lan969x: Add support for
- Microchip LAN969x SoC
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Vinod Koul <vkoul@kernel.org>,
-	<linux@armlinux.org.uk>, <alexandre.belloni@bootlin.com>,
-	<catalin.marinas@arm.com>, <will@kernel.org>, <olivia@selenic.com>,
-	<herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-	<andi.shyti@kernel.org>, <lee@kernel.org>, <broonie@kernel.org>,
-	<gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <arnd@kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-crypto@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-i2c@vger.kernel.org>, <linux-spi@vger.kernel.org>,
-	<linux-serial@vger.kernel.org>, <o.rempel@pengutronix.de>,
-	<daniel.machon@microchip.com>, Robert Marko <robert.marko@sartura.hr>,
-	<luka.perkov@sartura.hr>, Vinod Koul <vinod.koul@intel.com>
-References: <20250702183856.1727275-1-robert.marko@sartura.hr>
- <175327377884.189941.15214972441246653208.b4-ty@kernel.org>
- <bac5390f-725a-43db-a2b6-17a68d0d733c@tuxon.dev>
- <20250903-gratify-sustained-9acc011bc3c9@thorsis.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20250903-gratify-sustained-9acc011bc3c9@thorsis.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	* -1.6 NICE_REPLY_A Looks like a legit reply (A)
+Subject: Re: [PATCH] serial: max310x: improve interrupt handling
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 
-On 03/09/2025 at 15:16, Alexander Dahl wrote:
-> Hello,
+Hi,
+
+On Wed, 03 Sep 2025 09:23:04 +0000
+Tapio Reijonen <tapio.reijonen@vaisala.com> wrote:
+
+> When there is a heavy load of receiving characters to all
+> four UART's, the warning 'Hardware RX FIFO overrun' is
+> sometimes detected.
+> The current implementation always service first UART3 until
+> no more interrupt and then service another UARTs.
+
+To improve clarity and reduce confusion, maybe change to
+something like:
+
+... always service first the highest UART until
+no more interrupt and then service another UART (ex: UART3 will be
+serviced for as long as there are interrupts for it, then UART2, etc).
+
+
 > 
-> Am Thu, Jul 31, 2025 at 11:05:07AM +0300 schrieb Claudiu Beznea:
->> Hi, Vinod,
->>
->> On 23.07.2025 15:29, Vinod Koul wrote:
->>>
->>> On Wed, 02 Jul 2025 20:35:58 +0200, Robert Marko wrote:
->>>> This patch series adds basic support for Microchip LAN969x SoC.
->>>>
->>>> It introduces the SoC ARCH symbol itself under the ARCH_MICROCHIP symbol
->>>> which allows to avoid the need to change dependencies of the drivers that
->>>> are shared for Microchip SoC-s in the future.
->>>>
->>>> DTS and further driver will be added in follow-up series.
->>>>
->>>> [...]
->>>
->>> Applied, thanks!
->>>
->>> [08/10] dma: xdmac: make it selectable for ARCH_MICROCHIP
->>>          commit: e56982021f5303b2523ac247e3c79b063459d012
->>
->> As this one depends, as well, on the first 3 patches in the series (Robert,
->> please correct me if I'm wrong), and there are still discussions ongoing,
->> can you please drop it until all is clear on the first 3 patches?
->>
->> Otherwise, applying only this patch will lead to AT91 XDMAC driver not
->> being built for SAMA5{D2, D3, D4}, SAMA7{G5, D65} SoCs. Linux is not
->> booting on SAMA7G5 SoC only with this patch applied.
+> This commit improve interrupt service routine to handle all
+> interrupt sources, e.g. UARTs when a global IRQ is detected.
+
+The current code already handle all interrupt sources. What you
+maybe could be saying is that you handle all individual interrupt
+sources before reading the global IRQ register again?
+
+You could also add in your commit message that your modification has the
+nice side-effect of improving the efficiency of the driver by reducing
+the number of reads of the global IRQ register.
+
+
 > 
-> Second that.  Just tested v6.17-rc4 on sam9x60 and DMA is not working
-> at all because this driver can not be selected anymore.  This must be
-> fixed before v6.17 release please!
+> Signed-off-by: Tapio Reijonen <tapio.reijonen@vaisala.com>
+> ---
+>  drivers/tty/serial/max310x.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x.c
+> index ce260e9949c3c268e706b2615d6fc01adc21e49b..3234ed7c688ff423d25a007ed8b938b249ae0b82 100644
+> --- a/drivers/tty/serial/max310x.c
+> +++ b/drivers/tty/serial/max310x.c
+> @@ -824,15 +824,26 @@ static irqreturn_t max310x_ist(int irq, void *dev_id)
+>  
+>  	if (s->devtype->nr > 1) {
+>  		do {
+> -			unsigned int val = ~0;
+> +			unsigned int val;
+> +			unsigned int global_irq = ~0;
+> +			int port;
+>  
+>  			WARN_ON_ONCE(regmap_read(s->regmap,
+> -						 MAX310X_GLOBALIRQ_REG, &val));
+> -			val = ((1 << s->devtype->nr) - 1) & ~val;
+> +				MAX310X_GLOBALIRQ_REG, &global_irq));
 
-Yep, I'll try to fast forward patch 02 of this series before 6.17-final 
-(this instead of reverting XDMA patch).
+You changed the indentation here...
 
-Regards,
-   Nicolas
+> +
+> +			val = ((1 << s->devtype->nr) - 1) & ~global_irq;
+> +
+>  			if (!val)
+>  				break;
+> -			if (max310x_port_irq(s, fls(val) - 1) == IRQ_HANDLED)
+> -				handled = true;
+> +
+> +			do {
+> +				port = fls(val) - 1;
+> +				if (max310x_port_irq(s, port) == IRQ_HANDLED)
+> +					handled = true;
+> +
+> +				global_irq |= 1 << port;
+> +				val = ((1 << s->devtype->nr) - 1) & ~global_irq;
+> +			} while (val);
+>  		} while (1);
+>  	} else {
+>  		if (max310x_port_irq(s, 0) == IRQ_HANDLED)
+
+Maybe you could simplify (and improve readability) with this instead:
+
+---
+                        val = ((1 << s->devtype->nr) - 1) & ~val;
+                        if (!val)
+                                break;
+
+-                       if (max310x_port_irq(s, fls(val) - 1) == IRQ_HANDLED)
+-                               handled = true;
++
++                       do {
++                               unsigned int channel;
++
++                               channel = fls(val) - 1;
++
++                               if (max310x_port_irq(s, channel) == IRQ_HANDLED)
++                                       handled = true;
++
++                               val &= ~(1 << channel);
++                       } while (val);
+---
+
+> 
+> ---
+> base-commit: c8bc81a52d5a2ac2e4b257ae123677cf94112755
+> change-id: 20250903-master-max310x-improve-interrupt-handling-aa22b7ba1c1d
+> 
+> Best regards,
+> -- 
+> Tapio Reijonen <tapio.reijonen@vaisala.com>
+> 
+> 
+> 
+
+-- 
+Hugo Villeneuve
 
