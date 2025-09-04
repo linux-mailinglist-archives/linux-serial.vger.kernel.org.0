@@ -1,84 +1,74 @@
-Return-Path: <linux-serial+bounces-10640-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10645-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DEACB44808
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 23:06:01 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A24EDB4486B
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 23:25:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1BBA06163
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 21:05:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6F1C15A50CB
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 21:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA25291C11;
-	Thu,  4 Sep 2025 21:05:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 271312BE7B3;
+	Thu,  4 Sep 2025 21:25:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="txXorDv4"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="rLE+MT2E"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
+Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEB4C290DBB;
-	Thu,  4 Sep 2025 21:05:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39D3A278751;
+	Thu,  4 Sep 2025 21:25:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757019955; cv=none; b=oQcJ7i7YCIUCu3dxeGI7T0n7yzvpx4uclFmlgp1mDBPW7xfhE8vGcu78eD0dRZmFd/a8rlL3KGvB+YXpKPJo6T4uFypLKchk/EywLiqxUo7CZGe0F3h9XDAiEl2SGtpjGPpqaZieRewDWFz15pLlZSu1dxFMyBTL8JsS33QBc5w=
+	t=1757021110; cv=none; b=jsnWymmPouN1ulnRcI2ur//ShWo2Gm6mlTW5vnMofcsGyuUivjLigy2cvWWE4hrKIp110fJMGeGhmGJhkMxFvlNnIZlrgR+GBr6licT0C7hvczeQJkDvHUUI7XSeQK8AM1oM4lVP/nueaXkVu/schl4FAK3yZg34UCrggr5YTdM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757019955; c=relaxed/simple;
-	bh=39/B6WSkEZZ3cp0giMe6gcf/hX7JaIajniFWVqvJ2Y0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=i+2tPQQDOcOPmKY324F+kVgNndMswrmUpqsRy0B1Ug9zwYawY0xV3vAcjDEHCb8V2ZOuu4e+elg8/EWhkSsKEyJQC4ux4/EnecOuX8QfPpJT4OyXDGSw068FNnPmTHoEsz7ON2JO5I21GtuhfOG+wfkRCihtj5HLhwKrDyHjCBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=txXorDv4; arc=none smtp.client-ip=192.19.144.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
-	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id B5A58C0019F8;
-	Thu,  4 Sep 2025 14:05:52 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com B5A58C0019F8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
-	s=dkimrelay; t=1757019952;
-	bh=39/B6WSkEZZ3cp0giMe6gcf/hX7JaIajniFWVqvJ2Y0=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=txXorDv4HewUVQbZTj2+8dXmaYOEY/R0h2JJSm1uglaPfsRnvdwI428fj0gNWStQG
-	 cgHB0/hEeXXKMSuqpeiUOwSvibdL2u5CEoFz41lx9wnLdxjmsK/7DjrNIgwWTNHFp1
-	 pbJ5foXJwg6kfeRL6BeRd7nnaYUFq6toObuUvcoQ=
-Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 3EB1A18000530;
-	Thu,  4 Sep 2025 14:05:52 -0700 (PDT)
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-To: bcm-kernel-feedback-list@broadcom.com,
-	Andrea della Porta <andrea.porta@suse.com>,
-	linus.walleij@linaro.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	florian.fainelli@broadcom.com,
-	wahrenst@gmx.net,
-	linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	iivanov@suse.de,
-	svarbanov@suse.de,
-	mbrugger@suse.com,
-	Jonathan Bell <jonathan@raspberrypi.com>,
-	Phil Elwell <phil@raspberrypi.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Al Cooper <alcooperx@gmail.com>,
-	linux-mmc@vger.kernel.org,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-serial@vger.kernel.org
-Cc: Florian Fainelli <f.fainelli@gmail.com>
-Subject: Re: [PATCH v2 1/5] dt-bindings: mmc: Add support for capabilities to Broadcom SDHCI controller
-Date: Thu,  4 Sep 2025 14:05:51 -0700
-Message-ID: <20250904210551.222689-1-florian.fainelli@broadcom.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <181cc905566f2d9b2e5076295cd285230f81ed07.1756386531.git.andrea.porta@suse.com>
-References: <cover.1756386531.git.andrea.porta@suse.com> <181cc905566f2d9b2e5076295cd285230f81ed07.1756386531.git.andrea.porta@suse.com>
+	s=arc-20240116; t=1757021110; c=relaxed/simple;
+	bh=8Yeh/tAVOAYkSI0FRSgjmVSkAYxuZ9zbAdCdxFJkaJk=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=kBT45ciLqGrevR3Y4uRUc8yqy+9vWJZ6o3yMgEB7ZYM7v+RbyiG7iWxt32Z+GRjdHH6SGipDSynNuk7foVdc6E0m93z+dc9K0olJogoM8yJopKRaJ4hYpWFGPFTM3q4oCxhtL04EiTKeHN4fKiWjEnJBYtWNk5k1+iexVyg91mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=rLE+MT2E; arc=none smtp.client-ip=198.47.19.245
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllvem-sh03.itg.ti.com ([10.64.41.86])
+	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTP id 584LOwRV3104322;
+	Thu, 4 Sep 2025 16:24:58 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1757021098;
+	bh=W+7k4iMDy3tPbRxwd98DTYf2oybvEfzGMmh8cURrCmg=;
+	h=From:To:CC:Subject:Date;
+	b=rLE+MT2EsLwL45Qi+zX5/TxKSxsrRerZ0ZRN/aFJYEVqwq+I+ZD6Bje3gy9xr+3qd
+	 xCS87Ynl2PO/dmzIzf9UWCA0HwP0IWn9HyM1CFMWdhzn+49lGY5r2Nhw8WDzAzrWr2
+	 AQ4msLeW8PXxpYl2DrSZ9T/fRJIO3rLsA6XMXCRY=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by fllvem-sh03.itg.ti.com (8.18.1/8.18.1) with ESMTPS id 584LOv9w405688
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-SHA256 bits=128 verify=FAIL);
+	Thu, 4 Sep 2025 16:24:57 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55; Thu, 4
+ Sep 2025 16:24:57 -0500
+Received: from lelvem-mr06.itg.ti.com (10.180.75.8) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.55 via
+ Frontend Transport; Thu, 4 Sep 2025 16:24:57 -0500
+Received: from uda0506412.dhcp.ti.com (uda0506412.dhcp.ti.com [128.247.81.19])
+	by lelvem-mr06.itg.ti.com (8.18.1/8.18.1) with ESMTP id 584LOvld3611150;
+	Thu, 4 Sep 2025 16:24:57 -0500
+From: Kendall Willis <k-willis@ti.com>
+To: <gregkh@linuxfoundation.org>, <jirislaby@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <vigneshr@ti.com>,
+        <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC: <d-gole@ti.com>, <vishalm@ti.com>, <sebin.francis@ti.com>,
+        <msp@baylibre.com>, <khilman@baylibre.com>, <a-kaur@ti.com>,
+        <k-willis@ti.com>, <john.ogness@linutronix.de>,
+        <andriy.shevchenko@linux.intel.com>, <yujiaoliang@vivo.com>,
+        <b-liu@ti.com>, <u.kleine-koenig@baylibre.com>
+Subject: [PATCH 0/3] serial: 8250: omap: Add wakeup support
+Date: Thu, 4 Sep 2025 16:24:52 -0500
+Message-ID: <20250904212455.3729029-1-k-willis@ti.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -86,21 +76,65 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-From: Florian Fainelli <f.fainelli@gmail.com>
+This series adds wakeup support for the serial 8250_omap driver. On the
+TI K3 AM62 family of devices, the UARTs are able to wakeup the system
+from various low power modes by using I/O daisy-chaining.
 
-On Thu, 28 Aug 2025 15:17:10 +0200, Andrea della Porta <andrea.porta@suse.com> wrote:
-> The Broadcom BRCMSTB SDHCI Controller device supports Common
-> properties in terms of Capabilities.
-> 
-> Reference sdhci-common schema instead of mmc-controller in order
-> for capabilities to be specified in DT nodes avoiding warnings
-> from the DT compiler.
-> 
-> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
-> ---
+The wakeup functionality is implemented by adding the pinctrl state
+'wakeup' in which specific flags are set on the pins to enable wakeup
+via I/O daisy-chain. If the 'wakeup' pinctrl state exists for the serial
+device, the 'wakeup' pinctrl state is selected on suspend. Upon resume,
+the pinctrl 'default' state is selected.
 
-Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
---
-Florian
+The commits "dt-bindings: serial: 8250_omap: Add wakeup pinctrl state"
+and "serial: 8250: omap: Support wakeup pinctrl state on suspend" were
+picked from this series [1]. The commit "dt-bindings: serial: 8250_omap:
+Add wakeup pinctrl state" was updated to follow the structure of a
+similar patch [2] by Markus for the m_can driver. The commit "serial:
+8250: omap: Support wakeup pinctrl state on suspend" was updated to only
+include s2ram functionality instead of a poweroff state.
+
+Implementation
+--------------
+This series is intended to be implemented along with the following
+series:
+
+1. "pmdomain: ti_sci: Handle wakeup constraint if device has pinctrl
+   wakeup state": Patch which skips setting constraints for wakeup sources
+   that use pinctrl state 'wakeup'.
+
+2. "serial: 8250: omap: Add wakeup support" (this series): Implements
+   wakeup from the UARTs for TI K3 SoCs
+
+3. "arm64: dts: ti: k3-am62: Support Main UART wakeup": Implements the
+   functionality to wakeup the system from the Main UART
+
+Testing
+-------
+Tested on a SK-AM62B-P1 board with all series and dependencies
+implemented. Suspend/resume verified with the Main UART wakeup source
+by entering a keypress on the console.
+
+[1] https://lore.kernel.org/all/20240523075819.1285554-1-msp@baylibre.com/
+[2] https://lore.kernel.org/all/20250820-topic-mcan-wakeup-source-v6-12-v9-1-0ac13f2ddd67@baylibre.com/
+
+Kendall Willis (1):
+  dt-bindings: serial: 8250_omap: Update wakeup-source type property
+
+Markus Schneider-Pargmann (2):
+  dt-bindings: serial: 8250_omap: Add wakeup pinctrl state
+  serial: 8250: omap: Support wakeup pinctrl state on suspend
+
+ .../devicetree/bindings/serial/8250_omap.yaml | 25 ++++++++++++-
+ drivers/tty/serial/8250/8250_omap.c           | 36 +++++++++++++++++++
+ 2 files changed, 60 insertions(+), 1 deletion(-)
+
+
+base-commit: 4ac65880ebca1b68495bd8704263b26c050ac010
+-- 
+2.34.1
+
 
