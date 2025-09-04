@@ -1,195 +1,106 @@
-Return-Path: <linux-serial+bounces-10638-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10642-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 227CDB442F2
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 18:37:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B00FB44829
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 23:12:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 32A86483115
-	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 16:37:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 120E53BCE9C
+	for <lists+linux-serial@lfdr.de>; Thu,  4 Sep 2025 21:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 326BB2DD60E;
-	Thu,  4 Sep 2025 16:37:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F3B029A30E;
+	Thu,  4 Sep 2025 21:11:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="AFvd+gkJ"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="suz2rJic"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+Received: from relay.smtp-ext.broadcom.com (relay.smtp-ext.broadcom.com [192.19.144.207])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06DD12C3768;
-	Thu,  4 Sep 2025 16:37:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0CE2287256;
+	Thu,  4 Sep 2025 21:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.19.144.207
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757003826; cv=none; b=FUtmQ6/TyNMR+fcfijeOwPNMqfNyK4fXB6uGaY/kb5vtEL9gavqNjlIzyPl9XM7T44ytGX9DC9PEDYtVRYmOPEj7eNMZBKd0/mz9jfeZdhaa8Euef/9BWbnlnDKXXDB9ghZyCAGO2/FaQMTJeOqU/COioSB43fvMyzigaGG2Vyc=
+	t=1757020317; cv=none; b=ACdJQt+b+m76445qATgBszKiMyRJHxSODVqLI57OKMkMQ1wFE7udOp6cN0qlTutTd2Rwh5jMRvixq1/Wl1VUR3VhtsVfDsD/M3iW3wRzF3EPWDGTdMM5jcQ73LnCRrf3wOO9Waqx+cO5ebgt83EEF0pbxR2OZ4Fv66Ey9nBkdN0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757003826; c=relaxed/simple;
-	bh=aI33hpNZv7QPjfBmT68XRHirLg/skD+4qO8gAzqEKZ0=;
-	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
-	 Content-Type:Subject; b=C/tR5v7cswLTZ/mlgQUbFx8Hi+bfjCIRIBa1l6hNSedpr4BppO2fZ0UN5wUGJJFE7ZL2ZWmaLjnL4BdQhVm8RKjpIPf+eumf08Z/ksWrn/kCScMX1fLDEO6u9gwZ9V7cIio3Hy252KURi8wD7pIradhcPn0dKvYzvspcIqkjzY8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=AFvd+gkJ; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
-	:Date:subject:date:message-id:reply-to;
-	bh=aN8IZ0Npe/EHb0ZHn3hHSyVNoCWWTZZacN+GW1RF+5o=; b=AFvd+gkJajTuSscCJYkHR6IYsP
-	SSPOXHvzg2ox0IaxGnVFS1GvhsaGRvJkzOGo3oiUJgMgFmuMUQAaXQbAk7BWaqBm4tCZZ7EKOD/lD
-	TcyKWNmHTAcOprBrSKM7RzoHYVkmUdFv1hZBjTckfA/lFIWjt7MxVQbdtLPbwGtPGfVw=;
-Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:43692 helo=pettiford)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1uuCx1-0003c6-O7; Thu, 04 Sep 2025 12:36:45 -0400
-Date: Thu, 4 Sep 2025 12:36:42 -0400
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: Tapio Reijonen <tapio.reijonen@vaisala.com>
-Cc: Jiri Slaby <jirislaby@kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>, Alexander Shiyan <shc_work@mail.ru>, Hugo
- Villeneuve <hvilleneuve@dimonoff.com>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org
-Message-Id: <20250904123642.c8dd7bd6bf693ccbb5f6989b@hugovil.com>
-In-Reply-To: <e88f3c74-2ea0-4266-b5f7-62b87a1987c5@vaisala.com>
-References: <20250903-master-max310x-improve-interrupt-handling-v1-1-bfb44829e760@vaisala.com>
-	<214edb7a-2631-4f7f-9516-a38a3796cc0b@kernel.org>
-	<e88f3c74-2ea0-4266-b5f7-62b87a1987c5@vaisala.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1757020317; c=relaxed/simple;
+	bh=yR0GeRsnT6KXyUB9lde0kiI5FPpCvrnFXwk4iYvFZCA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ZM6FdIThCUMujyOOOBK4b3KH+xW2tHxpKxp0XgYgtD4wHFcBcISBrcdtnlNcStV4QNu3k8Yger8mQH8jpF1jBO1cAqbLcjT3OOnum2SV4vLUFMJmAWuZltUnR/J8lMDAtFliK+n+usOE9BhTCKmr+MY/OpU4cRCPAz9hNC841K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=suz2rJic; arc=none smtp.client-ip=192.19.144.207
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: from mail-lvn-it-01.broadcom.com (mail-lvn-it-01.lvn.broadcom.net [10.36.132.253])
+	by relay.smtp-ext.broadcom.com (Postfix) with ESMTP id 001D2C0019F9;
+	Thu,  4 Sep 2025 14:04:04 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 relay.smtp-ext.broadcom.com 001D2C0019F9
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=broadcom.com;
+	s=dkimrelay; t=1757019845;
+	bh=yR0GeRsnT6KXyUB9lde0kiI5FPpCvrnFXwk4iYvFZCA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=suz2rJicE8GPfR5rLKj7IMQQh+v1zt/kCzmhE32d/n4Zmu+FjsOvKwZpOK98sEiWi
+	 7FMTcczSy7qsti/LUd/bmD0zOI04OBhLwppOIA212EmpoBrrFKFipo9d7BydojaTVM
+	 s/0jT0evpI9C8pU6UlSuPOEIpD3mCp3FSDjBpztg=
+Received: from fainelli-desktop.igp.broadcom.net (fainelli-desktop.dhcp.broadcom.net [10.67.48.245])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mail-lvn-it-01.broadcom.com (Postfix) with ESMTPSA id 6F2E918000530;
+	Thu,  4 Sep 2025 14:04:04 -0700 (PDT)
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+To: bcm-kernel-feedback-list@broadcom.com,
+	Andrea della Porta <andrea.porta@suse.com>,
+	linus.walleij@linaro.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	florian.fainelli@broadcom.com,
+	wahrenst@gmx.net,
+	linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	iivanov@suse.de,
+	svarbanov@suse.de,
+	mbrugger@suse.com,
+	Jonathan Bell <jonathan@raspberrypi.com>,
+	Phil Elwell <phil@raspberrypi.com>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Al Cooper <alcooperx@gmail.com>,
+	linux-mmc@vger.kernel.org,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-serial@vger.kernel.org
+Cc: Florian Fainelli <f.fainelli@gmail.com>
+Subject: Re: [PATCH v2 2/5] arm64: dts: broadcom: bcm2712: Add pin controller nodes
+Date: Thu,  4 Sep 2025 14:04:03 -0700
+Message-ID: <20250904210403.222143-1-florian.fainelli@broadcom.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <5ceba8558e0007a9685f19b51d681d0ce79e7634.1756386531.git.andrea.porta@suse.com>
+References: <cover.1756386531.git.andrea.porta@suse.com> <5ceba8558e0007a9685f19b51d681d0ce79e7634.1756386531.git.andrea.porta@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=ISO-8859-1
-Content-Transfer-Encoding: quoted-printable
-X-SA-Exim-Connect-IP: 184.161.19.61
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	* -2.8 NICE_REPLY_A Looks like a legit reply (A)
-Subject: Re: [PATCH] serial: max310x: improve interrupt handling
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-Hi,
+From: Florian Fainelli <f.fainelli@gmail.com>
 
-On Thu, 4 Sep 2025 14:50:16 +0300
-Tapio Reijonen <tapio.reijonen@vaisala.com> wrote:
+On Thu, 28 Aug 2025 15:17:11 +0200, Andrea della Porta <andrea.porta@suse.com> wrote:
+> From: "Ivan T. Ivanov" <iivanov@suse.de>
+> 
+> Add pin-control devicetree nodes and used them to
+> explicitly define uSD card interface pin configuration.
+> 
+> Signed-off-by: Ivan T. Ivanov <iivanov@suse.de>
+> Reviewed-by: Stefan Wahren <wahrenst@gmx.net>
+> Signed-off-by: Andrea della Porta <andrea.porta@suse.com>
+> ---
 
-> Hi,
->=20
-> On 9/4/25 10:53, Jiri Slaby wrote:
-> > On 03. 09. 25, 11:23, Tapio Reijonen wrote:
-> >> When there is a heavy load of receiving characters to all
-> >> four UART's, the warning 'Hardware RX FIFO overrun' is
-> >> sometimes detected.
-> >> The current implementation always service first UART3 until
-> >> no more interrupt and then service another UARTs.
-> >>
-> >> This commit improve interrupt service routine to handle all
-> >> interrupt sources, e.g. UARTs when a global IRQ is detected.
-> >>
-> >> Signed-off-by: Tapio Reijonen <tapio.reijonen@vaisala.com>
-> >> ---
-> >> =A0 drivers/tty/serial/max310x.c | 21 ++++++++++++++++-----
-> >> =A0 1 file changed, 16 insertions(+), 5 deletions(-)
-> >>
-> >> diff --git a/drivers/tty/serial/max310x.c b/drivers/tty/serial/max310x=
-.c
-> >> index=20
-> >> ce260e9949c3c268e706b2615d6fc01adc21e49b..3234ed7c688ff423d25a007ed8b9=
-38b249ae0b82 100644
-> >> --- a/drivers/tty/serial/max310x.c
-> >> +++ b/drivers/tty/serial/max310x.c
-> >> @@ -824,15 +824,26 @@ static irqreturn_t max310x_ist(int irq, void=20
-> >> *dev_id)
-> >> =A0=A0=A0=A0=A0 if (s->devtype->nr > 1) {
-> >> =A0=A0=A0=A0=A0=A0=A0=A0=A0 do {
-> >> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 unsigned int val =3D ~0;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 unsigned int val;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 unsigned int global_irq =3D ~0;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 int port;
-> >> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 WARN_ON_ONCE(regmap_read(s->re=
-gmap,
-> >> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
-=A0 MAX310X_GLOBALIRQ_REG, &val));
-> >> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D ((1 << s->devtype->nr) - 1)=
- & ~val;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 MAX310X_GLOBALIRQ_REG, =
-&global_irq));
-> >> +
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D ((1 << s->devtype->nr) - 1)=
- & ~global_irq;
-> >=20
-> > This is horrid. Use GENMASK() (or BIT() below) instead. Likely, you wan=
-t=20
-> > a local var storing the mask (the first part before the &).
-> >=20
-> val =3D GENMASK(s->devtype->nr - 1, 0) & ~global_irq;>> =A0=A0=A0=A0=A0=
-=A0=A0=A0=A0=A0=A0=A0=A0 if=20
-> (!val)
-> >> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 break;
-> >> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (max310x_port_irq(s, fls(val) - =
-1) =3D=3D IRQ_HANDLED)
-> >> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 handled =3D true;
-> >> +
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 do {
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 port =3D fls(val) - 1;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 if (max310x_port_irq(s,=
- port) =3D=3D IRQ_HANDLED)
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 handled =3D=
- true;
-> >> +
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 global_irq |=3D 1 << po=
-rt;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 val =3D ((1 << s->devty=
-pe->nr) - 1) & ~global_irq;
-> >> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0 } while (val);
-> >=20
-> > Actually, does it have to be from the end? I am thinking of=20
-> > for_each_and_bit()...
-> >=20
-> >> =A0=A0=A0=A0=A0=A0=A0=A0=A0 } while (1);
-> >> =A0=A0=A0=A0=A0 } else {
-> >> =A0=A0=A0=A0=A0=A0=A0=A0=A0 if (max310x_port_irq(s, 0) =3D=3D IRQ_HAND=
-LED)
-
-Combining what I suggested earlier, with Jiri's comments but using=20
-for_each_clear_bit() allow to get rid of the original horrid mask:
-
----
-        if (s->devtype->nr > 1) {
-                do {
-                        unsigned int val =3D ~0;
-+                       unsigned long channel;
-+                       unsigned long irq;
-+                       bool read_reg_done =3D true;
-=20
-                        WARN_ON_ONCE(regmap_read(s->regmap,
-                                                 MAX310X_GLOBALIRQ_REG, &va=
-l));
--                       val =3D ((1 << s->devtype->nr) - 1) & ~val;
--                       if (!val)
-+                       irq =3D val;
-+
-+                       for_each_clear_bit(channel, &irq, s->devtype->nr) {
-+                               read_reg_done =3D false;
-+
-+                               if (max310x_port_irq(s, channel) =3D=3D IRQ=
-_HANDLED)
-+                                       handled =3D true;
-+                       }
-+
-+                       if (read_reg_done)
-                                break;
--                       if (max310x_port_irq(s, fls(val) - 1) =3D=3D IRQ_HA=
-NDLED)
--                               handled =3D true;
-                } while (1);
----
-
-
---=20
-Hugo Villeneuve
+Applied to https://github.com/Broadcom/stblinux/commits/devicetree-arm64/next, thanks!
+--
+Florian
 
