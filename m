@@ -1,345 +1,254 @@
-Return-Path: <linux-serial+bounces-10884-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-10886-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88E26B99EA8
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Sep 2025 14:45:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9739BB9A164
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Sep 2025 15:44:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3BDBF4C7D48
-	for <lists+linux-serial@lfdr.de>; Wed, 24 Sep 2025 12:44:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E64B324D71
+	for <lists+linux-serial@lfdr.de>; Wed, 24 Sep 2025 13:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEF082FE077;
-	Wed, 24 Sep 2025 12:42:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1304B305058;
+	Wed, 24 Sep 2025 13:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SCiEJbyt";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JITaLJKu"
+	dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b="EjxMOUKS"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mxout70.expurgate.net (mxout70.expurgate.net [91.198.224.70])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D016F2264DB;
-	Wed, 24 Sep 2025 12:42:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0814B304BDF;
+	Wed, 24 Sep 2025 13:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.198.224.70
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758717738; cv=none; b=h8KTz6nhgJRfpy79B9KRdyduGy38+iLbaYLz+RCYbG/9F7LWOycOQNoa+fRzPKbMCzuPUxDgLUZgsXrl+RIek0ey0YbpFrADQ8kyrWf+ojjPDw/u36AvtXE1yIBpQtLIrglAXAcCeGxBNS8Hw64X4gZq7A48Ss6re5AlBg7KERk=
+	t=1758721446; cv=none; b=r38G4WereIs6M88SjQkRbLZjHo9G3fsYqjII0Y4iFebJYqXPB0IEs+e0V5+sR37XWr3LbvE4+omVYQeGsrHziVL2gGqxquvrLHd87jp5Tt9dE5yOgqSWC5V+0nUDxMRV7saOSmUZ8e3LWg8hG+YPzFS4fd4SYQ9EK7JbvwkkJUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758717738; c=relaxed/simple;
-	bh=oaHbMoaSPr9HTbcItgMbrRvyXc13gg09CsrhW7KFaCQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=VGIkMQZPK5mU18FsZL7n39svloqSGZpk1O4jBUy9H/7HM6pvIEwdaXIsqKfhNQWBjNPjUKqy/lNr2KLRz2PicRwmEwUssx+FGnTQJHsB6Y2C6lgf4f7kpENPciXee639L5LQ2LC18mM2JWob3nc99kXAz9UCKH2ZHZmrUApMm1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SCiEJbyt; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JITaLJKu; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: John Ogness <john.ogness@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1758717733;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=onVcQ+okw6vCqSFiba0985cgTYFFho3jxFgbYYVMkqM=;
-	b=SCiEJbyt8doV02RBjEjOIqldxGEeOzDUIgO+mkZMy0VdJxUhFAJt7Z+WiaF9dYc9tPTAtb
-	kTWuVlmbZIsGePvdEWpTHU366dWWRXoZIuOqdWy/N/+s9wvKmluP8/KYqGQ+VcEfVgHodp
-	9cbpwpJdgmAp/td9VMQJMuNHY86VSNXcumoDW/ZMEDnLKBVBaUorJKc72dYO2YUlpaRZCw
-	hie/VijFhjpD8nwhIHDw4bLydwg2tqR1hIp5WFPWLD9oWj8IOkxqiy1o9x7GD0/pZzrpWU
-	hwZxGBU5UOPAJroj1FV6knfLp/Sj5VKAe0Xr6YC2uVRI7hPvITK095enZIf6aQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1758717733;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=onVcQ+okw6vCqSFiba0985cgTYFFho3jxFgbYYVMkqM=;
-	b=JITaLJKue6vOs6t+lmvKug3uj7LMnimT8APzlAIBEdPCc8cPcPezx+U3RloV6T7ib/pf6X
-	eFULMuMezdZToEDg==
-To: Petr Mladek <pmladek@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Sergey Senozhatsky <senozhatsky@chromium.org>,
- Steven Rostedt <rostedt@goodmis.org>, Thomas Gleixner
- <tglx@linutronix.de>, Esben Haabendal <esben@geanix.com>,
- linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, Andy
- Shevchenko <andriy.shevchenko@linux.intel.com>, Arnd Bergmann
- <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>, Niklas Schnelle
- <schnelle@linux.ibm.com>, Serge Semin <fancer.lancer@gmail.com>
-Subject: Re: [RFC 0/1] serial: 8250: nbcon_atomic_flush_pending() might
- trigger watchdog warnigns
-In-Reply-To: <aNO7Qjv_iSUSifTv@pathway.suse.cz>
-References: <20250822142502.69917-1-pmladek@suse.com>
- <84qzwzbr90.fsf@jogness.linutronix.de> <aNFR45fL2L4PavNc@pathway.suse.cz>
- <84348eju8a.fsf@jogness.linutronix.de> <aNO7Qjv_iSUSifTv@pathway.suse.cz>
-Date: Wed, 24 Sep 2025 14:48:12 +0206
-Message-ID: <84348crpi3.fsf@jogness.linutronix.de>
+	s=arc-20240116; t=1758721446; c=relaxed/simple;
+	bh=k14L0GDW8becF8NGOUpw+cLrQO/7WBC7qFAlCeJM9Xs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EMkcmI4W+hpa01nOLRdtUT2B0qewT/QSBfxerj0bQkyHp2jQmcgXi1eRNOxzRP4MhHurvSYRHV7iMsoE7qMi4uz9KzrI3Q2ZQD0zJ4YbkHSfYr/lGh08H90bYmRBMG7uRMvajnx7FpM26Ikui0zsFTjBFv++HPfSEGN2kGJ+DQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de; spf=pass smtp.mailfrom=dev.tdt.de; dkim=temperror (0-bit key) header.d=dev.tdt.de header.i=@dev.tdt.de header.b=EjxMOUKS; arc=none smtp.client-ip=91.198.224.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=dev.tdt.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dev.tdt.de
+Received: from [194.37.255.9] (helo=mxout.expurgate.net)
+	by relay.expurgate.net with smtp (Exim 4.92)
+	(envelope-from <prvs=8376ac7522=fe@dev.tdt.de>)
+	id 1v1Pfa-00BbW5-T8; Wed, 24 Sep 2025 15:36:30 +0200
+Received: from [195.243.126.94] (helo=securemail.tdt.de)
+	by relay.expurgate.net with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <fe@dev.tdt.de>)
+	id 1v1PfZ-00FCuR-Cw; Wed, 24 Sep 2025 15:36:29 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dev.tdt.de;
+	s=z1-selector1; t=1758720988;
+	bh=bJYsrHx0nwgEiYUjvvl9QWllyAPYJEPKdCvQ9kU4BB0=;
+	h=From:To:Cc:Subject:Date:From;
+	b=EjxMOUKSkedR2oJ09tBi5+5zoBakAEhABEZg3ymxAin5y1InywSLXOlXueuLh6+co
+	 +d5vh9IHRc+SSxz56j9X4qUoR8RJQKo8DXbGxEaEb0841qHDjjrcjA4WEAyT3aInAJ
+	 I67/JlgqcIlvTv8WBzXFjgX8WZKWqsnroiTg4ouzMtIy+fiiYrKSpRuJH5wm6jj+NM
+	 MkGr8YjveivPMaMu4NF7SqGBvBtEapVFCpizqU8XF72RPDKUd8f/hm4sBky6Q9+DpZ
+	 tiQutrkPrMzjrx1bRfYYa6vjFEGAwfLGDidMNsQ2J9ySIBQtWZUGOy4vtujEvXAIsj
+	 ux844YJXugXLw==
+Received: from securemail.tdt.de (localhost [127.0.0.1])
+	by securemail.tdt.de (Postfix) with ESMTP id E6C14240041;
+	Wed, 24 Sep 2025 15:36:28 +0200 (CEST)
+Received: from mail.dev.tdt.de (unknown [10.2.4.42])
+	by securemail.tdt.de (Postfix) with ESMTP id CE374240036;
+	Wed, 24 Sep 2025 15:36:28 +0200 (CEST)
+Received: from localhost.localdomain (unknown [10.2.3.40])
+	by mail.dev.tdt.de (Postfix) with ESMTPSA id 4EA4022FAE;
+	Wed, 24 Sep 2025 15:36:28 +0200 (CEST)
+From: Florian Eckert <fe@dev.tdt.de>
+To: gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	kumaravel.thiagarajan@microchip.com,
+	tharunkumar.pasumarthi@microchip.com,
+	andriy.shevchenko@linux.intel.com, pnewman@connecttech.com,
+	angelogioacchino.delregno@collabora.com, peterz@infradead.org,
+	yujiaoliang@vivo.com, arnd@kernel.org, cang1@live.co.uk,
+	macro@orcam.me.uk, schnelle@linux.ibm.com,
+	Eckert.Florian@googlemail.com
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	Florian Eckert <fe@dev.tdt.de>
+Subject: [PATCH] serial: 8250_pcilib: Replace deprecated PCI functions
+Date: Wed, 24 Sep 2025 15:35:45 +0200
+Message-ID: <20250924133544.2666514-1-fe@dev.tdt.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: quoted-printable
+X-purgate-ID: 151534::1758720990-B1D84A68-3392869A/0/0
+X-purgate: clean
+X-purgate-type: clean
 
-On 2025-09-24, Petr Mladek <pmladek@suse.com> wrote:
-> I tried to implement some naive solution, see below. I think that
-> it can be described as the 2nd layer of ownership.
->
-> It does not look that complicated. It might be because I used it only
-> in two paths which do the writing. And it is possible that it does
-> not work properly.
+When the '8250_exar' module is loaded in to the kernel, a kernel trace
+with 'WARN_ON(legacy_iomap_table[bar])' is dumped to the console,
+because the old pci table mapping is still used in '8250_pcilib'.
 
-It is an interesting approach and is one that I tend to prefer.
+The old function have been deprecated in commit e354bb84a4c1 ("PCI:
+Deprecate pcim_iomap_table(), pcim_iomap_regions_request_all()").
 
-> Then I got another idea. It might even easier.
->
-> I think that it might actually be enough to block the kthread when
-> any CPU is in emergency context, for example, by using a global
-> atomit counter.
+The remapping already takes or must take place in the driver that calls
+the function 'serial8250_pci_setup_port()'. The remapping should only be
+called once via 'pcim_iomap()'. Therefore the remapping moved to the
+caller of 'serial8250_pci_setup_port()'.
 
-This is the quick idea that usually comes first. Basically introducing
-an emergency_in_progress() to keep the kthreads out. My problem with
-this is that it causes _all_ consoles to synchronize with each other,
-which we worked hard to get away from. Yes, I realize Linus rejected the
-"store the backtrace, then print it" implementation, which limits the
-effectiveness of parallel printing. Nevertheless, I would prefer to work
-towards returning to parallelization, rather than reducing it further.
+To use the new functions in '8250_pcilib' the function signature of
+'serial8250_pci_setup_port()' has been extended with an already iomapped
+address value. So this can be used directly without mapping again.
 
-> I am not sure if you already started working on it. I rather share
-> my naive ideas early so that I do not duplicate the effort.
-> It is possible that you have been there.
+Signed-off-by: Florian Eckert <fe@dev.tdt.de>
+---
+ drivers/tty/serial/8250/8250_exar.c     |  4 ++--
+ drivers/tty/serial/8250/8250_pci.c      | 10 +++++++++-
+ drivers/tty/serial/8250/8250_pci1xxxx.c | 10 +++++-----
+ drivers/tty/serial/8250/8250_pcilib.c   |  7 ++-----
+ drivers/tty/serial/8250/8250_pcilib.h   |  2 +-
+ 5 files changed, 19 insertions(+), 14 deletions(-)
 
-Thanks. Yes, I tried various ideas like this. But your version does go
-about it differently. Although I am seeing the same problems. My
-comments below.
+diff --git a/drivers/tty/serial/8250/8250_exar.c b/drivers/tty/serial/825=
+0/8250_exar.c
+index 04a0cbab02c2..3c16a849b474 100644
+--- a/drivers/tty/serial/8250/8250_exar.c
++++ b/drivers/tty/serial/8250/8250_exar.c
+@@ -503,7 +503,7 @@ static int default_setup(struct exar8250 *priv, struc=
+t pci_dev *pcidev,
+ 	unsigned char status;
+ 	int err;
+=20
+-	err =3D serial8250_pci_setup_port(pcidev, port, 0, offset, board->reg_s=
+hift);
++	err =3D serial8250_pci_setup_port(pcidev, port, 0, offset, board->reg_s=
+hift, priv->virt);
+ 	if (err)
+ 		return err;
+=20
+@@ -831,7 +831,7 @@ static int cti_port_setup_common(struct exar8250 *pri=
+v,
+ 	port->port.port_id =3D idx;
+ 	port->port.uartclk =3D priv->osc_freq;
+=20
+-	ret =3D serial8250_pci_setup_port(pcidev, port, 0, offset, 0);
++	ret =3D serial8250_pci_setup_port(pcidev, port, 0, offset, 0, priv->vir=
+t);
+ 	if (ret)
+ 		return ret;
+=20
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250=
+/8250_pci.c
+index 152f914c599d..edd5f28f04c6 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -165,7 +165,15 @@ static int
+ setup_port(struct serial_private *priv, struct uart_8250_port *port,
+ 	   u8 bar, unsigned int offset, int regshift)
+ {
+-	return serial8250_pci_setup_port(priv->dev, port, bar, offset, regshift=
+);
++	void __iomem *iomem =3D NULL;
++
++	if (pci_resource_flags(priv->dev, bar) & IORESOURCE_MEM) {
++		iomem =3D pcim_iomap(priv->dev, bar, 0);
++		if (IS_ERR(iomem))
++			return -ENOMEM;
++	}
++
++	return serial8250_pci_setup_port(priv->dev, port, bar, offset, regshift=
+, iomem);
+ }
+=20
+ /*
+diff --git a/drivers/tty/serial/8250/8250_pci1xxxx.c b/drivers/tty/serial=
+/8250/8250_pci1xxxx.c
+index 4c149db84692..feeede164886 100644
+--- a/drivers/tty/serial/8250/8250_pci1xxxx.c
++++ b/drivers/tty/serial/8250/8250_pci1xxxx.c
+@@ -671,7 +671,7 @@ static int pci1xxxx_resume(struct device *dev)
+ }
+=20
+ static int pci1xxxx_setup(struct pci_dev *pdev,
+-			  struct uart_8250_port *port, int port_idx, int rev)
++			  struct uart_8250_port *port, int port_idx, struct pci1xxxx_8250 *pr=
+iv)
+ {
+ 	int ret;
+=20
+@@ -698,12 +698,12 @@ static int pci1xxxx_setup(struct pci_dev *pdev,
+ 	 * C0 and later revisions support Burst operation.
+ 	 * RTS workaround in mctrl is applicable only to B0.
+ 	 */
+-	if (rev >=3D 0xC0)
++	if (priv->dev_rev >=3D 0xC0)
+ 		port->port.handle_irq =3D pci1xxxx_handle_irq;
+-	else if (rev =3D=3D 0xB0)
++	else if (priv->dev_rev =3D=3D 0xB0)
+ 		port->port.set_mctrl =3D pci1xxxx_set_mctrl;
+=20
+-	ret =3D serial8250_pci_setup_port(pdev, port, 0, PORT_OFFSET * port_idx=
+, 0);
++	ret =3D serial8250_pci_setup_port(pdev, port, 0, PORT_OFFSET * port_idx=
+, 0, priv->membase);
+ 	if (ret < 0)
+ 		return ret;
+=20
+@@ -821,7 +821,7 @@ static int pci1xxxx_serial_probe(struct pci_dev *pdev=
+,
+ 		else
+ 			uart.port.irq =3D pci_irq_vector(pdev, 0);
+=20
+-		rc =3D pci1xxxx_setup(pdev, &uart, port_idx, priv->dev_rev);
++		rc =3D pci1xxxx_setup(pdev, &uart, port_idx, priv);
+ 		if (rc) {
+ 			dev_warn(dev, "Failed to setup port %u\n", i);
+ 			continue;
+diff --git a/drivers/tty/serial/8250/8250_pcilib.c b/drivers/tty/serial/8=
+250/8250_pcilib.c
+index d8d0ae0d7238..9d5d2531a33b 100644
+--- a/drivers/tty/serial/8250/8250_pcilib.c
++++ b/drivers/tty/serial/8250/8250_pcilib.c
+@@ -22,19 +22,16 @@ int serial_8250_warn_need_ioport(struct pci_dev *dev)
+ EXPORT_SYMBOL_NS_GPL(serial_8250_warn_need_ioport, "SERIAL_8250_PCI");
+=20
+ int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port=
+ *port,
+-		   u8 bar, unsigned int offset, int regshift)
++		   u8 bar, unsigned int offset, int regshift, void __iomem *iomem)
+ {
+ 	if (bar >=3D PCI_STD_NUM_BARS)
+ 		return -EINVAL;
+=20
+ 	if (pci_resource_flags(dev, bar) & IORESOURCE_MEM) {
+-		if (!pcim_iomap(dev, bar, 0) && !pcim_iomap_table(dev))
+-			return -ENOMEM;
+-
+ 		port->port.iotype =3D UPIO_MEM;
+ 		port->port.iobase =3D 0;
+ 		port->port.mapbase =3D pci_resource_start(dev, bar) + offset;
+-		port->port.membase =3D pcim_iomap_table(dev)[bar] + offset;
++		port->port.membase =3D iomem + offset;
+ 		port->port.regshift =3D regshift;
+ 	} else if (IS_ENABLED(CONFIG_HAS_IOPORT)) {
+ 		port->port.iotype =3D UPIO_PORT;
+diff --git a/drivers/tty/serial/8250/8250_pcilib.h b/drivers/tty/serial/8=
+250/8250_pcilib.h
+index 16a274574cde..ab18de8d1355 100644
+--- a/drivers/tty/serial/8250/8250_pcilib.h
++++ b/drivers/tty/serial/8250/8250_pcilib.h
+@@ -12,6 +12,6 @@ struct pci_dev;
+ struct uart_8250_port;
+=20
+ int serial8250_pci_setup_port(struct pci_dev *dev, struct uart_8250_port=
+ *port, u8 bar,
+-		   unsigned int offset, int regshift);
++		   unsigned int offset, int regshift, void __iomem *iomem);
+=20
+ int serial_8250_warn_need_ioport(struct pci_dev *dev);
 
-> Anyway, here is POC of an API which blocks writing/flushing
-> in a context with a lower priority:
->
-> From 5d8f9c61c8f67096feca5972c5e7f751c8371b9f Mon Sep 17 00:00:00 2001
-> From: Petr Mladek <pmladek@suse.com>
-> Date: Wed, 24 Sep 2025 10:42:26 +0200
-> Subject: [POC] printk/nbcon: Allow to release console context after each
->  record in atomic_flush
->
-> It gives nbcon_reacquire_nobuf() to acquire the ownership to clean up
-> the console after the interrupted write_thread() call and allow
-> to preempt the printk kthread.
->
-> Add an API to block writing/flushing messages in a context with
-> lower priority. Otherwise, it would start flushing a pending
-> message and get interrupted again by the higher priority context.
->
-> The API is used in both code paths which try to acquire the nbcon
-> console ownership and try to write a message using
-> nbcon_emit_next_record().
->
-> The priority field is set in nbcon unsafe context which
-> prevents takeovers. The context must not clear it after
-> loosing the console ownership.
->
-> Failure to reserve the flush priority is handled the same way
-> as a failure to get the context ownership. So, it might somehow
-> work.
->
-> Warning: This is just a POC. The code is not tested.
->
-> FIXME: The clearing of the flush priority is racy. It might
->        clear a value set by another context when it was
->        cleared by a higher priority context in the mean
->        time.
->
->        There are ways to fix it.
->
->        But wait! It might be enough to synchronize normal vs. emergency
->        context. Non-panic context won't be able to get
->        the ownership anyway.
->
-> Reviewed-by: Petr Mladek <pmladek@suse.com>
-> ---
->  include/linux/console.h |  2 +
->  kernel/printk/nbcon.c   | 86 ++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 86 insertions(+), 2 deletions(-)
->
-> diff --git a/include/linux/console.h b/include/linux/console.h
-> index 8f10d0a85bb4..51750f92673f 100644
-> --- a/include/linux/console.h
-> +++ b/include/linux/console.h
-> @@ -326,6 +326,7 @@ struct nbcon_write_context {
->   * @nbcon_seq:		Sequence number of the next record for nbcon to print
->   * @nbcon_device_ctxt:	Context available for non-printing operations
->   * @nbcon_prev_seq:	Seq num the previous nbcon owner was assigned to print
-> + * @nbcon_flush_prio:   Priority of a context flushing the console
->   * @pbufs:		Pointer to nbcon private buffer
->   * @kthread:		Printer kthread for this console
->   * @rcuwait:		RCU-safe wait object for @kthread waking
-> @@ -461,6 +462,7 @@ struct console {
->  	atomic_long_t		__private nbcon_seq;
->  	struct nbcon_context	__private nbcon_device_ctxt;
->  	atomic_long_t           __private nbcon_prev_seq;
-> +	enum nbcon_prio		__private nbcon_flush_prio;
->  
->  	struct printk_buffers	*pbufs;
->  	struct task_struct	*kthread;
-> diff --git a/kernel/printk/nbcon.c b/kernel/printk/nbcon.c
-> index 646801813415..575b2628e0b2 100644
-> --- a/kernel/printk/nbcon.c
-> +++ b/kernel/printk/nbcon.c
-> @@ -911,6 +911,78 @@ bool nbcon_exit_unsafe(struct nbcon_write_context *wctxt)
->  }
->  EXPORT_SYMBOL_GPL(nbcon_exit_unsafe);
->  
-> +/**
-> + * nbcon_context_get_flush_prio - Reserve writing by the given context priority
-> + * @wctxt:	The write context which wants to write messages
-> + *
-> + * The function allows to reserve rights for emitting/flushing messages with
-> + * the priority of the given context.
-> + *
-> + * It signalizes an intention to flush pending messages.
-> + *
-> + * The motivation is to allow releasing the nbcon console ownership after
-> + * each emitted message and still block any context with a lower priority
-> + * from flushing the pending messages. It prevents repeated interrupts
-> + * of the lower priority context in the middle of the message.
-> + *
-> + * Return:	True when the write context might try to flush messages.
-> + *		False when a context with a higher priority is flushing
-> + *		messages.
-> + *
-> + * FIXME: Maybe, only the NORMAL vs. EMERGENCY context is interesting.
-> + *	  Both these context will get blocked when there is a panic
-> + *	  in progress,
-> + *
-> + * It might be enough to synchronize kthread vs. emergency_enter/exit API.
-> + * Well, there is also the legacy kthread.
-> + */
-> +int nbcon_context_get_flush_prio(struct nbcon_write_context *wctxt)
-> +{
-> +	struct nbcon_context *ctxt = &ACCESS_PRIVATE(wctxt, ctxt);
-> +	struct console *con = ctxt->console;
-> +	ret = true;
-> +
-> +	if (!nbcon_context_try_acquire(ctxt, false))
-> +		return false;
-> +
-> +	if (!nbcon_context_enter_unsafe(ctxt))
-> +		return false;
+base-commit: 07e27ad16399afcd693be20211b0dfae63e0615f
+--=20
+2.39.5
 
-Since a printer will want to do a console acquire right after setting
-the flush_prio, it seems to me it would be better to require the caller
-has already performed the console acquire. Then it does not need to give
-it up in between. This enter_unsafe is enough to guarantee that this
-context is still the owner.
-
-> +
-> +	if (con->nbcon_flush_prio <= ctxt->prio)
-> +		con->nbcon_flush_prio = ctxt->prio;
-> +	else
-> +		ret = false;
-> +
-> +	if (!nbcon_context_exit_unsafe(ctxt))
-> +		ret = false;
-> +
-> +	nbcon_context_release(ctxt);
-> +
-> +	return ret;
-> +}
-> +
-> +void nbcon_context_put_flush_prio(struct nbcon_write_context *wctxt)
-> +{
-> +	struct nbcon_context *ctxt = &ACCESS_PRIVATE(wctxt, ctxt);
-> +	struct console *con = ctxt->console;
-> +	ret = 0;
-> +
-> +	if (!nbcon_context_try_acquire(ctxt, false))
-> +		return -EPERM;
-
-This is my main concern. If a context has set the flush_prio to
-something higher, it _MUST_ set it back down later. This cannot be best
-effort. A failed acquire does not mean that a context with the same
-priority is the owner (for example, it could be a NORMAL context that is
-in an unsafe section). Remember that there are owners that are not
-printers.
-
-So now we have a similar situation as nbcon_reacquire_nobuf(): we need
-to regain ownership so that we can undo something we setup. And that is
-the problem we are trying to solve in the first place. Maybe since this
-moves the problem from NORMAL to EMERGENCY, the busy-waiting is
-acceptable.
-
-> +	if (!nbcon_context_enter_unsafe(ctxt))
-> +		return -EAGAIN;
-> +
-> +	con->nbcon_flush_prio = NBCON_PRIO_NONE;
-> +
-> +	if (!nbcon_context_exit_unsafe(ctxt))
-> +		ret = -EAGAIN;
-> +
-> +	nbcon_context_release(ctxt);
-> +
-> +	return ret;
-> +}
-> +
->  /**
->   * nbcon_reacquire_nobuf - Reacquire a console after losing ownership
->   *				while printing
-> @@ -1120,6 +1192,8 @@ static bool nbcon_emit_one(struct nbcon_write_context *wctxt, bool use_atomic)
->  		cant_migrate();
->  	}
->  
-> +	if (!nbcon_context_get_flush_prio(wctxt))
-> +		goto out;
->  	if (!nbcon_context_try_acquire(ctxt, false))
->  		goto out;
-
-All "out paths" must restore the flush prio.
-
->  
-> @@ -1135,6 +1209,7 @@ static bool nbcon_emit_one(struct nbcon_write_context *wctxt, bool use_atomic)
->  		goto out;
->  
->  	nbcon_context_release(ctxt);
-> +	nbcon_context_put_flush_prio(wctxt);
->  
->  	ret = ctxt->backlog;
->  out:
-> @@ -1505,10 +1580,13 @@ static int __nbcon_atomic_flush_pending_con(struct console *con, u64 stop_seq,
->  	ctxt->prio			= nbcon_get_default_prio();
->  	ctxt->allow_unsafe_takeover	= allow_unsafe_takeover;
->  
-> -	if (!nbcon_context_try_acquire(ctxt, false))
-> +	if (!nbcon_context_get_flush_prio(&wctxt);
->  		return -EPERM;
->  
->  	while (nbcon_seq_read(con) < stop_seq) {
-> +		if (!nbcon_context_try_acquire(ctxt, false))
-> +			return -EPERM;
-> +
->  		/*
->  		 * nbcon_emit_next_record() returns false when the console was
->  		 * handed over or taken over. In both cases the context is no
-> @@ -1523,10 +1601,14 @@ static int __nbcon_atomic_flush_pending_con(struct console *con, u64 stop_seq,
->  				err = -ENOENT;
->  			break;
->  		}
-> +
-> +		nbcon_context_release(ctxt);
->  	}
->  
-> -	nbcon_context_release(ctxt);
-> +	nbcon_context_put_flush_prio(&wctxt);
-> +
->  	return err;
-> +
->  }
->  
->  /**
-> -- 
-> 2.51.0
-
-As you mentioned, there is the problem that the flushing context could
-change hands multiple times before the flush_prio is restored. And there
-is also the recursive case where a WARN could happen within a WARN, or a
-WARN could happen and then in an NMI another WARN. All these cases
-probably mean that it needs to be a per-prio counter rather than simply
-a single prio so that each context can increment/decrement their prio.
-
-John
 
