@@ -1,109 +1,131 @@
-Return-Path: <linux-serial+bounces-11080-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11082-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 038CFBED1BB
-	for <lists+linux-serial@lfdr.de>; Sat, 18 Oct 2025 16:51:50 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0613CBED5C8
+	for <lists+linux-serial@lfdr.de>; Sat, 18 Oct 2025 19:36:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DBF864E2EEE
-	for <lists+linux-serial@lfdr.de>; Sat, 18 Oct 2025 14:51:48 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id A62D534D636
+	for <lists+linux-serial@lfdr.de>; Sat, 18 Oct 2025 17:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F9721D7999;
-	Sat, 18 Oct 2025 14:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772AE261B8D;
+	Sat, 18 Oct 2025 17:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b="bDXjbbHv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JYpJtBKi"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from forward200d.mail.yandex.net (forward200d.mail.yandex.net [178.154.239.221])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEBB8AD51;
-	Sat, 18 Oct 2025 14:51:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.154.239.221
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C527A21ABC1;
+	Sat, 18 Oct 2025 17:35:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760799106; cv=none; b=TgjnZtli0cSAPo4dA15+ts7xx9N2YIUU+I+6VGaffK9M7p14nk4/pRXgeqj/zVaLB9KigWW733Bk8DyPJ9WWFv5s45uhwrn3MWoMVoI6nSxvZgGXyxEgAoM20AY9JzR9g5fHxmfNtwDxXFvyIfi4GHaYT3h468NMg+ZvM2ZfCyI=
+	t=1760808937; cv=none; b=KXbbzHg/vyu9MOaBmm8c8EthlOyP2B40EDeCKCLhSLy7t96tzNwYq/x/wroGFynbJFGdPEXJnhbCzJGphjPNpWScTNbwA86kxbsWzepPm6W0fzR4+7RMUQps1AU4ZR5i1RuoaXWzPyGtb2q3QuEl3EGJpb49PTg7lbs3gkxRjak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760799106; c=relaxed/simple;
-	bh=S1HCkmpQ7+I3nvlUjwOzRvoujXqhhZ/uRZvbLib6gwU=;
-	h=From:To:Subject:MIME-Version:Date:Message-Id:Content-Type; b=iXoKxYusqnGI+b7F9whJCoBDftJv5EpIOWQyww4CkaB/IhAxowFNdlb9dGi5ypTK7QEpru5AFCtqNre757vGP7jsgHq+ga+2+TS2xd7X/DjSmtMyGU/GQLY0RqHVaHSoKw0UUHRcAT4UYEwufQpfQKg+WUcFQq+gV1d3k1aU83g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru; spf=pass smtp.mailfrom=yandex.ru; dkim=pass (1024-bit key) header.d=yandex.ru header.i=@yandex.ru header.b=bDXjbbHv; arc=none smtp.client-ip=178.154.239.221
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=yandex.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=yandex.ru
-Received: from forward103d.mail.yandex.net (forward103d.mail.yandex.net [IPv6:2a02:6b8:c41:1300:1:45:d181:d103])
-	by forward200d.mail.yandex.net (Yandex) with ESMTPS id DBF0781069;
-	Sat, 18 Oct 2025 17:51:34 +0300 (MSK)
-Received: from mail-nwsmtp-mxback-production-main-74.klg.yp-c.yandex.net (mail-nwsmtp-mxback-production-main-74.klg.yp-c.yandex.net [IPv6:2a02:6b8:c43:8240:0:640:d397:0])
-	by forward103d.mail.yandex.net (Yandex) with ESMTPS id 3603EC004F;
-	Sat, 18 Oct 2025 17:51:27 +0300 (MSK)
-Received: from mail.yandex.ru (2a02:6b8:c43:341:0:640:ef0e:0 [2a02:6b8:c43:341:0:640:ef0e:0])
-	by mail-nwsmtp-mxback-production-main-74.klg.yp-c.yandex.net (mxback/Yandex) with HTTPS id qoUfLLMxha60-sG2RjNhD;
-	Sat, 18 Oct 2025 17:51:26 +0300
-X-Yandex-Fwd: 1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yandex.ru; s=mail;
-	t=1760799086; bh=XAgOav7U8f5zHxMigGatzwM+W3jGxhk+oJRplBsCXfA=;
-	h=Message-Id:Date:Subject:To:From;
-	b=bDXjbbHv4PauW3JWjWv/UoeA8aBwcQHS8IcJNa/7YmHinyD+ClAf8PTMWzlivji52
-	 NpgILOPSieXIPtcGYiaEq4uFKn1UsHTHTLxHbb0Yx45AI9YP+v8ooKHWt4QHd2PCM/
-	 IMi2E51SCitiGhyKnpPhpffZiLnqdOQNbg5U2IIU=
-Authentication-Results: mail-nwsmtp-mxback-production-main-74.klg.yp-c.yandex.net; dkim=pass header.i=@yandex.ru
-Received: by mail-sendbernar-production-main-85.klg.yp-c.yandex.net (sendbernar/Yandex) with HTTPS id 910b34ea3704d116b8d971597378f0b3;
-	Sat, 18 Oct 2025 17:51:25 +0300
-From: =?utf-8?B?0JLQu9Cw0LTQuNGB0LvQsNCyINCa0L7RgNC90LXQtdCy?= <vladosov50@yandex.ru>
-To: "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-	"jirislaby@kernel.org" <jirislaby@kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>
-Subject: fix tty device index parsing [PATCH v1]
+	s=arc-20240116; t=1760808937; c=relaxed/simple;
+	bh=eztBdCKaPnPu14BVQLRHDSd1VzhNyTYF0y0q/IugYoY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FKk7wJPfxD1Mlh5Z+y2FIuWrpPx8Z5Tqu9i4An7iVjHdXeVxqJWUBMxANvLLgmpkDF1rW8vLUKUbK1R35ku/6gAVh9mL1THlVF2VMh+4vVfxy07JwIvCfWg8WE67gynaAHm2E1WI5mW0bTnzz3bRrN3LInSw0p5WT1E5uX91Brc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JYpJtBKi; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1760808936; x=1792344936;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=eztBdCKaPnPu14BVQLRHDSd1VzhNyTYF0y0q/IugYoY=;
+  b=JYpJtBKiHm8DbK9wczqF3Zw0bm6PAacw2e6HnYxotKMfQnM4/ayuIooO
+   9uxFb6e9zNyIxcbh99+azqT8INBaLRrcatggAunS7Motle6KOkkW07bQx
+   diKfbU7zA9scTLm7yr8WgIKsNqnlmxrKEqeabVCVukoo13NX33MRyvn9J
+   Hmf7pY58eUQDilxUZ9VfKmomC7UrmJp4pO4awM1LFb/tR4xxPGpgvFRLz
+   OBlR9UCYqGfZhYvO2vanYyWV/4ioS7Tg39h69q511vybkfAhHfS0MUfyz
+   8nQ/VxBX//xRLcXGyPOxaMsgyO9e1sed9SQHC+d3K9XlT6KBH6BXIGtkP
+   A==;
+X-CSE-ConnectionGUID: glMxB517QNS7WY952tkKgg==
+X-CSE-MsgGUID: q+x9/8ekTYGLRU+ahWc+uQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74111588"
+X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
+   d="scan'208";a="74111588"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 10:35:35 -0700
+X-CSE-ConnectionGUID: eeE/8mgFRf6hHtlEf9VGow==
+X-CSE-MsgGUID: P2+86U1KTWOjHcuRsqbGhQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,239,1754982000"; 
+   d="scan'208";a="188288056"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO ashevche-desk.local) ([10.245.244.194])
+  by fmviesa004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Oct 2025 10:35:34 -0700
+Received: from andy by ashevche-desk with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1v8PGw-000000002mf-2YKD;
+	Mon, 13 Oct 2025 23:35:58 +0300
+Date: Mon, 13 Oct 2025 23:35:58 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Florian Eckert <fe@dev.tdt.de>
+Cc: gregkh@linuxfoundation.org, jirislaby@kernel.org,
+	kumaravel.thiagarajan@microchip.com, pnewman@connecttech.com,
+	angelogioacchino.delregno@collabora.com, peterz@infradead.org,
+	yujiaoliang@vivo.com, arnd@kernel.org, cang1@live.co.uk,
+	macro@orcam.me.uk, schnelle@linux.ibm.com,
+	Eckert.Florian@googlemail.com, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2] serial: 8250_pcilib: Replace deprecated PCI functions
+Message-ID: <aO1irsWEPKFgwQYU@smile.fi.intel.com>
+References: <20250930072743.791580-1-fe@dev.tdt.de>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Mailer: Yamail [ http://yandex.ru ] 5.0
-Date: Sat, 18 Oct 2025 21:51:25 +0700
-Message-Id: <105211760797925@mail.yandex.ru>
-Content-Type: multipart/mixed;
-	boundary="----==--bound.799098.37777c8a-89fa-4f8a-9831-51a737989bd8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250930072743.791580-1-fe@dev.tdt.de>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+
+On Tue, Sep 30, 2025 at 09:27:43AM +0200, Florian Eckert wrote:
+> When the '8250_exar' module is loaded into the kernel, a kernel trace
+> with 'WARN_ON(legacy_iomap_table[bar])' is dumped to the console,
+> because the old pci table mapping is still used in '8250_pcilib'.
+> 
+> The old function have been deprecated in commit e354bb84a4c1 ("PCI:
+> Deprecate pcim_iomap_table(), pcim_iomap_regions_request_all()").
+> 
+> The remapping already takes or must take place in the driver that calls
+> the function 'serial8250_pci_setup_port()'. The remapping should only be
+> called once via 'pcim_iomap()'. Therefore the remapping moved to the
+> caller of 'serial8250_pci_setup_port()'.
+> 
+> To replace the outdated/legacy iomap_table processing in '8250_pcilib' the
+> function signature of 'serial8250_pci_setup_port()' has been extended with
+> an already iomapped address value. So this can be used directly without
+> io mapping again.
+
+...
+
+> +	if (pci_resource_flags(priv->dev, bar) & IORESOURCE_MEM) {
+
+Dunno if this is included already in Linux Next, but here is room for
+improvement.
+
+The problem with the above code is it (wrongly?) checks for bit and not
+for the resource type. OTOH I don't remember if 64-bit version requires
+the IORESOURCE_MEM to be set along with that.
 
 
-------==--bound.799098.37777c8a-89fa-4f8a-9831-51a737989bd8
-Content-Transfer-Encoding: 8bit
-Content-Type: text/html; charset=utf-8
+> +		iomem = pcim_iomap(priv->dev, bar, 0);
+> +		if (!iomem)
+> +			return -ENOMEM;
+> +	}
 
-<div><div>Hello.</div><div>I am sending you the patch which fixes incorrect device index parsing in tty_dev_name_to_number().</div><div><div>Thank you for your time and attention. I am looking forward to any comments or suggestions for improvement.<div><span lang="en">Sorry for any mistakes, this is my first patch.</span><div> </div></div></div></div></div>
-------==--bound.799098.37777c8a-89fa-4f8a-9831-51a737989bd8
-Content-Disposition: attachment;
-	filename="0001-tty-fix-device-index-parsing.patch"
-Content-Transfer-Encoding: base64
-Content-Type: text/x-diff;
-	name="0001-tty-fix-device-index-parsing.patch"
 
-RnJvbSAyOWUwYWUwYjA3M2IzYzU3NmI5OGRmODU1M2IwZWY5ZTI1NWQwYmVjIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBWbGFkb3MgS29ybmVldiA8dmxhZG9zb3Y1MEB5YW5kZXgucnU+
-CkRhdGU6IFNhdCwgMTggT2N0IDIwMjUgMjE6MTY6NTAgKzA3MDAKU3ViamVjdDogW1BBVENIXSB0
-dHk6IGZpeCBkZXZpY2UgaW5kZXggcGFyc2luZwpNSU1FLVZlcnNpb246IDEuMApDb250ZW50LVR5
-cGU6IHRleHQvcGxhaW47IGNoYXJzZXQ9VVRGLTgKQ29udGVudC1UcmFuc2Zlci1FbmNvZGluZzog
-OGJpdAoKUHJldmlvdXNseSwgc2VhcmNoZWQgZm9yIHRoZSBmaXJzdCBkaWdpdCBpbiB0aGUgZGV2
-aWNlIG5hbWUgdG8gZGV0ZXJtaW5lCnRoZSBpbmRleC4gVGhpcyBjYXVzZWQgaW5jb3JyZWN0IHBh
-cnNpbmcgZm9yIGRldmljZSBuYW1lcyB0aGF0IGNvbnRhaW4KZGlnaXRzIGJlZm9yZSB0aGUgaW5k
-ZXgsIHN1Y2ggYXMgInR0eUNIOTM0NFVTQjAiIG9yICJ0dHlDSDkzNDRVU0IxMCIuCgpUaGUgbG9n
-aWMgaXMgdXBkYXRlZCB0byBzY2FuIGJhY2t3YXJkcyBmcm9tIHRoZSBlbmQgb2YgdGhlIHN0cmlu
-ZyBhbmQKbG9jYXRlIHRoZSBzdGFydCBvZiB0aGUgbGFzdCBjb250aWd1b3VzIHNlcXVlbmNlIG9m
-IGRpZ2l0cywgZW5zdXJpbmcgdGhlCmNvcnJlY3QgZGV2aWNlIG51bWJlciBpcyBleHRyYWN0ZWQu
-CgpFeGFtcGxlOgogICAgQmVmb3JlOiAidHR5Q0g5MzQ0VVNCMTAiIOKGkiBwYXJzZWQgYXMgIjkz
-NDRVU0IxMCIKICAgIEFmdGVyOiAgInR0eUNIOTM0NFVTQjEwIiDihpIgcGFyc2VkIGFzICIxMCIK
-ClNpZ25lZC1vZmYtYnk6IFZsYWRvcyBLb3JuZWV2IDx2bGFkb3NvdjUwQHlhbmRleC5ydT4KLS0t
-CiBkcml2ZXJzL3R0eS90dHlfaW8uYyB8IDUgKysrLS0KIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2Vy
-dGlvbnMoKyksIDIgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZHJpdmVycy90dHkvdHR5X2lv
-LmMgYi9kcml2ZXJzL3R0eS90dHlfaW8uYwppbmRleCBlMmQ5MmNmNzBlYjcuLjI1YWE5M2ExNjM0
-OSAxMDA2NDQKLS0tIGEvZHJpdmVycy90dHkvdHR5X2lvLmMKKysrIGIvZHJpdmVycy90dHkvdHR5
-X2lvLmMKQEAgLTMzOCw4ICszMzgsOSBAQCBpbnQgdHR5X2Rldl9uYW1lX3RvX251bWJlcihjb25z
-dCBjaGFyICpuYW1lLCBkZXZfdCAqbnVtYmVyKQogCWludCBpbmRleCwgcHJlZml4X2xlbmd0aCA9
-IDA7CiAJY29uc3QgY2hhciAqc3RyOwogCi0JZm9yIChzdHIgPSBuYW1lOyAqc3RyICYmICFpc2Rp
-Z2l0KCpzdHIpOyBzdHIrKykKLQkJOworCXN0ciA9IG5hbWUgKyBzdHJsZW4obmFtZSk7CisJd2hp
-bGUgKHN0ciA+IG5hbWUgJiYgaXNkaWdpdCgqKHN0ciAtIDEpKSkKKwkJc3RyLS07CiAKIAlpZiAo
-ISpzdHIpCiAJCXJldHVybiAtRUlOVkFMOwotLSAKMi4zNC4xCgo=
-------==--bound.799098.37777c8a-89fa-4f8a-9831-51a737989bd8--
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
