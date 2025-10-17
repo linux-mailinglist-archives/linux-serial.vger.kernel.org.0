@@ -1,85 +1,140 @@
-Return-Path: <linux-serial+bounces-11070-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11072-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D757BE7016
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Oct 2025 09:49:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E60EBE7055
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Oct 2025 09:57:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0BE72188CD12
-	for <lists+linux-serial@lfdr.de>; Fri, 17 Oct 2025 07:49:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BD6F81A67941
+	for <lists+linux-serial@lfdr.de>; Fri, 17 Oct 2025 07:57:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E47FA241695;
-	Fri, 17 Oct 2025 07:49:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b="Hm2dW2lR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406AE25BEF2;
+	Fri, 17 Oct 2025 07:57:11 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from cmsr-t-8.hinet.net (cmsr-t-8.hinet.net [203.69.209.167])
+Received: from mailgw.kylinos.cn (mailgw.kylinos.cn [124.126.103.232])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048E423A98E
-	for <linux-serial@vger.kernel.org>; Fri, 17 Oct 2025 07:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=203.69.209.167
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65C3F13B58B;
+	Fri, 17 Oct 2025 07:57:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=124.126.103.232
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760687365; cv=none; b=pMAs+0tqM9oR7moOXBpsAXDG0sZuqI65BgwWKA7Rj8isLqCs3eTIMjxKo9cjBhiMPSIdXhIFzAwmSgGfxYAh+1+kEaCQIQHClyYQiLpoeG0fMa2NL+2PzAnM8Ml7zWyrB/oNIaReUR3O3+4bxrCppnYIugnhPiLcuRhBVrK22zs=
+	t=1760687831; cv=none; b=MQazmNR8rYGpkkuABMo6pZ2/+k+eP9mPc3B778WprDsNX6f6MTqfdZNc8b2LqJCsWZ4FkBrh6WJw/v4eJVfkiYUyNPzRCPTTJHUiyhS9x8jRAUDHY1NB1rqNpWxx9PFStw+CMKpvfHTfx2zws7tTxN82fTR85ZJERQh+9UpBzj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760687365; c=relaxed/simple;
-	bh=WrdEc21Lyu7YgLOUI8A0yi0sx4kmguhPjttxRcbEbV0=;
-	h=From:To:Subject:Message-ID:Date:MIME-Version:Content-Type; b=Z+FWp/yniDAFxat3QirU0BW7+uTSyeiw2C9aj8VDVLsJ+kPKP6OubiYME0N/XLS4aQDfLcQIAhPseb4cCVwiR+I1X9LBAkW4csy9truKxyY5nPrlghaQNtWC2ypUaLhRU6TIaRZOnRXfnle3CDqZXnN89DXvl0jDS7prQrdbDcA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net; spf=pass smtp.mailfrom=ms29.hinet.net; dkim=pass (2048-bit key) header.d=ms29.hinet.net header.i=@ms29.hinet.net header.b=Hm2dW2lR; arc=none smtp.client-ip=203.69.209.167
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ms29.hinet.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ms29.hinet.net
-Received: from cmsr7.hinet.net ([10.199.216.86])
-	by cmsr-t-8.hinet.net (8.15.2/8.15.2) with ESMTPS id 59H7MSvY931182
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-serial@vger.kernel.org>; Fri, 17 Oct 2025 15:22:29 +0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ms29.hinet.net;
-	s=s2; t=1760685749; bh=WrdEc21Lyu7YgLOUI8A0yi0sx4kmguhPjttxRcbEbV0=;
-	h=From:To:Subject:Date;
-	b=Hm2dW2lRTrPFPILEBX4QdWZn5z1kZhSP2GtqUpfDEorMXPfEl9ViXtscOZDk6anJO
-	 DLHNllRWtLqbVeuxuFOsbmRbgnNSsp+/mwFa1OwoXHRtd/FamUytsZ1IBCasWWmO6n
-	 nrIZAKHiylPmNgyxt44CbyL+PVOHV2rHlSrPp9UM50teJUMW+CUbDyQhxEkuR8+jJC
-	 CmLz218K1MWQT9R/UxG46PSauWe8C7xfR9OEwC8xeX9zvGFKhmtbMGFvyY+pA0ZhwZ
-	 d7C955rlNkygeAGb1pXh1RjACs1nA+9A4wS3tVqkoF5WX+ioVnVxx+FupQIUQS0mMq
-	 U8Z3w+D7IbITg==
-Received: from [127.0.0.1] (218-164-149-150.dynamic-ip.hinet.net [218.164.149.150])
-	by cmsr7.hinet.net (8.15.2/8.15.2) with ESMTPS id 59H7JemI476298
-	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO)
-	for <linux-serial@vger.kernel.org>; Fri, 17 Oct 2025 15:22:27 +0800
-From: "Purchase - PathnSitu 987" <Linux-serial@ms29.hinet.net>
-To: linux-serial@vger.kernel.org
-Reply-To: "Purchase - PathnSitu." <purchase@pathnsithu.com>
-Subject: =?UTF-8?B?TmV3IE9jdG9iZXIgT3JkZXIuIDUyMTEzIEZyaWRheSwgT2N0b2JlciAxNywgMjAyNSBhdCAwOToyMjoyNiBBTQ==?=
-Message-ID: <bdf954d8-11b4-15e6-c421-43d97312528c@ms29.hinet.net>
-Content-Transfer-Encoding: 7bit
-Date: Fri, 17 Oct 2025 07:22:27 +0000
+	s=arc-20240116; t=1760687831; c=relaxed/simple;
+	bh=T9V9+6+9nbG76trsipkPX6d2o1N96gvwsqNgwqnTbZ0=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=VRqzBgpLfI6ZC+4djcEzNDDb0m31c3Pgk6nIZygfABWHWoSwenEGyL/Faru8W0SSIUxN82ry00WADf5e91nE+w50prjGbgVfXI8JMryGFEa4/85YLd02WcNsVg76UP5udONUyOc9kdla0QGNM9Bhe7ZzwZ9FNQfZAFAsjPls1gw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn; spf=pass smtp.mailfrom=kylinos.cn; arc=none smtp.client-ip=124.126.103.232
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kylinos.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kylinos.cn
+X-UUID: db969f9aab2e11f0a38c85956e01ac42-20251017
+X-CID-CACHE: Type:Local,Time:202510171554+08,HitQuantity:1
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.3.6,REQID:105bdecb-3893-49a2-941b-865f2675d5a3,IP:0,UR
+	L:0,TC:0,Content:-5,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
+	release,TS:-5
+X-CID-META: VersionHash:a9d874c,CLOUDID:3c6bae45bb7855bd36bad98adcf3d041,BulkI
+	D:nil,BulkQuantity:0,Recheck:0,SF:102|850,TC:nil,Content:0|50,EDM:-3,IP:ni
+	l,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0,LES
+	:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
+X-CID-BVR: 2,SSN|SDN
+X-CID-BAS: 2,SSN|SDN,0,_
+X-CID-FACTOR: TF_CID_SPAM_SNR
+X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
+X-UUID: db969f9aab2e11f0a38c85956e01ac42-20251017
+Received: from localhost [(10.44.16.150)] by mailgw.kylinos.cn
+	(envelope-from <pengyu@kylinos.cn>)
+	(Generic MTA with TLSv1.3 TLS_AES_256_GCM_SHA384 256/256)
+	with ESMTP id 916814478; Fri, 17 Oct 2025 15:56:58 +0800
+From: Yu Peng <pengyu@kylinos.cn>
+To: tj@kernel.org
+Cc: changlianzhi@uniontech.com,
+	dmitry.torokhov@gmail.com,
+	gregkh@linuxfoundation.org,
+	jiangshanlai@gmail.com,
+	jirislaby@kernel.org,
+	legion@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	lkp@intel.com,
+	mingo@kernel.org,
+	myrrhperiwinkle@qtmlabs.xyz,
+	oe-lkp@lists.linux.dev,
+	oliver.sang@intel.com,
+	pengyu@kylinos.cn,
+	syzbot+79c403850e6816dc39cf@syzkaller.appspotmail.com,
+	tglx@linutronix.de
+Subject: [PATCH v3 1/2] workqueue: Add initialization macro for work items that disabled by default
+Date: Fri, 17 Oct 2025 15:56:54 +0800
+Message-Id: <20251017075655.3781522-1-pengyu@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <aOVnoCnHa2vzB54g@slm.duckdns.org>
+References: <aOVnoCnHa2vzB54g@slm.duckdns.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-X-CMAE-Score: 0
-X-CMAE-Analysis: v=2.4 cv=fop/Z04f c=1 sm=1 tr=0 ts=68f1eeb4
-	a=LTSunQPlcsZIodFpDfL6WQ==:117 a=IkcTkHD0fZMA:10 a=5KLPUuaC_9wA:10
-	a=9ibCsRhy7-NA9_nKIewA:9 a=QEXdDO2ut3YA:10
+Content-Transfer-Encoding: 8bit
 
-Hi Linux-serial,
+In certain scenarios, workqueue tasks that are disabled by default are
+required. Similar to DECLARE_TASKLET_DISABLED, the DECLARE_WORK_DISABLED
+macro is added to achieve this functionality.
 
-Please provide a quote for your products:
+Signed-off-by: Yu Peng <pengyu@kylinos.cn>
+---
+ include/linux/workqueue.h | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Include:
-1.Pricing (per unit)
-2.Delivery cost & timeline
-3.Quote expiry date
+diff --git a/include/linux/workqueue.h b/include/linux/workqueue.h
+index 45d5dd470ff6..b6c72d59351b 100644
+--- a/include/linux/workqueue.h
++++ b/include/linux/workqueue.h
+@@ -102,6 +102,7 @@ enum wq_misc_consts {
+ /* Convenience constants - of type 'unsigned long', not 'enum'! */
+ #define WORK_OFFQ_BH		(1ul << WORK_OFFQ_BH_BIT)
+ #define WORK_OFFQ_FLAG_MASK	(((1ul << WORK_OFFQ_FLAG_BITS) - 1) << WORK_OFFQ_FLAG_SHIFT)
++#define WORK_OFFQ_DISABLED	(1ul  << WORK_OFFQ_DISABLE_SHIFT)
+ #define WORK_OFFQ_DISABLE_MASK	(((1ul << WORK_OFFQ_DISABLE_BITS) - 1) << WORK_OFFQ_DISABLE_SHIFT)
+ #define WORK_OFFQ_POOL_NONE	((1ul << WORK_OFFQ_POOL_BITS) - 1)
+ #define WORK_STRUCT_NO_POOL	(WORK_OFFQ_POOL_NONE << WORK_OFFQ_POOL_SHIFT)
+@@ -110,6 +111,8 @@ enum wq_misc_consts {
+ #define WORK_DATA_INIT()	ATOMIC_LONG_INIT((unsigned long)WORK_STRUCT_NO_POOL)
+ #define WORK_DATA_STATIC_INIT()	\
+ 	ATOMIC_LONG_INIT((unsigned long)(WORK_STRUCT_NO_POOL | WORK_STRUCT_STATIC))
++#define WORK_DATA_DISABLED_INIT()	\
++		ATOMIC_LONG_INIT((unsigned long)(WORK_STRUCT_NO_POOL | WORK_STRUCT_STATIC | WORK_OFFQ_DISABLED))
+ 
+ struct delayed_work {
+ 	struct work_struct work;
+@@ -242,6 +245,13 @@ struct execute_work {
+ 	__WORK_INIT_LOCKDEP_MAP(#n, &(n))				\
+ 	}
+ 
++#define __WORK_DISABLED_INITIALIZER(n, f) {					\
++	.data = WORK_DATA_DISABLED_INIT(),				\
++	.entry	= { &(n).entry, &(n).entry },				\
++	.func = (f),							\
++	__WORK_INIT_LOCKDEP_MAP(#n, &(n))				\
++	}
++
+ #define __DELAYED_WORK_INITIALIZER(n, f, tflags) {			\
+ 	.work = __WORK_INITIALIZER((n).work, (f)),			\
+ 	.timer = __TIMER_INITIALIZER(delayed_work_timer_fn,\
+@@ -251,6 +261,9 @@ struct execute_work {
+ #define DECLARE_WORK(n, f)						\
+ 	struct work_struct n = __WORK_INITIALIZER(n, f)
+ 
++#define DECLARE_WORK_DISABLED(n, f)						\
++	struct work_struct n = __WORK_DISABLED_INITIALIZER(n, f)
++
+ #define DECLARE_DELAYED_WORK(n, f)					\
+ 	struct delayed_work n = __DELAYED_WORK_INITIALIZER(n, f, 0)
+ 
+-- 
+2.25.1
 
-Deadline: October
-
-Thanks!
-
-Danny Peddinti
-
-PathnSitu Trading
 
