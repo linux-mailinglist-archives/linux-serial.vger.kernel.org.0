@@ -1,119 +1,193 @@
-Return-Path: <linux-serial+bounces-11132-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11135-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1391ABF59B8
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 11:48:32 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D98FBF6061
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 13:28:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23ABB198033C
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 09:48:28 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 025D6343AC3
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 11:28:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26F4532B984;
-	Tue, 21 Oct 2025 09:46:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6683932B9AD;
+	Tue, 21 Oct 2025 11:28:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="j/wRoNwR"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Z+Le7Y7c"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FEEB23BF9C;
-	Tue, 21 Oct 2025 09:46:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761040004; cv=pass; b=dxR+BhQGkEjy4cc846K5QSIlvoeYKpt/UXfZONiROw6h0dmMf6GdK7xnFIQIPTFJsffFYr/nUUIvboQAUQZsSIpfgiBAUTcQ89xaqkgOovoLL571X7lB/jOR+j7IC1L53j2pwSRtDsUs5JcGd/luTj999z8zomkn8tCZNRk+Pes=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761040004; c=relaxed/simple;
-	bh=BT1BbYf1Y5yXL3hJlz/v6ZRCueJkWknoQha5McKnBcs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=A5r+yPrF2VBrdkxVuwm5a6/ibAJXEFOdOwmstmCyQ47C6BkmGHngX2fV1hoI9O532HarQIdHZhtHhTrsy2J7OUqbBFKT5yK93/SLRuQt2M0Aw3tj9U5MyKrzlybCyfaJwFy30V47Z7dLV0rLOcngUT8T8CgUuFO/r5VZ1CA1SEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=j/wRoNwR; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
-ARC-Seal: i=1; a=rsa-sha256; t=1761039979; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=mSP5o11emiP2ro00kcTDnJIawgB51rtVQfA//mCOOsvGn1ArSHWMVlvbA79H9zeRwZsRdXNBUtDSYTYRug5W9/gJ451tx/s/4jt2huNIJ4wm1zVwSMj7+ujmvAiSHX9k6fSIu1EC6Ix2yGClH2BECsXJo0SBw6gEuzm0W011m8g=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1761039979; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=fM/OFmnj6so77IHYlA1fi4R93kba5pRm23lZo7zfC2g=; 
-	b=gXeLq88jQe415g4hLSIb8sa9cLHPByswYiqYZZdE9M5JcDsAQd2QeXe9thQxKBaN+rxM1kIfR7wpAuf3iIjvlIgSMnKocrBAdtZyDR+HI2m4PblBHq0r1YApLANTjzKCUsgzu6Nm7lXiPjTFC66qu8Nt+FoSm/D1ElhgkXSWemw=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=pigmoral.tech;
-	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
-	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761039979;
-	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
-	h=From:From:Date:Date:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Message-Id:References:In-Reply-To:To:To:Cc:Cc:Reply-To;
-	bh=fM/OFmnj6so77IHYlA1fi4R93kba5pRm23lZo7zfC2g=;
-	b=j/wRoNwRzVGbWhyuuP5wJ3+hG3OY9kc3SreZFpaBr4/jbGPhMn7jTBQ2y+3Hv+Cp
-	85XjVIultHSc8GviJdenuXONcPaoR2EgMkEZlQ3NQDYnFvHyvq2GjqLwcKgoWESueDv
-	aiyk8lQaaJmxGr6YzuTNs8eftvSZUw4yR2e9RlO8=
-Received: by mx.zohomail.com with SMTPS id 176103997777640.235295843942595;
-	Tue, 21 Oct 2025 02:46:17 -0700 (PDT)
-From: Junhui Liu <junhui.liu@pigmoral.tech>
-Date: Tue, 21 Oct 2025 17:41:48 +0800
-Subject: [PATCH v3 13/13] riscv: defconfig: Enable Anlogic SoC
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286DA2F4A1B;
+	Tue, 21 Oct 2025 11:28:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1761046133; cv=none; b=kX9tRwwqgyF0iYioE7BZ9sR4R0tD/jEFq6QNcB++rG+3mlReUJBNFKh6+sCv6W8XMAYGIC5YFbGlkkWH1E4YrktjGDWLKnEPNPGJnTebYVb2RuxaDLYM4bzLrJboCBC2Y3lCTIKklA8OBsXbtTk54XRFBr3Y9xppAgHvMYaMEr8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1761046133; c=relaxed/simple;
+	bh=/LAo/XgiJw3yP/NruDjQn14rn0dicvR7MvhTnc73HZg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F53pVLEc4pRFRbPVFiW3toLMCerFphndoZLBZDUlQ9PCO2k26BDOjiHt/0pSSNJB8Ffa/XPGd/vCmGoFBe4J4LNiOdRu/0K3FltTfEPyyG97o/fzmRyrLT95mtqRaCc5iDcbiwdDObslpwYnetqYR3PLuC+M4wU754Ib3oYz5Cg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Z+Le7Y7c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D72EC4CEF1;
+	Tue, 21 Oct 2025 11:28:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1761046132;
+	bh=/LAo/XgiJw3yP/NruDjQn14rn0dicvR7MvhTnc73HZg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Z+Le7Y7cpYeyev2yLI9fzD4vPa1GFAzLnlyXdtGJ2G/OzBCZ/rmyFfbtAmSdhWFnY
+	 tdlGke0RVGfH3A/Z9rbS25PEtlS8JanYEL9mckK+LQzGwa0kCqaHby3UXUv6VXiucy
+	 UmP+ZTsDWXCW3fGYEZCArgXP/YlPH9VhlPB9FD5k=
+Date: Tue, 21 Oct 2025 13:28:46 +0200
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Xin Zhao <jackzxcui1989@163.com>
+Cc: jirislaby@kernel.org, linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org, tj@kernel.org, hch@infradead.org
+Subject: Re: [PATCH v1 2/2] serial: 8250_dma: add parameter to queue work on
+ specific cpu
+Message-ID: <2025102157-goal-grandma-36d4@gregkh>
+References: <20251021083947.705135-1-jackzxcui1989@163.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251021-dr1v90-basic-dt-v3-13-5478db4f664a@pigmoral.tech>
-References: <20251021-dr1v90-basic-dt-v3-0-5478db4f664a@pigmoral.tech>
-In-Reply-To: <20251021-dr1v90-basic-dt-v3-0-5478db4f664a@pigmoral.tech>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
- Alexandre Ghiti <alex@ghiti.fr>, Junhui Liu <junhui.liu@pigmoral.tech>, 
- Thomas Gleixner <tglx@linutronix.de>, 
- Samuel Holland <samuel.holland@sifive.com>, 
- Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Palmer Dabbelt <palmer@sifive.com>, Conor Dooley <conor@kernel.org>, 
- linux-riscv@lists.infradead.org, Inochi Amaoto <inochiama@outlook.com>, 
- sophgo@lists.linux.dev, linux-serial@vger.kernel.org, 
- Conor Dooley <conor.dooley@microchip.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1761039846; l=773;
- i=junhui.liu@pigmoral.tech; s=20250910; h=from:subject:message-id;
- bh=BT1BbYf1Y5yXL3hJlz/v6ZRCueJkWknoQha5McKnBcs=;
- b=jcnGaIRVMmeBHgf8lPTP3BWGl5CDI1pC/z14YdPdQ5DLNGbyxSnAFXo+G1X3o/6cqyFe0nlOZ
- 6vuZFktycyWCCFp4fUDiPh/HVNOxMJAchZ3OH302AXEO3yUlN118mig
-X-Developer-Key: i=junhui.liu@pigmoral.tech; a=ed25519;
- pk=cgATWSU1KfGWmdwNmkPyHGnWgofhqqhE8Vts58wyxe4=
-X-ZohoMailClient: External
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251021083947.705135-1-jackzxcui1989@163.com>
 
-Enable Anlogic SoC config in defconfig to allow the default upstream
-kernel booting on Milianke MLKPAI-FS01 board.
+On Tue, Oct 21, 2025 at 04:39:47PM +0800, Xin Zhao wrote:
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Junhui Liu <junhui.liu@pigmoral.tech>
----
- arch/riscv/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Meta-comment, this is a v2, and was not threaded with patch 1/1.  Please
+use a tool like b4 or git send-email to send patches out so that we can
+properly review/apply them.
 
-diff --git a/arch/riscv/configs/defconfig b/arch/riscv/configs/defconfig
-index fc2725cbca1879c181d179a3d59ac3a0ce206061..14b82f770efe1dc8abe1ef68b523023d89d1f4e5 100644
---- a/arch/riscv/configs/defconfig
-+++ b/arch/riscv/configs/defconfig
-@@ -23,6 +23,7 @@ CONFIG_CHECKPOINT_RESTORE=y
- CONFIG_BLK_DEV_INITRD=y
- CONFIG_PROFILING=y
- CONFIG_ARCH_ANDES=y
-+CONFIG_ARCH_ANLOGIC=y
- CONFIG_ARCH_MICROCHIP=y
- CONFIG_ARCH_SIFIVE=y
- CONFIG_ARCH_SOPHGO=y
+> On the embedded platform, certain critical data, such as IMU data, is
+> transmitted through UART. The tty_flip_buffer_push interface in the TTY
+> layer uses system_unbound_wq to handle the flipping of the TTY buffer.
+> Although the unbound workqueue can create new threads on demand and wake
+> up the kworker thread on an idle CPU, the priority of the kworker thread
+> itself is not high. Even if the CPU running this work was idle just a
+> moment ago, it may be preempted by real-time tasks or other high-priority
+> tasks.
 
--- 
-2.51.1
+Are you using the RT kernel?  It seems odd that this is just coming up
+now, given our normal latency issues in the tty layer.  What changed to
+cause this?
 
+> In our system, the processing interval for each frame of IMU data
+> transmitted via UART can experience significant jitter due to this issue.
+> Instead of the expected 10 to 15 ms frame processing interval, we see
+> spikes up to 30 to 35 ms. Moreover, in just one or two hours, there can
+> be 2 to 3 occurrences of such high jitter, which is quite frequent. This
+> jitter exceeds the software's tolerable limit of 20 ms.
+
+Again, are you using the RT kernel?  If not, can you try that?
+
+> Add module param tty_flip_cpu to queue rx complete work on the specific
+> cpu by tty_flip_buffer_push_wq.
+
+This is not the 1990's, we don't add new module parameters :)
+
+This will not work for systems with multiple tty devices/drivers, please
+use a correct api for this if you really really need it.
+
+But again, I think this might not be needed if you use the RT kernel
+issue.
+
+> The default value of tty_flip_cpu is
+> WORK_CPU_UNBOUND which means using the default system_unbound_wq called
+> by tty_flip_buffer_push, otherwise we use the newly added workqueue
+> wq_tty_flip which is set to WQ_HIGHPRI to promote performance.
+> We set tty_flip_cpu to a specific CPU core that has relatively few
+> real-time tasks running continuously for long periods. Additionally,
+> tasks on this core have some correlation with the UART data related to
+> the 8250 DMA operation. After queuing work to this designated CPU and
+> set workqueue to WQ_HIGHPRI, we can stably eliminate the jitter and
+> ensure that the frame processing interval remains between 10 and 15 ms.
+> If we do not add the WQ_HIGHPRI flag, our testing on the platform shows
+> that there are still spikes occurring approximately once every hour.
+> Considering that projects utilizing this optimization feature must have
+> encountered similar issues to ours, just add the WQ_HIGHPRI flag in the
+> patch, without adding new module parameters for selection.
+> 
+> Signed-off-by: Xin Zhao <jackzxcui1989@163.com>
+> ---
+>  drivers/tty/serial/8250/8250.h     |  2 ++
+>  drivers/tty/serial/8250/8250_dma.c | 46 ++++++++++++++++++++++++++++--
+>  2 files changed, 46 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/8250/8250.h b/drivers/tty/serial/8250/8250.h
+> index cfe6ba286..e6da925df 100644
+> --- a/drivers/tty/serial/8250/8250.h
+> +++ b/drivers/tty/serial/8250/8250.h
+> @@ -20,6 +20,8 @@ struct uart_8250_dma {
+>  	void (*prepare_tx_dma)(struct uart_8250_port *p);
+>  	void (*prepare_rx_dma)(struct uart_8250_port *p);
+>  
+> +	struct workqueue_struct *wq_tty_flip;
+> +
+>  	/* Filter function */
+>  	dma_filter_fn		fn;
+>  	/* Parameter to the filter function */
+> diff --git a/drivers/tty/serial/8250/8250_dma.c b/drivers/tty/serial/8250/8250_dma.c
+> index bdd26c9f3..9a0abee62 100644
+> --- a/drivers/tty/serial/8250/8250_dma.c
+> +++ b/drivers/tty/serial/8250/8250_dma.c
+> @@ -38,6 +38,35 @@ static void __dma_tx_complete(void *param)
+>  	uart_port_unlock_irqrestore(&p->port, flags);
+>  }
+>  
+> +#define TTY_FLIP_WORK_CPU		WORK_CPU_UNBOUND
+> +
+> +static int wq_tty_flip_cpu = TTY_FLIP_WORK_CPU;
+> +
+> +static int param_set_tty_flip_cpu(const char *val,
+> +					const struct kernel_param *kp)
+> +{
+> +	int cpu;
+> +	int ret;
+> +
+> +	ret = kstrtoint(val, 0, &cpu);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if ((cpu >= 0 && cpu < nr_cpu_ids) || cpu == WORK_CPU_UNBOUND)
+> +		wq_tty_flip_cpu = cpu;
+> +	else
+> +		return -EINVAL;
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct kernel_param_ops tty_flip_cpu_ops = {
+> +	.set	= param_set_tty_flip_cpu,
+> +	.get	= param_get_int,
+> +};
+> +
+> +module_param_cb(tty_flip_cpu, &tty_flip_cpu_ops, &wq_tty_flip_cpu, 0644);
+> +
+>  static void __dma_rx_complete(struct uart_8250_port *p)
+>  {
+>  	struct uart_8250_dma	*dma = p->dma;
+> @@ -61,7 +90,10 @@ static void __dma_rx_complete(struct uart_8250_port *p)
+>  	p->port.icount.rx += count;
+>  	dma->rx_running = 0;
+>  
+> -	tty_flip_buffer_push(tty_port);
+> +	if (wq_tty_flip_cpu == WORK_CPU_UNBOUND)
+> +		tty_flip_buffer_push(tty_port);
+> +	else
+> +		tty_flip_buffer_push_wq(tty_port, dma->wq_tty_flip, wq_tty_flip_cpu);
+
+So you just bound ALL tty devices to the same cpu?  That feels very
+wrong, how will that work with multiple devices on different interrupts
+coming in on different cpus?
+
+Why not just queue this up on the cpu that the irq happened on instead?
+
+thanks,
+
+greg k-h
 
