@@ -1,278 +1,170 @@
-Return-Path: <linux-serial+bounces-11120-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11122-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9735FBF58C8
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 11:39:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FF49BF5955
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 11:45:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 49C6F460351
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 09:39:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CAC33AA1AD
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 09:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ECB22E7BDD;
-	Tue, 21 Oct 2025 09:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAE692F656D;
+	Tue, 21 Oct 2025 09:45:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="co5BRLPU"
+	dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b="HEh5qm4o"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mx-relay03-hz1.antispameurope.com (mx-relay03-hz1.antispameurope.com [94.100.132.203])
+Received: from sender4-op-o16.zoho.com (sender4-op-o16.zoho.com [136.143.188.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A78462E6CAD
-	for <linux-serial@vger.kernel.org>; Tue, 21 Oct 2025 09:39:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=94.100.132.203
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C58892DA746;
+	Tue, 21 Oct 2025 09:45:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.16
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761039548; cv=pass; b=K9H1JFx7AgHJehfA9NeHLh8oRcWeutrN8VNMfWY1L6Jazw8S7S84C10bkzQW2pUtj27FndsmSqEYAlbewXjsHfTjsr3sZVqJiBE9s38IeBz+LINyWUHkBNqJgj3w+bdOBkzQ4/nKwJtkcRjTYuZ+UvW23zFFCjc1PVeVf0UYAYM=
+	t=1761039915; cv=pass; b=HU26laC6Dlsj3CVH/5cGEU55bb6KpQpQRGeM803muCu01GWqPEY6Hhvh5qSHXaKeIiG25EdBDnTaZMpvqoDeByytE/3m4ZM1HDtdWC/a+twT53IBiWCkzdmnX/82lz1e1vjLn5rBQfGVWIthPNksoSXc/QElHG3C26nEx1TZvgI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761039548; c=relaxed/simple;
-	bh=eKhIEr2wdHZOdT7ow5a3AzpUQkJ0Ei2/IGrS1CI/pVM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=a9P4LMQW/pWBPd22wm2TwsPkEI+uqD3JstK+rI253RAoLMm528KjYP69Teqrmnq3tRn7JVJjhlOmip4tsqgaioTHRhlJJPXhnSTwbTSfBw/QEQ+ZZOdhtuprSS9sTtZThcwrPT+7WdSxtAVJIl4OYTNuxyoCyZjZ6On+ob3ZBus=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=co5BRLPU; arc=pass smtp.client-ip=94.100.132.203
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
-ARC-Authentication-Results: i=1; mx-gate03-hz1.hornetsecurity.com 1; spf=pass
- reason=mailfrom (ip=94.100.132.6, headerfrom=ew.tq-group.com)
- smtp.mailfrom=ew.tq-group.com smtp.helo=smtp-out01-hz1.hornetsecurity.com;
- dmarc=pass header.from=ew.tq-group.com orig.disposition=pass
-ARC-Message-Signature: a=rsa-sha256;
- bh=i9zmwlits19MWVeZiMnlveUvVwY/OpDAaLlQOnMopBQ=; c=relaxed/relaxed;
- d=hornetsecurity.com; h=from:to:date:subject:mime-version:; i=1; s=hse1;
- t=1761039509;
- b=sQY9v0k+AahZKlu09JKj8HrL78b7T7JPS0ZTFZwX2J1PjtCQMsOTZeUraZwhsLNzW2qNSTym
- PSiN13NZSin5QAAccNPe1byNZAKuyJ8g38HRSo4Qzo+y/CCef4ws5Q7D7mxFGjvFa0o7JHkwPAU
- lS4cjNSyAyzlu/wqDCbuHQ5D2KE0up0ZIrwPGW9S6/+vZWu7xXHtoLVUtclZ1ZO5H3ufC+0zqkT
- 0j/2gfjEekBxSOK1OkPtGaake6gey6xUPQerDXOIpDThum0anQFi8mqGGfzmn4huENU6294W3p7
- +fO2H4mqe+jhxT4EQ31AmjxDsJj60AaeJHYzrouEW1qzQ==
-ARC-Seal: a=rsa-sha256; cv=none; d=hornetsecurity.com; i=1; s=hse1;
- t=1761039509;
- b=syqCkxJNtG/FzY1Izu2VY+23C21qEn+W5MNOn8yaS0nA3aHCavYr4yLVcs+7fvMUxqdD/NXb
- 01PY9AmSXFYAD0vJmy5EwGhwvo/WzrSgn/bbdkX4zXAWE12kaZG2BnzzY0mcFIrz2/PxdQO2Wtg
- nIR94bWBWPCJc7fASJfKYF7S8cXuBL/jzmGOB/BoRMo3ALrFX1caOocUYsGdsgPsIG0x2Aax5R1
- oN3uxYzb2NgDahvvcQmGNVIk17tN6S4bd8IDDvEP8Xic7HmDzD65i37aIJ/UQCXPoiPQGCE3SmW
- WUUPXHNJSoxun/tt+pQvAhdq+DwEEMwA5Kpib/8zqdbew==
-Received: from he-nlb01-hz1.hornetsecurity.com ([94.100.132.6]) by mx-relay03-hz1.antispameurope.com;
- Tue, 21 Oct 2025 11:38:29 +0200
-Received: from [192.168.153.128] (host-82-135-125-110.customer.m-online.net [82.135.125.110])
-	(Authenticated sender: matthias.schiffer@ew.tq-group.com)
-	by smtp-out01-hz1.hornetsecurity.com (Postfix) with ESMTPSA id 11E9CA41274;
-	Tue, 21 Oct 2025 11:37:38 +0200 (CEST)
-Message-ID: <1963351b2e50c537418293e6ab9293576a239c98.camel@ew.tq-group.com>
-Subject: Re: [PATCH] serial: imx: allow CRTSCTS with RTS/CTS GPIOs
-From: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
-To: Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
- <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, linux-kernel@vger.kernel.org,
- linux-serial@vger.kernel.org,  imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux@ew.tq-group.com
-Date: Tue, 21 Oct 2025 11:37:37 +0200
-In-Reply-To: <lgse44as4k6fpzarztfnfl7wbxq2bfg5k7m7l6xlsyx23pmem4@khal3tytgwjn>
-References: <20251016113730.245341-1-matthias.schiffer@ew.tq-group.com>
-	 <cdkpp74ra2ltr7h46psutkwnzyvl4iegcicnhqqj7svm5trltm@w2egfj5nryjm>
-	 <7d3df04c482e71760ccc941469c99412b608c92b.camel@ew.tq-group.com>
-	 <lgse44as4k6fpzarztfnfl7wbxq2bfg5k7m7l6xlsyx23pmem4@khal3tytgwjn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.3-0ubuntu1 
+	s=arc-20240116; t=1761039915; c=relaxed/simple;
+	bh=HhYm2wgmjnUxkDSARQK8RR3OyXC2WBjXA6RAFCc0u4E=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=jkP3c4PEKQQVp8Vx5xni9uaQM6IvRUU4WT7pkZXkfMwhLkIjviG7F0CsVajfkYLFUgcTAwcZWZdQZAJxqo7th8jS9gzRiItrkDeNauJgFZu5Z3/KTb1WFbKTg9S4y54w65c7t2EudQ13gZupgPQx2nae/kRDT9ZRs7Met06lUIE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech; spf=pass smtp.mailfrom=pigmoral.tech; dkim=pass (1024-bit key) header.d=pigmoral.tech header.i=junhui.liu@pigmoral.tech header.b=HEh5qm4o; arc=pass smtp.client-ip=136.143.188.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pigmoral.tech
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pigmoral.tech
+ARC-Seal: i=1; a=rsa-sha256; t=1761039860; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=NnzBGQLYNBCXKQJzYf3bBsAtiXzhu7UoLkvTu7ddrt1jrxpTt6/OsT3D14KW/4tJ/XRT4f4baqOBwAAFs++G+GcA+5udPQ/iX/e6ON4S98gCWOmJQviL8oWpKMcfsAAWGQLoXDpEc6YtVFKqNZaLEAMM8gB9j+i/AaaEzMtdU2o=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1761039860; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=15xJqilDviN6GeZoWciapgWlMTam4VZt04d8Xq7VHbc=; 
+	b=aXQDbhjFWPFyzf3KCq+Hss3ySTNm91V1m1Y9jn/MCd/93MgC1cXuoSc4VrWvndnzXu8wWJnTZbGaEAQH94zJIR8I3DJBEfjf/2jwvL7oKOIfTbkOftNbvlYhorzFfayLWeUH9YHSxkz6S+6roGe5wbWVpQkeWm/cAnaJtK0c348=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=pigmoral.tech;
+	spf=pass  smtp.mailfrom=junhui.liu@pigmoral.tech;
+	dmarc=pass header.from=<junhui.liu@pigmoral.tech>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1761039860;
+	s=zmail; d=pigmoral.tech; i=junhui.liu@pigmoral.tech;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=15xJqilDviN6GeZoWciapgWlMTam4VZt04d8Xq7VHbc=;
+	b=HEh5qm4oRyBn8D/ZMACqQ41On4stzIqQj1U1jyEP97OK7NvxnC+YF4+1m6ExNibN
+	exImK/5tuEaPxu6z8Nejg61U+IUK6bL1OsdsRaJ4nh4SCWBBWvkB8ta7Z+xRsSkK4hQ
+	o7Clah0iQ+MD4QHeKKVxe3WWCpzxVk9BI2YfVxuc=
+Received: by mx.zohomail.com with SMTPS id 1761039855417529.1083617434861;
+	Tue, 21 Oct 2025 02:44:15 -0700 (PDT)
+From: Junhui Liu <junhui.liu@pigmoral.tech>
+Subject: [PATCH v3 00/13] riscv: Add initial support for Anlogic DR1V90
+Date: Tue, 21 Oct 2025 17:41:35 +0800
+Message-Id: <20251021-dr1v90-basic-dt-v3-0-5478db4f664a@pigmoral.tech>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-cloud-security-sender:matthias.schiffer@ew.tq-group.com
-X-cloud-security-recipient:linux-serial@vger.kernel.org
-X-cloud-security-crypt: load encryption module
-X-cloud-security-Mailarchiv: E-Mail archived for: matthias.schiffer@ew.tq-group.com
-X-cloud-security-Mailarchivtype:outbound
-X-cloud-security-Virusscan:CLEAN
-X-cloud-security-disclaimer: This E-Mail was scanned by E-Mailservice on mx-relay03-hz1.antispameurope.com with 4crRzQ6tXCzdsVM
-X-cloud-security-connect: he-nlb01-hz1.hornetsecurity.com[94.100.132.6], TLS=1, IP=94.100.132.6
-X-cloud-security-Digest:b6a1ef41415f75c94556ef2ddcc8cb65
-X-cloud-security:scantime:8.361
-DKIM-Signature: a=rsa-sha256;
- bh=i9zmwlits19MWVeZiMnlveUvVwY/OpDAaLlQOnMopBQ=; c=relaxed/relaxed;
- d=ew.tq-group.com;
- h=content-type:mime-version:subject:from:to:message-id:date; s=hse1;
- t=1761039508; v=1;
- b=co5BRLPU3oCAF6KOScSLMi7hcHBzBEmGwOY4mVLtvv7xh2s3ptuvwlpH5pSY+tlQYSAl7BJe
- o1P9L1MUcOt5NLOKf20WIuy6fsByyAVXuoOJ8YT1/QvbuRsV6uhH3ssdf+8De2E2BLsnJlmGYYl
- Zl1EPcoEaWc1VpRFR3Oeb2DcaZzYrbVVpJgwLXnCf797MrRv9mQirO/zrs4M3Vh4+pELs/nHK1o
- aqH8i1ga+yYtolTp1NMVoGCJHlRod7yR6KDbFzSgKF0Ge4/a2VRR9LVNzT3khOrWlV3lIbt+I2z
- nkFIAkd0JVmliYtVK2/dM4GwPA5dtkPHfpKNC1Q8595hA==
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAE9V92gC/2XNQQ6CMBCF4auQrq2ZDlSoK+9hXJR2hElUSEsaD
+ eHuFmLiguX/kvlmFpECUxTnYhaBEkceXjnKQyFcb18dSfa5BQJqqBVIH1QyIFsb2Uk/yVIjGUv
+ aurYR+WoMdOf3Jl5vuXuO0xA+24Ok1vVnodpZSUmQuq7AaWWMq+rLyN1zCPZxnMj1YvUS/g2Du
+ DcwG6fKY6MBXFvujGVZvhaM0Iz2AAAA
+X-Change-ID: 20250710-dr1v90-basic-dt-352e9ae5acb8
+To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Junhui Liu <junhui.liu@pigmoral.tech>, 
+ Thomas Gleixner <tglx@linutronix.de>, 
+ Samuel Holland <samuel.holland@sifive.com>, 
+ Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@sifive.com>, Conor Dooley <conor@kernel.org>, 
+ linux-riscv@lists.infradead.org, Inochi Amaoto <inochiama@outlook.com>, 
+ sophgo@lists.linux.dev, linux-serial@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ Conor Dooley <conor.dooley@microchip.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1761039846; l=3529;
+ i=junhui.liu@pigmoral.tech; s=20250910; h=from:subject:message-id;
+ bh=HhYm2wgmjnUxkDSARQK8RR3OyXC2WBjXA6RAFCc0u4E=;
+ b=WuAubXbtDtHedNzHkVtHXi+tn5DscdWLgHql03MT3do1bmP0JG6WX8sNrVZLsfnLXG8bWZH/8
+ YrmOvuywyfvDiHNYy9JWYrrJUA9KBEwp9gQi6atXP2kPggDv3joqGOY
+X-Developer-Key: i=junhui.liu@pigmoral.tech; a=ed25519;
+ pk=cgATWSU1KfGWmdwNmkPyHGnWgofhqqhE8Vts58wyxe4=
+X-ZohoMailClient: External
 
-On Tue, 2025-10-21 at 10:59 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> Hello Matthias,
->=20
-> On Mon, Oct 20, 2025 at 10:09:29AM +0200, Matthias Schiffer wrote:
-> > On Fri, 2025-10-17 at 17:01 +0200, Uwe Kleine-K=C3=B6nig wrote:
-> > > On Thu, Oct 16, 2025 at 01:37:30PM +0200, Matthias Schiffer wrote:
-> > > > The CTS GPIO is only evaluated when the CRTSCTS termios flag is ena=
-bled;
-> > > > it should be possible to enable the flag when only GPIO and no hard=
-ware-
-> > > > controlled RTS/CTS are available. UCR2_IRTS is kept enabled in this=
- case,
-> > > > so the hardware CTS is ignored.
-> > > >=20
-> > > > Fixes: 58362d5be352 ("serial: imx: implement handshaking using gpio=
-s with the mctrl_gpio helper")
-> > > > Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com=
->
-> > > > ---
-> > > >  drivers/tty/serial/imx.c | 10 +++++-----
-> > > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > >=20
-> > > > diff --git a/drivers/tty/serial/imx.c b/drivers/tty/serial/imx.c
-> > > > index 500dfc009d03e..4a54a689a0603 100644
-> > > > --- a/drivers/tty/serial/imx.c
-> > > > +++ b/drivers/tty/serial/imx.c
-> > > > @@ -1117,8 +1117,8 @@ static void imx_uart_set_mctrl(struct uart_po=
-rt *port, unsigned int mctrl)
-> > > >  			ucr2 |=3D UCR2_CTS;
-> > > >  			/*
-> > > >  			 * UCR2_IRTS is unset if and only if the port is
-> > > > -			 * configured for CRTSCTS, so we use inverted UCR2_IRTS
-> > > > -			 * to get the state to restore to.
-> > > > +			 * configured for hardware-controlled CRTSCTS, so we use
-> > > > +			 * inverted UCR2_IRTS to get the state to restore to.
-> > > >  			 */
-> > > >  			if (!(ucr2 & UCR2_IRTS))
-> > > >  				ucr2 |=3D UCR2_CTSC;
-> > > > @@ -1780,7 +1780,7 @@ imx_uart_set_termios(struct uart_port *port, =
-struct ktermios *termios,
-> > > >  	if ((termios->c_cflag & CSIZE) =3D=3D CS8)
-> > > >  		ucr2 |=3D UCR2_WS;
-> > > > =20
-> > > > -	if (!sport->have_rtscts)
-> > > > +	if (!sport->have_rtscts && !sport->have_rtsgpio)
-> > > >  		termios->c_cflag &=3D ~CRTSCTS;
-> > > > =20
-> > > >  	if (port->rs485.flags & SER_RS485_ENABLED) {
-> > >=20
-> > > This hunk makes sense.
-> > >=20
-> > > > @@ -1794,7 +1794,7 @@ imx_uart_set_termios(struct uart_port *port, =
-struct ktermios *termios,
-> > > >  		else
-> > > >  			imx_uart_rts_inactive(sport, &ucr2);
-> > > > =20
-> > > > -	} else if (termios->c_cflag & CRTSCTS) {
-> > > > +	} else if ((termios->c_cflag & CRTSCTS) && sport->have_rtscts) {
-> > >=20
-> > > I agree to add the parens here and consider this more readable than t=
-he
-> > > alternative
-> > >=20
-> > > 	} else if (termios->c_cflag & CRTSCTS && sport->have_rtscts) {
-> > >=20
-> > > . Note there is no real win here. If the port doesn't have RTS/CTS it
-> > > doesn't matter if it tries to control the RTS line. While you could
-> > > argue it shouldn't set the line, it only makes an externally observab=
-le
-> > > difference if one of the SoC's pads is muxed to its RTS function.
-> > > I claim it's more robust in this case (i.e. no uart-has-rtscts proper=
-ty
-> > > but a pinmux for the RTS line) to control the line according to the R=
-TS
-> > > setting. This is (at least IMO) better and more expected than driving
-> > > this line to a constant level. So I oppose to this hunk.
-> > >=20
-> > > >  		/*
-> > > >  		 * Only let receiver control RTS output if we were not requested
-> > > >  		 * to have RTS inactive (which then should take precedence).
-> > > > @@ -1803,7 +1803,7 @@ imx_uart_set_termios(struct uart_port *port, =
-struct ktermios *termios,
-> > > >  			ucr2 |=3D UCR2_CTSC;
-> > > >  	}
-> > > > =20
-> > > > -	if (termios->c_cflag & CRTSCTS)
-> > > > +	if ((termios->c_cflag & CRTSCTS) && sport->have_rtscts)
-> > > >  		ucr2 &=3D ~UCR2_IRTS;
-> > > >  	if (termios->c_cflag & CSTOPB)
-> > > >  		ucr2 |=3D UCR2_STPB;
-> > >=20
-> > > Hmm, not sure. On one hand the same argument applies as above, but on
-> > > the other if there are pins that are not explicitly configured but st=
-ill
-> > > in their CTS function this might affect operation in a bad way.
-> > > Also this affects the (very usual) configuration where only RX, TX an=
-d
-> > > RTS are used and CTS is not. In this case have_rtscts is true (right?=
-)
-> > > and then if there is an accidental CTS pin this is bad and not fixed =
-by
-> > > your change. Hmmm...
-> >=20
-> > I think it makes sense to always keep UCR2_IRTS set when have_rtscts is=
- unset,
-> > as otherwise there might be two separate CTS signals in the accidental =
-CTS pin
-> > case - the hardware + the GPIO one, both affecting the UART operation.
->=20
-> With that change you break setups that have an RTS-GPIO but rely on the
-> HW pin for the CTS function. Not sure how common that is, but in this
-> case you only want the first code change. You could argue that in that
-> case have_rtscts should be set, but that's somewhat fuzzy.
+This introduces initial support for the Anlogic DR1V90 SoC [1] and the
+Milianke MLKPAI-FS01 [2] board.
 
-Such a setup should set have_rtscts IMO. In any case, my patch would not br=
-eak
-existing setups, as the CRTSCTS flag simply cannot be set for !have_rtscts
-without these changes.
+The DR1V90 is a RISC-V based FPSoC from Anlogic, featuring a Nuclei
+UX900 [3] core as its processing system (PS) and 94,464 LUTs in the
+programmable logic (PL) part. The Milianke MLKPAI-FS01 board is one of
+the first platforms based on this SoC, with UART1 routed to a Type-C
+interface for console access.
 
->=20
-> > If we keep this change (the 3rd), the 2nd should also be included for
-> > consistency in the code path where I just changed a comment - there, UC=
-R2_CTSC
-> > is set only when UCR2_IRTS is unset. The 2nd and 3rd change together ke=
-ep
-> > imx_uart_set_mctrl and imx_uart_set_termios aligned.
-> >=20
-> > >=20
-> > > So in sum the 2nd and 3rd code change is controversial. If the first =
-one
-> > > already fixes the problem you're facing, I suggest to go for only tha=
-t.
-> > > If you still think that the 3rd (and maybe even the 2nd) change is a
-> > > good idea, I'd request to do that in a separate commit as this is a
-> > > separate problem. Also the commit log only describes the first change=
-,
-> > > doesn't it?
-> >=20
-> > The commit message describes the first and third change; the second is =
-included
-> > to keep the setup consistent. I don't think these changes can be separa=
-ted well
-> > - the second and third change only affect a case that couldn't occur wi=
-thout the
-> > first (as (termios->c_cflag & CRTSCTS) && !sport->have_rtscts would nev=
-er have
-> > been true). My suggestion would be that I extend the commit message to =
-explain
-> > each change in detail.
->=20
-> I'd still request to split the patch in at least two patches. The first
-> code change is to allow rts-gpios to work at all. The two later patches
-> change details about how HW pins are controlled in the presence of
-> rts-gpios
+Tested on the Milianke MLKPAI-FS01 board with both the vendor's OpenSBI
+and the not-yet-upstreamed mainline OpenSBI [4], as well as the vendor’s
+U-Boot. Because the vendor’s OpenSBI is loaded at 0x1f300000, we have
+to additionally reserve the DRAM region 0x1fe00000–0x1fffffff to prevent
+overlap if using vendor's OpenSBI.
 
-Okay, will do.
+Link: https://www.anlogic.com/product/fpga/saldragon/dr1 [1]
+Link: https://www.milianke.com/product-item-104.html [2]
+Link: https://nucleisys.com/product/900.php [3]
+Link: https://github.com/pigmoral/opensbi/tree/dr1v90 [4]
+---
+Changes in v3:
+- Update DT binding to use ACLINT instead of CLINT
+- Drop MAINTAINERS patch
+- Rebase on v6.18-rc1
+- Link to v2: https://lore.kernel.org/r/20250922-dr1v90-basic-dt-v2-0-64d28500cb37@pigmoral.tech
 
-Best,
-Matthias
+Changes in v2:
+- Add MAINTAINERS entry for the DR1V90 platform
+- Remove the riscv,isa property of cpu and reorder propertyies
+- Fix clint base address in the dtsi
+- Change the memory node to cover the full 512MB RAM in board dts
+- Link to v1: https://lore.kernel.org/r/20250721-dr1v90-basic-dt-v1-0-5740c5199c47@pigmoral.tech
 
+---
+Junhui Liu (13):
+      dt-bindings: vendor-prefixes: Add Anlogic, Milianke and Nuclei
+      dt-bindings: riscv: Add Nuclei UX900 compatibles
+      dt-bindings: riscv: Add Anlogic DR1V90
+      dt-bindings: interrupt-controller: Add Anlogic DR1V90 PLIC
+      dt-bindings: interrupt-controller: Add Anlogic DR1V90 ACLINT MSWI
+      dt-bindings: interrupt-controller: Add Anlogic DR1V90 ACLINT SSWI
+      dt-bindings: timer: Add Anlogic DR1V90 ACLINT MTIMER
+      dt-bindings: serial: snps-dw-apb-uart: Add Anlogic DR1V90 uart
+      irqchip/aclint-sswi: Add Nuclei UX900 support
+      riscv: Add Anlogic SoC famly Kconfig support
+      riscv: dts: Add initial Anlogic DR1V90 SoC device tree
+      riscv: dts: anlogic: Add Milianke MLKPAI FS01 board
+      riscv: defconfig: Enable Anlogic SoC
 
->=20
-> Best regards
-> Uwe
+ .../interrupt-controller/sifive,plic-1.0.0.yaml    |   1 +
+ .../thead,c900-aclint-mswi.yaml                    |  17 ++--
+ .../thead,c900-aclint-sswi.yaml                    |   4 +
+ .../devicetree/bindings/riscv/anlogic.yaml         |  27 ++++++
+ Documentation/devicetree/bindings/riscv/cpus.yaml  |   1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml          |   1 +
+ .../bindings/timer/thead,c900-aclint-mtimer.yaml   |  17 ++--
+ .../devicetree/bindings/vendor-prefixes.yaml       |   6 ++
+ arch/riscv/Kconfig.socs                            |   5 ++
+ arch/riscv/boot/dts/Makefile                       |   1 +
+ arch/riscv/boot/dts/anlogic/Makefile               |   2 +
+ arch/riscv/boot/dts/anlogic/dr1v90-mlkpai-fs01.dts |  28 ++++++
+ arch/riscv/boot/dts/anlogic/dr1v90.dtsi            | 100 +++++++++++++++++++++
+ arch/riscv/configs/defconfig                       |   1 +
+ drivers/irqchip/irq-aclint-sswi.c                  |   3 +-
+ 15 files changed, 201 insertions(+), 13 deletions(-)
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20250710-dr1v90-basic-dt-352e9ae5acb8
 
---=20
-TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Germ=
-any
-Amtsgericht M=C3=BCnchen, HRB 105018
-Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan Sch=
-neider
-https://www.tq-group.com/
+Best regards,
+-- 
+Junhui Liu <junhui.liu@pigmoral.tech>
+
 
