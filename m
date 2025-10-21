@@ -1,99 +1,136 @@
-Return-Path: <linux-serial+bounces-11115-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11117-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BAF6CBF549C
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 10:37:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D23CBF54F6
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 10:41:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1946B18828C0
-	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 08:38:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B0C723A9EED
+	for <lists+linux-serial@lfdr.de>; Tue, 21 Oct 2025 08:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31665302745;
-	Tue, 21 Oct 2025 08:37:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1515430F529;
+	Tue, 21 Oct 2025 08:39:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Gx36LVtm"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="eiQ5U+pp"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.2])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9878B288C20
-	for <linux-serial@vger.kernel.org>; Tue, 21 Oct 2025 08:37:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A001B30CD9F;
+	Tue, 21 Oct 2025 08:39:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.2
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761035866; cv=none; b=aPIuxcsKvO2fplxB/jC0CCnoJu6K+qtlu57qqLP1FYEfF66ztyiVvOZlepsQSrW9hD5lPASWhmYS/uY9RcgtzFXb32ADLHPfD3mliAaOzBC+2GXDAcFDYxF8lORjs7/HFWRjaWFg3Uq/duAVEd9I8hJT0tdSUtWz6bxRCuP2uao=
+	t=1761035973; cv=none; b=lY2IT6nyav8BJwV5y+ti05zs4hN6s+/vJgY7WonzbUzq2d7/HKsrFdMRWYWaYOXqS14rzyeCZE/OAZgpvo5anP6Ab+g4P7H9TXA3haeIZMN8YWMhvYnKwTegYjQWBNx9KA76V7P48QhYZLwBvmVyTRkTGyxDER4VCZOEvf27DNc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761035866; c=relaxed/simple;
-	bh=QjyCWM2eaOA0G4njqmL1QXzj7R90sfd0dteSirTsca4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ExEqzVYp5QUknQvsmHqXfcZKwPQw8zJlOKfJDLCdntEL8w2cYdc9e4PIdKr6GEnpC64Is14bOlWWgZXQ8YKil8dTzGZbIq96CEGMzS1gjauuDFWGckRIwTRb37sxp1XFY7f5UM9Dp7y+0/xCa53Sm0tzdNPske8VTvz2HXyUUM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Gx36LVtm; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b4736e043f9so897218166b.0
-        for <linux-serial@vger.kernel.org>; Tue, 21 Oct 2025 01:37:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761035863; x=1761640663; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QjyCWM2eaOA0G4njqmL1QXzj7R90sfd0dteSirTsca4=;
-        b=Gx36LVtmNIzqM8hPLu5g2RBt9sKc3Xr8z4YXyajQafsm8z+85hYTIcZUHC4o0qHgzw
-         Kmj4C2v6qaauSPZnF1wYOt78WB9dJvsiwmXjHEkLP76V45M/cpZdTyu4wAXkPHR6YJGB
-         KQ1Ab2eZp5Pl1oUxuF5xZdR64/uQNax2P4tEs0gM9s9m4wGfUAX9ZQnWzf8G9kIARh/3
-         Jmd7yHDN5Ipy5P1irI+lgmGQYYyYwUfZYj2+Vjg9JcD4lBIVMoGlQtYWC4JBfgiu7fUU
-         w+hY+fNdmrx3FAr54JWk/0CPr52x3/qktPr6h6nbJf4R2wP+R1pBQrU8wxnuS/1lz28L
-         UeTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761035863; x=1761640663;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QjyCWM2eaOA0G4njqmL1QXzj7R90sfd0dteSirTsca4=;
-        b=YKGVwGV2kTwV7i09BNcgSsmXbxZtVizR1TjLX7B/d+MIaSxC2cm7wtJe0qqE/jZF4D
-         JJtIBQZLi3or9M8GZc4315iSuSLteElEc/fgFY0u4UKarYUaBpdWPvUOY+ifTgboxiGc
-         x7in+RNnuj/Er6luqgohDw+1edinZA1oKZ+KOu2MJVUG0m5oQa9o1hfICmT1sce697Vw
-         tc+iwUw4kh47A1jy6gaJl7qPLBlejzuErovi1LMKGOV5xXjLb8/mwOuJDLPQA2MN+w7K
-         S5Eg3RW2bev9VxQ87WcpgEvgTWxJQoRWWEmMUodOeu9Sxq0ciPWAxJdQLug3FFZuyZJc
-         tgMw==
-X-Forwarded-Encrypted: i=1; AJvYcCU9S1B9dloKPyJnu3+qnpP99TVQWVEFQwzfKsTMfWgoBSSJbO41BxkTjLPGkMG3VogZ9LWeDKdaKGcOEmU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3PhF8mp4BGyNiE5dSbK7IHR7hi/FsQg1MdwjCXJJfzSOQH10x
-	y2Vq4Atk/GsvoN7v4tEOfx9jYdS7U/Npl4yfWBITQkxeXBbbAYvHgPJ3lMtvIS+NfZeOojsSXW9
-	PGkwIqKdoCFbMPyXOyaHKquXqOp/P5Q==
-X-Gm-Gg: ASbGncubZk7y61QWwmzH+VL+5l9SdyW9Q+3dXufy5D5qQtUttcfEF0FlJsRQZ6jY3jt
-	KDtnb9HVpGsNvlRpEMcoghSGg3fSCWfswgXeO5SWxPy0U+L0vwmJ10IOJQBe+nKYiifiAFBbNzY
-	dDgDTUwUQS+uBdQ1uwNjzdCjzMXAimKHVX/d3TDovsjkxZJMCKJK+8fc8Pc3hjk0NnLnEbai/5N
-	WmbHdLcOoFD6TetfaXYqB65nQ6SpjXusJEf9izgzeL29LzgMeNMQrrQzw==
-X-Google-Smtp-Source: AGHT+IEtZxUVPjSc2WqOyAjA7Fte4RrVXHEh4i2Gbt2zB79A/SDrGDESaIChW2EoFUntYRwCfCiMlt+Yi0KqlqbopSU=
-X-Received: by 2002:a17:907:3dac:b0:b45:8370:ef10 with SMTP id
- a640c23a62f3a-b647245845bmr1951550566b.22.1761035862848; Tue, 21 Oct 2025
- 01:37:42 -0700 (PDT)
+	s=arc-20240116; t=1761035973; c=relaxed/simple;
+	bh=5mvJZLRCE6qQFNtgg0ixmtP2qEAu5j/b+DtFPUipRWk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=E1YNJaNFI9dke+3m764MPdbAdlWBu+yzkTYxmrPRqPPVjl/qOcri2AfQPT5TXWqmfGWwdMGuj3fhYBPXcwC1VMxSuplJdq38tqNN8F55m7DnMJtimQbOVb909xyUkJPQFeXo/6WVV16eUD75+O7DaHQWPJmHJ6PCxhlBGBFcnI0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=eiQ5U+pp; arc=none smtp.client-ip=117.135.210.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=HP
+	kCgO+dtwR2sSHnMG+37aQKBPks/wWWyZdgP9BtMv8=; b=eiQ5U+ppHu2pxaxQGV
+	BBecT00HEOg1dGc8iiPIIJz+aUzl3Y29f1HEw57qMfH3K/GbD/apjY0AxI77jJdy
+	j+KQzMPwskuRmM/Q5htxo9skFHOKgQ5t05XT1ihY9KKO/flgPmpjflXLbhjJuR3s
+	F2jQDJ7Mn9ciZQjaL1rH/iEPY=
+Received: from zhaoxin-MS-7E12.. (unknown [])
+	by gzga-smtp-mtada-g1-2 (Coremail) with SMTP id _____wD3v4+lRvdoaOIBBw--.9646S2;
+	Tue, 21 Oct 2025 16:39:02 +0800 (CST)
+From: Xin Zhao <jackzxcui1989@163.com>
+To: gregkh@linuxfoundation.org,
+	jirislaby@kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	tj@kernel.org,
+	hch@infradead.org,
+	Xin Zhao <jackzxcui1989@163.com>
+Subject: [PATCH v1 1/2] tty: tty_buffer: add interface to queue work on specific wq and cpu
+Date: Tue, 21 Oct 2025 16:38:59 +0800
+Message-Id: <20251021083859.704472-1-jackzxcui1989@163.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251016103609.33897-2-bagasdotme@gmail.com> <aa388d29-b83b-454e-a686-638c80c6a7bf@infradead.org>
- <CAH2-hc+XQR7v9Z28yH_CTWZ4ieaF5eQFKBVut1idULP=4w03fQ@mail.gmail.com> <6b8e7935-6b80-4f00-9a44-7003071d1a21@infradead.org>
-In-Reply-To: <6b8e7935-6b80-4f00-9a44-7003071d1a21@infradead.org>
-From: =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
-Date: Tue, 21 Oct 2025 10:37:30 +0200
-X-Gm-Features: AS18NWAkzMEdIZQ7IEi0fFSxQKz8uPinwHCWF-5cnXsFVeY8YpgVfIMAZOdWQSE
-Message-ID: <CAH2-hc+M-CyXL1HtHkD9o_Q_8PP_OkYLvjqhdBiCnHVBQspedQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Documentation: sysrq: Rewrite /proc/sysrq-trigger usage
-To: Randy Dunlap <rdunlap@infradead.org>
-Cc: Bagas Sanjaya <bagasdotme@gmail.com>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	Linux Documentation <linux-doc@vger.kernel.org>, Linux Serial <linux-serial@vger.kernel.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Cengiz Can <cengiz@kernel.wtf>, Jiri Slaby <jirislaby@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, =?UTF-8?Q?Anselm_Sch=C3=BCler?= <mail@anselmschueler.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wD3v4+lRvdoaOIBBw--.9646S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7CrWkGrW5WF18Gw48WrW3KFg_yoW5JF1DpF
+	s0kr1YqFs5Xay29rsxGr17Jaya93Z3WFy7CrWI93ySyr1DJ3WruFnF9F9I9rn5Crn7Ww1a
+	yrZ5uws5CF12vrJanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zikpnPUUUUU=
+X-CM-SenderInfo: pmdfy650fxxiqzyzqiywtou0bp/1tbiRw3tCmj3QkFbDwAAsl
 
-In that case, can we use some short form? Something like
-"extra characters are ignored for now, which might change in future".
+On the embedded platform, certain critical data, such as IMU data, is
+transmitted through UART. The tty_flip_buffer_push interface in the TTY
+layer uses system_unbound_wq to handle the flipping of the TTY buffer.
+Although the unbound workqueue can create new threads on demand and wake
+up the kworker thread on an idle CPU, the priority of the kworker thread
+itself is not high. Even if the CPU running this work was idle just a
+moment ago, it may be preempted by real-time tasks or other high-priority
+tasks.
+Add tty_flip_buffer_push_wq interface to queue work on specific workqueue
+and specific cpu.
 
-Thing is that i wanted to add handling of extra characters, but
-maintainer said it cannot be done because people might currently rely
-on characters being ignored as written in documentation.
+Signed-off-by: Xin Zhao <jackzxcui1989@163.com>
+---
+ drivers/tty/tty_buffer.c | 23 +++++++++++++++++++++++
+ include/linux/tty_flip.h |  3 +++
+ 2 files changed, 26 insertions(+)
+
+diff --git a/drivers/tty/tty_buffer.c b/drivers/tty/tty_buffer.c
+index 67271fc0b..112a650e2 100644
+--- a/drivers/tty/tty_buffer.c
++++ b/drivers/tty/tty_buffer.c
+@@ -534,6 +534,29 @@ void tty_flip_buffer_push(struct tty_port *port)
+ }
+ EXPORT_SYMBOL(tty_flip_buffer_push);
+ 
++/**
++ * tty_flip_buffer_push		-	push terminal buffers
++ * @port: tty port to push
++ * @wq: workqueue on which to queue work
++ * @cpu: cpu on which to queue work
++ *
++ * Queue a push of the terminal flip buffers to the line discipline. Can be
++ * called from IRQ/atomic context.
++ *
++ * In the event of the queue being busy for flipping the work will be held off
++ * and retried later.
++ */
++void tty_flip_buffer_push_wq(struct tty_port *port,
++			     struct workqueue_struct *wq,
++			     int cpu)
++{
++	struct tty_bufhead *buf = &port->buf;
++
++	tty_flip_buffer_commit(buf->tail);
++	queue_work_on(cpu, wq, &buf->work);
++}
++EXPORT_SYMBOL(tty_flip_buffer_push_wq);
++
+ /**
+  * tty_insert_flip_string_and_push_buffer - add characters to the tty buffer and
+  *	push
+diff --git a/include/linux/tty_flip.h b/include/linux/tty_flip.h
+index af4fce98f..0138b6bfb 100644
+--- a/include/linux/tty_flip.h
++++ b/include/linux/tty_flip.h
+@@ -15,6 +15,9 @@ size_t __tty_insert_flip_string_flags(struct tty_port *port, const u8 *chars,
+ 				      size_t size);
+ size_t tty_prepare_flip_string(struct tty_port *port, u8 **chars, size_t size);
+ void tty_flip_buffer_push(struct tty_port *port);
++void tty_flip_buffer_push_wq(struct tty_port *port,
++			     struct workqueue_struct *wq,
++			     int cpu);
+ 
+ /**
+  * tty_insert_flip_string_fixed_flag - add characters to the tty buffer
+-- 
+2.34.1
+
 
