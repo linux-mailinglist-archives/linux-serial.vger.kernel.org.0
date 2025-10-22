@@ -1,191 +1,126 @@
-Return-Path: <linux-serial+bounces-11152-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11154-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39172BFC6D9
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Oct 2025 16:17:10 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 538B3BFCA82
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Oct 2025 16:49:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C10D91A074B6
-	for <lists+linux-serial@lfdr.de>; Wed, 22 Oct 2025 14:17:29 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id D96353578CC
+	for <lists+linux-serial@lfdr.de>; Wed, 22 Oct 2025 14:49:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3459E343D83;
-	Wed, 22 Oct 2025 14:17:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EE5934A76D;
+	Wed, 22 Oct 2025 14:47:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b="AEdiDaU+"
+	dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b="BuqiwOmC"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+Received: from m16.mail.163.com (m16.mail.163.com [117.135.210.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7384D34B420;
-	Wed, 22 Oct 2025 14:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.243.120.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39261F582E;
+	Wed, 22 Oct 2025 14:47:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761142624; cv=none; b=Co1gVbp4LNOCpgx38ZRW7I3VeotL4nAEcH71YBBPJq3w2BnHaEsdeIcKgy3+6QANDjcnwWgDCUpFPATXqRWKuyonhqk+zBex6mNIC6QMXWM7AFKfqZ+2A68z2YPg2Jui/Al3fsxKF/19CD/RZH6N7UDY9z6YrQ2eBrJ/GxSzCA8=
+	t=1761144468; cv=none; b=fllk7uJdYEJWrlXmvEFY5Uoty5UdRKDValtaHXjzlA0JxwCQTqB8aU8gYCwLkiAg9pz3ZdaSXRcDnsl5iPjEo8+JtVveE5g/RFfuf8Pj/PhABuhucQHz0ESSqleXXoCHlizvfoOjXJuvSvZzj32gqzbSaP1h2lZGd53f9xr0Zzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761142624; c=relaxed/simple;
-	bh=kEIdNZsYYnfkyuznqSp9VAPd2ZdXepekczU5RzpTfTU=;
-	h=Date:From:To:Cc:Message-Id:In-Reply-To:References:Mime-Version:
-	 Content-Type:Subject; b=A0ySh9o3FahKnB290jaPMdP75F2RQSG4zqncvziNlVU3B2NcJuTsA/wu+HR4LPme0Js3KVfVf5eWpjsjJ9gpAVqJ6K6iApwK5uIX/4gjiKr3KBkjMQZZ/ViXJpIyT7oPoftRk25RNJ2R3i/YEIKEPxHfQwhsZucYRWxdgokLTA4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com; spf=pass smtp.mailfrom=hugovil.com; dkim=pass (1024-bit key) header.d=hugovil.com header.i=@hugovil.com header.b=AEdiDaU+; arc=none smtp.client-ip=162.243.120.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hugovil.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hugovil.com
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
-	; s=x; h=Subject:Content-Transfer-Encoding:Mime-Version:Message-Id:Cc:To:From
-	:Date:subject:date:message-id:reply-to;
-	bh=1+PD1+X2bVQnaXpw26bvZRG1dWHXqNR8+UJ3fGypRBc=; b=AEdiDaU+ss1sUqqtNMckb1Mo9d
-	n0oOmyJupvICWKCR+x8ZtDizgp9qCc3fpx4pRSzUpC2gm4uRibwxwtziZjTN02Z01H7s99cwHSDxW
-	AU/V/kd3wLm7YqDKmUjeQy0O8uQzWXJE4CxWsiIX+oE7wgFClr9fFfLRW96eXKJflSnE=;
-Received: from modemcable168.174-80-70.mc.videotron.ca ([70.80.174.168]:47074 helo=pettiford)
-	by mail.hugovil.com with esmtpa (Exim 4.92)
-	(envelope-from <hugo@hugovil.com>)
-	id 1vBZe0-0005NK-5F; Wed, 22 Oct 2025 10:16:52 -0400
-Date: Wed, 22 Oct 2025 10:16:51 -0400
-From: Hugo Villeneuve <hugo@hugovil.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: kernel test robot <lkp@intel.com>, Hugo Villeneuve
- <hvilleneuve@dimonoff.com>, oe-kbuild-all@lists.linux.dev,
- linux-serial@vger.kernel.org
-Message-Id: <20251022101651.7c3ba0adb027f60bcf25be2e@hugovil.com>
-In-Reply-To: <2025102247-siesta-straw-5006@gregkh>
-References: <202510222048.fnK8S60G-lkp@intel.com>
-	<20251022095524.76e0377f7efcbce531ba52be@hugovil.com>
-	<2025102247-siesta-straw-5006@gregkh>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1761144468; c=relaxed/simple;
+	bh=xd4kL/jXzdOqVEVTeb6/caeOsR6uMZrZNGg1CWFuQUg=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=NaM7VQqt+fEaDoynu+waAovYUo8Cms7WzcEwC9ducefcsiRP4AsOvTWVyXnajMKX136C4292Ob2/nLUWaRjFYAI7bnbAeWQXwnEuezqR2piNI01e5P6BYml60r9TdImDPoDzx9Bc0zhZif4TPznMs+0s6x3E1jngZMZJL/uad9g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com; spf=pass smtp.mailfrom=163.com; dkim=pass (1024-bit key) header.d=163.com header.i=@163.com header.b=BuqiwOmC; arc=none smtp.client-ip=117.135.210.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=163.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=163.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+	s=s110527; h=From:To:Subject:Date:Message-Id:MIME-Version; bh=f6
+	xyuwMavmWKRPX4QfibwgyIlfcPx5ibwjw/2n1TmN4=; b=BuqiwOmCsbrK9nyHVK
+	IQavwsnAMoLEnxrpLOGLT9uLGWLkSfoAgZFZ5ZfpL+hLmiRbjhy8SFxlwn10dDWw
+	msfvST70CMqQdJou1aE8XUxvvc2bNZdDhoNShKNS8QP5SkBHkKQvImoaEEEvOUxk
+	8bccvtN0j/InlKv4U0oGt5rT4=
+Received: from zhaoxin-MS-7E12.. (unknown [])
+	by gzga-smtp-mtada-g0-4 (Coremail) with SMTP id _____wDnjwVr7vho86LUBg--.2882S2;
+	Wed, 22 Oct 2025 22:47:08 +0800 (CST)
+From: Xin Zhao <jackzxcui1989@163.com>
+To: gregkh@linuxfoundation.org
+Cc: hch@infradead.org,
+	jackzxcui1989@163.com,
+	jirislaby@kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	tj@kernel.org
+Subject: Re: [PATCH v1 2/2] serial: 8250_dma: add parameter to queue work on specific cpu
+Date: Wed, 22 Oct 2025 22:47:07 +0800
+Message-Id: <20251022144707.160181-1-jackzxcui1989@163.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <2025102107-player-baggie-37fc@gregkh>
+References: <2025102107-player-baggie-37fc@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 70.80.174.168
-X-SA-Exim-Mail-From: hugo@hugovil.com
-X-Spam-Level: 
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	* -1.9 NICE_REPLY_A Looks like a legit reply (A)
-Subject: Re: [tty:tty-testing 11/22] drivers/tty/serial/sc16is7xx.c:596:9:
- error: implicit declaration of function 'sc16is7xx_efr_lock'; did you mean
- 'sc16is7xx_regs_lock'?
-X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
-X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:_____wDnjwVr7vho86LUBg--.2882S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWxXr4xAw15Ar1UCr13try3XFb_yoW5ZFW8pF
+	WSga4ft3WkXF4Iy3ZrWr40vFW3Can8KF13Gw1kGrWfAwn8JryFkr1xKFWj9FWUGr1kuFy5
+	ZFn09rW0yaykA3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pRnSdDUUUUU=
+X-CM-SenderInfo: pmdfy650fxxiqzyzqiywtou0bp/xtbCvwwvOWj47mxGzwAA3+
 
-On Wed, 22 Oct 2025 16:08:21 +0200
-Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
+On Tue, 21 Oct 2025 18:26:53 +0200 Greg KH <gregkh@linuxfoundation.org> wrote:
 
-> On Wed, Oct 22, 2025 at 09:55:24AM -0400, Hugo Villeneuve wrote:
-> > On Wed, 22 Oct 2025 21:07:24 +0800
-> > kernel test robot <lkp@intel.com> wrote:
-> > 
-> > > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-testing
-> > > head:   cdca3a77b423691b0e3780653642cd5b31de8bd8
-> > > commit: 5a91e16ba44d9850088278ebe209b5c533f87cb8 [11/22] serial: sc16is7xx: define common register access function
-> > > config: x86_64-buildonly-randconfig-003-20251022 (https://download.01.org/0day-ci/archive/20251022/202510222048.fnK8S60G-lkp@intel.com/config)
-> > > compiler: gcc-14 (Debian 14.2.0-19) 14.2.0
-> > > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251022/202510222048.fnK8S60G-lkp@intel.com/reproduce)
-> > > 
-> > > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > > the same patch/commit), kindly add following tags
-> > > | Reported-by: kernel test robot <lkp@intel.com>
-> > > | Closes: https://lore.kernel.org/oe-kbuild-all/202510222048.fnK8S60G-lkp@intel.com/
-> > > 
-> > > All errors (new ones prefixed by >>):
-> > > 
-> > >    drivers/tty/serial/sc16is7xx.c: In function 'sc16is7xx_set_baud':
-> > > >> drivers/tty/serial/sc16is7xx.c:596:9: error: implicit declaration of function 'sc16is7xx_efr_lock'; did you mean 'sc16is7xx_regs_lock'? [-Wimplicit-function-declaration]
-> > >      596 |         sc16is7xx_efr_lock(port);
-> > >          |         ^~~~~~~~~~~~~~~~~~
-> > >          |         sc16is7xx_regs_lock
-> > > >> drivers/tty/serial/sc16is7xx.c:600:9: error: implicit declaration of function 'sc16is7xx_efr_unlock'; did you mean 'sc16is7xx_regs_unlock'? [-Wimplicit-function-declaration]
-> > >      600 |         sc16is7xx_efr_unlock(port);
-> > >          |         ^~~~~~~~~~~~~~~~~~~~
-> > >          |         sc16is7xx_regs_unlock
-> > > 
-> > > 
-> > > vim +596 drivers/tty/serial/sc16is7xx.c
-> > > 
-> > > dbf4ab821804df0 Hugo Villeneuve 2023-12-11  572  
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  573  /*
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  574   * Configure programmable baud rate generator (divisor) according to the
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  575   * desired baud rate.
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  576   *
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  577   * From the datasheet, the divisor is computed according to:
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  578   *
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  579   *              XTAL1 input frequency
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  580   *             -----------------------
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  581   *                    prescaler
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  582   * divisor = ---------------------------
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  583   *            baud-rate x sampling-rate
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  584   */
-> > > dfeae619d781dee Jon Ringle      2014-04-24  585  static int sc16is7xx_set_baud(struct uart_port *port, int baud)
-> > > dfeae619d781dee Jon Ringle      2014-04-24  586  {
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  587  	unsigned int prescaler = 1;
-> > > dfeae619d781dee Jon Ringle      2014-04-24  588  	unsigned long clk = port->uartclk, div = clk / 16 / baud;
-> > > dfeae619d781dee Jon Ringle      2014-04-24  589  
-> > > 2e57cefc4477659 Hugo Villeneuve 2023-12-21  590  	if (div >= BIT(16)) {
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  591  		prescaler = 4;
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  592  		div /= prescaler;
-> > > dfeae619d781dee Jon Ringle      2014-04-24  593  	}
-> > > dfeae619d781dee Jon Ringle      2014-04-24  594  
-> > > dfeae619d781dee Jon Ringle      2014-04-24  595  	/* Enable enhanced features */
-> > > 0c84bea0cabc4e2 Hugo Villeneuve 2023-12-21 @596  	sc16is7xx_efr_lock(port);
-> > > c112653b89e0cea Lech Perczak    2022-02-21  597  	sc16is7xx_port_update(port, SC16IS7XX_EFR_REG,
-> > > c112653b89e0cea Lech Perczak    2022-02-21  598  			      SC16IS7XX_EFR_ENABLE_BIT,
-> > > dfeae619d781dee Jon Ringle      2014-04-24  599  			      SC16IS7XX_EFR_ENABLE_BIT);
-> > > 0c84bea0cabc4e2 Hugo Villeneuve 2023-12-21 @600  	sc16is7xx_efr_unlock(port);
-> > > 30ec514d440cf2c Phil Elwell     2018-09-12  601  
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  602  	/* If bit MCR_CLKSEL is set, the divide by 4 prescaler is activated. */
-> > > dfeae619d781dee Jon Ringle      2014-04-24  603  	sc16is7xx_port_update(port, SC16IS7XX_MCR_REG,
-> > > dfeae619d781dee Jon Ringle      2014-04-24  604  			      SC16IS7XX_MCR_CLKSEL_BIT,
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  605  			      prescaler == 1 ? 0 : SC16IS7XX_MCR_CLKSEL_BIT);
-> > > dfeae619d781dee Jon Ringle      2014-04-24  606  
-> > > 5a91e16ba44d985 Hugo Villeneuve 2025-10-02  607  	/* Access special register set (DLL/DLH) */
-> > > 5a91e16ba44d985 Hugo Villeneuve 2025-10-02  608  	sc16is7xx_regs_lock(port, SC16IS7XX_LCR_REG_SET_SPECIAL);
-> > > dfeae619d781dee Jon Ringle      2014-04-24  609  
-> > > dfeae619d781dee Jon Ringle      2014-04-24  610  	/* Write the new divisor */
-> > > dfeae619d781dee Jon Ringle      2014-04-24  611  	sc16is7xx_port_write(port, SC16IS7XX_DLH_REG, div / 256);
-> > > dfeae619d781dee Jon Ringle      2014-04-24  612  	sc16is7xx_port_write(port, SC16IS7XX_DLL_REG, div % 256);
-> > > dfeae619d781dee Jon Ringle      2014-04-24  613  
-> > > 5a91e16ba44d985 Hugo Villeneuve 2025-10-02  614  	/* Restore access to general register set */
-> > > 5a91e16ba44d985 Hugo Villeneuve 2025-10-02  615  	sc16is7xx_regs_unlock(port);
-> > > 7d3b793faaab130 Hugo Villeneuve 2024-07-23  616  
-> > > 8492bd91aa05590 Hugo Villeneuve 2024-04-30  617  	return DIV_ROUND_CLOSEST((clk / prescaler) / 16, div);
-> > > dfeae619d781dee Jon Ringle      2014-04-24  618  }
-> > > dfeae619d781dee Jon Ringle      2014-04-24  619  
-> > > 
-> > > :::::: The code at line 596 was first introduced by commit
-> > > :::::: 0c84bea0cabc4e2b98a3de88eeb4ff798931f056 serial: sc16is7xx: refactor EFR lock
-> > > 
-> > > :::::: TO: Hugo Villeneuve <hvilleneuve@dimonoff.com>
-> > > :::::: CC: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > > 
-> > > -- 
-> > > 0-DAY CI Kernel Test Service
-> > > https://github.com/intel/lkp-tests/wiki
-> > 
-> > Hi Greg,
-> > this patch, and other patches in this series, depends on the patch
-> > "serial: sc16is7xx: remove useless enable of enhanced features"
-> > that you just added to your tty-linus tree.
-> > 
-> > If you first add this patch to tty-testing, then the error
-> > disappear.
+> I do not know, but it was not threaded :(
 > 
+> Try sending it to yourself and see if the delay maybe caused a problem?
+> there should not be an issue sending just 3 messages at once.
 
-> Ugh, that was not obvious at all :(
+Now that I think about it, both patches are small and address the same issue, so I
+will combine them into a single patch for the next submission.
 
-Hi Greg,
-sorry about that.
+> 6.1 is very old, please try the latest 6.17.y release, or 6.18-rc1.
+> Lots and lots of RT stuff has been fixed since 6.1.
+> 
+> I'm saying that the RT selection should cause you not to have those
+> larger variants in delays.  Try a newer kernel and see.
 
-> I'll go drop all of these from my tty-next branch, can you resend them
-> when I merge -rc3 into that branch so that things do not break?
+I have now clarified, as you mentioned, why there is no issue in the standard kernel
+but there is a problem in RT-Linux. In the dma_rx_complete function in 8250_dma.c,
+locking is done using uart_port_lock_irqsave and uart_port_unlock_irqrestore, where
+uart_port_lock_irqsave calls the spin_lock_irqsave API. In the standard kernel,
+spin_lock_irqsave disables both preemption and hardware interrupts, while in RT-Linux,
+spin_lock_irqsave does not disable preemption and does not disable hardware interrupts.
+This leads to a situation where, after acquiring the spin_lock_irqsave lock, if a
+real-time task preempts the current task, the spinlock holding period will lead to
+migrate_disable, so if other CPUs back to idle, they cannot pull the preempted kworker
+task. The work task can only continue execution after the real-time task releases the
+CPU, resulting in high latency. This issue cannot be resolved in any version of the
+kernel because the implementation of spin_lock_irqsave in RT-Linux is still defined
+as spin_lock in higher version kernels, which means it does not disable preemption or
+hardware interrupts. Similarly, in higher version kernels, spin_lock still calls
+migrate_disable. Therefore, this issue cannot be resolved by simply using a higher
+version of the kernel.
 
-No problem, in fact that is what I was planning to do all along,
-sending a v3 of the series once patch "serial: sc16is7xx: remove
-useless enable of enhanced features" lands in tty-testing or tty-next.
+> This should come from a hardware definition somewhere in your DT, not as
+> a user-selectable option.  And again, why not just tie it to the cpu
+> where the irq came from automatically?
 
-Hugo.
+I don't think binding the work task to the CPU that handles the interrupt is feasible,
+because, in practice, this hardware interrupt is evenly distributed across all cores
+in our system. Moreover, from the ftrace data we captured, the IRQ handler thread that
+wakes up the kworker threads in RT-Linux is also distributed across various CPUs by
+default.
+Considering the current situation is still limited to the RT-Linux scenario, if
+possible, I will add the logic to create this workqueue only when CONFIG_PREEMPT_RT
+is enabled in the next patch. By setting WQ_SYS, it will allow user space to dynamically
+modify it. Additionally, in tty_flip_buffer_push, I will check if a private workqueue
+has been created; if so, I will use the private workqueue to queue the work task.
+If modified this way, there will be no changes for the standard kernel. For the RT-Linux
+system, if user space does not dynamically modify the workqueue's CPU affinity and
+priority, the effect will be the same as if this patch were not applied. What do you think
+about this approach?
+
+--
+Xin Zhao
+
 
