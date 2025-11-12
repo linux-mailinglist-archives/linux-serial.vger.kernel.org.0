@@ -1,53 +1,53 @@
-Return-Path: <linux-serial+bounces-11456-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11450-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7894FC52D3B
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 15:54:23 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B696C530E5
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 16:33:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1C597350FA6
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 14:51:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D10D84FD7EE
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 14:50:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D87D34B430;
-	Wed, 12 Nov 2025 14:45:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD33134250E;
+	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7TcIa0M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uCcCNGel"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC97E34250C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5681233D6E7;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762958731; cv=none; b=jYqJLEU6tLgkETt7gFFZKkvj8vhGc9wL3Dyb9545rIGO2kswtlarIPZF5UpVO5FjM2o5CzF9+WjMQtSk1/u8e4qFc0OvcEjUu87RHRpwBTXc1nn58VNqlqev4pMmwxrw4a2u6uGDF0CrkrMOTEeqaaDwYV2d/Yhy9ABnVawaE/M=
+	t=1762958731; cv=none; b=ObUYfZSTr6DPLceOwF761JtoCXzGS9akIZ8x2N7ncl7zObSGftWdWF3ew2gicrtVB4gZPid8B99t9fm8uef0GoSrQ/hvn9UncY8Ms+v5n1oXZZycsOVm9Myuq2Adr2ilmXVeyi2UZidmys5KgkWLKhmAI7sjmb5yOMRQY6cPLFQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762958731; c=relaxed/simple;
-	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
+	bh=novVq7mIcfdWOjqb22DZyGsxIxWmlqMMB5fYxdyzH+U=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=CZWfiesq46SreJQzVUykxbZtd5zU1CeLkQwWsfqZdYl4ryDmy8jrKbdIFDbrdCDb+LzoEuUMEfYkJ2PwzHHZ565SDnyPjEVfT2FufSOf/n1jfEhtN24z3QZIGLJqu1i0Ywc3OpQsw7zuVJfRBmrd/Mmbdugl0oJIwp3NKU20O4E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7TcIa0M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D7D8C19425;
-	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=mMJx9LHWhG98KJRX2TsT6eWkFclKZG0Bb9f1WiDslgohmBEjXdMaEEfGzGNMOievAjMeGgzYB1wAaxTOFCZBxsOJecoWyHdcLJCUUS3xA1ZmktX//Qq4SbaRRRHaIADuWCgTyVdfQDGjHnxpGfCafIXc2jcoCopGmvelV+aAfYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uCcCNGel; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E9589C4CEF8;
+	Wed, 12 Nov 2025 14:45:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762958731;
-	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
+	bh=novVq7mIcfdWOjqb22DZyGsxIxWmlqMMB5fYxdyzH+U=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=G7TcIa0M7BgO+w+aWcSqWxEyqms9md1DwXPhJP/8O6lvj0mvncvKeRVkyxOCgc2sA
-	 Su5uQY9ylyJCUSMqNMe0Z29Ve/NcaaColnygOl59zZGu6tQpebbwA5VoSgbIrtg3m5
-	 kuu3OXX48sc/IXqXIY7aqe0qhUyrRW8TurOCYASpmM1QqfCCjG0UE7DFf3v+kKnOLq
-	 QVCVZSMyS49cNVSiFJRfxBfeLmhowm1ZAwUA6ykTgryFrrghf89fH3tFjEm0BJoDTc
-	 eEavvPHlZkpduCwQ8OuDanq9FqVdlrG6WfN9UFYM4moeU88Rd4g3FieNGF4Gg/P/d1
-	 h4RrgNL1G1w5g==
+	b=uCcCNGel5JAONTbXSmFZv6s6lUS26zOUZ3JsOH2/MgdhJMXRv4N/23RDaC93ct6uv
+	 nNgk1LWvMPFj+h0pu5JLgjTccyysBKhD6AuCv2I+mqEJ+xaLK6V2y4Zbp816vBJ1HE
+	 GPll3jHNbz63klkJ6xVxkPdWB+C1NZPhDQudARm41tgkNk4GWmf323udVHMlh305b8
+	 tuwvBfGl/fHZoIpAJcicf6IPF5g7YPbo1YYyW3bb2EzcfzlOb/yz/Ce3FzkGqTYY9P
+	 NDGHjDOqejSsfQyUSxWObhFz+L55Cjl3SdAyP5Rhiow/vWPKq8nE1gL79BMEssSn2k
+	 cDzpgmN694QBw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F18CD13CF;
-	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
+	by smtp.lore.kernel.org (Postfix) with ESMTP id DCA26CCFA1A;
+	Wed, 12 Nov 2025 14:45:30 +0000 (UTC)
 From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
-Date: Wed, 12 Nov 2025 20:15:20 +0530
-Subject: [PATCH 8/9] Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2
- card
+Date: Wed, 12 Nov 2025 20:15:13 +0530
+Subject: [PATCH 1/9] serdev: Convert to_serdev_device() and
+ to_serdev_controller() helpers to macros
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -55,8 +55,8 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-pci-m2-e-v1-8-97413d6bf824@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251112-pci-m2-e-v1-1-97413d6bf824@oss.qualcomm.com>
 References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 In-Reply-To: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, 
@@ -79,16 +79,16 @@ Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
  Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2696;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1668;
  i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
- bh=BvmMTIXQ1GNDFtswjVs+6kgwmDbVSZjbebNDSNmVGWY=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2HGzyZfvK1wWuuh2R0+XpgrtuddR6FBBMSs
- h9ujHKvehqJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhwAKCRBVnxHm/pHO
- 9ZJMB/9CsIHjXFLhSxMyD3KH42rNli77Z0cMlgKT76aBTmR1yHjj4rM5kkkP9+YqQAIK9g4dvKj
- IhkioadhbwsVBbgv0No2SGnsLJesOHwDW1/Q4OebgTR4Osg78Iai2xvxB6ybVmW+J6O3tjaDD0q
- 9JzWdanKbxsb3neIa4HtYsw9W7ORxGryz49PoqcK5wdXLCaIV64MbruswFeUp8ZG1BA30MgCzT9
- y1cCjIgjBov6xWYWpuGK8J7PpHe8NbfwoUfv50vZMwZXTKNS8zVdy7n7LNVNBV9R+NxLK5Xh+2t
- bGn/mmnez+yaIgjVC7MDJ1nhWAcFKF3DMa2D4HnzUFGqMoje
+ bh=pMjdMDUJJFdzXcs8r8heXhJAvEfUn5voSIPUccUCX28=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2GiS7ttFmSpXLyf6Ebs4G+J1tZeIesPjGyO
+ Io4W/4qnFSJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhgAKCRBVnxHm/pHO
+ 9S3zCACcJTT8QNObEZKWOhlVOpP+8Sdq43NqiYJbUBYuIUI/938PeuVe+p/Eu9tWu4Jx4ld9WLq
+ x7upQxEUF/78BXiJeB/5FQ9S0XNY1qRnZR2IndyMu0EquXXda9XQDoMxY6Xgeo3svQu9oDqZQ46
+ YaqnVYA2mfopwwCVjTkh4JNy2FGCmSChULV8E3JwBHN5v0UGXSVXfrHodrLB7u/4ySWqn51vWAz
+ wCF2daTzCAZTwT1Je0wMfLvgHK9msYEDJj7Kp/dqojqqcVsIMpkTzCBZHBzv5utYP7EsWD+E+l2
+ 00eA4GYX1ZWoyEYciBFQ6tATdVp8Ogfyl4maX1KkQroPRRTs
 X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
  fpr=C668AEC3C3188E4C611465E7488550E901166008
 X-Endpoint-Received: by B4 Relay for
@@ -98,76 +98,49 @@ Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 
-The WCN7850 PCIe M.2 card connected to the UART controller exposes the
-'WCN7850' serdev device and is controlled using the pwrseq framework.
+If these helpers receive the 'const struct device' pointer, then the const
+qualifier will get dropped, leading to below warning:
 
-Hence, add support for it in the driver. It reuses the existing
-'qca_soc_data_wcn7850' driver data.
+warning: passing argument 1 of ‘to_serdev_device_driver’ discards 'const'
+qualifier from pointer target type [-Wdiscarded-qualifiers]
+
+This is not an issue as of now, but with the future commits adding serdev
+device based driver matching, this warning will get triggered. Hence,
+convert these helpers to macros so that the qualifier get preserved.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 ---
- drivers/bluetooth/hci_qca.c | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ include/linux/serdev.h | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
-index 4cff4d9be3132561ee9bae4ddf2c8ac0bc13ecd7..09bfb3bba93698f496947775bf6b31f2f20279f1 100644
---- a/drivers/bluetooth/hci_qca.c
-+++ b/drivers/bluetooth/hci_qca.c
-@@ -26,6 +26,7 @@
- #include <linux/mod_devicetable.h>
- #include <linux/module.h>
- #include <linux/of.h>
-+#include <linux/of_graph.h>
- #include <linux/acpi.h>
- #include <linux/platform_device.h>
- #include <linux/pwrseq/consumer.h>
-@@ -2344,6 +2345,9 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 34562eb99931d808e885ce5022b8aa4577566885..ab185cac556380dfa3cdf94b7af6ee168b677587 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -49,10 +49,7 @@ struct serdev_device {
+ 	struct mutex write_lock;
+ };
  
- 	qcadev->serdev_hu.serdev = serdev;
- 	data = device_get_match_data(&serdev->dev);
-+	if (!data && serdev->id)
-+		data = (const struct qca_device_data *) serdev->id->driver_data;
-+
- 	serdev_device_set_drvdata(serdev, qcadev);
- 	device_property_read_string_array(&serdev->dev, "firmware-name",
- 					 qcadev->firmware_name, ARRAY_SIZE(qcadev->firmware_name));
-@@ -2384,6 +2388,15 @@ static int qca_serdev_probe(struct serdev_device *serdev)
- 	case QCA_WCN6855:
- 	case QCA_WCN7850:
- 	case QCA_WCN6750:
-+		if (of_graph_is_present(dev_of_node(&serdev->ctrl->dev))) {
-+			qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->ctrl->dev,
-+								   "uart");
-+			if (IS_ERR(qcadev->bt_power->pwrseq))
-+				qcadev->bt_power->pwrseq = NULL;
-+			else
-+				break;
-+		}
-+
- 		if (!device_property_present(&serdev->dev, "enable-gpios")) {
- 			/*
- 			 * Backward compatibility with old DT sources. If the
-@@ -2740,6 +2753,12 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
- MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
- #endif
+-static inline struct serdev_device *to_serdev_device(struct device *d)
+-{
+-	return container_of(d, struct serdev_device, dev);
+-}
++#define to_serdev_device(d) container_of(d, struct serdev_device, dev)
  
-+static const struct serdev_device_id qca_bluetooth_serdev_match[] = {
-+	{ "WCN7850", (kernel_ulong_t)&qca_soc_data_wcn7850 },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(serdev, qca_bluetooth_serdev_match);
-+
- #ifdef CONFIG_DEV_COREDUMP
- static void hciqca_coredump(struct device *dev)
- {
-@@ -2756,6 +2775,7 @@ static void hciqca_coredump(struct device *dev)
- static struct serdev_device_driver qca_serdev_driver = {
- 	.probe = qca_serdev_probe,
- 	.remove = qca_serdev_remove,
-+	.id_table = qca_bluetooth_serdev_match,
- 	.driver = {
- 		.name = "hci_uart_qca",
- 		.of_match_table = of_match_ptr(qca_bluetooth_of_match),
+ /**
+  * struct serdev_device_driver - serdev slave device driver
+@@ -67,10 +64,7 @@ struct serdev_device_driver {
+ 	void	(*remove)(struct serdev_device *);
+ };
+ 
+-static inline struct serdev_device_driver *to_serdev_device_driver(struct device_driver *d)
+-{
+-	return container_of(d, struct serdev_device_driver, driver);
+-}
++#define to_serdev_device_driver(d) container_of(d, struct serdev_device_driver, driver)
+ 
+ enum serdev_parity {
+ 	SERDEV_PARITY_NONE,
 
 -- 
 2.48.1
