@@ -1,53 +1,53 @@
-Return-Path: <linux-serial+bounces-11451-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11456-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FDF1C52DDE
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 16:02:10 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7894FC52D3B
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 15:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6CF1F4EC26F
-	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 14:50:47 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 1C597350FA6
+	for <lists+linux-serial@lfdr.de>; Wed, 12 Nov 2025 14:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C8EA3342522;
-	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D87D34B430;
+	Wed, 12 Nov 2025 14:45:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jkar5/a0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G7TcIa0M"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5688A340293;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC97E34250C;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762958731; cv=none; b=e/58wSYhF7f5lInXxpnd0BQ/UJmSr2TXmaOGnupujCNA9+AqMzJMznaJufAmlRlrvh7vomk8fSeg1Xr1oZLtvI4Lbx9GlZUt/k8uwgU/NFAopZMPQcVut4iQZM6bGRDhEvuoIeR5pl/ktpckXJuqtQqUsC11qqVpCQQbZHf13d4=
+	t=1762958731; cv=none; b=jYqJLEU6tLgkETt7gFFZKkvj8vhGc9wL3Dyb9545rIGO2kswtlarIPZF5UpVO5FjM2o5CzF9+WjMQtSk1/u8e4qFc0OvcEjUu87RHRpwBTXc1nn58VNqlqev4pMmwxrw4a2u6uGDF0CrkrMOTEeqaaDwYV2d/Yhy9ABnVawaE/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1762958731; c=relaxed/simple;
-	bh=L7iVFg7sZFJXM/ApGg4k66iGAwt68odx4+E9YWY+cnY=;
+	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XMo1SEq0cxZCG5W4lWoIfscAANcAC17G0j3XiOpT/btT+NgRGzbTyJf+R0zpEjVsNyKQ8xRQHJkOTBNUSpF+fcst2RHaMbj+BmeJ7gNo6iRDgyOtdIn4ep4QZ2HiXTG59ZgVuif3hw4LDcrxVI7QepUndKC1fV0nEJOjz8rhiD8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jkar5/a0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 11EF9C19423;
+	 In-Reply-To:To:Cc; b=CZWfiesq46SreJQzVUykxbZtd5zU1CeLkQwWsfqZdYl4ryDmy8jrKbdIFDbrdCDb+LzoEuUMEfYkJ2PwzHHZ565SDnyPjEVfT2FufSOf/n1jfEhtN24z3QZIGLJqu1i0Ywc3OpQsw7zuVJfRBmrd/Mmbdugl0oJIwp3NKU20O4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G7TcIa0M; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5D7D8C19425;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1762958731;
-	bh=L7iVFg7sZFJXM/ApGg4k66iGAwt68odx4+E9YWY+cnY=;
+	bh=UIyVuuxmdNWaQhSJYIjG9EwjXu8WQiu2r7LNT3ovXmk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=jkar5/a0xV0XfBYLALRxb9FqHLFMf5G0T3DQfiYdsWHlKfuS0cL/XxFbHk5+ObGUd
-	 gWBSf9UXqPiR+AoilYJcC7LbEfmwhBRl/lQo9v+ONpG0cD2lbHxLSMQshPTmRH4LC8
-	 GIP7Lf4PdsHg6La3kq1zJujMZr13SvyKtyWHfu9HEeUdVt0b8GlsZIbGvhRNKQeTe8
-	 xcXBLiFadI1v/lsBhAwXGjoWs/sjMr6x632q0I6REW/RhkXBdYLcbnJHqin13IF1GS
-	 +wHGQrsE5/5oBqL3yNyIbuD0ndlnZ0ZxZL76DlWnpYV7WoMicFQm2ELL/c9BQmhEhR
-	 yjOrpQsSDW8Sw==
+	b=G7TcIa0M7BgO+w+aWcSqWxEyqms9md1DwXPhJP/8O6lvj0mvncvKeRVkyxOCgc2sA
+	 Su5uQY9ylyJCUSMqNMe0Z29Ve/NcaaColnygOl59zZGu6tQpebbwA5VoSgbIrtg3m5
+	 kuu3OXX48sc/IXqXIY7aqe0qhUyrRW8TurOCYASpmM1QqfCCjG0UE7DFf3v+kKnOLq
+	 QVCVZSMyS49cNVSiFJRfxBfeLmhowm1ZAwUA6ykTgryFrrghf89fH3tFjEm0BJoDTc
+	 eEavvPHlZkpduCwQ8OuDanq9FqVdlrG6WfN9UFYM4moeU88Rd4g3FieNGF4Gg/P/d1
+	 h4RrgNL1G1w5g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 0A93BCCF9E3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 56F18CD13CF;
 	Wed, 12 Nov 2025 14:45:31 +0000 (UTC)
 From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
-Date: Wed, 12 Nov 2025 20:15:15 +0530
-Subject: [PATCH 3/9] serdev: Allow passing the serdev device name to
- serdev_device_add()
+Date: Wed, 12 Nov 2025 20:15:20 +0530
+Subject: [PATCH 8/9] Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2
+ card
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20251112-pci-m2-e-v1-3-97413d6bf824@oss.qualcomm.com>
+Message-Id: <20251112-pci-m2-e-v1-8-97413d6bf824@oss.qualcomm.com>
 References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 In-Reply-To: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
 To: Rob Herring <robh@kernel.org>, 
@@ -79,16 +79,16 @@ Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
  Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
  Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=5251;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2696;
  i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
- bh=c+ZfFChOiwPXrgBo3Hm41yJ4twgPMWwihL2KydIW2hU=;
- b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2GuH9bSE/qLpnlL7qfWYHEJ9kMMpDh2IkZg
- ioAcrCMP6WJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhgAKCRBVnxHm/pHO
- 9V4xCACpKggi0h5EsAbWmO1W3x1wepvdIQr3nk0oqB8ZQCGLntg+/dBH3YvESuNvQx+eHq1ecDy
- cJEs6hUol9p8HzY4e/wBOxnCvBmvD0cUlixShwOQUIpKslW2fiIJhdYuXOu1524VGYS85GWtRk2
- QT1cJ+1IpsxSmCTXiqPCoAICGWgZ4xU3/K3lIvJlXzGoyew4LMK3K6crX/RCr5B2KYcwfNa2A68
- 0mP9nGlvNLw+cKNCFfP2jv2rt9HNRAwgdJZYTQoVgn3qbsO/i0Zt5GhuGWqYxd97xkdp78VtW+v
- NOpygSfJ3jQK71/T0iPfQ1Dm5UDNO0u+7B4QBKl41P6CqrMR
+ bh=BvmMTIXQ1GNDFtswjVs+6kgwmDbVSZjbebNDSNmVGWY=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpFJ2HGzyZfvK1wWuuh2R0+XpgrtuddR6FBBMSs
+ h9ujHKvehqJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaRSdhwAKCRBVnxHm/pHO
+ 9ZJMB/9CsIHjXFLhSxMyD3KH42rNli77Z0cMlgKT76aBTmR1yHjj4rM5kkkP9+YqQAIK9g4dvKj
+ IhkioadhbwsVBbgv0No2SGnsLJesOHwDW1/Q4OebgTR4Osg78Iai2xvxB6ybVmW+J6O3tjaDD0q
+ 9JzWdanKbxsb3neIa4HtYsw9W7ORxGryz49PoqcK5wdXLCaIV64MbruswFeUp8ZG1BA30MgCzT9
+ y1cCjIgjBov6xWYWpuGK8J7PpHe8NbfwoUfv50vZMwZXTKNS8zVdy7n7LNVNBV9R+NxLK5Xh+2t
+ bGn/mmnez+yaIgjVC7MDJ1nhWAcFKF3DMa2D4HnzUFGqMoje
 X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
  fpr=C668AEC3C3188E4C611465E7488550E901166008
 X-Endpoint-Received: by B4 Relay for
@@ -98,118 +98,76 @@ Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
 From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 
-Instead of always setting the serdev device name from 'struct device' name,
-allow the callers to pass an optional name and set it as the serdev device
-name.
+The WCN7850 PCIe M.2 card connected to the UART controller exposes the
+'WCN7850' serdev device and is controlled using the pwrseq framework.
 
-This will be used by the future callers passing the serdev device ID as the
-name.
+Hence, add support for it in the driver. It reuses the existing
+'qca_soc_data_wcn7850' driver data.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
 ---
- drivers/platform/x86/dell/dell-uart-backlight.c             |  2 +-
- .../platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |  2 +-
- drivers/platform/x86/x86-android-tablets/core.c             |  2 +-
- drivers/tty/serdev/core.c                                   | 13 +++++++++----
- include/linux/serdev.h                                      |  2 +-
- 5 files changed, 13 insertions(+), 8 deletions(-)
+ drivers/bluetooth/hci_qca.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-diff --git a/drivers/platform/x86/dell/dell-uart-backlight.c b/drivers/platform/x86/dell/dell-uart-backlight.c
-index f323a667dc2d2c7dec9fb284515bc3b6b984b7b9..f076cfac2bc5ec14899d6622d084bae2ffecfa3c 100644
---- a/drivers/platform/x86/dell/dell-uart-backlight.c
-+++ b/drivers/platform/x86/dell/dell-uart-backlight.c
-@@ -354,7 +354,7 @@ static int dell_uart_bl_pdev_probe(struct platform_device *pdev)
- 	if (!serdev)
- 		return -ENOMEM;
+diff --git a/drivers/bluetooth/hci_qca.c b/drivers/bluetooth/hci_qca.c
+index 4cff4d9be3132561ee9bae4ddf2c8ac0bc13ecd7..09bfb3bba93698f496947775bf6b31f2f20279f1 100644
+--- a/drivers/bluetooth/hci_qca.c
++++ b/drivers/bluetooth/hci_qca.c
+@@ -26,6 +26,7 @@
+ #include <linux/mod_devicetable.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
++#include <linux/of_graph.h>
+ #include <linux/acpi.h>
+ #include <linux/platform_device.h>
+ #include <linux/pwrseq/consumer.h>
+@@ -2344,6 +2345,9 @@ static int qca_serdev_probe(struct serdev_device *serdev)
  
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		dev_err(&pdev->dev, "error %d adding serdev\n", ret);
- 		serdev_device_put(serdev);
-diff --git a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-index 8551ab4d2c7dbc3a8d0b2f50071d4460a3ee65e9..5e568fe1162d1563183713f8d5c71c59ff7667a1 100644
---- a/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-+++ b/drivers/platform/x86/lenovo/yoga-tab2-pro-1380-fastcharger.c
-@@ -260,7 +260,7 @@ static int yt2_1380_fc_pdev_probe(struct platform_device *pdev)
- 	/* The fwnode is a managed node, so it will be auto-put on serdev_device_put() */
- 	fwnode_handle_get(dev_fwnode(&serdev->dev));
- 
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		serdev_device_put(serdev);
- 		return dev_err_probe(&pdev->dev, ret, "adding serdev\n");
-diff --git a/drivers/platform/x86/x86-android-tablets/core.c b/drivers/platform/x86/x86-android-tablets/core.c
-index 6588fae303562b7dc9a1a8d281b167e44f0d3e84..96140f5d4f79240f44cb4530ee63777f783c6aaf 100644
---- a/drivers/platform/x86/x86-android-tablets/core.c
-+++ b/drivers/platform/x86/x86-android-tablets/core.c
-@@ -316,7 +316,7 @@ static __init int x86_instantiate_serdev(const struct x86_dev_info *dev_info, in
- 	ACPI_COMPANION_SET(&serdev->dev, serdev_adev);
- 	acpi_device_set_enumerated(serdev_adev);
- 
--	ret = serdev_device_add(serdev);
-+	ret = serdev_device_add(serdev, NULL);
- 	if (ret) {
- 		dev_err(&serdev->dev, "error %d adding serdev\n", ret);
- 		serdev_device_put(serdev);
-diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
-index 2b5582cd5063a87c9a6c99f83a8ab071637eae57..76b89dd0720f89dbe34e205b905ef24d9f94d770 100644
---- a/drivers/tty/serdev/core.c
-+++ b/drivers/tty/serdev/core.c
-@@ -121,14 +121,19 @@ static int serdev_device_match(struct device *dev, const struct device_driver *d
- /**
-  * serdev_device_add() - add a device previously constructed via serdev_device_alloc()
-  * @serdev:	serdev_device to be added
-+ * @name:	name of the serdev device (optional)
-  */
--int serdev_device_add(struct serdev_device *serdev)
-+int serdev_device_add(struct serdev_device *serdev, const char *name)
+ 	qcadev->serdev_hu.serdev = serdev;
+ 	data = device_get_match_data(&serdev->dev);
++	if (!data && serdev->id)
++		data = (const struct qca_device_data *) serdev->id->driver_data;
 +
+ 	serdev_device_set_drvdata(serdev, qcadev);
+ 	device_property_read_string_array(&serdev->dev, "firmware-name",
+ 					 qcadev->firmware_name, ARRAY_SIZE(qcadev->firmware_name));
+@@ -2384,6 +2388,15 @@ static int qca_serdev_probe(struct serdev_device *serdev)
+ 	case QCA_WCN6855:
+ 	case QCA_WCN7850:
+ 	case QCA_WCN6750:
++		if (of_graph_is_present(dev_of_node(&serdev->ctrl->dev))) {
++			qcadev->bt_power->pwrseq = devm_pwrseq_get(&serdev->ctrl->dev,
++								   "uart");
++			if (IS_ERR(qcadev->bt_power->pwrseq))
++				qcadev->bt_power->pwrseq = NULL;
++			else
++				break;
++		}
++
+ 		if (!device_property_present(&serdev->dev, "enable-gpios")) {
+ 			/*
+ 			 * Backward compatibility with old DT sources. If the
+@@ -2740,6 +2753,12 @@ static const struct acpi_device_id qca_bluetooth_acpi_match[] = {
+ MODULE_DEVICE_TABLE(acpi, qca_bluetooth_acpi_match);
+ #endif
+ 
++static const struct serdev_device_id qca_bluetooth_serdev_match[] = {
++	{ "WCN7850", (kernel_ulong_t)&qca_soc_data_wcn7850 },
++	{ },
++};
++MODULE_DEVICE_TABLE(serdev, qca_bluetooth_serdev_match);
++
+ #ifdef CONFIG_DEV_COREDUMP
+ static void hciqca_coredump(struct device *dev)
  {
- 	struct serdev_controller *ctrl = serdev->ctrl;
- 	struct device *parent = serdev->dev.parent;
- 	int err;
- 
--	dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
-+	if (name)
-+		dev_set_name(&serdev->dev, "%s", name);
-+	else
-+		dev_set_name(&serdev->dev, "%s-%d", dev_name(parent), serdev->nr);
- 
- 	/* Only a single slave device is currently supported. */
- 	if (ctrl->serdev) {
-@@ -544,7 +549,7 @@ static int of_serdev_register_devices(struct serdev_controller *ctrl)
- 
- 		device_set_node(&serdev->dev, of_fwnode_handle(node));
- 
--		err = serdev_device_add(serdev);
-+		err = serdev_device_add(serdev, NULL);
- 		if (err) {
- 			dev_err(&serdev->dev,
- 				"failure adding device. status %pe\n",
-@@ -692,7 +697,7 @@ static acpi_status acpi_serdev_register_device(struct serdev_controller *ctrl,
- 	ACPI_COMPANION_SET(&serdev->dev, adev);
- 	acpi_device_set_enumerated(adev);
- 
--	err = serdev_device_add(serdev);
-+	err = serdev_device_add(serdev, NULL);
- 	if (err) {
- 		dev_err(&serdev->dev,
- 			"failure adding ACPI serdev device. status %pe\n",
-diff --git a/include/linux/serdev.h b/include/linux/serdev.h
-index ee42e293445d928a311bd3c120e609214f89a5dd..3b87909b199af74d619b4fe548c5c9c994e7bc15 100644
---- a/include/linux/serdev.h
-+++ b/include/linux/serdev.h
-@@ -163,7 +163,7 @@ static inline void serdev_controller_put(struct serdev_controller *ctrl)
- }
- 
- struct serdev_device *serdev_device_alloc(struct serdev_controller *);
--int serdev_device_add(struct serdev_device *);
-+int serdev_device_add(struct serdev_device *serdev, const char *name);
- void serdev_device_remove(struct serdev_device *);
- 
- struct serdev_controller *serdev_controller_alloc(struct device *host,
+@@ -2756,6 +2775,7 @@ static void hciqca_coredump(struct device *dev)
+ static struct serdev_device_driver qca_serdev_driver = {
+ 	.probe = qca_serdev_probe,
+ 	.remove = qca_serdev_remove,
++	.id_table = qca_bluetooth_serdev_match,
+ 	.driver = {
+ 		.name = "hci_uart_qca",
+ 		.of_match_table = of_match_ptr(qca_bluetooth_of_match),
 
 -- 
 2.48.1
