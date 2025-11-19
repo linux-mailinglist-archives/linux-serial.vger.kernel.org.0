@@ -1,54 +1,54 @@
-Return-Path: <linux-serial+bounces-11525-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11526-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25516C6DE0E
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 11:05:18 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 884D7C6DDD5
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 11:03:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id 81BC42F2DC
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 10:02:20 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E3DC8355BCF
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 10:02:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB701348898;
-	Wed, 19 Nov 2025 10:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A362A349AF3;
+	Wed, 19 Nov 2025 10:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Mjgm6vA0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="d/fhpU+y"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 930B4347FF7;
-	Wed, 19 Nov 2025 10:01:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B931349AE9;
+	Wed, 19 Nov 2025 10:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763546510; cv=none; b=Y8lDcPG83bGGdLqsYxaX1fJx0u2RpU4/voGAOwwL8giX4a23UmFlhOPdNYaCifT6xYfK/mqAQbrHpzchGCuj8aRyAB+N9nJdLV1xcapvQ4lZ/QdrIG398bmRUmsNL8Xjxtvw8v4g9MuRj3LzLbPxFdwS7XCkQDSFJVA1NQgYcdI=
+	t=1763546512; cv=none; b=Ch4zZeOM1FG1zM3saeqAwB66w2S8NqnYUcXxFNptdNH/llpwnM0Tz5XaEVAcErom8iYtiYeJmf1SbBlnNlL7I3VHXoCeYtaHMd/QvBIw0P7ZXWXta1roeHL//BJG8CuENv5IhM3GeM/zJE3pn58e8e1pU4kq7PVNuyxEJ6EzoRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763546510; c=relaxed/simple;
-	bh=rmNlTLUmDmktbJUpOcgfcgiLBfJQH5gdGCf28ckt4bM=;
+	s=arc-20240116; t=1763546512; c=relaxed/simple;
+	bh=cSE1bgc/A5b3+eoo1rQhSQWurH3UJYa01QLJN+44l/E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Jo+ksd98ndvtfORmsy2vThK90PgnH/R5kncHtGame8BbH0QRvsiosJP0dRPK0pEeSRn9Nu8TEPaER349e7/6eI3IYXvo35Nl2Q2+65vk6d+noN4fHKnMahbTYKxmx1PU1KB6BAd/mfZmuSqv4h4cxFxUS7RVFTTieyvXqLntF7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Mjgm6vA0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8C61C4AF0E;
-	Wed, 19 Nov 2025 10:01:48 +0000 (UTC)
+	 MIME-Version; b=rX81DaXqMI5Go65TQzeFfa2oRvOffhfgYa6MAxe0jaym3fmdg0K8t1qKfGTxbSASAPPMDW1ys4Kkt7GzkXR67HP+0Co5lDV41e1SuNzBAGHZaoRoh2mZ/rjrwd8UgcT5HYGnokKwMuXVyrR334/r/edoJthaZMykRa2ybid3fuw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=d/fhpU+y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 848C8C4CEF5;
+	Wed, 19 Nov 2025 10:01:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763546510;
-	bh=rmNlTLUmDmktbJUpOcgfcgiLBfJQH5gdGCf28ckt4bM=;
+	s=k20201202; t=1763546511;
+	bh=cSE1bgc/A5b3+eoo1rQhSQWurH3UJYa01QLJN+44l/E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Mjgm6vA06XYqR54McH7FbPwmU5KlA7vPKweK7C2Ktbtwg/LIBLyG6b29yg/bj1ety
-	 BWzQ1YXEx+YzfPcPKfXxyYWEy8YhPweIxkc96zGBEbJvy7zD2EMeOxDCX0Tu5B3jrM
-	 KiKmeGZ4UjMZjPbtQKFWSUukpApE/XC/5f/byzdZe8RCn/N8RKHtaQiJEP01/RN67P
-	 PqnaqdBW/fRo6aGNYU5nW35KAxF7NCKLtm9uz/zSQUaN4+qrZLtVsWGwW/cKrIM7RO
-	 pMAHhwqCXtQkA4qMEpywb30FJHr3J4TSvRJQGgQuuDFqikb1MkSDjqS107MGOvs74k
-	 s4YOT4Y9nzJog==
+	b=d/fhpU+yvSO4iZphSI6puKLlx4b+ro10iKejfVz+b7eCczlfeLXw+ntm0R5hZBngu
+	 C7zOFCzEia5nGJIzk6wArj1/gB14kwRRtlULvd3XkrBD7hZWeaLO/hrgjDBmyrFd8b
+	 5hsCWFxUb2V+hoQdW8sQCeMo9y+K/VRULWZxrVhlZlGmx8OCtScsjcDw7j7lVch7HZ
+	 CiTY+gySYo78ZZRidhunSYKsiAWHTs7J1UBPOIUiQsFRpShBUSB0Aiid6x/WPNsxWI
+	 MbeCRZjnKvlGnHz4hTD8Q8JV/yd8Q3e1QAmeju7iJ1OvffXOm7gesVEEvrndyq2e0P
+	 30vBJMECtg6mQ==
 From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
 To: gregkh@linuxfoundation.org
 Cc: linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Subject: [PATCH 03/10] tty: n_hdlc: simplify return from n_hdlc_tty_ioctl()
-Date: Wed, 19 Nov 2025 11:01:33 +0100
-Message-ID: <20251119100140.830761-4-jirislaby@kernel.org>
+Subject: [PATCH 04/10] tty: n_hdlc: use guard()s
+Date: Wed, 19 Nov 2025 11:01:34 +0100
+Message-ID: <20251119100140.830761-5-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.51.1
 In-Reply-To: <20251119100140.830761-1-jirislaby@kernel.org>
 References: <20251119100140.830761-1-jirislaby@kernel.org>
@@ -60,59 +60,161 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The cases in the switch() of n_hdlc_tty_ioctl() can return immediately
--- no need to store into error and return later.
+Use guards in the n_hdlc code. This improves readability, makes error
+handling easier, and marks locked portions of code explicit. All that
+while being sure the lock is unlocked.
 
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 ---
- drivers/tty/n_hdlc.c | 12 +++---------
- 1 file changed, 3 insertions(+), 9 deletions(-)
+ drivers/tty/n_hdlc.c | 67 +++++++++++++++++---------------------------
+ 1 file changed, 26 insertions(+), 41 deletions(-)
 
 diff --git a/drivers/tty/n_hdlc.c b/drivers/tty/n_hdlc.c
-index 4a4dc58b866a..66bb8ce6ec40 100644
+index 66bb8ce6ec40..3c9dcb0928c6 100644
 --- a/drivers/tty/n_hdlc.c
 +++ b/drivers/tty/n_hdlc.c
-@@ -584,7 +584,6 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
- 			    unsigned long arg)
+@@ -263,21 +263,18 @@ static int n_hdlc_tty_open(struct tty_struct *tty)
+  */
+ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
+ {
+-	unsigned long flags;
+ 	struct n_hdlc_buf *tbuf;
+ 	ssize_t actual;
+ 
+ check_again:
+-
+-	spin_lock_irqsave(&n_hdlc->tx_buf_list.spinlock, flags);
+-	if (n_hdlc->tbusy) {
+-		n_hdlc->woke_up = true;
+-		spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
+-		return;
++	scoped_guard(spinlock_irqsave, &n_hdlc->tx_buf_list.spinlock) {
++		if (n_hdlc->tbusy) {
++			n_hdlc->woke_up = true;
++			return;
++		}
++		n_hdlc->tbusy = true;
++		n_hdlc->woke_up = false;
+ 	}
+-	n_hdlc->tbusy = true;
+-	n_hdlc->woke_up = false;
+-	spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
+ 
+ 	tbuf = n_hdlc_buf_get(&n_hdlc->tx_buf_list);
+ 	while (tbuf) {
+@@ -324,9 +321,8 @@ static void n_hdlc_send_frames(struct n_hdlc *n_hdlc, struct tty_struct *tty)
+ 		clear_bit(TTY_DO_WRITE_WAKEUP, &tty->flags);
+ 
+ 	/* Clear the re-entry flag */
+-	spin_lock_irqsave(&n_hdlc->tx_buf_list.spinlock, flags);
+-	n_hdlc->tbusy = false;
+-	spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
++	scoped_guard(spinlock_irqsave, &n_hdlc->tx_buf_list.spinlock)
++		n_hdlc->tbusy = false;
+ 
+ 	if (n_hdlc->woke_up)
+ 		goto check_again;
+@@ -585,7 +581,6 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
  {
  	struct n_hdlc *n_hdlc = tty->disc_data;
--	int error = 0;
  	int count;
- 	unsigned long flags;
+-	unsigned long flags;
  	struct n_hdlc_buf *buf = NULL;
-@@ -603,8 +602,7 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
- 		else
- 			count = 0;
- 		spin_unlock_irqrestore(&n_hdlc->rx_buf_list.spinlock, flags);
--		error = put_user(count, (int __user *)arg);
--		break;
-+		return put_user(count, (int __user *)arg);
+ 
+ 	pr_debug("%s() called %d\n", __func__, cmd);
+@@ -594,26 +589,26 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
+ 	case FIONREAD:
+ 		/* report count of read data available */
+ 		/* in next available frame (if any) */
+-		spin_lock_irqsave(&n_hdlc->rx_buf_list.spinlock, flags);
+-		buf = list_first_entry_or_null(&n_hdlc->rx_buf_list.list,
+-						struct n_hdlc_buf, list_item);
+-		if (buf)
+-			count = buf->count;
+-		else
+-			count = 0;
+-		spin_unlock_irqrestore(&n_hdlc->rx_buf_list.spinlock, flags);
++		scoped_guard(spinlock_irqsave, &n_hdlc->rx_buf_list.spinlock) {
++			buf = list_first_entry_or_null(&n_hdlc->rx_buf_list.list,
++						       struct n_hdlc_buf, list_item);
++			if (buf)
++				count = buf->count;
++			else
++				count = 0;
++		}
+ 		return put_user(count, (int __user *)arg);
  
  	case TIOCOUTQ:
  		/* get the pending tx byte count in the driver */
-@@ -616,8 +614,7 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
- 		if (buf)
- 			count += buf->count;
- 		spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
--		error = put_user(count, (int __user *)arg);
--		break;
-+		return put_user(count, (int __user *)arg);
+ 		count = tty_chars_in_buffer(tty);
+ 		/* add size of next output frame in queue */
+-		spin_lock_irqsave(&n_hdlc->tx_buf_list.spinlock, flags);
+-		buf = list_first_entry_or_null(&n_hdlc->tx_buf_list.list,
+-						struct n_hdlc_buf, list_item);
+-		if (buf)
+-			count += buf->count;
+-		spin_unlock_irqrestore(&n_hdlc->tx_buf_list.spinlock, flags);
++		scoped_guard(spinlock_irqsave, &n_hdlc->tx_buf_list.spinlock) {
++			buf = list_first_entry_or_null(&n_hdlc->tx_buf_list.list,
++						       struct n_hdlc_buf, list_item);
++			if (buf)
++				count += buf->count;
++		}
+ 		return put_user(count, (int __user *)arg);
  
  	case TCFLSH:
- 		switch (arg) {
-@@ -628,11 +625,8 @@ static int n_hdlc_tty_ioctl(struct tty_struct *tty, unsigned int cmd,
- 		fallthrough;	/* to default */
- 
- 	default:
--		error = n_tty_ioctl_helper(tty, cmd, arg);
--		break;
-+		return n_tty_ioctl_helper(tty, cmd, arg);
- 	}
--	return error;
+@@ -720,14 +715,10 @@ static struct n_hdlc *n_hdlc_alloc(void)
+ static void n_hdlc_buf_return(struct n_hdlc_buf_list *buf_list,
+ 						struct n_hdlc_buf *buf)
+ {
+-	unsigned long flags;
 -
- }	/* end of n_hdlc_tty_ioctl() */
+-	spin_lock_irqsave(&buf_list->spinlock, flags);
++	guard(spinlock_irqsave)(&buf_list->spinlock);
+ 
+ 	list_add(&buf->list_item, &buf_list->list);
+ 	buf_list->count++;
+-
+-	spin_unlock_irqrestore(&buf_list->spinlock, flags);
+ }
  
  /**
+@@ -738,14 +729,10 @@ static void n_hdlc_buf_return(struct n_hdlc_buf_list *buf_list,
+ static void n_hdlc_buf_put(struct n_hdlc_buf_list *buf_list,
+ 			   struct n_hdlc_buf *buf)
+ {
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&buf_list->spinlock, flags);
++	guard(spinlock_irqsave)(&buf_list->spinlock);
+ 
+ 	list_add_tail(&buf->list_item, &buf_list->list);
+ 	buf_list->count++;
+-
+-	spin_unlock_irqrestore(&buf_list->spinlock, flags);
+ }	/* end of n_hdlc_buf_put() */
+ 
+ /**
+@@ -758,10 +745,9 @@ static void n_hdlc_buf_put(struct n_hdlc_buf_list *buf_list,
+  */
+ static struct n_hdlc_buf *n_hdlc_buf_get(struct n_hdlc_buf_list *buf_list)
+ {
+-	unsigned long flags;
+ 	struct n_hdlc_buf *buf;
+ 
+-	spin_lock_irqsave(&buf_list->spinlock, flags);
++	guard(spinlock_irqsave)(&buf_list->spinlock);
+ 
+ 	buf = list_first_entry_or_null(&buf_list->list,
+ 						struct n_hdlc_buf, list_item);
+@@ -770,7 +756,6 @@ static struct n_hdlc_buf *n_hdlc_buf_get(struct n_hdlc_buf_list *buf_list)
+ 		buf_list->count--;
+ 	}
+ 
+-	spin_unlock_irqrestore(&buf_list->spinlock, flags);
+ 	return buf;
+ }	/* end of n_hdlc_buf_get() */
+ 
 -- 
 2.51.1
 
