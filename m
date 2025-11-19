@@ -1,126 +1,238 @@
-Return-Path: <linux-serial+bounces-11538-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11540-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F0C1C71555
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 23:46:31 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id B07EBC717BB
+	for <lists+linux-serial@lfdr.de>; Thu, 20 Nov 2025 00:59:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id D95572FC2C
-	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 22:46:29 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5DDAA4E2E97
+	for <lists+linux-serial@lfdr.de>; Wed, 19 Nov 2025 23:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 078F333557D;
-	Wed, 19 Nov 2025 22:42:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA81C326934;
+	Wed, 19 Nov 2025 23:59:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b="2QQoyEmF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="V4iKVDWi"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mailtransmit04.runbox.com (mailtransmit04.runbox.com [185.226.149.37])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B60332EBC;
-	Wed, 19 Nov 2025 22:42:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.226.149.37
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7180BCA52;
+	Wed, 19 Nov 2025 23:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763592173; cv=none; b=jykhkwMPiFWR1OV2lCqVcgWLLKEx6nPW7aCYYo2wljdv5kL7btNOaLOR5LmXWV6mSHYXxdxK+GxZ8GFWP+SGOAhTAd2X2idsLJH5IWsYXOcfDhcCm9dw8fzT5s3erB4wTptKRIAwSwiPxCfZWMz0Yjt41J0yPvSFKIszq4nbUrs=
+	t=1763596748; cv=none; b=LmlP9EIQrdRoxWWAL9wbIVAZepC3lAhR9ScBQ8fOBHL4l4EUV1fvQzP9+s7Ydse6V2nH1i+s37PIx4CtuMmOGiQMd7bBQB2WOjonA0sncBWVMghoKq6Yb8puNpEqx0/TOTbHgot9PGHlWlumim1sltQYZGLZi3z1op6oahkCsPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763592173; c=relaxed/simple;
-	bh=T0Sxp6xsTa8WHrZCPbphVeR1iBAUpsGRCq/LGdqVZ7o=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=qM/zo+ajYS3/IeF+OpyKKItfQRaMy+ZnLKGNYG8dpFe7HufDIQYqc1faV8Zc2Bt054QB6ggJuCVLXXTZiqHBW6OWQP7Rk+XzPp67RjNgQ8oL2uUcSC60gaDITPlYzvbg/q9LJZpL9kzJQr0Snnp0p7+3eVQJs3rcZAj9zgAcuRE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=runbox.com; dkim=pass (2048-bit key) header.d=runbox.com header.i=@runbox.com header.b=2QQoyEmF; arc=none smtp.client-ip=185.226.149.37
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=runbox.com
-Received: from mailtransmit02.runbox ([10.9.9.162] helo=aibo.runbox.com)
-	by mailtransmit04.runbox.com with esmtps  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-	(Exim 4.93)
-	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqsz-006yvY-CN; Wed, 19 Nov 2025 23:42:49 +0100
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=runbox.com;
-	 s=selector1; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To
-	:Message-Id:Date:Subject:Cc:To:From;
-	bh=kajQNevhoLguN2aApJmIevDLTauYCAm5/mL/qG+eV6w=; b=2QQoyEmF89XnRHRftzYQ3PCMno
-	j8slCyBoubJF4Z+hMjOecF3xZQOoc395Mx5+XcCxFu9p46TImC1VgYqxrVCejxPrsilkTX5pKhozr
-	QkAWo3Nw7BVXcgdfnFADk2LmDf6/x8bM2NspHWc6ut3qUMxJC8Soz48/1vh8OLKYuJTMv2KG4v9bG
-	OWYSx9Bh4tpmi4k1DFxUYTmFeZQLeoHV10+u53JB28l6E6HqKWN8N1ARPyzZWUwPyLSAEa50jyE2s
-	5dyKrg1fCbxEDzZWx72ZQwM1p74tntZC5G2VK9j0dCMqvPJCkvPyCCT50liutIYbfQ5byu/nfuDOl
-	bMQsXtVA==;
-Received: from [10.9.9.74] (helo=submission03.runbox)
-	by mailtransmit02.runbox with esmtp (Exim 4.86_2)
-	(envelope-from <david.laight.linux_spam@runbox.com>)
-	id 1vLqsz-00086B-3c; Wed, 19 Nov 2025 23:42:49 +0100
-Received: by submission03.runbox with esmtpsa  [Authenticated ID (1493616)]  (TLS1.2:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.93)
-	id 1vLqsh-00Fos6-JE; Wed, 19 Nov 2025 23:42:31 +0100
-From: david.laight.linux@gmail.com
-To: linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	s=arc-20240116; t=1763596748; c=relaxed/simple;
+	bh=aMfWom2YqMjywxvhE2wFwmB5PmpGzL00uN54+jIPqgU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=W5CIMmwHn9o7zrwkXZrOXZJ5mxGzKn0L7IDAfzSqrOnSB5w6FG7RNOMJPP6kFsGdc648izAUcaf3ggFhseOYENWCEWbLYnNN/FsDxqIJM1Jc3O8EsgOY9iXtiEvGAqG8hSqUIAeSlWnZIqUzff3VMSQdCcW0ipQ/nX0uhh3Vnog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=V4iKVDWi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29638C4CEF5;
+	Wed, 19 Nov 2025 23:59:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763596747;
+	bh=aMfWom2YqMjywxvhE2wFwmB5PmpGzL00uN54+jIPqgU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=V4iKVDWikOrKp8hiVqz7Okp9Q1q3wFuIqlNEPISzAxRKkGlABp3eSp+Q323D3HozF
+	 WQovlJ6kDkd1iVz/X6E3BuADT96viHLBJ7t0DQqIMu0W2U4TzTk/Py116HXU2jWkNa
+	 qdzNhgGXEtQ4zt9knAMOkL7xksapBqYXZmJERU27xjOqcHNjcHg5YUTlmcsrX6G3XC
+	 tceGSYW6Roc2HnSvfiJUQJere5z2Bk3CrTyV2sV9MvwNGqupZN9jMnrpfcC2hL8URJ
+	 mVU1CXqlhnfTXBnt83idwbEra5CVbSFhTWeLRTWsvxW7s1GEz1PusdHV6R537Gv57b
+	 4zMtgEWnlvIaQ==
+Date: Wed, 19 Nov 2025 17:59:05 -0600
+From: Rob Herring <robh@kernel.org>
+To: Manivannan Sadhasivam <mani@kernel.org>
+Cc: Frank Li <Frank.li@nxp.com>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
-	David Laight <david.laight.linux@gmail.com>
-Subject: [PATCH 27/44] drivers/tty/vt: use umin() instead of min_t(u16, ...) for row/col limits
-Date: Wed, 19 Nov 2025 22:41:23 +0000
-Message-Id: <20251119224140.8616-28-david.laight.linux@gmail.com>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20251119224140.8616-1-david.laight.linux@gmail.com>
-References: <20251119224140.8616-1-david.laight.linux@gmail.com>
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Hans de Goede <hansg@kernel.org>,
+	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Mark Pearson <mpearson-lenovo@squebb.ca>,
+	"Derek J. Clark" <derekjohn.clark@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>, linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+	platform-driver-x86@vger.kernel.org, linux-pci@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org, linux-pm@vger.kernel.org,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+Subject: Re: [PATCH 7/9] dt-bindings: connector: Add PCIe M.2 Mechanical Key
+ E connector
+Message-ID: <20251119235905.GA3575788-robh@kernel.org>
+References: <20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com>
+ <20251112-pci-m2-e-v1-7-97413d6bf824@oss.qualcomm.com>
+ <aRS/3OTerCBGlmBm@lizhi-Precision-Tower-5810>
+ <qiwgnela4b6gbwuuq7xaqjong47c2ix6caagjl6ryqukzqkswn@6l7rvkf4dfyx>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <qiwgnela4b6gbwuuq7xaqjong47c2ix6caagjl6ryqukzqkswn@6l7rvkf4dfyx>
 
-From: David Laight <david.laight.linux@gmail.com>
+On Thu, Nov 13, 2025 at 10:30:42AM +0530, Manivannan Sadhasivam wrote:
+> On Wed, Nov 12, 2025 at 12:11:56PM -0500, Frank Li wrote:
+> > On Wed, Nov 12, 2025 at 08:15:19PM +0530, Manivannan Sadhasivam wrote:
+> > > Add the devicetree binding for PCIe M.2 Mechanical Key E connector defined
+> > > in the PCI Express M.2 Specification, r4.0, sec 5.1.2. This connector
+> > > provides interfaces like PCIe or SDIO to attach the WiFi devices to the
+> > > host machine, USB or UART+PCM interfaces to attach the Bluetooth (BT)
+> > > devices along with additional interfaces like I2C for NFC solution. At any
+> > > point of time, the connector can only support either PCIe or SDIO as the
+> > > WiFi interface and USB or UART as the BT interface.
+> > >
+> > > The connector provides a primary power supply of 3.3v, along with an
+> > > optional 1.8v VIO supply for the Adapter I/O buffer circuitry operating at
+> > > 1.8v sideband signaling.
+> > >
+> > > The connector also supplies optional signals in the form of GPIOs for fine
+> > > grained power management.
+> > >
+> > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > ---
+> > >  .../bindings/connector/pcie-m2-e-connector.yaml    | 154 +++++++++++++++++++++
+> > >  MAINTAINERS                                        |   1 +
+> > >  2 files changed, 155 insertions(+)
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > new file mode 100644
+> > > index 0000000000000000000000000000000000000000..91cb56b1a75b7e3de3b9fe9a7537089f96875746
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/connector/pcie-m2-e-connector.yaml
+> > > @@ -0,0 +1,154 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: http://devicetree.org/schemas/connector/pcie-m2-e-connector.yaml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: PCIe M.2 Mechanical Key E Connector
+> > > +
+> > > +maintainers:
+> > > +  - Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+> > > +
+> > > +description:
+> > > +  A PCIe M.2 E connector node represents a physical PCIe M.2 Mechanical Key E
+> > > +  connector. Mechanical Key E connectors are used to connect Wireless
+> > > +  Connectivity devices including combinations of Wi-Fi, BT, NFC to the host
+> > > +  machine over interfaces like PCIe/SDIO, USB/UART+PCM, and I2C.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: pcie-m2-e-connector
+> > > +
+> > > +  vpcie3v3-supply:
+> > > +    description: A phandle to the regulator for 3.3v supply.
+> > > +
+> > > +  vpcie1v8-supply:
+> > > +    description: A phandle to the regulator for VIO 1.8v supply.
+> > > +
+> > > +  ports:
+> > > +    $ref: /schemas/graph.yaml#/properties/ports
+> > > +    description: OF graph bindings modeling the interfaces exposed on the
+> > > +      connector. Since a single connector can have multiple interfaces, every
+> > > +      interface has an assigned OF graph port number as described below.
+> > > +
+> > > +    properties:
+> > > +      port@0:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: PCIe/SDIO interface
+> > 
+> > 
+> > PCIe and SDIO is difference signal at key E. why combine to one port? The
+> > similar case is USB2.0/UART
+> > 
+> 
+> They will be defined as separate endpoints in the next version.
+> 
+> > > +
+> > > +      port@1:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: USB 2.0/UART interface
+> > > +
+> > > +      port@2:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: PCM/I2S interface
+> > > +
+> > > +      port@3:
+> > > +        $ref: /schemas/graph.yaml#/properties/port
+> > > +        description: I2C interface
+> > > +
+> > > +    oneOf:
+> > > +      - required:
+> > > +          - port@0
+> > > +
+> > > +  clocks:
+> > > +    description: 32.768 KHz Suspend Clock (SUSCLK) input from the host system to
+> > > +      the M.2 card. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.1 for
+> > > +      more details.
+> > > +    maxItems: 1
+> > 
+> > Do we need add pciref clock here?
+> > 
+> > > +
+> > > +  w_disable1-gpios:
+> > 
+> > use "-"
+> > 
+> > w-disable1-gpios
+> > 
+> 
+> I just went with the spec that defines the signal as W_DISABLE.
+> 
+> > > +    description: GPIO controlled connection to W_DISABLE1# signal. This signal
+> > > +      is used by the system to disable WiFi radio in the M.2 card. Refer, PCI
+> > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
+> > > +    maxItems: 1
+> > > +
+> > > +  w_disable2-gpios:
+> > > +    description: GPIO controlled connection to W_DISABLE2# signal. This signal
+> > > +      is used by the system to disable BT radio in the M.2 card. Refer, PCI
+> > > +      Express M.2 Specification r4.0, sec 3.1.12.3 for more details.
+> > > +    maxItems: 1
+> > > +
+> > > +  led1-gpios:
+> > > +    description: GPIO controlled connection to LED_1# signal. This signal is
+> > > +      used by the M.2 card to indicate the card status via the system mounted
+> > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
+> > > +      details.
+> > > +    maxItems: 1
+> > > +
+> > > +  led2-gpios:
+> > > +    description: GPIO controlled connection to LED_2# signal. This signal is
+> > > +      used by the M.2 card to indicate the card status via the system mounted
+> > > +      LED. Refer, PCI Express M.2 Specification r4.0, sec 3.1.12.2 for more
+> > > +      details.
+> > > +    maxItems: 1
+> > > +
+> > > +  viocfg-gpios:
+> > > +    description: GPIO controlled connection to IO voltage configuration
+> > > +      (VIO_CFG) signal. This signal is used by the M.2 card to indicate to the
+> > > +      host system that the card supports an independent IO voltage domain for
+> > > +      the sideband signals. Refer, PCI Express M.2 Specification r4.0, sec
+> > > +      3.1.15.1 for more details.
+> > > +    maxItems: 1
+> > > +
+> > > +  uim_power_src-gpios:
+> > 
+> > property use -
+> > 
+> 
+> Again, this is as per the spec. If DT maintainers object to it, I'll change it.
 
-The row/column bounds (for a screen window box) are changed from
-'offset one' to 'offset zero' and bound to the screen size using:
-	v->xs = min_t(u16, v->xs - 1, vc->vc_cols - 1);
-This has the side effect of converting zero to the limit.
+Use '-'.
 
-A check I'm adding to min_t() reports that (u16)(v->xs - 1) (etc)
-discards signiticant bits (because v->xs is promoted to 'int' before
-the addition).
-If v->xs is zero (it comes from userspace) it converts -1 to 0xffff.
-This is then bounded to 'vc->vc_cols - 1' which will be fine.
-
-Replace with:
-	v->xs = umin(v->xs - 1, vc->vc_cols - 1);
-which again converts a -1 to unsigned - this time to 0xffffffff,
-with the same overall effect.
-
-Whether zero is meant to mean the 'maximum size' is unknown.
-I can't find any documentation for the ioctl and it pre-dates git.
-
-Detected by an extra check added to min_t().
-
-Signed-off-by: David Laight <david.laight.linux@gmail.com>
----
- drivers/tty/vt/selection.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/tty/vt/selection.c b/drivers/tty/vt/selection.c
-index 07d3b93975d3..13f4e48b4142 100644
---- a/drivers/tty/vt/selection.c
-+++ b/drivers/tty/vt/selection.c
-@@ -348,10 +348,11 @@ static int vc_selection(struct vc_data *vc, struct tiocl_selection *v,
- 		return 0;
- 	}
- 
--	v->xs = min_t(u16, v->xs - 1, vc->vc_cols - 1);
--	v->ys = min_t(u16, v->ys - 1, vc->vc_rows - 1);
--	v->xe = min_t(u16, v->xe - 1, vc->vc_cols - 1);
--	v->ye = min_t(u16, v->ye - 1, vc->vc_rows - 1);
-+	/* Historically 0 => max value */
-+	v->xs = umin(v->xs - 1, vc->vc_cols - 1);
-+	v->ys = umin(v->ys - 1, vc->vc_rows - 1);
-+	v->xe = umin(v->xe - 1, vc->vc_cols - 1);
-+	v->ye = umin(v->ye - 1, vc->vc_rows - 1);
- 
- 	if (mouse_reporting() && (v->sel_mode & TIOCL_SELMOUSEREPORT)) {
- 		mouse_report(tty, v->sel_mode & TIOCL_SELBUTTONMASK, v->xs,
--- 
-2.39.5
-
+Rob
 
