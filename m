@@ -1,80 +1,80 @@
-Return-Path: <linux-serial+bounces-11602-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11604-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id D60E6C85B00
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 16:10:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79C3AC85B03
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 16:11:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3FB384EBCAB
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 15:06:44 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8D1AB4ED55B
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 15:06:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 138293271FE;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5ECE327BFD;
 	Tue, 25 Nov 2025 15:06:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d7dlCiyZ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KITUXPaA"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E30E7326934
-	for <linux-serial@vger.kernel.org>; Tue, 25 Nov 2025 15:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC515326D5C
+	for <linux-serial@vger.kernel.org>; Tue, 25 Nov 2025 15:06:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764083199; cv=none; b=sUM69iVUCTBJH8WbgpmvhGtfg5d/2z+7aQcWZZZbGffFVbYAj2MoACzBmYcFqwBT1Jcx14mmRk/dpHXbTk6y7gqZWD1e8DSmFxam+1aaohzvhSh3fizdW8r4Isnc3AAEmqQXLS1sl8DHr7IOReVckokqZp8BA7u0CzPphG5fM9c=
+	t=1764083200; cv=none; b=RWv/J8GNP+Suk0h3q6zobK+q25CCxgMtikhPq1QyK0JTNxtLSvGEEkhppv4McQtMx76B72WpnHKruR75mDxqqhc6mEf+k+Rs6FhXqOQ5XCSrJ14F88EWE1yFbY40FALEx/cUZiJSd6hW0sXpjwo2EQTpshu94bf0Tl8W5Dhp+2Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764083199; c=relaxed/simple;
-	bh=URgCagji9ulEv/oC74kPYZAgNQrzgrocXvcqKJMHjg4=;
+	s=arc-20240116; t=1764083200; c=relaxed/simple;
+	bh=Nh3Ty6TiX7FCEIz6ikF19spmIxiE8SBKU0CTyBwe/s4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=D0qF7CHlwOk5axot7JkdhUKjf+fKvB0THq512ySK3Djsl15wK5BIeeWQg8OyWe4p2cXjaswTvYFjmzhs+BN1YNsNIa0+F99Y7ajmbLuzGmiiYIKCX7QlKWpYo7tU2C4grrI7IjLYeiTFsmsxm+kTqup/inx324Zejbqqg/OdAGE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d7dlCiyZ; arc=none smtp.client-ip=209.85.221.48
+	 MIME-Version; b=R992hKyXxfPtJ96VZoDRPaZimD3dQlEa2W6V/8K3O0IVlTjAR2Zk1QVUd4CWe4+HXPpb24L7ANJi69y+WjxUPUQdMQDVpa72sENnY+vzWgqENo5xp5Y+tFdfdSApxjUqkoVV4YtkN8XYn9bGLZ6QB0ki3lGhGdX7rn1tx7vbL8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KITUXPaA; arc=none smtp.client-ip=209.85.128.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-42b3d4d9ca6so4612099f8f.2
-        for <linux-serial@vger.kernel.org>; Tue, 25 Nov 2025 07:06:37 -0800 (PST)
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-477b5e0323bso35089485e9.0
+        for <linux-serial@vger.kernel.org>; Tue, 25 Nov 2025 07:06:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1764083196; x=1764687996; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1764083197; x=1764687997; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0jWrl686rUuseHaR2IGQNw+X391sTPqfacAQ3nSnRP8=;
-        b=d7dlCiyZ98NzqmBaMsK2m373qTGxOtyB1pu89OAtXgH/QaINpr3Ku6OTFZk5sOnxP8
-         fnkH2CRhmSq4btAxGA+yF153+vX+yvbN21LTEsBwd/1+yxmQqe+8taiGwJrJZPBRhHrM
-         f5V/LyvKs+VgmSgKlJAmm1cTKPoPRkTEJHVSnXioi9ZCYYaPTKVgmDs/aWADfF790jE+
-         85k3N1L6zG3gUqRLen1r+iLtf/asN5pInF+PO2qdybyQcRTX5DRwvAmSMo4qBljlRHJH
-         2XxwH62DSAtbXMgXtvj3iZHIQlThdBPR4sk1sIOuQ+eqqYrsf/Zu6QdkBGK/LamnGAyE
-         S5Sw==
+        bh=LsvzpDdHuaCCHjJpYBsgV96uU86b6iPp7/i436ekO/M=;
+        b=KITUXPaAPaNEjZuoZ9vUCvYuqHolUJJqjZI/47FnxXC+Ecl/tBc/RPSMEzm4eAVHKq
+         jSWTfQ6kt8kMYIByk96Fb6b04yJsd3jvOq4aCCJnUMW/t2owUa3ubP4zcZMAtzS6l0pW
+         ET9fvxoB6E+Jx4btB/otiTfhm9Q2TLK4gk7x/iZBv+yqXyquH+64H6uicpC8M9j6kYPA
+         LmKlPdJXZXfT23ktaUtLtTqmC/Uq0zQg7sC+5XopPU1s4Y8WB9dX0aqeDJTxDzca7Qxj
+         SuTAOHNkFx7L/dyxAB4sRx20a+xBE7bN7+o7z8uF5D7vUArfQQTNdcukuycMTq7s8vbE
+         1F2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1764083196; x=1764687996;
+        d=1e100.net; s=20230601; t=1764083197; x=1764687997;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=0jWrl686rUuseHaR2IGQNw+X391sTPqfacAQ3nSnRP8=;
-        b=C42OcAD546Fz4fEvYQdUSixGNdMgMcsoKVoX3anlXhvApiiCau8PIlTvTYXkyORaLE
-         B0ff06Pl1qgZJlQFv34cBo3A5Iz2Mx5mp/ahOmmwkJfhLfh9aljFOxY/gNWs6zEt2OzV
-         PDACDR87UogEuss7zmyuIZobtFiF7SuF8htnNx6hKTSCN2grZSlRivbst+zSUTQxSDmC
-         ShDOPD1bQeT5ppQvvnrLaiDSyCYbkaqjCBdfK1aouVwtUkBh1k06xauHzqvOT93VsGYM
-         2wjNNdP0gDqCRX9VWi6JlA5+XtT9LtxaZaMjkdylDAYXV6EEWYd4TZwPuVxwkYhmBWZN
-         0Tow==
-X-Forwarded-Encrypted: i=1; AJvYcCX/99gG8IvG1OYrzJJ4iXzT/DOL6AcvnJyCt4YrD1mfmi+khRIbRJ3uNOyKWAFxVODXRpr0HyLFxRi7cns=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxwJaW721wTjZiflQdC4pDhRUTI1BHi1TjOtf6JJv9ZjsJkhrwR
-	yxOxmtsFD65UFHg/8HWxKGV/oGFVELTL/3ca/MVfyIliUp8eD6nw75My
-X-Gm-Gg: ASbGncvTNnBLWi5MB7kg2mOY+YTlUjA9/Zx14Kedx506WJ7P8Tma388eP/nrFaQp11o
-	CbMGiavdJRPhfH3lXbFHS2CAKst50HgS7VAnbtvBz/bXDWELc5Lc+xjJaojQLStlT+sViRhFQJj
-	1sp4Wem8JGAXVHcuZ+0na5kYpMQdKMHEeuY6HYDzkUcV0+oZcarF8Rh6qcKzHp7fFAYOEcGxeVh
-	hHee4LpLMgRpJIs8Tbn2/mVwGnrUatWmLFag40iQYaNo/n+QrztyuEEV2fYCXvsR6LNg+2UCLT7
-	t5JKLa3geaqZOfj8tjsaFHJjcHs8uIcYpuuMG5RMFgzyclFayLYcDsZIVXCgeu9DHCwA3Ftk7VU
-	3nQizpPgZjSDYO18jJCMz6VBiBwxzjnkWVW9eg4MMpiEYFqLc/40PQHo8LXGnA7IT1Tcn8AsDKc
-	1hFd8rZZ3m7Z6+ObKH9+1oXk2ZR/kLiRp5mblQH5ppjPzKgjz4ZN9yZPFbecLjcWcuYPIkve7Vt
-	w==
-X-Google-Smtp-Source: AGHT+IHpViq69JVRoMCbsi/0+Kb8UZ+bDh+cIur/3biXiiriptKoLT5nCL3lIDewhvr9osrSVyuF0Q==
-X-Received: by 2002:a05:6000:3104:b0:405:3028:1be2 with SMTP id ffacd0b85a97d-42cc1cd8ecamr15209763f8f.11.1764083196216;
+        bh=LsvzpDdHuaCCHjJpYBsgV96uU86b6iPp7/i436ekO/M=;
+        b=mdheBWjMfvXJid4IDVX04wrM9G0l9xKk+weVgpB628toh+bImqDj3iq7S5DGys0OD3
+         jCH4ANuU7lUK1gQQljjhjLkv2InJoYANrHqO88lQ7PPGspzp+LH8GzMb/OMnaanNDY6t
+         Ce5VsAqeFAFzpKvjSd9+wo1TwZi7dtZVGy09wC8qYPJloa+n8ZqCRisx1wLX/omWDok3
+         5Pm503yhxh3WPyxECaKRgElyeqtGizPpVfP6Qxgb2nPetT9OHRcDmG8cjgyLdhTDnSgc
+         yHr2hNOOWE54z02Qbkk4v++otYp39sQScOtANxx2Yi9M5yRmj9AgWoZ8VMVhZz6UCMXX
+         SMnA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVxmxreXvA7lUcDgztOA+ErUlr07KiBTvJRbdcFTYpvBZ09RYaeVs/cimveOO6iP2C/g8eDVIu9wpP82M=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTKuqP/Ee3xMBKJ9lwKVWcXOfeVS9RYS1hXaLpiYUmXkAUbivJ
+	wHLtwtReKzCzTNW3WocFQ+Y4FUNYB7yDhMQZdV7hl9iVJTmRU9+7E09/
+X-Gm-Gg: ASbGnctqYigMi7ziqF23HGQctXASD9TDIjzXvv598TbDppJWAcN0sR8smZiQRDdf91h
+	JMdpD3fkBj6Sy2tzZCBD9PqNnOwXzlZpwcq5sin9fr7VLsZwYNTV5GODLWScw3Q/b9DgT2UuDkS
+	LU1q987fezrXb6lU8f5uBgHno4xcKq2uo1S4oHvWqmNqlE5icIdUJLDNenEGYDw+B/uoxxPHuKM
+	lZd/RvqNXXaevlswrNZJ3iCoVQuDteIxgEhZH1s3AaONhQrVbngWoTqZRWSrwrGWREkCa4ljTF7
+	aj6aG/pThPX/50j+JFOrzTUGirxrP89NbC4xB3MB5tVa1u3t3stWqb5AT21pi9FT8nJWYoJ2W8O
+	3W2Jc7dOdBxsPBYCEiYuRrgKbjw1rqDb6UsXwCwhmDsHFwQYm3NMAEbLfRXD2339c+zWZ1054yj
+	upTgYLVfk32yci1eid+dWy92eQgbUiGe1SfwCgS38LGAIg3Ab6iNxgD0JyuKNPNFj23KJS2P27g
+	Q==
+X-Google-Smtp-Source: AGHT+IGQ2lrJjpd5A0Bi98GjwpO8U0bS/285r/RkgU2XPW9IQYDqpZ5dHzIRnpjdKjTjaKMviAxfTA==
+X-Received: by 2002:a05:6000:2508:b0:42b:39ee:2855 with SMTP id ffacd0b85a97d-42cba6528a2mr21269154f8f.8.1764083196944;
         Tue, 25 Nov 2025 07:06:36 -0800 (PST)
 Received: from localhost.localdomain (host86-162-200-138.range86-162.btcentralplus.com. [86.162.200.138])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fba201sm34797809f8f.32.2025.11.25.07.06.35
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-42cb7fba201sm34797809f8f.32.2025.11.25.07.06.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Nov 2025 07:06:35 -0800 (PST)
+        Tue, 25 Nov 2025 07:06:36 -0800 (PST)
 From: Biju <biju.das.au@gmail.com>
 X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -91,11 +91,10 @@ Cc: Biju Das <biju.das.jz@bp.renesas.com>,
 	linux-serial@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
-	Biju Das <biju.das.au@gmail.com>,
-	Conor Dooley <conor.dooley@microchip.com>
-Subject: [PATCH v4 01/16] dt-bindings: serial: renesas,rsci: Document RZ/G3E support
-Date: Tue, 25 Nov 2025 15:06:03 +0000
-Message-ID: <20251125150632.299890-2-biju.das.jz@bp.renesas.com>
+	Biju Das <biju.das.au@gmail.com>
+Subject: [PATCH v4 02/16] serial: sh-sci: Add sci_is_fifo_type()
+Date: Tue, 25 Nov 2025 15:06:04 +0000
+Message-ID: <20251125150632.299890-3-biju.das.jz@bp.renesas.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251125150632.299890-1-biju.das.jz@bp.renesas.com>
 References: <20251125150632.299890-1-biju.das.jz@bp.renesas.com>
@@ -109,151 +108,54 @@ Content-Transfer-Encoding: 8bit
 
 From: Biju Das <biju.das.jz@bp.renesas.com>
 
-Add documentation for the serial communication interface (RSCI) found on
-the Renesas RZ/G3E (R9A09G047) SoC. The RSCI IP on this SoC is identical
-to that on the RZ/T2H (R9A09G077) SoC, but it has a 32-stage FIFO compared
-to 16 on RZ/T2H. It supports both FIFO and non-FIFO mode operation. RZ/G3E
-has 6 clocks(5 module clocks + 1 external clock) compared to 3 clocks
-(2 module clocks + 1 external clock) on RZ/T2H, and it has multiple resets.
+Add sci_is_fifo_type() helper for SCI operates in FIFO mode to
+simplify the code in probe() and remove().
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Biju Das <biju.das.jz@bp.renesas.com>
 ---
-v3->v4:
- * Dropped separate compatible for non-FIFO mode and instead using single
-   compatible "renesas,r9a09g047-rsci" as non-FIFO mode can be achieved
-   by software configuration.
- * Renamed clock-names bus->pclk
- * Rearranged clock-names tclk{4, 16, 64}
- * Retained the tag as the changes are trivial.
-v2->v3:
- * Dropped 1st and 3rd items from clk-names and added minItems for the
-   range.
- * Added minItems for clk and clk-names for RZ/T2H as the range is 2-3
- * Added maxItems for clk and clk-names for RZ/G3E as the range is 5-6
- * Retained the tag as it is trivial change.
-v1->v2:
- * Updated commit message
- * Added resets:false for non RZ/G3E SoCs.
+v4:
+ * New patch.
 ---
- .../bindings/serial/renesas,rsci.yaml         | 82 ++++++++++++++++---
- 1 file changed, 71 insertions(+), 11 deletions(-)
+ drivers/tty/serial/sh-sci.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/serial/renesas,rsci.yaml b/Documentation/devicetree/bindings/serial/renesas,rsci.yaml
-index 6b1f827a335b..0e1367dc4aa2 100644
---- a/Documentation/devicetree/bindings/serial/renesas,rsci.yaml
-+++ b/Documentation/devicetree/bindings/serial/renesas,rsci.yaml
-@@ -10,17 +10,15 @@ maintainers:
-   - Geert Uytterhoeven <geert+renesas@glider.be>
-   - Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+diff --git a/drivers/tty/serial/sh-sci.c b/drivers/tty/serial/sh-sci.c
+index 53edbf1d8963..56d6489b2a7c 100644
+--- a/drivers/tty/serial/sh-sci.c
++++ b/drivers/tty/serial/sh-sci.c
+@@ -3546,6 +3546,12 @@ static struct uart_driver sci_uart_driver = {
+ 	.cons		= SCI_CONSOLE,
+ };
  
--allOf:
--  - $ref: serial.yaml#
--
- properties:
-   compatible:
-     oneOf:
--      - items:
--          - const: renesas,r9a09g087-rsci # RZ/N2H
--          - const: renesas,r9a09g077-rsci # RZ/T2H
-+      - enum:
-+          - renesas,r9a09g047-rsci # RZ/G3E
-+          - renesas,r9a09g077-rsci # RZ/T2H
++static bool sci_is_fifo_type(u8 type)
++{
++	return (type == PORT_SCIFA || type == PORT_SCIFB ||
++		type == PORT_HSCIF || type == SCI_PORT_RSCI);
++}
++
+ static void sci_remove(struct platform_device *dev)
+ {
+ 	struct sci_port *s = platform_get_drvdata(dev);
+@@ -3556,8 +3562,7 @@ static void sci_remove(struct platform_device *dev)
  
-       - items:
-+          - const: renesas,r9a09g087-rsci # RZ/N2H
-           - const: renesas,r9a09g077-rsci # RZ/T2H
+ 	if (s->port.fifosize > 1)
+ 		device_remove_file(&dev->dev, &dev_attr_rx_fifo_trigger);
+-	if (type == PORT_SCIFA || type == PORT_SCIFB || type == PORT_HSCIF ||
+-	    type == SCI_PORT_RSCI)
++	if (sci_is_fifo_type(type))
+ 		device_remove_file(&dev->dev, &dev_attr_rx_fifo_timeout);
+ }
  
-   reg:
-@@ -42,14 +40,36 @@ properties:
- 
-   clocks:
-     minItems: 2
--    maxItems: 3
-+    maxItems: 6
- 
-   clock-names:
--    minItems: 2
-+    oneOf:
-+      - items:
-+          - const: operation
-+          - const: bus
-+          - const: sck # optional external clock input
-+
-+        minItems: 2
-+
-+      - items:
-+          - const: pclk
-+          - const: tclk
-+          - const: tclk_div4
-+          - const: tclk_div16
-+          - const: tclk_div64
-+          - const: sck # optional external clock input
-+
-+        minItems: 5
-+
-+  resets:
-+    items:
-+      - description: Input for resetting the APB clock
-+      - description: Input for resetting TCLK
-+
-+  reset-names:
-     items:
--      - const: operation
--      - const: bus
--      - const: sck # optional external clock input
-+      - const: presetn
-+      - const: tresetn
- 
-   power-domains:
-     maxItems: 1
-@@ -62,6 +82,46 @@ required:
-   - clock-names
-   - power-domains
- 
-+allOf:
-+  - $ref: serial.yaml#
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g077-rsci
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 2
-+          maxItems: 3
-+
-+        clock-names:
-+          minItems: 2
-+          maxItems: 3
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: renesas,r9a09g047-rsci
-+    then:
-+      properties:
-+        clocks:
-+          minItems: 5
-+          maxItems: 6
-+
-+        clock-names:
-+          minItems: 5
-+          maxItems: 6
-+
-+      required:
-+        - resets
-+        - reset-names
-+    else:
-+      properties:
-+        resets: false
-+
- unevaluatedProperties: false
- 
- examples:
+@@ -3918,8 +3923,7 @@ static int sci_probe(struct platform_device *dev)
+ 		if (ret)
+ 			return ret;
+ 	}
+-	if (sp->type == PORT_SCIFA || sp->type == PORT_SCIFB ||
+-	    sp->type == PORT_HSCIF || sp->type == SCI_PORT_RSCI) {
++	if (sci_is_fifo_type(sp->type)) {
+ 		ret = device_create_file(&dev->dev, &dev_attr_rx_fifo_timeout);
+ 		if (ret) {
+ 			if (sp->port.fifosize > 1) {
 -- 
 2.43.0
 
