@@ -1,172 +1,243 @@
-Return-Path: <linux-serial+bounces-11590-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11591-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD9FAC8368C
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 06:52:06 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75CC6C857FF
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 15:46:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E5B83A849F
-	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 05:52:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9AB954EBCC2
+	for <lists+linux-serial@lfdr.de>; Tue, 25 Nov 2025 14:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 979B42701B1;
-	Tue, 25 Nov 2025 05:52:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44BED3271E1;
+	Tue, 25 Nov 2025 14:45:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epBnkQyn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dL4O+H3y"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669A41E505;
-	Tue, 25 Nov 2025 05:52:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86719324B2E;
+	Tue, 25 Nov 2025 14:45:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764049923; cv=none; b=fvopDw67o40LALPiMr7pYr3lcr8CeaXs0qyzYTla2JQSwqjNUrsqpVzBRO0wjMx0ZtL1ZI3cKVMR/1aJ14GSUwQPV2kQdWmjbfpW7IZEaHYXbp1hcfaGNhMgcMCC+rwsYKDCWJyAl/q6lLh06JJXc61KQoxzVLSjOTfq/EaaQ98=
+	t=1764081911; cv=none; b=rxWNtK9JKNGYChyhtknrZSVU5hM4x7extJtt09FX/d4B73d6AODF/WqE/lOfP3AtM362Dn+bCGW0/ZALHW3ohx9slEClqFCNdU5A/T5R76mjOHXwno3KVATjK6HEiQ7Y/6/bOpig6wEU41w7mkFTT2G4xFgqKwJzeNgnmVl2yr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764049923; c=relaxed/simple;
-	bh=pX4F3AVSn2oWHyvFNS8b0Z07RFdBON2PvrmWohyfGgs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AIq9AB4zSaXHZ/Ja2qa0LdZWyW2rQ5V0N6Zdq4GXSBX62r8OyTFbYW6Nnldq0CEoTcI9P4rmElQciPIe6/14WdjYilyUqrJ1awU5sHyKF+LE+5jeMGldcRPc0GVKtS6AhVSM5CcmarfS5QrKzKk8zPhMNma7zwNHkzo8ReFpb24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epBnkQyn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89139C4CEF1;
-	Tue, 25 Nov 2025 05:51:59 +0000 (UTC)
+	s=arc-20240116; t=1764081911; c=relaxed/simple;
+	bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SRv3yF9fD350BLnmnQX7BoZMBMGU7DiVGiXqmTrawn7LiRnSKBI5ttEHQYZdQyiicER/NHsTKFGTie3/2t6fZKqTNWPoRmwB8MuiSm32m4k5hOWjAZj86w9EpGdf25QbdD92sXHCaAdaWh0vd0w+sygy6DYmvlA/dxcQkZ5mX78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dL4O+H3y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF823C4CEF1;
+	Tue, 25 Nov 2025 14:45:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764049920;
-	bh=pX4F3AVSn2oWHyvFNS8b0Z07RFdBON2PvrmWohyfGgs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=epBnkQynSi9+dHHYPjUDqc2ngMiItMNjKRIkkluebnQ9wk+W37ssurQvUsYy7MY7A
-	 T6MmZlJ+27dAGPZBJ83C4otWDQHXZDfJ2PQuknZoX3vrGQLITYiLIsyzNq6pUZpfe8
-	 eLvT3bwnjsYJwn6G02pz2VZa8ECM/ea27siy273TPL43cvFcLvqTyAw3NilEt9I073
-	 XcUl+659pXRlAXnOG3Gfxk2+dK3BnpPkHKvPZtc/TRMVpNGV66gfDqufemGcZojAJn
-	 6tMUTemTfO8Ra95/Ijf1mQHTvjBx1w7wcq6020NtjCUb7I5uo7CL3NbX+qCq9y28M/
-	 qOv4OZ4Pbu9Kg==
-Message-ID: <2fe33f3d-562a-4382-9aef-e50eb5a97772@kernel.org>
-Date: Tue, 25 Nov 2025 06:51:57 +0100
+	s=k20201202; t=1764081911;
+	bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=dL4O+H3ykDcy2uUZ6vMaf+aASZpinT///lkx7BvJsJGjHJFGlCFNSziI7vYYtoTKs
+	 xyop0BHzyCBVG6AD99UcjYGU5Dob2fi/5X0VLgsWadAamhh7cDdg5YhAGV83jQjeqZ
+	 9WC6TfdmnO3x4Oj+SBVQykg3a8sEB/mDgGJupSkxAdyjrz0ORbnwKBhvrvNSCrn5TJ
+	 QROP18q5ZwbfMpWmU8xTHv6sa3BaPVs/hXZ3H41RygiJDIO4MlUDlmb+ZYWtuH5D3q
+	 /vi2xevwO4VTUOvcTnGClv0jXT/K5QvXDl4ij8rkpO5YDbPFmTnVnzK6r34FXfsAp7
+	 jwoSNm+h4mVkg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id D51CAD0E6C6;
+	Tue, 25 Nov 2025 14:45:10 +0000 (UTC)
+From: Manivannan Sadhasivam via B4 Relay <devnull+manivannan.sadhasivam.oss.qualcomm.com@kernel.org>
+Subject: [PATCH v2 00/10] Add support for handling PCIe M.2 Key E
+ connectors in devicetree
+Date: Tue, 25 Nov 2025 20:15:04 +0530
+Message-Id: <20251125-pci-m2-e-v2-0-32826de07cc5@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [tty:tty-next 27/37] drivers/tty/vt/keyboard.c:1712:7: error:
- cannot jump from this asm goto statement to one of its possible targets
-To: Nathan Chancellor <nathan@kernel.org>, kernel test robot <lkp@intel.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- linux-serial@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <202511241835.EA8lShgH-lkp@intel.com>
- <20251124221343.GA2953435@ax162>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- xsFNBE6S54YBEACzzjLwDUbU5elY4GTg/NdotjA0jyyJtYI86wdKraekbNE0bC4zV+ryvH4j
- rrcDwGs6tFVrAHvdHeIdI07s1iIx5R/ndcHwt4fvI8CL5PzPmn5J+h0WERR5rFprRh6axhOk
- rSD5CwQl19fm4AJCS6A9GJtOoiLpWn2/IbogPc71jQVrupZYYx51rAaHZ0D2KYK/uhfc6neJ
- i0WqPlbtIlIrpvWxckucNu6ZwXjFY0f3qIRg3Vqh5QxPkojGsq9tXVFVLEkSVz6FoqCHrUTx
- wr+aw6qqQVgvT/McQtsI0S66uIkQjzPUrgAEtWUv76rM4ekqL9stHyvTGw0Fjsualwb0Gwdx
- ReTZzMgheAyoy/umIOKrSEpWouVoBt5FFSZUyjuDdlPPYyPav+hpI6ggmCTld3u2hyiHji2H
- cDpcLM2LMhlHBipu80s9anNeZhCANDhbC5E+NZmuwgzHBcan8WC7xsPXPaiZSIm7TKaVoOcL
- 9tE5aN3jQmIlrT7ZUX52Ff/hSdx/JKDP3YMNtt4B0cH6ejIjtqTd+Ge8sSttsnNM0CQUkXps
- w98jwz+Lxw/bKMr3NSnnFpUZaxwji3BC9vYyxKMAwNelBCHEgS/OAa3EJoTfuYOK6wT6nadm
- YqYjwYbZE5V/SwzMbpWu7Jwlvuwyfo5mh7w5iMfnZE+vHFwp/wARAQABzSFKaXJpIFNsYWJ5
- IDxqaXJpc2xhYnlAa2VybmVsLm9yZz7CwXcEEwEIACEFAlW3RUwCGwMFCwkIBwIGFQgJCgsC
- BBYCAwECHgECF4AACgkQvSWxBAa0cEnVTg//TQpdIAr8Tn0VAeUjdVIH9XCFw+cPSU+zMSCH
- eCZoA/N6gitEcnvHoFVVM7b3hK2HgoFUNbmYC0RdcSc80pOF5gCnACSP9XWHGWzeKCARRcQR
- 4s5YD8I4VV5hqXcKo2DFAtIOVbHDW+0okOzcecdasCakUTr7s2fXz97uuoc2gIBB7bmHUGAH
- XQXHvdnCLjDjR+eJN+zrtbqZKYSfj89s/ZHn5Slug6w8qOPT1sVNGG+eWPlc5s7XYhT9z66E
- l5C0rG35JE4PhC+tl7BaE5IwjJlBMHf/cMJxNHAYoQ1hWQCKOfMDQ6bsEr++kGUCbHkrEFwD
- UVA72iLnnnlZCMevwE4hc0zVhseWhPc/KMYObU1sDGqaCesRLkE3tiE7X2cikmj/qH0CoMWe
- gjnwnQ2qVJcaPSzJ4QITvchEQ+tbuVAyvn9H+9MkdT7b7b2OaqYsUP8rn/2k1Td5zknUz7iF
- oJ0Z9wPTl6tDfF8phaMIPISYrhceVOIoL+rWfaikhBulZTIT5ihieY9nQOw6vhOfWkYvv0Dl
- o4GRnb2ybPQpfEs7WtetOsUgiUbfljTgILFw3CsPW8JESOGQc0Pv8ieznIighqPPFz9g+zSu
- Ss/rpcsqag5n9rQp/H3WW5zKUpeYcKGaPDp/vSUovMcjp8USIhzBBrmI7UWAtuedG9prjqfO
- wU0ETpLnhgEQAM+cDWLL+Wvc9cLhA2OXZ/gMmu7NbYKjfth1UyOuBd5emIO+d4RfFM02XFTI
- t4MxwhAryhsKQQcA4iQNldkbyeviYrPKWjLTjRXT5cD2lpWzr+Jx7mX7InV5JOz1Qq+P+nJW
- YIBjUKhI03ux89p58CYil24Zpyn2F5cX7U+inY8lJIBwLPBnc9Z0An/DVnUOD+0wIcYVnZAK
- DiIXODkGqTg3fhZwbbi+KAhtHPFM2fGw2VTUf62IHzV+eBSnamzPOBc1XsJYKRo3FHNeLuS8
- f4wUe7bWb9O66PPFK/RkeqNX6akkFBf9VfrZ1rTEKAyJ2uqf1EI1olYnENk4+00IBa+BavGQ
- 8UW9dGW3nbPrfuOV5UUvbnsSQwj67pSdrBQqilr5N/5H9z7VCDQ0dhuJNtvDSlTf2iUFBqgk
- 3smln31PUYiVPrMP0V4ja0i9qtO/TB01rTfTyXTRtqz53qO5dGsYiliJO5aUmh8swVpotgK4
- /57h3zGsaXO9PGgnnAdqeKVITaFTLY1ISg+Ptb4KoliiOjrBMmQUSJVtkUXMrCMCeuPDGHo7
- 39Xc75lcHlGuM3yEB//htKjyprbLeLf1y4xPyTeeF5zg/0ztRZNKZicgEmxyUNBHHnBKHQxz
- 1j+mzH0HjZZtXjGu2KLJ18G07q0fpz2ZPk2D53Ww39VNI/J9ABEBAAHCwV8EGAECAAkFAk6S
- 54YCGwwACgkQvSWxBAa0cEk3tRAAgO+DFpbyIa4RlnfpcW17AfnpZi9VR5+zr496n2jH/1ld
- wRO/S+QNSA8qdABqMb9WI4BNaoANgcg0AS429Mq0taaWKkAjkkGAT7mD1Q5PiLr06Y/+Kzdr
- 90eUVneqM2TUQQbK+Kh7JwmGVrRGNqQrDk+gRNvKnGwFNeTkTKtJ0P8jYd7P1gZb9Fwj9YLx
- jhn/sVIhNmEBLBoI7PL+9fbILqJPHgAwW35rpnq4f/EYTykbk1sa13Tav6btJ+4QOgbcezWI
- wZ5w/JVfEJW9JXp3BFAVzRQ5nVrrLDAJZ8Y5ioWcm99JtSIIxXxt9FJaGc1Bgsi5K/+dyTKL
- wLMJgiBzbVx8G+fCJJ9YtlNOPWhbKPlrQ8+AY52Aagi9WNhe6XfJdh5g6ptiOILm330mkR4g
- W6nEgZVyIyTq3ekOuruftWL99qpP5zi+eNrMmLRQx9iecDNgFr342R9bTDlb1TLuRb+/tJ98
- f/bIWIr0cqQmqQ33FgRhrG1+Xml6UXyJ2jExmlO8JljuOGeXYh6ZkIEyzqzffzBLXZCujlYQ
- DFXpyMNVJ2ZwPmX2mWEoYuaBU0JN7wM+/zWgOf2zRwhEuD3A2cO2PxoiIfyUEfB9SSmffaK/
- S4xXoB6wvGENZ85Hg37C7WDNdaAt6Xh2uQIly5grkgvWppkNy4ZHxE+jeNsU7tg=
-In-Reply-To: <20251124221343.GA2953435@ax162>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAPDAJWkC/23OzwrCMAwG8FcZPZuxxnZ/PPkeskPtohacm80sy
+ vDdjRNPegl8IfzyzYopBmK1yWYVKQUOw0UCrjLlT+5yJAidZIUFWq01wugD9AgEjSkb63zTlbZ
+ Scj5GOoT7Qu1ayafA0xAfi5z0e/sHSRoKaCqj1125P9RotgNzfr25sx/6Ppeh2ucHj3S9Sb3p8
+ 0H1xOyWetJ2cdF+3bQW1VusC4OOnKl+VTH3jgneizBtslTmuobotfx7vgCNIuqzFgEAAA==
+X-Change-ID: 20251112-pci-m2-e-94695ac9d657
+To: Rob Herring <robh@kernel.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Jiri Slaby <jirislaby@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
+ Nicolas Schier <nicolas.schier@linux.dev>, Hans de Goede <hansg@kernel.org>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Mark Pearson <mpearson-lenovo@squebb.ca>, 
+ "Derek J. Clark" <derekjohn.clark@gmail.com>, 
+ Manivannan Sadhasivam <mani@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Marcel Holtmann <marcel@holtmann.org>, 
+ Luiz Augusto von Dentz <luiz.dentz@gmail.com>, 
+ Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-kbuild@vger.kernel.org, platform-driver-x86@vger.kernel.org, 
+ linux-pci@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, linux-bluetooth@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+X-Mailer: b4 0.14.3
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6676;
+ i=manivannan.sadhasivam@oss.qualcomm.com; h=from:subject:message-id;
+ bh=uTECYDxx3v1bGzayL89lryGm1s4nv9vi4GpwLXVtnRY=;
+ b=owEBbQGS/pANAwAKAVWfEeb+kc71AcsmYgBpJcDxM2Jy7w/KJCb/fDPfjtzVC0c80RYMWpVsy
+ RvZgIAfyuaJATMEAAEKAB0WIQRnpUMqgUjL2KRYJ5dVnxHm/pHO9QUCaSXA8QAKCRBVnxHm/pHO
+ 9SCLB/9+huQ91JOYLD8k5L9pr5D9iwA3Gzsmtnb/InTVHyMNpl1ZcaLZLnG0TfekdU7Uucs3bqW
+ lbQhzehgnPRjA1ZceIAMl8GWm6e4bFtKBsCXDGgaczsr02Z+dmjkbvo2IbHr0fpFf//0cQM/yTm
+ 2kUEK1Q/uPAI1FdE/BuLRfuOWqsyVGWuhROsSF/+1S7nHFXNJi0e26wWBsEbh+WzTOVIgbKCDnW
+ kSweB+UBaV2L30XXTlVr0SEXmDsKu/UJpM8/2K6Vyd5k1TI99JeUuCH1j13tHLRdIWEM/JNu2L6
+ WNSTvfD68P+VA7dWeawbyXi9P2Q4dauUHpyBYI/3kRcYeRWD
+X-Developer-Key: i=manivannan.sadhasivam@oss.qualcomm.com; a=openpgp;
+ fpr=C668AEC3C3188E4C611465E7488550E901166008
+X-Endpoint-Received: by B4 Relay for
+ manivannan.sadhasivam@oss.qualcomm.com/default with auth_id=461
+X-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+Reply-To: manivannan.sadhasivam@oss.qualcomm.com
 
-On 24. 11. 25, 23:13, Nathan Chancellor wrote:
-> On Mon, Nov 24, 2025 at 06:25:26PM +0800, kernel test robot wrote:
->> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty.git tty-next
->> head:   da218406dd50e0ac96bb383de4edd208286efe70
->> commit: bfb24564b5fd8625ce5c007f274cabdc3b570969 [27/37] tty: vt/keyboard: use __free()
->> config: powerpc-randconfig-002-20251124 (https://download.01.org/0day-ci/archive/20251124/202511241835.EA8lShgH-lkp@intel.com/config)
->> compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
->> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251124/202511241835.EA8lShgH-lkp@intel.com/reproduce)
->>
->> If you fix the issue in a separate patch/commit (i.e. not just a new version of
->> the same patch/commit), kindly add following tags
->> | Reported-by: kernel test robot <lkp@intel.com>
->> | Closes: https://lore.kernel.org/oe-kbuild-all/202511241835.EA8lShgH-lkp@intel.com/
->>
->> All errors (new ones prefixed by >>):
->>
->>>> drivers/tty/vt/keyboard.c:1712:7: error: cannot jump from this asm goto statement to one of its possible targets
->>                     if (put_user(asize, &a->kb_cnt))
->>                         ^
->>     arch/powerpc/include/asm/uaccess.h:67:5: note: expanded from macro 'put_user'
->>                       __put_user(x, _pu_addr) : -EFAULT;                    \
->>                       ^
->>     arch/powerpc/include/asm/uaccess.h:49:3: note: expanded from macro '__put_user'
->>                     __put_user_size_goto(__pu_val, __pu_addr, __pu_size, __pu_failed);      \
->>                     ^
->>     arch/powerpc/include/asm/uaccess.h:127:10: note: expanded from macro '__put_user_size_goto'
->>             case 1: __put_user_asm_goto(x, __pus_addr, label, "stb"); break;        \
->>                     ^
->>     arch/powerpc/include/asm/uaccess.h:87:2: note: expanded from macro '__put_user_asm_goto'
->>             asm goto(                                       \
->>             ^
->>     drivers/tty/vt/keyboard.c:1736:7: note: possible target of asm goto statement
->>                     if (put_user(asize, &a->kb_cnt))
->>                         ^
->>     arch/powerpc/include/asm/uaccess.h:67:5: note: expanded from macro 'put_user'
->>                       __put_user(x, _pu_addr) : -EFAULT;                    \
->>                       ^
->>     arch/powerpc/include/asm/uaccess.h:53:9: note: expanded from macro '__put_user'
->>                                                                     \
->>                                                                     ^
->>     drivers/tty/vt/keyboard.c:1692:33: note: jump exits scope of variable with __attribute__((cleanup))
->>                     struct kbdiacr __free(kfree) *dia = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacr),
->>                                                   ^
->>     drivers/tty/vt/keyboard.c:1722:23: note: jump bypasses initialization of variable with __attribute__((cleanup))
->>                     void __free(kfree) *buf = kmalloc_array(MAX_DIACR, sizeof(struct kbdiacruc),
->>                                         ^
-> 
-> Previously reported:
-> 
->    https://lore.kernel.org/202509091702.Oc7eCRDw-lkp@intel.com/
+Hi,
 
-Ah, I forgot about this :(.
+This series is the continuation of the series [1] that added the initial support
+for the PCIe M.2 connectors. This series extends it by adding support for Key E
+connectors. These connectors are used to connect the Wireless Connectivity
+devices such as WiFi, BT, NFC and GNSS devices to the host machine over
+interfaces such as PCIe/SDIO, USB/UART and NFC. This series adds support for
+connectors that expose PCIe interface for WiFi and UART interface for BT. Other
+interfaces are left for future improvements.
 
-> My suggested workaround in that thread is still applicable if it would
-> be acceptable as a formal patch:
-> 
->    https://lore.kernel.org/20250909215342.GA2456480@ax162/
+Serdev device support for BT
+============================
 
-I think it makes sense. Could you post it formally then?
+Adding support for the PCIe interface was mostly straightforward and a lot
+similar to the previous Key M connector. But adding UART interface has proved to
+be tricky. This is mostly because of the fact UART is a non-discoverable bus,
+unlike PCIe which is discoverable. So this series relied on the PCI notifier to
+create the serdev device for UART/BT. This means the PCIe interface will be
+brought up first and after the PCIe device enumeration, the serdev device will
+be created by the pwrseq driver. This logic is necessary since the connector
+driver and DT node don't describe the device, but just the connector. So to make
+the connector interface Plug and Play, the connector driver uses the PCIe device
+ID to identify the card and creates the serdev device. This logic could be
+extended in the future to support more M.2 cards. Even if the M.2 card uses SDIO
+interface for connecting WLAN, a SDIO notifier could be added to create the
+serdev device.
 
-thanks,
+Open questions
+==============
+
+Though this series adds the relevant functionality for handling the M.2 Key M
+connectors, there are still a few open questions exists on the design. 
+
+1. I've used the M.2 card model name as the serdev device name. This is found
+out by comparing the PCIe VID:PID in the notifier. Is this approach acceptable?
+I did not use the PID as the serdev name since it will vary if the SDIO
+interface is used in the future.
+
+2. PCIe client drivers of some M.2 WLAN cards like the Qcom QCA6390, rely on
+the PCIe device DT node to extract properties such as
+'qcom,calibration-variant', 'firmware-name', etc... For those drivers, should we
+add the PCIe DT node in the Root Port in conjunction with the Port node as
+below?
+
+pcie@0 {
+	wifi@0 {
+		compatible = "pci17cb,1103";
+		...
+		qcom,calibration-variant = "LE_X13S";
+	};
+
+	port {
+		pcie4_port0_ep: endpoint {
+			remote-endpoint = <&m2_e_pcie_ep>;
+		};
+	};
+};
+
+This will also require marking the PMU supplies optional in the relevant ath
+bindings for M.2 cards.
+
+3. Some M.2 cards require specific power up sequence like delays between
+regulator/GPIO and such. For instance, the WCN7850 card supported in this series
+requires 50ms delay between powering up an interface and driving it. I've just
+hardcoded the delay in the driver, but it is a pure hack. Since the pwrseq
+driver doesn't know anything about the device it is dealing with before powering
+it ON, how should it handle the device specific power requirements? Should we
+hardcode the device specific property in the connector node? But then, it will
+no longer become a generic M.2 connector and sort of defeats the purpose of the
+connector binding.
+
+I hope to address these questions with the help of the relevant subsystem
+maintainers and the community. 
+
+Testing
+=======
+
+This series, together with the devicetree changes [2] was tested on the
+Qualcomm X1e based Lenovo Thinkpad T14s Laptop which has the WCN7850 WLAN/BT M.2
+card connected over PCIe and UART.
+
+Dependency
+==========
+
+This series is dependent on the M.2 Key M series [1] on top of v6.18-rc1.
+
+[1] https://lore.kernel.org/linux-pci/20251125-pci-m2-v3-0-c528042aea47@oss.qualcomm.com
+[2] https://github.com/Mani-Sadhasivam/linux/commit/acbee74a5c90fc8839bb7b6f326c677ee1c0d89c
+
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+---
+Changes in v2:
+- Used '-' for GPIO names in the binding and removed led*-gpios properties
+- Described the endpoint nodes for port@0 and port@1 nodes
+- Added the OF graph port to the serial binding
+- Fixed the hci_qca driver to return err if devm_pwrseq_get() fails
+- Incorporated various review comments in pwrseq driver
+- Collected Ack
+- Link to v1: https://lore.kernel.org/r/20251112-pci-m2-e-v1-0-97413d6bf824@oss.qualcomm.com
+
+---
+Manivannan Sadhasivam (10):
+      serdev: Convert to_serdev_*() helpers to macros and use container_of_const()
+      serdev: Add serdev device based driver match support
+      serdev: Allow passing the serdev device name to serdev_device_add()
+      serdev: Add an API to find the serdev controller associated with the devicetree node
+      serdev: Add modalias support for serdev client devices
+      dt-bindings: serial: Document the graph port
+      serdev: Do not return -ENODEV from of_serdev_register_devices() if external connector is used
+      dt-bindings: connector: Add PCIe M.2 Mechanical Key E connector
+      Bluetooth: hci_qca: Add support for WCN7850 PCIe M.2 card
+      power: sequencing: pcie-m2: Add support for PCIe M.2 Key E connectors
+
+ .../bindings/connector/pcie-m2-e-connector.yaml    | 178 ++++++++++++++++++
+ .../devicetree/bindings/serial/serial.yaml         |   3 +
+ MAINTAINERS                                        |   1 +
+ drivers/bluetooth/hci_qca.c                        |  19 ++
+ drivers/platform/x86/dell/dell-uart-backlight.c    |   2 +-
+ .../x86/lenovo/yoga-tab2-pro-1380-fastcharger.c    |   2 +-
+ drivers/platform/x86/x86-android-tablets/core.c    |   2 +-
+ drivers/power/sequencing/Kconfig                   |   1 +
+ drivers/power/sequencing/pwrseq-pcie-m2.c          | 205 ++++++++++++++++++++-
+ drivers/tty/serdev/core.c                          |  76 +++++++-
+ include/linux/mod_devicetable.h                    |   8 +
+ include/linux/serdev.h                             |  30 +--
+ scripts/mod/devicetable-offsets.c                  |   3 +
+ scripts/mod/file2alias.c                           |   8 +
+ 14 files changed, 505 insertions(+), 33 deletions(-)
+---
+base-commit: cb6649f6217c0331b885cf787f1d175963e2a1d2
+change-id: 20251112-pci-m2-e-94695ac9d657
+prerequisite-message-id: 20251125-pci-m2-v3-0-c528042aea47@oss.qualcomm.com
+prerequisite-patch-id: 58778d8eb97ab86008cd48fb5d28ed6cc0bbbc1b
+prerequisite-patch-id: 2dd7d793a67f59ef6e6b5137e69436896198b965
+prerequisite-patch-id: 8ccaa5fdd95e64e69cd942f93c26e89b827d0453
+prerequisite-patch-id: 3d3e1bb7959ab1e140c5024acdd8655e7a7e99ef
+
+Best regards,
 -- 
-js
-suse labs
+Manivannan Sadhasivam <manivannan.sadhasivam@oss.qualcomm.com>
+
+
 
