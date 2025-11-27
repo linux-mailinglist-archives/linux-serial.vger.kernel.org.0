@@ -1,34 +1,34 @@
-Return-Path: <linux-serial+bounces-11674-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11678-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35F6BC9007F
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 20:37:57 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 394DDC90157
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 21:07:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 287364E1746
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 19:37:56 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 48F68352F1A
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 20:06:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24D8C2D7DDF;
-	Thu, 27 Nov 2025 19:37:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E66A30CD93;
+	Thu, 27 Nov 2025 20:06:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="L8m6//ex"
+	dkim=fail reason="signature verification failed" (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b="JrQQqfcE"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mx15lb.world4you.com (mx15lb.world4you.com [81.19.149.125])
+Received: from mx11lb.world4you.com (mx11lb.world4you.com [81.19.149.121])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCB5C1E1A17
-	for <linux-serial@vger.kernel.org>; Thu, 27 Nov 2025 19:37:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.125
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71EC030CD8F
+	for <linux-serial@vger.kernel.org>; Thu, 27 Nov 2025 20:06:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.19.149.121
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764272273; cv=none; b=hyl0CuGlVZNE5zMKpARCN/0G/lrZR+xluKjJdq4ms+XOQArYTUxlV2ZeZOEtXWkRhLsOT8igouO3BuirWiPSYaoM4VmiprmmR+7ZHjw8YJ+oPAUhFoQsinoTBueooe/q+4ARWN1rtqV63YjmdmQa69onMIQNlaIXToppT65YbXI=
+	t=1764273992; cv=none; b=X7p9iYAcYdArrKkM8N9poFWuAWaIaZHc9kVTD5pwkyI8GDS4Ww+RTNqol46VAD7QZgbulxYyGpjgb/0uOYGqmRvEVjCG9+P2sfqQdTA2GU6QdxEvXqLNvFtyBLLSIwZuPe02JxXckB9KgCeTLaAidYNCKdnjT1yXf1LTaLe+m9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764272273; c=relaxed/simple;
-	bh=OmyABx1KSRIwprAY5f7EaPfHB/YR0M7+l2mkLUJAKzY=;
+	s=arc-20240116; t=1764273992; c=relaxed/simple;
+	bh=Hf9YUIUogEX1gyN/sPMtLdIcrdGwM5LVovO2EstAwtc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Axjkl6zYbT0VS6hpxzTN18BuJT5yghIQ/K7vSYFgcwSmTdJqu5mLDI/ksEGK9Bjx3xTJLGOvURzY96Jck1M8mwLut570uwzhgedik6cg7bibQvrKcibvTja2gTsoLwnTovlKcregK7B7BY8eeqHHalUk21IaUtSPtfCIRIj1/F8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=L8m6//ex; arc=none smtp.client-ip=81.19.149.125
+	 In-Reply-To:Content-Type; b=J/+kJa+mz8oWu/Uz2YSbUvL/EyHqadjm6WFq/GN+UezRSAKJccpUzI1yFXHl4MAPdn1kCOX4sHy1bzvEt6raoGFepw8ghveeswSH72UOIKqTJaXkLABAX5630nBXn4okk6gipjcTr8Xonx7bZ1m/KCAl0cp0RLTOvM31fdB5rnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com; spf=pass smtp.mailfrom=engleder-embedded.com; dkim=pass (1024-bit key) header.d=engleder-embedded.com header.i=@engleder-embedded.com header.b=JrQQqfcE; arc=none smtp.client-ip=81.19.149.121
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=engleder-embedded.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=engleder-embedded.com
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,17 +37,17 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=MLkgmV21HGdUS6P6wV07GfliO+sZIx+IAiUma3JiYyw=; b=L8m6//exB6Jsh4M8Q/SIjG62MY
-	0UeT2a3g+zOO+W5wQCKf0bl8wYb8iHpZMBVDZYUtrqnBOEhWR6cMGqJsNRukZRHE5PAA8MOBWm+Pw
-	MQBy9cJ1jolgmxwLhYnVDUhzL3JD37peHttHtmu7DiUd5LbVOjmf0QqiJ4VxEl1hFbRE=;
+	bh=tl0NJ2YPQ2AOumRFLIntC59+hyS7nmIhHe642WD3Kdo=; b=JrQQqfcETYtiZ2rUAwuCMd5tKR
+	9HyQnPlCF9DwVBv3hCqkTQNdNPqDTiVH3/fLtv2T5HcugXgL4vv0+Ev3Zn+Zhvf6Sz67fhEhvbjNW
+	ByFvUdQCUgYCI7wjChMdF9nep/kMlUaDQxSBTae8LCVLvBKFI2oa28mqod4X9uf3y5d8=;
 Received: from [188.23.34.236] (helo=[10.0.0.160])
-	by mx15lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	by mx11lb.world4you.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.97.1)
 	(envelope-from <gerhard@engleder-embedded.com>)
-	id 1vOhd8-000000002be-2PFE;
-	Thu, 27 Nov 2025 20:26:15 +0100
-Message-ID: <d7f1fbbb-0ec0-47b7-beee-8e9487098c99@engleder-embedded.com>
-Date: Thu, 27 Nov 2025 20:26:13 +0100
+	id 1vOhr8-000000000Ku-2pYi;
+	Thu, 27 Nov 2025 20:40:43 +0100
+Message-ID: <3f3092a0-8e9c-4d5c-9f98-3b574f970361@engleder-embedded.com>
+Date: Thu, 27 Nov 2025 20:40:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -55,71 +55,111 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 0/2] serial: add KEBA UART driver
+Subject: Re: [PATCH v4 2/2] serial: 8250: add driver for KEBA UART
 To: Andy Shevchenko <andriy.shevchenko@intel.com>
 Cc: linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
- jirislaby@kernel.org
-References: <20251017144209.2662-1-gerhard@engleder-embedded.com>
- <aSh21GDLStR3uhnX@black.igk.intel.com>
+ jirislaby@kernel.org, lukas@wunner.de, Gerhard Engleder <eg@keba.com>,
+ Daniel Gierlinger <gida@keba.com>
+References: <20251023151229.11774-1-gerhard@engleder-embedded.com>
+ <20251023151229.11774-3-gerhard@engleder-embedded.com>
+ <aSb99zuXhUh3VD4J@black.igk.intel.com>
+ <1692bf5e-a0de-4f75-8ec0-b228e94b6b4b@engleder-embedded.com>
+ <aSdyMXhtpDX_Eo82@smile.fi.intel.com>
 Content-Language: en-US
 From: Gerhard Engleder <gerhard@engleder-embedded.com>
-In-Reply-To: <aSh21GDLStR3uhnX@black.igk.intel.com>
+In-Reply-To: <aSdyMXhtpDX_Eo82@smile.fi.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-AV-Do-Run: Yes
 
-On 27.11.25 17:05, Andy Shevchenko wrote:
-> On Fri, Oct 17, 2025 at 04:42:07PM +0200, Gerhard Engleder wrote:
->> First the serial subsystem is prepared to keep rs485 settings from the
->> driver if no firmware node exists. This enables drivers to configure a
->> default rs485 mode, which is set by the serial subsystem.
+
+On 26.11.25 22:33, Andy Shevchenko wrote:
+> On Wed, Nov 26, 2025 at 10:06:17PM +0100, Gerhard Engleder wrote:
+>> On 26.11.25 14:17, Andy Shevchenko wrote:
+>>> On Thu, Oct 23, 2025 at 05:12:29PM +0200, Gerhard Engleder wrote:
+> 
+> ...
+> 
+>>>> +#include <linux/auxiliary_bus.h>
+>>>
+>>> + bits.h
+>>> + container_of.h
+>>>
+>>>> +#include <linux/device.h>
+>>>
+>>> I don't see how it's being used.
+>>> What I see are
+>>>
+>>> + dev_printk.h
+>>> + device/devres.h
+>>>
+>>> + err.h
+>>>
+>>>> +#include <linux/io.h>
+>>>> +#include <linux/misc/keba.h>
+>>>
+>>> + mod_devicetable.h
+>>>
+>>>> +#include <linux/module.h>
+>>>
+>>> + spinlock.h
+>>> + types.h
 >>
->> Second the driver for the KEBA UART is added. This driver supports
->> multiple rs485 modes and selects RS485 as default mode. This UART is
->> found in KEBA PLC devices. The auxiliary devices for this driver are
->> created by the cp500 driver.
+>> Is there any extra tool to check for missing headers? Or do I have to
+>> check the header for every used function?
 > 
-> I just realised (thanks, Lukas!) that this is for some kind of FPGA which makes
-> even bigger question here.
+> There is iwyu, which is heavily tweaked by Jonathan Cameron for use in Linux
+> kernel and even though it gives some false positives.
 > 
-> First of all, we have the FPGA framework, which handles (re-)configurations of
-> FPGAs. Second, why do you need a new driver when we have already one, i.e.
-> 8250_dfl that follows some kind of standards?
+> I did this manually by reading the code of the driver and remembering which
+> header provides which API.
+> 
+> ...
+> 
+>>> Can't you call uart_read_port_properties()?
+>>>
+>>> If ever you gain some properties either via FW description or via software
+>>> nodes, they will be automatically used without need to update the driver!
+>>
+>> Yes that would be some nice behavior. But __uart_read_properties()
+>> sets some defaults even if no firmware node exist (UPF_SHARE_IRQ,
+> 
+> Is it a problem? Even a single IRQ may be marked shared.
+> 
+>> 0 as irq number
+> 
+> It doesn't do that, it just skips setting it in that case.
+> 
+>> or it fails if not irq number is found).
+> 
+> Yeah, this is most "problematic" part in case of this driver. Why is it
+> auxiliary and not platform? With that the __uart_read_properties() needs
+> to be updated to also query IRQ from respective aux device, and aux dev
+> needs implementation of dev_is_auxiliary(). Not that big deal, though.
 
-Yes, there is FPGA framework, which handles FPGA re-configuration.
-There is no FPGA re-configuration in the driver and neither in the
-system. The FPGA does not even support re-configuration. The FPGA is
-just a variant to implement a PCIe target. The FPGA loads its
-configuration on power up once from flash before the BIOS starts. So
-the operating system does not need to know that it is an FPGA. It is
-just a PCIe target.
+It is auxiliary and not platform, because gregkh suggested to switch
+from platform to auxiliary. IMO he is right and that is a better fit,
+because auxiliary devices were introduced to split big devices into
+sub devices, which results in smaller drivers with one job for the
+sub device. That's actually what I tried to do with platform devices
+first.
 
-Why not 8250_dfl? Because this is a driver for a different IP core.
-The UART is no Altera/Intel or AMD/Xilinx IP core. It is a KEBA
-IP core and the 8250_keba driver only implements feature added by
-KEBA. The rest is 8250 and uses the 8250 infrastructure.
+>> So __uart_read_properties() would need to be changed. IMO it makes no sense
+>> to change __uart_read_properties() as this functionality is currently
+>> not required.
+> 
+> Yes, but as I said it will give you for free the possibility to use those
+> properties without future modifications of the driver. OTOH, driver is in
+> tree and modifications will be needed one way or another :-)
 
-> Third, the expect approach is to see DT overlay provided along with the FPGA
-> configuration. So, basically your cp500.c should not have been existed to begin
-> with.
-
-Like first, it is just a PCIe target and this PCIe target is divided
-into auxiliary devices, which was suggested by gregkh. Initially I
-divided it into platform devices, but the suggestion of gregkh is a
-better fit. It is a single PCIe target, which consists of multiple
-logical devices with its own registers and interrupts. This logical
-devices are then separated by auxiliary devices.
-
-3 years ago Intel was not able to deliver enough FPGAs. With just being
-a PCIe target, it was possible to switch the FPGA vendor without
-touching the software in the field. With Linux re-configuring the FPGA
-that would not have been possible. So re-configuring FPGAs during
-runtime is something that should be only used if needed.
-
-> Can you elaborate on these considerations?
-
-I hope you get a better impression what this is about. For the drivers
-it is not relevant that the device is FPGA based.
+Yes, if the KEBA UART changes, then modifications would be needed. We
+kept this UART stable now for over 10 years. As it is FPGA based, we
+can keep it stable as long as FPGAs are on the market. In industrial
+automation the products are in the field for 10 years, 20 years or even
+more. We can only support the devices for that long time by keeping
+them compatible. So I don't expect changes now and therefore I would
+not prepare for them.
 
 Gerhard
+
 
