@@ -1,161 +1,165 @@
-Return-Path: <linux-serial+bounces-11647-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11650-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD886C8C099
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Nov 2025 22:33:46 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A15BC8D650
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 09:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C8ADA4E2CAA
-	for <lists+linux-serial@lfdr.de>; Wed, 26 Nov 2025 21:33:45 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 15F894E4945
+	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 08:44:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F9C32DC792;
-	Wed, 26 Nov 2025 21:33:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D4273246E3;
+	Thu, 27 Nov 2025 08:44:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kdpaum4Z"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K8HDByM6"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f66.google.com (mail-pj1-f66.google.com [209.85.216.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C5D9463
-	for <linux-serial@vger.kernel.org>; Wed, 26 Nov 2025 21:33:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6D6B320A3C
+	for <linux-serial@vger.kernel.org>; Thu, 27 Nov 2025 08:44:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764192824; cv=none; b=H9PxpdlFvHz/aeE70btEazL6DtHQDDwy6q8WIIxaGTruKazly9WdOoV8O/wAy4eUCm5KITI1bWjX5YnaLKKudpJ/WLK06VQib9xFtiydjFnp1ZFM2uADzMT8AhJt2LRfYUymvFfYeHW9sccvxpI94sVNT5nvQqBq/twjSB0ZZtc=
+	t=1764233062; cv=none; b=u0YMIyoYh4EURqvQS0OxtWfdxtgIOLAI2QkS4rfhh/6rHp2c3V0eGePE/9bYJhxETP84CJqLVbSu4CWjIeW6RIRD7tMfW8FY4+wiXRqjctzCY4vAu9yBP255IRHedAyxy6y4tz/A6sZPphUcZ1PbchV0+MCLZBY3E+u65rhzpRE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764192824; c=relaxed/simple;
-	bh=iieyN2UU2nk1jjoImPSobtvcPXRx17cc6hr3aODk08Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=i+EKlXqm0OucemMrQMiLUrfb2jFBkplPNAo/EOepvmQYhchTfO0p/j2B9/zhZyzLPaCrFI002M5xwk2zjj8wDu/l928n1tbxIiBYqE91WwUUYDAhS3Htcp7ikSlpfh/lKqocjz0RWercnExLN9+VSuOB/sJPFkHNVNySfxGA/bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kdpaum4Z; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764192822; x=1795728822;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=iieyN2UU2nk1jjoImPSobtvcPXRx17cc6hr3aODk08Q=;
-  b=Kdpaum4Z5UnSAfHmjJq1+RzLxbxN4YGDMkLaDBG/szmSobYNVw2w/3JB
-   jgZoZqyQt2mP1hSG5lERQQFpo3L8GMlkmRrfe2Pz4gZwSkRsNQET+Vqx7
-   awxa695Y+nCp2vJK41/2vQPDz/ssSKRSiJ4Jdkfpnx9DrpJTEIXQaam2Q
-   PHPcN81n/4r9fCcMZkEgL/DP1iDrKRIsj589z9tQvceGHakKTHD/7y0CS
-   TirR3hFgwbjbjtEZuyxkRW3pNQg2govWUAAOINsuWPHh+akcF4NbbQxv9
-   X1NQKj/ATvASOnryO7jfwTA+6l75XZistOgU5nhYOGXKH01qnmNtnmwV3
-   g==;
-X-CSE-ConnectionGUID: mhbBxWOOTxGznahOKdrOPg==
-X-CSE-MsgGUID: +Py6tINCTkuV3R/ExuyLxA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11625"; a="66126498"
-X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="66126498"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 13:33:41 -0800
-X-CSE-ConnectionGUID: e/JHrvFKSH2388kanuQnfg==
-X-CSE-MsgGUID: WzxYAXbZRg6EaFcq/HuchA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,229,1758610800"; 
-   d="scan'208";a="216405181"
-Received: from rvuia-mobl.ger.corp.intel.com (HELO localhost) ([10.245.245.89])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 26 Nov 2025 13:33:40 -0800
-Date: Wed, 26 Nov 2025 23:33:37 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc: linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org, lukas@wunner.de,
-	Gerhard Engleder <eg@keba.com>, Daniel Gierlinger <gida@keba.com>
-Subject: Re: [PATCH v4 2/2] serial: 8250: add driver for KEBA UART
-Message-ID: <aSdyMXhtpDX_Eo82@smile.fi.intel.com>
-References: <20251023151229.11774-1-gerhard@engleder-embedded.com>
- <20251023151229.11774-3-gerhard@engleder-embedded.com>
- <aSb99zuXhUh3VD4J@black.igk.intel.com>
- <1692bf5e-a0de-4f75-8ec0-b228e94b6b4b@engleder-embedded.com>
+	s=arc-20240116; t=1764233062; c=relaxed/simple;
+	bh=kv3c2FkFzYef/skPOl9VjiUYxUdFfyDXVonv0DlVMQw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EU+6dYok6/5APpNzXISD+FZOXM+pgYuX0Svo98dTK7FnCripC25Cka5OW+F9UTIsVFeXCCsA9XyIKebHr/mVlYyQke/THgAYEX7YbrCAMkNuyALizNiwDTZjpa7tTquqOZbZXxYkzU7Gt19lTCrGDF7PiJjWfwhSDt+BLy5gTHU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K8HDByM6; arc=none smtp.client-ip=209.85.216.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f66.google.com with SMTP id 98e67ed59e1d1-340a5c58bf1so398364a91.2
+        for <linux-serial@vger.kernel.org>; Thu, 27 Nov 2025 00:44:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1764233060; x=1764837860; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sABHvu0jmtHoEktOCIN2DEc4NUJ9omD6CsiClBMm+YQ=;
+        b=K8HDByM6NnQy9C2ySfLk3f3OaaQuHnmm11stl465fBB8V+sZt9PVPpqxO4b80WOLHQ
+         wUoGye/Yth80Wi+Z62dA1tXhrhEblv9+xZ8hFf6BT1oYx6Vkf/164AJTFiqZo1FLMf1V
+         ldJ7lfHEMY9HjMP8RzxhHD8Y6R9k+XKl0BcVTpnIK8A9pFS0DK1mJfbiHjsjLh19u4gd
+         o/c+Fpq+e3aeeOsMzS7HR4KwmoA7FeIcUTFu1RQkXhoPXiT6NwYYTqOFgpoOznICoNwk
+         6QmptO0YiJgOkj71Jf5xac4yizaxtiTyTdlJK+rqLHqKVq2WgT/z/yXH9sufVMFjWGab
+         cy0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764233060; x=1764837860;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=sABHvu0jmtHoEktOCIN2DEc4NUJ9omD6CsiClBMm+YQ=;
+        b=c+0WaU7/X4K8/k8Zpb3722DwXqLqabrxrS5MVBaLRisGRR7AmPvR+ivdM3K3kgYtv3
+         i3huc7r8VwhaWqMJn5db1fWtD6eW5EWA24CtgRjhuCCTcWWoMznGiArbSlsFBk/P286s
+         U4nkY1pEzZvLt7Gvhs1iZwzaXlq68UfP3FCQFUnH+OWVVU4ce4HO1L4wbqaHJuH89Bc0
+         Yk7vOgecJzLN7cAEijBeyJ4Nh4cYzxbEh07P8ieN5RJ3NXsvp00fLoWxs8GcWmuwhTa5
+         qGnSFP27rGZpFJrKDQYjjhqB+nmtnjL25kcP1JYIkfIBhKRr12xdoh9mQd5hk2zgEHx8
+         BiZg==
+X-Forwarded-Encrypted: i=1; AJvYcCVzXXNr7sVrOJG1whreW+wxwRAng2NhdbmbyDv5TZz9B8ZnDvMWIJ49CRvNss6RC1xYR2qkdJ/E0WbV6u4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+QMOhxeWEf/Lh4lyQWayQa1zVznXTKEg6D8Z6v36G3TXLkHP6
+	ywdVMzkVZojBa0ychh724xv5U40VjOC0fR/W39IbVG/4cjxQVKPV3YX85rsETdu0hwiAim+0u0n
+	1pLUIN2GdEU1Oz/OAXHYNiClGHoj7XlAMCojwnJw=
+X-Gm-Gg: ASbGncs97yNZ+yaYHeIPsj6h2gskw9lDN/O12K8nFc8hzYL4j1mWW4eGfMo4ySARHok
+	FryLoJlspJlconaY546+cWAv/jBUKQfYuzVXeS69OJz47Iznuf2TK5cHO+xkvPoAHk+gyWdrtTm
+	0kgUsp3x9G5JYSOG+aBwa9eq7smAJcx/AEAvJOTju2PfZ2L8/Q+eOj/OZWisiGRIITheSX37FH2
+	nyEmJ+S/NjsqBBSqn36y3sakOmT4lfZr9pQCMMlZ8wWPiSE/NnaEOqKSpdiAocLB4IJYYQJ
+X-Google-Smtp-Source: AGHT+IHMlVcTI5n5ONvPpgRfR2zCyzv2bF6V+ZHhjlXJa0nN/Y0xVDigKmJQyMcz8Wv2mTZN2t6O0PH6leEElIwU2Hc=
+X-Received: by 2002:a17:90b:2587:b0:340:bb64:c5e with SMTP id
+ 98e67ed59e1d1-3475ebfa337mr10017708a91.14.1764233059905; Thu, 27 Nov 2025
+ 00:44:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1692bf5e-a0de-4f75-8ec0-b228e94b6b4b@engleder-embedded.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+References: <20251022030840.956589-1-Wenhua.Lin@unisoc.com> <aSb5Q0Giq8p43n_o@black.igk.intel.com>
+In-Reply-To: <aSb5Q0Giq8p43n_o@black.igk.intel.com>
+From: wenhua lin <wenhua.lin1994@gmail.com>
+Date: Thu, 27 Nov 2025 16:44:08 +0800
+X-Gm-Features: AWmQ_bk6UGedOdl5FvCIIYuRKJnTbvAXDlqKLOCC2X0XssW3Nuvskv32zUzWA_g
+Message-ID: <CAB9BWhfkkssUK7inD1gQA7DJ0YFuXKzboYFQjvZgT9jKSmyZFA@mail.gmail.com>
+Subject: Re: [PATCH] serial: sprd: Return -EPROBE_DEFER when uart clock is not ready
+To: Andy Shevchenko <andriy.shevchenko@intel.com>
+Cc: Wenhua Lin <Wenhua.Lin@unisoc.com>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Cixi Geng <cixi.geng@linux.dev>, linux-kernel@vger.kernel.org, 
+	linux-serial@vger.kernel.org, Xiongpeng Wu <xiongpeng.wu@unisoc.com>, 
+	Zhaochen Su <Zhaochen.Su@unisoc.com>, Zhirong Qiu <Zhirong.Qiu@unisoc.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 26, 2025 at 10:06:17PM +0100, Gerhard Engleder wrote:
-> On 26.11.25 14:17, Andy Shevchenko wrote:
-> > On Thu, Oct 23, 2025 at 05:12:29PM +0200, Gerhard Engleder wrote:
+On Wed, Nov 26, 2025 at 8:57=E2=80=AFPM Andy Shevchenko
+<andriy.shevchenko@intel.com> wrote:
+>
+> On Wed, Oct 22, 2025 at 11:08:40AM +0800, Wenhua Lin wrote:
+> > In sprd_clk_init(), when devm_clk_get() returns -EPROBE_DEFER
+> > for either uart or source clock, we should propagate the
+> > error instead of just warning and continuing with NULL clocks.
+> >
+> > Currently the driver only emits a warning when clock acquisition
+> > fails and proceeds with NULL clock pointers. This can lead to
+> > issues later when the clocks are actually needed. More importantly,
+> > when the clock provider is not ready yet and returns -EPROBE_DEFER,
+> > we should return this error to allow deferred probing.
+> >
+> > This change adds explicit checks for -EPROBE_DEFER after both:
+> > 1. devm_clk_get(uport->dev, uart)
+> > 2. devm_clk_get(uport->dev, source)
+> >
+> > When -EPROBE_DEFER is encountered, the function now returns
+> > -EPROBE_DEFER to let the driver framework retry probing
+> > later when the clock dependencies are resolved.
+>
+> ...
+>
+> >       clk_uart =3D devm_clk_get(uport->dev, "uart");
+> >       if (IS_ERR(clk_uart)) {
+> > +             if (PTR_ERR(clk_uart) =3D=3D -EPROBE_DEFER)
+> > +                     return -EPROBE_DEFER;
+> > +
+> >               dev_warn(uport->dev, "uart%d can't get uart clock\n",
+> >                        uport->line);
+> >               clk_uart =3D NULL;
+>
+> AFAICS this still ignores other issues, what should be done here is to
+> replace devm_clk_get() by devm_clk_get_optional() and drop this NULL
+> assignment.
+>
+> ...
 
-...
+Hi Andy:
+   The main reason for this change is that the UART driver is
+built-in, while the CLK driver is loaded as a module (ko).
+   There may be a situation where the UART driver is loaded first. If
+an EPROBE_DEFER error occurs, the driver will return directly
+   and continue waiting for the CLK driver to complete loading.
+   If this interface is changed to devm_clk_get_optional, in scenarios
+where dependent components are not yet loaded,
+   it will no longer return EPROBE_DEFER but instead return null. This
+behavior may not align with the desired outcome.
 
-> > > +#include <linux/auxiliary_bus.h>
-> > 
-> > + bits.h
-> > + container_of.h
-> > 
-> > > +#include <linux/device.h>
-> > 
-> > I don't see how it's being used.
-> > What I see are
-> > 
-> > + dev_printk.h
-> > + device/devres.h
-> > 
-> > + err.h
-> > 
-> > > +#include <linux/io.h>
-> > > +#include <linux/misc/keba.h>
-> > 
-> > + mod_devicetable.h
-> > 
-> > > +#include <linux/module.h>
-> > 
-> > + spinlock.h
-> > + types.h
-> 
-> Is there any extra tool to check for missing headers? Or do I have to
-> check the header for every used function?
+Thanks
 
-There is iwyu, which is heavily tweaked by Jonathan Cameron for use in Linux
-kernel and even though it gives some false positives.
-
-I did this manually by reading the code of the driver and remembering which
-header provides which API.
-
-...
-
-> > Can't you call uart_read_port_properties()?
-> > 
-> > If ever you gain some properties either via FW description or via software
-> > nodes, they will be automatically used without need to update the driver!
-> 
-> Yes that would be some nice behavior. But __uart_read_properties()
-> sets some defaults even if no firmware node exist (UPF_SHARE_IRQ,
-
-Is it a problem? Even a single IRQ may be marked shared.
-
-> 0 as irq number
-
-It doesn't do that, it just skips setting it in that case.
-
-> or it fails if not irq number is found).
-
-Yeah, this is most "problematic" part in case of this driver. Why is it
-auxiliary and not platform? With that the __uart_read_properties() needs
-to be updated to also query IRQ from respective aux device, and aux dev
-needs implementation of dev_is_auxiliary(). Not that big deal, though.
-
-> So __uart_read_properties() would need to be changed. IMO it makes no sense
-> to change __uart_read_properties() as this functionality is currently
-> not required.
-
-Yes, but as I said it will give you for free the possibility to use those
-properties without future modifications of the driver. OTOH, driver is in
-tree and modifications will be needed one way or another :-)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+>
+> >       clk_parent =3D devm_clk_get(uport->dev, "source");
+> >       if (IS_ERR(clk_parent)) {
+> > +             if (PTR_ERR(clk_parent) =3D=3D -EPROBE_DEFER)
+> > +                     return -EPROBE_DEFER;
+> > +
+> >               dev_warn(uport->dev, "uart%d can't get source clock\n",
+> >                        uport->line);
+> >               clk_parent =3D NULL;
+>
+> Ditto.
+>
+> --
+> With Best Regards,
+> Andy Shevchenko
+>
+>
 
