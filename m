@@ -1,75 +1,59 @@
-Return-Path: <linux-serial+bounces-11679-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11681-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50C28C902AF
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 21:56:27 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78960C90E74
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Nov 2025 06:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id F21853509A7
-	for <lists+linux-serial@lfdr.de>; Thu, 27 Nov 2025 20:56:26 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C7191343FED
+	for <lists+linux-serial@lfdr.de>; Fri, 28 Nov 2025 05:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB7B030DD17;
-	Thu, 27 Nov 2025 20:56:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A7552C2346;
+	Fri, 28 Nov 2025 05:53:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Xrvrd9cU"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="eCSSY75y"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D0772405E1
-	for <linux-serial@vger.kernel.org>; Thu, 27 Nov 2025 20:56:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 383AA2C0F8F;
+	Fri, 28 Nov 2025 05:53:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764276983; cv=none; b=uyRESBhVXchLBY3MZDz4DF40DEcAEtPPWg19QYDOvOpnpzlz+pC/AFSjf0dLg+tn6bXwGQ2KDEuOHw0LTTsJMyJzgs6FO/rGUTqQY92HsVuHLnHCuSgWc9+o9FRXqPLy/IJhw2mCtPvFmgYJMUS1yePSrh0jt4+eAi55VmS0oCs=
+	t=1764309188; cv=none; b=hdYT94x/xPhvZPtG3eWozT5RC52QUn1kyA4QoiGxP0n57SSdUY8JTt3BLNyVyL0+XFNH1IJh79y3s5TgNSljwS0opLLAogz6VQJt03aExG9aw6Ac9J3BBmtv9jZKGE+vPJRGmk1A5Kf+boxHmeNrqRPcYU1sDL8NOdHIGR5ODBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764276983; c=relaxed/simple;
-	bh=OZ2EEZny/FjxprF8WEN/iWSO/Bo/UfKxlA7JUeP6tks=;
+	s=arc-20240116; t=1764309188; c=relaxed/simple;
+	bh=sJNE2EqQudNagDwT3Ypqk6yAIXr51FigU3Oyf0BdWoQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q8LHqvgY0ghZ7fVA5a0fFduyFF4F2yRRsvyPgeXuMSOvHZSC6r6/WYuJ+FOsPOiOUAKRCiHqIYWqIGrvC2CGQKLbiIYYD/Y6KaslvDwJEIpz8nT2mPURzUsF0RGvWGfapPOaiCZnE0B7ea4/4A3Nx9u5KAOU9tue7NtFnXx76FA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Xrvrd9cU; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1764276982; x=1795812982;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=OZ2EEZny/FjxprF8WEN/iWSO/Bo/UfKxlA7JUeP6tks=;
-  b=Xrvrd9cUmVIuYmqONK0nt+omEd9P7Pir4uNKthFefT+2FRLOMxkpxz0q
-   6VhDrmBh8gvyZP5btwQUUHx7P7Y6VMhTtaQy909Pmw6e3U+y9jo7SLPYD
-   HpK/xJ/2HG3yIzXHwEDXmpOk/uvCKB/b8NrJXMlmJ8FgF48urIlom8YM4
-   alMp9k8y5u3pBXzbv5uA3cclAwXjSvrqMH1Z+mgRiuHHhWyyiQli/NouG
-   ucwr3emuzu/7zJQE67X7RuLR8ofuFnRK66JLG7H+cVa6XyOW5yJI42JlM
-   MOvgRg8Kj5Eavun2Ifgkz5AYVGdICtNSDYgpOJlTbmJIgJj6Aw8f4juWk
-   g==;
-X-CSE-ConnectionGUID: pihHyk7TR1K/5b/QXqwTVA==
-X-CSE-MsgGUID: hLBtPff8ThurwXGrmR5lSw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11626"; a="76952715"
-X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="76952715"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 12:56:20 -0800
-X-CSE-ConnectionGUID: rr5e9hmbQL27A5Evba7Xsw==
-X-CSE-MsgGUID: QvwMRt/zTYaklSlKnU0k/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.20,232,1758610800"; 
-   d="scan'208";a="197480622"
-Received: from abityuts-desk.ger.corp.intel.com (HELO localhost) ([10.245.245.225])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Nov 2025 12:56:06 -0800
-Date: Thu, 27 Nov 2025 22:56:03 +0200
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Gerhard Engleder <gerhard@engleder-embedded.com>
-Cc: linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
-	jirislaby@kernel.org
-Subject: Re: [PATCH v2 0/2] serial: add KEBA UART driver
-Message-ID: <aSi641ahFZ2WvZAg@smile.fi.intel.com>
-References: <20251017144209.2662-1-gerhard@engleder-embedded.com>
- <aSh21GDLStR3uhnX@black.igk.intel.com>
- <d7f1fbbb-0ec0-47b7-beee-8e9487098c99@engleder-embedded.com>
- <aSis8tuBCfHqJvGY@smile.fi.intel.com>
- <0269cc4a-9631-4129-b52c-59ee396f71c9@engleder-embedded.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xhbm5Tusx4wQZjTeCc/Gz/xTVwrW/UtdTQKHGgdqw4Mz3sknaw/gT2U6RzqvrqtD3a7J0iWbHjOxGWt9W6BfmEX2iY/2AeVMU25AEuUqC+yxH602zV5mv4CKQTPGA2iJEsmhy7RM7LTuefZd7ki+5Txjsg18YZctrYmQv6Hyi00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=eCSSY75y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48709C4CEF1;
+	Fri, 28 Nov 2025 05:53:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764309187;
+	bh=sJNE2EqQudNagDwT3Ypqk6yAIXr51FigU3Oyf0BdWoQ=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eCSSY75ySualVp9wBNgXvvKLuS2BSTX5ytSYtZe0YgcNmAPcIrVRfY553O65O9OEw
+	 K3oDE26LaWPtGvTIl0WcGjW9v91M4KJPrHfxMYP9LVuMIIrLxpjbDWhCsF7K/MNPGI
+	 bY8AoNZpm7MjduStHW7SqvEt5ErjRSpVuBoF1AkY=
+Date: Fri, 28 Nov 2025 06:53:04 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: "zhiyong.tao" <zhiyong.tao@mediatek.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Project_Global_Digits_Upstream_Group@mediatek.com,
+	liguo.zhang@mediatek.com, Vasanth.Reddy@mediatek.com,
+	Yenchia Chen <yenchia.chen@mediatek.com>
+Subject: Re: [PATCH] MEDIATEK: serial: 8250_mtk: Add ACPI support
+Message-ID: <2025112812-encounter-breath-8948@gregkh>
+References: <20251128021850.3459387-1-zhiyong.tao@mediatek.com>
+ <20251128021850.3459387-2-zhiyong.tao@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -78,63 +62,36 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0269cc4a-9631-4129-b52c-59ee396f71c9@engleder-embedded.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20251128021850.3459387-2-zhiyong.tao@mediatek.com>
 
-On Thu, Nov 27, 2025 at 09:07:10PM +0100, Gerhard Engleder wrote:
-> On 27.11.25 20:56, Andy Shevchenko wrote:
-> > On Thu, Nov 27, 2025 at 08:26:13PM +0100, Gerhard Engleder wrote:
-> > > On 27.11.25 17:05, Andy Shevchenko wrote:
-> > > > On Fri, Oct 17, 2025 at 04:42:07PM +0200, Gerhard Engleder wrote:
+On Fri, Nov 28, 2025 at 10:17:56AM +0800, zhiyong.tao wrote:
+> From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
 
-...
+Please use your name, not your email alias (i.e. drop the "." from the
+name portion.)
 
-> > > > Third, the expect approach is to see DT overlay provided along with the FPGA
-> > > > configuration. So, basically your cp500.c should not have been existed to begin
-> > > > with.
-> > > 
-> > > Like first, it is just a PCIe target and this PCIe target is divided
-> > > into auxiliary devices, which was suggested by gregkh. Initially I
-> > > divided it into platform devices, but the suggestion of gregkh is a
-> > > better fit. It is a single PCIe target, which consists of multiple
-> > > logical devices with its own registers and interrupts. This logical
-> > > devices are then separated by auxiliary devices.
-> > 
-> > This is implementation detail in Linux, but in HW why are those not a proper
-> > PCI endpoints / functions? With that done, the drivers can be just normal
-> > PCI device drivers.
+> Add ACPI support to 8250_mtk driver. This makes it possible to
+> use UART on ARM-based desktops with EDK2 UEFI firmware.
 > 
-> Yes, PCI subfunctions would have been much nicer, with direct drivers
-> and no auxiliary/platform stuff in between. But these were not
-> supported by the FPGA vendor.
-
-Unfortunately...
-
-> > > 3 years ago Intel was not able to deliver enough FPGAs. With just being
-> > > a PCIe target, it was possible to switch the FPGA vendor without
-> > > touching the software in the field. With Linux re-configuring the FPGA
-> > > that would not have been possible. So re-configuring FPGAs during
-> > > runtime is something that should be only used if needed.
-> > > 
-> > > > Can you elaborate on these considerations?
-> > > 
-> > > I hope you get a better impression what this is about. For the drivers
-> > > it is not relevant that the device is FPGA based.
-> > 
-> > Yes, so it's rather something with a custom FW that is not supposed to be
-> > changed (at least from the device hierarchy / functionality perspective),
-> > or very little from version to version. Is this a correct summary?
+> Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
+> Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
+> ---
+>  drivers/tty/serial/8250/8250_mtk.c | 23 +++++++++++++++++++----
+>  1 file changed, 19 insertions(+), 4 deletions(-)
 > 
-> Yes, the only changes are bugfixes. The register interface must be kept
-> compatible. Like a microcontroller with a firmware which implements an
-> USB device.
+> diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
+> index 5875a7b9b4b1..e6a56cf54ae0 100644
+> --- a/drivers/tty/serial/8250/8250_mtk.c
+> +++ b/drivers/tty/serial/8250/8250_mtk.c
+> @@ -19,6 +19,7 @@
+>  #include <linux/dma-mapping.h>
+>  #include <linux/tty.h>
+>  #include <linux/tty_flip.h>
+> +#include <linux/units.h>
 
-Got it, thanks for the elaboration on this.
+Do you also need to update the Kconfig dependencies?
 
--- 
-With Best Regards,
-Andy Shevchenko
+thanks,
 
-
+greg k-h
 
