@@ -1,177 +1,129 @@
-Return-Path: <linux-serial+bounces-11789-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11791-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F397CC9F376
-	for <lists+linux-serial@lfdr.de>; Wed, 03 Dec 2025 15:00:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E4113A4B52
-	for <lists+linux-serial@lfdr.de>; Wed,  3 Dec 2025 14:00:08 +0000 (UTC)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89B9FCA18A1
+	for <lists+linux-serial@lfdr.de>; Wed, 03 Dec 2025 21:21:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
+	by sea.lore.kernel.org (Postfix) with ESMTP id F2797300C292
+	for <lists+linux-serial@lfdr.de>; Wed,  3 Dec 2025 20:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 462892FCC1E;
-	Wed,  3 Dec 2025 13:59:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F251230C63C;
+	Wed,  3 Dec 2025 20:21:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XCjhSghm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JjucZfJe"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605192FBE05;
-	Wed,  3 Dec 2025 13:59:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DDB328DB54;
+	Wed,  3 Dec 2025 20:21:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764770384; cv=none; b=O5RuHLhHnVt2Jp1SkZZ3SGJpAGUHRnU5fYvPcFWsf8oDmvCjIUP+1p5GJe/o5JdR6cMIw35P+xlbtNd3sf5xLrABr9c69AewL+22u41RfZZohfe0lOIUcHB1fCrBSYonzAp+2WVyXuHhMFkmXx1mPm+5drZPMB87O6GFbMARuiQ=
+	t=1764793296; cv=none; b=GB06goSxWXswflvuF3kyJSJCwdtygyCqNhOJVfM2zvlr5J2T7JtC6KvTPHyY+JXskzV2/HX+beNihVz3yPIYka4jRuAR8R4Bgu8QeD4UNnOMSlb0D/5g75b/IO5DMMHpVxrXFDNuMJBBpxlh8GLunsAFt7JabXv5+Z+pKWn/rJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764770384; c=relaxed/simple;
-	bh=5RzIhfynSwf60ufTcSsowDIcBzDbf1yZS7wGFV2NLjQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=U+wgkb29kzIrm/aHeU/9WdsN35IgXiIaNQDwIYhq5t/lRgg7OXoH/t62R4TUoat4vYlfk6Wk/OCQjJSIgIt/YztvHLvm7Vb3k90e4qx1bDAryx6KLFZWLJEHlu1UXzNESZ0p6iHncbr0bNPOlGJ3Boj9/tl+2BaRi2ahdXv1eXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XCjhSghm; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1764770380;
-	bh=5RzIhfynSwf60ufTcSsowDIcBzDbf1yZS7wGFV2NLjQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=XCjhSghmG+sjwO7no+zMupcIuWrS6ev6eGEy2u94y4gS/ttibODVWFyyQioU7BKgY
-	 09OYiA4nA6UsTvE8bbGg4zFqxsfeolNz9jJ+VlwND9o2CSC04RhRr3Xopr78PPl3mh
-	 uqgl+aQioFvyWp32XF12XBOBEpjCNXb46ODyHm/uIDBNYkFgMQ6mGxHbPn87if2EJx
-	 g6BIvmHv8nP11FoZcnlPKGBsaFSM6iWfLJBSRVnOh9ENxVjS3hihKgYYbqChW0nxCS
-	 43Sjml2LtnODswWF4q606pkGTUO7xNOQ4qooS8+/0NfGxRz2F8Srq/rsFYY2c+UuFA
-	 hyQg1i7MNvSkg==
-Received: from yukiji.home (amontpellier-657-1-116-247.w83-113.abo.wanadoo.fr [83.113.51.247])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: laeyraud)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2298E17E10F6;
-	Wed,  3 Dec 2025 14:59:40 +0100 (CET)
-From: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-Date: Wed, 03 Dec 2025 14:59:29 +0100
-Subject: [PATCH 4/4] arm64: dts: mediatek: add device-tree for Genio
- 520-EVK board
+	s=arc-20240116; t=1764793296; c=relaxed/simple;
+	bh=O9CMw9zfUdZXbfDejAv/vHh09KuF634TFeTYh1UC4Mc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=MATBJVxGrmlwIjGaU/3P3BUxZ/AZ/9QnTqk9hmyiCPxHJ1iNgKNMtsL9sFsFn5XcKkHjsK/NfA1VwR2Evb/2if8ea9u/4S8uf6h3L0pZptr4mt+AtasepDyXjZAFX/Y2JvnzITzxTE4jw/P5TmZAurZavEDGFXIMtAK/jm0ySJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JjucZfJe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69DA7C4CEF5;
+	Wed,  3 Dec 2025 20:21:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1764793296;
+	bh=O9CMw9zfUdZXbfDejAv/vHh09KuF634TFeTYh1UC4Mc=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JjucZfJeY0OH9UWppFBT8tZoDIgM5X6kkGFdfa0GMDJTj8LJwdl37QIq0zTVkaVJ1
+	 saHKMTF8FxXZ60ffDNLavD+5nBvv1LuxG+wVC3wGxO9SQdkzLILuwgZGYObtleh6VQ
+	 41TCH055K1gO5rJ4SSunCW0L469BI1Ro0GouxOm40tkEWIsE+1oLNnEoX9XASPNME5
+	 p/0fLQoHcob4lBYr3KDhzNemZ5swnRImrLJACMctIRyjHXLIb53ZNTS5I3hDSUpSK5
+	 HA9eRkPvZE5uXcAbjUHMAK+yFfc6r+gw7zNY1jghkkUHb+8UbulhL45Joete5Z4k8b
+	 X+W8WThe5WggQ==
+Message-ID: <4dbab3a5-64bf-4c34-ad4c-94620a041993@kernel.org>
+Date: Wed, 3 Dec 2025 21:21:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20251203-add-mediatek-genio-520-720-evk-v1-4-df794b2a30ae@collabora.com>
-References: <20251203-add-mediatek-genio-520-720-evk-v1-0-df794b2a30ae@collabora.com>
-In-Reply-To: <20251203-add-mediatek-genio-520-720-evk-v1-0-df794b2a30ae@collabora.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: serial: mediatek,uart: Add compatible
+ for MT8189 SoC
+To: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Jiri Slaby <jirislaby@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
  Sean Wang <sean.wang@mediatek.com>
-Cc: kernel@collabora.com, linux-kernel@vger.kernel.org, 
- linux-serial@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1764770377; l=3311;
- i=louisalexis.eyraud@collabora.com; s=20250113; h=from:subject:message-id;
- bh=5RzIhfynSwf60ufTcSsowDIcBzDbf1yZS7wGFV2NLjQ=;
- b=wPwMYUZq6iOSoCHWLmsZHVjtkg4yetPn3n4kbFw6/K/Euen42IqOv6aTmYy5MxJn+xXoJzooR
- RhsfnXX2z/FC3gEeA0WpyvNQz4IR2cyjIS8UeilUdQwB5Xmqowpkeh3
-X-Developer-Key: i=louisalexis.eyraud@collabora.com; a=ed25519;
- pk=CHFBDB2Kqh4EHc6JIqFn69GhxJJAzc0Zr4e8QxtumuM=
+Cc: kernel@collabora.com, linux-kernel@vger.kernel.org,
+ linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org
+References: <20251203-add-mediatek-genio-520-720-evk-v1-0-df794b2a30ae@collabora.com>
+ <20251203-add-mediatek-genio-520-720-evk-v1-1-df794b2a30ae@collabora.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20251203-add-mediatek-genio-520-720-evk-v1-1-df794b2a30ae@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add device-tree for the basic hardware enablement of the Genio 520-EVK
-board, based on MT8371 SoC.
+On 03/12/2025 14:59, Louis-Alexis Eyraud wrote:
+> Add a compatible string for the MT8189 SoC.
+> The UART IPs in this chip are fully compatible with the one found in
+> MT6577 SoC.
+> 
+> Signed-off-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
+> ---
+>  Documentation/devicetree/bindings/serial/mediatek,uart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-MT8371 SoC is a variant of MT8189 SoC with the following differences:
-  - Arm Cortex-A78 CPU core maximum frequency (2.2 Ghz for MT8371, 3 Ghz
-  for MT8189).
-  - Arm Mali G57 MC2 GPU core maximum frequency (880 Mhz for MT8371, 1.1
-  Ghz for MT8189)
-  - one ISP engine instead of two
-MT8371 hardware register maps are identical to MT8189.
 
-The Genio 520-EVK has following features:
-  - MT8371 SoC
-  - MT6365 PMIC
-  - MT6319 Buck IC
-  - MT6375 Charger IC
-  - 8GB LPDDR5 RAM
-  - 64GB eMMC 5.1
-  - 128GB UFS
-  - 20V DC Jack
-  - USB Type-C Power Adapter
-  - Micro SD card slot
-  - Push Button x 4 (Power, Reset, Download and Home Key)
-  - LED x 3 (System Power, Reset, DC-IN Power)
-  - USB Type-C Connector (USB 3.2) x 2
-  - USB Type-C Connector (USB 2.0) x 1
-  - 3.5mm Earphone Jack x 1 (with Microphone Input)
-  - 3.5mm Line Out Audio Jack x 1
-  - Analog Microphone x 1
-  - Digital Microphone x 2
-  - Gigabit Ethernet with RJ45 connector
-  - DP x 1 (Mode over USB Type-C)
-  - LVDS port x 1
-  - eDP port x 1
-  - UART x2 with serial-to-usb converters and USB Type-C connectors
-  - UART Port x 2 on Pin Header
-  - M.2 Slot x 2
-  - I2C Capacitive Touch Pad
-  - 4-Lane DSI x 1
-  - 4-Data Lane CSI x 2
-  - I2S Pin header
-  - 40-Pin 2.54mm Pin Header x 1
-  - CAN Bus x 1 (RS232 Connector)
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 
-Signed-off-by: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
----
- arch/arm64/boot/dts/mediatek/Makefile                 |  1 +
- arch/arm64/boot/dts/mediatek/mt8371-genio-520-evk.dts | 19 +++++++++++++++++++
- 2 files changed, 20 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/mediatek/Makefile b/arch/arm64/boot/dts/mediatek/Makefile
-index e3b63085c0608b86dc8638c9d5e0b73441e9ed7b..e6356733a1c0ad5f3ccf9517f3e393ba5f114da8 100644
---- a/arch/arm64/boot/dts/mediatek/Makefile
-+++ b/arch/arm64/boot/dts/mediatek/Makefile
-@@ -106,6 +106,7 @@ dtb-$(CONFIG_ARCH_MEDIATEK) += mt8195-evb.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8365-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8370-genio-510-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8370-grinn-genio-510-sbc.dtb
-+dtb-$(CONFIG_ARCH_MEDIATEK) += mt8371-genio-520-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8395-genio-1200-evk.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8395-genio-1200-evk-ufs.dtb
- dtb-$(CONFIG_ARCH_MEDIATEK) += mt8390-genio-700-evk.dtb
-diff --git a/arch/arm64/boot/dts/mediatek/mt8371-genio-520-evk.dts b/arch/arm64/boot/dts/mediatek/mt8371-genio-520-evk.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..b259fc6c01a13bb84c1ed8b4433a799241a28a6b
---- /dev/null
-+++ b/arch/arm64/boot/dts/mediatek/mt8371-genio-520-evk.dts
-@@ -0,0 +1,19 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (c) 2025 Collabora Ltd.
-+ * Author: Louis-Alexis Eyraud <louisalexis.eyraud@collabora.com>
-+ */
-+/dts-v1/;
-+#include "mt8189.dtsi"
-+#include "mt8391-genio-common.dtsi"
-+
-+/*
-+ * MT8371 SoC is a variant of the MT8189 with only one ISP engine
-+ * and lower maximum frequency on the big cores and on the Mali GPU.
-+ */
-+
-+/ {
-+	model = "MediaTek Genio 520 EVK";
-+	compatible = "mediatek,mt8371-evk", "mediatek,mt8371",
-+		     "mediatek,mt8189";
-+};
-
--- 
-2.52.0
-
+Best regards,
+Krzysztof
 
