@@ -1,46 +1,46 @@
-Return-Path: <linux-serial+bounces-11876-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11878-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id B3707CC4056
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Dec 2025 16:44:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB563CC409E
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Dec 2025 16:47:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BEED0301DE20
-	for <lists+linux-serial@lfdr.de>; Tue, 16 Dec 2025 15:43:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 15A36305FA97
+	for <lists+linux-serial@lfdr.de>; Tue, 16 Dec 2025 15:44:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D57D134676F;
-	Tue, 16 Dec 2025 15:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5DC434B415;
+	Tue, 16 Dec 2025 15:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j72WahTN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DTNTWkXp"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3903345CDC;
-	Tue, 16 Dec 2025 15:34:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8640534B194;
+	Tue, 16 Dec 2025 15:35:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765899245; cv=none; b=ChdIKfzZYkaKLgjsPGCLoL/H4T9qfq3nXXi0U3p2ryALaKIMD3N2v0tUVNqy91xEI7RTEwNp1jZ2YXZqonOM3FLewL+SjxuUqw6yJ0Mi5PW5NcrObS8SCECw/CiEhMfrmlcuMfmkU86/bFtcb2jJb3I/eQyqVxiD01uOCCgQNwg=
+	t=1765899329; cv=none; b=DVsDvpZ9iFAEwn2trd6zZJjCn5/WBgyPCuL5W8IbAT3fLJA1Lv8rokWmP6nnhbnAr4C9jvkyU2QRjJAl500SokNJTEJ2WbsRr0qsmSaRay1gY7VdT/CQvqA8AGBRJp0uXsIl51u9w26Jw/TV9swtYkH1Rmp77Z0AeE6W+zmcNGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765899245; c=relaxed/simple;
-	bh=hM7hv/uTuPw7pyoCXXVQEAU9qrJdNAHs1PtiCSlFsmM=;
+	s=arc-20240116; t=1765899329; c=relaxed/simple;
+	bh=ogz6DU6yHeTIS19hmTjn7eKrxbGw0a8WOL02t8Hhp1s=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Smdm7CfD4+SnUKjVFn1B4iISFhWeeAgvWx6pqqXA1ZfIg1ImazWJckOvpMF5nKtzf3X4+ZJkXjGor2UZOzkoGPaOUTqKojrQG4UHcQarvcxvTuHseqn+3IJwq3Q1FR8cQ4DTtBAq+ZyHRGLrNxBXL2i3hxL9r+WHiaQ4dLUIt0A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j72WahTN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0795C4CEF1;
-	Tue, 16 Dec 2025 15:33:59 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=soJgiqdQreEi53P/mn5iNaRY+Qz8SB2qy1DPBBcDL+u6lriSmod2MpdH6nk80RUjbitVXpeSF4kfgmYCpNA3+5gm2gVzWZnAWFI4+Z95mFy19tVhmtsRhNPNoJSQrvsgIofmD8CYENQIi6+kEGoPAXlDf+hxOZxigxJVE9DrsNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DTNTWkXp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD9BBC4CEF1;
+	Tue, 16 Dec 2025 15:35:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765899245;
-	bh=hM7hv/uTuPw7pyoCXXVQEAU9qrJdNAHs1PtiCSlFsmM=;
+	s=k20201202; t=1765899329;
+	bh=ogz6DU6yHeTIS19hmTjn7eKrxbGw0a8WOL02t8Hhp1s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=j72WahTNaRpouLKnmp3Xq5tYiE/Xsm8e9vemO6EUt4zFrYn9WnvJtMnEEbzXQxvhh
-	 iA9Qrj75/sn4DgXX0d099GGHKFKLQlkqYjM1c37KF7ZeFwJxqpKY/oTxWKrm8HPI8d
-	 mv3wVqyL4CgbayS3uGmfJp7YeNglZ5vOM3HA6DUdJNhkWe89yYXFOaZSw7uE+rDs/A
-	 CXxVbXSZYReSf+xnAnmAIb8Wo8hMnlqeseOQ92U77AF2ADxgZMie0BriYc+gDeB/fW
-	 vmz2WSnWtm40d0awiljo8LcB0cwHlzJUVwVmMorBacjjHKFgF9drEHva77pg2c07OP
-	 C3JNxeuoGBqsg==
-Message-ID: <b3af2b4a-1d70-4c49-a794-b4006e930fd7@kernel.org>
-Date: Tue, 16 Dec 2025 16:33:58 +0100
+	b=DTNTWkXpW9maNa6neQuNcscwLT24F+1ne21G8qSOJBnJ9jiHzQng4U8ursF4w0JmN
+	 gtFcs6bWu3xiSAz2c9CGm8pvU5Ve8Yt563YhATSlf/FZ07Q0Q6VkNFy500YkLkPLU1
+	 eUHnCZ/8lyFQb6gvjWJ9sICbKaKxoQb8RO3WKDFCOIhEZsOAqBK5AYKLLQepwmlO42
+	 MV950LyOSEiQEpPDr4xMcvaYYFT61twr4OdrS08dNEhZvsO0iBru+iNA5cFa769OtV
+	 UUSVztPFqQJADhFxAK6PRWi9MfUqXp+rSmlYNquLUP7XTLie/zOt9c0KujvWjeWPkv
+	 V/cOBKvOhbdig==
+Message-ID: <b0857d3b-5b82-47c1-8415-ec9b2046e704@kernel.org>
+Date: Tue, 16 Dec 2025 16:35:22 +0100
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -48,8 +48,8 @@ List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/8] dt-bindings: interrupt-controller: add SpacemiT K3
- IMSIC
+Subject: Re: [PATCH 7/8] riscv: dts: spacemit: add initial device tree of
+ SpacemiT K3 SoC
 To: Guodong Xu <guodong@riscstar.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>,
@@ -69,7 +69,7 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
  linux-kernel@vger.kernel.org, spacemit@lists.linux.dev,
  linux-serial@vger.kernel.org
 References: <20251216-k3-basic-dt-v1-0-a0d256c9dc92@riscstar.com>
- <20251216-k3-basic-dt-v1-4-a0d256c9dc92@riscstar.com>
+ <20251216-k3-basic-dt-v1-7-a0d256c9dc92@riscstar.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -115,29 +115,54 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20251216-k3-basic-dt-v1-4-a0d256c9dc92@riscstar.com>
+In-Reply-To: <20251216-k3-basic-dt-v1-7-a0d256c9dc92@riscstar.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 16/12/2025 14:32, Guodong Xu wrote:
-> Add compatible string for SpacemiT K3 IMSIC.
+> SpacemiT K3 is equipped with 8 X100 cores, which are RVA23 compliant.
+> Add nodes of uarts, timer and interrupt-controllers.
 > 
 > Signed-off-by: Guodong Xu <guodong@riscstar.com>
 > ---
->  Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/riscv/boot/dts/spacemit/k3.dtsi | 529 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 529 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml
-> index c23b5c09fdb90baccece03708f4a381084b22049..152eff7335dd8457bf01d02497b7080f2a02ab65 100644
-> --- a/Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml
-> +++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,imsics.yaml
-> @@ -47,6 +47,7 @@ properties:
->    compatible:
->      items:
->        - enum:
-> +          - spacemit,k3-imsics
+> diff --git a/arch/riscv/boot/dts/spacemit/k3.dtsi b/arch/riscv/boot/dts/spacemit/k3.dtsi
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..cb27b790716fdd6dc2bc89c28dd2588a596a5af9
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/spacemit/k3.dtsi
+> @@ -0,0 +1,529 @@
+> +// SPDX-License-Identifier: (GPL-2.0 OR MIT)
+> +/*
+> + * Copyright (c) 2025 SpacemiT (Hangzhou) Technology Co. Ltd
+> + * Copyright (c) 2025 Guodong Xu <guodong@riscstar.com>
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/dts-v1/;
+> +
+> +/ {
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +	model = "SpacemiT K3";
+> +	compatible = "spacemit,k3";
+> +
+> +	aliases {
+> +		serial0 = &uart0;
+> +		serial2 = &uart2;
+> +		serial3 = &uart3;
+> +		serial4 = &uart4;
+> +		serial5 = &uart5;
+> +		serial6 = &uart6;
+> +		serial7 = &uart7;
+> +		serial8 = &uart8;
+> +		serial9 = &uart9;
+> +		serial10 = &uart10;
 
-Also not sorted. s > q.
+These are not properties of the soc, but the board DTS.
 
 Best regards,
 Krzysztof
