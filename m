@@ -1,53 +1,54 @@
-Return-Path: <linux-serial+bounces-11960-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-11956-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9142CD357E
-	for <lists+linux-serial@lfdr.de>; Sat, 20 Dec 2025 19:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E5709CD352D
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Dec 2025 19:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 696B830124CC
-	for <lists+linux-serial@lfdr.de>; Sat, 20 Dec 2025 18:51:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E17083013967
+	for <lists+linux-serial@lfdr.de>; Sat, 20 Dec 2025 18:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62DCB30FC1C;
-	Sat, 20 Dec 2025 18:51:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4831E30FC34;
+	Sat, 20 Dec 2025 18:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="LRRXLr6f"
+	dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b="c4nDwN9a"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
+Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FEC82C21DF
-	for <linux-serial@vger.kernel.org>; Sat, 20 Dec 2025 18:51:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1CB923536B
+	for <linux-serial@vger.kernel.org>; Sat, 20 Dec 2025 18:44:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.67.36.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766256676; cv=none; b=kwBsNsjZQ//RBa2vkTK+4pK08uMUM/QVDMb7EDHYWPLRY4BT2DnYBGUOr6DkmI/PFdgmO1O+YYZGmcSjo7Cw8BHBfWkFyBW13EwkXmGGnCEJBHlwO64Wl9XvnvRSX+3Nw75yrcWNSP63iWsMViqiOe0lYqHY15WNI6G/2gP0N1U=
+	t=1766256251; cv=none; b=FjlM4uESw7uwg51CgX7JNSTA9+zzUyVxr157FzMNKGyW3YYiN53cE7qGX/wlMKuQ/t9AquldvZMnq0iAJsZzlreMRIj4HLCBug0zcsWR1J8TF3P7oPIi8aBEunIcUAV0k9xCfCvIzfyQJrNb5zFMPFruBsZY3TMv5S5pnRgHwEA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766256676; c=relaxed/simple;
-	bh=pO7lViA3UDqU2ILirSuthRDId2PL04Tut6ezCFqQmfg=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PPV3K+PHEob4J9JAIJ5wiQcu7j9IMIvvbtttTpEsakS6IcnDFjUx31kqcYlFx9fPILdVL4q4aDy2qwHJVIqP+cCwQFDFV7bhcZX1VSH3AIBhmMqvbMJjgrkf137ekjv7kh/a3OoQDNEC5ry5fy689561/FNpZ78Ga3sco7FPylM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=LRRXLr6f; arc=none smtp.client-ip=185.67.36.66
+	s=arc-20240116; t=1766256251; c=relaxed/simple;
+	bh=N5q2aEiYe7dgto/kG9UiDYXhU/zMXYlCm50QX5ilJsE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=hdohsT49auAXavVU9T2sqCly3/tjLSiaxwOjCkEo8l8/9bEn+zmsmNrwOFheHYOH2c9PsSuELdfevJ2yP5/fuLsg7G/DUpZR+ImkicZIod737SHiGCG9VrBD4sWArLoROR5thDL2yAK05CpRgVipfpI3E6ymmPKpKEbiibThPqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de; spf=pass smtp.mailfrom=posteo.de; dkim=pass (2048-bit key) header.d=posteo.de header.i=@posteo.de header.b=c4nDwN9a; arc=none smtp.client-ip=185.67.36.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=posteo.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=posteo.de
 Received: from submission (posteo.de [185.67.36.169]) 
-	by mout02.posteo.de (Postfix) with ESMTPS id 152EE240103
-	for <linux-serial@vger.kernel.org>; Sat, 20 Dec 2025 19:44:05 +0100 (CET)
+	by mout01.posteo.de (Postfix) with ESMTPS id 081E224002D
+	for <linux-serial@vger.kernel.org>; Sat, 20 Dec 2025 19:44:06 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=posteo.de; s=2017;
-	t=1766256245; bh=eZtWdwMAYdMMyN2pI2nGm0zkxekdGtYyqGRCJ+suVXM=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:
-	 Content-Transfer-Encoding:To:Cc:Autocrypt:OpenPGP:From;
-	b=LRRXLr6f4oKXZ7zutGAb0kG9Ca66EpoKrBxb80wP8F7DYq1PNUpbgNUK4ax+LeNky
-	 skizUQbgB1mvXmqQqXYra9/fE4RuABSElYX7K37QdV8WTEZVkiiCPxajDZOCMqD1nQ
-	 28tLyK9cQx799XOMNElcqXwlVFHhMfOAhN6KGceun4FTRSpvMPaehpAksuX76lI2gw
-	 /FjeIYBZjtlKE8hVzEta584V7Ehgsn2thMTKthzudJ60pD3G7VWH0NlR2cRL9JHAHT
-	 hS+VNaL+vGJQnXYOXb+nfGjEfDFVG8hXyhJpGBy8uOVHeV2NvUu4XK1TLWfiFTmJDT
-	 5/IwnyXHfPpWw==
+	t=1766256246; bh=IvztXzr5xSlHP9rpeQ5k1NFXGf6NuK8FLPWZGuMt0S0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:
+	 Content-Transfer-Encoding:Message-Id:To:Cc:Autocrypt:OpenPGP:From;
+	b=c4nDwN9aebbDi6Pk0uwxKQgMcQJV2t6EgIG93DFKX4SjEezNf9LmtW1FBXhPkr401
+	 uhysKbqHZGahaycHhyo87xBY20rcCQpHlihQfHEoytwpTu3gHZeQCd5Mrp82aYmULa
+	 eWwuvleYB+9Yc+p1vC547ilUporotuIwt9ZwY1mr/I06+754gsBaab99Jh7bdxNkU+
+	 eqg2NPmueY2GmmTQY00EV8fzNy1xsyTqmOJSyXFcC/rrQLGWqw0gbqo4VCiX4DEcUD
+	 svOVyFNNoVjhY+XWtOdNprEUGybzjIhEf8Y56MP6/rOjuvG++vldUmvNOdsxR+0fzo
+	 rw9WJdu7QceBg==
 Received: from customer (localhost [127.0.0.1])
-	by submission (posteo.de) with ESMTPSA id 4dYYGC06Kjz9rxD;
-	Sat, 20 Dec 2025 19:44:02 +0100 (CET)
+	by submission (posteo.de) with ESMTPSA id 4dYYGD2Tl8z9rxN;
+	Sat, 20 Dec 2025 19:44:04 +0100 (CET)
 From: Markus Probst <markus.probst@posteo.de>
-Subject: [PATCH RFC 0/4] rust: add basic serial device bus abstractions
-Date: Sat, 20 Dec 2025 18:44:04 +0000
-Message-Id: <20251220-rust_serdev-v1-0-e44645767621@posteo.de>
+Date: Sat, 20 Dec 2025 18:44:05 +0000
+Subject: [PATCH RFC 1/4] serdev: Export internal is_serdev_device() for
+ drivers
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -56,10 +57,9 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAOrsRmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1NDI0Nz3aLS4pJ4oKaU1DLd1FRTEwvDVEsDC9NkJaCOgqLUtMwKsGnRSkF
- uzkqxtbUA6cC9x2IAAAA=
-X-Change-ID: 20251217-rust_serdev-ee5481e9085c
+Message-Id: <20251220-rust_serdev-v1-1-e44645767621@posteo.de>
+References: <20251220-rust_serdev-v1-0-e44645767621@posteo.de>
+In-Reply-To: <20251220-rust_serdev-v1-0-e44645767621@posteo.de>
 To: Rob Herring <robh@kernel.org>, 
  Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
  Jiri Slaby <jirislaby@kernel.org>, Miguel Ojeda <ojeda@kernel.org>, 
@@ -71,21 +71,21 @@ To: Rob Herring <robh@kernel.org>,
  Kari Argillander <kari.argillander@gmail.com>
 Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org, 
  rust-for-linux@vger.kernel.org, Markus Probst <markus.probst@posteo.de>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1738;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1853;
  i=markus.probst@posteo.de; h=from:subject:message-id;
- bh=pO7lViA3UDqU2ILirSuthRDId2PL04Tut6ezCFqQmfg=;
- b=owEBiQJ2/ZANAwAIATR2H/jnrUPSAcsmYgBpRu5yL92yCERDUu536klRA9vDxg2kaC5MPvdCs
- kn9rrIpdmWJAk8EAAEIADkWIQSCdBjE9KxY53IwxHM0dh/4561D0gUCaUbuchsUgAAAAAAEAA5t
- YW51MiwyLjUrMS4xMSwyLDIACgkQNHYf+OetQ9LeuhAAp1tHm7+b6X0xgPBtoQMokFinU3qyOnh
- QB29fS6WSTAl6fc+52uNbHARLIvmldOFvm+/0d6cjpbTTHURjZVMCvtyuSf66Wp0onQUQo0wO0M
- F9XA+BmwprjwyQhgN4FUrjUAgzwYZxXPTR5XxhryOGZ2Q5jwoPfNWC19arih0TFhEVBhaEvra+b
- Ees/jOt+4KVr9Xfq2nSKymZ0MSFutqx7JmAODAP2ze/mh0ZPBwQWp0QwprdNNlqNLTqo7AH+tLE
- tWy9oSITvCZfzTp7V372kHCZw4xKKNiG0qWKnI8N0OHArVyFQDa8EA+MY4IQHO2U0Sk1ELDfDDT
- s0fJXPCn1WmLg/Hhqu5ulGy8OWXjjrX2aBD4lmGrl7/Q0l5PGIKP5ZDGbhKi0AhKbULmLoi5Jg3
- FKbjg8hoYj6xlDGmdMyOuAwTsFpHnfhReK0D5UrfSt2M3ZCGZlXAOrk+cnJX4r7ZAesqdWIP4v3
- g2M1N7ZWkIPVHqOKw431asG+iRHP4ZtejUTe4JaA0nnq1Y/taMMvB6Wpr/JLEfWCevUpddoVEB7
- hvqLsYvtChRLHXEVGe2SmALPYBMLawHEiDezpgbqe7uB0EoLKwnInK49qQn/xu0awNl6Kq63vhz
- 9EQmQT3cqjY2IYURFWoDNT29l4gwGOjzXpDABYMIPR92Cp+z3bos=
+ bh=dYFpooORdHMyhcZP4v33hyOyTm3wYSwyKARxxeg2xIc=;
+ b=owEBiQJ2/ZANAwAIATR2H/jnrUPSAcsmYgBpRu5yl6wQmQUeaaTJM4cF/Q03svMC58ZXTxkQ8
+ tEFtxj7ODSJAk8EAAEIADkWIQSCdBjE9KxY53IwxHM0dh/4561D0gUCaUbuchsUgAAAAAAEAA5t
+ YW51MiwyLjUrMS4xMSwyLDIACgkQNHYf+OetQ9JFzA/+OsLIgvC+njN1ddsjPMl+QJCmHCg6Ibi
+ fCuHCmGgIaAgTku4IwW9j225EBAjVAAN8sS0R07fTZpdAuYDzK7xTOtl4mPJj9Z1UvO/1THLrMy
+ WUp3uHeByhRcsy2MxrzKJOk+GznMA4Nq3A8yKaRMf9pnLyKC7yDrcjvPNirCDjE4ebrWmLORrDJ
+ UNay7UFMCvKWwdlySNkNPReyJC6JfZtxV+vdYZjyhG9QqgFsbsOyGpHac6YW46K5cIXxWLReOx0
+ ZOATSsyCqutWrG/D4zkSqEeXax1k0yow4ZR2JX2a0y32iHdc1NXZNVb4SbuYoudcs/AqhmvWp4i
+ j+V2YQvk3+t7i+25Jc0dEAd7Y3J0i5NsrcWJEDTQmLMQiZW2jKmD1W4gdA2pJx5PFXc7u1bu+vS
+ +Zxo3rCpf/PKwBaDXzyEOqUBxY+3juvA/rZlsy9Hjmp4Bf82NHXpKxhqL3VoZiw86iPu3wvj/AR
+ Hbwj11GJNr3bmYW1+L7+0BqPJzi6dytZbf5geoK+YxSZdaf/9SPejKM+iE1c2WIODqg8pfBsInq
+ nwocIfdcoAFykGZ7kc9E5gBNjnN0PNShDNXJcjbQ6QLxex6E5mtePU7bUHpoHs0Cnz4Gg5bFghY
+ Rr/1t5L/CJ8EZpDJg5s88liGgaQaTMjTTMBsqzJE1UGQd0LuQn0c=
 X-Developer-Key: i=markus.probst@posteo.de; a=openpgp;
  fpr=827418C4F4AC58E77230C47334761FF8E7AD43D2
 Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
@@ -131,45 +131,61 @@ Autocrypt: addr=markus.probst@posteo.de; prefer-encrypt=mutual;
   aBeNN4ijKZchBXHPgVx+YtWRHfcm4l8=
 OpenPGP: url=https://posteo.de/keys/markus.probst@posteo.de.asc; preference=encrypt
 
-This patch series adds the serdev device bus rust abstraction into the
-kernel.
+From: Kari Argillander <kari.argillander@gmail.com>
 
-This abstraction will be used by a driver I am currently working on,
-which targets the MCU devices in Synology devices.
+The serdev core has an internal is_serdev_device() helper, but it was
+not accessible to drivers. Make it public by declaring it in serdev.h
+and exporting the symbol so that modular serdev drivers can rely on it
+instead of duplicating type checks.
 
-Kari Argillander also messaged me, stating that he wants to write a
-watchdog driver with this abstraction (needing initial device data).
+This allows example future Rust serdev abstraction to have
 
-@Rob: Are you willing to maintain these rust abstractions yourself,
-as you are the expert on this subsystem, otherwise I would take care of
-it with a "SERIAL DEVICE BUS [RUST]" section in the MAINTAINERS file. In
-the second case, I assume you are going to pick those patches as-is into
-your tree, after they have been reviewed?
+    TryFrom<&device::Device<Ctx>> for &serdev::Device<Ctx>
 
-Signed-off-by: Markus Probst <markus.probst@posteo.de>
+That way using bus is easy for other substystems. Also some other
+subsystems expose similar function:
+
+  - bool is_usb_device(const struct device *dev)
+  - bool dev_is_pci(const struct device *dev)
+
+Signed-off-by: Kari Argillander <kari.argillander@gmail.com>
 ---
-Kari Argillander (1):
-      serdev: Export internal is_serdev_device() for drivers
+ drivers/tty/serdev/core.c | 3 ++-
+ include/linux/serdev.h    | 2 ++
+ 2 files changed, 4 insertions(+), 1 deletion(-)
 
-Markus Probst (3):
-      rust: add basic serial device bus abstractions
-      samples: rust: add Rust serial device bus sample device driver
-      rust: Add serdev rust abstractions to MAINTAINERS file
+diff --git a/drivers/tty/serdev/core.c b/drivers/tty/serdev/core.c
+index b33e708cb245..1f6bf8e826d8 100644
+--- a/drivers/tty/serdev/core.c
++++ b/drivers/tty/serdev/core.c
+@@ -69,10 +69,11 @@ static const struct device_type serdev_device_type = {
+ 	.release	= serdev_device_release,
+ };
+ 
+-static bool is_serdev_device(const struct device *dev)
++bool is_serdev_device(const struct device *dev)
+ {
+ 	return dev->type == &serdev_device_type;
+ }
++EXPORT_SYMBOL_GPL(is_serdev_device);
+ 
+ static void serdev_ctrl_release(struct device *dev)
+ {
+diff --git a/include/linux/serdev.h b/include/linux/serdev.h
+index 34562eb99931..0043b6cc6d01 100644
+--- a/include/linux/serdev.h
++++ b/include/linux/serdev.h
+@@ -116,6 +116,8 @@ static inline struct serdev_controller *to_serdev_controller(struct device *d)
+ 	return container_of(d, struct serdev_controller, dev);
+ }
+ 
++bool is_serdev_device(const struct device *dev);
++
+ static inline void *serdev_device_get_drvdata(const struct serdev_device *serdev)
+ {
+ 	return dev_get_drvdata(&serdev->dev);
 
- MAINTAINERS                        |   3 +
- drivers/tty/serdev/core.c          |   3 +-
- include/linux/serdev.h             |   2 +
- rust/bindings/bindings_helper.h    |   1 +
- rust/helpers/helpers.c             |   1 +
- rust/helpers/serdev.c              |  22 +
- rust/kernel/lib.rs                 |   2 +
- rust/kernel/serdev.rs              | 815 +++++++++++++++++++++++++++++++++++++
- samples/rust/Kconfig               |  10 +
- samples/rust/Makefile              |   1 +
- samples/rust/rust_driver_serdev.rs | 175 ++++++++
- 11 files changed, 1034 insertions(+), 1 deletion(-)
----
-base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
-change-id: 20251217-rust_serdev-ee5481e9085c
+-- 
+2.51.2
 
 
