@@ -1,197 +1,118 @@
-Return-Path: <linux-serial+bounces-12142-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12137-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69600CEA932
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Dec 2025 21:03:13 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E7E5CEA887
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Dec 2025 20:21:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 32AFB300F89B
-	for <lists+linux-serial@lfdr.de>; Tue, 30 Dec 2025 20:03:12 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 5AF3A3004E29
+	for <lists+linux-serial@lfdr.de>; Tue, 30 Dec 2025 19:21:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7A322D7B5;
-	Tue, 30 Dec 2025 20:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E83412E6CC7;
+	Tue, 30 Dec 2025 19:21:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hW7dwjgh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mVbdb2wa"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABC4635965
-	for <linux-serial@vger.kernel.org>; Tue, 30 Dec 2025 20:03:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF2BFAD5A;
+	Tue, 30 Dec 2025 19:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767124991; cv=none; b=E+7anXdcKJVr8EPzMqQUEwLpLRI64bX5sQToDoBb9GoYhyzrlPjUO3/IxoWBVtGi9WB+e8TFvDgNMACd/HBB6dJYh3i+kXrVAmM8g6yyeGM6cB7iGsrmdQwXSPo86itysSlJS4zzpWfwvldAIa8zROdxopIR7Clj3U4NayZis1E=
+	t=1767122498; cv=none; b=jlvrV81TrVnKS9QsZd4sNABvcuCeajdmihNWTz/mLF5oMNkK4aMtFh/zI2YJxA9cYa/oDRD+YWctXTJdxSqs1qT0qU2wmvh8ELu/+4moUxUmqrAvDKecsAwMPAwd8V9ljvn+9Ayka+8bIX0S1mEUxuoruJ8NHd4AcP/wLzLZg+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767124991; c=relaxed/simple;
-	bh=4Uq/LuMFJ/bKwMeSTNcN1XmhonxlOFuHeuhk/6pGReA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=jVmBSAL6IhJ1Y54Xap43E+btFbL9/9TBTNzIevQrIa0lZjoWZuTzVA8puesZZthuI38XpP76UkLTkJ/8gjACmssZq/cpy0ahpyqbXzkGlGhypiwmHf6Miy5G0VxtLOm/q9MoJRVXgqz7ZzRtZzFAsiJHu9uivL3R2tOM+C1Dr60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hW7dwjgh; arc=none smtp.client-ip=209.85.167.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-459a6261428so3224652b6e.1
-        for <linux-serial@vger.kernel.org>; Tue, 30 Dec 2025 12:03:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767124988; x=1767729788; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SQ2qeV8/CMzii4Cc7pVXwWXbCg7/CDjibpfP3lPkew8=;
-        b=hW7dwjghwO29zLEF+fh/q9PPlfXdYHx/9i3WDaYLHXi8CSV1JdoZ+rrXj+sEYM3bqz
-         /2UYWXIBP/pwAnLP3lrpoAO7e0qEDWrk2gzvD8PaPlcVO1B3DqnYUkCne2tLZ0Yifg2g
-         xrE7QMeao6pTrJ7AL+MTItFtzY7cptlhf9eZa4FkU+bshsJ08KFXjO7Mz/8+oGh5eu2U
-         BDwhBoORBlpr5LqFIhNfyQCLgCRjE+VSHLvQtEUoVR2dYMusF/pk1XglgclV8uBJ6w/Q
-         xGf6lFqOxboxxLAcmWcolBvk2H2+y9c58dYxmDpvIZ3dC089dcdBFzf9h/X9SuHS0deo
-         B7HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767124988; x=1767729788;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=SQ2qeV8/CMzii4Cc7pVXwWXbCg7/CDjibpfP3lPkew8=;
-        b=hLlz4zg2Nq4Oiw9nlaXL2JgfpOHcAyjclCF5ZfRhLgewgxCIUFOlFNZgZRZzZB2cko
-         bkEm43qlyyu5x90f/BbI8evseu+hlFaJT+dttU2XBW/QNuDJGV/u0MhZHm+dLtn/zxDk
-         +XeQrXLVyH4141BBesEge99L1ouOBXJWmsoFJyiOpi92CzSQd3Zh2PL2qgo+rn7Jv/pu
-         kJ71UIx+inTnc9qx6lQCpDJ5iPoTV2iRL8R8waYrVOs7sQ+PnAIArVmggWAz0vnfLAip
-         zJIoaPhSafU8OuxZYyF3uJO1mLJv4dtQ7eIkpW7qKM1VSjIHvP+5QVXoFEfjg6a8BpwN
-         Zhqg==
-X-Forwarded-Encrypted: i=1; AJvYcCWg3W5ZNNEHmI5e3oVRj5+5ln76i4IMgayL58K0U3hNWta5TXKY7W39Pqp+QkyXXPTfO18ZTcSzRngu0WA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJ/jpwCrYELZQgNi5nW4dF+RVVFS+0ixWhFsh8Kakv5xEf9+Uk
-	HCTD4iuhzSVfOe0SsMvVrqSleRZoOK8WROnSeMa119qGeFfzEn8RvDYQ
-X-Gm-Gg: AY/fxX4Xz4HKJ1ye40mb+h9LQTU/zw7lXFM0WyIKl7h5ey0EMprMPkLflp6uHZoqIO5
-	fOpj9pAQ64dCGuRa+rtDk7/V2XCxxZ48FRRlHYQY773RundrY0KOVsdZrT0c1QvfZxxg6tLi0IN
-	0Ldst2TMkcXrlvw/Za+BB9LdcPo1c8j9ajnaORWI2clBSFgNLz2cEd4ncy7XNunc3vexiSAfv7H
-	UFzWNc9ZMFvGH0agrXr/lIIbuyOg4zVMLsapVNIN/CrOPzlWXo8x9TZHYPVSAKXAckyHLWjyZX4
-	tZBduTwScsGMPISnMLqlHtbJInMwQlwtSTr7lWXaenCQmTeS5q7TfT9DVbPzX7DWblqBrfxU0I5
-	qmXfZtUuhWSSXmQtmkt7+psK+t66ijesWUnQnTtHuhT5lZ7cINITqpfK8sKCq4EAwPeU1ozo43n
-	hjuOx5eMl7Ra7FxLlQpnHvOsjxzUjHy3pQm/ghq3gEaFVXSjF9s5tL/BJ0xtczhZN6EXIdL8ZLx
-	xBl1zYy5roUmWv3d+2rFA==
-X-Google-Smtp-Source: AGHT+IESyaAQ5T3YAYk5oG3HpiGG3dgsPGYC0NsIxOY31vJ9VG1hZq4KkWvGFlOWl7CULDPAileC8w==
-X-Received: by 2002:a17:90b:3843:b0:32e:4716:d551 with SMTP id 98e67ed59e1d1-34e90d6a42cmr29651001a91.6.1767118281443;
-        Tue, 30 Dec 2025 10:11:21 -0800 (PST)
-Received: from visitorckw-work01.c.googlers.com.com (25.118.81.34.bc.googleusercontent.com. [34.81.118.25])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-c1e7bc69728sm29598278a12.19.2025.12.30.10.11.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 30 Dec 2025 10:11:21 -0800 (PST)
-From: Kuan-Wei Chiu <visitorckw@gmail.com>
-To: airlied@gmail.com,
-	simona@ffwll.ch,
-	maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org,
-	tzimmermann@suse.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	dmitry.torokhov@gmail.com,
-	sre@kernel.org,
-	gregkh@linuxfoundation.org,
-	jirislaby@kernel.org,
-	lgirdwood@gmail.com,
-	broonie@kernel.org
-Cc: jserv@ccns.ncku.edu.tw,
-	eleanor15x@gmail.com,
-	dri-devel@lists.freedesktop.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	linux-sound@vger.kernel.org,
-	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH 6/6] dt-bindings: display: google,goldfish-fb: Convert to DT schema
-Date: Tue, 30 Dec 2025 18:10:31 +0000
-Message-ID: <20251230181031.3191565-7-visitorckw@gmail.com>
-X-Mailer: git-send-email 2.52.0.358.g0dd7633a29-goog
-In-Reply-To: <20251230181031.3191565-1-visitorckw@gmail.com>
-References: <20251230181031.3191565-1-visitorckw@gmail.com>
+	s=arc-20240116; t=1767122498; c=relaxed/simple;
+	bh=JHeq0sE7x9XUxdE+MvcareElflUYAz3cTd2iOEHjm14=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FC1KbdxCtTuwymNY3XPrmfDVdqyGDwaeHEeS12iYFQ42yt253j6HP+zfkorZtvLEq7phF5/Ovkbz6UGxLny16Glx2kdC9pS8SLz3zIqpMtzUGG1b7WOydqlBSQypebGVq6BreEpT8mZ2pXjkRGjJjDcB9E4WLaPhzPPgPeITbMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mVbdb2wa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7355FC4CEFB;
+	Tue, 30 Dec 2025 19:21:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767122498;
+	bh=JHeq0sE7x9XUxdE+MvcareElflUYAz3cTd2iOEHjm14=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mVbdb2wawJgVjJSiF2Us8b8tX5zz+NUWRGvyeOax0xnxWmGR+1GEb4iHW7MkGuh96
+	 Nz5pY3xwmumiVuqWQlIVU/lSiOsMmOwAZX5bv9VZhCWAq2bLj4WyShbmAYVXLpGq5b
+	 CS9sCr3E0amfDJ4+Ix00gVjykICjtgomP5vSZ6wftkUXKMveVNJvv9GSKly1E38h+8
+	 ZYtilKgFaHk3ps9mW6LOUzqtxucZG2KX2JWVCpWnGoyU4zEHlGpExINl8E/7e+dvtD
+	 T7G3e1EJ7YFVkZRbJ8/NS5Sw9pKFkZ0t8mOZjitsNDjrCWkvh6Opl3cSlWCf3D9eNf
+	 scACs6G9H8Wnw==
+Date: Tue, 30 Dec 2025 19:21:31 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Alex Elder <elder@riscstar.com>
+Cc: Guodong Xu <guodong@riscstar.com>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Paul Walmsley <pjw@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Yixun Lan <dlan@gentoo.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Anup Patel <anup@brainfault.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>,
+	Yangyu Chen <cyy@cyyself.name>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Heinrich Schuchardt <xypron.glpk@gmx.de>,
+	Kevin Meng Zhang <zhangmeng.kevin@linux.spacemit.com>,
+	Andrew Jones <ajones@ventanamicro.com>, devicetree@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+	spacemit@lists.linux.dev, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 07/13] dt-bindings: riscv: Add B ISA extension
+ description
+Message-ID: <20251230-unselect-canon-842bc2403c47@spud>
+References: <20251222-k3-basic-dt-v2-0-3af3f3cd0f8a@riscstar.com>
+ <20251222-k3-basic-dt-v2-7-3af3f3cd0f8a@riscstar.com>
+ <20251222-stitch-preachy-3fab87fd6f0f@spud>
+ <CAH1PCMZ7ywZ3unLy0yHYK+fFHk0y=q2cEtPnRi=qSpf=fc75rw@mail.gmail.com>
+ <66c0676a-7920-4825-b916-3c00b1648a08@riscstar.com>
+ <20251230-imprison-sleet-6b5a1e26d34b@spud>
+ <dc87a3c0-8627-4328-a17a-6510ee8245ac@riscstar.com>
+ <20251230-ungloved-unworthy-cacc7e22e1c7@spud>
+ <55c2c0e2-2213-4cc9-a752-fce17149bc35@riscstar.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="1e9YdYuLH+dKIj17"
+Content-Disposition: inline
+In-Reply-To: <55c2c0e2-2213-4cc9-a752-fce17149bc35@riscstar.com>
 
-Convert the Android Goldfish Framebuffer binding to DT schema format.
-Update the example node name to 'display' to comply with generic node
-naming standards.
 
-Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
----
- .../bindings/display/google,goldfish-fb.txt   | 17 ---------
- .../bindings/display/google,goldfish-fb.yaml  | 38 +++++++++++++++++++
- 2 files changed, 38 insertions(+), 17 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.txt
- create mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
+--1e9YdYuLH+dKIj17
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-diff --git a/Documentation/devicetree/bindings/display/google,goldfish-fb.txt b/Documentation/devicetree/bindings/display/google,goldfish-fb.txt
-deleted file mode 100644
-index 751fa9f51e5d..000000000000
---- a/Documentation/devicetree/bindings/display/google,goldfish-fb.txt
-+++ /dev/null
-@@ -1,17 +0,0 @@
--Android Goldfish framebuffer
--
--Android Goldfish framebuffer device used by Android emulator.
--
--Required properties:
--
--- compatible : should contain "google,goldfish-fb"
--- reg        : <registers mapping>
--- interrupts : <interrupt mapping>
--
--Example:
--
--	display-controller@1f008000 {
--		compatible = "google,goldfish-fb";
--		interrupts = <0x10>;
--		reg = <0x1f008000 0x100>;
--	};
-diff --git a/Documentation/devicetree/bindings/display/google,goldfish-fb.yaml b/Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
-new file mode 100644
-index 000000000000..48b9c056d9ac
---- /dev/null
-+++ b/Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
-@@ -0,0 +1,38 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/display/google,goldfish-fb.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Android Goldfish Framebuffer
-+
-+maintainers:
-+  - Kuan-Wei Chiu <visitorckw@gmail.com>
-+
-+description:
-+  Android Goldfish framebuffer device used by Android emulator.
-+
-+properties:
-+  compatible:
-+    const: google,goldfish-fb
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    display@1f008000 {
-+        compatible = "google,goldfish-fb";
-+        reg = <0x1f008000 0x100>;
-+        interrupts = <0x10>;
-+    };
--- 
-2.52.0.358.g0dd7633a29-goog
+On Tue, Dec 30, 2025 at 12:06:39PM -0600, Alex Elder wrote:
 
+
+> I think it's too bad these "equivalent" extensions can't be used
+> to simplify things.
+>=20
+> I really dislike requiring the both a simpler extension *and*
+> the others that it represents/implies.
+
+They generally have been done they way you'd expect, this one just
+differs because b is being added much later on rather than at the same
+time.
+
+--1e9YdYuLH+dKIj17
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaVQmOwAKCRB4tDGHoIJi
+0kGhAQCxAzMhUD4RufMSgiCXLmxQYYsaVF6keAz3iTra6Co1VAD9El+gIhJwMplP
+Ub7eTbrTxBVP7WgRNQQWd1iA4ooCQwg=
+=uC2U
+-----END PGP SIGNATURE-----
+
+--1e9YdYuLH+dKIj17--
 
