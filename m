@@ -1,178 +1,213 @@
-Return-Path: <linux-serial+bounces-12161-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12163-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 990AFCF1A97
-	for <lists+linux-serial@lfdr.de>; Mon, 05 Jan 2026 03:41:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6550CF39F9
+	for <lists+linux-serial@lfdr.de>; Mon, 05 Jan 2026 13:55:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 90C693009F53
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Jan 2026 02:41:21 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 34F743008742
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Jan 2026 12:55:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8C431D757;
-	Mon,  5 Jan 2026 02:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 618C13375AE;
+	Mon,  5 Jan 2026 12:52:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="Cm0NCZ5/"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="3Z0uC/UH"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mailgw02.mediatek.com (unknown [210.61.82.184])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 935A13164D4;
-	Mon,  5 Jan 2026 02:41:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.61.82.184
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D89DC335095
+	for <linux-serial@vger.kernel.org>; Mon,  5 Jan 2026 12:52:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767580879; cv=none; b=eLtI+NwVnRTAlaJ1WzKMuepxKvmW0fPS7klI/KcN6P1n3H70lWi5Oj5ClvBA4MejuMRxicEX6rU+i28TlmKnBJMkcWOcaAO+lfHzPt6/RT6K4o2qDogrGEb3Vl/SXco7HmSwR2617DEPxVfcFwI7ZTLANTMKawGlYtMPHQEi4Z4=
+	t=1767617542; cv=none; b=hEVoti59xfS8ot2CzUwXcXGzNJv1AiZeT0KXhX6oaJrRsRGP1o2EduDK+KluwIgOEpwejNIzdXB/C+fQ326UDW9WrKiZ9fiWuvqDY+MZtLJf/deH56nKczGbqXYbrpaV/h7KC5Fzztra+zc1kR/P82sm4b1kaawTQBOJ0ZObLOc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767580879; c=relaxed/simple;
-	bh=zlBvy830AdQLVe6b8HS5Bjfb7jv7Xh6htQ9+DoQeP5I=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=agNxyC5vg1ISpaM7t6H8SlX+1hcpJ3w7l33i9ukQXlRxvJkz4pH7O5Gmyz1GTNcJpfGyV3xw8mziTtkCQgRdXzbDJt5KvOkTOvhm+k6p3QF6R0uF/dQRO3yX8Qn5ULcGQ/VxRTGP2CD6dkJZKWK5xa97dfGZsWDtt/uRMBUnqqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=Cm0NCZ5/; arc=none smtp.client-ip=210.61.82.184
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: fb68c614e9df11f0b33aeb1e7f16c2b6-20260105
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=V7IFbZVIyPVKWadnXb+iToLnqdSwPcwtFdqT4vEhn9U=;
-	b=Cm0NCZ5/0ilpflUNGGR2WF66zLHr3A46xiCnnCnfAVh6Bs+3GG62x273OExg9jdY7jHmDHVCi+6vAkZPMAN1EhnOHiT5J6lFhD3Cthxfag9ErotfcPxscQH+g/mVlHhRP6AwB1D02ZiKUU4TF1MfqHDYZ2I6rdgconSgq6AKJSQ=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.3.9,REQID:ab9ef169-c4f6-4823-b664-cf60a7af6bce,IP:0,UR
-	L:0,TC:0,Content:-25,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
-	:release,TS:-25
-X-CID-META: VersionHash:5047765,CLOUDID:40a63829-e3a2-4f78-a442-8c73c4eb9e9d,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102|836|888|898,TC:-5,Content:
-	0|15|50,EDM:-3,IP:nil,URL:0,File:130,RT:0,Bulk:nil,QS:nil,BEC:nil,COL:0,OS
-	I:0,OSA:0,AV:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 2,SSN|SDN
-X-CID-BAS: 2,SSN|SDN,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-CID-RHF: D41D8CD98F00B204E9800998ECF8427E
-X-UUID: fb68c614e9df11f0b33aeb1e7f16c2b6-20260105
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw02.mediatek.com
-	(envelope-from <zhiyong.tao@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 1331170852; Mon, 05 Jan 2026 10:41:05 +0800
-Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
- MTKMBS09N1.mediatek.inc (172.21.101.35) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.2562.29; Mon, 5 Jan 2026 10:41:05 +0800
-Received: from mediatek.com (10.233.130.16) by mtkmbs13n2.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.2.2562.29 via Frontend
- Transport; Mon, 5 Jan 2026 10:41:05 +0800
-Received: by mediatek.com (Postfix, from userid 10007317)
-	id 0A1A6200C5; Mon,  5 Jan 2026 10:41:05 +0800 (CST)
-From: Zhiyong Tao <zhiyong.tao@mediatek.com>
-To: <jirislaby@kernel.org>, <matthias.bgg@gmail.com>,
-	<angelogioacchino.delregno@collabora.com>, <zhiyong.tao@mediatek.com>,
-	<fred2599@gmail.com>
-CC: <linux-kernel@vger.kernel.org>, <linux-serial@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Digits_Upstream_Group@mediatek.com>,
-	<liguo.zhang@mediatek.com>, <Vasanth.Reddy@mediatek.com>, Yenchia Chen
-	<yenchia.chen@mediatek.com>
-Subject: [PATCH] MEDIATEK: serial: 8250_mtk: Add ACPI support
-Date: Mon, 5 Jan 2026 10:39:55 +0800
-Message-ID: <20260105024103.2027085-2-zhiyong.tao@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20260105024103.2027085-1-zhiyong.tao@mediatek.com>
-References: <20260105024103.2027085-1-zhiyong.tao@mediatek.com>
+	s=arc-20240116; t=1767617542; c=relaxed/simple;
+	bh=N0gZejhpVIK3qi+zXOjdBby6xn4BUij6Dyqnfq1/VnA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ns6Yl6VxJbwn7ucnnO1AkRmPGi+u7vG7UK6t+OGyrNg0FrYvbGHp9knEU1r4sIE4ihPFEZVuMCp/SFVIPuZYfD+AuKViGgi+MphBVlbAgCNkCLHyDf5bioe18xxOgUAn9+23xUSQ6pjF1PgGD1N1Z8H/fNKz4U4KWeKU6KHrSdA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=3Z0uC/UH; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-430f5ecaa08so5733917f8f.3
+        for <linux-serial@vger.kernel.org>; Mon, 05 Jan 2026 04:52:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1767617538; x=1768222338; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DIfhp3vJVBySXs5/naEXyaaROJC4kEOY5dOC0TJhcN0=;
+        b=3Z0uC/UHBVnzel8Jnhuk8T+cAwex0RTJSiYOheeNpc3vdOwwLJMBAffc5eAvD4KGOL
+         LGK2+inyZLpmTytw/dcj5wps4yJKiNGEqtTVmqt9haYtMuPWkkHivDr4xtyJ+ttb12Ha
+         rfZIWsPp4QYm17CPeymLbjcbS/AZMWvvB9y7ETcw6Pu0WL/DsaXiFxKww8/ccyrmPsvG
+         86rI/h3UvSFHPf/e2t8new9Nx/gn7C/thk5LZPTN1SdjtNmTmXmoCRCPK4zABE3WLbII
+         W7/0IjShWCirFI6WjQkTMAfwwZfi/GWyYgc7Buz1QSuu2YWxJSaD/AzfupN0+wO6jMeA
+         jaNw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767617538; x=1768222338;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DIfhp3vJVBySXs5/naEXyaaROJC4kEOY5dOC0TJhcN0=;
+        b=XNqXapMPoFjwUBQr+D7IxT4T88Ky09BKWS7fR2fpnJSSRzo6+ax5IJHHZh1bx0/Nas
+         H9FRrLtKokTEK/smVa+sXdSUqc1yoiRkuP0r4KOO5+CKqm3wVvcgVZBkfVAwzvEML/Wn
+         jyOKIx3rojlwQM/BB+AaWZQJcdS+2yQcGuCoYHiGw55VCMGmZI+oFPWSlBlnGvzQ1qX1
+         CArMnBUn0yjYtvMS7l7S1b2oKeHlsHBSfSqphrcW7mOpWkx5HwCZsM3nEMLo0jW4Nwal
+         27Ogufon/YovYQkVEXbXZWA0uYynXMqBUHOb5R8A7esLt/+wBNdmtMsOHI1LWnHSC9xL
+         USHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVbVAdXU+bX2U52LpAUJVUZQshEHShy7L1hdC5xwP2urW3OZry1wStIfMzl2ShBtzIXzFtDxYNQUZ1OF3U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRE0zfQvrVmGZ/evKAuIl1wZ0OHs4Z50Ui2uzLE2IPxcXsr2nF
+	NVT6bbTFGWRh54I5i1XeVQ889yV5PBr46qMEFL84yrMyaUr754qNY9juBn7hqLCJLAo=
+X-Gm-Gg: AY/fxX7ZVYMk9Hg6puJuuBPQNv9XP50rk9MhbgDV2o+W3fST/ek3xkITsdfk91cH1cN
+	HKCHAwicS0FQsMiCT8MPixQnjwNnm7pItdWuhrKiZAdzGqcYtmW2HPNbspnu22L5xoJXTgiVRGL
+	xxz5M7OTl40vrLVRX/7jqM7Eo9ByZAx14O1aFrPV+JHwJusoR8PZlw4GQ8MnIep41MOikIYRlYM
+	PtLdt7Q8ukFxeyiWiROK3t74XuNyv2jsDkECIH9YJp2S8SQeW1csIdQlLHyHKlvY71qtGPeagxC
+	2PVZWmTcLfOdEc9S5iCBwiRO83trwQ/i0aMDPPh1KMAsQcbXPT1h0mKKI7siTq3Faqv0lS5a+BH
+	NM+z7AvUUpitf5WxYh6b8FA809syDFdI/cCWcCQFuF7u7+glqDG5OtJn3mv5yjIAG6fM7QB61eV
+	fBzISN1dGFO7TvBEgmGWnLTV/GBSQ8SQaXEoCFby+mcbStQWUmQZtThBfhCtBaKods0FALeHAOZ
+	ztjZW2dGXbn+lzxSSkIJ5VZayl30ksawftENIvMQNsZLj5KuCcPiDAKHbYFveRIoWG64DPj4kH8
+	8VozP30=
+X-Google-Smtp-Source: AGHT+IE4Mz004OZ0As7rWOFq5sPjHYJ4N8Pzam8+bOUXJdXGQOskOlJaecSDta7VRdPfx5XGGjwohQ==
+X-Received: by 2002:a05:6000:1844:b0:432:8504:b8a9 with SMTP id ffacd0b85a97d-4328504b8e1mr37753933f8f.62.1767617537725;
+        Mon, 05 Jan 2026 04:52:17 -0800 (PST)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1b36fsm100029761f8f.5.2026.01.05.04.52.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 04:52:17 -0800 (PST)
+Date: Mon, 5 Jan 2026 12:52:14 +0000
+From: Daniel Thompson <daniel@riscstar.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+	linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+	netdev@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-hardening@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	sparclinux@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 00/19] printk cleanup - part 3
+Message-ID: <aVuz_hpbrk8oSCVC@aspen.lan>
+References: <20251227-printk-cleanup-part3-v1-0-21a291bcf197@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-MTK: N
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251227-printk-cleanup-part3-v1-0-21a291bcf197@suse.com>
 
-From: "Zhiyong.Tao" <zhiyong.tao@mediatek.com>
+Hi Marcos
 
-Add ACPI support to 8250_mtk driver. This makes it possible to
-use UART on ARM-based desktops with EDK2 UEFI firmware.
+On Sat, Dec 27, 2025 at 09:16:07AM -0300, Marcos Paulo de Souza wrote:
+> The parts 1 and 2 can be found here [1] and here[2].
+>
+> The changes proposed in this part 3 are mostly to clarify the usage of
+> the interfaces for NBCON, and use the printk helpers more broadly.
+> Besides it, it also introduces a new way to register consoles
+> and drop thes the CON_ENABLED flag. It seems too much, but in reality
+> the changes are not complex, and as the title says, it's basically a
+> cleanup without changing the functional changes.
 
-Signed-off-by: Yenchia Chen <yenchia.chen@mediatek.com>
-Signed-off-by: Zhiyong.Tao <zhiyong.tao@mediatek.com>
----
- drivers/tty/serial/8250/8250_mtk.c | 23 +++++++++++++++++++----
- 1 file changed, 19 insertions(+), 4 deletions(-)
+I ran this patchset through the kgdb test suite and I'm afraid it is
+reporting functional changes.
 
-diff --git a/drivers/tty/serial/8250/8250_mtk.c b/drivers/tty/serial/8250/8250_mtk.c
-index 5875a7b9b4b1..e6a56cf54ae0 100644
---- a/drivers/tty/serial/8250/8250_mtk.c
-+++ b/drivers/tty/serial/8250/8250_mtk.c
-@@ -19,6 +19,7 @@
- #include <linux/dma-mapping.h>
- #include <linux/tty.h>
- #include <linux/tty_flip.h>
-+#include <linux/units.h>
- 
- #include "8250.h"
- 
-@@ -521,6 +522,7 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	struct mtk8250_data *data;
- 	struct resource *regs;
- 	int irq, err;
-+	struct fwnode_handle *fwnode = dev_fwnode(&pdev->dev);
- 
- 	irq = platform_get_irq(pdev, 0);
- 	if (irq < 0)
-@@ -543,12 +545,13 @@ static int mtk8250_probe(struct platform_device *pdev)
- 
- 	data->clk_count = 0;
- 
--	if (pdev->dev.of_node) {
-+	if (is_of_node(fwnode)) {
- 		err = mtk8250_probe_of(pdev, &uart.port, data);
- 		if (err)
- 			return err;
--	} else
-+	} else if (!fwnode) {
- 		return -ENODEV;
-+	}
- 
- 	spin_lock_init(&uart.port.lock);
- 	uart.port.mapbase = regs->start;
-@@ -564,14 +567,18 @@ static int mtk8250_probe(struct platform_device *pdev)
- 	uart.port.startup = mtk8250_startup;
- 	uart.port.set_termios = mtk8250_set_termios;
- 	uart.port.uartclk = clk_get_rate(data->uart_clk);
-+	if (!uart.port.uartclk)
-+		uart.port.uartclk = 26 * HZ_PER_MHZ;
- #ifdef CONFIG_SERIAL_8250_DMA
- 	if (data->dma)
- 		uart.dma = data->dma;
- #endif
- 
--	/* Disable Rate Fix function */
--	writel(0x0, uart.port.membase +
-+	if (is_of_node(fwnode)) {
-+		/* Disable Rate Fix function */
-+		writel(0x0, uart.port.membase +
- 			(MTK_UART_RATE_FIX << uart.port.regshift));
-+	}
- 
- 	platform_set_drvdata(pdev, data);
- 
-@@ -649,11 +656,19 @@ static const struct of_device_id mtk8250_of_match[] = {
- };
- MODULE_DEVICE_TABLE(of, mtk8250_of_match);
- 
-+static const struct acpi_device_id mtk8250_acpi_match[] = {
-+	{ "MTKI0511" },
-+	{ "NVDA0240" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(acpi, mtk8250_acpi_match);
-+
- static struct platform_driver mtk8250_platform_driver = {
- 	.driver = {
- 		.name		= "mt6577-uart",
- 		.pm		= &mtk8250_pm_ops,
- 		.of_match_table	= mtk8250_of_match,
-+		.acpi_match_table = mtk8250_acpi_match,
- 	},
- 	.probe			= mtk8250_probe,
- 	.remove			= mtk8250_remove,
--- 
-2.45.2
+Specifically the earlycon support for kdb has regressed (FWIW the
+problem bisects down to the final patch in the series where CON_ENABLED
+is removed).
 
+Reproduction on x86-64 KVM outside of the test suite should be easy:
+
+    make defconfig
+    scripts/config \
+        --enable DEBUG_INFO \
+	--enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+	--enable DEBUG_FS \
+	--enable KALLSYMS_ALL \
+	--enable MAGIC_SYSRQ \
+	--enable KGDB \
+	--enable KGDB_TESTS \
+	--enable KGDB_KDB \
+	--enable KDB_KEYBOARD \
+	--enable LKDTM \
+	--enable SECURITY_LOCKDOWN_LSM
+    make olddefconfig
+    make -j$(nproc)
+    qemu-system-x86_64 \
+        -m 1G -smp 2 -nographic \
+	-kernel arch/x86/boot/bzImage \
+	-append "console=ttyS0,115200 kgdboc=ttyS0 earlycon=uart8250,io,0x3f8 kgdboc_earlycon kgdbwait"
+
+In a successful test the kdb prompt will appear after only a few lines
+of output:
+~~~
+[    0.000000] Linux version 6.19.0-rc4-00020-g4b7f3b144021 (drt@wychelm) (gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44) #2 SMP PREEMPT_DYNAMIC Mon Jan 6
+[    0.000000] Command line: console=ttyS0,115200 kgdboc=ttyS0 earlycon=uart8250,io,0x3f8 kgdboc_earlycon kgdbwait
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000003ffdffff] usable
+[    0.000000] BIOS-e820: [mem 0x000000003ffe0000-0x000000003fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] earlycon: uart8250 at I/O port 0x3f8 (options '')
+[    0.000000] printk: legacy bootconsole [uart8250] enabled
+[    0.000000] kgdboc: Going to register kgdb with earlycon 'uart'
+[    0.000000] KGDB: Registered I/O driver kgdboc_earlycon
+[    0.000000] KGDB: Waiting for connection from remote gdb...
+
+Entering kdb (current=0x0000000000000000, pid 0) on processor 0 due to NonMaskable Interrupt @ 0xffffffff9101491f
+[0]kdb>
+~~~
+
+After this patchset is applied the earlycon triggers do not work
+correctly and we get:
+~~~
+[    0.000000] Linux version 6.19.0-rc4-00019-g882df99205ba (drt@wychelm) (gcc (Debian 14.2.0-19) 14.2.0, GNU ld (GNU Binutils for Debian) 2.44) #3 SMP PREEMPT_DYNAMIC Mon Jan 6
+[    0.000000] Command line: console=ttyS0,115200 kgdboc=ttyS0 earlycon=uart8250,io,0x3f8 kgdboc_earlycon kgdbwait
+[    0.000000] BIOS-provided physical RAM map:
+[    0.000000] BIOS-e820: [mem 0x0000000000000000-0x000000000009fbff] usable
+[    0.000000] BIOS-e820: [mem 0x000000000009fc00-0x000000000009ffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000000f0000-0x00000000000fffff] reserved
+[    0.000000] BIOS-e820: [mem 0x0000000000100000-0x000000003ffdffff] usable
+[    0.000000] BIOS-e820: [mem 0x000000003ffe0000-0x000000003fffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x00000000fffc0000-0x00000000ffffffff] reserved
+[    0.000000] BIOS-e820: [mem 0x000000fd00000000-0x000000ffffffffff] reserved
+[    0.000000] earlycon: uart8250 at I/O port 0x3f8 (options '')
+[    0.000000] kgdboc: No suitable earlycon yet, will try later
+...
+~~~
+
+
+Daniel.
 
