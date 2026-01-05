@@ -1,110 +1,187 @@
-Return-Path: <linux-serial+bounces-12162-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12164-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E708FCF3EED
-	for <lists+linux-serial@lfdr.de>; Mon, 05 Jan 2026 14:50:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4788ACF432F
+	for <lists+linux-serial@lfdr.de>; Mon, 05 Jan 2026 15:44:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 6B9B83179552
-	for <lists+linux-serial@lfdr.de>; Mon,  5 Jan 2026 13:45:04 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 39C623156B89
+	for <lists+linux-serial@lfdr.de>; Mon,  5 Jan 2026 14:37:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1490A346E73;
-	Mon,  5 Jan 2026 12:47:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8739F33B6FD;
+	Mon,  5 Jan 2026 14:08:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Nz5BKJw/"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="H9+hkPjh"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2445346E64;
-	Mon,  5 Jan 2026 12:47:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72C2B33A6E4
+	for <linux-serial@vger.kernel.org>; Mon,  5 Jan 2026 14:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767617231; cv=none; b=FJKe3vEm/4n+ZKx2rhjh+QAtFT3M4+qxaRp5NGRkfNshiZqlNkncRb6S6d8z0AHHbSTU+GVsWqoIemOSx4qBebrORoPlTNexs28VMo11Ne/iRkK/ks5tb5+q7AIrn9dBSkSfPMMz26FqObyiktWBEhQvVOPpe+dBSpvtCgcMNTw=
+	t=1767622118; cv=none; b=annBeW1Gs4coGU72BgQsNuJBeHYAfe/YCGfZaXWq+UQyOE/LIZr3bfthNaODqzF5eBt+M3eBR7IP4/avvaS3DxbiA65FqdgCmPJuokitU/6axrTfKFFK1Bqog7ebBiylPdSxrk24LArb/iVMFFNMQI3bDPpxkJFrVJfrKXCMljs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767617231; c=relaxed/simple;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
+	s=arc-20240116; t=1767622118; c=relaxed/simple;
+	bh=r3I6M7kWHIbwx8pg9jWTMfz8fscetYU9L971EGe7OZc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HoCR0KRRlpdsPBo9c2/AmpDVc+hkbQ0MKouk5w5QDWI9LHiKBkM5wcjwyFUbk6SoPHDpo2qywan8s/ULpcLGKbmpEpKr1WuuGwzBcS7xoFP8O2YOYTpUuh5qWGoJIS2ooQMmUTpzIlFtcosgB0PxYjVSweFvV0y8ki+wR1bCS3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Nz5BKJw/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3606CC116D0;
-	Mon,  5 Jan 2026 12:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767617227;
-	bh=DcK9JhgklTlks/dbMU+80cGJYIWzHkB6Fy6SWnC+6X4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Nz5BKJw/SW7aFh5PDOn4mjTKTV+LFDrfIA0RGg+0ukrtI/PWWaAkWyRxPhjHOORJ2
-	 F/w6WBFrMWFgCSU2ISdgFwjDlN6RJQGUpNtbSDFRgxj0nCBCNDcP/L8EDfUCsH9gEc
-	 mlu4FBl2Ci2EU2Ws0he3TS3VVhUptlYr949Nb1Pt3prNClT7c60WGSzHXKmRhXNJ6j
-	 AahYn0rfC6Gh2cHn5zTWUzZEAv/8eKMksb2N723rGz9Dh7iCNZ/zP1/Y/1u5wxBIyA
-	 1Un3saqGObtBBTQaXpEhtVjmp3anbCGER1NIrZ5yjgzlo4HO5YIiuhg64BQYow0aEu
-	 K25kQXvV5JU6Q==
-Date: Mon, 5 Jan 2026 12:46:57 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Robert Marko <robert.marko@sartura.hr>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au,
-	davem@davemloft.net, vkoul@kernel.org, andi.shyti@kernel.org,
-	lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com,
-	kuba@kernel.org, pabeni@redhat.com, linusw@kernel.org,
-	Steen.Hegelund@microchip.com, daniel.machon@microchip.com,
-	UNGLinuxDriver@microchip.com, olivia@selenic.com,
-	radu_nicolae.pirea@upb.ro, richard.genoud@bootlin.com,
-	gregkh@linuxfoundation.org, jirislaby@kernel.org,
-	lars.povlsen@microchip.com, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, dmaengine@vger.kernel.org,
-	linux-i2c@vger.kernel.org, netdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-	linux-serial@vger.kernel.org, linux-usb@vger.kernel.org,
-	luka.perkov@sartura.hr, Conor Dooley <conor.dooley@microchip.com>
-Subject: Re: [PATCH v4 04/15] dt-bindings: spi: at91: add
- microchip,lan9691-spi
-Message-ID: <2ff4b417-871b-4b0e-a4f5-424ce535ebd3@sirena.org.uk>
-References: <20251229184004.571837-1-robert.marko@sartura.hr>
- <20251229184004.571837-5-robert.marko@sartura.hr>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uUtWocnHOEDzO6cFqIJCl6xQ3erGuDkUeon067vthBBS3laU6FSZ/urUjP+yojducMVIP8n9Q+oJluE/K1cGQuA61RqWXV9mPpgyX3Tjpf8uoFN1q3BZwrb8EqGR4Jl9dz/zwvXYbHi+ZO2z+F9SoAOqaOHam/hiuA7avAynUa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=H9+hkPjh; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-4308d81fdf6so6752258f8f.2
+        for <linux-serial@vger.kernel.org>; Mon, 05 Jan 2026 06:08:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1767622109; x=1768226909; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kq3TtsxUy/q4IZcqauYlg+KhZOOjIgyB7YRbMBjceZQ=;
+        b=H9+hkPjhAyTEos4JbC3SAHaK4U1jFi/jCKRwkG3H3+42Ugy69WLCmKacOeNmxPOKw0
+         Ix+pwpDSjEpf1yAwNXdsT20c7NqUd5oHunNPqzsePlSzps5WYOiSx5uiCtjGUY1TIUPv
+         t3T9IoS8ShGcJgfzjL2u6Q1kdVMwGv1f8pIgH0DMcox24h5IEYh+Atzg4WxOTvniWzK+
+         G51sNEh08yMuuRlk8CmnRljUjsg5kNffJGszJhny8HWJRogQSvnCbU6DTnjhLeuxTHmy
+         I4XskcK1GoHISE8qrTfNJmMx/D+rH0FMktQJVeTsE0D2xA7ox80+XRiyZ3oSBGef62e1
+         HWGQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767622109; x=1768226909;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Kq3TtsxUy/q4IZcqauYlg+KhZOOjIgyB7YRbMBjceZQ=;
+        b=SQvLUUtyfT0XAAcS1LMWHQTBqcRxDQTLl5xjlJCTmvd1dkgA5dzLCihCoW+mLjVEKM
+         sg3ycYJXzb5/VXVFrpiB7HdFrlKKsKpuTAQkMbqO0ZFcTshPzoslm/zmGqzNM58mfyc8
+         5usDys/VElAgDx2bjdd0du06vcO83Jg7ECWlIUSg6mBYaCpkKmMCNEqheZ4jPw8NrPWK
+         gPg2rHeTxkmj39WmKVEZk+GXDF/5Uw/6DkJtOlBoEBlEsEwPp2puup+JLPeCDd4g0bRO
+         y19lFX6FgdM6ujV4DZ5WlcaUM8ZYgNc2WrXVRl7/nDEePWeTmqApL23IYTF+1uQcoeH6
+         6o1g==
+X-Forwarded-Encrypted: i=1; AJvYcCXaPhVyKgRh8YgC3C5ANcI1LGltNkcZMMCp7XdkECr4z/JS4jEuq4XShnI6lntYZobTTH4zWwTFgtpwrHs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOqS5g0WYBVAaDZBgO9rmxOkOt4HF5NfnulbQerdehtnWz//mm
+	+IZixX3gM03JNo2BqKCsALBhNbIIhBs+G5ODTe0NdSM78PxCH3xhfw7dISmUMgfwqxE=
+X-Gm-Gg: AY/fxX5Z/CjvWlWXYNeV4I/lZ7EvGzoL0JLEE0LV3AboE2ZOnF0imvAwUimVtG8YObc
+	6okwDKkw9N3QIrQTI1jhXct8thUpKPMOyCh8JooPILuGSQNC95rJDBlWpFG780MyXLk+71rl0mA
+	ppFVyHksWQ23BeWMc2VjvDVt+Lp7sy7Rz2qJaiG4g188Lpo7MGYMllku2KbB2m+FlZOed4UFsfj
+	Z5WPwCZnkz/jwwpPkHneOXapxGEo5ZtX3whhPJkBhR/TFUzuWYsO2F+HgqROijSrrQtDpnDdCQB
+	V2ri7ALaYVjBrzzpj5BArskiB6Watq+QWGUaSwW53jyPnEbHU4KfrHAuFsVEJ1DeuD08uKUyHUR
+	FVsyiHKPoA1NDWLKzUk5+R9ilJ0vr0PYqQjyRQT77r43//gd7glOsgdE2RDVr4APKZgj2adIE/y
+	ebf+QavffhIjXhCTvl0RfZfy7zO4lH66tF0Nlj0SgdD7oNipo2YAnNtg5aluUphCN87hYKiQ3qI
+	4Ytk1m+KsiITx8BKzhgEYVxZomX0ekh598kdYOsJcufjQpCDmI0C83389MrXq0sIZz8+sN0
+X-Google-Smtp-Source: AGHT+IFtm/KgnS/DHXZ241C9Tii09D9IuHplpok3aN88rFmOsLWOymloQBuensoLNVO5jV8TaARwoQ==
+X-Received: by 2002:a5d:4842:0:b0:432:84ee:186d with SMTP id ffacd0b85a97d-43284ee2de1mr31846134f8f.62.1767622109438;
+        Mon, 05 Jan 2026 06:08:29 -0800 (PST)
+Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324ea1b1b1sm100250524f8f.3.2026.01.05.06.08.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 05 Jan 2026 06:08:29 -0800 (PST)
+Date: Mon, 5 Jan 2026 14:08:26 +0000
+From: Daniel Thompson <daniel@riscstar.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jason Wessel <jason.wessel@windriver.com>,
+	Daniel Thompson <danielt@kernel.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Petr Mladek <pmladek@suse.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Jiri Slaby <jirislaby@kernel.org>, Breno Leitao <leitao@debian.org>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Kees Cook <kees@kernel.org>, Tony Luck <tony.luck@intel.com>,
+	"Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Laurentiu Tudor <laurentiu.tudor@nxp.com>,
+	linux-um@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kgdb-bugreport@lists.sourceforge.net, linux-serial@vger.kernel.org,
+	netdev@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-hardening@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	sparclinux@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org, linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH 00/19] printk cleanup - part 3
+Message-ID: <aVvF2hivCm0vIlfE@aspen.lan>
+References: <20251227-printk-cleanup-part3-v1-0-21a291bcf197@suse.com>
+ <aVuz_hpbrk8oSCVC@aspen.lan>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="L5qsEAHx6q9dJj52"
-Content-Disposition: inline
-In-Reply-To: <20251229184004.571837-5-robert.marko@sartura.hr>
-X-Cookie: So many women
-
-
---L5qsEAHx6q9dJj52
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <aVuz_hpbrk8oSCVC@aspen.lan>
 
-On Mon, Dec 29, 2025 at 07:37:45PM +0100, Robert Marko wrote:
+On Mon, Jan 05, 2026 at 12:52:14PM +0000, Daniel Thompson wrote:
+> Hi Marcos
+>
+> On Sat, Dec 27, 2025 at 09:16:07AM -0300, Marcos Paulo de Souza wrote:
+> > The parts 1 and 2 can be found here [1] and here[2].
+> >
+> > The changes proposed in this part 3 are mostly to clarify the usage of
+> > the interfaces for NBCON, and use the printk helpers more broadly.
+> > Besides it, it also introduces a new way to register consoles
+> > and drop thes the CON_ENABLED flag. It seems too much, but in reality
+> > the changes are not complex, and as the title says, it's basically a
+> > cleanup without changing the functional changes.
+>
+> I ran this patchset through the kgdb test suite and I'm afraid it is
+> reporting functional changes.
+>
+> Specifically the earlycon support for kdb has regressed (FWIW the
+> problem bisects down to the final patch in the series where CON_ENABLED
+> is removed).
+>
+> Reproduction on x86-64 KVM outside of the test suite should be easy:
+>
+>     make defconfig
+>     scripts/config \
+>         --enable DEBUG_INFO \
+> 	--enable DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT \
+> 	--enable DEBUG_FS \
+> 	--enable KALLSYMS_ALL \
+> 	--enable MAGIC_SYSRQ \
+> 	--enable KGDB \
+> 	--enable KGDB_TESTS \
+> 	--enable KGDB_KDB \
+> 	--enable KDB_KEYBOARD \
+> 	--enable LKDTM \
+> 	--enable SECURITY_LOCKDOWN_LSM
+>     make olddefconfig
+>     make -j$(nproc)
+>     qemu-system-x86_64 \
+>         -m 1G -smp 2 -nographic \
+> 	-kernel arch/x86/boot/bzImage \
+> 	-append "console=ttyS0,115200 kgdboc=ttyS0 earlycon=uart8250,io,0x3f8 kgdboc_earlycon kgdbwait"
 
-> Document Microchip LAN969x SPI compatible.
+Actually I realized there was a simpler reproduction (hinted at by the
+missing "printk: legacy bootconsole [uart8250] enabled" in the regressed
+case). It looks like the earlycon simply doesn't work and that means the
+reproduction doesn't require anything related to kgdb at all. Simply:
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+    make defconfig
+    make -j$(nproc)
+    qemu-system-x86_64 -m 1G -smp 2 -nographic -kernel arch/x86/boot/bzImage \
+        -append "earlycon=uart8250,io,0x3f8"
 
---L5qsEAHx6q9dJj52
-Content-Type: application/pgp-signature; name="signature.asc"
+With the part 3 patchset applied I get no output from the earlycon
+(without the patch set I get the early boot messages which, as expected,
+stop when tty0 comes up).
 
------BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmlbssAACgkQJNaLcl1U
-h9D4Xwf/SR39qhC6yLd9TVLdTbJvbv9td/1UUXSFHjr1far0W1wTnHIk9agrEcs+
-/CUvNmq9Xga7s68neH9NM4e3phBnJZt74a3J3zzhvBekn3xXCyKfmhw9WFU+rGGC
-dLJg/c/VyK4Dzfq6tzvajmvH8NYGkfWsf8TDYMAQkWfyFf3iASqrWODzvobA5l8D
-f4Q5wCZqo6GnSlAfW2+galQbUNMK85g0ponFRfi1JfjuTyYb2ZKghpKWLJGOTJzj
-PMinOleBkv3jp7jH4T6Lh+DiCyhddXuYJhoGGfDIlnhZrm+1fCifyVtpxwbXKXH3
-bT3c73me1CxD3Ncn8Q6E2gOrpidxdg==
-=VKTA
------END PGP SIGNATURE-----
-
---L5qsEAHx6q9dJj52--
+Daniel.
 
