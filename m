@@ -1,76 +1,78 @@
-Return-Path: <linux-serial+bounces-12194-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12199-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8DCF6D0232C
-	for <lists+linux-serial@lfdr.de>; Thu, 08 Jan 2026 11:49:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id C30D2D02359
+	for <lists+linux-serial@lfdr.de>; Thu, 08 Jan 2026 11:52:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 20E09313BC84
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Jan 2026 10:33:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8A115311021C
+	for <lists+linux-serial@lfdr.de>; Thu,  8 Jan 2026 10:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B679D3D7276;
-	Thu,  8 Jan 2026 09:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 494E83D5DBF;
+	Thu,  8 Jan 2026 10:08:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dVNUnNZE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z/YiwKIo"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-vs1-f45.google.com (mail-vs1-f45.google.com [209.85.217.45])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8D7F3D725E
-	for <linux-serial@vger.kernel.org>; Thu,  8 Jan 2026 09:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 186F53D605E
+	for <linux-serial@vger.kernel.org>; Thu,  8 Jan 2026 10:08:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767865679; cv=none; b=DcjZZ9xXLoZ5oC2d/DX0jD8OGyGGWuPouRbTeEWLmqM96VS+Gv3817qerK68zArpMeXsfhu0ZZhatAt3FRUM4d/3EY0XH0lM1Q6mMcQ+HuP/gfDJG7IDnGI68S8XojYAS1SQQew2XnUIVx5Aspd+qaFXgd+IpeUxjHTN2Jq0rtY=
+	t=1767866931; cv=none; b=JclXKCin0x2cs6tAyaHRmnK+/yp/+zx1Xf4N0RSH7076NtVJ2VUDg/PR7kT27AqMNZNJPPIIzL3+dWqQxK9DjK88qd81OrcdmpsWad8Do0OYDaKUnKS2VHHOBHc5CSJ/JGfxpbGCHwY7jsA1n+yIBOQdMDEFJ0VuLgaW8vPDInw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767865679; c=relaxed/simple;
-	bh=F+HI9weCrGvZqZdvGzT41fozcChUp0aiMuJIzq7Twlk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nF5l/vZqI46Eq+TLDY74TV6nHVVnGK2jr6m6f3WRKY0LqDUKKzagM/DBIYCeOdhA0GytlF23nMrEyD2J8bSJyCT9WDV+hMkOV7S7UpJKa02TNwRgf3kOlKaoeDO6n6Fdiuq7x5nGzXDGhmNYEGJPYPE5lr+7RS6LoyLgEXHZdzI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dVNUnNZE; arc=none smtp.client-ip=209.85.217.45
+	s=arc-20240116; t=1767866931; c=relaxed/simple;
+	bh=1t0rpAxQeLHUoXH9EqV6OjuM5gq46cEpA0JagdgwR9k=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ERXHKcYW5OU1u95cyclCDQ+j7WwRBu0sz6h5izUWBsbMpAfUyHEQVsvwJ2Tyat/U3S1pnERi+fw8dew0pSFrMzMHaogD2s3O5Xb2Nn0S+NSbqyQmS0C5+QVaLDsmOdbYWjydcJF8NLRiRgM1uNBsLhJsQw0lgKuECwRoqTItGNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z/YiwKIo; arc=none smtp.client-ip=209.85.222.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f45.google.com with SMTP id ada2fe7eead31-5ec838c33e6so909180137.0
-        for <linux-serial@vger.kernel.org>; Thu, 08 Jan 2026 01:47:54 -0800 (PST)
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-8b2ea2b9631so340505285a.3
+        for <linux-serial@vger.kernel.org>; Thu, 08 Jan 2026 02:08:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767865671; x=1768470471; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mNWaW5uyJY39Ee5wA6GOpA1sGvgkAjuELUOx96wJt9s=;
-        b=dVNUnNZE6UlRbvbgVadwQRwht0zLe+MUQE/LQBHDiUnQQAlCvfbaq9wiURjWUlKoLS
-         4nvIotsYVuOwTf7+Mb2k91jiYHB9KEmb5oMB4Fir+OwhiBnqja6txSOpIj6wUBdSaJ7E
-         tZGnxDJwijwgmoAnrWEmgs/+DdXhLJr22QhUSU+ua5tzFDLLKQ8yuRql/x7aRpUGvIBn
-         y+XttrpV6iYqYennm2ORt0doPYsgKYRUBHFTAtnj+BhgsciTmwF3L7KtgaeXfzl7IHBu
-         iDRs5+dzEXr4phD1ci/JAfCIM8mYaQtvH0TeSlOuRNb62ip+nPa32x7jthP5HzB1ZppH
-         Y2ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767865671; x=1768470471;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1767866927; x=1768471727; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mNWaW5uyJY39Ee5wA6GOpA1sGvgkAjuELUOx96wJt9s=;
-        b=IV3HZ5rdcGl36mgb1uFuGCCsusLXf26NHDaaSLbSfiVY0udle2PEmSOQtYUWC7nyky
-         oambK7D5kHsfMoHYHNh5rIhsuAkpQSuo4u4jWiyoOMrlSr0hlLKjk39HMB1jbeR0lWbU
-         opbyIMun4cQD+U0Ay7pno66U1GrYBe9b6CjxICNtwU4iBSY15wE++ikS1gQhmWI0djv0
-         HA0A4ZKHbePYx5vBNEODNKsOOcV0fcLE3bjp/Jeso0e/fMMnD7qUGqFZ9gKVj2Jg+Hx2
-         Guza1xEoHT8LDo28j4o3/PE9cACu1YjeHFBQKUtUpThOc1OOCLt2X2Og6izWQ8XF7rLE
-         MFNw==
-X-Forwarded-Encrypted: i=1; AJvYcCWev2QmncYt40mr53LuoEJw2N4tJRT3F65q53TQH91zv1qmTCLF5SI+ibPYr1BtjmAdHdslRWtd7BoAW1s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/KM55QoeiQ2Drdw9wBn8AZBwRjS1EC5EctguPEN4myTNaP3Xc
-	JmyY8ltbioQf1UOJMue08mFTDop1zKfcLIIZ8nyfQCMqt8s+qZ8YM4XWr/aOSg==
-X-Gm-Gg: AY/fxX76yEGbl7gpUinwKu53rUVdn6qWlbTvrP7l69uyPLNOKspbGGJn1VXLZ7qoAtO
-	SLgdfCr7EB6YjhC7jXw/V0EsyNrLhspYOLLPZx61XfLkGEi5BAp4cRSDUMft9Vo3+/H5WZ7iZG1
-	QCZppZSc6TXYpt4362aNt2UbL1xOcd2hG8t/ZutPzNQCW3Lkid34aGe5m3Hql70M59qF3hgT+vF
-	i03AhkaMkZESvvUuvab8TMpeXz8sWq6a+p4B9bCd7t+UTJ/i3F+4p4HL+qSZZmDsknEotvCYJ0F
-	w8r7wupEYg/+oZhGD8ILBLz0dSaac+4zcYU5VZ+j5JEZXWCpLEBW1m4WUz+MqF+YogMTaPFqAev
-	wIVhqN9DkFyG803nZHxj1JhNC+ERxSXI8sid8/VnMGe2WbGrUnG2PC5n96pp6uy0fySvHXC6Nuk
-	T32Ov4YhaurjLcuUpsWZB+WOW3LOXowGKzsCikFS/PwkmkqpawFIXm5D2Xf/mnWQd2R2T0GZYdy
-	kX35xRWkvn2uHZ/yz6hsw==
-X-Google-Smtp-Source: AGHT+IHWNlnOIQoHRnNghuP/KuzB06upezljxGJd8aibyns6gUrJ5zRj9QVDAk4WOeIpJQ1oogEYew==
-X-Received: by 2002:a17:90b:314a:b0:343:3898:e7c9 with SMTP id 98e67ed59e1d1-34f5f831c74mr8109800a91.2.1767859745886;
-        Thu, 08 Jan 2026 00:09:05 -0800 (PST)
+        bh=KNDmxXp+I2DQQMGpjKHJPmnR6bZXLNX2CabD4SmBa4E=;
+        b=Z/YiwKIo58evuPM6BsA2mmZ6l6Xle878X2XnLrlNHNsm4puEvoXO0rrrq0XgP0cRem
+         FLhMIWjY2Zan9SA1Gu8lT7Rl0xpoMXVcE8Hi5+M8sg5BNZFHFyGctKDkUHeZ4/Pj7uq0
+         eKFLvPXnhN8kGLBL5rK3RyrTv2TqPUMfqVUpoZyXegaqhki/ZZkX7ZoN6FhWUJHVgxDr
+         sm7PQakVEK7SPPxOtfU9kD9tX/6hel5GOKElunwO2xnocVDtjEJDGYEb/jFAzNQxvIeG
+         2BUMLISAyFO3VVsI9/koEwYGXGLsCWxH2++AD6UvwHamsBT31XQbtEdrQuCLrT6VUKrF
+         94xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767866927; x=1768471727;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=KNDmxXp+I2DQQMGpjKHJPmnR6bZXLNX2CabD4SmBa4E=;
+        b=E6293PWvT19gNLL34QAZqBjWAr2hxy3bTu2YktjQwP5j+YKH0SYlUXKAvNgu5ulkPW
+         PykUWehcmkadEtP4Dqw9lVsb4aNrO6rwH8BO/RFDbY5C9bD2vSzOzFFdK3RmBMfpIBkt
+         Eq1pVTVvdtzs/+I15yG4R/H4TzgdmoN8bXS+e5dI4SsOalCGZaXhFfRupmq1LaHOIHVQ
+         vxkXrH96aMv4QhXgOkmAE2LWH8xlzWuaOowNgXmWsUkF7qDwKIJnDs81yKVVaPydxCzu
+         S/Vh7wd3Oa9+NzDmBrMuA5WcBajs8dCC8iY7cKaZPKmvz9iuHHtYQtxP8r4ZeOMlOZPj
+         P+Dg==
+X-Forwarded-Encrypted: i=1; AJvYcCULHbfwyZubpmzbT3QpZ1xJNmQ6aGsl/e9IjqzP3oyHw0kWt4sax+Vxy5wmFsnuamKX8WnrJtqSGy5nQdg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZdA2Ka0jonA//+gO9tivisE7H9N9ekLEzZz5BAF+PXEBeaTvb
+	VWl6IAEVlL6zLvQBPpvv4wUoC+qLc20GV3F6LXgw3R1Yt929+rYsQDWNM0b+RQ==
+X-Gm-Gg: AY/fxX78pHOsCFSd9L1T+oVT+Gpyh5EM3MKe6HKegLbI6YMBsDfb0MbTnlwlR/czgES
+	WwTEUO7SojXLTh2pftll/5LRP1MtM9MSwrzwxdftoxsejHGWqGyOdEFpOHLAj0JTOpH6S4JdHN2
+	1e/thGwKmFW85t4IFuz6jZzAdZxSDh9YVDK0XlANUcOKA0hts6PDxlPckMUNuK4X7ukaC81khY9
+	uQz83kKYgaeumAfVDkmMD3xUXUO+XISBpn4ZTLH36NPfUTwEB4AclpynLr9+URakFtpj5kiB872
+	UF5GHU1eOb6SZWVXkFkVjcsd1rez37Xh+RSubG12BQssJtIFiJL0Ru8XUoVoNciZURwtMh5rTpF
+	6Cuwd0LnOW96AqoKGQi6fKhY+vk6OkbVipQKEsHbtrdglVttkxZzF8cVWTmxL+hVV8C+lFImOEe
+	ZJicNLRYZKWgZEVK8pUy3v7xPhlo3woS8tF31yy4Zgj+FMUsBSZwKKesP0Aw+MxtR9qLrBWPDNi
+	O2LK5sZiAI2bAdirTbDlDWwBApiZDqF
+X-Google-Smtp-Source: AGHT+IEtkI6q/xm4mTDrq1zwIoRGWeEmLimQWTPdv0cxMzV+X4wwZ1AH39dUZF1XLibUlHDhrrF/7Q==
+X-Received: by 2002:a17:90b:1d01:b0:34c:a35d:de1b with SMTP id 98e67ed59e1d1-34f68c48346mr5296424a91.37.1767859752118;
+        Thu, 08 Jan 2026 00:09:12 -0800 (PST)
 Received: from visitorckw-work01.c.googlers.com.com (25.118.81.34.bc.googleusercontent.com. [34.81.118.25])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe991dsm6900582b3a.16.2026.01.08.00.09.02
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe991dsm6900582b3a.16.2026.01.08.00.09.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 00:09:05 -0800 (PST)
+        Thu, 08 Jan 2026 00:09:11 -0800 (PST)
 From: Kuan-Wei Chiu <visitorckw@gmail.com>
 To: airlied@gmail.com,
 	simona@ffwll.ch,
@@ -97,10 +99,12 @@ Cc: jserv@ccns.ncku.edu.tw,
 	linux-sound@vger.kernel.org,
 	krzysztof.kozlowski@oss.qualcomm.com,
 	Kuan-Wei Chiu <visitorckw@gmail.com>
-Subject: [PATCH v2 0/6] dt-bindings: goldfish: Convert to DT schema
-Date: Thu,  8 Jan 2026 08:08:30 +0000
-Message-ID: <20260108080836.3777829-1-visitorckw@gmail.com>
+Subject: [PATCH v2 1/6] dt-bindings: serial: google,goldfish-tty: Convert to DT schema
+Date: Thu,  8 Jan 2026 08:08:31 +0000
+Message-ID: <20260108080836.3777829-2-visitorckw@gmail.com>
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+In-Reply-To: <20260108080836.3777829-1-visitorckw@gmail.com>
+References: <20260108080836.3777829-1-visitorckw@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -109,62 +113,93 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Convert the Android Goldfish emulator platform bindings from text
-format to DT schema.
+Convert the Google Goldfish TTY binding to DT schema format.
+Move the file to the serial directory to match the subsystem.
+Update the example node name to 'serial' to comply with generic node
+naming standards.
 
-Most of these bindings are currently located in
-Documentation/devicetree/bindings/goldfish/. Move them to the
-appropriate subsystem directories (serial, input, power, sound, misc)
-to align with the kernel directory structure.
-
-Update the examples to use generic node names (e.g., 'serial' instead
-of 'goldfish_tty') and fix minor inconsistencies in the original
-documentation to comply with current DT specifications.
+Signed-off-by: Kuan-Wei Chiu <visitorckw@gmail.com>
 ---
 Changes in v2:
-- Add references to generic subsystem schemas (serial, input,
-  power-supply) where applicable.
-- Update property validation to use 'unevaluatedProperties: false' for
-  schemas referencing generic bindings.
+- Add reference to serial.yaml schema.
+- Change additionalProperties to unevaluatedProperties: false.
 
-v1: https://lore.kernel.org/lkml/20251230181031.3191565-1-visitorckw@gmail.com/
-
-Kuan-Wei Chiu (6):
-  dt-bindings: serial: google,goldfish-tty: Convert to DT schema
-  dt-bindings: misc: google,android-pipe: Convert to DT schema
-  dt-bindings: input: google,goldfish-events-keypad: Convert to DT
-    schema
-  dt-bindings: power: supply: google,goldfish-battery: Convert to DT
-    schema
-  dt-bindings: sound: google,goldfish-audio: Convert to DT schema
-  dt-bindings: display: google,goldfish-fb: Convert to DT schema
-
- .../bindings/display/google,goldfish-fb.txt   | 17 --------
- .../bindings/display/google,goldfish-fb.yaml  | 38 +++++++++++++++++
- .../devicetree/bindings/goldfish/audio.txt    | 17 --------
- .../devicetree/bindings/goldfish/battery.txt  | 17 --------
- .../devicetree/bindings/goldfish/events.txt   | 17 --------
- .../devicetree/bindings/goldfish/pipe.txt     | 17 --------
  .../devicetree/bindings/goldfish/tty.txt      | 17 --------
- .../input/google,goldfish-events-keypad.yaml  | 41 +++++++++++++++++++
- .../bindings/misc/google,android-pipe.yaml    | 38 +++++++++++++++++
- .../power/supply/google,goldfish-battery.yaml | 41 +++++++++++++++++++
  .../bindings/serial/google,goldfish-tty.yaml  | 41 +++++++++++++++++++
- .../bindings/sound/google,goldfish-audio.yaml | 38 +++++++++++++++++
- 12 files changed, 237 insertions(+), 102 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.txt
- create mode 100644 Documentation/devicetree/bindings/display/google,goldfish-fb.yaml
- delete mode 100644 Documentation/devicetree/bindings/goldfish/audio.txt
- delete mode 100644 Documentation/devicetree/bindings/goldfish/battery.txt
- delete mode 100644 Documentation/devicetree/bindings/goldfish/events.txt
- delete mode 100644 Documentation/devicetree/bindings/goldfish/pipe.txt
+ 2 files changed, 41 insertions(+), 17 deletions(-)
  delete mode 100644 Documentation/devicetree/bindings/goldfish/tty.txt
- create mode 100644 Documentation/devicetree/bindings/input/google,goldfish-events-keypad.yaml
- create mode 100644 Documentation/devicetree/bindings/misc/google,android-pipe.yaml
- create mode 100644 Documentation/devicetree/bindings/power/supply/google,goldfish-battery.yaml
  create mode 100644 Documentation/devicetree/bindings/serial/google,goldfish-tty.yaml
- create mode 100644 Documentation/devicetree/bindings/sound/google,goldfish-audio.yaml
 
+diff --git a/Documentation/devicetree/bindings/goldfish/tty.txt b/Documentation/devicetree/bindings/goldfish/tty.txt
+deleted file mode 100644
+index 82648278da77..000000000000
+--- a/Documentation/devicetree/bindings/goldfish/tty.txt
++++ /dev/null
+@@ -1,17 +0,0 @@
+-Android Goldfish TTY
+-
+-Android goldfish tty device generated by android emulator.
+-
+-Required properties:
+-
+-- compatible : should contain "google,goldfish-tty" to match emulator
+-- reg        : <registers mapping>
+-- interrupts : <interrupt mapping>
+-
+-Example:
+-
+-	goldfish_tty@1f004000 {
+-		compatible = "google,goldfish-tty";
+-		reg = <0x1f004000 0x1000>;
+-		interrupts = <0xc>;
+-	};
+diff --git a/Documentation/devicetree/bindings/serial/google,goldfish-tty.yaml b/Documentation/devicetree/bindings/serial/google,goldfish-tty.yaml
+new file mode 100644
+index 000000000000..0b702c8657c2
+--- /dev/null
++++ b/Documentation/devicetree/bindings/serial/google,goldfish-tty.yaml
+@@ -0,0 +1,41 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/serial/google,goldfish-tty.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Google Goldfish TTY
++
++maintainers:
++  - Kuan-Wei Chiu <visitorckw@gmail.com>
++
++allOf:
++  - $ref: /schemas/serial/serial.yaml#
++
++description:
++  Android goldfish TTY device generated by Android emulator.
++
++properties:
++  compatible:
++    const: google,goldfish-tty
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    serial@1f004000 {
++        compatible = "google,goldfish-tty";
++        reg = <0x1f004000 0x1000>;
++        interrupts = <0xc>;
++    };
 -- 
 2.52.0.457.g6b5491de43-goog
 
