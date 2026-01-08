@@ -1,82 +1,81 @@
-Return-Path: <linux-serial+bounces-12211-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12203-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5AC62D02D1C
-	for <lists+linux-serial@lfdr.de>; Thu, 08 Jan 2026 14:02:25 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04BD0D02E8F
+	for <lists+linux-serial@lfdr.de>; Thu, 08 Jan 2026 14:13:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 9CD5E300814F
-	for <lists+linux-serial@lfdr.de>; Thu,  8 Jan 2026 13:02:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C3D8B30C929C
+	for <lists+linux-serial@lfdr.de>; Thu,  8 Jan 2026 12:46:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44C2A4A340F;
-	Thu,  8 Jan 2026 12:28:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A652D3033D4;
+	Thu,  8 Jan 2026 12:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="LGFo2/fR"
+	dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b="rz1YBrUK"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-pf1-f177.google.com (mail-pf1-f177.google.com [209.85.210.177])
+Received: from mail-pf1-f172.google.com (mail-pf1-f172.google.com [209.85.210.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 710644A2E30
-	for <linux-serial@vger.kernel.org>; Thu,  8 Jan 2026 12:28:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022562F547D
+	for <linux-serial@vger.kernel.org>; Thu,  8 Jan 2026 12:26:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767875298; cv=none; b=odGvHi39iiffu6T+ElZvV/3NNkdW44LkV92mm64oOmCQyQr+TGWyvAqKzt//yAATojAjJaWpWP/1QMgd8qZAFutW3WGV449ry3ikXO6KntdpEZAOOWVdZLFikkB9DnFCbWYWOu8tz1LnDtY0mEaHCa0NM5TrVAghIx8yjBBGx3c=
+	t=1767875203; cv=none; b=D2StTxyEAQyeGVhqQeh4I16QXzut9s3MGsUKo4LZrFIkgYR+nVeuWbYuWQ9f2TlAR2ob6iY2yRXC/wNAu49uMjDfENRIFhYRW+y1wTv+iTvC0wnLgVuRhpsvf5b3A/xZKfQzpmiw96VXec6g6AB8+cjVastkPxXmtPZIeRZipD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767875298; c=relaxed/simple;
-	bh=B/xJC06ouJTSzqoVe1zpf/ArcrN3kkBBh4pRafmC2q0=;
+	s=arc-20240116; t=1767875203; c=relaxed/simple;
+	bh=BmARFNdMYVDF85A9HHxy7Xy3eWz7vlysBnNURs7Ug3g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=K3+2OCDQBVgW7BAebyEUBtWEQEssVMK8naJDeCN/nNBo6rB04GM6wvTQbWuuoxtH805rms3w3KxNy4fznFhTv/JUFOokyshcP1fyfDz4vmsd45mxzMUJt647MuJPzu2AT7eYd6VsQ4WpE4x5a1UKRd0aYxgs5NwNRnoicXn0Atk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=LGFo2/fR; arc=none smtp.client-ip=209.85.210.177
+	 In-Reply-To:To:Cc; b=KYWmTbebAfvGslqV+ZLYnHpDObhTXhnFylcZqjaQr7fRUdSnYBBX/ZH1TFXMSutXb5CsLwTBrJny7iB4R4R02vaA06ry9S/58bd7ln8uLH0hCXHqC+00ERJOlKCH1VNI89HuZsMWTQDpFBcI3dsVtHtxl/GdM4wOnIvpXc4mKY0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com; spf=pass smtp.mailfrom=riscstar.com; dkim=pass (2048-bit key) header.d=riscstar-com.20230601.gappssmtp.com header.i=@riscstar-com.20230601.gappssmtp.com header.b=rz1YBrUK; arc=none smtp.client-ip=209.85.210.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=riscstar.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=riscstar.com
-Received: by mail-pf1-f177.google.com with SMTP id d2e1a72fcca58-7e2762ad850so2671478b3a.3
-        for <linux-serial@vger.kernel.org>; Thu, 08 Jan 2026 04:28:16 -0800 (PST)
+Received: by mail-pf1-f172.google.com with SMTP id d2e1a72fcca58-7baf61be569so2155127b3a.3
+        for <linux-serial@vger.kernel.org>; Thu, 08 Jan 2026 04:26:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1767875296; x=1768480096; darn=vger.kernel.org;
+        d=riscstar-com.20230601.gappssmtp.com; s=20230601; t=1767875201; x=1768480001; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vr6lqGLFQ3xLUl/SLHoUY02BcAcuWIW3ayvn+T++ix8=;
-        b=LGFo2/fRBmL5A6dlnvfDDmng5HIJHiDGpUisu28uSY07QrHT/tocdpGwS94Gk3FWZp
-         +1CWEu4nNaa+p1Y9l0Usu98yca9nkL3q3QFWsXiuPz164+l+AHVKzmMgTWc13oPu75Gy
-         2XqiMMxgwpLYDw7bQchMh+Is4EhJ3P1Mu5N4MVDhP7GuihEkf2D6waVxCoS/+s/hTSL0
-         LxIFeQsQg/eo+1hRBhVBXDJZB9GfGzr5WI/ZvcXGpAzHm8rVxpg1RfBw6lAKYTAUr/h9
-         QuxCxiZ542+CYXt6RBCAXlKAicmUHEfYS523iZGYonGgaXDVcpYW5Q9HPxeljqhuQ+Nw
-         SBlA==
+        bh=uE1KQ3Nap9wSa7ARNmv253D/zHZAcI3o2YellqaTrW0=;
+        b=rz1YBrUKroTnNeMDZaTQs9VcwI4BQFjXnYfLhe2qBiLUjF7OvIcFBBXI2a+x8LYOgL
+         qL1/xxR8ShU/8j5uulbM3QtIgElfHb/6Y8005PIt0laAAjkWs9zUqD7toQhwhljX/HvN
+         QI+4XqVctbAaasKaqrffm+0sIgOnlYjmDNVzeXHqiHNt7SaBvrB8bYfyH6Cqu5M80EBC
+         NXxlD537Gszp7tXWeJ16Q3UUIqEQBANvOGvhLA6+E0iM4wNaXTzfj9JYcdMgLgaSI30G
+         aHB+Y/pZw77LIowicJj93QR69GUeCXU7H7kvEA7waiFO0WsyhBFBRFSftSLVxw58Q8VJ
+         ymqQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767875296; x=1768480096;
+        d=1e100.net; s=20230601; t=1767875201; x=1768480001;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Vr6lqGLFQ3xLUl/SLHoUY02BcAcuWIW3ayvn+T++ix8=;
-        b=O47RNSoCuTVbwd4dZU8bS4li6M+oVcV0AQhSVni/M1V7biZPvG8fTsPkk0IxAbp7d8
-         AAxoioqRJ8lw/rUQPDLCYBJcSUANzVeaG4whbN2WOy3Nzi07y7ZRiir2kzuRt5haVK2g
-         zAxpB+FN/GOink2TsFODC7yJ0dbkXOUUnHb0LxhRo0d6+GpQ8r3OtlSTsh2YJVetC6Ah
-         T4op5LEU0XI2iPsdtPkcD0L9QWwPHcZP65803wkS3WgOYkR9aa6lbWXk1B9mfrZDxZMl
-         gtHqbbE1I2xb3gNI/Z95rJ5h1SQGAt4f2bivUUiLuvrh4KXzQxF+O07lHcxIkvAaRogj
-         zoog==
-X-Forwarded-Encrypted: i=1; AJvYcCVUtatP1GQP42wLQXwjKEmpIng46IL7RZv4DgfdHHoT9qQhtP0s0Ur8SMc77Zq5Jq4WK9tKn8XtpjOUQWk=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwJFqr16BYlLZ6ZH5t5vzvsASNGzz1gYmt7JCOv4t1LOSMwcK2Y
-	+jWSiDxZ+K7EkyN6PXKr5HH1PEhbHGjx/sa/DCqH6k2Qwsrfm+C5YWAPEljscmjRaXohP0fnIDo
-	e9aavQa6WMxqj
-X-Gm-Gg: AY/fxX7ePHRj/9GeKG3o1vatJCJJH5r8Pn0C1knZbBKtdobIzRuw1GRuGHP/L75wMDh
-	g63fsyLDxl2grEA1k9j1N2yAZHGYCTljKb3jNomv3mzjY9aZmHLGeP/THjP8NhbfZT9+0KF2BR1
-	x4CrPKxY3tDZRqcIsWxZ6Xv68eUF6w7eyY8ksIAY9SvoUkIXAcwY6hfDg9zAu8y9QH2DxoU0YS2
-	wAsvK8UcCbiEdKe8YXRnja0v9x55qC5blp1K8CmPO+uwfebj8R65lPYMJimVKjUaRojfP+goqZY
-	5a+QOAncLNLHBza0czixIG7jKz0IAGjtE3W+7d1Ah4SRRSfmBTOfTEPW4mInlbEteoZMGGDkli6
-	gT8oncvcu4EBH00ePFuQZoFnJtwUEyneMMsRmOKZwLGdnXDhPD3Duph0WI1PE9F6gqsWPRUJ3o4
-	qQQQjVdg/WcEPicKAr7t47sl6dVQZ1uAE=
-X-Google-Smtp-Source: AGHT+IEp3lIqQRQ8F/+xV31qGFYy3RxmeX8QufC32EgJpFKkC8v8rt/OnKylZz/xtgAcQ5aWbSQxCQ==
-X-Received: by 2002:a05:6a00:3688:b0:819:bad0:1002 with SMTP id d2e1a72fcca58-81b801ce2e1mr5550278b3a.66.1767875295662;
-        Thu, 08 Jan 2026 04:28:15 -0800 (PST)
+        bh=uE1KQ3Nap9wSa7ARNmv253D/zHZAcI3o2YellqaTrW0=;
+        b=Vwu/Jxqcdt4a58c05ngCy5/YpALl5WlCM3MyPqzXOQ3m7KZdI1uJWA/5TSK9/AGE0E
+         nTczrfZXRz93ETeUo+B+nBkfYxBgRF6SXZQ8eAlAb7oWZsKv2C1RrGFqW+9oqT4L2IYp
+         reSeQs9UN34D1TWx96pwyW/Wcib3rD4IxgYm5f7Cmt9LFpHelDaBiBxg3C2Q3A7pc49E
+         uBeqPQNdfiXvVX9brCPRx7UxHRYu+Gdc7TZ/B0KrdIamBKvaYczoHJO+5XNWqV0Ov4ph
+         QVRFvfKI2+cgRCdyFbhsOW4hifHI9hXot+/3y9O6mNlBvzH1PhpPK8kx3QWZ5QVWpWpJ
+         TrvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUeQofR9uUpAXmm86PLJC49tGPm4k1K+ZfmlHxcBTqAfupDDbYg0zYQiYLSwzVeiuatUe849kRgssR7994=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk4GPHpFK4vhXfRSVkjvd/dyHsl/i87Ad0NhwYT9brcklet6Su
+	gVR010MZs9ns1iDKp920lKZ2SAkwON1ejK5bHbS1xU/lpeqp1bOvHkqot9gW2vqQinU=
+X-Gm-Gg: AY/fxX6Ak2ZSOdIZepChioi9f78tC8Ku14JhNHIw8dZqF1hk423zgZoimRR7kH9R0jN
+	PdJS/pCNN5IXPfWt7YfoaWNR14zRAvQBcm17g96pjqdOn3BwatQ4N4kT8f+JL5FPFOdV5et+9a/
+	N6J1mfpQ+/jzl75tFEgHn8z5Wn/imfadUHxuAKmHCmhKcbFrzBcy4S66yJLg1YoDzJbDPjZ5n2I
+	PMz0vYvH2r/UTAonJ8H0i9wMVwCwqLJ4DukxT7YmltISgz2yyQ4lLBcKIOnB78aIV7i8im5fCgS
+	tPJs7Ev3cCdHP4aCcty/+ecUs4rPS+ZZfOk1u0zDrFwsyTMI9jwriSdwbdZgCl7C5s3MF0lqlx4
+	3Sotui5rNqWw+wVOVb27no6dZZ4k5Hq9S6Wrdrg5Y1pLMCFOypCyuxeom+cl/xs1d0jKAY7/bSz
+	UWVBNvMDh4xZW4p4j91VRwxOKoYvJ7+Iw=
+X-Google-Smtp-Source: AGHT+IEf2mq8ef1YFTNrrFOuAanoejlFcGh2te7djhwZxqGKBzNIruQxKkJjwV3kGI0EiglOFPr0Pg==
+X-Received: by 2002:a05:6a00:4219:b0:7f7:2680:7325 with SMTP id d2e1a72fcca58-81b7d6511bemr5205066b3a.13.1767875201339;
+        Thu, 08 Jan 2026 04:26:41 -0800 (PST)
 Received: from [127.0.1.1] ([2a12:a305:4::40df])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe991dsm7656401b3a.16.2026.01.08.04.28.04
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-819bafe991dsm7656401b3a.16.2026.01.08.04.26.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 04:28:15 -0800 (PST)
+        Thu, 08 Jan 2026 04:26:40 -0800 (PST)
 From: Guodong Xu <guodong@riscstar.com>
-Date: Thu, 08 Jan 2026 20:26:02 +0800
-Subject: [PATCH v3 11/11] riscv: dts: spacemit: add SpacemiT K3 Pico-ITX
- board device tree
+Date: Thu, 08 Jan 2026 20:25:54 +0800
+Subject: [PATCH v3 03/11] dt-bindings: interrupt-controller: add SpacemiT
+ K3 APLIC
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -85,7 +84,7 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-k3-basic-dt-v3-11-ed99eb4c3ad3@riscstar.com>
+Message-Id: <20260108-k3-basic-dt-v3-3-ed99eb4c3ad3@riscstar.com>
 References: <20260108-k3-basic-dt-v3-0-ed99eb4c3ad3@riscstar.com>
 In-Reply-To: <20260108-k3-basic-dt-v3-0-ed99eb4c3ad3@riscstar.com>
 To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -105,79 +104,33 @@ Cc: Paul Walmsley <paul.walmsley@sifive.com>,
  Anup Patel <anup@brainfault.org>, Andrew Jones <ajones@ventanamicro.com>, 
  devicetree@vger.kernel.org, linux-riscv@lists.infradead.org, 
  linux-kernel@vger.kernel.org, spacemit@lists.linux.dev, 
- linux-serial@vger.kernel.org, Guodong Xu <guodong@riscstar.com>
+ linux-serial@vger.kernel.org, Guodong Xu <guodong@riscstar.com>, 
+ Conor Dooley <conor.dooley@microchip.com>
 X-Mailer: b4 0.14.2
 
-K3 Pico-ITX is a 2.5-inch single-board computer equipted with a SpacemiT
-K3 SoC.
+Add compatible string for SpacemiT K3 APLIC.
 
-This minimal device tree enables booting into a serial console with UART
-output.
-
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 Signed-off-by: Guodong Xu <guodong@riscstar.com>
 ---
 v3: No change.
-v2: Add aliases node in this board DT.
-    Update the memory node to reflect the hardware truth. Address
-     starts at 0x100000000 (4G) boundary.
+v2: Add Conor's Acked-by.
 ---
- arch/riscv/boot/dts/spacemit/Makefile        |  1 +
- arch/riscv/boot/dts/spacemit/k3-pico-itx.dts | 38 ++++++++++++++++++++++++++++
- 2 files changed, 39 insertions(+)
+ Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/riscv/boot/dts/spacemit/Makefile b/arch/riscv/boot/dts/spacemit/Makefile
-index 95889e7269d1bae679b28cd053e1b0a23ae6de68..7e2b877025718113a0e31917eadf7562f488d825 100644
---- a/arch/riscv/boot/dts/spacemit/Makefile
-+++ b/arch/riscv/boot/dts/spacemit/Makefile
-@@ -4,3 +4,4 @@ dtb-$(CONFIG_ARCH_SPACEMIT) += k1-milkv-jupiter.dtb
- dtb-$(CONFIG_ARCH_SPACEMIT) += k1-musepi-pro.dtb
- dtb-$(CONFIG_ARCH_SPACEMIT) += k1-orangepi-r2s.dtb
- dtb-$(CONFIG_ARCH_SPACEMIT) += k1-orangepi-rv2.dtb
-+dtb-$(CONFIG_ARCH_SPACEMIT) += k3-pico-itx.dtb
-diff --git a/arch/riscv/boot/dts/spacemit/k3-pico-itx.dts b/arch/riscv/boot/dts/spacemit/k3-pico-itx.dts
-new file mode 100644
-index 0000000000000000000000000000000000000000..037ce757e5bcae0258a326ea6265185d761f2b52
---- /dev/null
-+++ b/arch/riscv/boot/dts/spacemit/k3-pico-itx.dts
-@@ -0,0 +1,38 @@
-+// SPDX-License-Identifier: (GPL-2.0 OR MIT)
-+/*
-+ * Copyright (c) 2025 SpacemiT (Hangzhou) Technology Co. Ltd
-+ * Copyright (c) 2025 Guodong Xu <guodong@riscstar.com>
-+ */
-+
-+#include "k3.dtsi"
-+
-+/ {
-+	model = "SpacemiT K3 Pico-ITX";
-+	compatible = "spacemit,k3-pico-itx", "spacemit,k3";
-+
-+	aliases {
-+		serial0 = &uart0;
-+		serial2 = &uart2;
-+		serial3 = &uart3;
-+		serial4 = &uart4;
-+		serial5 = &uart5;
-+		serial6 = &uart6;
-+		serial7 = &uart7;
-+		serial8 = &uart8;
-+		serial9 = &uart9;
-+		serial10 = &uart10;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0";
-+	};
-+
-+	memory@100000000 {
-+		device_type = "memory";
-+		reg = <0x1 0x00000000 0x4 0x00000000>;
-+	};
-+};
-+
-+&uart0 {
-+	status = "okay";
-+};
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+index bef00521d5dacc002d24c50843ebe6380a7d5524..0718071444d29fbfa36283fc9666e8cecd6f77e7 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/riscv,aplic.yaml
+@@ -28,6 +28,7 @@ properties:
+     items:
+       - enum:
+           - qemu,aplic
++          - spacemit,k3-aplic
+       - const: riscv,aplic
+ 
+   reg:
 
 -- 
 2.43.0
