@@ -1,47 +1,48 @@
-Return-Path: <linux-serial+bounces-12264-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12268-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACF69D0DF07
-	for <lists+linux-serial@lfdr.de>; Sun, 11 Jan 2026 00:27:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 064B8D0DF1C
+	for <lists+linux-serial@lfdr.de>; Sun, 11 Jan 2026 00:27:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C9113018302
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Jan 2026 23:26:57 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B3D043035F46
+	for <lists+linux-serial@lfdr.de>; Sat, 10 Jan 2026 23:27:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EB5A2877FE;
-	Sat, 10 Jan 2026 23:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B4152D47EF;
+	Sat, 10 Jan 2026 23:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZB+qyuWF"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ZgAb21fM"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9FF18DB37;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A02AA26E6E1;
 	Sat, 10 Jan 2026 23:26:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768087614; cv=none; b=pdkJrqKLNl6cXbeBHsZ+UBga7mzbowNNbqQQltvtDAJO+2Rhudzu6fz9JYdtESeCvLjmhW1h8ohpyaBYJi40zfTk9bZZHgHOtV0u6p8Oj/0EMclMjN3S4vt389//lcg4OJDGWjJd+E6mkH1/RxghhWLXqMQh7lBC9JS3cBTLZ28=
+	t=1768087616; cv=none; b=dTVnYIejwZwYvFGdnIZCwYTW/VgXYp3to+PQVZx1AOb9yQo0P5E8rjim+jAtLI46JufJTUWAeQnpEI11LKu8eiglo795HwnsaXrnCgdyrnZ5sNlQjR7yFdXGBgsG9lCm3qiCV0R0vFCF14tDHJw+ytsfm7ACtXNBgf+mLAZLYSk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768087614; c=relaxed/simple;
-	bh=WCy1F6gUlUiHEaKv+j3z/c3UXIVutz3A4XmPLkOGAL0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=d4K7prrnTMElGlNFTr/kcAUoD3/AAMMPd5dY2yuuyuyeoe5EPoLRU5x5uYzxmYP1JBjIqKFq3YChxr0HMrTc9GkBfGXTrVVYfP7gEWJlM9oqSiBKCTvRJgHEauYf1/r06L25fUgxHzq6X1ItsYGGJlE02cxojwxgtnpdt/1xftA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZB+qyuWF; arc=none smtp.client-ip=198.137.202.133
+	s=arc-20240116; t=1768087616; c=relaxed/simple;
+	bh=iCYS7nazhk9qvnVW6nNZNrqaiaAb8T581JSnfxwLcy0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=gSaj8sgFjReMQvB1VVtRUipMsqWx2xq92cAP0pWKmvZqIfa8K4EMG3SlKXToYCeY9saMEloGaCXRu63JQU1aikSaO+eyGPSwSYTX7H49dMw47cNoiu2F+OhyzmOMGIX+QpXo7M1pirBYAHkusWvjmkJch9F4R8/uMef5xkoDgBM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ZgAb21fM; arc=none smtp.client-ip=198.137.202.133
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
-	Content-ID:Content-Description:In-Reply-To:References;
-	bh=0wqz/acFyvI2Bv/YfOJ/LpoztRNFSxEYt7VGWEKKWOw=; b=ZB+qyuWFqRZDmr64Jlr1bGQdsx
-	2cySAAXrAh2ukCXdQXPsc71nfAJkHu852m3+x1HLqg8IgkKoGPWZ87dldf6pKkUGMgJktKgx2HDC4
-	HXEaqQTFMEkQY0pQf60DgxWZAdQXgSDdGtx9qnFrD3CGI4F3JZwQI5z0OhpJTNCdpaFeF1ZI8Ki15
-	02zsXf2zHcQLO2L7ZZf01M8vwnC+rhPbe7782rRoqRywgEwAzu1WniNsIHrbRh+74EmvPvF0gCOi+
-	aFa/hDrrDVBTw9KLljWdAh2YDKTIlLubGQCKguPeUnbiMS49aI1WB4XK3PlJ2B00j56ckMsig9bBd
-	FbcMKsSg==;
+	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
+	:Reply-To:Content-Type:Content-ID:Content-Description;
+	bh=duQxC0uTPFl9OBKTDlU60acfDEsAvmXsqLyESd2q+zk=; b=ZgAb21fMU9zEvTCxuYUUeKkYN9
+	9tCP048g6wto3O+VMT1rBFjda71BOWMx55FAkxw7XUvvYeMPWzl0ur1dEoLxfCWeZNPfg3DOlctdD
+	f4NE51Nipv5nfwF7HgEOBalsHnGZB124bzmhNgFI4Vnv3A/aVva55BrtB9Fnb2h5Fie1yPErgUr6d
+	hFBG9FqB+qm8hwDPEHjaA+81kBS29ncYlNaQXUYiot5C3VSbpNEYqoqZDoY/yUO/2rZlirPv/PvHt
+	S2jgDRf5OWK6HcisKqrlbxsSqczZTgAd4fG16L/TqSn2WTXReNDaRRJX19Dp0wI6Ers5crJMosrKY
+	0004KsAw==;
 Received: from [50.53.43.113] (helo=bombadil.infradead.org)
 	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1veiM0-00000003lbk-3DU4;
-	Sat, 10 Jan 2026 23:26:44 +0000
+	id 1veiM1-00000003lbk-0IXz;
+	Sat, 10 Jan 2026 23:26:45 +0000
 From: Randy Dunlap <rdunlap@infradead.org>
 To: linux-kernel@vger.kernel.org
 Cc: Randy Dunlap <rdunlap@infradead.org>,
@@ -49,10 +50,12 @@ Cc: Randy Dunlap <rdunlap@infradead.org>,
 	Jiri Slaby <jirislaby@kernel.org>,
 	Geert Uytterhoeven <geert+renesas@glider.be>,
 	linux-serial@vger.kernel.org
-Subject: [PATCH 0/4 v2] serial: Kconfig cleanups
-Date: Sat, 10 Jan 2026 15:26:39 -0800
-Message-ID: <20260110232643.3533351-1-rdunlap@infradead.org>
+Subject: [PATCH 1/4 v2] serial: imx: change SERIAL_IMX_CONSOLE to bool
+Date: Sat, 10 Jan 2026 15:26:40 -0800
+Message-ID: <20260110232643.3533351-2-rdunlap@infradead.org>
 X-Mailer: git-send-email 2.52.0
+In-Reply-To: <20260110232643.3533351-1-rdunlap@infradead.org>
+References: <20260110232643.3533351-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -61,24 +64,44 @@ List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Clean up some Kconfig entries.
+SERIAL_IMX_CONSOLE is a build option for the imx driver (SERIAL_IMX).
+It does not build a separate console driver file, so it can't be built
+as a module since it isn't built at all.
 
-[PATCH 1/4 v2] serial: imx: change SERIAL_IMX_CONSOLE to bool
-[PATCH 2/4 v2] serial: 8250: fix ordering of entries for menu display
-[PATCH 3/4 v2] serial: Kconfig: fix ordering of entries for menu display
-[PATCH 4/4 v2] serial: SH_SCI: improve "DMA support" prompt
+Change the Kconfig symbol from tristate to bool and update the help
+text accordingly.
 
-Patches 1-3 are the same as v1 other than dropping
-Fugang Duan <fugang.duan@nxp.com> from patch 1/4 (mail bounces).
-
-Patch 4 was modified at Geert's request.
-
- drivers/tty/serial/8250/Kconfig |   95 +++++++++++++++---------------
- drivers/tty/serial/Kconfig      |   34 +++++-----
- 2 files changed, 65 insertions(+), 64 deletions(-)
+Fixes: 0db4f9b91c86 ("tty: serial: imx: enable imx serial console port as module")
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+---
+v2: drop Fugang Duan <fugang.duan@nxp.com> (mail bounces)
 
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc: Jiri Slaby <jirislaby@kernel.org>
 Cc: Geert Uytterhoeven <geert+renesas@glider.be>
 Cc: linux-serial@vger.kernel.org
+
+ drivers/tty/serial/Kconfig |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+--- linux-next-20251219.orig/drivers/tty/serial/Kconfig
++++ linux-next-20251219/drivers/tty/serial/Kconfig
+@@ -486,14 +486,14 @@ config SERIAL_IMX
+ 	  can enable its onboard serial port by enabling this option.
+ 
+ config SERIAL_IMX_CONSOLE
+-	tristate "Console on IMX serial port"
++	bool "Console on IMX serial port"
+ 	depends on SERIAL_IMX
+ 	select SERIAL_CORE_CONSOLE
+ 	help
+ 	  If you have enabled the serial port on the Freescale IMX
+-	  CPU you can make it the console by answering Y/M to this option.
++	  CPU you can make it the console by answering Y to this option.
+ 
+-	  Even if you say Y/M here, the currently visible virtual console
++	  Even if you say Y here, the currently visible virtual console
+ 	  (/dev/tty0) will still be used as the system console by default, but
+ 	  you can alter that using a kernel command line option such as
+ 	  "console=ttymxc0". (Try "man bootparam" or see the documentation of
 
