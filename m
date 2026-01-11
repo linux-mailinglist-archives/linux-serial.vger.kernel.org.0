@@ -1,95 +1,79 @@
-Return-Path: <linux-serial+bounces-12265-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12269-lists+linux-serial=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-serial@lfdr.de
 Delivered-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCF69D0DF0D
-	for <lists+linux-serial@lfdr.de>; Sun, 11 Jan 2026 00:27:08 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F32BD0E91A
+	for <lists+linux-serial@lfdr.de>; Sun, 11 Jan 2026 11:26:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4F4B9301833B
-	for <lists+linux-serial@lfdr.de>; Sat, 10 Jan 2026 23:26:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 196E23006F64
+	for <lists+linux-serial@lfdr.de>; Sun, 11 Jan 2026 10:26:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1FA129DB6A;
-	Sat, 10 Jan 2026 23:26:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72664330D36;
+	Sun, 11 Jan 2026 10:26:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="feoAPe8t"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RaPcsb/f"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D70E23EA9B;
-	Sat, 10 Jan 2026 23:26:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 502B823AB88;
+	Sun, 11 Jan 2026 10:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768087614; cv=none; b=p6kLNGf3eDnEsewBWEspGreorGiUqRKeIrl8aYroViPSHe1hHo7oari7CfnpBjxcz5S1gtrTXYdLg+GI4wmTa60Q15FYsZDKPtT4echcEMlFQFJBJlgt2wlqtZ/nAZg1WPhX8CFxQ2IL9xdsGRwfg7b+1/MYk89l3Sl+G8HnJaM=
+	t=1768127195; cv=none; b=gUsMDNExMcPGRMrBUqoBZlC3jJfhd9usmvf3w2rz8UYIcdopoubFOcubIYNMsOmvqyX/vOzqt2fhIB/OEzH8nXVdcfqqgT/jp8c2VEU4Hovsu9GFFO4bI7AKa5/McFx5WYXeFgg8otlTWoUsNpJhT3W21Q8xn3H/7fdGr9tKdLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768087614; c=relaxed/simple;
-	bh=15BWXFeMSMIh6w661ix/FbNONx1QYCGdtYtG2EPQ5Q0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=TZn7DtHJiukU6dDWfTn/kTEdvYZdz382ysDdWArmhkxlVSgsRb3lgk/nuYWo+w4wERl1rnlHupdCSkpJq6D1COn9n/r93YuEUlVQBHtaqyPbAdG8n3GTwdh6pypTLn0V/I4nLGnb8xRVqom3bgptUC47ccyVpTL4f6u5gv1VYUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=feoAPe8t; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender
-	:Reply-To:Content-Type:Content-ID:Content-Description;
-	bh=spkX88AB1ItPY7AAUri8iKAK/0QnhYU30lyjDwyqRQI=; b=feoAPe8tl8UFGM+3daoVIShonV
-	+Ll/YTZRkFig5oj1euVSDaZqB4OtUJwxdTrTaVtLGN1QQc55qI/jX+FHsgXtuoBscyY5cb0AG/Lgn
-	+5px+IEnJkVxMFldphWHWpUef0alyjP9fF7yZzvYCP2kVmHCMJYUjv4zMxo81xp2tuBOfa/GhPx+K
-	v5ZnboXgO/vpMixp10tTn/A6NLzdGeK8e5OYy3r7gHBXEuWst1NacrS02ZQA1rBWOiL+LKvznFiku
-	LeNb1YqJXu8IWlwkiTN6stG4k6LipvAZA7kVOk9ejpuobc6PwKkTRlt5PoA7Qiit1TJ9rsHLfUXJy
-	/2G/Sxcg==;
-Received: from [50.53.43.113] (helo=bombadil.infradead.org)
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1veiM1-00000003lbk-3qMR;
-	Sat, 10 Jan 2026 23:26:45 +0000
-From: Randy Dunlap <rdunlap@infradead.org>
-To: linux-kernel@vger.kernel.org
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	linux-serial@vger.kernel.org
-Subject: [PATCH 4/4 v2] serial: SH_SCI: improve "DMA support" prompt
-Date: Sat, 10 Jan 2026 15:26:43 -0800
-Message-ID: <20260110232643.3533351-5-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260110232643.3533351-1-rdunlap@infradead.org>
-References: <20260110232643.3533351-1-rdunlap@infradead.org>
+	s=arc-20240116; t=1768127195; c=relaxed/simple;
+	bh=4sjlRsRXnCiU1+Vn2EpRzWnXPIuxu1JKKXUgm2mFkCw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RS05jDY8aUi8Kuh0GcLEzUAkwtccbKxIGnj288bGMMFhzPhYiidgz6Xo2CIsZzYeZ/FpXsb926vJb7NmRVSrN7WsHWuYc7KEXXskEgo89ZTPCmTuXTF2kOZzSi3liQaK68yiA8J9jyem47GhITL0rpSM5hWxhzxa0jtzFqKhwBQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RaPcsb/f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E5FEC4CEF7;
+	Sun, 11 Jan 2026 10:26:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1768127194;
+	bh=4sjlRsRXnCiU1+Vn2EpRzWnXPIuxu1JKKXUgm2mFkCw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RaPcsb/fYzLWxjEPVkto0vT0zS0pVocR+zXrskrkcAj185oyuHU1xeAKXubup7bxs
+	 ygspoQ9W1x/iQdp4K+P9OWb6ZeZd5lhgnO60RrKtJPWFEn8ImVJVBKModGC949B9L+
+	 wjG7AMzLoFVN+lIb3t506+br0jq4jz5ncOxNTjac=
+Date: Sun, 11 Jan 2026 11:26:31 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Marco Crivellari <marco.crivellari@suse.com>
+Cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org,
+	Tejun Heo <tj@kernel.org>, Lai Jiangshan <jiangshanlai@gmail.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+	Michal Hocko <mhocko@suse.com>, Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] tty: replace use of system_unbound_wq with system_dfl_wq
+Message-ID: <2026011107--0bfc@gregkh>
+References: <20251104105446.110884-1-marco.crivellari@suse.com>
+ <CAAofZF6DCmHnpT8mNGiYRJdeQc9yBooRf=N+WVEw371-ZP06Zw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAofZF6DCmHnpT8mNGiYRJdeQc9yBooRf=N+WVEw371-ZP06Zw@mail.gmail.com>
 
-Having a prompt of "DMA support" suddenly appear during a
-"make oldconfig" can be confusing. Add a little helpful text to
-the prompt message.
+On Wed, Dec 24, 2025 at 03:54:01PM +0100, Marco Crivellari wrote:
+> On Tue, Nov 4, 2025 at 11:54 AM Marco Crivellari
+> <marco.crivellari@suse.com> wrote:
+> >  drivers/tty/serial/8250/8250_dw.c | 4 ++--
+> >  drivers/tty/tty_buffer.c          | 8 ++++----
+> >  2 files changed, 6 insertions(+), 6 deletions(-)
+> 
+> Gentle ping.
 
-Fixes: 73a19e4c0301 ("serial: sh-sci: Add DMA support.")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
----
-v2: make the prompt more like the other SH_SCI prompts (Geert)
+This isn't in my queue anymore, are you sure I didn't apply it (sorry,
+don't have access to my devel tree at the moment...)
 
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>
-Cc: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-serial@vger.kernel.org
+if not, can you resend it?
 
- drivers/tty/serial/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+thanks,
 
---- linux-next-20260109.orig/drivers/tty/serial/Kconfig
-+++ linux-next-20260109/drivers/tty/serial/Kconfig
-@@ -671,7 +671,7 @@ config SERIAL_SH_SCI_EARLYCON
- 	default ARCH_RENESAS
- 
- config SERIAL_SH_SCI_DMA
--	bool "DMA support" if EXPERT
-+	bool "Support for DMA on SuperH SCI(F)" if EXPERT
- 	depends on SERIAL_SH_SCI && DMA_ENGINE
- 	default ARCH_RENESAS
- 
+greg k-h
 
