@@ -1,198 +1,143 @@
-Return-Path: <linux-serial+bounces-12495-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12498-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QNsIMRrxcWlKZwAAu9opvQ
-	(envelope-from <linux-serial+bounces-12495-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 10:42:50 +0100
+	id WDWgMcH+cWmvZwAAu9opvQ
+	(envelope-from <linux-serial+bounces-12498-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:41:05 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CEB964B3D
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 10:42:50 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C45965622
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:41:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 71742621D88
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 09:35:55 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B688944B3F9
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 10:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6C4B31AA80;
-	Thu, 22 Jan 2026 09:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69B4F40FDA4;
+	Thu, 22 Jan 2026 10:24:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b="WMmVf+cD"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GrjO1EE8"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FCE32E764B
-	for <linux-serial@vger.kernel.org>; Thu, 22 Jan 2026 09:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.208.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769074548; cv=pass; b=oXXq3e8JDKdcAv3hO6jSJhR+w9vc7beMV0oE3xeLz3XSdXV1nZewiyGKZ5MNggZW8G6ghRwY9UiAYnyFXeIRlwoWmQWRhNQFzwgCXz0mGm1iZ+tEmntU4oWBHx/Q78HOTh+4ojWroOxzaF+aHMiHf5mGGKz78T0gjEMQSgAIFdI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769074548; c=relaxed/simple;
-	bh=CpowxPIs9WsIvTj4/MuMW1Y5/GmzHzBIUQWzh9qqtsQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mt0dPe118CMePcrFe5IitdVxRQAoDRXTHgqwJVS+G4d/nls2G+M9cBQ5h1IB6bY9kZGz8IjVpyJ9w6ytEI4ecXbsPF9EDB10ICEiLU2FAIddAw41qxhtUIj5QB3rLi2jSiLXFNuAewNk6vE/6DHTixfTcFbzm/ZJBCyyvNXoyBw=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr; spf=pass smtp.mailfrom=sartura.hr; dkim=pass (2048-bit key) header.d=sartura.hr header.i=@sartura.hr header.b=WMmVf+cD; arc=pass smtp.client-ip=209.85.208.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sartura.hr
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sartura.hr
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-6582e8831aeso1244675a12.1
-        for <linux-serial@vger.kernel.org>; Thu, 22 Jan 2026 01:35:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769074545; cv=none;
-        d=google.com; s=arc-20240605;
-        b=LWwGDmZLQUc9i1hoxdRyQk+4DvkZlG300fo3MI7a/5sSabklDGsdnvo85LsEE+vgxi
-         pRwozyFC4W1I/y0kuOpcP2bl/6A4jDb+jWXGZeAy+8jrpUaVfeie6LLPMfxy0QiGW8B6
-         qL2bep5XnumvH4GoTrMhSxLJQPkOxS7lqoWsdsl+oWakYhkFxFWCrSHc5wjnb9SlU7ik
-         kHHDujT7dT0QiMguHphV6bIWR0Jfj4gFtxI09/SHiZs0JCpbW5yI7pqdD8oX4csC9phI
-         FxqHjms6sGBNXiUaE6GrQ+MVedTKVejVYTsWloebiUHz9DsNIDxKx46959P8VurCdDWe
-         L5BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=CpowxPIs9WsIvTj4/MuMW1Y5/GmzHzBIUQWzh9qqtsQ=;
-        fh=fAyKZhc2xpPbEKPJOQS/repcW6ozqQQByxEQKUpHM8Y=;
-        b=UhHlnBCJ1ernHO645MJGAhW2nhOPYRPBVVyraod8w7FcJFYgDtO1yFLMKH2W1GZJYx
-         sGOjBFp5rbLwfH4+Yl+BtAYS8CaG7UnJtGMfDCglWkjqm3QwZZ49/QUfz2fQnuDgNFDB
-         H57ty7bjhsivvlAqovByTJ3ghByNjkJGY7FeiXCJjiaHo5gviNn+tVGyGmfErdqo71IB
-         lnFlGCX6xe5EntvXMSV+zB55HTxw6+gY5KKqnQ0fofsoNRI5bmlXzxi3izgjDJNw8EnC
-         QbHVsw3DVIiJuXFizw21aWgNgbjtskjyUFNT/le2naugOhXhHpizhYhk+zChIovsx9jM
-         ZBQw==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sartura.hr; s=sartura; t=1769074545; x=1769679345; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CpowxPIs9WsIvTj4/MuMW1Y5/GmzHzBIUQWzh9qqtsQ=;
-        b=WMmVf+cDPVXyzKm73nlXhVqX/GgwBPysyw+V8fdoMVElEaKbT5iIB+JX6bg1SMgNHp
-         BZ/xpZLXmDtL49wkbLH6Qe5t/c1FlVbMBwB35Yj2bfbomiTfVmmlbRHxUoEZR/oQWck+
-         Be74nd4grwTHoU8lZrxh7rK5Z11b36UuyBJ2+hjYl8aOJ18c08LpQdSkzjpNZL7dXtFS
-         T9v9pdYZUJX2F6R2ZKeQUFJ7x2iA+DdPl0QupDzrrWAwUT1dVBgpkasAEVxZ/M05ccks
-         CyBCrEYEw1asEPFNKbUBuBO1ZPFruijEtPlo7DqxHXrUhxmMxMlp5rmrVyWYwRFOfOVs
-         sNLw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769074545; x=1769679345;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=CpowxPIs9WsIvTj4/MuMW1Y5/GmzHzBIUQWzh9qqtsQ=;
-        b=IScI0u3sou8gTCwas07U/7edGrlT7NNVId7rp8DX4oxt7hA6DqAF7/N4nyFUSpF9Qn
-         hWsUzKGXwkEqbeV2YG7iHpt67a125JaGqc6BBwC+Pu/pqnJ14bJEXAQIIce0fhQ1XZnA
-         BeKu4rTb09z1+BO9zHu+no+yvW92CyTtb27NAeT/R0vGbKOtXV7vJaH3qs1IAW9iOekK
-         3T52xYusu3/c6s1faCUQzh4lkVyX3YhRyQ1eMs96G2am2uzzq9hyDDcnf977cj7NisO6
-         5oVtZzYfCB8RcOYBxfFstjqUSWI9XelsYl9pVzB9xtkM6d/tU4Yz5m0iZNgwvKjXkbu1
-         QoPg==
-X-Forwarded-Encrypted: i=1; AJvYcCU5a4L8IpXbvsLsbQ4chLD0rSh/BOg4bUucNIIiYezIxNl1AC6QPq5n1ehFJl+uj6TU2D7L6j8CnrvVyMI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQ5suKJZVafOQr3sV9qds5e6o8uKW+luje131xA7R47rKXbAaA
-	YpvcoyMb182q86dmL+OomnZMXLTuo91X42SDLxVBtf4CDZnmsTfA03SvX9egJFtPwjPogQADJg4
-	Pm9WJ9+cB5ut6wHcbf1XP17ugttx4uVGfrcnhqwe7mQ==
-X-Gm-Gg: AZuq6aIFXfsL1LJ8h9C4+JPPTe0G4Rm/vPDFf+sqa5M5L3wjRRL3+5Wu7TLBSqCnGB/
-	ZEIblfHtN1MrPUu+yzctXxhgyFMbcm94OmzMx83PsOkQjHQ911KF29vn4NF9UYaE0YlCC1mQ31T
-	4pduOpDcPI7Otjms47njv/pfOHn/2kx+U3PX6fZqYEGp/HVzXSJg1aYYNGNSWzB0a4gKzfUurRs
-	14qCFN28k0M5pgfoLy4BJZn9XwmTpOWXc9E4NbP4LsX9KVWkkHt/3onFCaSWM4eGXm1C1J9hLK+
-	Y9LaXLatQbr8DQvOXIFYiw+UvofkRPJoGe7UDZDhmkpvasxvIiiPxtIyjOHxhQ==
-X-Received: by 2002:a05:6402:f02:b0:658:1304:b68b with SMTP id
- 4fb4d7f45d1cf-6581304b771mr3388171a12.15.1769074544348; Thu, 22 Jan 2026
- 01:35:44 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520163D34A6;
+	Thu, 22 Jan 2026 10:24:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769077444; cv=none; b=eMVTGK3M6SJEnmGnCe7c9D939soxbygIjEPfzB+lkVMJyyFXANF8O+46/mAJH+G+RDyZ+sSX1J823zF7bGY6a2vdj7u821bCtsx8d8zG9yZFxTTXK5m+EmaP3gxsFoSwR5IIr33Phm9bxIw2KN0VcxEPLBOX9Ih+T0irX6jQ0iw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769077444; c=relaxed/simple;
+	bh=uTiTQ01g0GllJB8U43pVQU4kXZOWEcw7b3TRyEuxnPg=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E82URWHRPTuiy/DXjLXl+Opo97C02Q7Lso5AdH7YDTe4h6hYKcr+HewdBhHmdZuXWUi4kh/hZir+9LrQxTSqOk1D1RMGBpG3vGD8qEAAufV9sWFklRgZK8+gAM2PsceV1dG+leTumNTNxHn8HFPkiMyn9ZaakKvJO1wfY6gOOaQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GrjO1EE8; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769077442; x=1800613442;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=uTiTQ01g0GllJB8U43pVQU4kXZOWEcw7b3TRyEuxnPg=;
+  b=GrjO1EE8zCA7AB27jP2c6n3rnC1lYLpVz/EgsGnEox44IvPBVdeJmymn
+   42ELfkH+ixewzSKuXfHrvK867fI574EUfRCxONz7C0JfLXJO+k8Oj+B5c
+   mTp6FXFNAPx/sKL+Xuf7jHUX7RNcKRDQ4yT2IFFUGEURpDnh0T3wggN3p
+   u24o8lqFt2gAAXCa6BIkax7kLjtTcVp2Ae2SOZ/2/UhQvQlxJaBMFA99a
+   ZBF+rkF/HmhVnkFx4OZZF+smeZfGbWyNTe5M5GfObVoi2NIXtlhWEJ+iY
+   +yDdCI5EE1GZ+UIegE3oAXLI2yAX51fdnkslKOxR1puqdGeVjSTZZMMQe
+   g==;
+X-CSE-ConnectionGUID: DsGGEN/ZR4mdQXNLAl8QOQ==
+X-CSE-MsgGUID: rrosdSLSQrq7VxHUaVURPg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="95790490"
+X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
+   d="scan'208";a="95790490"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 02:23:59 -0800
+X-CSE-ConnectionGUID: /tnuQFeSQb2tjbtePBW/Dw==
+X-CSE-MsgGUID: ncYWQdrBQ3eVtEiWBfpDkw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
+   d="scan'208";a="206958324"
+Received: from black.igk.intel.com ([10.91.253.5])
+  by fmviesa008.fm.intel.com with ESMTP; 22 Jan 2026 02:23:56 -0800
+Received: by black.igk.intel.com (Postfix, from userid 1003)
+	id B7E9295; Thu, 22 Jan 2026 11:23:55 +0100 (CET)
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	linux-doc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Tony Lindgren <tony@atomide.com>
+Subject: [PATCH v1 0/2] serial: 8250: Remove highly customised deprecated interface
+Date: Thu, 22 Jan 2026 11:19:46 +0100
+Message-ID: <20260122102349.2395423-1-andriy.shevchenko@linux.intel.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260115114021.111324-1-robert.marko@sartura.hr>
- <20260115114021.111324-7-robert.marko@sartura.hr> <CAD++jLmitNVhWmUf9BBqLR2_WsAR7V-+ykVJsLK3MuOSUKQF0A@mail.gmail.com>
-In-Reply-To: <CAD++jLmitNVhWmUf9BBqLR2_WsAR7V-+ykVJsLK3MuOSUKQF0A@mail.gmail.com>
-From: Robert Marko <robert.marko@sartura.hr>
-Date: Thu, 22 Jan 2026 10:35:33 +0100
-X-Gm-Features: AZwV_QgGcZewelkI3QjoxNf_Rdp39oV_bH_54mEjrqvn-sBMKJLuqze3gq5di5o
-Message-ID: <CA+HBbNEw_9FNOFxx8Mo63Aq49MxWvvuQ4Sc75mXFYpwtMmETiw@mail.gmail.com>
-Subject: Re: [PATCH v5 06/11] dt-bindings: pinctrl: pinctrl-microchip-sgpio:
- add LAN969x
-To: Linus Walleij <linusw@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, 
-	claudiu.beznea@tuxon.dev, herbert@gondor.apana.org.au, davem@davemloft.net, 
-	lee@kernel.org, andrew+netdev@lunn.ch, edumazet@google.com, kuba@kernel.org, 
-	pabeni@redhat.com, Steen.Hegelund@microchip.com, daniel.machon@microchip.com, 
-	UNGLinuxDriver@microchip.com, olivia@selenic.com, richard.genoud@bootlin.com, 
-	radu_nicolae.pirea@upb.ro, gregkh@linuxfoundation.org, 
-	richardcochran@gmail.com, horatiu.vultur@microchip.com, 
-	Ryan.Wanner@microchip.com, tudor.ambarus@linaro.org, 
-	kavyasree.kotagiri@microchip.com, lars.povlsen@microchip.com, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, 
-	linux-serial@vger.kernel.org, luka.perkov@sartura.hr, 
-	Conor Dooley <conor.dooley@microchip.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.46 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	MID_CONTAINS_FROM(1.00)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[sartura.hr:s=sartura];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-12495-lists,linux-serial=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TAGGED_FROM(0.00)[bounces-12498-lists,linux-serial=lfdr.de];
+	DMARC_POLICY_ALLOW(0.00)[intel.com,none];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[37];
-	FREEMAIL_CC(0.00)[kernel.org,microchip.com,bootlin.com,tuxon.dev,gondor.apana.org.au,davemloft.net,lunn.ch,google.com,redhat.com,selenic.com,upb.ro,linuxfoundation.org,gmail.com,linaro.org,vger.kernel.org,lists.infradead.org,sartura.hr];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[sartura.hr:+];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[robert.marko@sartura.hr,linux-serial@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[sartura.hr,reject];
-	TAGGED_RCPT(0.00)[linux-serial,dt,netdev];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:2a01:60a::/32, country:US];
+	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	TAGGED_RCPT(0.00)[linux-serial];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-serial@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,microchip.com:email,tuxon.dev:email,ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: 6CEB964B3D
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	R_SPF_SOFTFAIL(0.00)[~all:c];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns,intel.com:dkim,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 7C45965622
 X-Rspamd-Action: no action
 
-On Wed, Jan 21, 2026 at 1:44=E2=80=AFPM Linus Walleij <linusw@kernel.org> w=
-rote:
->
-> Hi Robert,
->
-> On Thu, Jan 15, 2026 at 12:41=E2=80=AFPM Robert Marko <robert.marko@sartu=
-ra.hr> wrote:
->
-> > Document LAN969x compatibles for SGPIO.
-> >
-> > Signed-off-by: Robert Marko <robert.marko@sartura.hr>
-> > Acked-by: Conor Dooley <conor.dooley@microchip.com>
-> > Reviewed-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
->
-> Should I just merge this one patch to the pinctrl tree?
+The custom divisor interface not only old and deprecated, it's too much
+driver-dependent. For the user it's not easy to understand what to supply
+as a value (usually encoded) via that interface. On top of it, there is
+an existing BOTHER mechanism that allows to do the same and more without
+any tribal knowledge.
 
-That would be great as other bindings are slowly being picked into
-their respective trees.
+Remove highly customised deprecated interface to set baud rates.
 
-Regards,
-Robert
-> Looks good to me.
->
-> Yours,
-> Linus Walleij
+Note, the "standard" custom_divisor that is used as a plain value
+for "quot" is still left and may be used by the respective drivers
+including but not limited to 8250.
 
+Andy Shevchenko (2):
+  serial: 8250_omap: Remove custom deprecated baud setting routine
+  serial: 8250_pci: Remove custom deprecated baud setting routine
 
+ Documentation/misc-devices/oxsemi-tornado.rst | 26 +-----
+ drivers/tty/serial/8250/8250_omap.c           | 16 ----
+ drivers/tty/serial/8250/8250_pci.c            | 85 ++++++++-----------
+ 3 files changed, 38 insertions(+), 89 deletions(-)
 
---=20
-Robert Marko
-Staff Embedded Linux Engineer
-Sartura d.d.
-Lendavska ulica 16a
-10000 Zagreb, Croatia
-Email: robert.marko@sartura.hr
-Web: www.sartura.hr
+-- 
+2.50.1
+
 
