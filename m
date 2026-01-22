@@ -1,69 +1,70 @@
-Return-Path: <linux-serial+bounces-12498-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12496-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id WDWgMcH+cWmvZwAAu9opvQ
-	(envelope-from <linux-serial+bounces-12498-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:41:05 +0100
+	id kE3yArL9cWmvZwAAu9opvQ
+	(envelope-from <linux-serial+bounces-12496-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:36:34 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C45965622
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:41:05 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C75F65558
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 11:36:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id B688944B3F9
-	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 10:27:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6A6637494C0
+	for <lists+linux-serial@lfdr.de>; Thu, 22 Jan 2026 10:27:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69B4F40FDA4;
-	Thu, 22 Jan 2026 10:24:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B6713D3311;
+	Thu, 22 Jan 2026 10:24:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GrjO1EE8"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GSd+0Z2A"
 X-Original-To: linux-serial@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520163D34A6;
-	Thu, 22 Jan 2026 10:24:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 671B436AB4E;
+	Thu, 22 Jan 2026 10:23:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769077444; cv=none; b=eMVTGK3M6SJEnmGnCe7c9D939soxbygIjEPfzB+lkVMJyyFXANF8O+46/mAJH+G+RDyZ+sSX1J823zF7bGY6a2vdj7u821bCtsx8d8zG9yZFxTTXK5m+EmaP3gxsFoSwR5IIr33Phm9bxIw2KN0VcxEPLBOX9Ih+T0irX6jQ0iw=
+	t=1769077442; cv=none; b=W304X6f6Vne24o1vQA2yYM/sXww318BC1kS571rUrkPjsGWld6IyjN41uDbYKrebr4X2HIQbJpd7N6gGJHWs41Fw+JfmugvAYDp7IKIVlzReLKH8dxURQMYc0kdMt3wHhObUK9fI7r22uOrSjUhp7C3zsw9K6ZDK0FRDtagTYds=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769077444; c=relaxed/simple;
-	bh=uTiTQ01g0GllJB8U43pVQU4kXZOWEcw7b3TRyEuxnPg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=E82URWHRPTuiy/DXjLXl+Opo97C02Q7Lso5AdH7YDTe4h6hYKcr+HewdBhHmdZuXWUi4kh/hZir+9LrQxTSqOk1D1RMGBpG3vGD8qEAAufV9sWFklRgZK8+gAM2PsceV1dG+leTumNTNxHn8HFPkiMyn9ZaakKvJO1wfY6gOOaQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GrjO1EE8; arc=none smtp.client-ip=192.198.163.7
+	s=arc-20240116; t=1769077442; c=relaxed/simple;
+	bh=+ponhCVn2cRUJSU87mwByby7CyGZivwMxVvrVozaoFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=NFpXv/p5lLte5TOi9H4VFIDIWUguTwH0SGeYlTYlrhYfebKKBMqiaMNbYIQ/1bHW22z7awLsAxhbS9UD1M5fVw57TwYRLH1kdUmauw+v0hvehxfBm9bOrD82WsHcf9U9YczYLggw10YvwdzoQz4Obg1CUM8lKWcP/TzeAwHLKu8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GSd+0Z2A; arc=none smtp.client-ip=192.198.163.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769077442; x=1800613442;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=uTiTQ01g0GllJB8U43pVQU4kXZOWEcw7b3TRyEuxnPg=;
-  b=GrjO1EE8zCA7AB27jP2c6n3rnC1lYLpVz/EgsGnEox44IvPBVdeJmymn
-   42ELfkH+ixewzSKuXfHrvK867fI574EUfRCxONz7C0JfLXJO+k8Oj+B5c
-   mTp6FXFNAPx/sKL+Xuf7jHUX7RNcKRDQ4yT2IFFUGEURpDnh0T3wggN3p
-   u24o8lqFt2gAAXCa6BIkax7kLjtTcVp2Ae2SOZ/2/UhQvQlxJaBMFA99a
-   ZBF+rkF/HmhVnkFx4OZZF+smeZfGbWyNTe5M5GfObVoi2NIXtlhWEJ+iY
-   +yDdCI5EE1GZ+UIegE3oAXLI2yAX51fdnkslKOxR1puqdGeVjSTZZMMQe
-   g==;
-X-CSE-ConnectionGUID: DsGGEN/ZR4mdQXNLAl8QOQ==
-X-CSE-MsgGUID: rrosdSLSQrq7VxHUaVURPg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="95790490"
+  t=1769077440; x=1800613440;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+ponhCVn2cRUJSU87mwByby7CyGZivwMxVvrVozaoFs=;
+  b=GSd+0Z2AvDT6A4Do7T/Y+0Hib7Elks/cg68XJ/bCPJN/REFPO9b6BUSM
+   D6HkfQpDoHGVBw9ibBxYYUagz7D1++ISugUYEmFqZxfYNzuc0jODlMJx6
+   rrEtKEQsPw1PzKiXOOA87q1+R6Gak+eZPGhKJ0aDrnhWBqX8TsPfdiUR5
+   e3/JVi0oHYvzG2Lz/7OeuailoFar+76EmBTZzeXbiFHIylMM/V2VegGqw
+   pTdCURD+JNLqILkL3vAEqFpxS2/KN/90MXlDn0fTpiKp4qPZufkKL5LNf
+   kSF1WepDji+ySfpWG3VM8OXoicpIQj54+LqQB5HoW7CaTXOa+jFXy5mCF
+   A==;
+X-CSE-ConnectionGUID: 9GMYrpN8Rv+HexPXMSjWrA==
+X-CSE-MsgGUID: iWZJY7fjQ66Mm+s7cVCc9Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11678"; a="95790499"
 X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="95790490"
+   d="scan'208";a="95790499"
 Received: from fmviesa008.fm.intel.com ([10.60.135.148])
   by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Jan 2026 02:23:59 -0800
-X-CSE-ConnectionGUID: /tnuQFeSQb2tjbtePBW/Dw==
-X-CSE-MsgGUID: ncYWQdrBQ3eVtEiWBfpDkw==
+X-CSE-ConnectionGUID: aWLxvmeNQy+6SwLF0x5R0A==
+X-CSE-MsgGUID: Z1nwToaFTriE2qZu9N4daA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,246,1763452800"; 
-   d="scan'208";a="206958324"
+   d="scan'208";a="206958325"
 Received: from black.igk.intel.com ([10.91.253.5])
   by fmviesa008.fm.intel.com with ESMTP; 22 Jan 2026 02:23:56 -0800
 Received: by black.igk.intel.com (Postfix, from userid 1003)
-	id B7E9295; Thu, 22 Jan 2026 11:23:55 +0100 (CET)
+	id BAF2098; Thu, 22 Jan 2026 11:23:55 +0100 (CET)
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -75,10 +76,12 @@ Cc: Jonathan Corbet <corbet@lwn.net>,
 	Shuah Khan <skhan@linuxfoundation.org>,
 	Kevin Hilman <khilman@baylibre.com>,
 	Tony Lindgren <tony@atomide.com>
-Subject: [PATCH v1 0/2] serial: 8250: Remove highly customised deprecated interface
-Date: Thu, 22 Jan 2026 11:19:46 +0100
-Message-ID: <20260122102349.2395423-1-andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v1 1/2] serial: 8250_omap: Remove custom deprecated baud setting routine
+Date: Thu, 22 Jan 2026 11:19:47 +0100
+Message-ID: <20260122102349.2395423-2-andriy.shevchenko@linux.intel.com>
 X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20260122102349.2395423-1-andriy.shevchenko@linux.intel.com>
+References: <20260122102349.2395423-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -98,45 +101,66 @@ X-Spamd-Result: default: False [-0.46 / 15.00];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[intel.com:+];
-	TAGGED_FROM(0.00)[bounces-12498-lists,linux-serial=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-12496-lists,linux-serial=lfdr.de];
 	DMARC_POLICY_ALLOW(0.00)[intel.com,none];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:7979, ipnet:213.196.21.0/24, country:US];
+	ASN(0.00)[asn:7979, ipnet:2605:f480::/32, country:US];
 	TAGGED_RCPT(0.00)[linux-serial];
 	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-serial@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
-	R_SPF_SOFTFAIL(0.00)[~all:c];
+	R_SPF_SOFTFAIL(0.00)[~all];
 	RCPT_COUNT_SEVEN(0.00)[10];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[ams.mirrors.kernel.org:helo,ams.mirrors.kernel.org:rdns,intel.com:dkim,linux.intel.com:mid]
-X-Rspamd-Queue-Id: 7C45965622
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns,intel.com:email,intel.com:dkim,stackoverflow.com:url,linux.intel.com:mid]
+X-Rspamd-Queue-Id: 8C75F65558
 X-Rspamd-Action: no action
 
-The custom divisor interface not only old and deprecated, it's too much
-driver-dependent. For the user it's not easy to understand what to supply
-as a value (usually encoded) via that interface. On top of it, there is
-an existing BOTHER mechanism that allows to do the same and more without
-any tribal knowledge.
+As comments mentioned this is old (and actually deprecated) interface
+to set custom baud rates. This interface has limitations as it only
+allows to set a single opaque value called "custom_divisor". If the HW
+needs more complex settings (like fractional divisor) it must somehow
+encode this. This is horrid interface that is very driver specific
+and not flexible. Meanwhile Linux has established way to set free
+baud rate settings via BOTHER [1]. With all this being said, remove
+deprecated interface for good.
 
-Remove highly customised deprecated interface to set baud rates.
+Link: https://stackoverflow.com/questions/12646324/how-can-i-set-a-custom-baud-rate-on-linux [1]
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/tty/serial/8250/8250_omap.c | 16 ----------------
+ 1 file changed, 16 deletions(-)
 
-Note, the "standard" custom_divisor that is used as a plain value
-for "quot" is still left and may be used by the respective drivers
-including but not limited to 8250.
-
-Andy Shevchenko (2):
-  serial: 8250_omap: Remove custom deprecated baud setting routine
-  serial: 8250_pci: Remove custom deprecated baud setting routine
-
- Documentation/misc-devices/oxsemi-tornado.rst | 26 +-----
- drivers/tty/serial/8250/8250_omap.c           | 16 ----
- drivers/tty/serial/8250/8250_pci.c            | 85 ++++++++-----------
- 3 files changed, 38 insertions(+), 89 deletions(-)
-
+diff --git a/drivers/tty/serial/8250/8250_omap.c b/drivers/tty/serial/8250/8250_omap.c
+index 4496f692b86b..427719c158b7 100644
+--- a/drivers/tty/serial/8250/8250_omap.c
++++ b/drivers/tty/serial/8250/8250_omap.c
+@@ -243,22 +243,6 @@ static void omap_8250_get_divisor(struct uart_port *port, unsigned int baud,
+ 	unsigned int div_13, div_16;
+ 	unsigned int abs_d13, abs_d16;
+ 
+-	/*
+-	 * Old custom speed handling.
+-	 */
+-	if (baud == 38400 && (port->flags & UPF_SPD_MASK) == UPF_SPD_CUST) {
+-		priv->quot = port->custom_divisor & UART_DIV_MAX;
+-		/*
+-		 * I assume that nobody is using this. But hey, if somebody
+-		 * would like to specify the divisor _and_ the mode then the
+-		 * driver is ready and waiting for it.
+-		 */
+-		if (port->custom_divisor & (1 << 16))
+-			priv->mdr1 = UART_OMAP_MDR1_13X_MODE;
+-		else
+-			priv->mdr1 = UART_OMAP_MDR1_16X_MODE;
+-		return;
+-	}
+ 	div_13 = DIV_ROUND_CLOSEST(uartclk, 13 * baud);
+ 	div_16 = DIV_ROUND_CLOSEST(uartclk, 16 * baud);
+ 
 -- 
 2.50.1
 
