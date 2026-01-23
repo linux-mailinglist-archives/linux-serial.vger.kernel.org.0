@@ -1,67 +1,67 @@
-Return-Path: <linux-serial+bounces-12516-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12517-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QFLtICfrc2llzgAAu9opvQ
-	(envelope-from <linux-serial+bounces-12516-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 22:41:59 +0100
+	id uKmpF6bwc2nMzwAAu9opvQ
+	(envelope-from <linux-serial+bounces-12517-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 23:05:26 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB4977AF52
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 22:41:58 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9343C7B084
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 23:05:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4C5433003728
-	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 21:41:56 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 99E6C30058F4
+	for <lists+linux-serial@lfdr.de>; Fri, 23 Jan 2026 22:05:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C7632FA0DD;
-	Fri, 23 Jan 2026 21:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E7E4224AFA;
+	Fri, 23 Jan 2026 22:05:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="L6HeCEtC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UrHBcPks"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 840D6256C70;
-	Fri, 23 Jan 2026 21:41:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 822F772631;
+	Fri, 23 Jan 2026 22:05:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769204513; cv=none; b=mYx7lxDf6/tkRfSEjK2nvMyx46BcvmCZsYBRsvXGS+R6B4/A1sOwlkjPa1z+tMH3OkWs70onKjpXqflY3u7bkoF9scbXJ2TDenruYw9Tc12hCcG22ePn0NmK/4b5nBuecDXR5Al35D7hfpQVaGhvO/zL2zxRu1xuTshQAkf9q6Y=
+	t=1769205921; cv=none; b=uVpKviuSpYzvRyyClL5wtFi+j24S5E0iUHN5xWK9aaeFSmZp+rSU1van1aVmWjAVuesgvl46nD4ZsgugwpuXE8FlHElLXTH93FVM3dM26deeUZsc6iFZ+mQZ2aSuLWYkxYgy4hJFki1Ap5YMTRpuOcI4hloTU0eeZhGGgd+BEw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769204513; c=relaxed/simple;
-	bh=OxQGoJ/PXaLE3hWGnwmc+T7rIphREYp3WfiP5c0T7F8=;
+	s=arc-20240116; t=1769205921; c=relaxed/simple;
+	bh=VmjzkoC3eH+h0dArfqgmnR1yMf7HY3lkUF8meobDtlE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tnD3whBLfZsSjS0/bMku+KgFZnASFrrhbc5YEzVrXg1KxZQ6iTnEsFB6jsfI1T9ksEfbuHT1yoxtGYQnyBoN0C5zHX/ITaXSN6s7GVtyjxLhErptBbvN5xoL24SC4BXzLmkmkk04MT4yjajkMFZegc4kQZU3z5zZNajQsskAfB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=L6HeCEtC; arc=none smtp.client-ip=198.175.65.16
+	 Content-Type:Content-Disposition:In-Reply-To; b=PzDVTn0MeOFYMdtvIrAXJenbXtQy0IDtpt/+tRalkcPAjV5ZmBAllMktBWqehTGQTeJ1wSzFcISTcAtxI/s+z41HE+d7PO9gjQT8WvXdIIXOfA6idgWL2T0axT/pLzszNXxNtHML+1uoceoYLuXvumFtkNoGFwKw4dD2v1gEAGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UrHBcPks; arc=none smtp.client-ip=192.198.163.18
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1769204512; x=1800740512;
+  t=1769205919; x=1800741919;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=OxQGoJ/PXaLE3hWGnwmc+T7rIphREYp3WfiP5c0T7F8=;
-  b=L6HeCEtChG5VmdURAImc9FvNUjwPomWki3n16T9OnKcGS2EGhfjpE42R
-   h3ttP3qtOOqf0O/pkd3CBzAJAdwdhLofDDhgjy4FO2FDNfrgtVRmIg2La
-   svOKecZm2ttfsTU4jR3fr0qoUxqfY3/4GUWJ00RhXTJg42AQqkaSZUsw5
-   wDuDi0cffupyLqS3+y6CwujJ4aTRrKoCH6Fp6GZTgkpUcdJHsJYaTxzCy
-   1TuSF1TKuMd5edB1/QLuaIdSvr90LveGiCqvCvLsUJuY5x2ul2Tqzv/Sr
-   JZuBvB+OLK+RKwslvZbpEabEyE8Al7Fe9P+0miXb76lA+o32qnoCjjXoE
-   g==;
-X-CSE-ConnectionGUID: wkVRua5qQfyw8leHvpuGfQ==
-X-CSE-MsgGUID: bB1F3TwQTASClzjLO/+tNw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="70627804"
+  bh=VmjzkoC3eH+h0dArfqgmnR1yMf7HY3lkUF8meobDtlE=;
+  b=UrHBcPkscXhuY76HC2pP3+XhvA2Gn6evq3xiG9BI/bUD1pOqKUFrT83Y
+   vP9w0PHPQL+vYkiL0uC3brg1Mb+3Dm4oldHXzdhwU5NLMEbhtOmteJvjZ
+   jHOgxtCf/HSQdbiKjB2GV101PN1pfFDj2lH3X2FUwzb1avqjE43+gMl2D
+   YZQrtoF0cAB/NT8WovUEh0yBzvOtt75Mzbw7qwbwCuQIVmEUWCnBAFDWq
+   yXVIMZi25h7txrSEQ2W6+D3j901TnZMvIbsz/Pq56yCkvOI8TDl6TJ5gz
+   STtqh7yTxY+dxPbXxt9N2VEtU2FbE9wPA4VBytq0CMQgJ298ki6RqfbvB
+   A==;
+X-CSE-ConnectionGUID: 9vbpnBKVTRCq3LmdnjyPCQ==
+X-CSE-MsgGUID: I3isLPQ6Skas0eNOl67ChA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11680"; a="69659705"
 X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="70627804"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 13:41:51 -0800
-X-CSE-ConnectionGUID: CAbTJ5zeQXWwmIIxJ4Z/Og==
-X-CSE-MsgGUID: wT94QfXoQN6nP9tH07U56g==
+   d="scan'208";a="69659705"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 14:05:19 -0800
+X-CSE-ConnectionGUID: M31zFIRcR5e6Bt7DaGVdDQ==
+X-CSE-MsgGUID: eoM+cRpzQ6iVOqA6uBu5Zw==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.21,248,1763452800"; 
-   d="scan'208";a="207168564"
+   d="scan'208";a="230088997"
 Received: from rvuia-mobl.ger.corp.intel.com (HELO localhost) ([10.245.244.112])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 13:41:48 -0800
-Date: Fri, 23 Jan 2026 23:41:46 +0200
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Jan 2026 14:05:15 -0800
+Date: Sat, 24 Jan 2026 00:05:13 +0200
 From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
 Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -70,10 +70,11 @@ Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Adriana Nicolae <adriana@arista.com>, linux-kernel@vger.kernel.org,
 	"Bandal, Shankar" <shankar.bandal@intel.com>,
 	"Murthy, Shanth" <shanth.murthy@intel.com>
-Subject: Re: [PATCH 2/6] serial: 8250_dw: Avoid unnecessary LCR writes
-Message-ID: <aXPrGqUHtCCpKbcN@smile.fi.intel.com>
+Subject: Re: [PATCH 3/6] serial: 8250_dw: Rework dw8250_handle_irq() locking
+ and IIR handling
+Message-ID: <aXPwmfqPlUkI2zuw@smile.fi.intel.com>
 References: <20260123172739.13410-1-ilpo.jarvinen@linux.intel.com>
- <20260123172739.13410-3-ilpo.jarvinen@linux.intel.com>
+ <20260123172739.13410-4-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
@@ -83,7 +84,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260123172739.13410-3-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20260123172739.13410-4-ilpo.jarvinen@linux.intel.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
@@ -91,7 +92,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
 	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -99,7 +100,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,vger.kernel.org,163.com,arista.com,intel.com];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-12516-lists,linux-serial=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-12517-lists,linux-serial=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	HAS_ORG_HEADER(0.00)[];
 	MISSING_XM_UA(0.00)[];
@@ -108,39 +109,79 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-serial@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.991];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	NEURAL_HAM(-0.00)[-0.988];
 	RCPT_COUNT_SEVEN(0.00)[9];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
 	TAGGED_RCPT(0.00)[linux-serial];
 	FORGED_SENDER_MAILLIST(0.00)[]
-X-Rspamd-Queue-Id: AB4977AF52
+X-Rspamd-Queue-Id: 9343C7B084
 X-Rspamd-Action: no action
 
-On Fri, Jan 23, 2026 at 07:27:35PM +0200, Ilpo Järvinen wrote:
-> When DW UART is configured with BUSY flag, LCR writes may not always
-> succeed which can make any LCR write complex and very expensive.
-> Performing write directly can trigger IRQ and the driver has to perform
-> complex and distruptive sequence while retrying the write.
+On Fri, Jan 23, 2026 at 07:27:36PM +0200, Ilpo Järvinen wrote:
+> dw8250_handle_irq() takes port's lock multiple times with no good
+> reason to release it in between and calls serial8250_handle_irq()
+> that also takes port's lock.
 > 
-> Therefore, it's better to avoid doing LCR write that would not change
-> the value of the LCR register. Add LCR write avoidance code into the
-> 8250_dw driver's serial_out functions.
+> As serial8250_handle_irq() takes port's lock itself, create
+> serial8250_handle_irq_locked() that allows caller to hold port's lock
+> across the call. Take port's lock only once in dw8250_handle_irq() and
+> call serial8250_handle_irq_locked() directly.
 
-.serial_out() ?
+Sounds to me that the latter can be split to a prerequisite patch.
+
+> As IIR_NO_INT check in serial8250_handle_irq() was outside of port's
+> lock, it has to be done already in dw8250_handle_irq().
+> 
+> DW UART can, in addition to IIR_NO_INT, report BUSY_DETECT (0x7) which
+> collided with the IIR_NO_INT (0x1) check in serial8250_handle_irq()
+> (because & is used instead of ==) meaning that no other work is done by
+> serial8250_handle_irq() during an BUSY_DETECT interrupt.
+> 
+> This allows reorganizing code in dw8250_handle_irq() to do both
+> IIR_NO_INT and BUSY_DETECT handling right at the start simplifying
+> the logic.
 
 ...
 
-> +/*
-> + * With BUSY, LCR writes can be very expensive (IRQ + complex retry logic).
-> + * If the write would not change the value of the LCR register, skip write
+> +#include <linux/bitfield.h>
+> +#include <linux/bits.h>
 
-would --> does
++ cleanup.h
 
-skip write --> skip it
+>  #include <linux/clk.h>
+>  #include <linux/delay.h>
+>  #include <linux/device.h>
 
-> + * entirely.
-> + */
+...
+
+> --- a/drivers/tty/serial/8250/8250_port.c
+> +++ b/drivers/tty/serial/8250/8250_port.c
+
+>  #include <linux/ioport.h>
+>  #include <linux/init.h>
+>  #include <linux/irq.h>
+
+> +#include <linux/lockdep.h>
+
+I would still keep more order.
+
+>  #include <linux/console.h>
+>  #include <linux/gpio/consumer.h>
+
+Giving the context we have, the better place for a new inclusion is somewhere
+here.
+
+>  #include <linux/sysrq.h>
+
+(Also perhaps sorting headers in a separate patch helps with finding better
+ places for the future inclusions?)
+
+...
+
+> +EXPORT_SYMBOL_GPL(serial8250_handle_irq_locked);
+
+Wondering if we can start exporting with a namespace...
 
 -- 
 With Best Regards,
