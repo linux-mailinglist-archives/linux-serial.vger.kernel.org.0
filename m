@@ -1,207 +1,175 @@
-Return-Path: <linux-serial+bounces-12527-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12528-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id uHBRCFc3d2nhdAEAu9opvQ
-	(envelope-from <linux-serial+bounces-12527-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 10:43:51 +0100
+	id UHeNN0tAd2mMdQEAu9opvQ
+	(envelope-from <linux-serial+bounces-12528-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 11:22:03 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FC1386247
-	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 10:43:50 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40FA886C09
+	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 11:22:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id CDDB130015BA
-	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 09:43:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2EEF7302E430
+	for <lists+linux-serial@lfdr.de>; Mon, 26 Jan 2026 10:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED638329E7B;
-	Mon, 26 Jan 2026 09:43:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E4EE329E47;
+	Mon, 26 Jan 2026 10:20:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="EQoY7TkY"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="vmGqoAUM"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690CD314B87
-	for <linux-serial@vger.kernel.org>; Mon, 26 Jan 2026 09:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC7982C11F3;
+	Mon, 26 Jan 2026 10:20:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769420625; cv=none; b=KldAlY+KrVCrxX3Q9qjcXxmYh79iIhoQgwtPUBOVloXPFFxrZFJEkwhgl1HhPfZTdyXovHmSc3t1V1Zb09h2+OtoEUdJHGbsky66lWHyFJmlpWLj9CMXT9iq2ELNpWyOLCcZ+xSkrsVplDdTCYk/jhhQWUMN65fOnyLw6FWQG7o=
+	t=1769422824; cv=none; b=FPKWsbLgW35kef1uCmfEAOIOPMLtfth54dkE0E+7UqWY68YhXOVzSvX51hIfJI1NYehqLX7uUCDi15hyGgzFI5+XjrINXZcBTNeIvWcjaRBLyLe1WeUloMlYJmAaxMqirwbnaRE8XtM+TTJZzHQp4DHfbOz8zqWboYI2FYOpKR4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769420625; c=relaxed/simple;
-	bh=iF0jtrJlUrNHpWgOjOkf75eJXLoQ3RvCmYCuoX+XzEQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VrCxV7/DXWcMhCzxNglBq3+LrOFzf9xVWnlPcLSAljmd15PwYGZB02bewE7isnidasRi6IwEHpeTbL3zXdeqOgYmQ0HU0X8tDLFHcj6yRRkO3vM8Vqwo8L1Nzq0VcCkFdBnrac7u5JCEtPo3RW511qarWlO4urh9CeOWSWOeygY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=EQoY7TkY; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769420623;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=2RIapV1jNyyZRIdn1KJNs6Oqxeyn0EIFbQQYGbVwf34=;
-	b=EQoY7TkYymGN96fReH0jSVx+AAcw6ztjJq1A6KL1uDzeT6QVR9Tq83boTTCVQkWmLVmPRM
-	NcjuDOUpHPKhLk5h88zIi9E+GUZ2d7jvTCToR7uptrSJyT6gLwu/7f0brvr0MBJMQcpl7s
-	ju152vH4chc4x6SvUSMiJ39B5ZJmDgc=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-74-bE_sXz5rO72E9cDi9W88zg-1; Mon, 26 Jan 2026 04:43:42 -0500
-X-MC-Unique: bE_sXz5rO72E9cDi9W88zg-1
-X-Mimecast-MFC-AGG-ID: bE_sXz5rO72E9cDi9W88zg_1769420621
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-430fd96b2f5so4582439f8f.3
-        for <linux-serial@vger.kernel.org>; Mon, 26 Jan 2026 01:43:42 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769420621; x=1770025421;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2RIapV1jNyyZRIdn1KJNs6Oqxeyn0EIFbQQYGbVwf34=;
-        b=gkOAqOwf135tIt6PcII4SqmbhVA6Kh8MJhrYcSgF7HWcifyHOobJJiGeoMG7DINqg7
-         4l0SGhvxCq10Tl1QClbMqDDHEpN8q67TqXabay9ewv2jffZrZz3IMuw0Z6cPnjhjGICF
-         c7s0ApoA4LEa7x/4hkdfMJTreRkGnDfUQyiJIe/Qnj6QYOomPprFJ2Th83kDhswixJlt
-         OdS2yZigVtBixr+Ag6DrbdeHojuunhRZRonAZIeYTOIb/HQ2IR19OBGmyrKscHMHvUQe
-         AMQ4nP9GxEr25wt/RzgkVMG/dOpCjrZCdVotXBjSEu2COcXBkpeKOHqhX4/eBcMFXOy0
-         ERSg==
-X-Forwarded-Encrypted: i=1; AJvYcCXikNbvH6xaTN0r4J7t8pV6qMrLa7bAO/vp4wnOGoezj7MC665bzPFpLLMVKh9FxDWT4BhRNWh/bSKJP9w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAewtDqHOkp+it2luFHchKFonpdeho6RwHMF6Sx6795eCWnZHt
-	wb4DyS+mDg4jHHgfK8dCB71oMvdic7CPZMlWuzzTFZOHmL0L2Y+Lz9yxGbMUptuFBVFKApCFuCz
-	bfCEXFELNIBJSuTyJunI/ke8aH4iPfOoaUFOOJuKNYiZTpnlNbzwmEn+D+UFHiPao8Q==
-X-Gm-Gg: AZuq6aICM7sM+TUfRWExn2ZdGv9yttj0HWeIg/47xtVESWphiX+1ucpTDCmBWBrRw3J
-	7FO+m37c2f/bTbes9Pr0SROls+N8ZH3dl+Zn5eGPaTm/09YqyRY6PZHMwBTSpL9FUaZtk+PWy5i
-	4F0GSZLx/LDEiJIjTgO3dYxI0eHT6qKxbwwnKUECoM4IghtntxebEPceW/IJX9PXP3Zag3+IWYe
-	LmipLjtWwp/kZ5wyS/8lPQtv3jCkAAT3UGkSZeRDj0nwRh1q0PrIWA84CvPqpzuqjHxA1KkglS+
-	/clLXyOIPbecWIdpwrofmAVuTOARR/Mhnjy4IZaISADuEvbqPfUJthC4YVBfXrty0v8Z+96+WXa
-	psqbEaM19Sqdn5kL2hB02uq/2DSDJfAtvCHXYlN6lcBVjnhE7Qw==
-X-Received: by 2002:a05:6000:40dd:b0:42f:bc61:d1bd with SMTP id ffacd0b85a97d-435ca138f4cmr6111227f8f.45.1769420620893;
-        Mon, 26 Jan 2026 01:43:40 -0800 (PST)
-X-Received: by 2002:a05:6000:40dd:b0:42f:bc61:d1bd with SMTP id ffacd0b85a97d-435ca138f4cmr6111188f8f.45.1769420620482;
-        Mon, 26 Jan 2026 01:43:40 -0800 (PST)
-Received: from ?IPV6:2a01:e0a:c:37e0:8998:e0cf:68cc:1b62? ([2a01:e0a:c:37e0:8998:e0cf:68cc:1b62])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435b1f7b4d8sm27537474f8f.38.2026.01.26.01.43.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 26 Jan 2026 01:43:40 -0800 (PST)
-Message-ID: <48be84fb-bee4-4a22-bde4-0d0c78282f80@redhat.com>
-Date: Mon, 26 Jan 2026 10:43:35 +0100
+	s=arc-20240116; t=1769422824; c=relaxed/simple;
+	bh=3Qjxcn0PwBkzPv88WTwPwBNc0qOvf7TEIuRjsKBYNRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ORX46ANqTq/GlqWn1kL3tZTpu3cMt/McI3AijDhOtongoMj1sHNw8tNvJw0uM30KMem4zMfCDx1aKCp5LTaBbQE7mntjzoKJaffXRUkKFgidwbt5hdemXOH7I7kLw4yiKv9eU9hi1ahWWpdXA+nmS0TqL7Ju2tNiabpgjotSTFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=vmGqoAUM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1588CC116C6;
+	Mon, 26 Jan 2026 10:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1769422824;
+	bh=3Qjxcn0PwBkzPv88WTwPwBNc0qOvf7TEIuRjsKBYNRI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=vmGqoAUM7J7Xc7xHnIDb9CpAfNik3zuoxIYKkxcFoa2yaIm+Q/55yv8s60lmdulG7
+	 BW+SR6KZ0gSQJjtRrAUZLAx4AlNaT3rTZUsG+snsc2Q+886V7De828xLbPbtnUUGil
+	 qD3E6P4xn3U7IlMspkoWBwCXXtTzwSLEEGy4PJkg=
+Date: Mon, 26 Jan 2026 11:20:21 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Jocelyn Falempe <jfalempe@redhat.com>
+Cc: Jiri Slaby <jirislaby@kernel.org>, Nicolas Pitre <npitre@baylibre.com>,
+	Calixte Pernot <calixte.pernot@grenoble-inp.org>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH] vt: Add enable module parameter
+Message-ID: <2026012648-vantage-mummified-2a43@gregkh>
+References: <20260126092234.713465-1-jfalempe@redhat.com>
+ <2026012613-cotton-jellied-b67a@gregkh>
+ <48be84fb-bee4-4a22-bde4-0d0c78282f80@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] vt: Add enable module parameter
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jiri Slaby <jirislaby@kernel.org>, Nicolas Pitre <npitre@baylibre.com>,
- Calixte Pernot <calixte.pernot@grenoble-inp.org>,
- linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-References: <20260126092234.713465-1-jfalempe@redhat.com>
- <2026012613-cotton-jellied-b67a@gregkh>
-From: Jocelyn Falempe <jfalempe@redhat.com>
-In-Reply-To: <2026012613-cotton-jellied-b67a@gregkh>
-X-Mimecast-Spam-Score: 0
-X-Mimecast-MFC-PROC-ID: AmRKsa4_D4s6ixLvQNBQG9af2eeao75RCRObym0zvoM_1769420621
-X-Mimecast-Originator: redhat.com
-Content-Language: en-US, fr
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <48be84fb-bee4-4a22-bde4-0d0c78282f80@redhat.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [2.34 / 15.00];
+	MID_END_EQ_FROM_USER_PART(4.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719];
+	DMARC_POLICY_ALLOW(-0.50)[linuxfoundation.org,none];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[linuxfoundation.org:s=korg];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TO_DN_SOME(0.00)[];
-	URIBL_MULTI_FAIL(0.00)[neocities.org:server fail,sin.lore.kernel.org:server fail];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-12527-lists,linux-serial=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-12528-lists,linux-serial=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[4];
+	TO_DN_SOME(0.00)[];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[6];
-	RCVD_COUNT_FIVE(0.00)[6];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jfalempe@redhat.com,linux-serial@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	MISSING_XM_UA(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[gregkh@linuxfoundation.org,linux-serial@vger.kernel.org];
+	DKIM_TRACE(0.00)[linuxfoundation.org:+];
 	TAGGED_RCPT(0.00)[linux-serial];
-	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,neocities.org:url]
-X-Rspamd-Queue-Id: 3FC1386247
+	RCPT_COUNT_FIVE(0.00)[6];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,neocities.org:url,linuxfoundation.org:dkim]
+X-Rspamd-Queue-Id: 40FA886C09
 X-Rspamd-Action: no action
 
-On 26/01/2026 10:33, Greg Kroah-Hartman wrote:
-> On Mon, Jan 26, 2026 at 10:21:50AM +0100, Jocelyn Falempe wrote:
->> This allows to build the kernel with CONFIG_VT enabled, and choose
->> on the kernel command line to enable it or not.
+On Mon, Jan 26, 2026 at 10:43:35AM +0100, Jocelyn Falempe wrote:
+> On 26/01/2026 10:33, Greg Kroah-Hartman wrote:
+> > On Mon, Jan 26, 2026 at 10:21:50AM +0100, Jocelyn Falempe wrote:
+> > > This allows to build the kernel with CONFIG_VT enabled, and choose
+> > > on the kernel command line to enable it or not.
+> > 
+> > This says what is happening, but not why?
+> > 
+> > > Add vt.enable=1 to force enable, or vt.enable=0 to force disable.
+> > 
+> > Why are we using a 1990's technology for a new feature?  What is this
+> > going to allow to have happen?  Who needs/wants this?  Who will use it?
+> > For what?
 > 
-> This says what is happening, but not why?
+> The goal is to ease the transition to disable CONFIG_VT.
 > 
->> Add vt.enable=1 to force enable, or vt.enable=0 to force disable.
+> So if this is merged, you can boot without VT on any Linux distribution,
+> without rebuilding the kernel.
+
+But that's a distro-specific thing, the distro should be enabling or
+disabling the option as it needs, it should not be a user-configurable
+boot-time selection option as userspace depends entirely on this either
+being there or not.  Why would you have a kernel with both options but
+userspace without that?
+
+> This option will also allow a distribution to disable VT by default, but
+> users that really wants this can enable it on the kernel command line,
+> without rebuilding the kernel.
+
+Why would a user want that?  If a user really wants it enabled, why
+would userspace even still work and why would they want to not rebuild
+the kernel?
+
+> It will also avoid hacky solution in userspace like this:
+> https://overhead.neocities.org/blog/systemd-logind-seat/#very-hacky-solutions
+
+Surely that can't be the only way, why can't userspace just handle this
+"properly" if it wants to?
+
+> > > Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
+> > > ---
+> > >   drivers/tty/Kconfig | 13 +++++++++++++
+> > >   drivers/tty/vt/vt.c |  5 +++++
+> > >   2 files changed, 18 insertions(+)
+> > > 
+> > > diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
+> > > index 149f3d53b7608..2b94c2710687a 100644
+> > > --- a/drivers/tty/Kconfig
+> > > +++ b/drivers/tty/Kconfig
+> > > @@ -41,6 +41,19 @@ config VT
+> > >   	  If unsure, say Y, or else you won't be able to do much with your new
+> > >   	  shiny Linux system :-)
+> > > +config VT_ENABLE
+> > > +	depends on VT
+> > > +	default y
+> > > +	bool "enable VT terminal" if EXPERT
+> > 
+> > So no one will ever really use this config option?
+> > 
+> > And you are doing 2 things in this patch, not just one, unlike what the
+> > changelog said :(
 > 
-> Why are we using a 1990's technology for a new feature?  What is this
-> going to allow to have happen?  Who needs/wants this?  Who will use it?
-> For what?
+> I can split that in two if you prefer.
 
-The goal is to ease the transition to disable CONFIG_VT.
+I'm objecting to the patch doing something other than what the changelog
+describes, which as you know is not a good thing.
 
-So if this is merged, you can boot without VT on any Linux distribution, 
-without rebuilding the kernel.
+> Adding a module parameter, and adding a Kconfig option, to choose the
+> default for this module parameter.
 
-This option will also allow a distribution to disable VT by default, but 
-users that really wants this can enable it on the kernel command line, 
-without rebuilding the kernel.
+I really don't like adding new module parameters that we are going to
+have to now support for forever.  Why not just rely on the config option
+being there or not as-is?  That's why we allowed it to be turned off at
+all, because userspace was going to be moved to not need it anymore.
+Why would we want to support "both" at the same time in the kernel?
 
-It will also avoid hacky solution in userspace like this:
-https://overhead.neocities.org/blog/systemd-logind-seat/#very-hacky-solutions
+thanks,
 
-
-> 
->> Signed-off-by: Jocelyn Falempe <jfalempe@redhat.com>
->> ---
->>   drivers/tty/Kconfig | 13 +++++++++++++
->>   drivers/tty/vt/vt.c |  5 +++++
->>   2 files changed, 18 insertions(+)
->>
->> diff --git a/drivers/tty/Kconfig b/drivers/tty/Kconfig
->> index 149f3d53b7608..2b94c2710687a 100644
->> --- a/drivers/tty/Kconfig
->> +++ b/drivers/tty/Kconfig
->> @@ -41,6 +41,19 @@ config VT
->>   	  If unsure, say Y, or else you won't be able to do much with your new
->>   	  shiny Linux system :-)
->>   
->> +config VT_ENABLE
->> +	depends on VT
->> +	default y
->> +	bool "enable VT terminal" if EXPERT
-> 
-> So no one will ever really use this config option?
-> 
-> And you are doing 2 things in this patch, not just one, unlike what the
-> changelog said :(
-
-I can split that in two if you prefer.
-
-Adding a module parameter, and adding a Kconfig option, to choose the 
-default for this module parameter.
-
-> 
-> thanks,
-> 
-> greg k-h
-> 
-
--- 
-
-Jocelyn
-
+greg k-h
 
