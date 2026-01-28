@@ -1,194 +1,220 @@
-Return-Path: <linux-serial+bounces-12560-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12562-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OCnkD4pCeWmAwAEAu9opvQ
-	(envelope-from <linux-serial+bounces-12560-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Tue, 27 Jan 2026 23:56:10 +0100
+	id gHp9KKJZeWlnwgEAu9opvQ
+	(envelope-from <linux-serial+bounces-12562-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 01:34:42 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC1D49B462
-	for <lists+linux-serial@lfdr.de>; Tue, 27 Jan 2026 23:56:09 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31BEB9BAD9
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 01:34:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 36358300BB91
-	for <lists+linux-serial@lfdr.de>; Tue, 27 Jan 2026 22:56:09 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id AEB7D300D5FB
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 00:34:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AFF2D7DE9;
-	Tue, 27 Jan 2026 22:56:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="3f/m2CtP"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 286852144D7;
+	Wed, 28 Jan 2026 00:34:33 +0000 (UTC)
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
+Received: from mail-ot1-f80.google.com (mail-ot1-f80.google.com [209.85.210.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 452DF1D9346
-	for <linux-serial@vger.kernel.org>; Tue, 27 Jan 2026 22:56:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ABD71F5846
+	for <linux-serial@vger.kernel.org>; Wed, 28 Jan 2026 00:34:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.80
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769554566; cv=none; b=G0gbOrSBcUEFVMT0JGM72EWYvuqDMhoQbpxPb+gGRcO+4LTxaHg2X6KQnSrQFqNdCaCXIqQHJivmnguW+yHh0Cbcv2X3W1gp8jGobZiaeqrrAvTuu0pFKg4dc50IEIB5pEjmAVwuPZpIyq+Dx/aQ4d42XJ7QzeYolE7Orqug2Vo=
+	t=1769560473; cv=none; b=LdasEw/t9lFr6b1Z+9a2sNTdVDCN6OauvwMnnxETkTJOaMOjXBJZsRotNbjG84I/vZ/9PigcVettQGYEYbkiaR8E/hb4e9ZyReW+vCBcslkpHeSMqUmkUy1LeP2vnSznvnj38XXC2qThgJRkJeTTTQFpZQhRwF8GgD5M6sbZiZQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769554566; c=relaxed/simple;
-	bh=BIqtV71O4b2nNBJ39pBWJei81bi2HK91qUvVgENdbQ0=;
-	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=iFA/R3lutDdwEQ42rZUACf0RM1RAlsGZwqbbFKZJDC4kX43rZK+WxfziUQ1qu43IPElSY5K9jehjVPYt7zDACjpOzI25BMxnWY7x88mrF4MRPBb/FgSM3ckLAx+0t3PdCBUOA6JEXA5CmvirI8acnRsrYi+iAoC3KBBi5kF3GUs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=3f/m2CtP; arc=none smtp.client-ip=209.85.222.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-8c5349ba802so632197685a.1
-        for <linux-serial@vger.kernel.org>; Tue, 27 Jan 2026 14:56:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1769554563; x=1770159363; darn=vger.kernel.org;
-        h=mime-version:message-id:subject:cc:to:from:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=be7rCfgGfMyw8VXlN7Q+qrUYUoCH9F4cDfmNDHeRxCI=;
-        b=3f/m2CtPUNVolk2N69gEc7bviJ1m+nKBFeRmpYkkWYlWhrv8k/yqXOHeV6BvnPkSok
-         aTl8yRpeifm4BgFvLWm91Bmax9M3zxi1xTKRUQkrNEgxCUo4rxv5XbPh8I9zS4lnQdY4
-         U7m6EGV5wnHVLON91mq+kSA8KV3GWErvZu9cxnQyejMtrkB6BR2HsFpP/ufMBqhKSvvQ
-         qfew+HXummM77l3xqfGaicL/sNE2NQ57b4wV4jxkxhYob7tviZJvDkgsHxNpUm5g3FrB
-         IU3mYARufjGqRNLw7XHlP0G6keHF9HYMF7ZYoW+IG3Aj6Lrall/dsefb8CUafgsoN8wV
-         qZuQ==
+	s=arc-20240116; t=1769560473; c=relaxed/simple;
+	bh=GoA4nzoyoCbL/8U+wIMHhL4VObsnCRbfUht+W7K5Yfw=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=XUNj9txYZzwtsKhuLp/CoTcjcQlaqYYAeUkl/HAYWjInL1DxrgAEpEI3llmNf+F64o06bNVnnjt76LRkaMeBd1/ecAJSXS4L/1vW3gOSgMHIZsCID0+OZuwPLxrztk8wrX/d2dfk6ZkIi/X9VELDt8LW9sabpRCkUQWrnENOXWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.210.80
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-ot1-f80.google.com with SMTP id 46e09a7af769-7cfd0f67288so15027045a34.3
+        for <linux-serial@vger.kernel.org>; Tue, 27 Jan 2026 16:34:31 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769554563; x=1770159363;
-        h=mime-version:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=be7rCfgGfMyw8VXlN7Q+qrUYUoCH9F4cDfmNDHeRxCI=;
-        b=qlk/MkOUC5ma6AK32UBd+/w9IpWsodPdYGohTrTP8hnWTlFvCG0JhWPbUGGBu1FROj
-         p+Zmn2SIaW/lJ2x2u1ArK0zkfobiT/F0xeg99Mp57DFqxGpKsc6LlK+kSqx0lEb3kvN+
-         C8JP2QZ35Z0xT1Lhh2alPTytvP7CfttZjuvsv+I5vMcjk5LZL0od8rFx5KkIC6l/p7yk
-         iL6evVVIhlvpqdyR2Xn2nWvTPeqAYoytLbXc7jer5idr0o57DTP1B70lqbL6XhVeezMA
-         5aj5HOAmPo262Sn3Sm9QbJA7cdlMFTosAjtihmcxrbXhi2x/mpYouQcKB2BuL/mOI7Gq
-         kHqA==
-X-Forwarded-Encrypted: i=1; AJvYcCUuowEvDDQpT6yrbLHIXMYgpxPzKfYHHH2aKKdd2lVl3yOHr2gzbRkzeQAzaozPd00YCYu8t5/FzH0NTPg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUN5GIOqhBa2HzISnBw0qs7FsamVVp8EZbqZEHTfENtToofGRX
-	NglxiqDrhbS5L+DoUu1RxWgK5CdL38psGUpRpihmccZH2ikrUGBogIiGgR1g6awKPt3G/Zx7my6
-	WNRpamJ8=
-X-Gm-Gg: AZuq6aLTKSzNh/tcYFF67XOdwxO5dBtdqbwZhx7H7O07NRra/PYzhIoulk+t6o92sxB
-	4IyUCn75LO3wY6BPnt6tCPLmaa6KmpxAbz4zTuPDhxOjNbY+uaP4/maqGDVJ/paEHoPljivztDZ
-	uaixmmqaCVjr3K+uz9yxSp7lw9QEhE7EEOXHInjF/kdLFjWlBvDpIfmLP6zBPGJiOd1R82FjKsh
-	LwWrntF6i+WfkiYTYgG9xMPXeiVtFK8oAQhXnLJBHpkQNcPVeI8btA/vK7wS/qovnZA/GlRe8/P
-	lCuf6oXtRxTjnwNQz7A85t8KXqQbEAFKakoINVTWWHBqE2lBaq7HhfPkZHk6x7oWAc7XLAoWEnU
-	rDGK1o+WuAnt+wEXLXwz10RZDjjZzkFZiSQyoEknaOdwoRjs14CuOAeyg1JEbG2Hz7iJIe2X73n
-	zEXejUCzeOH+0ecTUQEmuUAkgyouEI+zVuleRPwfcfFOVwcxxWNog=
-X-Received: by 2002:a05:620a:4624:b0:8b2:dcde:b670 with SMTP id af79cd13be357-8c70b918e63mr420739285a.70.1769554563190;
-        Tue, 27 Jan 2026 14:56:03 -0800 (PST)
-Received: from xanadu (modemcable048.4-80-70.mc.videotron.ca. [70.80.4.48])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c711d2a2d4sm64282485a.32.2026.01.27.14.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 27 Jan 2026 14:56:02 -0800 (PST)
-Date: Tue, 27 Jan 2026 17:56:01 -0500 (EST)
-From: Nicolas Pitre <npitre@baylibre.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Jiri Slaby <jirislaby@kernel.org>, 
-    Calixte Pernot <calixte.pernot@grenoble-inp.org>
-cc: linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: [PATCH] vt: save/restore unicode screen buffer for alternate
- screen
-Message-ID: <5o2p6qp3-91pq-0p17-or02-1oors4417ns7@onlyvoer.pbz>
+        d=1e100.net; s=20230601; t=1769560470; x=1770165270;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=GMXfSgj7YpSdbxLnPiy6dtBZ28PSOIJzvqpGQtivY5I=;
+        b=pUXuUWdIdFQugo9meVTuFzapXSPZU91tDoz0mZlH6K35rejV2McyEZA+ei9/yykz09
+         U/kQbnDbqb+vCykyst4d11mjECeOqWUCvjzbzWWp6Gk6qOCbEDyqaFMUfQgqg3cwE+5E
+         XTL0m1UJ0xag80bLOq3T+DJ4yzY+NBIiIcKgrxihPVklB7ymmKUOEJS3qaqJqyt6UJFr
+         i3YMx4IXZchIxjpdBDd04z72P40pd3msm0vk1N78E1EgpUfPyGQ2gp7E3yOJIde7aReG
+         iIZXzhj2JfYC560AVGkoqdOmk12qWOJPjek/bV/TswqC/rMCUs62K5e8R+i9QO7b0WvE
+         yLhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWOhCP1rmSMs1yY5p7ku2gJ/tF3oo3G1nol7hqjBJ1lvvockXm16QWfcav/o447PzBo29mNTM21HAMYjWA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YygiT5Ucx8m2j7CdqEZRqALOAoFrQCP1H9qNg+fN+3xFq+COgTK
+	3fsHBf3HLjiZGiheDXZtzs1UL4TGxQzurLBGSdd6fZaLlGs5uC1Ol7R275fzC+WFONeFfATogm9
+	IRmUleNs1h8Wa7+GrG5XFDHWslzTdjZQNaDbmsHUxkG6BVciPuKvACsu8U78=
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-Received: by 2002:a05:6820:1c82:b0:65f:6601:b343 with SMTP id
+ 006d021491bc7-662f20b0fc1mr2315719eaf.48.1769560470296; Tue, 27 Jan 2026
+ 16:34:30 -0800 (PST)
+Date: Tue, 27 Jan 2026 16:34:30 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <69795996.050a0220.c9109.002a.GAE@google.com>
+Subject: [syzbot] [serial?] general protection fault in k_pad
+From: syzbot <syzbot+4b914439b1ce3f6b1baf@syzkaller.appspotmail.com>
+To: gregkh@linuxfoundation.org, jirislaby@kernel.org, 
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.36 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	URI_HIDDEN_PATH(1.00)[https://syzkaller.appspot.com/x/.config?x=d51c584a7396ddf1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
+	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-12560-lists,linux-serial=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	DMARC_NA(0.00)[baylibre.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[npitre@baylibre.com,linux-serial@vger.kernel.org];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-serial];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-12562-lists,linux-serial=lfdr.de,4b914439b1ce3f6b1baf];
+	RCVD_TLS_LAST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	SUBJECT_HAS_QUESTION(0.00)[];
+	REDIRECTOR_URL(0.00)[goo.gl];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-serial@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	TO_DN_NONE(0.00)[];
+	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,baylibre.com:email,onlyvoer.pbz:mid]
-X-Rspamd-Queue-Id: CC1D49B462
+	TAGGED_RCPT(0.00)[linux-serial];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[appspotmail.com:email,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,goo.gl:url,storage.googleapis.com:url]
+X-Rspamd-Queue-Id: 31BEB9BAD9
 X-Rspamd-Action: no action
 
-The alternate screen support added by commit 23743ba64709 ("vt: add
-support for smput/rmput escape codes") only saves and restores the
-regular screen buffer (vc_origin), but completely ignores the corresponding
-unicode screen buffer (vc_uni_lines) creating a messed-up display.
+Hello,
 
-Add vc_saved_uni_lines to save the unicode screen buffer when entering
-the alternate screen, and restore it when leaving. Also ensure proper
-cleanup in reset_terminal() and vc_deallocate().
+syzbot found the following issue on:
 
-Fixes: 23743ba64709 ("vt: add support for smput/rmput escape codes")
-Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
+HEAD commit:    615aad0f61e0 Add linux-next specific files for 20260126
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=1504e5ac580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d51c584a7396ddf1
+dashboard link: https://syzkaller.appspot.com/bug?extid=4b914439b1ce3f6b1baf
+compiler:       Debian clang version 21.1.8 (++20251221033036+2078da43e25a-1~exp1~20251221153213.50), Debian LLD 21.1.8
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11b2198a580000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15947d2a580000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/5318e5f027be/disk-615aad0f.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/d165e561fa49/vmlinux-615aad0f.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/fb0e01c90aa5/bzImage-615aad0f.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+4b914439b1ce3f6b1baf@syzkaller.appspotmail.com
+
+Oops: general protection fault, probably for non-canonical address 0xdffffc0000000038: 0000 [#1] SMP KASAN PTI
+KASAN: null-ptr-deref in range [0x00000000000001c0-0x00000000000001c7]
+CPU: 1 UID: 0 PID: 6021 Comm: syz.0.17 Not tainted syzkaller #0 PREEMPT(full) 
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/13/2026
+RIP: 0010:__queue_work+0xa2/0xf90 kernel/workqueue.c:2269
+Code: 11 31 ff 89 ee e8 4e f4 37 00 85 ed 0f 85 ef 0c 00 00 e8 01 f0 37 00 4d 8d b7 c0 01 00 00 4c 89 f0 48 c1 e8 03 48 89 44 24 28 <42> 0f b6 04 20 84 c0 0f 85 22 0d 00 00 4c 89 34 24 41 8b 2e 89 ee
+RSP: 0018:ffffc900030174d8 EFLAGS: 00010002
+RAX: 0000000000000038 RBX: 0000000000000008 RCX: ffff88802ea33c80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffff88813ff72017 R09: 1ffff11027fee402
+R10: dffffc0000000000 R11: ffffed1027fee403 R12: dffffc0000000000
+R13: ffff88813ff72010 R14: 00000000000001c0 R15: 0000000000000000
+FS:  000055558b419500(0000) GS:ffff8881253b4000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30a63fff CR3: 000000003698e000 CR4: 00000000003526f0
+Call Trace:
+ <TASK>
+ queue_work_on+0x106/0x1d0 kernel/workqueue.c:2405
+ put_queue drivers/tty/vt/keyboard.c:328 [inline]
+ k_pad+0x4c4/0xa90 drivers/tty/vt/keyboard.c:832
+ kbd_keycode drivers/tty/vt/keyboard.c:1497 [inline]
+ kbd_event+0x2ec1/0x40d0 drivers/tty/vt/keyboard.c:1515
+ input_handle_events_default+0xd4/0x1a0 drivers/input/input.c:2541
+ input_pass_values+0x288/0x890 drivers/input/input.c:128
+ input_event_dispose+0x330/0x6b0 drivers/input/input.c:342
+ input_inject_event+0x1dd/0x340 drivers/input/input.c:424
+ evdev_write+0x325/0x4c0 drivers/input/evdev.c:528
+ vfs_write+0x29a/0xb90 fs/read_write.c:686
+ ksys_write+0x150/0x270 fs/read_write.c:740
+ do_syscall_x64 arch/x86/entry/syscall_64.c:63 [inline]
+ do_syscall_64+0xe2/0xf80 arch/x86/entry/syscall_64.c:94
+ entry_SYSCALL_64_after_hwframe+0x77/0x7f
+RIP: 0033:0x7fcc5759aeb9
+Code: ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 e8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc141a1f98 EFLAGS: 00000246 ORIG_RAX: 0000000000000001
+RAX: ffffffffffffffda RBX: 00007fcc57815fa0 RCX: 00007fcc5759aeb9
+RDX: 0000000000002250 RSI: 0000200000000040 RDI: 0000000000000003
+RBP: 00007fcc57608c1f R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007fcc57815fac R14: 00007fcc57815fa0 R15: 00007fcc57815fa0
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__queue_work+0xa2/0xf90 kernel/workqueue.c:2269
+Code: 11 31 ff 89 ee e8 4e f4 37 00 85 ed 0f 85 ef 0c 00 00 e8 01 f0 37 00 4d 8d b7 c0 01 00 00 4c 89 f0 48 c1 e8 03 48 89 44 24 28 <42> 0f b6 04 20 84 c0 0f 85 22 0d 00 00 4c 89 34 24 41 8b 2e 89 ee
+RSP: 0018:ffffc900030174d8 EFLAGS: 00010002
+RAX: 0000000000000038 RBX: 0000000000000008 RCX: ffff88802ea33c80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: ffff88813ff72017 R09: 1ffff11027fee402
+R10: dffffc0000000000 R11: ffffed1027fee403 R12: dffffc0000000000
+R13: ffff88813ff72010 R14: 00000000000001c0 R15: 0000000000000000
+FS:  000055558b419500(0000) GS:ffff8881253b4000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000001b30a63fff CR3: 000000003698e000 CR4: 00000000003526f0
+----------------
+Code disassembly (best guess), 1 bytes skipped:
+   0:	31 ff                	xor    %edi,%edi
+   2:	89 ee                	mov    %ebp,%esi
+   4:	e8 4e f4 37 00       	call   0x37f457
+   9:	85 ed                	test   %ebp,%ebp
+   b:	0f 85 ef 0c 00 00    	jne    0xd00
+  11:	e8 01 f0 37 00       	call   0x37f017
+  16:	4d 8d b7 c0 01 00 00 	lea    0x1c0(%r15),%r14
+  1d:	4c 89 f0             	mov    %r14,%rax
+  20:	48 c1 e8 03          	shr    $0x3,%rax
+  24:	48 89 44 24 28       	mov    %rax,0x28(%rsp)
+* 29:	42 0f b6 04 20       	movzbl (%rax,%r12,1),%eax <-- trapping instruction
+  2e:	84 c0                	test   %al,%al
+  30:	0f 85 22 0d 00 00    	jne    0xd58
+  36:	4c 89 34 24          	mov    %r14,(%rsp)
+  3a:	41 8b 2e             	mov    (%r14),%ebp
+  3d:	89 ee                	mov    %ebp,%esi
+
+
 ---
- drivers/tty/vt/vt.c            | 8 ++++++++
- include/linux/console_struct.h | 1 +
- 2 files changed, 9 insertions(+)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/drivers/tty/vt/vt.c b/drivers/tty/vt/vt.c
-index 59b4b5e126ba..83a285577708 100644
---- a/drivers/tty/vt/vt.c
-+++ b/drivers/tty/vt/vt.c
-@@ -1345,6 +1345,8 @@ struct vc_data *vc_deallocate(unsigned int currcons)
- 			kfree(vc->vc_saved_screen);
- 			vc->vc_saved_screen = NULL;
- 		}
-+		vc_uniscr_free(vc->vc_saved_uni_lines);
-+		vc->vc_saved_uni_lines = NULL;
- 	}
- 	return vc;
- }
-@@ -1890,6 +1892,8 @@ static void enter_alt_screen(struct vc_data *vc)
- 	vc->vc_saved_screen = kmemdup((u16 *)vc->vc_origin, size, GFP_KERNEL);
- 	if (vc->vc_saved_screen == NULL)
- 		return;
-+	vc->vc_saved_uni_lines = vc->vc_uni_lines;
-+	vc->vc_uni_lines = NULL;
- 	vc->vc_saved_rows = vc->vc_rows;
- 	vc->vc_saved_cols = vc->vc_cols;
- 	save_cur(vc);
-@@ -1911,6 +1915,8 @@ static void leave_alt_screen(struct vc_data *vc)
- 		dest = ((u16 *)vc->vc_origin) + r * vc->vc_cols;
- 		memcpy(dest, src, 2 * cols);
- 	}
-+	vc_uniscr_set(vc, vc->vc_saved_uni_lines);
-+	vc->vc_saved_uni_lines = NULL;
- 	restore_cur(vc);
- 	/* Update the entire screen */
- 	if (con_should_update(vc))
-@@ -2233,6 +2239,8 @@ static void reset_terminal(struct vc_data *vc, int do_clear)
- 	if (vc->vc_saved_screen != NULL) {
- 		kfree(vc->vc_saved_screen);
- 		vc->vc_saved_screen = NULL;
-+		vc_uniscr_free(vc->vc_saved_uni_lines);
-+		vc->vc_saved_uni_lines = NULL;
- 		vc->vc_saved_rows = 0;
- 		vc->vc_saved_cols = 0;
- 	}
-diff --git a/include/linux/console_struct.h b/include/linux/console_struct.h
-index 13b35637bd5a..d5ca855116df 100644
---- a/include/linux/console_struct.h
-+++ b/include/linux/console_struct.h
-@@ -160,6 +160,7 @@ struct vc_data {
- 	struct uni_pagedict **uni_pagedict_loc; /* [!] Location of uni_pagedict variable for this console */
- 	u32 **vc_uni_lines;			/* unicode screen content */
- 	u16		*vc_saved_screen;
-+	u32		**vc_saved_uni_lines;
- 	unsigned int	vc_saved_cols;
- 	unsigned int	vc_saved_rows;
- 	/* additional information is in vt_kern.h */
--- 
-2.52.0
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the report is already addressed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to overwrite report's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the report is a duplicate of another one, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
 
