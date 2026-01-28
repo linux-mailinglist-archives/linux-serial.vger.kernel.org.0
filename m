@@ -1,320 +1,136 @@
-Return-Path: <linux-serial+bounces-12574-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12576-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id CDVIG1H1eWnT1AEAu9opvQ
-	(envelope-from <linux-serial+bounces-12574-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 12:38:57 +0100
+	id 8JmTMkULemk82AEAu9opvQ
+	(envelope-from <linux-serial+bounces-12576-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 14:12:37 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE22BA09D1
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 12:38:56 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8D9CA1DDE
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 14:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 14F25308BBF9
-	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 11:32:20 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 2944A3006006
+	for <lists+linux-serial@lfdr.de>; Wed, 28 Jan 2026 13:12:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F40D34E763;
-	Wed, 28 Jan 2026 11:30:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0D6E344DB3;
+	Wed, 28 Jan 2026 13:12:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FAOAH5D3"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SlL6Pkc3"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA452265CC2
-	for <linux-serial@vger.kernel.org>; Wed, 28 Jan 2026 11:30:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A29531355C;
+	Wed, 28 Jan 2026 13:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769599841; cv=none; b=tn02GNKJJJuGzQf1/BhGbxZxJntkCknPl3o52/6kf9BESYYJER6dbxkEUf7DpVO3Y6Tn/bCO68oZ/nzTaI11BDlaBegCXoBZIVMTVB54Z2k+6yFTofHKzXySihFeoRcb1pw6uwTBLZJbkdhr0R0aldQkqPpdTROSeOVB3IsVX2c=
+	t=1769605940; cv=none; b=U9Sv1CeUgwAZu3JfNe3GZgINUHRsiZtimoSNH9SoO4pPDWjaQoPx4oHjNE42ScHKIvz2BKZt8e7byCJP1DAFpYYBFkfTScbGXWGzn1GonhFjaRWQ0Lz+3zXv3YCNEd94HdssbF53KTNtjxdXpmrAayTQs8g6foWlwAmeQLNOydE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769599841; c=relaxed/simple;
-	bh=vI51rqj9mAoro40GtyeFpfzb1a+5P7sekhLbaM63ohs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oOZxBC+lBWkVIqmMq/WWQnLiMu7cdtPs8PNUUSv2Myd5KpES0fnuc94u8cGyzoQct87wZ7r8PHxs32+9CKBKiTvWE05i91j5hiIC9jarLT37t54J+eDrKjleWn02UtAKsScwEAT0h0bamWGUJOyl+dlzhkK1fGLRVsoksQsfrQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FAOAH5D3; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b872f1c31f1so922756866b.0
-        for <linux-serial@vger.kernel.org>; Wed, 28 Jan 2026 03:30:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769599837; x=1770204637; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=s2xe46S9OXtff4ArewDBe+L9gYByram4wS3kF9ZEniM=;
-        b=FAOAH5D3uuRRkhMejG7hEiwhl2lSIixw+htX5EObE1MNcD9z5cqxs3mg5M8u9Asrnx
-         QQrwjtHrX6AbgE1QtOBkyEJj0yjuV3YtgDaD9x8LksJ05DEO3TGtB8YRXVl51mYfdKyp
-         IyspFnn05DZXXZGNaueilJmpAUoNByVDc1D21F6MjwPfstfIRkrHr3LLwzvhpzD14aBM
-         fYuT7e8TRYknfPBDVzgs4dwcllwar1TdFjgpUV3iUs1pH8lNKEkr00dJej0zaPSYPz3C
-         iWZq+qU9Sk4CG6fS1odULBLpJZ9hDYov5RLeWNlAJAYkMNnJnnSNhzZJiMKBhXqe9pD0
-         ChOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769599837; x=1770204637;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=s2xe46S9OXtff4ArewDBe+L9gYByram4wS3kF9ZEniM=;
-        b=B8tAV3XP4de9PzeD4rGIT2oRI4CvtLNPmqIJbLtwIW9uPi5ft0myUlSobEGZzQYKlE
-         0nUWriIo++c7ZW25/TMcPH9H2DVkCyJnwc0oLw6GQfVnMyV1NzP2503iN1vfwZ0DlQzb
-         cIJSHaXoKJNlBCo3b4NXtiHE8LDlGqe1X2DN8or6HPPJ3S9iJJOlnFL+yhXGMTnJ1XpD
-         e569JYv7X9HaHHHMUNThyD4caBxC1VpASQQERTP5AyJjaAVg/hablCiEmw2TWZfNwfnH
-         n+lWttBgiqztC95/vjeseodjB9RG5HayKGs0UrJlnITFSpLNhkMJfrWyP4ipcHnuvrAJ
-         4Gbw==
-X-Forwarded-Encrypted: i=1; AJvYcCXmBUa6RY79lyUkY6UN7qx3kVg4DvlQ8mpOZNJwZypIBUZCEzNaKo2fQFTG3Q9NUnLSwi95RC1L5WnNmHM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyl8F8OVZZjhBPzq6vr0Ff78D44O0DqujpHjhATQFldKzlnGyKg
-	5oep1nqFeg4uz9CZNyUOqTJCrScFPImAj3iuME9xThMcDVs2Ol0xSfOV
-X-Gm-Gg: AZuq6aJ8Eke55QE63ZapaDHkuOMoD91P/knx+RIIX/yky3bc2HCF/mlRuwX8IXppwz5
-	vsIF4g21UHYapkyLDHBqu6RIo8y4f4Z8ffNvNDSEsyPyvkXXFpLvjes2Ib2f/1OhIKgJas5BSkY
-	oot6lTH/EFP73mEQK2erj/W8guu0AD2fsNN7oyM91cbQT4v+qNfyTgIzCzrZfzSnKM+MWwVDl+x
-	Sctmki7P2X6s0HkubH2mXaR7LdDPv+zSQ+e8gdW/+FGEd3ZIOAQLXSX1Y/6WRO685kedvPlf2fC
-	YLN9bwAUk63xTBE/EHVTxql0BUC6oZeDn6hBc3tKyrLut4UL7V3DlxagPvaA3UaWskAl6ecE2u+
-	oG06ezvN1xl7mS8bnbXlnwK6fg/3eF8MtTl4xe7qOBjocnQbYYNj0GamlMz4/+ngo6vbx5QdjTa
-	hgTQ6FRlMLFc/i6ofpjy0suPLChQ2399sLdAo=
-X-Received: by 2002:a17:907:7fa9:b0:b87:7cb9:c3dc with SMTP id a640c23a62f3a-b8dab2fda90mr336737466b.32.1769599836732;
-        Wed, 28 Jan 2026 03:30:36 -0800 (PST)
-Received: from localhost.localdomain ([2a00:23c4:a758:8a01:e29d:6e0e:72c1:d15d])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8dbf1baa42sm114400366b.46.2026.01.28.03.30.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 28 Jan 2026 03:30:36 -0800 (PST)
-From: Biju <biju.das.au@gmail.com>
-X-Google-Original-From: Biju <biju.das.jz@bp.renesas.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>
-Cc: Biju Das <biju.das.jz@bp.renesas.com>,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-clk@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Prabhakar Mahadev Lad <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Biju Das <biju.das.au@gmail.com>
-Subject: [PATCH v2 00/10] Add support for Renesas RZ/G3L SoC and SMARC-EVK platform
-Date: Wed, 28 Jan 2026 11:30:19 +0000
-Message-ID: <20260128113032.337231-1-biju.das.jz@bp.renesas.com>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1769605940; c=relaxed/simple;
+	bh=caMJj5MeXWu40BTtO1svNq6KPU22GmNvoXPFEBVKB20=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eel/KJVGuryihIbhkpH1sf6E20plu1F04Rf6iT9a1JwsEbEvNwrn1z20Bo1ACGo355qgFTBtVdFnucRyvlifi8fWRqoXXgkR9doWBUbwnImXuVLVtV9JinYDjZfwhJTqJcUsvlWOmQmE0/XGo6voim3pPR1WhDkliKylCledpMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SlL6Pkc3; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769605940; x=1801141940;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=caMJj5MeXWu40BTtO1svNq6KPU22GmNvoXPFEBVKB20=;
+  b=SlL6Pkc37N3qzBhiLdtKoZVx/Q0OB7yetjYH0XZkC8Y6YYinUY5rtP93
+   wg0fEIkHUhHv/VOhwpvt3LdMTIQFWxpT6ONT7KbQHQBmL6vFKDhEwm5NA
+   94Lf+uUTFQTo8mY25zBHCNG3XMO1kWgV60Wlwyw+/V6Uni5mC4is19neU
+   xQzw5aKfAQCQqbHGE0bNvaKQS0QeYh1yEZoYcBaDfMBn8IAtC5yV4PSZZ
+   KoymJZd/nO2K5oAqgYqRTVWtWfxzx6Wa03B1VqvoC3hLo8yYHOVdvbu0U
+   v69K3MGuldxovVXLHff1Y9/nh31Xs1y54ueGBFa4yb+QVpP6lD65Y4WA7
+   g==;
+X-CSE-ConnectionGUID: hi3sUG5cRwesQuwL/biixQ==
+X-CSE-MsgGUID: B3FGsmTFTMOzaOY9J3CcsA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11684"; a="70716351"
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="70716351"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 05:12:19 -0800
+X-CSE-ConnectionGUID: DlRy0w6cTXCBeNHBC4xmIg==
+X-CSE-MsgGUID: +dp6+yVLT6ayjqdD5Av3jg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,258,1763452800"; 
+   d="scan'208";a="208501745"
+Received: from hrotuna-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Jan 2026 05:12:16 -0800
+Date: Wed, 28 Jan 2026 15:12:14 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
+	qianfan Zhao <qianfanguijin@163.com>,
+	Adriana Nicolae <adriana@arista.com>, linux-kernel@vger.kernel.org,
+	"Bandal, Shankar" <shankar.bandal@intel.com>,
+	"Murthy, Shanth" <shanth.murthy@intel.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/7] serial: 8250: Protect LCR write in shutdown
+Message-ID: <aXoLLq17mWtGzZU7@smile.fi.intel.com>
+References: <20260128105301.1869-1-ilpo.jarvinen@linux.intel.com>
+ <20260128105301.1869-2-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260128105301.1869-2-ilpo.jarvinen@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-12574-lists,linux-serial=lfdr.de];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[19];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[bp.renesas.com,vger.kernel.org,gmail.com];
-	FREEMAIL_TO(0.00)[linuxfoundation.org,kernel.org,baylibre.com,glider.be,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bijudasau@gmail.com,linux-serial@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[linuxfoundation.org,kernel.org,vger.kernel.org,163.com,arista.com,intel.com];
+	TAGGED_FROM(0.00)[bounces-12576-lists,linux-serial=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	HAS_ORG_HEADER(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
-	TAGGED_RCPT(0.00)[linux-serial,dt,renesas];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-serial@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,renesas.com:email,bp.renesas.com:mid]
-X-Rspamd-Queue-Id: EE22BA09D1
+	RCPT_COUNT_SEVEN(0.00)[10];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	TAGGED_RCPT(0.00)[linux-serial];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,smile.fi.intel.com:mid,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: E8D9CA1DDE
 X-Rspamd-Action: no action
 
-From: Biju Das <biju.das.jz@bp.renesas.com>
+On Wed, Jan 28, 2026 at 12:52:55PM +0200, Ilpo Järvinen wrote:
+> The 8250_dw driver needs to potentially perform very complex operations
+> during LCR writes because its BUSY handling prevents updates to LCR
+> while UART is BUSY (which is not fully under our control without those
+> complex operations). Thus, LCR writes should occur under port's lock.
+> 
+> Move LCR write under port's lock in serial8250_do_shutdown(). Also
+> split the LCR RMW so that the logic is on a separate line for clarity.
 
-Hi all,
-
-This patch series adds initial support for the Renesas RZ/G3L SoC and
-RZ/G3L SMARC EVK platform. The RZ/G3L device is a general-purpose
-microprocessor with a quad-core CA-55, single core CM-33, Mali-G31
-3-D Graphics and other peripherals.
-
-Support for the below list of blocks is added in the SoC DTSI (r9a08g046.dtsi):
-
- - EXT CLK
- - 4X CA55
- - SCIF
- - CPG
- - GIC
- - ARMv8 Timer
-
-This series also adds SCIF support for the RZ/G3L SMARC EVK board (r9a08g046l48-smarc.dts).
-
-v1->v2:
- * Dropped scif bindings patch as it is accepted.
- * Collected tags.
- * Squashed the patch#3 and #4
- * Documented GE3D/VCP for all SoC variants
- * Documented external ethernet clocks as it is a clock source for MUX
-   inside CPG
- * Updated commit description for bindings.
- * Keep the tag from Conor as it is trivial change for adding more
-   clks.
- * Added CLK_ETH{0,1}_TXC_TX_CLK_IN and CLK_ETH{0,1}_RXC_RX_CLK_IN clocks
-   in clk table.
- * Dropped R9A08G046_IA55_PCLK from critical clock list.
- * Added external clocks eth{0,1}_txc_tx_clk and eth{0,1}_rxc_rx_clk
-   in soc dtsi as it needed for cpg as it is a clock source for mux.
- * Updated cpg node.
- * Dropped gpio.h header from SoM dtsi.
- * Dropped scif node as it is already included in common platform
-   file.
-
-Test logs:
-/ #uname -r
-6.19.0-rc7-next-20260127-g6e9651049dd7
-/ # cat /proc/cpuinfo
-processor       : 0
-BogoMIPS        : 48.00
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x2
-CPU part        : 0xd05
-CPU revision    : 0
-
-processor       : 1
-BogoMIPS        : 48.00
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x2
-CPU part        : 0xd05
-CPU revision    : 0
-
-processor       : 2
-BogoMIPS        : 48.00
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x2
-CPU part        : 0xd05
-CPU revision    : 0
-
-processor       : 3
-BogoMIPS        : 48.00
-Features        : fp asimd evtstrm aes pmull sha1 sha2 crc32 atomics fphp asimdhp cpuid asimdrdm lrcpc dcpop asimddp
-CPU implementer : 0x41
-CPU architecture: 8
-CPU variant     : 0x2
-CPU part        : 0xd05
-CPU revision    : 0
-
-/ # cat /proc/interrupts
-           CPU0       CPU1       CPU2       CPU3
- 11:        356       1051        444        127    GICv3  27 Level     arch_timer
- 14:          0          0          0          0    GICv3 185 Edge      error
- 15:          0          0          0          0    GICv3 186 Edge      11820000.dma-controller:0
- 16:          0          0          0          0    GICv3 187 Edge      11820000.dma-controller:1
- 17:          0          0          0          0    GICv3 188 Edge      11820000.dma-controller:2
- 18:          0          0          0          0    GICv3 189 Edge      11820000.dma-controller:3
- 19:          0          0          0          0    GICv3 190 Edge      11820000.dma-controller:4
- 20:          0          0          0          0    GICv3 191 Edge      11820000.dma-controller:5
- 21:          0          0          0          0    GICv3 192 Edge      11820000.dma-controller:6
- 22:          0          0          0          0    GICv3 193 Edge      11820000.dma-controller:7
- 23:          0          0          0          0    GICv3 194 Edge      11820000.dma-controller:8
- 24:          0          0          0          0    GICv3 195 Edge      11820000.dma-controller:9
- 25:          0          0          0          0    GICv3 196 Edge      11820000.dma-controller:10
- 26:          0          0          0          0    GICv3 197 Edge      11820000.dma-controller:11
- 27:          0          0          0          0    GICv3 198 Edge      11820000.dma-controller:12
- 28:          0          0          0          0    GICv3 199 Edge      11820000.dma-controller:13
- 29:          0          0          0          0    GICv3 200 Edge      11820000.dma-controller:14
- 30:          0          0          0          0    GICv3 201 Edge      11820000.dma-controller:15
- 31:          0          0          0          0    GICv3 418 Level     100ac000.serial:rx err
- 32:          3          0          0          0    GICv3 420 Level     100ac000.serial:rx full
- 33:        259          0          0          0    GICv3 421 Level     100ac000.serial:tx empty
- 34:          0          0          0          0    GICv3 419 Level     100ac000.serial:break
- 35:         26          0          0          0    GICv3 422 Level     100ac000.serial:rx ready
-IPI0:        18         32         21         19       Rescheduling interrupts
-IPI1:       269        367        204        122       Function call interrupts
-IPI2:         0          0          0          0       CPU stop interrupts
-IPI3:         0          0          0          0       CPU stop NMIs
-IPI4:         0          0          0          0       Timer broadcast interrupts
-IPI5:         0          0          0          0       IRQ work interrupts
-IPI6:         0          0          0          0       CPU backtrace interrupts
-IPI7:         0          0          0          0       KGDB roundup interrupts
-Err:          0
-
-/ # cat /proc/meminfo
-MemTotal:        1887812 kB
-MemFree:         1849032 kB
-MemAvailable:    1816456 kB
-
-/ # cat /sys/devices/soc0/family
-RZ/G3L
-/ # cat /sys/devices/soc0/machine
-Renesas SMARC EVK version 2 based on r9a08g046l48
-/ # cat /sys/devices/soc0/soc_id
-r9a08g046
-/ # cat /sys/devices/soc0/revision
-0
-
-Biju Das (10):
-  dt-bindings: dma: rz-dmac: Document RZ/G3L SoC
-  dt-bindings: soc: renesas: Document RZ/G3L SoC variants, SMARC SoM and
-    Carrier-II EVK
-  dt-bindings: soc: renesas: renesas,rzg2l-sysc: Document RZ/G3L SoC
-  soc: renesas: rz-sysc: Add SoC identification for RZ/G3L SoC
-  dt-bindings: clock: Document RZ/G3L SoC
-  clk: renesas: Add support for RZ/G3L SoC
-  arm64: dts: renesas: Add initial DTSI for RZ/G3L SoC
-  arm64: dts: renesas: Add initial support for RZ/G3L SMARC SoM
-  arm64: dts: renesas: renesas-smarc2: Move usb3 nodes to board DTS
-  arm64: dts: renesas: Add initial device tree for RZ/G3L SMARC EVK
-    board
-
- .../bindings/clock/renesas,rzg2l-cpg.yaml     |  40 ++-
- .../bindings/dma/renesas,rz-dmac.yaml         |   1 +
- .../soc/renesas/renesas,rzg2l-sysc.yaml       |   1 +
- .../bindings/soc/renesas/renesas.yaml         |  13 +
- arch/arm64/boot/dts/renesas/Makefile          |   2 +
- arch/arm64/boot/dts/renesas/r9a08g046.dtsi    | 251 +++++++++++++
- .../boot/dts/renesas/r9a08g046l48-smarc.dts   |  37 ++
- arch/arm64/boot/dts/renesas/r9a08g046l48.dtsi |  13 +
- .../boot/dts/renesas/r9a09g047e57-smarc.dts   |   6 +
- .../boot/dts/renesas/renesas-smarc2.dtsi      |   8 -
- .../boot/dts/renesas/rzg3l-smarc-som.dtsi     |  20 ++
- drivers/clk/renesas/Kconfig                   |   7 +-
- drivers/clk/renesas/Makefile                  |   1 +
- drivers/clk/renesas/r9a08g046-cpg.c           | 144 ++++++++
- drivers/clk/renesas/rzg2l-cpg.c               |   6 +
- drivers/clk/renesas/rzg2l-cpg.h               |   1 +
- drivers/soc/renesas/Kconfig                   |  12 +
- drivers/soc/renesas/Makefile                  |   1 +
- drivers/soc/renesas/r9a08g046-sysc.c          |  91 +++++
- drivers/soc/renesas/rz-sysc.c                 |   3 +
- drivers/soc/renesas/rz-sysc.h                 |   1 +
- include/dt-bindings/clock/r9a08g046-cpg.h     | 339 ++++++++++++++++++
- 22 files changed, 984 insertions(+), 14 deletions(-)
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046l48-smarc.dts
- create mode 100644 arch/arm64/boot/dts/renesas/r9a08g046l48.dtsi
- create mode 100644 arch/arm64/boot/dts/renesas/rzg3l-smarc-som.dtsi
- create mode 100644 drivers/clk/renesas/r9a08g046-cpg.c
- create mode 100644 drivers/soc/renesas/r9a08g046-sysc.c
- create mode 100644 include/dt-bindings/clock/r9a08g046-cpg.h
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 
