@@ -1,73 +1,73 @@
-Return-Path: <linux-serial+bounces-12623-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12622-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kHKxMgCAgWkcGwMAu9opvQ
-	(envelope-from <linux-serial+bounces-12623-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Feb 2026 05:56:32 +0100
+	id gA4qJPV/gWkUGwMAu9opvQ
+	(envelope-from <linux-serial+bounces-12622-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Feb 2026 05:56:21 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C1E4D483A
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Feb 2026 05:56:32 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FA55D482B
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Feb 2026 05:56:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2686B304467D
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Feb 2026 04:56:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 742AC3040304
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Feb 2026 04:56:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65B4A2765C3;
-	Tue,  3 Feb 2026 04:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D1D2652A2;
+	Tue,  3 Feb 2026 04:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="Rl4SAXgF";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="tGEfKmCO"
+	dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b="KM2ALRzt";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="llBQ8aO2"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from fout-a8-smtp.messagingengine.com (fout-a8-smtp.messagingengine.com [103.168.172.151])
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A257E2367D1;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DAE921D3D2;
 	Tue,  3 Feb 2026 04:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.151
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770094576; cv=none; b=s39j+H17Ronaf7Ei4CMwGTyW3P1pg9fa2T86Wc0ak7CWVFE8sQFZecXIiXRP1CDvB349rsKamAg84Z4jzvo+Xcn2J86390iqeedZ3NkR4Jf14Dw8gMUox9Wm46VmfGX9FAvLg0OvdWWghNDqumgAgNBnsx3imD9nKUYR52gW3X4=
+	t=1770094575; cv=none; b=dWFtN//VGjjqN/sMBZIV6X+A5bItJS0tb0eaVE96lo57x8emBrg0hgZETfEw6XlMyyg3uxm7NaPL5LvFmwVvUrKz7A94n1eKwrkCUP/TAIx+UwlgJJp91M/qHdODKnEHketahqcufdUtGDDcOcDk2tdClt78cloOP0zvUvBpUrs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770094576; c=relaxed/simple;
-	bh=H00p2QTWgHRd3v7fXeiVC00XtIWN4oAlLCk2/E7v4Ms=;
+	s=arc-20240116; t=1770094575; c=relaxed/simple;
+	bh=YX3ddRErhJmkqLa2vI7Uo4ePlfnJ4VRoyrNL81YBCXQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t7V06oR4I01Uiy4bmLqAswH54glRGaxUhZVEdoZc3asMxTkIWac5eFAlSkflSQIHct9kEEcM6LbmsDJVBMxOt1Q3ciwo30lCgCh68lHXvG/2GIXmbkELvm8LpHLJb3XRxcfDFwM4Ar4meiOXWXl6WFnIW17VSOR9h8RwtsiWSVw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=Rl4SAXgF; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=tGEfKmCO; arc=none smtp.client-ip=103.168.172.151
+	 MIME-Version; b=o+ddsDitB4AdwgPGCACfGhsNiU8+81ZzymMuY29GLROYGTnJo+H1cqTo53phlx6crDA7esvVnPNjDVP5V2RcKtXNIzYrfTHT66pHEkZ4+KoCcfm2KStbznRJGqso3LKDxl24oISsc+uZP/f0fImjii7UiCI9ZrFWp+07XFzedgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net; spf=pass smtp.mailfrom=fluxnic.net; dkim=pass (2048-bit key) header.d=fluxnic.net header.i=@fluxnic.net header.b=KM2ALRzt; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=llBQ8aO2; arc=none smtp.client-ip=103.168.172.155
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=fluxnic.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fluxnic.net
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id C2E08EC00D9;
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id A663C140008A;
 	Mon,  2 Feb 2026 23:56:12 -0500 (EST)
-Received: from phl-frontend-02 ([10.202.2.161])
-  by phl-compute-05.internal (MEProxy); Mon, 02 Feb 2026 23:56:12 -0500
+Received: from phl-frontend-01 ([10.202.2.160])
+  by phl-compute-03.internal (MEProxy); Mon, 02 Feb 2026 23:56:12 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fluxnic.net; h=
 	cc:cc:content-transfer-encoding:content-type:date:date:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to; s=fm3; t=1770094572; x=
-	1770180972; bh=mtU/GWKtojl4sW0tNaxPzcXLqRiii+DrYSo1mhjQGjk=; b=R
-	l4SAXgFBatNQCQg6VG5ivoql5JU2nxI7XwdK9CRZsoYwDfpLcFbYd2miLiz1wXPY
-	xkzOhFGss41w8vkUVCg5nXOS0lrPxyNRsIhkRLUvJ1rYR5zGO6GVIpkCbIrPC+Z4
-	YP2+iE8Io9s9gz6Ypdh1pNCRBKzooTV4ymmy3fcKTh+apsceJP1voU5iVk5UfidX
-	pUJL3fhOVCnziTSQAoRw/cADWgLgWfbZR4mmOLFzGfo8jd/OMs1NXx8o9B8Lg+yj
-	jMrJMHIF15QmbFANfY0leiGjjiFZbCZGV5a1l0CrfeAoc384LhvFrDXioEjEh/E7
-	Z6NzzWcqk6p0NhjM968FQ==
+	1770180972; bh=6OgqYQ+bJP/Rsu67GlT4totdCauvICVJAmMVEgcwnn8=; b=K
+	M2ALRztuYBbFrIhEG81P2EB0LOBYKN86joVGqDwKHTEZrNn/VzY/YSMoghploydi
+	mTVFTg13s2nZJ2KqE6IF213bDSSJeCw5rv5yyknZI4qiiSt/M57wY9v8+xp6ZyNt
+	7yolaDYCa2UEEvW+BlAV48+T22F4hswJ4mmL6peSoF9/W5FOHpUEGsrUMPwbEVuz
+	fSPdlgLNLUYCaJtuP1MCSiWhrSuEiLJ911Ih4EtB66P7IioJuY4kxO8bbmCC3Ina
+	Tv2Uy8PBr3D1dgVvCatBXWR2TkNAL6fkkkcUf7op1eCem2nAX2OjzsSN1k37otQF
+	wxZwesaK+JQ3wJJXFz6MQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:date:date:feedback-id:feedback-id:from:from
 	:in-reply-to:in-reply-to:message-id:mime-version:references
 	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1770094572; x=1770180972; bh=m
-	tU/GWKtojl4sW0tNaxPzcXLqRiii+DrYSo1mhjQGjk=; b=tGEfKmCOzDhPx4UZD
-	gyWm+Vs5fYS/tLqYWpTYo6ZP2Qo2JEfEZNu0aBbv8gMsY+gfgmx1/tnnPVwomxjj
-	7EVs8Pjw2bPFm6YSOjkNrZVvkB4JBB+c9KDTQvK3A0fkWFQCX2cTNEoAzOAgZJhI
-	lb2hmkXabh1FW7TvnIhpb787rU7EwLdcd7BnyNwqzfcP6SPoRCOxT8Z0YLPeUoOT
-	qG094o4bJ84Cf09tLFkxIQmyhRs72bsgyq7v9G88JVuWPxu/HhOQnyCLzC9x8Zua
-	ic4pYaC4JiMHfR5zR2d6Ycd+VITe+3gPhrCG4q6X7AhIZqqJcxQYMCfV3RNPvP2i
-	Z9RpA==
-X-ME-Sender: <xms:7H-BaVNRKr4W0g-6lg0hZ4DaKkYGdI9EqU-3MfeamKXKZLs1g1n1-g>
-    <xme:7H-BaRSihtOYLAfmAol-j9dTJ7_6RkKHpY69PzuhEMUIiv0YZeZqbe4jOLqTB0Q1D
-    3bGMHwjm7s5tjrBj-6ITVfpzZy_Z_auW-cyA_wgFpGjauRR5SsgAzg>
-X-ME-Received: <xmr:7H-BabjJ1i6YuxlIxwwBFn1Wmcc0bGMhAxql28vl0BxHunsuAV-VG6eyT2MJGDsGXfpaAP61P6jTa2ZUi0xzKAWlp6WeDurtsoM7fULQ>
+	:x-me-sender:x-sasl-enc; s=fm3; t=1770094572; x=1770180972; bh=6
+	OgqYQ+bJP/Rsu67GlT4totdCauvICVJAmMVEgcwnn8=; b=llBQ8aO2gyNduX29b
+	4SHb2ylXW1SItbq/KUdSDGqZvQpL5eWv62gvbLKK1G0vk4yXKTfMk21HbmKhkPl0
+	IwfkQZ4zZkiw8nKZYPHO08NXdKASg8PDe7DDCBI151HU96RJCpOSMmqiKNEbvaV6
+	U9VpH2SFTokKmZfgunalhQDj+GRM+JVZSufCpdk2ptJqNm1h+WAdbOdc9dqm/Kwb
+	q26dz4uZmnu+Rr1BSnhPx3H/EwH7EBiOiKQzy7dKOs7pnI216T7dJBba0mUTTy0f
+	VbpuO7uLUR+Dci4FrekPgF3bPRXvHbDvkGKPL4gh3QgdIGy4vKYms4sOjcHMP6Sc
+	jGQxg==
+X-ME-Sender: <xms:7H-BacMlwACFlJmMq30Br5PApPnwsL8Qp9G4hlFCUOyALAoC5gwuXw>
+    <xme:7H-BacS1bsFZvHqs3aG4xOIe6dENqTZafggEC1xz50zB5ITivuBO_I4N-HC_gmJ0a
+    qUuA0_sIw-098aG7Qh1ug-cErksFAiouQjKUQT-dkmfrgAMtHUzI6o>
+X-ME-Received: <xmr:7H-BaahLl8I5InN70JRXKVuyQ5PWZ3Z9tv8pPCl-N4jvcs7NgynCL9TAbWFFMP8gl9XVuUA-nUrdc_FM_KoEn-LkKfOgY1ePggHdzJaW>
 X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeelheelucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
     rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
@@ -82,16 +82,16 @@ X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeelheelucetufdote
     hunhgurghtihhonhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhg
     vghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhsvghrihgrlhesvh
     hgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:7H-BaS9Sf__S-Uu4pvx_-R_jfb8Vjx2qZixYMZBDqvrvJPiZPSSiKQ>
-    <xmx:7H-BaaGuaMDODsIzdtqvCom26nC8PqW9HIwpvdlYEbnhcf8Z4aRulQ>
-    <xmx:7H-BadkEsZKgYIR0vuRJmVbLVcKTwUy1qTPKHyn48GiR77xxl4edpw>
-    <xmx:7H-BaWbiCRHaqKTpHL_dshdTE30iXR4iAIPrx7pxqjWFxcNz0rximA>
-    <xmx:7H-BabDoEIqgHp_bg-cRxSyGHGMElBfnBRok796o0mt31QhNED7Y1Y-x>
+X-ME-Proxy: <xmx:7H-BaV9FdMZJF8lQzqYWWzeQZkL9ela2qTxX-83SbaS0FBNm3kiUWw>
+    <xmx:7H-BaRFacVl9a5va9UAHIANYbmyHdNgvpZfHmrnd3ez_LC2Ue8iffg>
+    <xmx:7H-BaYmjqLCZTytrJiEPBIS1JVXQDT-b6XpfdUV-jXE3oebQimKiNA>
+    <xmx:7H-BaVaTSjaEYu4jyrGk6rnaNdI3juUhYx-f-p-agm1fl5XaQOpDOQ>
+    <xmx:7H-BaSBHEGGDBR1hIPA_HfU8S3Mrw7KJE994R22buCaPwKhbv2CQ_GYl>
 Feedback-ID: i58514971:Fastmail
 Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
  2 Feb 2026 23:56:12 -0500 (EST)
 Received: from xanadu.lan (_gateway [192.168.1.1])
-	by yoda.fluxnic.net (Postfix) with ESMTPSA id A5C33151AE39;
+	by yoda.fluxnic.net (Postfix) with ESMTPSA id B922E151AE3A;
 	Mon, 02 Feb 2026 23:56:11 -0500 (EST)
 From: Nicolas Pitre <nico@fluxnic.net>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -100,9 +100,9 @@ To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 Cc: Nicolas Pitre <npitre@baylibre.com>,
 	linux-serial@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 1/3] vt: add modifier support to cursor keys
-Date: Mon,  2 Feb 2026 23:52:46 -0500
-Message-ID: <20260203045457.1049793-2-nico@fluxnic.net>
+Subject: [PATCH 2/3] vt: add KT_CSI keysym type for modifier-aware CSI sequences
+Date: Mon,  2 Feb 2026 23:52:47 -0500
+Message-ID: <20260203045457.1049793-3-nico@fluxnic.net>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260203045457.1049793-1-nico@fluxnic.net>
 References: <20260203045457.1049793-1-nico@fluxnic.net>
@@ -119,18 +119,18 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_CONTAINS_FROM(1.00)[];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[fluxnic.net,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	R_DKIM_ALLOW(-0.20)[fluxnic.net:s=fm3,messagingengine.com:s=fm3];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
 	TO_DN_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-12623-lists,linux-serial=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-12622-lists,linux-serial=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	DKIM_TRACE(0.00)[fluxnic.net:+,messagingengine.com:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	RCPT_COUNT_FIVE(0.00)[6];
 	FROM_NEQ_ENVFROM(0.00)[nico@fluxnic.net,linux-serial@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
@@ -140,73 +140,158 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: 5C1E4D483A
+X-Rspamd-Queue-Id: 4FA55D482B
 X-Rspamd-Action: no action
 
 From: Nicolas Pitre <npitre@baylibre.com>
 
-Generate xterm-style CSI sequences with modifier parameters for arrow
-keys when Shift, Alt, or Ctrl are held. For example, Shift+Up produces
-ESC [ 1 ; 2 A instead of plain ESC [ A.
+Add a new keysym type KT_CSI that generates CSI tilde sequences with
+automatic modifier encoding. The keysym value encodes the CSI parameter
+number, producing sequences like ESC [ <value> ~ or ESC [ <value> ; <mod> ~
+when Shift, Alt, or Ctrl modifiers are held.
 
-The modifier encoding follows the standard xterm convention:
+This allows navigation keys (Home, End, Insert, Delete, PgUp, PgDn) and
+function keys to generate modifier-aware escape sequences without
+consuming string table entries for each modifier combination.
+
+Define key symbols for navigation keys (K_CSI_HOME, K_CSI_END, etc.)
+and function keys (K_CSI_F1 through K_CSI_F20) using standard xterm
+CSI parameter values.
+
+The modifier encoding follows the xterm convention:
   mod = 1 + (shift ? 1 : 0) + (alt ? 2 : 0) + (ctrl ? 4 : 0)
 
-When no modifiers are pressed, the original behavior is preserved.
+Allowed CSI parameter values range from 0 to 99.
 
-Explicit keymap bindings for modified cursor keys (e.g., "shift keycode
-103 = Find") take precedence over this automatic modifier encoding.
+Note: The Linux console historically uses a non-standard double-bracket
+format for F1-F5 (ESC [ [ A through ESC [ [ E) rather than the xterm
+tilde format (ESC [ 11 ~ through ESC [ 15 ~). The K_CSI_F1 through
+K_CSI_F5 definitions use the xterm format. Converting F1-F5 to KT_CSI
+would require updating the "linux" terminfo entry to match. Navigation
+keys and F6-F20 already use the tilde format and are fully compatible.
 
 Signed-off-by: Nicolas Pitre <npitre@baylibre.com>
 ---
- drivers/tty/vt/keyboard.c | 27 ++++++++++++++++++++++++++-
- 1 file changed, 26 insertions(+), 1 deletion(-)
+ drivers/tty/vt/keyboard.c     | 38 ++++++++++++++++++++++++++++++-----
+ include/uapi/linux/keyboard.h | 29 ++++++++++++++++++++++++++
+ 2 files changed, 62 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/tty/vt/keyboard.c b/drivers/tty/vt/keyboard.c
-index d65fc60dd7be..dacc2267de6b 100644
+index dacc2267de6b..0b323cefc647 100644
 --- a/drivers/tty/vt/keyboard.c
 +++ b/drivers/tty/vt/keyboard.c
-@@ -765,14 +765,39 @@ static void k_fn(struct vc_data *vc, unsigned char value, char up_flag)
- 		pr_err("k_fn called with value=%d\n", value);
+@@ -74,7 +74,7 @@ static inline int kbd_defleds(void)
+ 	k_self,		k_fn,		k_spec,		k_pad,\
+ 	k_dead,		k_cons,		k_cur,		k_shift,\
+ 	k_meta,		k_ascii,	k_lock,		k_lowercase,\
+-	k_slock,	k_dead2,	k_brl,		k_ignore
++	k_slock,	k_dead2,	k_brl,		k_csi
+ 
+ typedef void (k_handler_fn)(struct vc_data *vc, unsigned char value,
+ 			    char up_flag);
+@@ -127,6 +127,7 @@ static const unsigned char max_vals[] = {
+ 	[ KT_SLOCK	] = NR_LOCK - 1,
+ 	[ KT_DEAD2	] = 255,
+ 	[ KT_BRL	] = NR_BRL - 1,
++	[ KT_CSI	] = 99,
+ };
+ 
+ static const int NR_TYPES = ARRAY_SIZE(max_vals);
+@@ -644,10 +645,6 @@ static void fn_null(struct vc_data *vc)
+ /*
+  * Special key handlers
+  */
+-static void k_ignore(struct vc_data *vc, unsigned char value, char up_flag)
+-{
+-}
+-
+ static void k_spec(struct vc_data *vc, unsigned char value, char up_flag)
+ {
+ 	if (up_flag)
+@@ -1029,6 +1026,37 @@ static void k_brl(struct vc_data *vc, unsigned char value, char up_flag)
+ 	}
  }
  
 +/*
-+ * Compute xterm-style modifier parameter for CSI sequences.
-+ * Returns 1 + (shift ? 1 : 0) + (alt ? 2 : 0) + (ctrl ? 4 : 0)
++ * Handle KT_CSI keysym type: generate CSI tilde sequences with modifier
++ * support. The value encodes the CSI parameter number, producing sequences
++ * like ESC [ <value> ~ or ESC [ <value> ; <mod> ~ when modifiers are held.
 + */
-+static int csi_modifier_param(void)
++static void k_csi(struct vc_data *vc, unsigned char value, char up_flag)
 +{
-+	int mod = 1;
++	char buf[10];
++	int i = 0;
++	int mod;
 +
-+	if (shift_state & (BIT(KG_SHIFT) | BIT(KG_SHIFTL) | BIT(KG_SHIFTR)))
-+		mod += 1;
-+	if (shift_state & (BIT(KG_ALT) | BIT(KG_ALTGR)))
-+		mod += 2;
-+	if (shift_state & (BIT(KG_CTRL) | BIT(KG_CTRLL) | BIT(KG_CTRLR)))
-+		mod += 4;
-+	return mod;
++	if (up_flag)
++		return;
++
++	mod = csi_modifier_param();
++
++	buf[i++] = 0x1b;
++	buf[i++] = '[';
++	if (value >= 10)
++		buf[i++] = '0' + value / 10;
++	buf[i++] = '0' + value % 10;
++	if (mod > 1) {
++		buf[i++] = ';';
++		buf[i++] = '0' + mod;
++	}
++	buf[i++] = '~';
++	buf[i] = 0x00;
++
++	puts_queue(vc, buf);
 +}
 +
- static void k_cur(struct vc_data *vc, unsigned char value, char up_flag)
- {
- 	static const char cur_chars[] = "BDCA";
-+	int mod;
+ #if IS_ENABLED(CONFIG_INPUT_LEDS) && IS_ENABLED(CONFIG_LEDS_TRIGGERS)
  
- 	if (up_flag)
- 		return;
+ struct kbd_led_trigger {
+diff --git a/include/uapi/linux/keyboard.h b/include/uapi/linux/keyboard.h
+index 36d230cedf12..48ecb0cefb45 100644
+--- a/include/uapi/linux/keyboard.h
++++ b/include/uapi/linux/keyboard.h
+@@ -41,6 +41,7 @@
+ #define KT_SLOCK	12
+ #define KT_DEAD2	13
+ #define KT_BRL		14
++#define KT_CSI		15	/* CSI sequences with modifier support */
  
--	applkey(vc, cur_chars[value], vc_kbd_mode(kbd, VC_CKMODE));
-+	mod = csi_modifier_param();
-+	if (mod > 1) {
-+		char buf[] = { 0x1b, '[', '1', ';', '0' + mod, cur_chars[value], 0x00 };
+ #define K(t,v)		(((t)<<8)|(v))
+ #define KTYP(x)		((x) >> 8)
+@@ -461,5 +462,33 @@
+ 
+ #define NR_BRL		11
+ 
++/* KT_CSI keys: value is the CSI parameter number for ESC [ <value> ~ */
++#define K_CSI_HOME	K(KT_CSI, 1)	/* ESC [ 1 ~ */
++#define K_CSI_INSERT	K(KT_CSI, 2)	/* ESC [ 2 ~ */
++#define K_CSI_DELETE	K(KT_CSI, 3)	/* ESC [ 3 ~ */
++#define K_CSI_END	K(KT_CSI, 4)	/* ESC [ 4 ~ */
++#define K_CSI_PGUP	K(KT_CSI, 5)	/* ESC [ 5 ~ */
++#define K_CSI_PGDN	K(KT_CSI, 6)	/* ESC [ 6 ~ */
++#define K_CSI_F1	K(KT_CSI, 11)	/* ESC [ 11 ~ */
++#define K_CSI_F2	K(KT_CSI, 12)	/* ESC [ 12 ~ */
++#define K_CSI_F3	K(KT_CSI, 13)	/* ESC [ 13 ~ */
++#define K_CSI_F4	K(KT_CSI, 14)	/* ESC [ 14 ~ */
++#define K_CSI_F5	K(KT_CSI, 15)	/* ESC [ 15 ~ */
++#define K_CSI_F6	K(KT_CSI, 17)	/* ESC [ 17 ~ */
++#define K_CSI_F7	K(KT_CSI, 18)	/* ESC [ 18 ~ */
++#define K_CSI_F8	K(KT_CSI, 19)	/* ESC [ 19 ~ */
++#define K_CSI_F9	K(KT_CSI, 20)	/* ESC [ 20 ~ */
++#define K_CSI_F10	K(KT_CSI, 21)	/* ESC [ 21 ~ */
++#define K_CSI_F11	K(KT_CSI, 23)	/* ESC [ 23 ~ */
++#define K_CSI_F12	K(KT_CSI, 24)	/* ESC [ 24 ~ */
++#define K_CSI_F13	K(KT_CSI, 25)	/* ESC [ 25 ~ */
++#define K_CSI_F14	K(KT_CSI, 26)	/* ESC [ 26 ~ */
++#define K_CSI_F15	K(KT_CSI, 28)	/* ESC [ 28 ~ */
++#define K_CSI_F16	K(KT_CSI, 29)	/* ESC [ 29 ~ */
++#define K_CSI_F17	K(KT_CSI, 31)	/* ESC [ 31 ~ */
++#define K_CSI_F18	K(KT_CSI, 32)	/* ESC [ 32 ~ */
++#define K_CSI_F19	K(KT_CSI, 33)	/* ESC [ 33 ~ */
++#define K_CSI_F20	K(KT_CSI, 34)	/* ESC [ 34 ~ */
 +
-+		puts_queue(vc, buf);
-+	} else {
-+		applkey(vc, cur_chars[value], vc_kbd_mode(kbd, VC_CKMODE));
-+	}
- }
- 
- static void k_pad(struct vc_data *vc, unsigned char value, char up_flag)
+ #define MAX_DIACR	256
+ #endif /* _UAPI__LINUX_KEYBOARD_H */
 -- 
 2.52.0
 
