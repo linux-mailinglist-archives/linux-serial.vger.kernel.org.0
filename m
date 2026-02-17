@@ -1,146 +1,120 @@
-Return-Path: <linux-serial+bounces-12725-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12727-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0KL0JQ3Pk2kz8wEAu9opvQ
-	(envelope-from <linux-serial+bounces-12725-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 03:14:37 +0100
+	id DsPVDq3gk2kR9gEAu9opvQ
+	(envelope-from <linux-serial+bounces-12727-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 04:29:49 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2249148771
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 03:14:36 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B19431489F8
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 04:29:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 309BE30166EF
-	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 02:14:34 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id D36D23006142
+	for <lists+linux-serial@lfdr.de>; Tue, 17 Feb 2026 03:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B69A92144D7;
-	Tue, 17 Feb 2026 02:14:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3663260580;
+	Tue, 17 Feb 2026 03:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="GQtiPvJJ";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="NoY6/D6k"
+	dkim=pass (2048-bit key) header.d=pythcoiner.dev header.i=@pythcoiner.dev header.b="lXscuYGe"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.pythcoiner.dev (unknown [159.198.47.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82B531A238C;
-	Tue, 17 Feb 2026 02:14:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B157222584;
+	Tue, 17 Feb 2026 03:29:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.198.47.63
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771294472; cv=none; b=I5Ln3LlzfixQnGR+1rOs6vMDqzYrfgeC/gaGWdKK+nzY95OnLZkdbDOUI6EkO7VADUNUiQJyR+DAs7ZckHhwMFYDfFtU5N1suCdiKSzhJb+9Inrs4jKfnatppEWPXneh0UybCRCeM3DsSem5RsYt3QSuz+VcWPKEuRBnWUQpgJg=
+	t=1771298984; cv=none; b=ruBRK63niavnMxhSrLgj1grTrAM2qY9d1eQfajE/7K8+9JU7ndGEZbxwbQ6ZmUwA+rmxwMLrviUeTt0US8hFqfDl9Op26igsWNhQ1eTF6IWbEix3hTUYcD57PrXvM5wbFdroNFvq39aP3Ielu5zYdufdwhtpyacHlFqdA3eDWMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771294472; c=relaxed/simple;
-	bh=WuNo0hyEI/y/3r2N2k5bIroJMhjaGh7DQxU3V52yWLA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=NqJzBPA89vlJ9GWpmohCDvXU4MNOvrM791u4LkxkuaUXWFc72p4QYi5KzHmuRhUNfhuFf2D26T67HG5MiPXT6TBMXhdRS0iNrh3nFXkrwAng7p9AbbvrKUIjRZ87VFmA1vhBS/qL6GgB9W9BtUhCIS6IrkwpRjqQtxlot7at28U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=GQtiPvJJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=NoY6/D6k; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1771294464;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=TvU4/TcpH+A/DNluEe92TPtsDcT+c9aV1pmx/XjYkaA=;
-	b=GQtiPvJJgQjrSYNfWp5pgGwGXHTYfBvUprvFhNebifhiFva6ckvzTxokou2jah9Y01UdZ4
-	iOs+KrhuJuzX+6Cj76IM3Ixfud66rZLmOS1mqg2vN0bV03dYJeF5ZTze+4p9t63oSZfkbw
-	ptGYClJPTPvFhH37GW4IZz6ogaNhjMXqeLXIVnNUyEtOoEE2lPSxAg7g4eiokDt+TpD/tW
-	hW1YUuDg/C+b/aYMq3ZghUi1JybsAPSfaZFP2C9DmVuzVY5DsE+F9BYXBqnAADGSKslcmU
-	It4ZBFlM3kI1caPzZtw2GRygsJ0u9o6FRAQx2BHx9i5nfPgifp0Sdj3K4hvnIA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1771294464;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type;
-	bh=TvU4/TcpH+A/DNluEe92TPtsDcT+c9aV1pmx/XjYkaA=;
-	b=NoY6/D6kiyoiFPBYYzdLCpy/3HjOGFjiYS/GpHEdHkNFJOBcxZeSoyS1qt6Z0LlXsEbEO3
-	pkXnXh7EMbh80tDw==
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Jiri Slaby
- <jirislaby@kernel.org>, Nicolas Pitre <npitre@baylibre.com>, Calixte
- Pernot <calixte.pernot@grenoble-inp.org>, Petr Mladek <pmladek@suse.com>,
- Steven Rostedt <rostedt@goodmis.org>, John Ogness
- <john.ogness@linutronix.de>, Sergey Senozhatsky
- <senozhatsky@chromium.org>, Sebastian Andrzej Siewior
- <bigeasy@linutronix.de>, Clark Williams <clrkwllms@kernel.org>
-Cc: linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-rt-devel@lists.linux.dev
-Subject: printk, vt: sleep from invalid context bug
-Date: Tue, 17 Feb 2026 09:14:12 +0700
-Message-ID: <87v7fwdsln.fsf@yellow.woof>
+	s=arc-20240116; t=1771298984; c=relaxed/simple;
+	bh=Q9HJR8ZlJDXNqq/opcn86eWl8m6JBWvpYDOZ0obgEOE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Sji0dctnvJSgqeWhnUz/lS2BjBYRU4F87pGvCMGYrC9jQ3Nja8vaQfiXyqICWNDxCQ0bKdjIHgRJjB/uunX2nu/sxHZKZSHYsO97Fw2ANODGHVXHQFYiNef7gY4m2IK6d4ut1ix/uUoVHijhgpLJmez+5YDfcdP48CLd7G8CCJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=pythcoiner.dev; spf=pass smtp.mailfrom=pythcoiner.dev; dkim=pass (2048-bit key) header.d=pythcoiner.dev header.i=@pythcoiner.dev header.b=lXscuYGe; arc=none smtp.client-ip=159.198.47.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=pythcoiner.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pythcoiner.dev
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E3BF5AAF89;
+	Tue, 17 Feb 2026 03:20:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=pythcoiner.dev;
+	s=dkim; t=1771298427; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=uRtLPqQMGhjNsCO4iwfqS8zEqGhEiD3jTSg5XEJ6qCw=;
+	b=lXscuYGeVbqyE34cxF4ySCCYbeQvg58h/+gtJmZOs1ySxwebJUHr3sKUfkv5PSJAQMmK8i
+	nn49mG4HYHVcawSIAN5yW+JiiWZMzgOxlAZbIuWARM11XzqLMkmN8RVmoI741J+DAOtVLR
+	U1v1yi0fhc2j+JBb8FQ/z93VAvtJ1BYwAo6Y+C71jeeiv/+ByuVZ+JVk4dyNRDzs+mGjWa
+	mRTx8twF1b931JW8zaAZU8/vK1rZukMuLK6rIj8FcEK5lBoUDBD8V44UGNOb6VwbbWBI/f
+	QFR6RKvAcwEVYBdkYyVF/OYuM1gqo7PT0d83WHeKevsUwvYBOfQnKslFc+gOUg==
+From: Pete Connor <pete.connor@pythcoiner.dev>
+To: Chaitanya Vadrevu <chaitanya.vadrevu@emerson.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Pete Connor <pete.connor@pythcoiner.dev>
+Subject: [PATCH] serial: 8250_ni: use kzalloc_obj() for allocation
+Date: Mon, 16 Feb 2026 22:19:13 -0500
+Message-ID: <20260217031913.1166949-1-pete.connor@pythcoiner.dev>
+X-Mailer: git-send-email 2.47.3
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[pythcoiner.dev,none];
 	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_DKIM_ALLOW(-0.20)[pythcoiner.dev:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-12725-lists,linux-serial=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[13];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[namcao@linutronix.de,linux-serial@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	PRECEDENCE_BULK(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TAGGED_RCPT(0.00)[linux-serial];
+	TAGGED_FROM(0.00)[bounces-12727-lists,linux-serial=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_TLS_LAST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:dkim,yellow.woof:mid]
-X-Rspamd-Queue-Id: E2249148771
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[pete.connor@pythcoiner.dev,linux-serial@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[pythcoiner.dev:+];
+	PRECEDENCE_BULK(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-serial];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: B19431489F8
 X-Rspamd-Action: no action
 
-Hi,
+  Replace kzalloc() with the preferred kzalloc_obj() helper
+  to address a checkpatch warning.
 
-Since commit 1bc9a28f076f ("printk: Use console_flush_one_record for
-legacy printer kthread"), I see this warning:
+  Signed-off-by: Pete Connor <pete.connor@pythcoiner.dev>
+---
+ drivers/tty/serial/8250/8250_ni.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-BUG: sleeping function called from invalid context at kernel/printk/printk.c:3431
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 14, name: pr/legacy
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-4 locks held by pr/legacy/14:
- #0: ffffffff807dcdf0 (console_lock){+.+.}-{0:0}, at: legacy_kthread_func+0x40/0x114
- #1: ffffffff807dce30 (console_srcu){....}-{0:0}, at: console_flush_one_record+0x0/0x3c8
- #2: ffffffff8083af88 (printing_lock){+.+.}-{3:3}, at: vt_console_print+0x48/0x330
- #3: ffffffff807df2e8 (rcu_read_lock){....}-{1:3}, at: rt_spin_trylock+0x24/0x138
-CPU: 0 UID: 0 PID: 14 Comm: pr/legacy Not tainted 6.19.0-rvvm-09292-g7449f86bafcd #79 PREEMPT_RT 
-Hardware name: RVVM v0.7-git-g8c45ccf (DT)
-Call Trace:
-    walk_stackframe+0x0/0x80
-    dump_stack_lvl+0x4e/0x74
-    rt_spin_trylock+0x9e/0x138
-    __might_resched+0x19e/0x1e0
-    fbcon_redraw+0x74/0x1a0
-    fbcon_scroll+0xf2/0x13c
-    con_scroll+0x122/0x188
-    lf+0x6a/0x74
-    vt_console_print+0x2ac/0x330
-    console_flush_one_record+0x208/0x3c8
-    console_flush_one_record+0x3c4/0x3c8
-    kthread+0xc6/0x100
-    legacy_kthread_func+0x4c/0x114
-    prio_changed_stop+0xc/0x10
-    kthread+0xc6/0x100
-    ret_from_fork_kernel_asm+0x12/0x18
-    ret_from_fork_kernel+0xe/0x3fc
-    rt_spin_unlock+0x56/0x128
-    kthread_affine_node+0x88/0x8c
-    ret_from_fork_kernel_asm+0x12/0x18
+diff --git a/drivers/tty/serial/8250/8250_ni.c b/drivers/tty/serial/8250/8250_ni.c
+index cb5b42b3609c..3f3dac694e20 100644
+--- a/drivers/tty/serial/8250/8250_ni.c
++++ b/drivers/tty/serial/8250/8250_ni.c
+@@ -285,7 +285,7 @@ static int ni16550_probe(struct platform_device *pdev)
+ 	bool rs232_property;
+ 	int ret;
+ 
+-	uart = kzalloc(sizeof(*uart), GFP_KERNEL);
++	uart = kzalloc_obj(*uart, GFP_KERNEL);
+ 	if (!uart)
+ 		return -ENOMEM;
+ 
+-- 
+2.47.3
 
-If I understand it correctly, vt_console_print() grabs the spin lock
-"printing_lock", and then calls fbcon_redraw() which does
-console_conditional_schedule(), triggering the warning.
-
-Nam
 
