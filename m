@@ -1,141 +1,143 @@
-Return-Path: <linux-serial+bounces-12837-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12838-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iLzqOUuXpmltRgAAu9opvQ
-	(envelope-from <linux-serial+bounces-12837-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 09:09:47 +0100
+	id 6IoQBGWcpmlqRwAAu9opvQ
+	(envelope-from <linux-serial+bounces-12838-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 09:31:33 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 448751EA974
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 09:09:46 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D0B71EAD05
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 09:31:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 00E433083E0C
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2026 08:07:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id ED63C302C92A
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2026 08:26:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5221D386C2E;
-	Tue,  3 Mar 2026 08:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73928224AF2;
+	Tue,  3 Mar 2026 08:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IMF3V784"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from mail-oo1-f70.google.com (mail-oo1-f70.google.com [209.85.161.70])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B8FD386C29
-	for <linux-serial@vger.kernel.org>; Tue,  3 Mar 2026 08:07:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.70
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9E9F17A309;
+	Tue,  3 Mar 2026 08:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772525249; cv=none; b=O32DL+OLzi+sX+gHcpDOb2lsPy+phUDkf1qXAhzLHnQwvsoI1Y/VMcwN1sV01C2FAZN70ECjtcqpWp7tL6wSpxH5gg4KSHZ7KOZBgu8Zaam6qk1jXP4wQZme35TpHzZ9NPeM+QZlhjta9rUDKEsCRqlKixhUJ1IPjukshuS7n9Y=
+	t=1772526377; cv=none; b=E6yhBmKJ+nmIm0MQ4oXbd6iBOqCm1eMRxb9HG89yx2Mbg9Cr76q+iEe0R/xDNcJ8m3CYlHSiV1zDexNH6+GlW+WHG0dfk6ewF2D/j4Iw7QRmyWlJ5cCdwC6c3c8nR4+Wf/Dsn7SywK5CrTVyWFGrJSYhGkHc4lyciwzzhRgmE2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772525249; c=relaxed/simple;
-	bh=Oh3tXpsx+QCNbHNTgWm6Cjr2HzH5WnWb4OxgLqw/My8=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=NxFGvPD0k8zI4OBe7gpz9GSDt+1OA/UDDsNx0q0b8fAbF7FS06UZ+GupOdrfqmD/X2Ffdigt6SKZRyKfdEiL29UuFOZ0SLQC8YRQ8MGPbkxPHP44v5YMQa0ibm7XWJ2kemeOPxOT3Vj1os4vrj+CY8pMm4PoYO/qrkH3n/p3SMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.161.70
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-oo1-f70.google.com with SMTP id 006d021491bc7-679c5ed0942so77203204eaf.1
-        for <linux-serial@vger.kernel.org>; Tue, 03 Mar 2026 00:07:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772525247; x=1773130047;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oviuPl5RmRyl2KpaZ8AaGZ4C5yAr5Fb5kKNpRgZG6jE=;
-        b=Fa4EMnC2zlo3bnFjs9hC2GBjrUlbfd6Hae3UqUBy50QVNwqqE+f0gDmFO8VkAC7g41
-         yYsOW/f/svA3ZIYtjAbvv4IdweSar+ePXLRDG44dr8ScU5WzqRWHalLUCievWlMUAjri
-         S84jxHGEV/5RHeGjvD6sk2J8SPC5lHsFvsBAL+qJDQQlngGy0v89BhBU+niINNlQvOD0
-         4WFMFvUnXX096fOEPVlSPZY08Rs8xlBIrK7IgE2Yvnfgwq7BzNhK7amMCsFhNRIySjB/
-         sWId6mR8STyOXgGli6Uw1swSwfTV110oK7zUCd/VYH9ENEAriJYokNlRAtq2cXl0KEpV
-         RsNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2d2gnSO8FHWneIRW0PKfBIpZfz64ko4DevMk0eJmUd1nbfUe/g/BrQfsEbECdB6sDki9aNzJZJQxJLJw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA4GEGxdn6JGqlk2C9Hfd24giaVzUOoXtXQfy4lV3bU4g98pPG
-	Hd2FMv/GxhnpEzwK2z4X2GK6UDYscELvl6yqzYt4Yb79f4hSDrIucXP2Ey26OqiOP+UOQTktUhv
-	nRvb9P+6V1+o89QcqpKwQ0cMBLhlNZWKhbmDDqQ35OzIS6kbZUr1jcim6qG4=
+	s=arc-20240116; t=1772526377; c=relaxed/simple;
+	bh=448dK8GnIa9bf97ungbXtcNYT/1dnAsvokMfQnlvWHA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SYjYX/FwowIOAwHk0+MKTxE41ltY6+/vQNDSeR6wlpr+oOMDU57/LIUHG5nFIsXX51hVIaI/0wNpERuVtCYV4if4X6HcafU2DE2V4439D1/S/SxU4hVYAd3QUkJc6C4AeXggl4M00jaYfROD6PCvHx/3CUv21FqmseEw85CSpDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IMF3V784; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1772526376; x=1804062376;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=448dK8GnIa9bf97ungbXtcNYT/1dnAsvokMfQnlvWHA=;
+  b=IMF3V784cLAHHv0EoL3iKZiiEIGSX/IrVGOV477KNgbC/gKK1XjcM26t
+   wKi8M6fVH/8vbaUo4belx90P0B3GBqNhslzpVtVi9Ozfhutv/kt8USLfC
+   ap1oKr0E7JClbl4FJ0TgsywG7uv+gi8aQXgUZw0NLj5VA6EW8IrVt05cA
+   Pt7b3eRpyh6mEw8o+NVoZX7hdcqIisAOy+VWC7sJ6jKdkpJIWBOiSrcBj
+   DPqIQysKepP3KFoRyWBsXtZpQDJMfYq5J3/xFVRM5muZM//NfuZEf48ss
+   g9XpMxP5/TrqKfhacq5MggXUGqJFwHrKfY6wiN1F42utFQyvjEhd3afb8
+   A==;
+X-CSE-ConnectionGUID: WDtSG9nIT+KGLXC1IMB2VQ==
+X-CSE-MsgGUID: lyYxbF+FQ7CUpaVjByfuwQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11717"; a="73598159"
+X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
+   d="scan'208";a="73598159"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 00:26:13 -0800
+X-CSE-ConnectionGUID: yeA/LFCOSmy1UtfsMaGJBw==
+X-CSE-MsgGUID: rE8pnFa0RnapIJyzaiMUWA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,321,1763452800"; 
+   d="scan'208";a="222084181"
+Received: from pgcooper-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.196])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Mar 2026 00:26:12 -0800
+Date: Tue, 3 Mar 2026 10:26:09 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v1 1/1] serial: 8250_port: Drop duplicate NULL check
+Message-ID: <aaabITX34OyXB2Dg@ashevche-desk.local>
+References: <20260302152738.2498579-1-andriy.shevchenko@linux.intel.com>
+ <c1500ee2-d609-4c66-b301-2b081722eef9@kernel.org>
+ <aaaT_LiDbWX-ifK1@ashevche-desk.local>
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6820:450f:b0:676:c2a1:ef12 with SMTP id
- 006d021491bc7-679faf0cb9emr6767834eaf.42.1772525247013; Tue, 03 Mar 2026
- 00:07:27 -0800 (PST)
-Date: Tue, 03 Mar 2026 00:07:26 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <69a696be.050a0220.21ae90.000a.GAE@google.com>
-Subject: [syzbot] Monthly serial report (Mar 2026)
-From: syzbot <syzbot+lista6742188c23171793101@syzkaller.appspotmail.com>
-To: gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org, 
-	linux-serial@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Rspamd-Queue-Id: 448751EA974
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aaaT_LiDbWX-ifK1@ashevche-desk.local>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
+X-Rspamd-Queue-Id: 9D0B71EAD05
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[appspotmail.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	TAGGED_FROM(0.00)[bounces-12837-lists,linux-serial=lfdr.de,lista6742188c23171793101];
+	TAGGED_FROM(0.00)[bounces-12838-lists,linux-serial=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	FROM_HAS_DN(0.00)[];
-	REDIRECTOR_URL(0.00)[goo.gl];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[syzbot@syzkaller.appspotmail.com,linux-serial@vger.kernel.org];
+	HAS_ORG_HEADER(0.00)[];
+	DKIM_TRACE(0.00)[intel.com:+];
+	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_NONE(0.00)[];
-	R_DKIM_NA(0.00)[];
-	NEURAL_HAM(-0.00)[-0.903];
+	RCPT_COUNT_THREE(0.00)[4];
+	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[andriy.shevchenko@linux.intel.com,linux-serial@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	TAGGED_RCPT(0.00)[linux-serial];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,googlegroups.com:email,goo.gl:url]
+	NEURAL_HAM(-0.00)[-0.999];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,ashevche-desk.local:mid,intel.com:dkim]
 X-Rspamd-Action: no action
 
-Hello serial maintainers/developers,
+On Tue, Mar 03, 2026 at 09:55:45AM +0200, Andy Shevchenko wrote:
+> On Tue, Mar 03, 2026 at 06:25:29AM +0100, Jiri Slaby wrote:
+> > On 02. 03. 26, 16:27, Andy Shevchenko wrote:
+> > > serial8250_release_dma() is NULL-aware, no need to check this in the caller.
+> > > While at it, make sure DMA won't be used again, by NULLifying the pointer.
 
-This is a 31-day syzbot report for the serial subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/serial
+...
 
-During the period, 0 new issues were detected and 0 were fixed.
-In total, 18 issues are still open and 48 have already been fixed.
+> > > -	if (up->dma)
+> > > -		serial8250_release_dma(up);
+> > > +	serial8250_release_dma(up);
+> > > +	up->dma = NULL;
+> > 
+> > Shouldn't serial8250_release_dma() NULL it instead, so the callers need not
+> > to bother?
+> 
+> I copied what 8250_omap is doing. But we can do what you suggested I think.
 
-Some of the still happening issues:
+I looked at the 8250_dma code and serial8250_release_dma() in particular,
+and I think I am not going to change the approach. The 'dma' pointer is
+assigned outside of serial8250_request_dma() and NULLifying it in
+serial8250_release_dma() will be a layering violation.
 
-Ref Crashes Repro Title
-<1> 3827    Yes   possible deadlock in console_lock_spinning_enable (5)
-                  https://syzkaller.appspot.com/bug?extid=622acb507894a48b2ce9
-<2> 3214    Yes   KMSAN: uninit-value in n_tty_receive_buf_standard
-                  https://syzkaller.appspot.com/bug?extid=559c7fe4b8bac56d38c2
-<3> 1193    Yes   BUG: soft lockup in tx
-                  https://syzkaller.appspot.com/bug?extid=5e87db90e68fbc4707c6
-<4> 283     Yes   KMSAN: uninit-value in n_tty_receive_buf_closing (3)
-                  https://syzkaller.appspot.com/bug?extid=dd514b5f0cf048aec256
-<5> 243     Yes   INFO: task can't die in show_free_areas
-                  https://syzkaller.appspot.com/bug?extid=8f41dccfb6c03cc36fd6
-<6> 121     Yes   possible deadlock in tty_buffer_flush (3)
-                  https://syzkaller.appspot.com/bug?extid=52cf91760dcb1dac6376
-<7> 55      No    KMSAN: uninit-value in n_tty_lookahead_flow_ctrl (2)
-                  https://syzkaller.appspot.com/bug?extid=290abdcd4f509377a0eb
-<8> 5       No    KASAN: slab-out-of-bounds Write in do_con_write (3)
-                  https://syzkaller.appspot.com/bug?extid=8e9c1abac3ceb45abffe
-<9> 4       Yes   possible deadlock in n_tty_flush_buffer
-                  https://syzkaller.appspot.com/bug?extid=d84934b4184d7f9a1aed
+-- 
+With Best Regards,
+Andy Shevchenko
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
