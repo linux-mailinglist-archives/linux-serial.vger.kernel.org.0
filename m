@@ -1,330 +1,176 @@
-Return-Path: <linux-serial+bounces-12842-lists+linux-serial=lfdr.de@vger.kernel.org>
+Return-Path: <linux-serial+bounces-12843-lists+linux-serial=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-serial@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id ULslARezpmn9SgAAu9opvQ
-	(envelope-from <linux-serial+bounces-12842-lists+linux-serial=lfdr.de@vger.kernel.org>)
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 11:08:23 +0100
+	id +AyAKjzEpmn3TQAAu9opvQ
+	(envelope-from <linux-serial+bounces-12843-lists+linux-serial=lfdr.de@vger.kernel.org>)
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 12:21:32 +0100
 X-Original-To: lists+linux-serial@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 548F51EC654
-	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 11:08:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0ED1D1EDA89
+	for <lists+linux-serial@lfdr.de>; Tue, 03 Mar 2026 12:21:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E1D08305EBB3
-	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2026 10:06:33 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4A2F23118185
+	for <lists+linux-serial@lfdr.de>; Tue,  3 Mar 2026 11:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D173921E6;
-	Tue,  3 Mar 2026 10:06:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF61B3FB043;
+	Tue,  3 Mar 2026 11:14:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QwvAnL8s"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="U5HyLv8P"
 X-Original-To: linux-serial@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511F4391821;
-	Tue,  3 Mar 2026 10:06:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC363ECBFA
+	for <linux-serial@vger.kernel.org>; Tue,  3 Mar 2026 11:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772532389; cv=none; b=ryodNBJVHPM8eljqNKs+IaYmmXpuodHfFj1EiFElZWVkAExyH5lUhfPsq9zSTL+HNVx29UHiwJUoSw1ThuAmQbVdxr7g5FTVpwXkYPIC18GbSe7+uD7BaZ6MPsm6+/rS8HM3vemOn8t51N8NXOA+cwYjQ7xcbG0pvgwy5H4rgj4=
+	t=1772536484; cv=none; b=uPpzINw0LeKDvGyrHNK/rfUW45E7OrZEELBHSbe/1NjdBfyqE1o7sOYDXwBXlx8Wq1KQWxB6QLZfJ4xGxbXgzghTYX3aiauuiaNmuzn3RitLtPGnqyi5gK2Z0hXRawXLdl9c3phuzZOfCKlKkx8OnDdHUrxFQVlZ8BAl1tgP9Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772532389; c=relaxed/simple;
-	bh=eO9gr/Eb4XIsWl7Ozofk85fAxnL6mM1g0zjcZLACG1E=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=u8gM6r6SPdQ34XgP0BVgDVTrr4ChtMThZPa3PZACye9DcXRNe25D3RfmziDwwe5jVJjJRoGg6ga3c2HSrFmxGXbXqmquFWPCHVmcq1bBiff9yGMuuzPNogI98QOIHNX0yvxHTnaRAbu5cZtiJfrfineAaCsPL3YWmuI4Pd0VK8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QwvAnL8s; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 14F8AC2BCB2;
-	Tue,  3 Mar 2026 10:06:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772532389;
-	bh=eO9gr/Eb4XIsWl7Ozofk85fAxnL6mM1g0zjcZLACG1E=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=QwvAnL8s3kUVS+Wkay3SZrBGweoFZp3/PWltmdmzr3P2yx+KYDH5vHkNUpFLOZGmN
-	 RfpyhKzW67qb+r0uHikBeRF2v+QsdIszX7XSGw4nUGTop1sOa8aDcTtv4V+WdUsEJF
-	 3sqW2SIV4epMyUuQuwCgyYBZRnMoLJkyoe0VvS6d8gLF1BjkAjLRKuLYz8+BS2xWHt
-	 kZTnuUm5itoZseg7Wu4jI7llZwLAKGFalxiDgK4rAI1uzaKaaqPyl6MyaQNsHfSkl5
-	 1xH+E9vi4cW9kmzyGxsljBYvqhtff2a8CIegC6M3kpmG4WGJNzZcUE+Issc0O6bBZS
-	 TvB6QzSky/JNg==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 057C9EC048C;
-	Tue,  3 Mar 2026 10:06:29 +0000 (UTC)
-From: Xianwei Zhao via B4 Relay <devnull+xianwei.zhao.amlogic.com@kernel.org>
-Date: Tue, 03 Mar 2026 10:06:26 +0000
-Subject: [PATCH v3 2/2] arm64: dts: add support for A9 based Amlogic BY401
+	s=arc-20240116; t=1772536484; c=relaxed/simple;
+	bh=lG/DZ3WywMxkW718njBWn7clqicbwq5XJkykLBVrlxU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=ZJ3hPpRyVm3UKIYKfyvVUzOIVba3fZFevhNykB06DbNRGKYbZOU8tH834jbooTXCGgmrVJ4A1cdqh1FjUIkjR7EEui5pNzK+1UBylIXvJSI7CbqMRDeYVjYNhLr+8akUuZkoY/FRQyNLkAYGKuLGQ2gjFUgld7nFYJx3Kxubf/Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=U5HyLv8P; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-48374014a77so66484285e9.3
+        for <linux-serial@vger.kernel.org>; Tue, 03 Mar 2026 03:14:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1772536480; x=1773141280; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Xgdv9fVdx/IEA9nZHRjuPZVXLrXBxXsiA90FmBdGMb0=;
+        b=U5HyLv8Pho13u/f+I/VS8HGivtUhBmlPHKZGs3ruUQ6tZPB5FMR9PB8JfJbVyZzpdn
+         903IE7AbTrVf+9p1ONpfCkGLXzyoCRSVP5AtHpX0vYjFYgNtDrAZWMqducZPC1Ff2enq
+         GoSF4iRStBYYrqDMbCmlfp1Oz6d8wEMMhwa/kq90qqMAIu6OQ03FJ0BbP8nrcLKV4IEM
+         SaWaiReST+XomkoO03wAYUxmzTMGZ8r6V3L5kM+H2zlPA8Zx0CLeGPEU4JXYzdjAAM7V
+         39GU4W/ZWhd/+KmU5o2O7/7HLC0KuSM1mJTMtN2b3V35asKX1R+Aldumd1oSYXCij/CQ
+         CpPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1772536480; x=1773141280;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Xgdv9fVdx/IEA9nZHRjuPZVXLrXBxXsiA90FmBdGMb0=;
+        b=UkwwqdEhFub6TOGU1EXf8Ks8ZvsQseEL2AX63crY+naMHsfEBCNpS6qUHASWbfqbCg
+         xmQHwgp02bmBaoAB+x0FUU3iZ0YnLlSIMmrGUpvu1ATxccqMvon5Lb+z9SkHKSBMLrKr
+         wV2hLGw3/NQ3i+Pol/jj+LguwqTpmFu4yHEEsqxQ5e+h+l4Ej7mitV2zuVHdzeSV8iHP
+         +YueFfQiPc/At7pEQRd7p5rLU9nT0bpvqi7zi9/bUmK23iy6ONU8uW5I0eUWAl9+gvFm
+         RrsNVdg8u6uddTFEsbm3PbgQaDTJ8lt96/bIK2DM8rETDqVpf9IHUCoR5NT/ZIT+iGU3
+         Uwww==
+X-Forwarded-Encrypted: i=1; AJvYcCWP30+e475+Jy8D53yY4Fc8RqegbPq/0Ry7wlx6PAfo3Ag4oVRN+W8As6HR2Y5QafzCPRP1LoYl2RVasUk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywk3tJkwBrHmT2ocCmWHpJPJo0vRXS7WzNaqFOYpZwinL+SoITF
+	ldrbWaENjVgAgpyh0U48xqBn4ptJTl3NU2ht4bcLCny6Wks78UXrqGIEy4V6cfgKxuM=
+X-Gm-Gg: ATEYQzwPGJk4W7xJ0XFu7o3JvkmTFK0F6JRWVHiwycXvEcuy4qVqAwhTIe2XBVvnlfF
+	/F8CJICzi6eVmXRR6ht/NiQBPXACqcLz3h+IGrU9WbYlCkdq3ZpTbxn2JjyiE2GCpjvBzv4imiA
+	Lr3TE5LBj43btEy3MjgLeTYGKHXyjmkAGWDOxeDst0YtEVSAs+UjVAtH1R/9eGlAwgZtvc4xNKN
+	ZaArXB3qEaEB0cWWKM4umIznROsYRuoNo7hAlYEV5OD9Ml1zXNvI0ookTZr0lOPKtILJyG02STr
+	doURt+ffUFLMQF9gPOvdA7OTWr5V6EidQDeWjLz2xKpqVl2d+qCaXyiOtIv43pwkkuDCDb2gWkZ
+	pHCiPHlRVXq5d4xCcQeAD3eroOrOA24WTE02LHwZExLOYfoOO6oXTHYuh1NrkfhHHLr9L
+X-Received: by 2002:a05:600c:c4a6:b0:480:1d0b:2d32 with SMTP id 5b1f17b1804b1-483c9bc0344mr259053495e9.12.1772536480350;
+        Tue, 03 Mar 2026 03:14:40 -0800 (PST)
+Received: from localhost ([151.19.25.210])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485133508bbsm17667855e9.5.2026.03.03.03.14.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Mar 2026 03:14:40 -0800 (PST)
+From: Francesco Lavra <flavra@baylibre.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	Randy Dunlap <rdunlap@infradead.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Zong Jiang <quic_zongjian@quicinc.com>,
+	Thierry Bultel <thierry.bultel.yh@bp.renesas.com>,
+	Raphael Gallais-Pou <raphael.gallais-pou@foss.st.com>,
+	Robert Marko <robert.marko@sartura.hr>,
+	linux-kernel@vger.kernel.org,
+	linux-serial@vger.kernel.org,
+	linux-tegra@vger.kernel.org
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2] serial: tegra: remove Kconfig dependency on APB DMA controller
+Date: Tue,  3 Mar 2026 12:14:38 +0100
+Message-Id: <20260303111438.2691799-1-flavra@baylibre.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-serial@vger.kernel.org
 List-Id: <linux-serial.vger.kernel.org>
 List-Subscribe: <mailto:linux-serial+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-serial+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260303-a9-baisc-dts-v3-2-4bf21001f05c@amlogic.com>
-References: <20260303-a9-baisc-dts-v3-0-4bf21001f05c@amlogic.com>
-In-Reply-To: <20260303-a9-baisc-dts-v3-0-4bf21001f05c@amlogic.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Neil Armstrong <neil.armstrong@linaro.org>, 
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
- Jerome Brunet <jbrunet@baylibre.com>, Kevin Hilman <khilman@baylibre.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jiri Slaby <jirislaby@kernel.org>
-Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-serial@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-amlogic@lists.infradead.org, Xianwei Zhao <xianwei.zhao@amlogic.com>
-X-Mailer: b4 0.14.3
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772532387; l=5530;
- i=xianwei.zhao@amlogic.com; s=20251216; h=from:subject:message-id;
- bh=ngLHAW867mRhs8VNuDyRiFbWtUBMBRBgKcYsKwXWGTI=;
- b=kq1gPymBgUjE80ZPXYiIBeePFG1tvPtkAA8t84W83cJvSsI3hfikZCueSKu36A9ph/RI/kl2Y
- Q0Nz3CBc3xFDXQNXy5ghHTlta4obN0SEoYDW4603aJu4AW+BdkKtEKv
-X-Developer-Key: i=xianwei.zhao@amlogic.com; a=ed25519;
- pk=dWwxtWCxC6FHRurOmxEtr34SuBYU+WJowV/ZmRJ7H+k=
-X-Endpoint-Received: by B4 Relay for xianwei.zhao@amlogic.com/20251216 with
- auth_id=578
-X-Original-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
-Reply-To: xianwei.zhao@amlogic.com
-X-Rspamd-Queue-Id: 548F51EC654
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1461; i=flavra@baylibre.com; h=from:subject; bh=lG/DZ3WywMxkW718njBWn7clqicbwq5XJkykLBVrlxU=; b=owEB7QES/pANAwAKAe3xO3POlDZfAcsmYgBppsIidjpJYctRWN5hOyNxVnAxdEa0f5jD7q4mR uzU4wLOdImJAbMEAAEKAB0WIQSGV4VPlTvcox7DFObt8TtzzpQ2XwUCaabCIgAKCRDt8TtzzpQ2 X4ATC/96p9lCQmb44HSR3w9JqD1EHcLByEZFcPkoExD7sDGiieEB+CH535JniKYxqREOVQlfv+S 5cIEBoK7p9IHqCh8NVX0vQjY99JaZ3a1YF60RDWD6z58CGAVUoCMXjx+LOeRF+c+QZIQDUnXYtE u+rHOzXPY1Z7GYJdE3vxvtCX0SjTv9gUT3zCtXsfucHPRP+TfsSbhEw/Vr3w3wtphsN7qBVEjma 6wkdMlBsClq3NO1segO6rKiSI4xmWGSQ2DCy2Oe4BFrXGcAK0rg770YU8BHvJUEHv/90PmGbc98 czYGo2A5+7zBFle4NH6neAU4QIdc8iVq8F0A6qghEz7c1QzWXSOj62qNKsu2Bf1wiW1qwH0wLVy XU4FYby8xqDFPw75Q3mnUnZLTGCiufFaXeIH/c/BFpw5CgZPswsKMQ0+p4UGsb9G6XG4EAQXGK2 y/HW62d9bRQ9ejp5M3OQSkCaBq3yBNesNEfQo6It1WX2KrmsDxlZoL1L7f2W2twqskBGU=
+X-Developer-Key: i=flavra@baylibre.com; a=openpgp; fpr=8657854F953BDCA31EC314E6EDF13B73CE94365F
+Content-Transfer-Encoding: 8bit
+X-Rspamd-Queue-Id: 0ED1D1EDA89
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[baylibre-com.20230601.gappssmtp.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-12842-lists,linux-serial=lfdr.de,xianwei.zhao.amlogic.com];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[12];
+	TAGGED_FROM(0.00)[bounces-12843-lists,linux-serial=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_TO(0.00)[kernel.org,linaro.org,googlemail.com,baylibre.com,linuxfoundation.org];
-	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	FROM_HAS_DN(0.00)[];
-	REPLYTO_DOM_NEQ_TO_DOM(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[devnull@kernel.org,linux-serial@vger.kernel.org];
-	REPLYTO_DOM_NEQ_FROM_DOM(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	TAGGED_RCPT(0.00)[linux-serial,dt];
-	HAS_REPLYTO(0.00)[xianwei.zhao@amlogic.com];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[baylibre.com];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[flavra@baylibre.com,linux-serial@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[baylibre-com.20230601.gappssmtp.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-serial,renesas];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[baylibre-com.20230601.gappssmtp.com:dkim,baylibre.com:mid,baylibre.com:email,sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,intel.com:email]
 X-Rspamd-Action: no action
 
-From: Xianwei Zhao <xianwei.zhao@amlogic.com>
+This driver runs also on SoCs without a Tegra20 APB DMA controller (e.g.
+Tegra234).
+Remove the Kconfig dependency on TEGRA20_APB_DMA, and remove reference to
+the APB DMA controller from the Kconfig help text.
 
-Add basic support for the A9 based Amlogic BY401 board, which describes
-the following components: CPU, GIC, IRQ, Timer and UART.
-These are capable of booting up into the serial console.
-
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Signed-off-by: Francesco Lavra <flavra@baylibre.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 ---
- arch/arm64/boot/dts/amlogic/Makefile               |   1 +
- .../boot/dts/amlogic/amlogic-a9-a311y3-by401.dts   |  40 +++++++
- arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi        | 128 +++++++++++++++++++++
- 3 files changed, 169 insertions(+)
+Changes from v1 [1]:
+- added Andy's Reviewed-by tag
+- removed Fixes tag (Jon)
 
-diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
-index 15f9c817e502..57bc440fa55c 100644
---- a/arch/arm64/boot/dts/amlogic/Makefile
-+++ b/arch/arm64/boot/dts/amlogic/Makefile
-@@ -1,6 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- dtb-$(CONFIG_ARCH_MESON) += amlogic-a4-a113l2-ba400.dtb
- dtb-$(CONFIG_ARCH_MESON) += amlogic-a5-a113x2-av400.dtb
-+dtb-$(CONFIG_ARCH_MESON) += amlogic-a9-a311y3-by401.dtb
- dtb-$(CONFIG_ARCH_MESON) += amlogic-c3-c302x-aw409.dtb
- dtb-$(CONFIG_ARCH_MESON) += amlogic-c3-c308l-aw419.dtb
- dtb-$(CONFIG_ARCH_MESON) += amlogic-s6-s905x5-bl209.dtb
-diff --git a/arch/arm64/boot/dts/amlogic/amlogic-a9-a311y3-by401.dts b/arch/arm64/boot/dts/amlogic/amlogic-a9-a311y3-by401.dts
-new file mode 100644
-index 000000000000..a6b380ca47a5
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/amlogic-a9-a311y3-by401.dts
-@@ -0,0 +1,40 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2026 Amlogic, Inc. All rights reserved.
-+ */
-+
-+/dts-v1/;
-+
-+#include "amlogic-a9.dtsi"
-+/ {
-+	model = "Amlogic A311DY3 BY401 Development Board";
-+	compatible = "amlogic,by401", "amlogic,a9";
-+	#address-cells = <2>;
-+	#size-cells = <2>;
-+
-+	aliases {
-+		serial0 = &uart_b;
-+	};
-+
-+	memory@0 {
-+		device_type = "memory";
-+		reg = <0x0 0x0 0x0 0x80000000>;
-+	};
-+
-+	reserved-memory {
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		/* 35 MiB reserved for ARM Trusted Firmware */
-+		secmon_reserved: secmon@5000000 {
-+			compatible = "shared-dma-pool";
-+			reg = <0x0 0x05000000 0x0 0x2300000>;
-+			no-map;
-+		};
-+	};
-+};
-+
-+&uart_b {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi
-new file mode 100644
-index 000000000000..d957c8ad1d86
---- /dev/null
-+++ b/arch/arm64/boot/dts/amlogic/amlogic-a9.dtsi
-@@ -0,0 +1,128 @@
-+// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
-+/*
-+ * Copyright (c) 2026 Amlogic, Inc. All rights reserved.
-+ */
-+
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/interrupt-controller/arm-gic.h>
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	interrupt-parent = <&gic>;
-+
-+	cpus {
-+		#address-cells = <2>;
-+		#size-cells = <0>;
-+
-+		cpu0: cpu@0 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x0>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu1: cpu@100 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x100>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu2: cpu@200 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x200>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu3: cpu@300 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x300>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu4: cpu@400 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x400>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu5: cpu@500 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a55";
-+			reg = <0x0 0x500>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu6: cpu@600 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x0 0x600>;
-+			enable-method = "psci";
-+		};
-+
-+		cpu7: cpu@700 {
-+			device_type = "cpu";
-+			compatible = "arm,cortex-a78";
-+			reg = <0x0 0x700>;
-+			enable-method = "psci";
-+		};
-+	};
-+
-+	timer {
-+		compatible = "arm,armv8-timer";
-+		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
-+			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
-+	};
-+
-+	psci {
-+		compatible = "arm,psci-1.0";
-+		method = "smc";
-+	};
-+
-+	xtal: xtal-clk {
-+		compatible = "fixed-clock";
-+		clock-frequency = <24000000>;
-+		clock-output-names = "xtal";
-+		#clock-cells = <0>;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		gic: interrupt-controller@ff800000 {
-+			compatible = "arm,gic-v3";
-+			#interrupt-cells = <3>;
-+			#address-cells = <0>;
-+			interrupt-controller;
-+			reg = <0x0 0xff800000 0 0x1000>,
-+			      <0x0 0xff840000 0 0x8000>;
-+			interrupts = <GIC_PPI 9 0xf04>;
-+		};
-+
-+		aobus: bus@ffa00000 {
-+			compatible = "simple-bus";
-+			reg = <0x0 0xffa00000 0x0 0x100000>;
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges = <0x0 0x0 0x0 0xffa00000 0x0 0x100000>;
-+
-+			uart_b: serial@1e000 {
-+				compatible = "amlogic,a9-uart",
-+					     "amlogic,meson-s4-uart";
-+				reg = <0x0 0x1e000 0x0 0x18>;
-+				interrupts = <GIC_SPI 66 IRQ_TYPE_EDGE_RISING>;
-+				clocks = <&xtal>, <&xtal>, <&xtal>;
-+				clock-names = "xtal", "pclk", "baud";
-+				status = "disabled";
-+			};
-+		};
-+	};
-+};
+[1] https://lore.kernel.org/linux-serial/20251126090759.4042709-1-flavra@baylibre.com/T/
 
+ drivers/tty/serial/Kconfig | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/tty/serial/Kconfig b/drivers/tty/serial/Kconfig
+index f86775cfdcc9..8500b1eed5b5 100644
+--- a/drivers/tty/serial/Kconfig
++++ b/drivers/tty/serial/Kconfig
+@@ -255,14 +255,13 @@ config SERIAL_SAMSUNG_CONSOLE
+ 
+ config SERIAL_TEGRA
+ 	tristate "NVIDIA Tegra20/30 SoC serial controller"
+-	depends on (ARCH_TEGRA && TEGRA20_APB_DMA) || COMPILE_TEST
++	depends on ARCH_TEGRA || COMPILE_TEST
+ 	select SERIAL_CORE
+ 	help
+ 	  Support for the on-chip UARTs on the NVIDIA Tegra series SOCs
+ 	  providing /dev/ttyTHS0, 1, 2, 3 and 4 (note, some machines may not
+ 	  provide all of these ports, depending on how the serial port
+-	  are enabled). This driver uses the APB DMA to achieve higher baudrate
+-	  and better performance.
++	  are enabled).
+ 
+ config SERIAL_TEGRA_TCU
+ 	tristate "NVIDIA Tegra Combined UART"
 -- 
-2.52.0
-
+2.39.5
 
 
